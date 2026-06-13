@@ -1546,6 +1546,8 @@ export class Hud {
 
   private updatePartyFrames(): void {
     const el = $('#party-frames');
+    const target = this.sim.player.targetId !== null ? this.sim.entities.get(this.sim.player.targetId) : null;
+    el.classList.toggle('below-target', !!target && target.kind !== 'object');
     const info = this.sim.partyInfo;
     if (!info) {
       if (el.innerHTML !== '') el.innerHTML = '';

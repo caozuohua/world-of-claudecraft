@@ -172,8 +172,23 @@
 
   /* ---------- unit frames ---------- */
   .unitframe { position: absolute; top: 12px; display: flex; gap: 0; align-items: center; }
-  #player-frame { left: 12px; }
-  #target-frame { left: 320px; display: none; }
+  #player-frame {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 612px;
+    margin: 0 auto 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #player-frame .uf-bars {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+    max-width: 520px;
+  }
+  #target-frame { left: 12px; top: 12px; display: none; z-index: 6; }
   .portrait-wrap { position: relative; width: 64px; height: 64px; z-index: 2; }
   .portrait {
     width: 60px; height: 60px; border-radius: 50%;
@@ -1270,7 +1285,8 @@
     border-radius: 4px; padding: 7px 10px; font-size: 13px; user-select: text; }
 
   /* ---------- party frames ---------- */
-  #party-frames { position: absolute; left: 12px; top: 92px; display: flex; flex-direction: column; gap: 6px; }
+  #party-frames { position: absolute; left: 12px; top: 12px; display: flex; flex-direction: column; gap: 6px; z-index: 5; }
+  #party-frames.below-target { top: 96px; }
   .party-frame { width: 170px; padding: 4px 8px; cursor: pointer; }
   .party-frame .pfm-name { font-size: 11.5px; font-family: var(--title-font); color: #7fb8ff; display: flex; justify-content: space-between; }
   .party-frame .pfm-name .lead { color: var(--gold); font-size: 10px; }
@@ -1958,18 +1974,6 @@
   <div id="nameplates"></div>
 
   <div id="ui">
-    <div id="player-frame" class="unitframe">
-      <div class="portrait-wrap">
-        <div class="portrait"><canvas id="pf-portrait" width="54" height="54"></canvas></div>
-        <div class="level-chip" id="pf-level">1</div>
-      </div>
-      <div class="uf-bars">
-        <div class="uf-name" id="pf-name">Adventurer</div>
-        <div class="bar hp"><div class="bar-fill" id="pf-hp"></div><div class="bar-text" id="pf-hp-text"></div></div>
-        <div class="bar mana" id="pf-resource"><div class="bar-fill" id="pf-res"></div><div class="bar-text" id="pf-res-text"></div></div>
-      </div>
-    </div>
-
     <div id="target-frame" class="unitframe">
       <div class="portrait-wrap">
         <div class="portrait"><canvas id="tf-portrait" width="54" height="54"></canvas></div>
@@ -2015,6 +2019,17 @@
     <div id="bottom-bar">
       <div id="actionbar-row">
         <div id="actionbar-stack">
+          <div id="player-frame" class="unitframe">
+            <div class="portrait-wrap">
+              <div class="portrait"><canvas id="pf-portrait" width="54" height="54"></canvas></div>
+              <div class="level-chip" id="pf-level">1</div>
+            </div>
+            <div class="uf-bars">
+              <div class="uf-name" id="pf-name">Adventurer</div>
+              <div class="bar hp"><div class="bar-fill" id="pf-hp"></div><div class="bar-text" id="pf-hp-text"></div></div>
+              <div class="bar mana" id="pf-resource"><div class="bar-fill" id="pf-res"></div><div class="bar-text" id="pf-res-text"></div></div>
+            </div>
+          </div>
           <div id="xpbar"><div class="fill"></div><div class="ticks"></div><div class="label"></div></div>
           <div id="actionbar" class="panel"></div>
         </div>
