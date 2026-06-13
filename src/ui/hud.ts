@@ -213,11 +213,40 @@ export class Hud {
     const a = res.def;
     const resName = this.sim.player.resourceType === 'rage' ? 'Rage' : this.sim.player.resourceType === 'energy' ? 'Energy' : 'Mana';
     let dmgText = '';
-    for (const eff of res.effects) {
-      if (eff.type === 'directDamage') dmgText = eff.min === eff.max ? `${eff.min}` : `${eff.min} to ${eff.max}`;
-      if (eff.type === 'weaponDamage' || eff.type === 'weaponStrike') dmgText = `${eff.bonus}`;
-      if (eff.type === 'dot') dmgText = `${eff.total}`;
-      if (eff.type === 'aoeDamage' || eff.type === 'aoeRoot') dmgText = `${eff.min} to ${eff.max}`;
+    const primaryEffect = res.effects.find(eff => 
+      eff.type === 'directDamage' || 
+      eff.type === 'heal' || 
+      eff.type === 'weaponDamage' || 
+      eff.type === 'weaponStrike' || 
+      eff.type === 'aoeDamage' || 
+      eff.type === 'aoeRoot' ||
+      eff.type === 'finisherDamage' ||
+      eff.type === 'drainTick'
+    );
+    if (primaryEffect) {
+      if (primaryEffect.type === 'directDamage' || primaryEffect.type === 'aoeDamage' || primaryEffect.type === 'aoeRoot' || primaryEffect.type === 'drainTick') {
+        dmgText = primaryEffect.min === primaryEffect.max ? `${primaryEffect.min}` : `${primaryEffect.min} to ${primaryEffect.max}`;
+      } else if (primaryEffect.type === 'weaponDamage' || primaryEffect.type === 'weaponStrike') {
+        dmgText = `${primaryEffect.bonus}`;
+      } else if (primaryEffect.type === 'finisherDamage') {
+        dmgText = `${primaryEffect.base} plus ${primaryEffect.perCombo} per combo point`;
+      }
+    } else {
+      const secondaryEffect = res.effects.find(eff => 
+        eff.type === 'dot' || 
+        eff.type === 'hot' || 
+        eff.type === 'absorb' || 
+        eff.type === 'imbue'
+      );
+      if (secondaryEffect) {
+        if (secondaryEffect.type === 'dot' || secondaryEffect.type === 'hot') {
+          dmgText = `${secondaryEffect.total}`;
+        } else if (secondaryEffect.type === 'absorb') {
+          dmgText = `${secondaryEffect.amount}`;
+        } else if (secondaryEffect.type === 'imbue') {
+          dmgText = `${secondaryEffect.bonus}`;
+        }
+      }
     }
     let html = `<div class="tt-title">${a.name}</div>`;
     html += `<div class="tt-sub">Rank ${res.rank}</div>`;
