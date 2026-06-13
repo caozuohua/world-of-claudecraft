@@ -4,8 +4,9 @@ import type { IWorld } from '../world_api';
 import { groundHeight, WATER_LEVEL, zoneBiomeAt } from '../sim/world';
 import {
   MOBS, ABILITIES, DUNGEON_X_THRESHOLD, DUNGEON_LIST, QUESTS,
-  instanceOrigin, INSTANCE_SLOT_COUNT, ARENA_SLOT_COUNT, arenaOrigin, isArenaPos,
+  instanceOrigin, INSTANCE_SLOT_COUNT, ARENA_SLOT_COUNT, arenaOrigin, arenaOriginAt, isArenaPos,
 } from '../sim/data';
+import { ARENA_LAYOUT, DUNGEON_WALL_X } from '../sim/dungeon_layout';
 import type { BiomeId } from '../sim/types';
 import { AnimState, CharacterVisual, createCharacterVisual } from './characters';
 import { LocoTrack, newLocoTrack, updateLocomotion } from './locomotion';
@@ -1036,9 +1037,18 @@ export class Renderer {
     const py = p.prevPos.y + (p.pos.y - p.prevPos.y) * alpha;
     const pz = p.prevPos.z + (p.pos.z - p.prevPos.z) * alpha;
     const eyeY = py + 2.0;
-    const cx = px - Math.sin(this.camYaw) * Math.cos(this.camPitch) * this.camDist;
+    let cx = px - Math.sin(this.camYaw) * Math.cos(this.camPitch) * this.camDist;
     const cy = eyeY + Math.sin(this.camPitch) * this.camDist;
-    const cz = pz - Math.cos(this.camYaw) * Math.cos(this.camPitch) * this.camDist;
+    let cz = pz - Math.cos(this.camYaw) * Math.cos(this.camPitch) * this.camDist;
+    // The Ashen Coliseum is a small enclosed pit and the combatants spawn only
+    // ~6yd from the end walls, so the 12yd chase cam would otherwise sit outside
+    // the walls looking in. Keep it inside the room's interior box.
+    if (isArenaPos(p.pos.x)) {
+      const o = arenaOriginAt(p.pos.z);
+      const m = 2; // clearance from the wall faces
+      cx = Math.min(Math.max(cx, o.x - DUNGEON_WALL_X + m), o.x + DUNGEON_WALL_X - m);
+      cz = Math.min(Math.max(cz, o.z + ARENA_LAYOUT.zMin + m), o.z + ARENA_LAYOUT.zMax - m);
+    }
     const groundY = groundHeight(cx, cz, this.sim.cfg.seed) + 0.6;
     this.camera.position.set(cx, Math.max(cy, groundY), cz);
     this.camera.lookAt(px, eyeY, pz);
