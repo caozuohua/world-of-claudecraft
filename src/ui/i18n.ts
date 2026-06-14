@@ -7242,6 +7242,28 @@ export function t(key: TranslationKey, values?: InterpolationValues): string {
   return typeof current === "string" ? interpolate(current, values) : key;
 }
 
+function translationValue(key: string, lang: SupportedLanguage): string | null {
+  const parts = key.split(".");
+  let current: unknown = translations[lang];
+  for (const part of parts) {
+    if (current && typeof current === "object" && part in current) {
+      current = (current as Record<string, unknown>)[part];
+    } else {
+      return null;
+    }
+  }
+  return typeof current === "string" ? current : null;
+}
+
+export function hasTranslation(key: string, lang: SupportedLanguage = currentLanguage): boolean {
+  return translationValue(key, lang) !== null;
+}
+
+export function tOptional(key: string, values?: InterpolationValues, lang: SupportedLanguage = currentLanguage): string | null {
+  const value = translationValue(key, lang);
+  return value === null ? null : interpolate(value, values);
+}
+
 export function formatNumber(value: number, options?: Intl.NumberFormatOptions, lang: SupportedLanguage = currentLanguage): string {
   return new Intl.NumberFormat(languageTag(lang), options).format(value);
 }
