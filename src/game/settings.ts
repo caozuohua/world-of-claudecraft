@@ -22,6 +22,10 @@ export const SETTING_RANGES = {
 
 export const BOOL_SETTINGS = {
   mouseCamera: { def: false },
+  // off by default: mirrors the touch layout so the movement joystick sits on
+  // the right and the camera joystick on the left, for left-thumb-dominant
+  // players. CSS-only swap gated on body.mobile-left-handed; ignored on desktop.
+  leftHandedTouch: { def: false },
 } as const;
 
 export type NumericSettingKey = keyof typeof SETTING_RANGES;

@@ -462,6 +462,11 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
       input.setMouseCameraEnabled(v);
       return;
     }
+    if (key === 'leftHandedTouch') {
+      const v = settings.set('leftHandedTouch', !!value);
+      document.body.classList.toggle('mobile-left-handed', v);
+      return;
+    }
     const v = settings.set(key as keyof typeof SETTING_RANGES, value as number);
     switch (key) {
       case 'cameraSpeed': input.setCameraSpeed(v); break;

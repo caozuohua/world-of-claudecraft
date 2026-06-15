@@ -4505,10 +4505,11 @@ export class Hud {
     el.innerHTML = `<div class="panel-title"><span>Key Bindings</span><span class="x-btn" data-close>${svgIcon('close')}</span></div>`;
     this.settingToggleKeybind(el, 'Mouse Camera', 'mouseCamera');
     this.settingToggleKeybind(el, 'Click to Move', 'clickToMove');
+    this.settingToggleKeybind(el, 'Left-handed Touch', 'leftHandedTouch');
     const note = document.createElement('div');
     note.className = 'kb-note';
     note.textContent = this.keybindNote
-      || 'Mouse Camera off: A/D turns, drag to orbit (classic). On: camera-relative WASD, A/D strafes. Click to Move: left-click the ground or an enemy to walk there. Click a key cell to rebind; Esc cancels.';
+      || 'Mouse Camera off: A/D turns, drag to orbit (classic). On: camera-relative WASD, A/D strafes. Click to Move: left-click the ground or an enemy to walk there. Left-handed Touch mirrors the on-screen joysticks for touch devices. Click a key cell to rebind; Esc cancels.';
     el.appendChild(note);
     const rows = document.createElement('div');
     rows.className = 'kb-rows';

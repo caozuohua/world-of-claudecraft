@@ -56,6 +56,14 @@ describe('Settings', () => {
     expect(b.get('mouseCamera')).toBe(true);
   });
 
+  it('defaults left-handed touch off and persists it across instances', () => {
+    const a = new Settings();
+    expect(a.get('leftHandedTouch')).toBe(false);
+    a.set('leftHandedTouch', true);
+    const b = new Settings();
+    expect(b.get('leftHandedTouch')).toBe(true);
+  });
+
   it('falls back to defaults for missing/corrupt keys', () => {
     localStorage.setItem('woc_settings', JSON.stringify({ cameraSpeed: 0.5 }));
     const s = new Settings();
