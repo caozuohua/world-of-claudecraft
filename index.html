@@ -2913,6 +2913,14 @@
     gap: 7px;
     pointer-events: auto;
     z-index: 70;
+    /* The tray grows upward from a fixed bottom. As it has gained buttons it can
+       now run off the TOP of a short landscape phone, leaving the upper rows
+       unreachable, so cap it to the space above the bottom controls and let the
+       overflow scroll. 100dvh accounts for mobile browser chrome (unlike 100vh). */
+    max-height: calc(100dvh - 84px - env(safe-area-inset-bottom));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
   body.mobile-touch.mobile-more-open #mobile-extra-controls { display: grid; }
   body.mobile-touch #mobile-extra-controls .mobile-btn {
@@ -3234,6 +3242,7 @@
       grid-template-columns: repeat(2, 104px);
       grid-auto-rows: 38px;
       gap: 6px;
+      max-height: calc(100dvh - 74px - env(safe-area-inset-bottom));
     }
     body.mobile-touch #mobile-extra-controls .mobile-btn {
       width: 104px;
