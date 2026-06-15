@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import type { WebSocket } from 'ws';
 import { Sim } from '../src/sim/sim';
 import type { PlayerMeta } from '../src/sim/sim';
-import { DT, Entity, SimEvent, dist2d } from '../src/sim/types';
+import { DT, Entity, SimEvent, dist2d, emptyMoveInput } from '../src/sim/types';
 import { parseMoveInputFrame } from '../src/sim/move_input';
 import { stealthDetectionRadius, threatEntries } from '../src/sim/threat';
 import { zoneAt, DUNGEONS } from '../src/sim/data';
@@ -45,6 +45,10 @@ const CHAT_RATE_ERROR_COOLDOWN_SECONDS = 4;
 const CHAT_COOLDOWN_SECONDS = 20;
 const CHAT_RATE_VIOLATIONS_FOR_COOLDOWN = 3;
 const WHO_RESULT_LIMIT = 50;
+// Clients stream movement intent every 50ms. If that stream goes silent while
+// the last packet held a key down, stop applying it instead of turning/running
+// forever. 750ms leaves room for normal jitter and short browser stalls.
+const STALE_INPUT_SECONDS = 0.75;
 // Exponential moving average weight for the per-tick duration stat.
 const TICK_EMA_ALPHA = 0.05;
 
@@ -73,6 +77,8 @@ export interface ClientSession {
   rememberedChat: RememberedChat;
   // last client input sequence processed; echoed in snapshots for latency telemetry
   lastInputSeq: number;
+  // sim time of the last movement input frame, used to clear stale held input
+  lastInputAt: number;
   // serialized form of each delta self field as last sent to this client;
   // a field is omitted from a snapshot while its serialization is unchanged
   lastSent: Record<string, string>;
@@ -430,6 +436,7 @@ export class GameServer {
       if (dt > 0.5) dt = 0.5;
       acc += dt;
       while (acc >= DT) {
+        this.clearStaleInputs();
         const events = this.sim.tick();
         this.routeEvents(events);
         acc -= DT;
@@ -457,6 +464,19 @@ export class GameServer {
 
   // -------------------------------------------------------------------------
 
+  private clearStaleInputs(): void {
+    for (const session of this.clients.values()) {
+      if (this.sim.time - session.lastInputAt <= STALE_INPUT_SECONDS) continue;
+      const meta = this.sim.meta(session.pid);
+      if (!meta) continue;
+      const mi = meta.moveInput;
+      if (!(mi.forward || mi.back || mi.turnLeft || mi.turnRight || mi.strafeLeft || mi.strafeRight || mi.jump)) continue;
+      Object.assign(meta.moveInput, emptyMoveInput());
+    }
+  }
+
+  // -------------------------------------------------------------------------
+
   join(ws: WebSocket, accountId: number, characterId: number, name: string, cls: import('../src/sim/types').PlayerClass, state: import('../src/sim/sim').CharacterState | null, isGm = false): ClientSession | { error: string } {
     if (this.sessionsByCharacterId.has(characterId)) return { error: 'character already in world' };
     const pid = this.sim.addPlayer(cls, name, { state: state ?? undefined });
@@ -477,6 +497,7 @@ export class GameServer {
       lastWhisperFrom: null,
       rememberedChat: { channel: 'say' },
       lastInputSeq: 0,
+      lastInputAt: this.sim.time,
       lastSent: {},
       sentEnts: new Map(),
     };
@@ -691,6 +712,7 @@ export class GameServer {
       if (!meta || !e) return;
       const { moveInput, facing } = parseMoveInputFrame(msg);
       Object.assign(meta.moveInput, moveInput);
+      session.lastInputAt = sim.time;
       if (typeof msg.seq === 'number' && Number.isFinite(msg.seq) && msg.seq > 0) {
         session.lastInputSeq = Math.max(session.lastInputSeq, Math.floor(msg.seq));
       }

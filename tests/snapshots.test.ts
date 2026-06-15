@@ -15,7 +15,7 @@ vi.mock('../server/db', () => ({
 import { censorChatText, GameServer, ClientSession } from '../server/game';
 import { saveCharacterState } from '../server/db';
 import { ClientWorld } from '../src/net/online';
-import type { PlayerClass } from '../src/sim/types';
+import { DT, type PlayerClass } from '../src/sim/types';
 
 const DELTA_KEYS = ['inv', 'buyback', 'equip', 'qlog', 'qdone', 'cds', 'stats', 'weapon', 'party', 'trade', 'duel'];
 
@@ -294,6 +294,30 @@ describe('delta snapshots', () => {
     expect(snapOld.self).not.toHaveProperty('inv');
     // both players spawn together, so each sees the other in ents
     expect(snapNew.ents.some((e: any) => e.id === session.pid)).toBe(true);
+  });
+});
+
+describe('online movement input lifetime', () => {
+  it('clears stale held movement when the websocket input stream goes quiet', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Spinner');
+
+    server.handleMessage(session, JSON.stringify({
+      t: 'input',
+      seq: 1,
+      mi: { f: 0, b: 0, tl: 1, tr: 0, sl: 0, sr: 0, j: 0 },
+    }));
+    const meta = server.sim.meta(session.pid)!;
+    expect(meta.moveInput.turnLeft).toBe(true);
+
+    for (let i = 0; i < Math.floor(0.5 / DT); i++) server.sim.tick();
+    (server as any).clearStaleInputs();
+    expect(meta.moveInput.turnLeft).toBe(true);
+
+    for (let i = 0; i < Math.ceil(0.35 / DT); i++) server.sim.tick();
+    (server as any).clearStaleInputs();
+    expect(meta.moveInput.turnLeft).toBe(false);
   });
 });
 
