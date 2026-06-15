@@ -27,6 +27,17 @@ const WORLD_SEED = 20061; // fixed: World of Claudecraft is a persistent place
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.querySelector(sel) as T;
 let pendingDeleteCharacter: CharacterSummary | null = null;
 
+declare const __APP_VERSION__: string;
+declare const __APP_BUILD_ID__: string;
+declare const __APP_BUILD_DATE__: string;
+
+function syncBuildInfo(): void {
+  const el = document.getElementById('game-version');
+  if (!el) return;
+  el.textContent = `v${__APP_VERSION__} · build ${__APP_BUILD_ID__}`;
+  el.title = `Built ${__APP_BUILD_DATE__}`;
+}
+
 function syncAppViewport(): void {
   const useStableGameViewport = document.body.classList.contains('game-active') && isPhoneTouchDevice();
   const width = Math.max(1, Math.round(useStableGameViewport ? window.innerWidth : (window.visualViewport?.width ?? window.innerWidth)));
@@ -56,6 +67,7 @@ function syncPhoneTouchClass(): void {
 }
 
 syncAppViewport();
+syncBuildInfo();
 preventMobileZoom();
 syncPhoneTouchClass();
 window.matchMedia(PHONE_TOUCH_QUERY).addEventListener?.('change', syncPhoneTouchClass);
