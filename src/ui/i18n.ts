@@ -1,41 +1,26 @@
-import { en } from './i18n.en';
-import { es } from './i18n.locales/es';
-import { es_ES } from './i18n.locales/es_ES';
-import { fr_FR } from './i18n.locales/fr_FR';
-import { fr_CA } from './i18n.locales/fr_CA';
-import { en_CA } from './i18n.locales/en_CA';
-import { it_IT } from './i18n.locales/it_IT';
-import { de_DE } from './i18n.locales/de_DE';
-import { zh_CN } from './i18n.locales/zh_CN';
-import { zh_TW } from './i18n.locales/zh_TW';
-import { ko_KR } from './i18n.locales/ko_KR';
-import { ja_JP } from './i18n.locales/ja_JP';
-import { pt_BR } from './i18n.locales/pt_BR';
-import { ru_RU } from './i18n.locales/ru_RU';
+import {
+  translations,
+  en, es, es_ES, fr_FR, fr_CA, en_CA, it_IT, de_DE, zh_CN, zh_TW, ko_KR, ja_JP, pt_BR, ru_RU,
+} from './i18n.resolved.generated';
 import type { Leaves, TranslationKey, InterpolationValue, InterpolationValues, DeepPartial } from './i18n.en';
 
-// Re-export the authoritative en base, every locale object, gameStrings, and the
-// type machinery so importers of './i18n' keep an unchanged public surface.
+// The translation table is the generated dense artifact
+// (src/ui/i18n.resolved.generated.ts), where every locale is overlaid onto `en`
+// and filled from English. Every read-path below (t, translationValue,
+// hasTranslation, tOptional) reads that dense table, never the raw per-locale
+// objects - those go sparse in later phases, so a direct read of them would
+// return undefined or the wrong value.
+//
+// Re-export the dense per-locale objects, gameStrings, and the type machinery so
+// importers of './i18n' keep an unchanged public surface.
 export { en, es, es_ES, fr_FR, fr_CA, en_CA, it_IT, de_DE, zh_CN, zh_TW, ko_KR, ja_JP, pt_BR, ru_RU };
-export { gameStrings } from './i18n.en';
+// gameStrings is the post-cap/XP/leaderboard layer, which the table carries under
+// the `game` key. Source it from the generated dense `en` rather than re-exporting
+// from i18n.en, so importing './i18n' does not pull the full i18n.en base (en +
+// shared content layers, ~1 MB) into the client bundle - that module now exists
+// only to feed the generator. Same content, same export name.
+export const gameStrings = en.game;
 export type { Leaves, TranslationKey, InterpolationValue, InterpolationValues, DeepPartial };
-
-const translations = {
-  en,
-  es,
-  es_ES,
-  fr_FR,
-  fr_CA,
-  en_CA,
-  it_IT,
-  de_DE,
-  zh_CN,
-  zh_TW,
-  ko_KR,
-  ja_JP,
-  pt_BR,
-  ru_RU,
-};
 
 export type SupportedLanguage = keyof typeof translations;
 
