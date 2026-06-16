@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Codex should treat this file as the root project guidance for World of ClaudeCraft. Keep it concise and defer detailed, temporary, or model-specific guidance to the linked files.
+Any non-Claude coding agent (Codex and similar) can treat this file as root project guidance for World of ClaudeCraft. **`CLAUDE.md` (root + per-directory) is the canonical source of truth** — kept current for Claude Code (Claude Opus 4.8); this file mirrors it for other agents, and when they disagree, `CLAUDE.md` wins. Keep this file concise and defer detailed, temporary, or model-specific guidance to the linked files.
 
 ## Startup Checklist
 
@@ -36,7 +36,7 @@ Codex should treat this file as the root project guidance for World of ClaudeCra
 - Never mutate simulation state directly from rendering, UI, or client glue code.
 - All state mutations must happen through simulation actions/ticks.
 - Use seeded RNG from `src/sim/rng.ts`; never use `Math.random()` in simulation logic.
-- Maintain vanilla WoW-style stat formulas and deterministic combat behavior.
+- Maintain classic-era-MMO-style stat formulas and deterministic combat behavior.
 - Use existing collision, spatial, and pathfinding helpers.
 
 ## Frontend And UI Rules

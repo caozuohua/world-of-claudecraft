@@ -24,8 +24,8 @@ This guide provides project-specific context and instructions optimized for **Ge
 - **Direct Output Style**: Gemini 3.5 Flash (High) can generate overly flowery explanations or AI-like narratives when reasoning is set to High. Write concise, direct, and functional comments. Do **not** use em dashes in user-facing copy or developer documentation; prefer colons, hyphens, or parentheses.
 
 ### Claude Interoperability
-- **Claude Alignment**: Other developers use Claude Code. If a `CLAUDE.md` file exists in the project root, you **must** read and ingest its contents during your initialization or planning phase to ensure strict alignment.
-- **Git Notice**: This `GEMINI.md` file is used locally for agent session context. Per user instructions, do not commit it to the main repository history, nor add it manually to `.gitignore` if not already present.
+- **`CLAUDE.md` is canonical.** This project is driven primarily through Claude Code (Claude Opus 4.8); the root and per-directory `CLAUDE.md` files are the source of truth for architecture, invariants, commands, and conventions. Read and ingest them during your initialization/planning phase, and when this guide and `CLAUDE.md` disagree, **`CLAUDE.md` wins** — treat this file as the Gemini-session companion, not a competing spec.
+- **Git Notice**: `GEMINI.md` is tracked in the repository (it is committed). Keep it consistent with `CLAUDE.md` when conventions change; do not add it to `.gitignore`.
 
 ---
 
@@ -33,7 +33,7 @@ This guide provides project-specific context and instructions optimized for **Ge
 
 - **`src/sim/` (Deterministic Simulation Core)**:
   - *Must know*: Purely deterministic game simulation. Zero DOM/WebGL/rendering dependencies.
-  - Contains entity state definitions, stats formulas (e.g. vanilla WoW formulas), collision geometry (`colliders.ts`), pathfinding (`pathfind.ts`), and quests.
+  - Contains entity state definitions, stats formulas (e.g. classic-era MMO formulas), collision geometry (`colliders.ts`), pathfinding (`pathfind.ts`), and quests.
   - Shared directly by the client (offline mode) and the server (authoritative online mode).
 - **`server/` (Authoritative Game Server)**:
   - Node `http` + `ws` WebSocket + REST server (`main.ts`, `game.ts`).
@@ -55,7 +55,7 @@ This guide provides project-specific context and instructions optimized for **Ge
 When working inside the simulation package:
 1. **Deterministic Mutation**: Never directly modify the `Sim` state or entity properties from rendering or client code. All state mutations must go through `Sim`'s own command methods (e.g. `castAbility`, `targetEntity`, `addItem`) and resolve inside the `tick()` loop (`src/sim/sim.ts`). The numeric RL action surface `applyAction` lives in `src/sim/obs.ts`, not `sim.ts`.
 2. **Deterministic RNG**: Always use the seed-based pseudo-random number generator (`src/sim/rng.ts`). Never call `Math.random()`.
-3. **Stat Formulas**: Maintain fidelity to Vanilla WoW-style formulas (e.g., Attack Power, Armor Damage Mitigation, Critical Strike rating, and Spell Resistances) defined in `src/sim/content/classes.ts`.
+3. **Stat Formulas**: Maintain fidelity to classic-era-MMO-style formulas (e.g., Attack Power, Armor Damage Mitigation, Critical Strike rating, and Spell Resistances) defined in `src/sim/content/classes.ts`.
 4. **Collision & Spatial Queries**: Use the axis-aligned bounding box (AABB) system in `src/sim/colliders.ts` and spatial indexing in `src/sim/spatial.ts` for physics checks and spell ranges.
 
 ---
@@ -184,7 +184,7 @@ Types: `feat`, `fix`, `refactor`, `style`, `docs`, `test`, `chore`.
 When developing user interfaces, menus, or launchers for the game client:
 
 ### 1. Aesthetic Style & MMO Theme
-- **WoW-Inspired Themes**: Target a premium, dark fantasy theme with deep dark tracks, gold-brown accents, and rich borders. Avoid default browser elements.
+- **Classic-MMO-Inspired Themes**: Target a premium, dark fantasy theme with deep dark tracks, gold-brown accents, and rich borders. Avoid default browser elements.
 - **No Emojis**: Do not use raw emojis for icons. Generate procedural in-game ability/class icons dynamically, or use high-quality assets/SVGs.
 - **Rich Transitions**: Implement smooth, interruption-safe transition classes (e.g., cross-fades) to navigate between views without layout shifts.
 
