@@ -1075,6 +1075,7 @@ export class GameServer {
 
   private canObserveEntity(viewer: Entity, e: Entity, d2: number): boolean {
     if (e.kind !== 'player' || !isStealthed(e)) return true;
+    if (this.sim.isHostileTo(viewer, e)) return false;
     const party = this.sim.partyOf(viewer.id);
     const sameParty = party?.members.includes(e.id) ?? false;
     const duel = this.sim.duelFor(viewer.id);
