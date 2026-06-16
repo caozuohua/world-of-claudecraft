@@ -666,6 +666,7 @@ export class ClientWorld implements IWorld {
       e.comboTargetId = s.comboTgt ?? null;
       e.targetId = s.target ?? null;
       e.autoAttack = !!s.auto;
+      e.swingTimer = s.swing ?? e.swingTimer;
       e.queuedOnSwing = s.queued ?? null;
       e.stats = s.stats ?? e.stats;
       e.attackPower = s.ap ?? 0;

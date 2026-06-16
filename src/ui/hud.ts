@@ -281,6 +281,10 @@ export class Hud {
   private questDialogReturnFocus: HTMLElement | null = null;
   private questLogReturnFocus: HTMLElement | null = null;
   private lastPortraitTarget = -999;
+  // swing timer: the period is captured from the reset edge (swingTimer jumping
+  // up), so the bar tracks real swing speed including haste / ranged weapons.
+  private swingPeriod = 0;
+  private lastSwingTimer = 0;
   // trading: locally staged offer, pushed to the server on change
   private stagedTrade: { items: InvSlot[]; copper: number } = { items: [], copper: 0 };
   private tradeWasOpen = false;
@@ -1654,6 +1658,29 @@ export class Hud {
       this.setWidth(this.castbarFillEl, '0%');
       this.setText(this.castbarLabelEl, '');
       this.setText(this.castbarTimerEl, '');
+    }
+
+    // swing timer — fills between melee/ranged auto-attack swings. swingTimer
+    // counts DOWN to 0 (ready); we recover the full interval from the reset
+    // edge so the bar stays accurate under haste and for ranged weapons.
+    const sw = $('#swingbar');
+    if (p.autoAttack && target && !target.dead && target.kind !== 'object') {
+      if (p.swingTimer > this.lastSwingTimer + 1e-4 || this.swingPeriod <= 0) {
+        this.swingPeriod = Math.max(p.swingTimer, p.weapon.speed);
+      }
+      this.lastSwingTimer = p.swingTimer;
+      const frac = this.swingPeriod > 0
+        ? Math.min(1, Math.max(0, 1 - p.swingTimer / this.swingPeriod))
+        : 1;
+      sw.style.display = 'block';
+      (sw.querySelector('.fill') as HTMLElement).style.width = `${(frac * 100).toFixed(1)}%`;
+      sw.classList.toggle('ready', p.swingTimer <= 0);
+      (sw.querySelector('.label') as HTMLElement).textContent =
+        p.swingTimer <= 0 ? 'Swing' : `${p.swingTimer.toFixed(1)}s`;
+    } else {
+      sw.style.display = 'none';
+      this.lastSwingTimer = 0;
+      this.swingPeriod = 0;
     }
 
     // action bar

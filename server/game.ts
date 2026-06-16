@@ -1258,6 +1258,7 @@ export class GameServer {
       prk: meta.prestigeRank,
       copper: meta.copper,
       gcd: round2(p.gcdRemaining),
+      swing: round2(p.swingTimer),
       combo: p.comboPoints,
       comboTgt: p.comboTargetId,
       target: p.targetId,

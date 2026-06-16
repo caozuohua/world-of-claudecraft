@@ -500,6 +500,15 @@
     color: #fff; text-shadow: 1px 1px 2px #000; font-family: var(--title-font); }
   #castbar .timer { position: absolute; top: 0; right: 6px; line-height: 21px; font-size: 11px;
     color: #fff; text-shadow: 1px 1px 2px #000; font-family: var(--title-font); font-variant-numeric: tabular-nums; }
+  /* swing timer: sits just under the cast bar, steel-on-amber to read as melee */
+  #swingbar { position: absolute; left: 50%; transform: translateX(-50%); bottom: 174px; width: 220px;
+    height: 12px; display: none; border: 1px solid var(--border); outline: 1px solid #000; border-radius: 3px;
+    background: #0c0a07; overflow: hidden; }
+  #swingbar .fill { height: 100%; width: 0%; background: linear-gradient(#ffcf7a, #d97b1e 60%, #8a4a10);
+    box-shadow: inset 0 1px 0 #fff4; transition: width 60ms linear; }
+  #swingbar.ready .fill { background: linear-gradient(#d8e8ff, #8fb6e6 60%, #5b86b8); }
+  #swingbar .label { position: absolute; inset: 0; text-align: center; font-size: 9px; line-height: 12px;
+    color: #fff; text-shadow: 1px 1px 1px #000; font-family: var(--title-font); letter-spacing: .5px; }
 
   /* ---------- bottom cluster ---------- */
   #bottom-bar { position: absolute; left: 50%; transform: translateX(-50%); bottom: 6px; text-align: center; }
@@ -5303,6 +5312,7 @@
     <div id="trade-window" class="window panel"></div>
 
     <div id="castbar"><div class="fill"></div><div class="label"></div><div class="timer"></div></div>
+    <div id="swingbar"><div class="fill"></div><div class="label"></div></div>
 
     <div id="minimap-wrap">
       <div id="zone-label" data-i18n="entities.zones.eastbrook_vale.name">Eastbrook Vale</div>
