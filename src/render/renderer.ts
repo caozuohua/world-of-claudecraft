@@ -63,6 +63,7 @@ const AIRBORNE_EPS = 0.4;
 const LIGHT_BUDGET_RANGE_SQ = 55 * 55;
 // HDR boosts so the bloom pass picks these out (composer tiers only)
 const SELECTION_RING_BOOST = 1.5;
+const SELECTION_RING_SPIN = 0.6; // rad/s — slow classic target-reticle rotation
 const SPARKLE_BOOST = 1.5;
 const PORTAL_BOOST = 2;
 // Third-person camera collision (see updateCamera). HARD_PAD keeps the camera
@@ -437,13 +438,26 @@ export class Renderer {
     this.fireLights = props.fireLights;
     this.propsView = props;
 
-    // selection ring
-    const ringGeo = new THREE.RingGeometry(0.9, 1.15, 32);
+    // selection ring — a classic target reticle: a base ring plus four
+    // inward-pointing ticks. The ring is radially symmetric (so spin reads
+    // only off the ticks); it rotates slowly and pulses in sync() below.
+    const ringGeo = new THREE.RingGeometry(0.9, 1.15, 48);
     ringGeo.rotateX(-Math.PI / 2);
-    this.selectionRing = new THREE.Mesh(
-      ringGeo,
-      new THREE.MeshBasicMaterial({ color: 0xd4af37, transparent: true, opacity: 0.9, depthWrite: false }),
-    );
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0xd4af37, transparent: true, opacity: 0.9, depthWrite: false });
+    this.selectionRing = new THREE.Mesh(ringGeo, ringMat);
+    // four cardinal ticks, flat in the XZ plane, sharing the ring material so
+    // the per-frame hostile/friendly recolour carries over for free.
+    const tickGeo = new THREE.BufferGeometry();
+    tickGeo.setAttribute('position', new THREE.Float32BufferAttribute([
+      0.72, 0, 0,     // inner tip (points toward the unit)
+      1.2, 0, 0.16,   // outer corners
+      1.2, 0, -0.16,
+    ], 3));
+    for (let i = 0; i < 4; i++) {
+      const t = new THREE.Mesh(tickGeo, ringMat);
+      t.rotation.y = (i * Math.PI) / 2;
+      this.selectionRing.add(t);
+    }
     this.selectionRing.visible = false;
     this.scene.add(this.selectionRing);
 
@@ -1223,9 +1237,11 @@ export class Renderer {
         this.selectionRing.position.copy(tv.group.position);
         this.selectionRing.position.y += 0.08;
         this.selectionRing.scale.setScalar(target.scale);
+        this.selectionRing.rotation.y += dt * SELECTION_RING_SPIN; // slow reticle spin
         const ringMat = this.selectionRing.material as THREE.MeshBasicMaterial;
         ringMat.color.setHex(target.hostile ? 0xcc2222 : 0xd4af37);
         if (!this.lowGfx) ringMat.color.multiplyScalar(SELECTION_RING_BOOST); // subtle bloom edge
+        ringMat.opacity = 0.78 + 0.2 * Math.sin(this.time * 4.5); // gentle pulse
         this.selectionRing.visible = true;
       } else {
         this.selectionRing.visible = false;
