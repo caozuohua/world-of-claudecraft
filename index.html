@@ -1653,6 +1653,13 @@
     margin-top: var(--spacing-xs);
   }
 
+  /* "Browse the Wiki" launcher: reuses the .btn skin but renders as an anchor. */
+  .wiki-cta {
+    display: inline-block;
+    text-decoration: none;
+    margin-top: var(--spacing-sm);
+  }
+
   /* Home-page global leaderboard (Max-Level XP Overflow) */
   .hs-panel {
     display: flex;
@@ -1703,6 +1710,123 @@
   .hs-lvl, .hs-vlvl { text-align: center; }
   .hs-xp { text-align: right; color: #ffe27a; font-variant-numeric: tabular-nums; }
   .hs-prestige { color: #ffd100; font-size: 11px; margin-right: 4px; }
+
+  /* News & Updates view (mirrored from GitHub Releases) */
+  .news-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg);
+    max-width: 860px;
+  }
+  .news-feed {
+    width: 100%;
+    margin-top: var(--spacing-sm);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  .news-loading, .news-empty, .news-error {
+    width: 100%;
+    color: var(--color-text-light);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    text-align: center;
+    padding: 28px 0;
+  }
+  .news-error { color: #e08a7a; }
+  .news-item {
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.025);
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+  .news-item-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: var(--spacing-sm);
+    border-bottom: 1px solid rgba(78, 61, 29, 0.3);
+    padding-bottom: var(--spacing-sm);
+  }
+  .news-item-title {
+    font-family: var(--font-heading);
+    color: var(--color-primary);
+    font-size: 16px;
+    margin: 0;
+    text-shadow: 1px 1px 2px #000;
+  }
+  .news-tag {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: var(--color-text-muted, #b9ac82);
+    font-variant-numeric: tabular-nums;
+  }
+  .news-badge {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #ffd86b;
+    border: 1px solid #ffd86b66;
+    border-radius: var(--radius-sm);
+    padding: 1px 6px;
+  }
+  .news-date {
+    margin-left: auto;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: var(--color-text-muted, #b9ac82);
+  }
+  .news-body {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--color-text-light);
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    max-height: 460px;
+    overflow-y: auto;
+    padding-right: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-default) transparent;
+  }
+  .news-body::-webkit-scrollbar { width: 8px; }
+  .news-body::-webkit-scrollbar-track { background: transparent; }
+  .news-body::-webkit-scrollbar-thumb {
+    background: var(--color-border-default);
+    border-radius: 4px;
+  }
+  .news-body > :first-child { margin-top: 0; }
+  .news-body > :last-child { margin-bottom: 0; }
+  .news-body h1, .news-body h2, .news-body h3 {
+    font-family: var(--font-heading);
+    color: var(--color-primary-dim, #d9c896);
+    font-size: 14px;
+    margin: var(--spacing-md) 0 var(--spacing-xs);
+  }
+  .news-body p { margin: var(--spacing-xs) 0; }
+  .news-body ul { margin: var(--spacing-xs) 0; padding-left: 20px; }
+  .news-body li { margin: 2px 0; }
+  .news-body code {
+    font-family: var(--font-mono, monospace);
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 3px;
+    padding: 1px 4px;
+    font-size: 12px;
+  }
+  .news-body a { color: #ffd86b; text-decoration: underline; }
+  .news-item-foot { margin-top: var(--spacing-sm); }
+  .news-link {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: #ffd86b;
+    text-decoration: none;
+  }
+  .news-link:hover, .news-link:focus-visible { text-decoration: underline; }
 
   /* Wiki view with integrated Controls Guide */
   .wiki-container-layout {
@@ -2397,7 +2521,11 @@
 
   /* ---------- Animated Backdrop ---------- */
   #start-screen-backdrop {
-    position: absolute;
+    /* fixed (not absolute) so the atmospheric backdrop stays pinned to the
+       viewport and keeps covering as the homepage scrolls — an absolute
+       inset:0 child of the scrolling #start-screen only spans the first
+       viewport height, leaving bare #040408 below the fold. */
+    position: fixed;
     inset: 0;
     z-index: -1;
     overflow: hidden;
@@ -4739,7 +4867,7 @@
             </div>
             <h2 class="skeleton-title" data-i18n="wiki.title">Game Wiki & Guide</h2>
             <p class="skeleton-desc" data-i18n="wiki.desc">Discover the secrets of the realm, class guides, and strategies.</p>
-            <div class="coming-soon-badge" data-i18n="comingSoon.placeholder">Coming Soon...</div>
+            <a class="btn wiki-cta" href="/wiki" target="_blank" rel="noopener noreferrer" data-i18n="wiki.cta">Browse the Wiki</a>
           </div>
           
           <div class="wiki-controls-guide">
@@ -4783,7 +4911,7 @@
       </section>
 
       <section id="news-view" class="view-section" hidden aria-hidden="true">
-        <div class="parchment-panel skeleton-panel">
+        <div class="parchment-panel news-panel">
           <div class="skeleton-icon-wrapper">
             <svg viewBox="0 0 24 24" class="skeleton-svg-icon" aria-hidden="true">
               <path fill="currentColor" d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6m-2 0l-8 5l-8-5h16m0 12H4V8l8 5l8-5v10z"/>
@@ -4791,7 +4919,9 @@
           </div>
           <h2 class="skeleton-title" data-i18n="news.title">News & Updates</h2>
           <p class="skeleton-desc" data-i18n="news.desc">Read the latest patch notes, events, and community updates.</p>
-          <div class="coming-soon-badge" data-i18n="comingSoon.placeholder">Coming Soon...</div>
+          <div id="news-feed" class="news-feed" aria-live="polite">
+            <div class="news-loading" data-i18n="news.loading">Loading the latest updates…</div>
+          </div>
         </div>
       </section>
 

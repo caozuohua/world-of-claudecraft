@@ -77,6 +77,11 @@ export default defineConfig({
       '/api': { target: 'http://127.0.0.1:8787', changeOrigin: true },
       '/admin/api': { target: 'http://127.0.0.1:8787', changeOrigin: true },
       '/ws': { target: 'ws://127.0.0.1:8787', ws: true },
+      // MediaWiki community wiki runs as its own container on :8080. Proxy /wiki*
+      // to it so the in-app "Browse the Wiki" link resolves in dev too — mirrors
+      // the prod reverse-proxy route (nginx /wiki -> :8080). Needs the container
+      // up: `docker compose up -d mediawiki mediawiki-db`.
+      '/wiki': { target: 'http://127.0.0.1:8080', changeOrigin: true },
     },
   },
   build: {

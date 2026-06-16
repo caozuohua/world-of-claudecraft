@@ -10964,10 +10964,16 @@ export const en = {
   wiki: {
     title: "Game Wiki & Guide",
     desc: "Discover the secrets of the realm, class guides, and strategies.",
+    cta: "Browse the Wiki",
   },
   news: {
     title: "News & Updates",
     desc: "Read the latest patch notes, events, and community updates.",
+    loading: "Loading the latest updates…",
+    error: "Couldn't load updates. Please try again later.",
+    empty: "No updates yet — check back soon.",
+    prerelease: "Pre-release",
+    viewOnGithub: "View on GitHub",
   },
   download: {
     title: "Download Desktop Launcher",
@@ -11118,10 +11124,16 @@ export const es: typeof en = {
   wiki: {
     title: "Wiki y Guía del Juego",
     desc: "Descubre los secretos del reino, guías de clase y estrategias.",
+    cta: "Explorar la Wiki",
   },
   news: {
     title: "Noticias y Actualizaciones",
     desc: "Lee las últimas notas del parche, eventos y noticias de la comunidad.",
+    loading: "Cargando las últimas novedades…",
+    error: "No se pudieron cargar las novedades. Inténtalo de nuevo más tarde.",
+    empty: "Aún no hay novedades; vuelve pronto.",
+    prerelease: "Versión preliminar",
+    viewOnGithub: "Ver en GitHub",
   },
   download: {
     title: "Descargar Lanzador de Escritorio",
@@ -11272,10 +11284,16 @@ export const es_ES: typeof en = {
   wiki: {
     title: "Wiki y guía del juego",
     desc: "Descubre los secretos del reino, guías de clase y estrategias.",
+    cta: "Explorar la wiki",
   },
   news: {
     title: "Noticias y actualizaciones",
     desc: "Lee las últimas notas del parche, eventos y noticias de la comunidad.",
+    loading: "Cargando las últimas novedades…",
+    error: "No se pudieron cargar las novedades. Inténtalo de nuevo más tarde.",
+    empty: "Aún no hay novedades; vuelve pronto.",
+    prerelease: "Versión preliminar",
+    viewOnGithub: "Ver en GitHub",
   },
   download: {
     title: "Descargar lanzador de escritorio",
@@ -11426,10 +11444,16 @@ export const fr_FR: typeof en = {
   wiki: {
     title: "Wiki et guide du jeu",
     desc: "Découvrez les secrets du royaume, les guides de classe et les stratégies.",
+    cta: "Parcourir le wiki",
   },
   news: {
     title: "Actualités et mises à jour",
     desc: "Lisez les dernières notes de mise à jour, les événements et les nouvelles de la communauté.",
+    loading: "Chargement des dernières actualités…",
+    error: "Impossible de charger les actualités. Veuillez réessayer plus tard.",
+    empty: "Aucune actualité pour le moment — revenez bientôt.",
+    prerelease: "Préversion",
+    viewOnGithub: "Voir sur GitHub",
   },
   download: {
     title: "Télécharger le lanceur de bureau",
@@ -11580,10 +11604,16 @@ export const fr_CA: typeof en = {
   wiki: {
     title: "Wiki et guide du jeu",
     desc: "Découvrez les secrets du royaume, les guides de classe et les stratégies.",
+    cta: "Parcourir le wiki",
   },
   news: {
     title: "Actualités et mises à jour",
     desc: "Lisez les dernières notes de mise à jour, les événements et les nouvelles de la communauté.",
+    loading: "Chargement des dernières actualités…",
+    error: "Impossible de charger les actualités. Veuillez réessayer plus tard.",
+    empty: "Aucune actualité pour le moment — revenez bientôt.",
+    prerelease: "Préversion",
+    viewOnGithub: "Voir sur GitHub",
   },
   download: {
     title: "Télécharger le lanceur de bureau",
@@ -11734,10 +11764,16 @@ export const en_CA: typeof en = {
   wiki: {
     title: "Game Wiki & Guide",
     desc: "Discover the secrets of the realm, class guides, and strategies.",
+    cta: "Browse the Wiki",
   },
   news: {
     title: "News & Updates",
     desc: "Read the latest patch notes, events, and community updates.",
+    loading: "Loading the latest updates…",
+    error: "Couldn't load updates. Please try again later.",
+    empty: "No updates yet — check back soon.",
+    prerelease: "Pre-release",
+    viewOnGithub: "View on GitHub",
   },
   download: {
     title: "Download Desktop Launcher",
@@ -11888,10 +11924,16 @@ export const it_IT: typeof en = {
   wiki: {
     title: "Wiki e guida del gioco",
     desc: "Scopri i segreti del reame, le guide di classe e le strategie.",
+    cta: "Esplora la Wiki",
   },
   news: {
     title: "Notizie e aggiornamenti",
     desc: "Leggi le ultime note sulla patch, gli eventi e gli aggiornamenti della community.",
+    loading: "Caricamento degli ultimi aggiornamenti…",
+    error: "Impossibile caricare gli aggiornamenti. Riprova più tardi.",
+    empty: "Ancora nessun aggiornamento — torna presto.",
+    prerelease: "Anteprima",
+    viewOnGithub: "Vedi su GitHub",
   },
   download: {
     title: "Scarica il launcher per desktop",
@@ -12042,10 +12084,16 @@ export const de_DE: typeof en = {
   wiki: {
     title: "Spiel-Wiki und Guides",
     desc: "Entdecke die Geheimnisse des Realms, Klassenguides und Strategien.",
+    cta: "Zum Wiki",
   },
   news: {
     title: "Neuigkeiten und Updates",
     desc: "Lies die neuesten Patchnotes, Events und Community-Updates.",
+    loading: "Neueste Updates werden geladen…",
+    error: "Updates konnten nicht geladen werden. Bitte versuche es später erneut.",
+    empty: "Noch keine Updates — schau bald wieder vorbei.",
+    prerelease: "Vorabversion",
+    viewOnGithub: "Auf GitHub ansehen",
   },
   download: {
     title: "Desktop-Launcher herunterladen",
@@ -12196,10 +12244,16 @@ export const zh_CN: typeof en = {
   wiki: {
     title: "游戏百科与指南",
     desc: "探索世界的秘密、职业指南以及战术策略。",
+    cta: "浏览百科",
   },
   news: {
     title: "新闻与更新说明",
     desc: "阅读最新补丁说明、游戏内事件和社区动态。",
+    loading: "正在加载最新动态…",
+    error: "无法加载动态，请稍后再试。",
+    empty: "暂无动态，敬请期待。",
+    prerelease: "预发布",
+    viewOnGithub: "在 GitHub 上查看",
   },
   download: {
     title: "下载电脑版启动器",
@@ -12350,10 +12404,16 @@ export const zh_TW: typeof en = {
   wiki: {
     title: "遊戲百科與指南",
     desc: "探索世界的秘密、職業指南以及戰術策略。",
+    cta: "瀏覽百科",
   },
   news: {
     title: "新聞與更新說明",
     desc: "閱讀最新修補程式說明、遊戲內事件和社群動態。",
+    loading: "正在載入最新動態…",
+    error: "無法載入動態，請稍後再試。",
+    empty: "暫無動態，敬請期待。",
+    prerelease: "搶先版",
+    viewOnGithub: "在 GitHub 上檢視",
   },
   download: {
     title: "下載電腦版啟動器",
@@ -12504,10 +12564,16 @@ export const ko_KR: typeof en = {
   wiki: {
     title: "게임 위키 및 가이드",
     desc: "렐름의 비밀과 클래스 가이드, 전략 등을 확인해 보세요.",
+    cta: "위키 둘러보기",
   },
   news: {
     title: "새소식 및 업데이트",
     desc: "최신 패치 노트, 이벤트 소식, 커뮤니티 업데이트를 확인해 보세요.",
+    loading: "최신 소식을 불러오는 중…",
+    error: "소식을 불러오지 못했습니다. 나중에 다시 시도해 주세요.",
+    empty: "아직 소식이 없습니다. 곧 다시 확인해 주세요.",
+    prerelease: "사전 출시",
+    viewOnGithub: "GitHub에서 보기",
   },
   download: {
     title: "데스크톱 런처 다운로드",
@@ -12658,10 +12724,16 @@ export const ja_JP: typeof en = {
   wiki: {
     title: "ゲームWiki & ガイド",
     desc: "レルムの秘密、クラスガイド、戦略を確認しましょう。",
+    cta: "Wikiを見る",
   },
   news: {
     title: "ニュース & アップデート",
     desc: "最新のパッチノート、イベント、コミュニティの更新情報を確認しましょう。",
+    loading: "最新情報を読み込んでいます…",
+    error: "更新情報を読み込めませんでした。後でもう一度お試しください。",
+    empty: "まだ更新情報はありません。またご確認ください。",
+    prerelease: "先行リリース",
+    viewOnGithub: "GitHub で見る",
   },
   download: {
     title: "デスクトップランチャーのダウンロード",
@@ -12812,10 +12884,16 @@ export const pt_BR: typeof en = {
   wiki: {
     title: "Wiki e guia do jogo",
     desc: "Descubra os segredos do reino, guias de classes e estratégias.",
+    cta: "Explorar a Wiki",
   },
   news: {
     title: "Notícias e atualizações",
     desc: "Leia as últimas notas do patch, eventos e atualizações da comunidade.",
+    loading: "Carregando as novidades mais recentes…",
+    error: "Não foi possível carregar as novidades. Tente novamente mais tarde.",
+    empty: "Ainda não há novidades — volte em breve.",
+    prerelease: "Pré-lançamento",
+    viewOnGithub: "Ver no GitHub",
   },
   download: {
     title: "Baixar launcher para desktop",
@@ -12966,10 +13044,16 @@ export const ru_RU: typeof en = {
   wiki: {
     title: "Вики и руководство",
     desc: "Откройте секреты игрового мира, руководства по классам и стратегии.",
+    cta: "Открыть вики",
   },
   news: {
     title: "Новости и обновления",
     desc: "Читайте описание последних обновлений, информацию о событиях и новости сообщества.",
+    loading: "Загрузка последних новостей…",
+    error: "Не удалось загрузить новости. Повторите попытку позже.",
+    empty: "Новостей пока нет — загляните позже.",
+    prerelease: "Предварительный выпуск",
+    viewOnGithub: "Открыть на GitHub",
   },
   download: {
     title: "Скачать загрузчик для ПК",
