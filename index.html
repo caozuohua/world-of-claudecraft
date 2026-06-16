@@ -3124,7 +3124,7 @@
      anywhere; the joystick rests dimmed at home until touched, then springs to
      the touch point with a gold "engaged" glow. */
   body.mobile-touch #mobile-move-zone {
-    position: absolute; left: 0; bottom: 0; width: 44%; height: 58%;
+    position: absolute; left: 0; bottom: 0; width: min(34vw, calc(50vw - 126px)); min-width: 142px; max-width: 300px; height: 58%;
     pointer-events: auto; touch-action: none; z-index: 1;
   }
   body.mobile-touch.mobile-chat-open #mobile-move-zone { pointer-events: none; }
@@ -3149,7 +3149,7 @@
   }
   body.mobile-touch #mobile-combat-controls {
     position: absolute; left: 50%; bottom: calc(4px + env(safe-area-inset-bottom)); transform: translateX(-50%);
-    display: grid; grid-template-columns: 124px repeat(4, 58px); gap: 8px; pointer-events: auto; align-items: end;
+    display: grid; grid-template-columns: 124px repeat(5, 58px); gap: 8px; pointer-events: auto; align-items: end; z-index: 30;
   }
   body.mobile-touch .mobile-btn {
     width: 58px; height: 54px; border: 2px solid #4a3d1d; border-radius: 8px;
@@ -3718,6 +3718,12 @@
 
   @media (orientation: portrait) {
     body.mobile-touch.game-active #rotate-device { display: flex; }
+    body.mobile-touch #mobile-combat-controls {
+      grid-template-columns: 96px repeat(5, 42px);
+      gap: 4px;
+    }
+    body.mobile-touch .mobile-btn { width: 42px; height: 44px; font-size: 16px; }
+    body.mobile-touch #mobile-attack-nearest { width: 96px; }
   }
 
   @media (orientation: landscape) {
@@ -3733,7 +3739,7 @@
     }
     body.mobile-touch .mobile-joy-label { bottom: -15px; font-size: 8px; color: #d7c987aa; }
     body.mobile-touch #mobile-combat-controls {
-      bottom: calc(2px + env(safe-area-inset-bottom)); grid-template-columns: 115px repeat(4, 54px); gap: 7px;
+      bottom: calc(2px + env(safe-area-inset-bottom)); grid-template-columns: 115px repeat(5, 54px); gap: 7px;
     }
     body.mobile-touch .mobile-btn { width: 54px; height: 48px; font-size: 20px; background: radial-gradient(circle at 35% 30%, #2d3048bf, #11121ec2 72%); }
     body.mobile-touch #mobile-attack-nearest { width: 115px; }

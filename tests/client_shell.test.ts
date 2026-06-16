@@ -54,9 +54,21 @@ describe('client HTML shell', () => {
   });
 
   it('keeps the mobile More button in the combat row', () => {
-    expect(html).toContain('grid-template-columns: 124px repeat(4, 58px);');
-    expect(html).toContain('grid-template-columns: 115px repeat(4, 54px);');
+    const combatControls = html.slice(html.indexOf('<div id="mobile-combat-controls">'), html.indexOf('<div id="mobile-extra-controls">'));
+    const primaryButtons = [...combatControls.matchAll(/<button class="mobile-btn"/g)];
+
+    expect(primaryButtons).toHaveLength(6);
+    expect(html).toContain('grid-template-columns: 124px repeat(5, 58px);');
+    expect(html).toContain('grid-template-columns: 115px repeat(5, 54px);');
+    expect(html).toContain('grid-template-columns: 96px repeat(5, 42px);');
+    expect(html).toContain('pointer-events: auto; align-items: end; z-index: 30;');
     expect(html).toContain('body.mobile-touch #mobile-more {\n    position: static;');
+  });
+
+  it('keeps the mobile move zone clear of the centered skill bar', () => {
+    expect(html).toContain('width: min(34vw, calc(50vw - 126px));');
+    expect(html).toContain('min-width: 142px;');
+    expect(html).toContain('max-width: 300px;');
   });
 
   it('places mobile Autorun beside the spell bar', () => {
