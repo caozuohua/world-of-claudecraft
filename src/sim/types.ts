@@ -168,6 +168,9 @@ export interface MobTemplate {
   // Boss mechanic: damage multiplier (and optional swing-speed haste) once hp
   // drops below the threshold. hasteMult > 1 makes the enraged mob swing faster.
   enrage?: { belowHpPct: number; dmgMult: number; hasteMult?: number };
+  // Mob mechanic: a one-time desperation self-heal the first time hp drops
+  // below the threshold (healPct is a fraction of maxHp). Resets on evade/respawn.
+  desperateHeal?: { belowHpPct: number; healPct: number };
 }
 
 export type AbilityEffect =
@@ -478,6 +481,7 @@ export interface Entity {
   firedSummons: number; // summonAdds thresholds already triggered
   summonedIds: number[]; // live adds this boss summoned; despawned on reset
   enraged: boolean; // enrage mechanic active
+  healedThisPull: boolean; // desperation self-heal already used this pull
   spawnPos: Vec3;
   leashAnchor: Vec3 | null; // refreshed by hostile player/pet actions; spawnPos remains the true home
   evadeStall: number; // seconds an evading mob has failed to get closer to home; snaps it home if it can't path back (e.g. across water)
