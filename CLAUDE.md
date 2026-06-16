@@ -1,12 +1,12 @@
-<!-- World of Claudecraft — project-root CLAUDE.md.
+<!-- World of ClaudeCraft — project-root CLAUDE.md.
      Keep this under ~150 lines and strictly repo-wide. Area-specific guidance
      lives in each subdirectory's own CLAUDE.md (src/sim/, src/render/, server/,
      ...), which load on demand when you open files there — do NOT duplicate
      them here. HTML comments like this are stripped before load (zero tokens). -->
 
-# World of Claudecraft
+# World of ClaudeCraft
 
-A WoW-Classic-style micro-MMO **and** a headless reinforcement-learning
+A classic-style micro-MMO **and** a headless reinforcement-learning
 environment, both driven by one deterministic TypeScript simulation core.
 Stack: TypeScript (ESM, `strict`) · Three.js renderer · `ws` WebSockets ·
 Postgres (`pg`) · Vite + esbuild · Vitest. No UI framework; tiny dependency set.
@@ -63,7 +63,7 @@ See `README.md` for the full host/develop/play guide and the classic-fidelity ch
 - **Determinism.** The sim is a fixed **20 Hz** tick (`DT = 1/20`). All randomness
   goes through `Rng` (`src/sim/rng.ts`) — **never `Math.random`**, `Date.now`, or
   `performance.now` in sim logic. Same seed ⇒ same world.
-- **Gameplay math follows real vanilla-WoW formulas** (rage, hit tables, armor DR,
+- **Gameplay math follows real classic-era MMO formulas** (rage, hit tables, armor DR,
   XP curves — see `README.md` and `docs/design/`). Don't invent balance numbers.
 - **Don't hand-edit generated files** — e.g. `src/render/assets/manifest.generated.ts`
   (regenerate via the build).
@@ -101,8 +101,8 @@ See `README.md` for the full host/develop/play guide and the classic-fidelity ch
 
 ## Conventions
 - **ESM + TypeScript `strict`** everywhere. 2-space indent; match the surrounding file.
-- **Large single-file modules are normal here** (`sim.ts` ~4.7k lines, `hud.ts`
-  ~3.5k). Follow the existing in-file structure; **don't split a module just to hit
+- **Large single-file modules are normal here** (`sim.ts` and `hud.ts` are each
+  ~5k+ lines). Follow the existing in-file structure; **don't split a module just to hit
   a line count.** (This overrides any generic "files < N lines" rule from a
   higher-level CLAUDE.md.)
 - **Keep the dependency set tiny.** Don't add packages without a clear need.
@@ -114,6 +114,27 @@ See `README.md` for the full host/develop/play guide and the classic-fidelity ch
 - E2E/visual: `scripts/*.mjs` drive real browsers via `puppeteer-core` and need
   `npm run dev` (often `npm run server` too) running. Bot raids / E2E that teleport
   or level need `ALLOW_DEV_COMMANDS=1` (dev only).
+
+## Working style by model
+This whole file is the baseline for **any** model — obey all of it. Your active
+model is named in your system prompt ("You are powered by the model named … model
+ID …"). The block below changes only *how much* you take on at once, never *what is
+correct*.
+- **Baseline (Sonnet 4.6, any model, and the default whenever you're unsure):** take
+  small, verifiable steps; checkpoint with the user before large multi-file changes;
+  use one investigation subagent for a broad search rather than fanning out widely.
+- **Opus 4.8 only (model ID `claude-opus-4-8`):** work more autonomously — plan
+  multi-step work end to end and carry long-horizon tasks (migrations, multi-file
+  refactors) through to completion without pausing after each step, as long as the
+  build and tests stay green; fan out parallel subagents for independent
+  investigation and per-file batch work; before declaring done, have a fresh
+  subagent review your own diff for correctness/requirement gaps (not style). The
+  operator can push this further with `xhigh` effort / ultracode.
+- **Never gate the Invariants, safety (`ALLOW_DEV_COMMANDS`, secrets), or
+  correctness on which model you are** — the identity line can be stale, so when in
+  doubt use the baseline. Anchor every autonomous step on a check you can actually
+  run (`npx vitest run <file>`, `npm test`, `npm run build`, the S3 i18n guard
+  `tests/localization_fixes.test.ts`), never on "looks done."
 
 ## Pointers
 `README.md` (host/develop/play + fidelity checklist) · `DEPLOY.md` (production) ·
