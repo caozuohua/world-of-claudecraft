@@ -2,14 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
 import { ACTIONS, encodeObs } from '../src/sim/obs';
 import { Entity, dist2d } from '../src/sim/types';
-import { CRYPT_DOOR_POS, DUNGEON_LIST, DUNGEON_X_THRESHOLD, ITEMS, LAKE, MOBS, NPCS, QUESTS, zoneAt, zoneWelcomeText } from '../src/sim/data';
+import { CRYPT_DOOR_POS, DUNGEON_LIST, DUNGEON_X_THRESHOLD, ITEMS, LAKE, MOBS, NPCS, QUESTS, instanceOrigin, zoneAt, zoneWelcomeText } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
 import { groundHeight, WATER_LEVEL } from '../src/sim/world';
-import { cameraOcclusion, isBlocked, resolvePosition } from '../src/sim/colliders';
+import { cameraOcclusion, isBlocked, lineOfSightClear, resolvePosition } from '../src/sim/colliders';
 
 const SEED = 20061;
 
-function makeSim(cls: 'warrior' | 'mage' = 'warrior') {
+function makeSim(cls: 'warrior' | 'mage' | 'hunter' = 'warrior') {
   return new Sim({ seed: SEED, playerClass: cls });
 }
 
@@ -19,6 +19,18 @@ function teleportTo(sim: Sim, x: number, z: number, pid?: number) {
   p.pos.z = z;
   p.pos.y = groundHeight(x, z, sim.cfg.seed);
   p.prevPos = { ...p.pos };
+}
+
+function placeEntity(sim: Sim, e: Entity, x: number, z: number) {
+  e.pos.x = x;
+  e.pos.z = z;
+  e.pos.y = groundHeight(x, z, sim.cfg.seed);
+  e.prevPos = { ...e.pos };
+  e.spawnPos = { ...e.pos };
+}
+
+function faceTarget(actor: Entity, target: Entity) {
+  actor.facing = Math.atan2(target.pos.x - actor.pos.x, target.pos.z - actor.pos.z);
 }
 
 describe('quest lifecycle', () => {
@@ -517,10 +529,39 @@ describe('boss loot and encounter resets', () => {
     expect(mob.lootable).toBe(true);
     expect(mob.loot?.items).toContainEqual({ itemId: 'boar_hide', count: 1, personalFor: [b] });
 
+    sim.partyLeave(b);
     sim.lootCorpse(mob.id, b);
     expect(sim.countItem('boar_hide', b)).toBe(1);
     expect(mob.loot).toBeNull();
     expect(mob.lootable).toBe(false);
+  });
+
+  it('personal loot remains claimable after party rights are gone without granting shared loot', () => {
+    const sim = makeSim();
+    const a = sim.playerId;
+    const b = sim.addPlayer('mage', 'Bert');
+    const mob = createMob(990103, MOBS.forest_wolf, 2, { x: 20, y: 0, z: 22 });
+    mob.dead = true;
+    mob.lootable = true;
+    mob.tappedById = a;
+    mob.loot = {
+      copper: 88,
+      items: [
+        { itemId: 'boar_hide', count: 1, personalFor: [b] },
+        { itemId: 'wolf_fang', count: 1 },
+      ],
+    };
+    sim.entities.set(mob.id, mob);
+    teleportTo(sim, 20, 20, b);
+
+    const beforeCopper = sim.meta(b)!.copper;
+    sim.lootCorpse(mob.id, b);
+
+    expect(sim.countItem('boar_hide', b)).toBe(1);
+    expect(sim.countItem('wolf_fang', b)).toBe(0);
+    expect(sim.meta(b)!.copper).toBe(beforeCopper);
+    expect(mob.loot?.copper).toBe(88);
+    expect(mob.loot?.items).toContainEqual({ itemId: 'wolf_fang', count: 1 });
   });
 
   it('does not drop a quest-gated item whose quest has no matching collect objective', () => {
@@ -859,6 +900,62 @@ describe('spell visuals', () => {
     for (let i = 0; i < 60; i++) events.push(...sim.tick());
     const fx = events.filter((e) => e.type === 'spellfx');
     expect(fx.some((e) => e.type === 'spellfx' && e.fx === 'projectile' && e.school === 'fire')).toBe(true);
+  });
+
+  it('hostile targeted spells cannot start through dungeon walls', () => {
+    const sim = makeSim('mage');
+    const origin = instanceOrigin(2, 0);
+    const p = sim.player;
+    const mob = createMob(990200, MOBS.sanctum_boneguard, 19, { x: origin.x - 14, y: 0, z: origin.z + 74 });
+    sim.entities.set(mob.id, mob);
+    teleportTo(sim, origin.x - 14, origin.z + 60);
+    faceTarget(p, mob);
+    sim.targetEntity(mob.id);
+
+    expect(lineOfSightClear(sim.cfg.seed, p.pos, mob.pos)).toBe(false);
+    sim.castAbility('fireball');
+    const events = sim.tick();
+
+    expect(p.castingAbility).toBeNull();
+    expect(events.some((e) => e.type === 'castStart' && e.ability === 'fireball')).toBe(false);
+    expect(events.some((e) => e.type === 'error' && /line of sight/i.test(e.text))).toBe(true);
+  });
+
+  it('hostile targeted spells can start through the open dungeon passage', () => {
+    const sim = makeSim('mage');
+    const origin = instanceOrigin(2, 0);
+    const p = sim.player;
+    const mob = createMob(990201, MOBS.sanctum_boneguard, 19, { x: origin.x, y: 0, z: origin.z + 74 });
+    sim.entities.set(mob.id, mob);
+    teleportTo(sim, origin.x, origin.z + 60);
+    faceTarget(p, mob);
+    sim.targetEntity(mob.id);
+
+    expect(lineOfSightClear(sim.cfg.seed, p.pos, mob.pos)).toBe(true);
+    sim.castAbility('fireball');
+    const events = sim.tick();
+
+    expect(p.castingAbility).toBe('fireball');
+    expect(events.some((e) => e.type === 'castStart' && e.ability === 'fireball')).toBe(true);
+  });
+
+  it('ranged auto shot does not fire through dungeon walls', () => {
+    const sim = makeSim('hunter');
+    const origin = instanceOrigin(2, 0);
+    const p = sim.player;
+    const mob = createMob(990202, MOBS.sanctum_boneguard, 19, { x: origin.x - 14, y: 0, z: origin.z + 74 });
+    sim.entities.set(mob.id, mob);
+    teleportTo(sim, origin.x - 14, origin.z + 60);
+    placeEntity(sim, mob, origin.x - 14, origin.z + 74);
+    faceTarget(p, mob);
+    sim.targetEntity(mob.id);
+    sim.startAutoAttack();
+    p.swingTimer = 0;
+
+    const events = sim.tick();
+
+    expect(events.some((e) => e.type === 'spellfx' && e.targetId === mob.id)).toBe(false);
+    expect(events.some((e) => e.type === 'damage' && e.ability === 'Auto Shot')).toBe(false);
   });
 });
 

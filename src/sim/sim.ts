@@ -5,7 +5,7 @@ import {
   zoneAt, ZONES,
 } from './data';
 import { ARENA_SPAWN_A, ARENA_SPAWN_B } from './dungeon_layout';
-import { resolvePosition } from './colliders';
+import { lineOfSightClear, resolvePosition } from './colliders';
 import { findPath } from './pathfind';
 import { createGroundObject, createMob, createNpc, createPlayer, recalcPlayerStats, PlayerEquipment } from './entity';
 import {
@@ -255,6 +255,7 @@ export interface RewardCounters {
 export interface SentChat {
   channel: 'say' | 'yell' | 'whisper' | 'general' | 'party' | 'world' | 'lfg';
   message: string;
+  target?: string;
 }
 
 // Opt-in global chat channels a player can /join and /leave. `general` is
@@ -1670,6 +1671,19 @@ export class Sim {
     this.emit({ type: 'castStop', entityId: p.id, success: false });
   }
 
+  private abilityNeedsLineOfSight(ability: AbilityDef): boolean {
+    if (!ability.requiresTarget) return false;
+    return ability.school !== 'physical' || ability.range > MELEE_RANGE;
+  }
+
+  private hasLineOfSight(source: Entity, target: Entity): boolean {
+    return lineOfSightClear(this.cfg.seed, source.pos, target.pos);
+  }
+
+  private lineOfSightBlocked(source: Entity, target: Entity, ability: AbilityDef): boolean {
+    return this.abilityNeedsLineOfSight(ability) && !this.hasLineOfSight(source, target);
+  }
+
   private pushbackCast(p: Entity): void {
     if (p.channeling) {
       p.castRemaining = Math.max(0, p.castRemaining - p.castTotal * CHANNEL_PUSHBACK_FRACTION);
@@ -1743,6 +1757,7 @@ export class Sim {
       target = cur && !cur.dead && this.isFriendlyTo(p, cur) ? cur : p;
       const d = dist2d(p.pos, target.pos);
       if (d > Math.max(ability.range, 5)) { this.error(p.id, 'Out of range.'); return; }
+      if (this.lineOfSightBlocked(p, target, ability)) { this.error(p.id, 'Line of sight.'); return; }
     } else if (ability.requiresTarget) {
       target = p.targetId !== null ? this.entities.get(p.targetId) ?? null : null;
       if (!target || target.dead || !this.isHostileTo(p, target)) { this.error(p.id, 'You have no target.'); return; }
@@ -1750,6 +1765,7 @@ export class Sim {
       const maxRange = ability.range > 0 ? ability.range : MELEE_RANGE;
       if (d > maxRange) { this.error(p.id, 'Out of range.'); return; }
       if (ability.minRange && d < ability.minRange) { this.error(p.id, 'Too close!'); return; }
+      if (this.lineOfSightBlocked(p, target, ability)) { this.error(p.id, 'Line of sight.'); return; }
       const facingDiff = Math.abs(normAngle(angleTo(p.pos, target.pos) - p.facing));
       if (facingDiff > MELEE_ARC) { this.error(p.id, 'You must be facing your target.'); return; }
       // execute-style gate: only usable while the target is nearly dead
@@ -1848,6 +1864,11 @@ export class Sim {
   private applyChannelTick(p: Entity, res: ResolvedAbility): void {
     const target = p.targetId !== null ? this.entities.get(p.targetId) : null;
     if (!target || target.dead) { this.cancelCast(p); return; }
+    if (this.lineOfSightBlocked(p, target, res.def)) {
+      this.error(p.id, 'Line of sight.');
+      this.cancelCast(p);
+      return;
+    }
     this.emit({ type: 'spellfx', sourceId: p.id, targetId: target.id, school: res.def.school, fx: 'projectile' });
     for (const eff of res.effects) {
       if (eff.type === 'directDamage') {
@@ -1938,12 +1959,14 @@ export class Sim {
       const cur = p.targetId !== null ? this.entities.get(p.targetId) ?? null : null;
       target = cur && !cur.dead && this.isFriendlyTo(p, cur) ? cur : p;
       if (dist2d(p.pos, target.pos) > Math.max(ability.range, 5) + 2) { this.error(p.id, 'Out of range.'); return; }
+      if (this.lineOfSightBlocked(p, target, ability)) { this.error(p.id, 'Line of sight.'); return; }
     } else if (ability.requiresTarget) {
       target = p.targetId !== null ? this.entities.get(p.targetId) ?? null : null;
       if (!target || target.dead) { this.error(p.id, 'You have no target.'); return; }
       const d = dist2d(p.pos, target.pos);
       const maxRange = ability.range > 0 ? ability.range : MELEE_RANGE;
       if (d > maxRange + 2) { this.error(p.id, 'Out of range.'); return; }
+      if (this.lineOfSightBlocked(p, target, ability)) { this.error(p.id, 'Line of sight.'); return; }
     }
     if (p.resource < res.cost && !this.formShiftKind(p, ability)) { this.error(p.id, 'Not enough ' + (p.resourceType ?? 'resource') + '!'); return; }
 
@@ -2171,6 +2194,7 @@ export class Sim {
         case 'aoeDamage': {
           this.emit({ type: 'spellfx', sourceId: p.id, targetId: p.id, school: ability.school, fx: 'nova' });
           for (const m of this.mobsInRadius(p.pos, eff.radius)) {
+            if (!this.hasLineOfSight(p, m)) continue;
             let dmg = this.rng.range(eff.min, eff.max);
             // Armor only mitigates physical damage, mirroring the single-target
             // path above — spell-school AoE (Arcane Explosion, Consecration) is
@@ -2183,6 +2207,7 @@ export class Sim {
         case 'aoeAttackSpeed': {
           for (const m of this.mobsInRadius(p.pos, eff.radius)) {
             if (m.dead) continue;
+            if (!this.hasLineOfSight(p, m)) continue;
             this.applyAura(m, {
               id: ability.id + '_as', name: ability.name, kind: 'attackspeed',
               remaining: eff.duration, duration: eff.duration, value: eff.mult,
@@ -2194,6 +2219,7 @@ export class Sim {
         case 'aoeRoot': {
           this.emit({ type: 'spellfx', sourceId: p.id, targetId: p.id, school: ability.school, fx: 'nova' });
           for (const m of this.hostilesInRadius(p, p.pos, eff.radius)) {
+            if (!this.hasLineOfSight(p, m)) continue;
             const dmg = this.rng.range(eff.min, eff.max);
             this.dealDamage(p, m, Math.round(dmg), false, ability.school, ability.name, 'hit');
             if (!m.dead && this.isHostileTo(p, m)) {
@@ -2505,6 +2531,7 @@ export class Sim {
     // casters (wand-style, no dead zone so they don't run into melee — #94)
     const ranged = CLASSES[meta.cls].ranged;
     if (ranged && d <= ranged.maxRange && d >= (ranged.wand ? 0 : ranged.minRange)) {
+      if (!this.hasLineOfSight(p, t)) return;
       this.rangedSwing(p, t, ranged);
       p.swingTimer = ranged.speed * this.swingIntervalMult(p);
       return;
@@ -4131,16 +4158,17 @@ export class Sim {
     const { meta, e: p } = r;
     const mob = this.entities.get(mobId);
     if (!mob || !mob.lootable || !mob.loot) return;
-    if (mob.tappedById !== null && mob.tappedById !== meta.entityId) {
-      // party members of the tapper share loot rights
-      const tapperParty = this.partyOf(mob.tappedById);
-      if (!tapperParty || !tapperParty.members.includes(meta.entityId)) {
-        this.error(meta.entityId, "You don't have permission to loot that.");
-        return;
-      }
+    const tapperParty = mob.tappedById !== null ? this.partyOf(mob.tappedById) : null;
+    const hasSharedLootRights = mob.tappedById === null
+      || mob.tappedById === meta.entityId
+      || !!tapperParty?.members.includes(meta.entityId);
+    const hasPersonalLoot = mob.loot.items.some((s) => s.personalFor?.includes(meta.entityId));
+    if (!hasSharedLootRights && !hasPersonalLoot) {
+      this.error(meta.entityId, "You don't have permission to loot that.");
+      return;
     }
     if (dist2d(p.pos, mob.pos) > INTERACT_RANGE) { this.error(meta.entityId, 'Too far away.'); return; }
-    if (mob.loot.copper > 0) {
+    if (hasSharedLootRights && mob.loot.copper > 0) {
       meta.copper += mob.loot.copper;
       meta.counters.lootCopper += mob.loot.copper;
       this.emit({ type: 'loot', text: `You loot ${formatMoney(mob.loot.copper)}.`, pid: meta.entityId });
@@ -4153,6 +4181,7 @@ export class Sim {
         s.personalFor = s.personalFor.filter((id) => id !== meta.entityId);
         continue;
       }
+      if (!hasSharedLootRights) continue;
       for (let i = 0; i < s.count; i++) {
         if (!this.rollGroupLoot(s.itemId, mob, meta)) this.addItem(s.itemId, 1, meta.entityId);
       }
@@ -4450,6 +4479,40 @@ export class Sim {
     return undefined;
   }
 
+  private whisperMessageForName(rest: string, name: string, exactCase: boolean): string | null {
+    const input = exactCase ? rest : rest.toLowerCase();
+    const prefix = exactCase ? name : name.toLowerCase();
+    if (!input.startsWith(prefix)) return null;
+    const next = rest.charAt(name.length);
+    if (!next || !/\s/.test(next)) return null;
+    const message = rest.slice(name.length).trim();
+    return message ? message : null;
+  }
+
+  private resolveWhisperTarget(rest: string): { target: PlayerMeta; message: string } | { error: string } | null {
+    const trimmed = rest.trim();
+    if (!trimmed) return null;
+    const matches: { target: PlayerMeta; message: string; exactCase: boolean }[] = [];
+    for (const target of this.players.values()) {
+      const exactMessage = this.whisperMessageForName(trimmed, target.name, true);
+      if (exactMessage !== null) {
+        matches.push({ target, message: exactMessage, exactCase: true });
+        continue;
+      }
+      const insensitiveMessage = this.whisperMessageForName(trimmed, target.name, false);
+      if (insensitiveMessage !== null) matches.push({ target, message: insensitiveMessage, exactCase: false });
+    }
+    matches.sort((a, b) => b.target.name.length - a.target.name.length);
+    const longestLength = matches[0]?.target.name.length ?? 0;
+    const longest = matches.filter((m) => m.target.name.length === longestLength);
+    const exact = longest.filter((m) => m.exactCase);
+    if (exact.length > 0) return exact[0];
+    if (longest.length === 1) return longest[0];
+    const typedName = trimmed.split(/\s+/, 1)[0] ?? trimmed;
+    if (longest.length > 1) return { error: `Several players match '${typedName}'. Use exact capitalization.` };
+    return { error: `There is no player named '${typedName}' online.` };
+  }
+
   chat(text: string, pid?: number): SentChat | null {
     const r = this.resolve(pid);
     if (!r) return null;
@@ -4683,27 +4746,15 @@ export class Sim {
     if (/^\/(queued|onswing|swingqueue)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.queuedReadout(r.e)); return null; }
     if (/^\/(?:savedmana|parkedmana|sm)(?:\s|$)/i.test(raw)) { this.error(r.meta.entityId, this.savedManaReadout(r.meta, r.e)); return null; }
 
-    // "/w name message" — private whisper to an online player
-    const wm = /^\/(?:w|whisper|t|tell)\s+(\S+)\s+([\s\S]+)$/i.exec(line);
+    // "/w name message" — private whisper to an online player. Match against
+    // `line` so a "/r" reply (rewritten to the /w form above) flows through the
+    // same longest-online-name resolver.
+    const wm = /^\/(?:w|whisper|t|tell)\s+([\s\S]+)$/i.exec(line);
     if (wm) {
-      const targetName = wm[1];
-      const msg = wm[2].trim();
-      if (!msg) return null;
-      // exact case wins outright; otherwise a case-insensitive match is used
-      // only when unambiguous, so 'Bet' and 'bet' can't silently intercept
-      // each other's whispers
-      let target: PlayerMeta | null = null;
-      const ciMatches: PlayerMeta[] = [];
-      const wanted = targetName.toLowerCase();
-      for (const meta of this.players.values()) {
-        if (meta.name === targetName) { target = meta; break; }
-        if (meta.name.toLowerCase() === wanted) ciMatches.push(meta);
-      }
-      if (!target) {
-        if (ciMatches.length === 1) target = ciMatches[0];
-        else if (ciMatches.length > 1) { this.error(r.meta.entityId, `Several players match '${targetName}'. Use exact capitalization.`); return null; }
-      }
-      if (!target) { this.error(r.meta.entityId, `There is no player named '${targetName}' online.`); return null; }
+      const resolved = this.resolveWhisperTarget(wm[1]);
+      if (!resolved) return null;
+      if ('error' in resolved) { this.error(r.meta.entityId, resolved.error); return null; }
+      const { target, message: msg } = resolved;
       if (target.entityId === r.meta.entityId) { this.error(r.meta.entityId, 'You mutter to yourself. Nobody hears it.'); return null; }
       if (target.away) {
         const label = target.away.mode === 'afk' ? 'Away From Keyboard' : 'Do Not Disturb';
@@ -4720,7 +4771,7 @@ export class Sim {
       target.lastWhisperFrom = r.meta.name;
       this.emit({ type: 'chat', fromPid: r.meta.entityId, from: r.meta.name, text: msg, channel: 'whisper', pid: target.entityId });
       this.emit({ type: 'chat', fromPid: r.meta.entityId, from: r.meta.name, to: target.name, text: msg, channel: 'whisper', pid: r.meta.entityId });
-      return { channel: 'whisper', message: msg };
+      return { channel: 'whisper', message: msg, target: target.name };
     }
 
 

@@ -44,7 +44,7 @@ describe('sent chat normalization', () => {
     const sim = makeWorld();
     const a = sim.addPlayer('warrior', 'Aleph');
     sim.addPlayer('mage', 'Bet');
-    expect(sim.chat('/w bet psst', a)).toEqual({ channel: 'whisper', message: 'psst' });
+    expect(sim.chat('/w bet psst', a)).toEqual({ channel: 'whisper', message: 'psst', target: 'Bet' });
     expect(sim.chat('/w nobody psst', a)).toBeNull();
   });
 

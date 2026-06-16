@@ -19,7 +19,9 @@ export const DATABASE_URL =
 
 export const pool = new Pool({ connectionString: DATABASE_URL, max: 10 });
 
-const SCHEMA = `
+const REALM_SQL_DEFAULT = REALM.replace(/'/g, "''");
+
+export const SCHEMA = `
 CREATE TABLE IF NOT EXISTS accounts (
   id SERIAL PRIMARY KEY,
   username TEXT UNIQUE NOT NULL,
@@ -39,12 +41,14 @@ CREATE TABLE IF NOT EXISTS characters (
   account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
   name TEXT UNIQUE NOT NULL,
   class TEXT NOT NULL,
+  realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}',
   level INT NOT NULL DEFAULT 1,
   state JSONB,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS characters_account ON characters(account_id);
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS realm TEXT NOT NULL DEFAULT '${REALM_SQL_DEFAULT}';
 -- Max-Level XP Overflow leaderboard: indexed lifetime-XP sort key. The first
 -- index serves the realm-scoped in-game panel; the second serves the global
 -- (cross-realm) home-page board.
@@ -369,6 +373,36 @@ export async function createCharacter(accountId: number, name: string, cls: Play
     [accountId, name, cls, REALM],
   );
   return res.rows[0];
+}
+
+export async function createCharacterCapped(
+  accountId: number,
+  name: string,
+  cls: PlayerClass,
+  limit = 10,
+): Promise<CharacterRow | null> {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const account = await client.query('SELECT id FROM accounts WHERE id = $1 FOR UPDATE', [accountId]);
+    if ((account.rowCount ?? 0) === 0) { await client.query('ROLLBACK'); return null; }
+    const count = await client.query(
+      'SELECT count(*)::int AS n FROM characters WHERE account_id = $1 AND realm = $2',
+      [accountId, REALM],
+    );
+    if (Number(count.rows[0]?.n ?? 0) >= limit) { await client.query('ROLLBACK'); return null; }
+    const res = await client.query(
+      'INSERT INTO characters (account_id, name, class, realm) VALUES ($1, $2, $3, $4) RETURNING id, account_id, name, class, level, state, is_gm, force_rename',
+      [accountId, name, cls, REALM],
+    );
+    await client.query('COMMIT');
+    return res.rows[0];
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
 }
 
 export async function deleteCharacter(accountId: number, characterId: number): Promise<boolean> {

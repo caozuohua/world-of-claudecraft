@@ -1294,8 +1294,7 @@ export class GameServer {
     const sent = this.sim.chat(text, pid);
     if (sent) {
       if (sent.channel === 'whisper') {
-        const wm = /^\/(?:w|whisper|t|tell)\s+(\S+)\s+[\s\S]+$/i.exec(text);
-        if (wm) session.rememberedChat = { channel: 'whisper', target: wm[1] };
+        if (sent.target) session.rememberedChat = { channel: 'whisper', target: sent.target };
       } else {
         session.rememberedChat = { channel: sent.channel };
       }

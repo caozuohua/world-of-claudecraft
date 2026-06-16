@@ -16,6 +16,7 @@ import { getLanguage, t, formatNumber, type InterpolationValues, type SupportedL
 import { tEntity } from './entity_i18n';
 
 const enTable = {
+  "error.lineOfSight": "Line of sight.",
   "error.specLevel": "You may choose a specialization at level {level}.",
   "error.invalidBuild": "Invalid talent build.",
   "error.unknownSpec": "Unknown specialization.",
@@ -82,6 +83,7 @@ export type SimMessageKey = keyof typeof enTable;
 // tsc fails on a missing locale OR a missing/renamed key (stronger than the server DICT).
 export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
   en: {
+    "error.lineOfSight": "Line of sight.",
     "error.specLevel": "You may choose a specialization at level {level}.",
     "error.invalidBuild": "Invalid talent build.",
     "error.unknownSpec": "Unknown specialization.",
@@ -142,6 +144,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
     "aura.tamed": "Tamed",
   },
   es: {
+    "error.lineOfSight": "Sin línea de visión.",
     "error.specLevel": "Puedes elegir una especialización al nivel {level}.",
     "error.invalidBuild": "Configuración de talentos no válida.",
     "error.unknownSpec": "Especialización desconocida.",
@@ -202,6 +205,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
     "aura.tamed": "Domado",
   },
   es_ES: {
+    "error.lineOfSight": "Sin línea de visión.",
     "error.specLevel": "Podrás elegir una especialización en el nivel {level}.",
     "error.invalidBuild": "Configuración de talentos no válida.",
     "error.unknownSpec": "Especialización desconocida.",
@@ -262,6 +266,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
     "aura.tamed": "Domado",
   },
   fr_FR: {
+    "error.lineOfSight": "Pas de ligne de vue.",
     "error.specLevel": "Vous pourrez choisir une spécialisation au niveau {level}.",
     "error.invalidBuild": "Distribution de talents invalide.",
     "error.unknownSpec": "Spécialisation inconnue.",
@@ -322,6 +327,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
     "aura.tamed": "Apprivoisé",
   },
   fr_CA: {
+    "error.lineOfSight": "Pas de ligne de vue.",
     "error.specLevel": "Vous pourrez choisir une spécialisation au niveau {level}.",
     "error.invalidBuild": "Spécialisation invalide.",
     "error.unknownSpec": "Spécialisation inconnue.",
@@ -382,6 +388,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
     "aura.tamed": "Apprivoisé",
   },
   en_CA: {
+    "error.lineOfSight": "Line of sight.",
     "error.specLevel": "You may choose a specialization at level {level}.",
     "error.invalidBuild": "Invalid talent build.",
     "error.unknownSpec": "Unknown specialization.",
@@ -442,6 +449,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
     "aura.tamed": "Tamed",
   },
   it_IT: {
+    "error.lineOfSight": "Nessuna linea di vista.",
     "error.specLevel": "Puoi scegliere una specializzazione al livello {level}.",
     "error.invalidBuild": "Build dei talenti non valida.",
     "error.unknownSpec": "Specializzazione sconosciuta.",
@@ -502,6 +510,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
     "aura.tamed": "Addomesticato",
   },
   de_DE: {
+    "error.lineOfSight": "Kein Sichtkontakt.",
     "error.specLevel": "Ihr könnt auf Stufe {level} eine Spezialisierung wählen.",
     "error.invalidBuild": "Ungültige Talentverteilung.",
     "error.unknownSpec": "Unbekannte Spezialisierung.",
@@ -562,6 +571,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
     "aura.tamed": "Gezähmt",
   },
   zh_CN: {
+    "error.lineOfSight": "目标不在视线内。",
     "error.specLevel": "你将在{level}级时选择专精。",
     "error.invalidBuild": "无效的天赋配置。",
     "error.unknownSpec": "未知的专精。",
@@ -622,6 +632,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
     "aura.tamed": "已驯服",
   },
   zh_TW: {
+    "error.lineOfSight": "目標不在視線內。",
     "error.specLevel": "你必須達到等級 {level} 才能選擇專精。",
     "error.invalidBuild": "無效的天賦配置。",
     "error.unknownSpec": "未知的專精。",
@@ -682,6 +693,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
     "aura.tamed": "馴服",
   },
   ko_KR: {
+    "error.lineOfSight": "시야가 막혀 있습니다.",
     "error.specLevel": "{level}레벨에 전문화를 선택할 수 있습니다.",
     "error.invalidBuild": "잘못된 특성 구성입니다.",
     "error.unknownSpec": "알 수 없는 전문화입니다.",
@@ -742,6 +754,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
     "aura.tamed": "길들여짐",
   },
   ja_JP: {
+    "error.lineOfSight": "視線が通っていません。",
     "error.specLevel": "専門化はレベル{level}で選択できます。",
     "error.invalidBuild": "無効なタレントビルドです。",
     "error.unknownSpec": "不明な専門化です。",
@@ -802,6 +815,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
     "aura.tamed": "テイム",
   },
   pt_BR: {
+    "error.lineOfSight": "Sem linha de visão.",
     "error.specLevel": "Você pode escolher uma especialização no nível {level}.",
     "error.invalidBuild": "Estrutura de talentos inválida.",
     "error.unknownSpec": "Especialização desconhecida.",
@@ -862,6 +876,7 @@ export const DICT: Record<SupportedLanguage, Record<SimMessageKey, string>> = {
     "aura.tamed": "Domado",
   },
   ru_RU: {
+    "error.lineOfSight": "Нет прямой видимости.",
     "error.specLevel": "Выбрать специализацию можно на {level} уровне.",
     "error.invalidBuild": "Недопустимая сборка талантов.",
     "error.unknownSpec": "Неизвестная специализация.",

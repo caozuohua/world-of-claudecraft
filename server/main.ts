@@ -4,7 +4,7 @@ import * as path from 'node:path';
 import { WebSocketServer, WebSocket } from 'ws';
 import {
   ensureSchema, pool, createAccount, findAccount, getAccountsCount, touchLogin, saveToken, accountForToken,
-  listCharacters, getCharacter, createCharacter, deleteCharacter, closeOrphanSessions,
+  listCharacters, getCharacter, createCharacterCapped, deleteCharacter, closeOrphanSessions,
   pruneChatLogs, searchCharacters, characterCountsByRealm, moderationStatusForAccount, renameCharacter,
   findCharacterReportTargetByName, topArenaRatings, topLifetimeXp, chatMuteStatusForAccount,
 } from './db';
@@ -273,10 +273,9 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         if (offensiveName(name)) return json(res, 400, { error: 'character name is not allowed' });
         const validClasses = ['warrior', 'paladin', 'hunter', 'rogue', 'priest', 'shaman', 'mage', 'warlock', 'druid'];
         if (!validClasses.includes(body.class)) return json(res, 400, { error: 'invalid class' });
-        const chars = await listCharacters(accountId);
-        if (chars.length >= 10) return json(res, 400, { error: 'character limit reached' });
         try {
-          const c = await createCharacter(accountId, name, body.class);
+          const c = await createCharacterCapped(accountId, name, body.class, 10);
+          if (!c) return json(res, 400, { error: 'character limit reached' });
           return json(res, 200, { id: c.id, name: c.name, class: c.class, level: c.level, forceRename: c.force_rename });
         } catch (err: any) {
           if (isUniqueViolation(err)) return json(res, 409, { error: 'that name is taken' });

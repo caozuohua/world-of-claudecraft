@@ -318,6 +318,56 @@ describe('chat channels', () => {
     expect(toTarget!.pid).not.toBe(squatter);
   });
 
+  it('whisper resolves the longest online name so spaced names are not misdelivered', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Aleph');
+    const short = sim.addPlayer('mage', 'Bob');
+    const spaced = sim.addPlayer('rogue', 'Bob Smith');
+    teleport(sim, a, 0, -40);
+    sim.tick();
+
+    const sent = sim.chat('/w Bob Smith meet at the crypt', a);
+    const msgs = chatEvents(sim.tick());
+    const toTarget = msgs.find((m) => m.pid !== a);
+    const echo = msgs.find((m) => m.pid === a);
+
+    expect(sent).toEqual({ channel: 'whisper', message: 'meet at the crypt', target: 'Bob Smith' });
+    expect(toTarget!.pid).toBe(spaced);
+    expect(toTarget!.pid).not.toBe(short);
+    expect(echo!.to).toBe('Bob Smith');
+  });
+
+  it('whisper resolves spaced names case-insensitively only when unambiguous', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Aleph');
+    const spaced = sim.addPlayer('rogue', 'Bob Smith');
+    teleport(sim, a, 0, -40);
+    sim.tick();
+
+    const sent = sim.chat('/w bob smith lowercase works', a);
+    const msgs = chatEvents(sim.tick());
+
+    expect(sent).toEqual({ channel: 'whisper', message: 'lowercase works', target: 'Bob Smith' });
+    expect(msgs.find((m) => m.pid !== a)!.pid).toBe(spaced);
+  });
+
+  it('a shorter exact-case name does not intercept a longer spaced case-insensitive match', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Aleph');
+    const short = sim.addPlayer('mage', 'Bob');
+    const spaced = sim.addPlayer('rogue', 'bob smith');
+    teleport(sim, a, 0, -40);
+    sim.tick();
+
+    const sent = sim.chat('/w Bob Smith mixed case target', a);
+    const msgs = chatEvents(sim.tick());
+    const toTarget = msgs.find((m) => m.pid !== a);
+
+    expect(sent).toEqual({ channel: 'whisper', message: 'mixed case target', target: 'bob smith' });
+    expect(toTarget!.pid).toBe(spaced);
+    expect(toTarget!.pid).not.toBe(short);
+  });
+
   it('ambiguous case-insensitive whisper is refused, not misdelivered', () => {
     const sim = makeWorld();
     const a = sim.addPlayer('warrior', 'Aleph');
