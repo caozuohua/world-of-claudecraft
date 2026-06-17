@@ -47,7 +47,8 @@ export type AuraKind =
   | 'dot' | 'slow' | 'stun' | 'root' | 'incapacitate' | 'polymorph'
   | 'attackspeed' | 'debuff_ap' | 'buff_ap' | 'buff_armor' | 'buff_int' | 'buff_dodge' | 'buff_speed' | 'buff_haste'
   | 'hot' | 'absorb' | 'imbue' | 'buff_sta' | 'buff_allstats' | 'thorns' | 'form_bear'
-  | 'form_cat' | 'stealth' | 'defensive_stance' | 'righteous_fury' | 'sunder' | 'mortal_wound' | 'silence';
+  | 'form_cat' | 'stealth' | 'defensive_stance' | 'righteous_fury' | 'sunder' | 'mortal_wound' | 'silence'
+  | 'spellvuln';
 
 export interface Aura {
   id: string; // ability id that applied it
@@ -223,6 +224,13 @@ export interface MobTemplate {
   // more physical damage from everyone until it expires. Rides the existing
   // sunder aura; no new aura kind.
   corrode?: { chance: number; armor: number; maxStacks: number; duration: number; name: string; school?: Aura['school'] };
+  // Combat mechanic: a landed melee hit has `chance` to curse the victim with a
+  // spell-vulnerability debuff (`spellvuln`) that amplifies all NON-physical
+  // (magic) damage they take by `amp` (e.g. 0.15 = +15%) from every attacker for
+  // `duration`. The arcane twin of `corrode` — corrode shreds armor (physical
+  // mitigation); this raises magic damage taken. Holy is excluded so healing-
+  // school spells stay unaffected.
+  spellVuln?: { chance: number; amp: number; duration: number; name: string; school?: Aura['school'] };
   // On-hit web mechanic: a landed melee swing has `chance` to ensnare the struck
   // player in place — a `root` aura for `duration`s (naga/spider snares). Rides the
   // existing root aura + crowd-control DR; no new aura kind. Players only; rooting a

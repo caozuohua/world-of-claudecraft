@@ -124,7 +124,7 @@ const EMOTE_ALIASES: Record<string, string> = {
 // (buff_*, hot, absorb, imbue, stances, forms, stealth, thorns, attackspeed
 // haste) is treated as helpful/neutral. Used by /targetbuffs to tag each aura.
 const HARMFUL_AURA_KINDS: ReadonlySet<AuraKind> = new Set<AuraKind>([
-  'dot', 'slow', 'stun', 'root', 'incapacitate', 'polymorph', 'sunder',
+  'dot', 'slow', 'stun', 'root', 'incapacitate', 'polymorph', 'sunder', 'spellvuln',
 ]);
 
 function isHarmfulAura(kind: AuraKind): boolean {
@@ -186,7 +186,7 @@ const DEMON_HEAL_DURATION = 5;
 const DEMON_HEAL_TICK = 1;
 const TAMED_TARGET_RESPAWN_SECONDS = 60;
 const FRIENDLY_NPC_REJECTED_AURA_KINDS: ReadonlySet<AuraKind> = new Set([
-  'dot', 'slow', 'stun', 'root', 'incapacitate', 'polymorph', 'attackspeed', 'sunder',
+  'dot', 'slow', 'stun', 'root', 'incapacitate', 'polymorph', 'attackspeed', 'sunder', 'spellvuln',
 ]);
 
 function isRejectedFriendlyNpcAura(aura: Aura): boolean {
@@ -3271,6 +3271,18 @@ export class Sim {
       amount = Math.round(amount * 0.9);
     }
 
+    // Spell Vulnerability: a `spellvuln` debuff amplifies all NON-physical (magic)
+    // damage the victim takes from every attacker. Holy is excluded so healing-
+    // school spells are untouched. Stacks additively across active debuffs and
+    // lands before absorb shields, so a soaked hit still soaks the amplified total.
+    if (amount > 0 && school !== 'physical' && school !== 'holy') {
+      let amp = 0;
+      for (const a of target.auras) {
+        if (a.kind === 'spellvuln') amp += a.value;
+      }
+      if (amp > 0) amount = Math.round(amount * (1 + amp));
+    }
+
     // absorb shields soak damage first
     if (amount > 0) {
       for (let i = target.auras.length - 1; i >= 0 && amount > 0; i--) {
@@ -4190,6 +4202,23 @@ export class Sim {
         value: ms.healReduction,
         sourceId: mob.id,
         school: (ms.school as Aura['school']) ?? 'physical',
+      });
+    }
+    // Spell Vulnerability: a landed hit may curse the victim so they take more
+    // magic damage from everyone (the arcane twin of corrode's armor shred).
+    // Hostile mobs only, so a friendly pet (mobSwing's other caller) never curses
+    // the party. A single refreshing slot keyed by template, like mortal_wound.
+    const sv = MOBS[mob.templateId]?.spellVuln;
+    if (sv && mob.hostile && !target.dead && this.rng.chance(sv.chance)) {
+      this.applyAura(target, {
+        id: `spellvuln_${mob.templateId}`,
+        name: sv.name,
+        kind: 'spellvuln',
+        remaining: sv.duration,
+        duration: sv.duration,
+        value: sv.amp,
+        sourceId: mob.id,
+        school: (sv.school as Aura['school']) ?? 'arcane',
       });
     }
     // Ensnare: a landed hit may web the victim in place (root). Hostile mobs only

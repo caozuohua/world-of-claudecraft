@@ -138,6 +138,10 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     // A touch of the storm's cold numbs the limbs: each landed swing has a
     // chance to slow the victim to half speed for a few seconds.
     chillOnHit: { chance: 0.35, mult: 0.5, duration: 6, name: 'Numbing Chill' },
+    // Static Charge: the elemental's storm clings to whatever it strikes, leaving
+    // the victim conductive so every spell that lands on them bites deeper —
+    // +18% magic damage taken from all attackers for a while.
+    spellVuln: { chance: 0.3, amp: 0.18, duration: 10, name: 'Static Charge', school: 'nature' },
   },
   shardlord_kazzix: {
     id: 'shardlord_kazzix', name: 'Shardlord Kazzix', minLevel: 18, maxLevel: 18, family: 'elemental', rare: true,
