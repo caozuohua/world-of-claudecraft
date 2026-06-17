@@ -48969,3 +48969,19 @@ export const translations = {
   pt_BR,
   ru_RU,
 };
+
+export const pending: Record<string, readonly string[]> = {
+  "es": [],
+  "es_ES": [],
+  "fr_FR": [],
+  "fr_CA": [],
+  "en_CA": [],
+  "it_IT": [],
+  "de_DE": [],
+  "zh_CN": [],
+  "zh_TW": [],
+  "ko_KR": [],
+  "ja_JP": [],
+  "pt_BR": [],
+  "ru_RU": []
+};

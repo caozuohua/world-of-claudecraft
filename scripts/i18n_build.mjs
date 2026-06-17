@@ -23,7 +23,7 @@
 import * as esbuild from 'esbuild';
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { unflatten } from './i18n_flatten.mjs';
+import { flatten, unflatten } from './i18n_flatten.mjs';
 
 const root = process.cwd();
 const OUT_PATH = path.join(root, 'src/ui/i18n.resolved.generated.ts');
@@ -130,7 +130,7 @@ function banner() {
   ].join('\n');
 }
 
-function emit(resolved) {
+function emit(resolved, pending) {
   const lines = [banner(), '', "import type { EnTranslations } from './i18n.en';", ''];
   for (const lang of LOCALES) {
     lines.push(`export const ${lang}: EnTranslations = ${JSON.stringify(resolved[lang], null, 2)};`);
@@ -140,7 +140,43 @@ function emit(resolved) {
   for (const lang of LOCALES) lines.push(`  ${lang},`);
   lines.push('};');
   lines.push('');
+  // Per-locale dotted keys with NO real translation in the source overlay: the
+  // dense table above carries the English FILL for each of them. t() renders that
+  // English on a non-release build and HARD-FAILS on a release build (the release
+  // gate asserts this set is empty, so the failure is a never-fires safety net).
+  // Computed from the overlays, dialect-aware, mirroring scripts/i18n_scan.mjs's
+  // `providedByLang`; `en` is the source and is never pending. EMPTY while the
+  // overlays stay dense.
+  lines.push('export const pending: Record<string, readonly string[]> = ' + JSON.stringify(pending, null, 2) + ';');
+  lines.push('');
   return lines.join('\n');
+}
+
+// A locale "provides" a key when its own overlay (or, for a dialect, its base
+// chain) carries a non-empty value for it. The complement against `en`'s leaves is
+// the per-locale `pending` set: untranslated keys the resolved table English-fills.
+// This is the exact same rule as scripts/i18n_scan.mjs `providedByLang`, kept in
+// lockstep so the build's runtime `pending` and the registry's `pending` agree.
+const isPresent = (v) => typeof v === 'string' && v.trim().length > 0;
+
+function computePending(en, locales) {
+  const enFlatKeys = Object.keys(flatten(en));
+  const pending = {};
+  for (const lang of LOCALES) {
+    if (lang === 'en') continue; // en is the authoritative source, never pending
+    const provided = new Set();
+    const own = locales[lang] || {};
+    for (const k of Object.keys(own)) if (isPresent(own[k])) provided.add(k);
+    const base = DIALECT_BASE[lang];
+    if (base === 'en') {
+      for (const k of enFlatKeys) provided.add(k); // English dialect inherits every leaf
+    } else if (base) {
+      const baseOverlay = locales[base] || {};
+      for (const k of Object.keys(baseOverlay)) if (isPresent(baseOverlay[k])) provided.add(k);
+    }
+    pending[lang] = enFlatKeys.filter((k) => !provided.has(k)).sort();
+  }
+  return pending;
 }
 
 async function main() {
@@ -164,7 +200,8 @@ async function main() {
     }
     resolved[lang] = out;
   }
-  const text = emit(resolved);
+  const pending = computePending(en, locales);
+  const text = emit(resolved, pending);
   writeFileSync(OUT_PATH, text);
   console.log(
     `generated ${path.relative(root, OUT_PATH)} (${LOCALES.length} locales, ${Buffer.byteLength(text, 'utf8')} bytes)`,

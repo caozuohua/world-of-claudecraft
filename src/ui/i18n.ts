@@ -1,5 +1,6 @@
 import {
   translations,
+  pending,
   en, es, es_ES, fr_FR, fr_CA, en_CA, it_IT, de_DE, zh_CN, zh_TW, ko_KR, ja_JP, pt_BR, ru_RU,
 } from './i18n.resolved.generated';
 import type { Leaves, TranslationKey, InterpolationValue, InterpolationValues, DeepPartial } from './i18n.en';
@@ -96,6 +97,57 @@ function interpolate(template: string, values?: InterpolationValues): string {
   });
 }
 
+// --- Phase 6: release detection + the t() miss / pending policy -----------------
+//
+// A non-release build (dev / pre-release / vitest) MAY render English for a key the
+// active locale has not translated yet (a registry-`pending` key): the dense table
+// carries that English fill, so it renders with no special-casing. A RELEASE build
+// must NEVER do that - the release CI gate asserts the pending set is empty, and
+// t() additionally hard-fails on any pending key as a never-fires backstop, so
+// English can never be silently shipped to a translated player. CONSEQUENCE: a
+// non-release build that still carries pending keys MUST NOT be deployed.
+//
+// Release detection: Vite statically replaces `import.meta.env.PROD` (true for
+// `vite build`, false for the dev server and vitest). Tests and the release build
+// step can force release semantics with the `I18N_RELEASE=1` env var. Read lazily,
+// on the cold (miss / pending) path only, so a test can flip it and the hot hit
+// path pays nothing.
+function isReleaseBuild(): boolean {
+  try {
+    if (typeof process !== "undefined" && process.env && process.env.I18N_RELEASE === "1") return true;
+  } catch {
+    // No `process` (browser runtime) - fall through to the build-time flag.
+  }
+  try {
+    return (import.meta as { env?: { PROD?: boolean } }).env?.PROD === true;
+  } catch {
+    return false;
+  }
+}
+
+// Keys each locale has NOT translated (the resolved table English-fills them).
+// Empty while overlays stay dense; populated once a locale goes sparse. Built once
+// from the generated `pending` lists. PENDING_TOTAL lets the hot path skip the
+// per-key membership test entirely when nothing is pending (the common case).
+const PENDING_SETS: Partial<Record<SupportedLanguage, ReadonlySet<string>>> = {};
+let PENDING_TOTAL = 0;
+for (const [lang, keys] of Object.entries(pending)) {
+  PENDING_SETS[lang as SupportedLanguage] = new Set(keys);
+  PENDING_TOTAL += keys.length;
+}
+
+// A key absent from the dense table is absent from `en` itself, so it is untracked
+// by the registry (the PR gate - tsc for t() keys, s3_registered for matcher emits -
+// rejects an unregistered key). Throw in dev/test so a typo'd or never-registered
+// key surfaces immediately; on an (already-gated) release build, degrade to the raw
+// key rather than crash a player's client mid-render.
+function onUntrackedKey(key: string): string {
+  if (!isReleaseBuild()) {
+    throw new Error(`i18n: untracked key "${key}" is not in the translation table or registry`);
+  }
+  return key;
+}
+
 export function t(key: TranslationKey, values?: InterpolationValues): string {
   const parts = key.split(".");
   let current: unknown = translations[currentLanguage];
@@ -103,10 +155,16 @@ export function t(key: TranslationKey, values?: InterpolationValues): string {
     if (current && typeof current === "object" && part in current) {
       current = (current as Record<string, unknown>)[part];
     } else {
-      return key;
+      return onUntrackedKey(key);
     }
   }
-  return typeof current === "string" ? interpolate(current, values) : key;
+  if (typeof current !== "string") return onUntrackedKey(key);
+  if (PENDING_TOTAL > 0 && PENDING_SETS[currentLanguage]?.has(key) && isReleaseBuild()) {
+    throw new Error(
+      `i18n: key "${key}" is untranslated (pending) for locale "${currentLanguage}" on a release build; English must never ship to a translated player`,
+    );
+  }
+  return interpolate(current, values);
 }
 
 function translationValue(key: string, lang: SupportedLanguage): string | null {
