@@ -1219,10 +1219,19 @@ export class Renderer {
       v.visual.setFar(v.isFar && active === v.visual);
 
       // animation state machine inputs, derived from render-space motion with
-      // hysteresis so a one-frame speed dip can't reset the walk clip
-      const vx = x - v.lastX, vz = z - v.lastZ;
-      v.lastX = x;
-      v.lastZ = z;
+      // hysteresis so a one-frame speed dip can't reset the walk clip.
+      // For the local player online, sample the *plain* interpolated sim motion
+      // (ax/ay/az), never the smoothed/predicted self render position (selfPos):
+      // the online self predictor freezes-then-jumps within each snapshot
+      // interval, and feeding that jitter to the cadence/airborne logic
+      // intermittently flips the base state and resets the walk clip. The
+      // predictor moves only the mesh. Offline, ax==x so this is a no-op.
+      const ax = isSelf ? e.prevPos.x + (e.pos.x - e.prevPos.x) * alpha : x;
+      const ay = isSelf ? e.prevPos.y + (e.pos.y - e.prevPos.y) * alpha : y;
+      const az = isSelf ? e.prevPos.z + (e.pos.z - e.prevPos.z) * alpha : z;
+      const vx = ax - v.lastX, vz = az - v.lastZ;
+      v.lastX = ax;
+      v.lastZ = az;
       const loco = updateLocomotion(v.loco, vx, vz, facing, dt);
       const moving = loco.moving;
       const visuallyDead = isVisuallyDead(e);
@@ -1234,7 +1243,7 @@ export class Renderer {
       const airborne = !visuallyDead && !swimming && (
         !e.onGround
         || (e.kind === 'player'
-          && y - groundHeight(x, z, this.sim.cfg.seed) > AIRBORNE_EPS));
+          && ay - groundHeight(ax, az, this.sim.cfg.seed) > AIRBORNE_EPS));
       const st: AnimState = {
         speed: loco.speed,
         moving,
