@@ -132,7 +132,7 @@ export const CLASSES: Record<PlayerClass, ClassDef> = {
     resourceType: 'mana',
     startWeapon: 'training_mace',
     startChest: 'footpad_jerkin',
-    abilities: ['lightning_bolt', 'rockbiter_weapon', 'healing_wave', 'earth_shock', 'lightning_shield', 'flame_shock', 'frost_shock', 'ghost_wolf', 'stormstrike'],
+    abilities: ['lightning_bolt', 'rockbiter_weapon', 'healing_wave', 'earth_shock', 'lightning_shield', 'flame_shock', 'flametongue_weapon', 'frost_shock', 'ghost_wolf', 'stormstrike'],
     color: 0x0070de,
   },
   warlock: {
@@ -943,6 +943,16 @@ export const ABILITIES: Record<string, AbilityDef> = {
       effects: [{ type: 'directDamage', min: 42, max: 42 }, { type: 'dot', total: 48, duration: 12, interval: 3 }],
     }],
     description: 'Sears the target with fire for 25 damage plus $d over 12 sec.',
+  },
+  flametongue_weapon: {
+    id: 'flametongue_weapon', name: 'Flametongue Weapon', class: 'shaman', learnLevel: 10,
+    cost: 25, castTime: 0, cooldown: 0, range: 0, school: 'fire',
+    requiresTarget: false,
+    effects: [{ type: 'imbue', bonus: 8, duration: 300 }],
+    ranks: [
+      { rank: 2, level: 18, cost: 40, effects: [{ type: 'imbue', bonus: 13, duration: 300 }] },
+    ],
+    description: 'Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min.',
   },
   frost_shock: {
     id: 'frost_shock', name: 'Frost Shock', class: 'shaman', learnLevel: 14,

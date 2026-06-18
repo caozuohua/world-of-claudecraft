@@ -257,6 +257,7 @@
 
 | Ability | Learn | Cost | Cast/CD | Effects |
 |---|---|---|---|---|
+| `flametongue_weapon` | 10 | 25 | inst | imbue +8/swing (Fire), 5min; R2 L18 +13 |
 | `frost_shock` | 14 | 50 | inst, 6cd, 20yd | directDamage 36–42 + slow 0.5/8s |
 | `ghost_wolf` | 16 | 35 | 2.0s cast | selfBuff buff_speed 1.4, 10min |
 | `stormstrike` | 20 | 40 | inst, 12cd | weaponStrike +26 |

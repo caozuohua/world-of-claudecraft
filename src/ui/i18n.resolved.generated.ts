@@ -1548,6 +1548,10 @@ export const en: EnTranslations = {
         "name": "Flame Shock",
         "description": "Sears the target with fire for 25 damage plus {damage} over 12 sec."
       },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
+      },
       "frost_shock": {
         "name": "Frost Shock",
         "description": "Instantly shocks the target with frost for {damage} Frost damage and slows its movement by 50% for 8 sec."
@@ -5136,6 +5140,10 @@ export const es: EnTranslations = {
       "flame_shock": {
         "name": "Choque de llamas",
         "description": "Abrasa al objetivo con fuego por 25 de daño más {damage} durante 12 s."
+      },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
       },
       "frost_shock": {
         "name": "Choque de Escarcha",
@@ -8726,6 +8734,10 @@ export const es_ES: EnTranslations = {
         "name": "Choque de llamas",
         "description": "Abrasa al objetivo con fuego por 25 de daño más {damage} durante 12 s."
       },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
+      },
       "frost_shock": {
         "name": "Choque de Escarcha",
         "description": "Golpea al objetivo al instante con escarcha por {damage} de daño de Escarcha y reduce su velocidad de movimiento un 50% durante 8 s."
@@ -12314,6 +12326,10 @@ export const fr_FR: EnTranslations = {
       "flame_shock": {
         "name": "Horion de flammes",
         "description": "Brûle la cible par le feu pour 25 points de dégâts plus {damage} en 12 s."
+      },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
       },
       "frost_shock": {
         "name": "Horion de givre",
@@ -15904,6 +15920,10 @@ export const fr_CA: EnTranslations = {
         "name": "Horion de flammes",
         "description": "Brûle la cible par le feu pour 25 points de dégâts plus {damage} en 12 s."
       },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
+      },
       "frost_shock": {
         "name": "Horion de givre",
         "description": "Frappe instantanément la cible par le givre pour {damage} points de dégâts de Givre et ralentit son déplacement de 50% pendant 8 s."
@@ -19492,6 +19512,10 @@ export const en_CA: EnTranslations = {
       "flame_shock": {
         "name": "Flame Shock",
         "description": "Sears the target with fire for 25 damage plus {damage} over 12 sec."
+      },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
       },
       "frost_shock": {
         "name": "Frost Shock",
@@ -23082,6 +23106,10 @@ export const it_IT: EnTranslations = {
         "name": "Folgore del Fuoco",
         "description": "Brucia il bersaglio con il fuoco per 25 danni più {damage} in 12 s."
       },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
+      },
       "frost_shock": {
         "name": "Folgore del Gelo",
         "description": "Scuote istantaneamente il bersaglio col gelo per {damage} danni da Gelo e rallenta il movimento del 50% per 8 s."
@@ -26670,6 +26698,10 @@ export const de_DE: EnTranslations = {
       "flame_shock": {
         "name": "Flammenschock",
         "description": "Versengt das Ziel mit Feuer für 25 Schaden plus {damage} über 12 Sek."
+      },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
       },
       "frost_shock": {
         "name": "Frostschock",
@@ -30260,6 +30292,10 @@ export const zh_CN: EnTranslations = {
         "name": "烈焰震击",
         "description": "用火焰灼烧目标，造成 25 点伤害，并在 12 秒内额外造成 {damage}。"
       },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
+      },
       "frost_shock": {
         "name": "冰霜震击",
         "description": "立即以冰霜冲击目标，造成 {damage} 点冰霜伤害，并使其移动速度降低 50%，持续 8 秒。"
@@ -33848,6 +33884,10 @@ export const zh_TW: EnTranslations = {
       "flame_shock": {
         "name": "烈焰震擊",
         "description": "用火焰灼燒目標，造成 25 點傷害，並在 12 秒內額外造成 {damage}。"
+      },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
       },
       "frost_shock": {
         "name": "冰霜震擊",
@@ -37438,6 +37478,10 @@ export const ko_KR: EnTranslations = {
         "name": "화염 충격",
         "description": "대상을 불태워 25의 피해를 입히고 12초에 걸쳐 추가로 {damage}의 피해를 입힙니다."
       },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
+      },
       "frost_shock": {
         "name": "냉기 충격",
         "description": "대상을 즉시 냉기로 강타해 {damage}의 냉기 피해를 입히고 8초 동안 이동 속도를 50%만큼 감소시킵니다."
@@ -41026,6 +41070,10 @@ export const ja_JP: EnTranslations = {
       "flame_shock": {
         "name": "フレイムショック",
         "description": "対象を炎で焼き、25ダメージに加えて12秒間で {damage} のダメージを与えます。"
+      },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
       },
       "frost_shock": {
         "name": "フロストショック",
@@ -44616,6 +44664,10 @@ export const pt_BR: EnTranslations = {
         "name": "Choque Flamejante",
         "description": "Queima o alvo com fogo, causando 25 de dano mais {damage} ao longo de 12 s."
       },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
+      },
       "frost_shock": {
         "name": "Choque Gélido",
         "description": "Choca o alvo instantaneamente com gelo, causando {damage} de dano de Gelo e reduzindo a velocidade de movimento em 50% por 8 s."
@@ -48205,6 +48257,10 @@ export const ru_RU: EnTranslations = {
         "name": "Огненный шок",
         "description": "Обжигает цель огнем, нанося 25 ед. урона и еще {damage} за 12 сек."
       },
+      "flametongue_weapon": {
+        "name": "Flametongue Weapon",
+        "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
+      },
       "frost_shock": {
         "name": "Ледяной шок",
         "description": "Мгновенно поражает цель льдом, нанося {damage} ед. урона от магии льда и снижая скорость передвижения на 50% на 8 сек."
@@ -50274,32 +50330,52 @@ export const translations = {
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+<<<<<<< HEAD
     "entities.abilities.aspect_of_the_monkey.description",
     "entities.abilities.aspect_of_the_monkey.name",
+=======
+    "entities.abilities.flametongue_weapon.description",
+    "entities.abilities.flametongue_weapon.name",
+>>>>>>> origin/feature/shaman-flametongue
     "itemUi.slots.gloves",
     "itemUi.slots.helmet",
     "itemUi.slots.shoulder",
     "itemUi.slots.waist"
   ],
   "es_ES": [
+<<<<<<< HEAD
     "entities.abilities.aspect_of_the_monkey.description",
     "entities.abilities.aspect_of_the_monkey.name",
+=======
+    "entities.abilities.flametongue_weapon.description",
+    "entities.abilities.flametongue_weapon.name",
+>>>>>>> origin/feature/shaman-flametongue
     "itemUi.slots.gloves",
     "itemUi.slots.helmet",
     "itemUi.slots.shoulder",
     "itemUi.slots.waist"
   ],
   "fr_FR": [
+<<<<<<< HEAD
     "entities.abilities.aspect_of_the_monkey.description",
     "entities.abilities.aspect_of_the_monkey.name",
+=======
+    "entities.abilities.flametongue_weapon.description",
+    "entities.abilities.flametongue_weapon.name",
+>>>>>>> origin/feature/shaman-flametongue
     "itemUi.slots.gloves",
     "itemUi.slots.helmet",
     "itemUi.slots.shoulder",
     "itemUi.slots.waist"
   ],
   "fr_CA": [
+<<<<<<< HEAD
     "entities.abilities.aspect_of_the_monkey.description",
     "entities.abilities.aspect_of_the_monkey.name",
+=======
+    "entities.abilities.flametongue_weapon.description",
+    "entities.abilities.flametongue_weapon.name",
+>>>>>>> origin/feature/shaman-flametongue
     "itemUi.slots.gloves",
     "itemUi.slots.helmet",
     "itemUi.slots.shoulder",
@@ -50307,64 +50383,104 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "en_CA": [],
   "it_IT": [
+<<<<<<< HEAD
     "entities.abilities.aspect_of_the_monkey.description",
     "entities.abilities.aspect_of_the_monkey.name",
+=======
+    "entities.abilities.flametongue_weapon.description",
+    "entities.abilities.flametongue_weapon.name",
+>>>>>>> origin/feature/shaman-flametongue
     "itemUi.slots.gloves",
     "itemUi.slots.helmet",
     "itemUi.slots.shoulder",
     "itemUi.slots.waist"
   ],
   "de_DE": [
+<<<<<<< HEAD
     "entities.abilities.aspect_of_the_monkey.description",
     "entities.abilities.aspect_of_the_monkey.name",
+=======
+    "entities.abilities.flametongue_weapon.description",
+    "entities.abilities.flametongue_weapon.name",
+>>>>>>> origin/feature/shaman-flametongue
     "itemUi.slots.gloves",
     "itemUi.slots.helmet",
     "itemUi.slots.shoulder",
     "itemUi.slots.waist"
   ],
   "zh_CN": [
+<<<<<<< HEAD
     "entities.abilities.aspect_of_the_monkey.description",
     "entities.abilities.aspect_of_the_monkey.name",
+=======
+    "entities.abilities.flametongue_weapon.description",
+    "entities.abilities.flametongue_weapon.name",
+>>>>>>> origin/feature/shaman-flametongue
     "itemUi.slots.gloves",
     "itemUi.slots.helmet",
     "itemUi.slots.shoulder",
     "itemUi.slots.waist"
   ],
   "zh_TW": [
+<<<<<<< HEAD
     "entities.abilities.aspect_of_the_monkey.description",
     "entities.abilities.aspect_of_the_monkey.name",
+=======
+    "entities.abilities.flametongue_weapon.description",
+    "entities.abilities.flametongue_weapon.name",
+>>>>>>> origin/feature/shaman-flametongue
     "itemUi.slots.gloves",
     "itemUi.slots.helmet",
     "itemUi.slots.shoulder",
     "itemUi.slots.waist"
   ],
   "ko_KR": [
+<<<<<<< HEAD
     "entities.abilities.aspect_of_the_monkey.description",
     "entities.abilities.aspect_of_the_monkey.name",
+=======
+    "entities.abilities.flametongue_weapon.description",
+    "entities.abilities.flametongue_weapon.name",
+>>>>>>> origin/feature/shaman-flametongue
     "itemUi.slots.gloves",
     "itemUi.slots.helmet",
     "itemUi.slots.shoulder",
     "itemUi.slots.waist"
   ],
   "ja_JP": [
+<<<<<<< HEAD
     "entities.abilities.aspect_of_the_monkey.description",
     "entities.abilities.aspect_of_the_monkey.name",
+=======
+    "entities.abilities.flametongue_weapon.description",
+    "entities.abilities.flametongue_weapon.name",
+>>>>>>> origin/feature/shaman-flametongue
     "itemUi.slots.gloves",
     "itemUi.slots.helmet",
     "itemUi.slots.shoulder",
     "itemUi.slots.waist"
   ],
   "pt_BR": [
+<<<<<<< HEAD
     "entities.abilities.aspect_of_the_monkey.description",
     "entities.abilities.aspect_of_the_monkey.name",
+=======
+    "entities.abilities.flametongue_weapon.description",
+    "entities.abilities.flametongue_weapon.name",
+>>>>>>> origin/feature/shaman-flametongue
     "itemUi.slots.gloves",
     "itemUi.slots.helmet",
     "itemUi.slots.shoulder",
     "itemUi.slots.waist"
   ],
   "ru_RU": [
+<<<<<<< HEAD
     "entities.abilities.aspect_of_the_monkey.description",
     "entities.abilities.aspect_of_the_monkey.name",
+=======
+    "entities.abilities.flametongue_weapon.description",
+    "entities.abilities.flametongue_weapon.name",
+>>>>>>> origin/feature/shaman-flametongue
     "itemUi.slots.gloves",
     "itemUi.slots.helmet",
     "itemUi.slots.shoulder",
@@ -51910,6 +52026,10 @@ export const en_XA: EnTranslations = {
       "flame_shock": {
         "name": "[Ƒļáɱé Šĥóçķ]",
         "description": "[Šéáŕš ţĥé ţáŕĝéţ ŵíţĥ ƒíŕé ƒóŕ 25 ðáɱáĝé þļúš {damage} óʋéŕ 12 šéç.]"
+      },
+      "flametongue_weapon": {
+        "name": "[Ƒļáɱéţóñĝúé Ŵéáþóñ]",
+        "description": "[Íɱƀúéš ýóúŕ ŵéáþóñ ŵíţĥ éļéɱéñţáļ ƒíŕé: éáçĥ šŵíñĝ ðéáļš 8 áððíţíóñáļ Ƒíŕé ðáɱáĝé ƒóŕ 5 ɱíñ.]"
       },
       "frost_shock": {
         "name": "[Ƒŕóšţ Šĥóçķ]",
