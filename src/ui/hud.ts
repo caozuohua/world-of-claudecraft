@@ -22,6 +22,7 @@ import { formatMinimapCoords } from './coords';
 import { compassView } from './compass';
 import { clampMinimapZoom, nextMinimapZoom, isMinMinimapZoom, isMaxMinimapZoom, formatMinimapZoom, MINIMAP_ZOOM_DEFAULT } from './minimap_zoom';
 import { restView } from './rest_indicator';
+import { nearestSubzone } from './subzone';
 import { terrainHeight, WATER_LEVEL, roadDistance, generateDecorations } from '../sim/world';
 import type { Decoration } from '../sim/world';
 import { Meters } from './meters';
@@ -243,6 +244,7 @@ export class Hud {
   private combatLogEl = $('#combatlog');
   private errorEl = $('#error-msg');
   private bannerEl = $('#banner');
+  private subzoneEl = $('#subzone-banner');
   private tooltipEl = $('#tooltip');
   // Distinguishes a touch long-press "peek" (inspect, no action) from a tap.
   private peekGuard = new TouchPeekGuard();
@@ -276,6 +278,8 @@ export class Hud {
   private hotWriteCache = new Map<HTMLElement, string>();
   private hotDomWrites = 0;
   private hotDomSkippedWrites = 0;
+  private subzoneTimer: number | undefined;
+  private lastSubzone: string | null = null;
   private minimapCtx: CanvasRenderingContext2D;
   private minimapBg: HTMLCanvasElement;
   private clockEl: HTMLElement | null = null;
@@ -1835,6 +1839,15 @@ export class Hud {
         }
       }
 
+      // subzone text: a smaller banner when you step into a named landmark
+      // (classic "subzone" display). POIs are the same labels the minimap pins.
+      const subzone = inDungeon ? null
+        : nearestSubzone(p.pos.x, p.pos.z, currentZone.pois, this.lastSubzone);
+      if (subzone !== this.lastSubzone) {
+        this.lastSubzone = subzone;
+        if (subzone) this.showSubzone(subzone);
+      }
+
       // soundtrack: pick the zone theme and layer in combat percussion.
       // Combat = a mob is on us, or we traded blows in the last few seconds
       // (the wire protocol doesn't ship the inCombat flag).
@@ -3265,6 +3278,13 @@ export class Hud {
     this.bannerEl.style.opacity = '1';
     clearTimeout(this.bannerTimer);
     this.bannerTimer = window.setTimeout(() => { this.bannerEl.style.opacity = '0'; }, 2600);
+  }
+
+  showSubzone(text: string): void {
+    this.subzoneEl.textContent = text;
+    this.subzoneEl.style.opacity = '1';
+    clearTimeout(this.subzoneTimer);
+    this.subzoneTimer = window.setTimeout(() => { this.subzoneEl.style.opacity = '0'; }, 2600);
   }
 
   // -------------------------------------------------------------------------

@@ -1296,6 +1296,9 @@
   #banner { position: absolute; left: 50%; top: 28%; transform: translateX(-50%); color: var(--gold);
     font-size: 38px; font-weight: bold; text-shadow: 0 0 18px #00000088, 2px 2px 6px #000; opacity: 0;
     transition: opacity 1.2s; pointer-events: none; font-family: var(--title-font); letter-spacing: 1px; white-space: nowrap; }
+  #subzone-banner { position: absolute; left: 50%; top: 35%; transform: translateX(-50%); color: #fff;
+    font-size: 22px; font-weight: bold; text-shadow: 0 0 14px #00000088, 1px 1px 4px #000; opacity: 0;
+    transition: opacity 1.2s; pointer-events: none; font-family: var(--title-font); letter-spacing: 1px; white-space: nowrap; }
 
   /* ---------- death overlay ---------- */
   #death-overlay { position: absolute; inset: 0; background: radial-gradient(ellipse at center, #40000077 0%, #300000bb 100%);
@@ -4861,6 +4864,7 @@
       white-space: normal;
       overflow-wrap: anywhere;
     }
+    body.mobile-touch #subzone-banner { top: 25%; font-size: 18px; }
     body.mobile-touch #error-msg { top: 16%; font-size: 16px; }
     body.mobile-touch #mobile-preflight .preflight-panel { width: min(520px, 84vw); padding: 18px 22px; }
     body.mobile-touch #mobile-preflight h2 { font-size: 22px; }
@@ -5496,6 +5500,7 @@
 
     <div id="error-msg"></div>
     <div id="banner"></div>
+    <div id="subzone-banner"></div>
 
     <div id="death-overlay">
       <h2 data-i18n="hud.core.deathTitle">You have died.</h2>
