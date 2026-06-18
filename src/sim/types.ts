@@ -209,6 +209,12 @@ export interface MobTemplate {
   // On-hit debuff: a chance per landed melee swing to inflict a stacking-refresh
   // damage-over-time poison on the struck target (spiders, serpents, scorpions).
   venom?: { chance: number; perTick: number; interval: number; duration: number; name: string; school?: string };
+  // On-hit rot: a landed melee swing has `chance` to fester a refreshing SHADOW
+  // damage-over-time wound on the victim ("Soulrot"). The same on-hit DoT seam as
+  // `venom` (nature/poison) and `bleed` (physical), but shadow-school — the
+  // undead/necrotic flavour, and it bites every class (resisted by shadow, not
+  // nature/physical mitigation). Refreshes (never stacks) like venom.
+  soulrot?: { chance: number; perTick: number; interval: number; duration: number; name: string; school?: Aura['school'] };
   // On-death mechanic ("Death Throes"): a volatile creature does not detonate
   // the instant it dies. Its corpse destabilizes for `delay` seconds (a
   // telegraph players can run from), then bursts for min..max `school` damage

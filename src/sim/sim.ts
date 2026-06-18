@@ -4209,6 +4209,20 @@ export class Sim {
         sourceId: mob.id, school: (venom.school as Aura['school']) ?? 'nature',
       });
     }
+    // soulrot ("Soulrot"): a landed swing may fester a refreshing SHADOW DoT.
+    // Same on-hit DoT seam as venom, but shadow-school — the undead/necrotic
+    // flavour. Hostile mobs only (mobSwing is also the pet attack path, so a
+    // friendly pet must never rot the party).
+    const soulrot = MOBS[mob.templateId]?.soulrot;
+    if (soulrot && mob.hostile && !target.dead && this.rng.chance(soulrot.chance)) {
+      this.applyAura(target, {
+        id: 'soulrot_' + mob.templateId, name: soulrot.name, kind: 'dot',
+        remaining: soulrot.duration, duration: soulrot.duration,
+        value: Math.max(1, Math.round(soulrot.perTick)),
+        tickInterval: soulrot.interval, tickTimer: soulrot.interval,
+        sourceId: mob.id, school: (soulrot.school as Aura['school']) ?? 'shadow',
+      });
+    }
     // corrosive bite: a landed hit may shred the victim's armor (stacking sunder).
     // Guarded on hostile so a friendly pet (the other mobSwing caller) never debuffs an ally.
     const corrode = MOBS[mob.templateId]?.corrode;
