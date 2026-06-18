@@ -5545,6 +5545,7 @@ const itemStringsEn = {
     },
     tooltip: {
       qualityKind: "{quality} {kind}",
+      currentlyEquipped: "Currently equipped", ifYouEquip: "If you equip this",
       damageSpeed: "{min} - {max} Damage Speed {speed}",
       dps: "({dps} damage per second)",
       dagger: "Dagger",
@@ -5652,7 +5653,7 @@ export const itemStrings = {
       kind: { weapon: "Arma", armor: "Armadura", quest: "Objeto de misión", junk: "Chatarra", food: "Comida", drink: "Bebida" },
       stats: { armor: "Armadura", str: "Fuerza", agi: "Agilidad", sta: "Aguante", int: "Intelecto", spi: "Espíritu", attackPower: "Poder de ataque", dps: "Daño/seg", critChance: "Prob. de crítico", dodge: "Esquiva" },
       tooltip: {
-        qualityKind: "{kind} {quality}", damageSpeed: "{min} - {max} de daño  Velocidad {speed}", dps: "({dps} de daño por segundo)", dagger: "Daga", armorStat: "{value} de armadura", stat: "+{value} {stat}",
+        qualityKind: "{kind} {quality}", currentlyEquipped: "Equipado actualmente", ifYouEquip: "Si equipas esto", damageSpeed: "{min} - {max} de daño  Velocidad {speed}", dps: "({dps} de daño por segundo)", dagger: "Daga", armorStat: "{value} de armadura", stat: "+{value} {stat}",
         useFood: "Uso: restaura {amount} de salud durante {seconds} s. Debes permanecer sentado mientras comes.", useDrink: "Uso: restaura {amount} de maná durante {seconds} s. Debes permanecer sentado mientras bebes.", questItem: "Objeto de misión", classes: "Clases: {classes}", sellPrice: "Precio de venta: {money}",
         clickBuy: "Haz clic para comprar", clickSell: "Haz clic para vender", clickEquip: "Haz clic para equipar", clickConsume: "Haz clic para consumir", clickTradeOffer: "Haz clic para ofrecer en el comercio", clickMarketList: "Haz clic para ponerlo en el mercado", cannotMarket: "No se puede vender en el mercado", cannotVendor: "No se puede vender a comerciantes", clickDestroy: "Haz clic para destruir",
       },
@@ -5675,7 +5676,7 @@ export const itemStrings = {
       kind: { weapon: "Arme", armor: "Armure", quest: "Objet de quête", junk: "Camelote", food: "Nourriture", drink: "Boisson" },
       stats: { armor: "Armure", str: "Force", agi: "Agilité", sta: "Endurance", int: "Intelligence", spi: "Esprit", attackPower: "Puissance d'attaque", dps: "Dégâts/s", critChance: "Chances de critique", dodge: "Esquive" },
       tooltip: {
-        qualityKind: "{kind} {quality}", damageSpeed: "{min} - {max} points de dégâts  Vitesse {speed}", dps: "({dps} dégâts par seconde)", dagger: "Dague", armorStat: "{value} armure", stat: "+{value} {stat}",
+        qualityKind: "{kind} {quality}", currentlyEquipped: "Actuellement équipé", ifYouEquip: "Si vous équipez ceci", damageSpeed: "{min} - {max} points de dégâts  Vitesse {speed}", dps: "({dps} dégâts par seconde)", dagger: "Dague", armorStat: "{value} armure", stat: "+{value} {stat}",
         useFood: "Utiliser : rend {amount} points de vie en {seconds} s. Vous devez rester assis en mangeant.", useDrink: "Utiliser : rend {amount} points de mana en {seconds} s. Vous devez rester assis en buvant.", questItem: "Objet de quête", classes: "Classes : {classes}", sellPrice: "Prix de vente : {money}",
         clickBuy: "Cliquer pour acheter", clickSell: "Cliquer pour vendre", clickEquip: "Cliquer pour équiper", clickConsume: "Cliquer pour consommer", clickTradeOffer: "Cliquer pour proposer en échange", clickMarketList: "Cliquer pour mettre au marché", cannotMarket: "Ne peut pas être vendu au marché", cannotVendor: "Ne peut pas être vendu aux marchands", clickDestroy: "Cliquer pour détruire",
       },
@@ -5699,7 +5700,7 @@ export const itemStrings = {
       kind: { weapon: "Arma", armor: "Armatura", quest: "Oggetto missione", junk: "Cianfrusaglia", food: "Cibo", drink: "Bevanda" },
       stats: { armor: "Armatura", str: "Forza", agi: "Agilità", sta: "Tempra", int: "Intelletto", spi: "Spirito", attackPower: "Potenza d'attacco", dps: "Danni/sec", critChance: "Prob. critico", dodge: "Schivata" },
       tooltip: {
-        qualityKind: "{kind} {quality}", damageSpeed: "{min} - {max} danni  Velocità {speed}", dps: "({dps} danni al secondo)", dagger: "Pugnale", armorStat: "{value} armatura", stat: "+{value} {stat}",
+        qualityKind: "{kind} {quality}", currentlyEquipped: "Attualmente equipaggiato", ifYouEquip: "Se equipaggi questo", damageSpeed: "{min} - {max} danni  Velocità {speed}", dps: "({dps} danni al secondo)", dagger: "Pugnale", armorStat: "{value} armatura", stat: "+{value} {stat}",
         useFood: "Usa: ripristina {amount} salute in {seconds} s. Devi restare seduto mentre mangi.", useDrink: "Usa: ripristina {amount} mana in {seconds} s. Devi restare seduto mentre bevi.", questItem: "Oggetto missione", classes: "Classi: {classes}", sellPrice: "Prezzo di vendita: {money}",
         clickBuy: "Clicca per comprare", clickSell: "Clicca per vendere", clickEquip: "Clicca per equipaggiare", clickConsume: "Clicca per consumare", clickTradeOffer: "Clicca per offrire nello scambio", clickMarketList: "Clicca per mettere sul mercato", cannotMarket: "Non può essere venduto al mercato", cannotVendor: "Non può essere venduto ai mercanti", clickDestroy: "Clicca per distruggere",
       },
@@ -5721,7 +5722,7 @@ export const itemStrings = {
       kind: { weapon: "Waffe", armor: "Rüstung", quest: "Questgegenstand", junk: "Plunder", food: "Essen", drink: "Getränk" },
       stats: { armor: "Rüstung", str: "Stärke", agi: "Beweglichkeit", sta: "Ausdauer", int: "Intelligenz", spi: "Willenskraft", attackPower: "Angriffskraft", dps: "Schaden/Sek.", critChance: "Krit. Chance", dodge: "Ausweichen" },
       tooltip: {
-        qualityKind: "{quality} {kind}", damageSpeed: "{min} - {max} Schaden  Tempo {speed}", dps: "({dps} Schaden pro Sekunde)", dagger: "Dolch", armorStat: "{value} Rüstung", stat: "+{value} {stat}",
+        qualityKind: "{quality} {kind}", currentlyEquipped: "Derzeit angelegt", ifYouEquip: "Wenn du dies anlegst", damageSpeed: "{min} - {max} Schaden  Tempo {speed}", dps: "({dps} Schaden pro Sekunde)", dagger: "Dolch", armorStat: "{value} Rüstung", stat: "+{value} {stat}",
         useFood: "Benutzen: Stellt über {seconds} Sek. {amount} Gesundheit wieder her. Ihr müsst beim Essen sitzen bleiben.", useDrink: "Benutzen: Stellt über {seconds} Sek. {amount} Mana wieder her. Ihr müsst beim Trinken sitzen bleiben.", questItem: "Questgegenstand", classes: "Klassen: {classes}", sellPrice: "Verkaufspreis: {money}",
         clickBuy: "Zum Kaufen klicken", clickSell: "Zum Verkaufen klicken", clickEquip: "Zum Anlegen klicken", clickConsume: "Zum Verbrauchen klicken", clickTradeOffer: "Zum Anbieten im Handel klicken", clickMarketList: "Zum Einstellen auf dem Markt klicken", cannotMarket: "Kann nicht auf dem Markt verkauft werden", cannotVendor: "Kann nicht an Händler verkauft werden", clickDestroy: "Zum Zerstören klicken",
       },
@@ -5743,7 +5744,7 @@ export const itemStrings = {
       kind: { weapon: "武器", armor: "护甲", quest: "任务物品", junk: "杂物", food: "食物", drink: "饮料" },
       stats: { armor: "护甲", str: "力量", agi: "敏捷", sta: "耐力", int: "智力", spi: "精神", attackPower: "攻击强度", dps: "每秒伤害", critChance: "暴击几率", dodge: "躲闪" },
       tooltip: {
-        qualityKind: "{quality}{kind}", damageSpeed: "{min} - {max} 伤害  速度 {speed}", dps: "（每秒 {dps} 伤害）", dagger: "匕首", armorStat: "{value} 护甲", stat: "+{value} {stat}",
+        qualityKind: "{quality}{kind}", currentlyEquipped: "当前装备", ifYouEquip: "装备后", damageSpeed: "{min} - {max} 伤害  速度 {speed}", dps: "（每秒 {dps} 伤害）", dagger: "匕首", armorStat: "{value} 护甲", stat: "+{value} {stat}",
         useFood: "使用：在 {seconds} 秒内恢复 {amount} 点生命值。进食时必须保持坐下。", useDrink: "使用：在 {seconds} 秒内恢复 {amount} 点法力值。饮水时必须保持坐下。", questItem: "任务物品", classes: "职业：{classes}", sellPrice: "出售价格：{money}",
         clickBuy: "点击购买", clickSell: "点击出售", clickEquip: "点击装备", clickConsume: "点击使用", clickTradeOffer: "点击加入交易", clickMarketList: "点击上架市场", cannotMarket: "不能在市场出售", cannotVendor: "不能卖给商人", clickDestroy: "点击摧毁",
       },
@@ -5765,7 +5766,7 @@ export const itemStrings = {
       kind: { weapon: "武器", armor: "護甲", quest: "任務物品", junk: "雜物", food: "食物", drink: "飲料" },
       stats: { armor: "護甲", str: "力量", agi: "敏捷", sta: "耐力", int: "智力", spi: "精神", attackPower: "攻擊強度", dps: "每秒傷害", critChance: "爆擊機率", dodge: "閃躲" },
       tooltip: {
-        qualityKind: "{quality}{kind}", damageSpeed: "{min} - {max} 傷害  速度 {speed}", dps: "（每秒 {dps} 傷害）", dagger: "匕首", armorStat: "{value} 護甲", stat: "+{value} {stat}",
+        qualityKind: "{quality}{kind}", currentlyEquipped: "目前裝備", ifYouEquip: "裝備後", damageSpeed: "{min} - {max} 傷害  速度 {speed}", dps: "（每秒 {dps} 傷害）", dagger: "匕首", armorStat: "{value} 護甲", stat: "+{value} {stat}",
         useFood: "使用：在 {seconds} 秒內恢復 {amount} 點生命值。進食時必須保持坐下。", useDrink: "使用：在 {seconds} 秒內恢復 {amount} 點法力值。飲水時必須保持坐下。", questItem: "任務物品", classes: "職業：{classes}", sellPrice: "出售價格：{money}",
         clickBuy: "點擊購買", clickSell: "點擊出售", clickEquip: "點擊裝備", clickConsume: "點擊使用", clickTradeOffer: "點擊加入交易", clickMarketList: "點擊上架市場", cannotMarket: "不能在市場出售", cannotVendor: "不能賣給商人", clickDestroy: "點擊摧毀",
       },
@@ -5787,7 +5788,7 @@ export const itemStrings = {
       kind: { weapon: "무기", armor: "방어구", quest: "퀘스트 아이템", junk: "잡동사니", food: "음식", drink: "음료" },
       stats: { armor: "방어도", str: "힘", agi: "민첩성", sta: "체력", int: "지능", spi: "정신력", attackPower: "전투력", dps: "초당 피해", critChance: "치명타율", dodge: "회피" },
       tooltip: {
-        qualityKind: "{quality} {kind}", damageSpeed: "{min} - {max} 피해  속도 {speed}", dps: "(초당 피해 {dps})", dagger: "단검", armorStat: "방어도 {value}", stat: "+{value} {stat}",
+        qualityKind: "{quality} {kind}", currentlyEquipped: "현재 착용 중", ifYouEquip: "이것을 착용하면", damageSpeed: "{min} - {max} 피해  속도 {speed}", dps: "(초당 피해 {dps})", dagger: "단검", armorStat: "방어도 {value}", stat: "+{value} {stat}",
         useFood: "사용 효과: {seconds}초에 걸쳐 생명력 {amount} 회복. 먹는 동안 앉아 있어야 합니다.", useDrink: "사용 효과: {seconds}초에 걸쳐 마나 {amount} 회복. 마시는 동안 앉아 있어야 합니다.", questItem: "퀘스트 아이템", classes: "직업: {classes}", sellPrice: "판매 가격: {money}",
         clickBuy: "클릭하여 구매", clickSell: "클릭하여 판매", clickEquip: "클릭하여 장착", clickConsume: "클릭하여 사용", clickTradeOffer: "클릭하여 거래에 올리기", clickMarketList: "클릭하여 시장에 올리기", cannotMarket: "시장에서 판매할 수 없음", cannotVendor: "상인에게 판매할 수 없음", clickDestroy: "클릭하여 파괴",
       },
@@ -5809,7 +5810,7 @@ export const itemStrings = {
       kind: { weapon: "武器", armor: "防具", quest: "クエストアイテム", junk: "雑貨", food: "食べ物", drink: "飲み物" },
       stats: { armor: "防御力", str: "筋力", agi: "敏捷性", sta: "スタミナ", int: "知力", spi: "精神力", attackPower: "攻撃力", dps: "秒間ダメージ", critChance: "クリティカル率", dodge: "回避" },
       tooltip: {
-        qualityKind: "{quality} {kind}", damageSpeed: "{min} - {max} ダメージ  速度 {speed}", dps: "（秒間 {dps} ダメージ）", dagger: "短剣", armorStat: "防御力 {value}", stat: "+{value} {stat}",
+        qualityKind: "{quality} {kind}", currentlyEquipped: "現在の装備", ifYouEquip: "これを装備すると", damageSpeed: "{min} - {max} ダメージ  速度 {speed}", dps: "（秒間 {dps} ダメージ）", dagger: "短剣", armorStat: "防御力 {value}", stat: "+{value} {stat}",
         useFood: "使用: {seconds}秒かけて体力を{amount}回復します。食事中は座ったままでいる必要があります。", useDrink: "使用: {seconds}秒かけてマナを{amount}回復します。飲んでいる間は座ったままでいる必要があります。", questItem: "クエストアイテム", classes: "クラス: {classes}", sellPrice: "売却価格: {money}",
         clickBuy: "クリックして購入", clickSell: "クリックして売却", clickEquip: "クリックして装備", clickConsume: "クリックして使用", clickTradeOffer: "クリックして取引に出す", clickMarketList: "クリックして市場に出す", cannotMarket: "市場では売却できません", cannotVendor: "商人には売却できません", clickDestroy: "クリックして破棄",
       },
@@ -5831,7 +5832,7 @@ export const itemStrings = {
       kind: { weapon: "Arma", armor: "Armadura", quest: "Item de missão", junk: "Sucata", food: "Comida", drink: "Bebida" },
       stats: { armor: "Armadura", str: "Força", agi: "Agilidade", sta: "Vigor", int: "Intelecto", spi: "Espírito", attackPower: "Poder de ataque", dps: "Dano/s", critChance: "Chance crítica", dodge: "Esquiva" },
       tooltip: {
-        qualityKind: "{kind} {quality}", damageSpeed: "{min} - {max} de dano  Velocidade {speed}", dps: "({dps} de dano por segundo)", dagger: "Adaga", armorStat: "{value} de armadura", stat: "+{value} {stat}",
+        qualityKind: "{kind} {quality}", currentlyEquipped: "Atualmente equipado", ifYouEquip: "Se você equipar isto", damageSpeed: "{min} - {max} de dano  Velocidade {speed}", dps: "({dps} de dano por segundo)", dagger: "Adaga", armorStat: "{value} de armadura", stat: "+{value} {stat}",
         useFood: "Usar: restaura {amount} de vida ao longo de {seconds} s. É preciso permanecer sentado enquanto come.", useDrink: "Usar: restaura {amount} de mana ao longo de {seconds} s. É preciso permanecer sentado enquanto bebe.", questItem: "Item de missão", classes: "Classes: {classes}", sellPrice: "Preço de venda: {money}",
         clickBuy: "Clique para comprar", clickSell: "Clique para vender", clickEquip: "Clique para equipar", clickConsume: "Clique para consumir", clickTradeOffer: "Clique para oferecer na troca", clickMarketList: "Clique para colocar no mercado", cannotMarket: "Não pode ser vendido no mercado", cannotVendor: "Não pode ser vendido a mercadores", clickDestroy: "Clique para destruir",
       },
@@ -5853,7 +5854,7 @@ export const itemStrings = {
       kind: { weapon: "Оружие", armor: "Броня", quest: "Задание", junk: "Хлам", food: "Еда", drink: "Напиток" },
       stats: { armor: "Броня", str: "Сила", agi: "Ловкость", sta: "Выносливость", int: "Интеллект", spi: "Дух", attackPower: "Сила атаки", dps: "Урон/сек", critChance: "Шанс крита", dodge: "Уклонение" },
       tooltip: {
-        qualityKind: "{quality} {kind}", damageSpeed: "{min} - {max} урона  Скорость {speed}", dps: "({dps} урона в секунду)", dagger: "Кинжал", armorStat: "{value} брони", stat: "+{value} {stat}",
+        qualityKind: "{quality} {kind}", currentlyEquipped: "Сейчас надето", ifYouEquip: "Если надеть это", damageSpeed: "{min} - {max} урона  Скорость {speed}", dps: "({dps} урона в секунду)", dagger: "Кинжал", armorStat: "{value} брони", stat: "+{value} {stat}",
         useFood: "Использование: восстанавливает {amount} здоровья за {seconds} сек. Нужно оставаться сидя во время еды.", useDrink: "Использование: восстанавливает {amount} маны за {seconds} сек. Нужно оставаться сидя во время питья.", questItem: "Предмет задания", classes: "Классы: {classes}", sellPrice: "Цена продажи: {money}",
         clickBuy: "Нажмите, чтобы купить", clickSell: "Нажмите, чтобы продать", clickEquip: "Нажмите, чтобы экипировать", clickConsume: "Нажмите, чтобы использовать", clickTradeOffer: "Нажмите, чтобы предложить в обмене", clickMarketList: "Нажмите, чтобы выставить на рынок", cannotMarket: "Нельзя продать на рынке", cannotVendor: "Нельзя продать торговцам", clickDestroy: "Нажмите, чтобы уничтожить",
       },
@@ -10712,6 +10713,10 @@ export const gameStrings = {
     showOverflowXp: "Show Overflow XP",
     weather: "Weather Effects",
   },
+  hud: {
+    lowMana: "Low Mana",
+    lowEnergy: "Low Energy",
+  },
   // Talents & Specializations — UI chrome only (node/spec names are content,
   // rendered directly like ability names). Registered here so the panel routes
   // through t() per the i18n constraint.
@@ -10831,6 +10836,7 @@ export const gameStringsEs: typeof gameStrings = {
     needXp: "más EXP de por vida para prestigio",
   },
   settings: { showOverflowXp: "Mostrar EXP excedente", weather: "Efectos meteorológicos" },
+  hud: { lowMana: "Maná bajo", lowEnergy: "Energía baja" },
   talents: {
     title: "Talentos",
     classTab: "Clase",
@@ -10941,6 +10947,7 @@ export const gameStringsFrFR: typeof gameStrings = {
     needXp: "EXP à vie supplémentaire pour le prestige",
   },
   settings: { showOverflowXp: "Afficher l'EXP excédentaire", weather: "Effets météo" },
+  hud: { lowMana: "Mana faible", lowEnergy: "Énergie faible" },
   talents: {
     title: "Talents",
     classTab: "Classe",
@@ -11011,6 +11018,7 @@ export const gameStringsItIT: typeof gameStrings = {
   milestone: { unlocked: "Traguardo sbloccato", veteran: "Veterano", champion: "Campione", paragon: "Esemplare", mythic: "Mitico", eternal: "Eterno" },
   prestige: { action: "Prestigio", title: "Prestigio personaggio", body: "Il prestigio aumenta il tuo rango prestigio di 1 e azzera la barra PE del livello. Non cambia livello, equipaggiamento, talenti, abilità, PE totali o posizione in classifica: è solo un segno cosmetico.", confirm: "Prestigio", cancel: "Annulla", rank: "Prestigio", needCap: "Devi essere al livello massimo per ottenere prestigio.", needXp: "PE totali in più per il prestigio" },
   settings: { showOverflowXp: "Mostra PE eccedenti", weather: "Effetti meteo" },
+  hud: { lowMana: "Mana basso", lowEnergy: "Energia bassa" },
   talents: {
     title: "Talenti", classTab: "Classe", specTab: "Specializzazione", available: "Disponibili", spent: "Spesi", pointSource: "Ottieni 1 punto talento a ogni livello dal {first} al {cap}. Sali di livello per ottenerne altri.", apply: "Applica modifiche", clear: "Azzera punti", reset: "Azzera", chooseSpec: "Scegli una specializzazione", noSpec: "Nessuna specializzazione scelta", role: "Ruolo", mastery: "Maestria", signature: "Firma", roleTank: "Difensore", roleHealer: "Guaritore", roleDps: "Danni", loadouts: "Build salvate", currentBuild: "Build attuale", createBuild: "Crea build", saveBuild: "Salva attuale", saveBuildAs: "Salva build", newBuild: "Nuova build", deleteBuild: "Elimina", currentBuildHint: "Scegli una build salvata, poi Salva attuale per aggiornarla. Esporta condivide la build selezionata.", createBuildHint: "Nuova build salva i punti attuali separatamente. Importa incolla una stringa condivisa.", buildHint: "Scegli una build salvata, aggiornala con Salva attuale o creane un'altra.", buildInvalid: "Questa build non è ancora valida.", selectBuildFirst: "Seleziona una build salvata da eliminare.", deleteBuildTitle: "Eliminare la build salvata?", deleteBuildBody: "Eliminare \"{name}\"? Rimuove solo la build salvata; i talenti attuali restano invariati.", deleteBuildConfirm: "Elimina build", namePrompt: "Nome di questa build:", import: "Importa", export: "Esporta", importPrompt: "Incolla una stringa build:", exportCopied: "Stringa build copiata negli appunti.", exportTitle: "Stringa build (copia e condividi):", invalidBuild: "Questa stringa build non è valida.", rank: "Grado", requires: "Richiede", pointsGate: "punti spesi nell'albero", dormant: "Inattivo: prerequisito rimborsato", editHint: "Clic sinistro per aggiungere - clic destro per rimuovere", cycleHint: "Clicca per scegliere un'opzione", combatLocked: "Non puoi cambiare talenti in combattimento.", nothingStaged: "Nessuna modifica da applicare.", pickSpecFirst: "Scegli una specializzazione per accedere a questo albero.", unlockBanner: "Talenti sbloccati!", unlockHint: "Hai ottenuto il tuo primo punto talento: premi N per aprire Talenti.", copy: "Copia", close: "Chiudi", cancel: "Annulla", noBuilds: "Nessuna build salvata", save: "Salva", comingSoonTitle: "Talenti in arrivo", comingSoonBody: "Questa classe non ha ancora alberi dei talenti. Puoi continuare a giocare normalmente; gli alberi completi arriveranno in un futuro aggiornamento.",
   },
@@ -11023,6 +11031,7 @@ export const gameStringsDeDE: typeof gameStrings = {
   milestone: { unlocked: "Meilenstein freigeschaltet", veteran: "Veteran", champion: "Champion", paragon: "Paragon", mythic: "Mythisch", eternal: "Ewig" },
   prestige: { action: "Prestige", title: "Charakter prestigen", body: "Prestige erhöht Euren Prestigerang um 1 und setzt die Stufen-EP-Leiste zurück. Stufe, Ausrüstung, Talente, Fähigkeiten, Lebenszeit-EP und Ranglistenplatz bleiben unverändert; es ist nur ein kosmetisches Zeichen.", confirm: "Prestige", cancel: "Abbrechen", rank: "Prestige", needCap: "Ihr müsst die Maximalstufe erreicht haben, um Prestige zu erhalten.", needXp: "mehr Lebenszeit-EP für Prestige" },
   settings: { showOverflowXp: "Überschuss-EP anzeigen", weather: "Wettereffekte" },
+  hud: { lowMana: "Wenig Mana", lowEnergy: "Wenig Energie" },
   talents: {
     title: "Talente", classTab: "Klasse", specTab: "Spezialisierung", available: "Verfügbar", spent: "Ausgegeben", pointSource: "Ihr erhaltet pro Stufe von {first} bis {cap} 1 Talentpunkt. Steigt auf, um mehr Punkte zu bekommen.", apply: "Änderungen anwenden", clear: "Punkte zurücksetzen", reset: "Zurücksetzen", chooseSpec: "Spezialisierung wählen", noSpec: "Keine Spezialisierung gewählt", role: "Rolle", mastery: "Meisterschaft", signature: "Signatur", roleTank: "Tank", roleHealer: "Heiler", roleDps: "Schaden", loadouts: "Gespeicherte Builds", currentBuild: "Aktueller Build", createBuild: "Build erstellen", saveBuild: "Aktuellen speichern", saveBuildAs: "Build speichern", newBuild: "Neuer Build", deleteBuild: "Löschen", currentBuildHint: "Wählt einen gespeicherten Build und dann Aktuellen speichern, um ihn zu aktualisieren. Exportieren teilt den gewählten Build.", createBuildHint: "Neuer Build speichert Eure aktuellen Punkte separat. Importieren fügt eine geteilte Zeichenfolge ein.", buildHint: "Wählt einen gespeicherten Build, aktualisiert ihn oder erstellt einen neuen.", buildInvalid: "Dieser Build ist noch nicht gültig.", selectBuildFirst: "Wählt zuerst einen gespeicherten Build zum Löschen.", deleteBuildTitle: "Gespeicherten Build löschen?", deleteBuildBody: "\"{name}\" löschen? Nur der gespeicherte Build wird entfernt; Eure aktuellen Talente bleiben erhalten.", deleteBuildConfirm: "Build löschen", namePrompt: "Name dieses Builds:", import: "Importieren", export: "Exportieren", importPrompt: "Build-Zeichenfolge einfügen:", exportCopied: "Build-Zeichenfolge in die Zwischenablage kopiert.", exportTitle: "Build-Zeichenfolge (kopieren und teilen):", invalidBuild: "Diese Build-Zeichenfolge ist ungültig.", rank: "Rang", requires: "Benötigt", pointsGate: "Punkte im Baum ausgegeben", dormant: "Inaktiv: Voraussetzung erstattet", editHint: "Linksklick zum Hinzufügen - Rechtsklick zum Entfernen", cycleHint: "Klicken, um eine Option zu wählen", combatLocked: "Im Kampf könnt Ihr keine Talente ändern.", nothingStaged: "Keine Änderungen zum Anwenden.", pickSpecFirst: "Wählt eine Spezialisierung, um diesen Baum zu öffnen.", unlockBanner: "Talente freigeschaltet!", unlockHint: "Ihr habt Euren ersten Talentpunkt verdient: Drückt N, um Talente zu öffnen.", copy: "Kopieren", close: "Schließen", cancel: "Abbrechen", noBuilds: "Keine gespeicherten Builds", save: "Speichern", comingSoonTitle: "Talente folgen bald", comingSoonBody: "Diese Klasse hat noch keine Talentbäume. Ihr könnt normal weiterspielen; vollständige Bäume kommen in einem zukünftigen Update.",
   },
@@ -11035,6 +11044,7 @@ export const gameStringsZhCN: typeof gameStrings = {
   milestone: { unlocked: "里程碑解锁", veteran: "老兵", champion: "冠军", paragon: "典范", mythic: "神话", eternal: "永恒" },
   prestige: { action: "声望晋升", title: "角色声望晋升", body: "声望晋升会使你的声望阶级提高 1，并重置等级经验条。它不会改变等级、装备、天赋、技能、终身经验或排行榜位置；这只是外观荣誉。", confirm: "声望晋升", cancel: "取消", rank: "声望", needCap: "你必须达到等级上限才能进行声望晋升。", needXp: "更多终身经验才可声望晋升" },
   settings: { showOverflowXp: "显示溢出经验", weather: "天气效果" },
+  hud: { lowMana: "法力不足", lowEnergy: "能量不足" },
   talents: {
     title: "天赋", classTab: "职业", specTab: "专精", available: "可用", spent: "已用", pointSource: "从 {first} 级到 {cap} 级，每升一级获得 1 点天赋点。继续升级可获得更多点数。", apply: "应用更改", clear: "重置点数", reset: "重置", chooseSpec: "选择一个专精", noSpec: "未选择专精", role: "职责", mastery: "精通", signature: "标志技能", roleTank: "坦克", roleHealer: "治疗", roleDps: "伤害", loadouts: "已保存配置", currentBuild: "当前配置", createBuild: "创建配置", saveBuild: "保存当前", saveBuildAs: "保存配置", newBuild: "新配置", deleteBuild: "删除", currentBuildHint: "选择已保存配置，然后用保存当前更新它。导出会分享所选配置。", createBuildHint: "新配置会把当前点数另存为一个配置。导入可粘贴分享字符串。", buildHint: "选择已保存配置，用保存当前更新，或创建新配置。", buildInvalid: "此配置尚未有效。", selectBuildFirst: "先选择要删除的已保存配置。", deleteBuildTitle: "删除已保存配置？", deleteBuildBody: "删除“{name}”？这只会移除已保存配置；当前天赋不会改变。", deleteBuildConfirm: "删除配置", namePrompt: "为此配置命名：", import: "导入", export: "导出", importPrompt: "粘贴配置字符串：", exportCopied: "配置字符串已复制到剪贴板。", exportTitle: "配置字符串（复制并分享）：", invalidBuild: "该配置字符串无效。", rank: "等级", requires: "需要", pointsGate: "点已投入此树", dormant: "未激活：前置已退还", editHint: "左键添加 - 右键移除", cycleHint: "点击选择选项", combatLocked: "战斗中不能更改天赋。", nothingStaged: "没有要应用的更改。", pickSpecFirst: "选择专精后才能使用此树。", unlockBanner: "天赋已解锁！", unlockHint: "你获得了第一个天赋点：按 N 打开天赋。", copy: "复制", close: "关闭", cancel: "取消", noBuilds: "没有已保存配置", save: "保存", comingSoonTitle: "天赋即将推出", comingSoonBody: "此职业还没有天赋树。你可以继续正常游玩；完整天赋树会在未来更新中到来。",
   },
@@ -11047,6 +11057,7 @@ export const gameStringsZhTW: typeof gameStrings = {
   milestone: { unlocked: "里程碑解鎖", veteran: "老兵", champion: "冠軍", paragon: "典範", mythic: "神話", eternal: "永恆" },
   prestige: { action: "威望晉升", title: "角色威望晉升", body: "威望晉升會使你的威望階級提高 1，並重置等級經驗條。它不會改變等級、裝備、天賦、技能、終身經驗或排行榜位置；這只是外觀榮譽。", confirm: "威望晉升", cancel: "取消", rank: "威望", needCap: "你必須達到等級上限才能進行威望晉升。", needXp: "更多終身經驗才可威望晉升" },
   settings: { showOverflowXp: "顯示溢出經驗", weather: "天氣效果" },
+  hud: { lowMana: "法力不足", lowEnergy: "能量不足" },
   talents: {
     title: "天賦",
     classTab: "職業",
@@ -11115,6 +11126,7 @@ export const gameStringsKoKR: typeof gameStrings = {
   milestone: { unlocked: "이정표 해제", veteran: "베테랑", champion: "용사", paragon: "귀감", mythic: "신화", eternal: "영원" },
   prestige: { action: "명예 승급", title: "캐릭터 명예 승급", body: "명예 승급은 명예 등급을 1 올리고 레벨 경험치 막대를 초기화합니다. 레벨, 장비, 특성, 능력, 누적 경험치, 순위표 위치는 바뀌지 않으며 외형적 표시입니다.", confirm: "명예 승급", cancel: "취소", rank: "명예", needCap: "명예 승급을 하려면 최대 레벨이어야 합니다.", needXp: "명예 승급까지 필요한 추가 누적 경험치" },
   settings: { showOverflowXp: "초과 경험치 표시", weather: "날씨 효과" },
+  hud: { lowMana: "마나 부족", lowEnergy: "기력 부족" },
   talents: { title: "특성", classTab: "직업", specTab: "전문화", available: "사용 가능", spent: "사용함", pointSource: "{first}레벨부터 {cap}레벨까지 레벨마다 특성 점수 1점을 얻습니다. 더 많은 점수를 얻으려면 레벨을 올리세요.", apply: "변경 적용", clear: "점수 초기화", reset: "초기화", chooseSpec: "전문화 선택", noSpec: "선택한 전문화 없음", role: "역할", mastery: "숙련", signature: "대표 기술", roleTank: "방어", roleHealer: "치유", roleDps: "피해", loadouts: "저장한 빌드", currentBuild: "현재 빌드", createBuild: "빌드 만들기", saveBuild: "현재 저장", saveBuildAs: "빌드 저장", newBuild: "새 빌드", deleteBuild: "삭제", currentBuildHint: "저장한 빌드를 고른 뒤 현재 저장으로 갱신하세요. 내보내기는 선택한 빌드를 공유합니다.", createBuildHint: "새 빌드는 현재 점수를 별도 빌드로 저장합니다. 가져오기는 공유 문자열을 붙여넣습니다.", buildHint: "저장한 빌드를 고르고 현재 저장으로 갱신하거나 새 빌드를 만드세요.", buildInvalid: "이 빌드는 아직 유효하지 않습니다.", selectBuildFirst: "삭제할 저장 빌드를 먼저 선택하세요.", deleteBuildTitle: "저장한 빌드를 삭제할까요?", deleteBuildBody: "\"{name}\"을(를) 삭제할까요? 저장한 빌드만 삭제되며 현재 특성은 유지됩니다.", deleteBuildConfirm: "빌드 삭제", namePrompt: "이 빌드 이름:", import: "가져오기", export: "내보내기", importPrompt: "빌드 문자열 붙여넣기:", exportCopied: "빌드 문자열이 클립보드에 복사되었습니다.", exportTitle: "빌드 문자열(복사해 공유):", invalidBuild: "그 빌드 문자열은 유효하지 않습니다.", rank: "등급", requires: "필요", pointsGate: "점이 이 트리에 사용됨", dormant: "비활성: 선행 조건 환불됨", editHint: "왼쪽 클릭 추가 - 오른쪽 클릭 제거", cycleHint: "클릭해 옵션 선택", combatLocked: "전투 중에는 특성을 바꿀 수 없습니다.", nothingStaged: "적용할 변경이 없습니다.", pickSpecFirst: "이 트리를 사용하려면 전문화를 선택하세요.", unlockBanner: "특성 해제!", unlockHint: "첫 특성 점수를 얻었습니다. N을 눌러 특성을 여세요.", copy: "복사", close: "닫기", cancel: "취소", noBuilds: "저장한 빌드 없음", save: "저장", comingSoonTitle: "특성 준비 중", comingSoonBody: "이 직업은 아직 특성 트리가 없습니다. 계속 정상적으로 플레이할 수 있으며 전체 트리는 향후 업데이트에 추가됩니다." },
 };
 
@@ -11125,6 +11137,7 @@ export const gameStringsJaJP: typeof gameStrings = {
   milestone: { unlocked: "到達点解除", veteran: "古参", champion: "勇者", paragon: "範士", mythic: "神話", eternal: "永遠" },
   prestige: { action: "威信", title: "キャラクター威信化", body: "威信は威信ランクを1上げ、レベル経験値バーをリセットします。レベル、装備、タレント、アビリティ、累計経験値、ランキング順位は変わりません。見た目の栄誉です。", confirm: "威信", cancel: "キャンセル", rank: "威信", needCap: "威信を得るにはレベル上限に達している必要があります。", needXp: "威信までに必要な追加累計経験値" },
   settings: { showOverflowXp: "超過経験値を表示", weather: "天候エフェクト" },
+  hud: { lowMana: "マナ低下", lowEnergy: "エネルギー低下" },
   talents: { title: "タレント", classTab: "クラス", specTab: "専門化", available: "使用可能", spent: "使用済み", pointSource: "レベル{first}から{cap}まで、レベルごとにタレントポイントを1獲得します。さらにポイントを得るにはレベルを上げてください。", apply: "変更を適用", clear: "ポイントをリセット", reset: "リセット", chooseSpec: "専門化を選択", noSpec: "専門化未選択", role: "役割", mastery: "熟達", signature: "シグネチャ", roleTank: "タンク", roleHealer: "ヒーラー", roleDps: "ダメージ", loadouts: "保存ビルド", currentBuild: "現在のビルド", createBuild: "ビルド作成", saveBuild: "現在を保存", saveBuildAs: "ビルド保存", newBuild: "新規ビルド", deleteBuild: "削除", currentBuildHint: "保存ビルドを選び、現在を保存で更新します。エクスポートは選択したビルドを共有します。", createBuildHint: "新規ビルドは現在のポイントを別ビルドとして保存します。インポートは共有文字列を貼り付けます。", buildHint: "保存ビルドを選び、現在を保存で更新するか、新規ビルドを作成します。", buildInvalid: "このビルドはまだ有効ではありません。", selectBuildFirst: "削除する保存ビルドを選択してください。", deleteBuildTitle: "保存ビルドを削除しますか?", deleteBuildBody: "\"{name}\"を削除しますか? 保存ビルドだけを削除し、現在のタレントは変わりません。", deleteBuildConfirm: "ビルド削除", namePrompt: "このビルドの名前:", import: "インポート", export: "エクスポート", importPrompt: "ビルド文字列を貼り付け:", exportCopied: "ビルド文字列をクリップボードにコピーしました。", exportTitle: "ビルド文字列(コピーして共有):", invalidBuild: "そのビルド文字列は無効です。", rank: "ランク", requires: "必要", pointsGate: "ポイントをこのツリーに使用", dormant: "休眠: 前提が払い戻されました", editHint: "左クリックで追加 - 右クリックで削除", cycleHint: "クリックして選択", combatLocked: "戦闘中はタレントを変更できません。", nothingStaged: "適用する変更はありません。", pickSpecFirst: "このツリーを使うには専門化を選択してください。", unlockBanner: "タレント解除!", unlockHint: "最初のタレントポイントを獲得しました。Nでタレントを開きます。", copy: "コピー", close: "閉じる", cancel: "キャンセル", noBuilds: "保存ビルドなし", save: "保存", comingSoonTitle: "タレント準備中", comingSoonBody: "このクラスにはまだタレントツリーがありません。通常通りプレイできます。完全なツリーは今後のアップデートで追加されます。" },
 };
 
@@ -11135,6 +11148,7 @@ export const gameStringsPtBR: typeof gameStrings = {
   milestone: { unlocked: "Marco desbloqueado", veteran: "Veterano", champion: "Campeão", paragon: "Paragão", mythic: "Mítico", eternal: "Eterno" },
   prestige: { action: "Prestigiar", title: "Prestigiar personagem", body: "Prestígio aumenta seu grau de prestígio em 1 e reinicia a barra de EXP do nível. Ele não muda nível, equipamento, talentos, habilidades, EXP vitalícia nem posição na classificação; é apenas um destaque cosmético.", confirm: "Prestigiar", cancel: "Cancelar", rank: "Prestígio", needCap: "Você precisa estar no nível máximo para prestigiar.", needXp: "mais EXP vitalícia para prestigiar" },
   settings: { showOverflowXp: "Mostrar EXP excedente", weather: "Efeitos climáticos" },
+  hud: { lowMana: "Mana baixa", lowEnergy: "Energia baixa" },
   talents: {
     title: "Talentos",
     classTab: "Classe",
@@ -11203,6 +11217,7 @@ export const gameStringsRuRU: typeof gameStrings = {
   milestone: { unlocked: "Веха открыта", veteran: "Ветеран", champion: "Чемпион", paragon: "Образец", mythic: "Мифический", eternal: "Вечный" },
   prestige: { action: "Престиж", title: "Престиж персонажа", body: "Престиж повышает ранг престижа на 1 и сбрасывает шкалу опыта уровня. Он не меняет уровень, снаряжение, таланты, способности, общий опыт или место в рейтинге; это только косметический знак.", confirm: "Престиж", cancel: "Отмена", rank: "Престиж", needCap: "Для престижа нужен максимальный уровень.", needXp: "еще общего опыта до престижа" },
   settings: { showOverflowXp: "Показывать лишний опыт", weather: "Погодные эффекты" },
+  hud: { lowMana: "Мало маны", lowEnergy: "Мало энергии" },
   talents: { title: "Таланты", classTab: "Класс", specTab: "Специализация", available: "Доступно", spent: "Потрачено", pointSource: "Получайте 1 очко талантов за каждый уровень с {first} по {cap}. Повышайте уровень, чтобы получить больше очков.", apply: "Применить изменения", clear: "Сбросить очки", reset: "Сброс", chooseSpec: "Выберите специализацию", noSpec: "Специализация не выбрана", role: "Роль", mastery: "Мастерство", signature: "Ключевое", roleTank: "Танк", roleHealer: "Лекарь", roleDps: "Урон", loadouts: "Сохраненные билды", currentBuild: "Текущий билд", createBuild: "Создать билд", saveBuild: "Сохранить текущий", saveBuildAs: "Сохранить билд", newBuild: "Новый билд", deleteBuild: "Удалить", currentBuildHint: "Выберите сохраненный билд, затем сохраните текущий для обновления. Экспорт делится выбранным билдом.", createBuildHint: "Новый билд сохраняет текущие очки отдельно. Импорт вставляет общую строку.", buildHint: "Выберите сохраненный билд, обновите его или создайте новый.", buildInvalid: "Этот билд пока недействителен.", selectBuildFirst: "Сначала выберите сохраненный билд для удаления.", deleteBuildTitle: "Удалить сохраненный билд?", deleteBuildBody: "Удалить \"{name}\"? Будет удален только сохраненный билд; текущие таланты не изменятся.", deleteBuildConfirm: "Удалить билд", namePrompt: "Название этого билда:", import: "Импорт", export: "Экспорт", importPrompt: "Вставьте строку билда:", exportCopied: "Строка билда скопирована в буфер обмена.", exportTitle: "Строка билда (скопируйте и поделитесь):", invalidBuild: "Эта строка билда недействительна.", rank: "Ранг", requires: "Требуется", pointsGate: "очков вложено в дерево", dormant: "Неактивно: требование возвращено", editHint: "ЛКМ добавить - ПКМ убрать", cycleHint: "Щелкните, чтобы выбрать вариант", combatLocked: "В бою нельзя менять таланты.", nothingStaged: "Нет изменений для применения.", pickSpecFirst: "Выберите специализацию, чтобы открыть это дерево.", unlockBanner: "Таланты открыты!", unlockHint: "Вы получили первое очко талантов: нажмите N, чтобы открыть Таланты.", copy: "Копировать", close: "Закрыть", cancel: "Отмена", noBuilds: "Нет сохраненных билдов", save: "Сохранить", comingSoonTitle: "Таланты скоро появятся", comingSoonBody: "У этого класса еще нет деревьев талантов. Можно продолжать играть как обычно; полные деревья появятся в будущем обновлении." },
 };
 

@@ -20,6 +20,14 @@ import {
 import { xpBarView, formatXp } from './xp_bar';
 import { lowHealthVignette } from './low_health';
 import { absorbBarView } from './absorb_bar';
+import { itemStatDeltas } from './item_compare';
+import { formatClockTime } from './clock';
+import { formatMinimapCoords } from './coords';
+import { compassView } from './compass';
+import { clampMinimapZoom, nextMinimapZoom, isMinMinimapZoom, isMaxMinimapZoom, formatMinimapZoom, MINIMAP_ZOOM_DEFAULT } from './minimap_zoom';
+import { restView } from './rest_indicator';
+import { nearestSubzone } from './subzone';
+import { lowResourceView } from './low_resource';
 import { terrainHeight, WATER_LEVEL, roadDistance, generateDecorations } from '../sim/world';
 import type { Decoration } from '../sim/world';
 import { Meters } from './meters';
@@ -262,6 +270,7 @@ export class Hud {
   private combatLogEl = $('#combatlog');
   private errorEl = $('#error-msg');
   private bannerEl = $('#banner');
+  private subzoneEl = $('#subzone-banner');
   private tooltipEl = $('#tooltip');
   // Distinguishes a touch long-press "peek" (inspect, no action) from a tap.
   private peekGuard = new TouchPeekGuard();
@@ -295,8 +304,22 @@ export class Hud {
   private hotWriteCache = new Map<HTMLElement, string>();
   private hotDomWrites = 0;
   private hotDomSkippedWrites = 0;
+  private subzoneTimer: number | undefined;
+  private lastSubzone: string | null = null;
   private minimapCtx: CanvasRenderingContext2D;
   private minimapBg: HTMLCanvasElement;
+  private clockEl: HTMLElement | null = null;
+  private clock24 = false;          // 24-hour vs 12-hour AM/PM display
+  private lastClockText = '';       // avoid redundant DOM writes each frame
+  private lastCoordsText = ''; // cache so we only touch the DOM when coords change
+  // heading compass: a pool of rose-label spans built once, repositioned per frame
+  private compassMarks = new Map<string, HTMLElement>();
+  private compassHeadingEl: HTMLElement | null = null;
+  private lastCompassHeading = '';
+  // Minimap zoom: a multiplier on the minimap's base pixels-per-yard. Discrete
+  // presets (see minimap_zoom.ts), persisted to localStorage. 1 = shipped look.
+  private minimapZoom = MINIMAP_ZOOM_DEFAULT;
+  private minimapZoomLabel: HTMLElement | null = null;
   private mapBg: HTMLCanvasElement | null = null;
   private openLootMobId: number | null = null;
   private openVendorNpcId: number | null = null;
@@ -310,6 +333,7 @@ export class Hud {
   // up), so the bar tracks real swing speed including haste / ranged weapons.
   private swingPeriod = 0;
   private lastSwingTimer = 0;
+  private lastLowResourceSig = '';
   // trading: locally staged offer, pushed to the server on change
   private stagedTrade: { items: InvSlot[]; copper: number } = { items: [], copper: 0 };
   private tradeWasOpen = false;
@@ -328,6 +352,7 @@ export class Hud {
   private arenaAllTime: { name: string; class: string; level: number; rating: number; wins: number; losses: number }[] | null = null;
   private arenaLbFetchedAt = 0;
   private lastCombatEventAt = 0;
+  private lastResting = false;
   private lastZoneId = '';
   private mapZoneId = ''; // zone the cached map-window canvas was rendered for
   private mapZoom = 1; // world-map zoom: 1 = whole zone, up to MAP_MAX_ZOOM
@@ -401,6 +426,8 @@ export class Hud {
       if (target && (this.emoteWheelEl?.contains(target) || document.getElementById('mm-emote')?.contains(target) || document.getElementById('mobile-emote')?.contains(target))) return;
       this.hideEmoteWheel();
     });
+    this.initCompass();
+    this.initMinimapZoom(mm);
     this.releaseSpiritBtnEl.addEventListener('click', () => {
       if (this.sim.arenaInfo?.match) return;
       this.sim.releaseSpirit();
@@ -427,6 +454,19 @@ export class Hud {
       document.getElementById('mobile-controls')?.classList.remove('expanded');
       document.getElementById('mobile-more')?.classList.remove('active');
     });
+    // classic-WoW minimap clock: real local time under the minimap; click it to
+    // flip between 12-hour (AM/PM) and 24-hour display. Real-time clocks are a
+    // UI-only concern, so `new Date()` here is fine (the sim-only time ban
+    // doesn't apply — cf. meters.ts using performance.now()).
+    this.clockEl = $('#minimap-clock');
+    this.clock24 = (() => { try { return localStorage.getItem('clock24h') === '1'; } catch { return false; } })();
+    this.clockEl?.addEventListener('click', () => {
+      this.clock24 = !this.clock24;
+      try { localStorage.setItem('clock24h', this.clock24 ? '1' : '0'); } catch { /* private mode */ }
+      this.lastClockText = ''; // force a redraw in the new format
+      this.updateClock();
+    });
+    this.updateClock();
     // classic MMOs: the player interaction menu opens from the target portrait
     $('#target-frame').addEventListener('contextmenu', (ev) => {
       ev.preventDefault();
@@ -1087,7 +1127,7 @@ export class Hud {
     this.tooltipEl.style.display = 'none';
   }
 
-  private itemTooltip(item: ItemDef): string {
+  private itemTooltip(item: ItemDef, compare = true): string {
     const qColor = QUALITY_COLOR[item.quality ?? 'common'] ?? '#fff';
     let html = `<div class="tt-title" style="color:${qColor}">${esc(itemDisplayName(item))}</div>`;
     html += `<div class="tt-sub">${esc(t('itemUi.tooltip.qualityKind', {
@@ -1130,6 +1170,31 @@ export class Hud {
       html += `<div class="tt-sub">${esc(t('itemUi.tooltip.classes', { classes: item.requiredClass.map(classDisplayName).join(', ') }))}</div>`;
     }
     if (item.sellValue > 0) html += `<div class="tt-sub">${esc(t('itemUi.tooltip.sellPrice', { money: formatLocalizedMoney(item.sellValue) }))}</div>`;
+    if (compare) html += this.itemCompareBlock(item);
+    return html;
+  }
+
+  // Classic-WoW item comparison: when hovering an equippable item, append the
+  // item currently worn in that slot plus the stat change you'd see if you
+  // swapped to it (green = gain, red = loss). Reads IWorld.equipment, so it
+  // works identically offline and online.
+  private itemCompareBlock(item: ItemDef): string {
+    if (!item.slot) return '';
+    const equippedId = this.sim.equipment[item.slot];
+    if (!equippedId || equippedId === item.id) return '';
+    const equipped = ITEMS[equippedId];
+    if (!equipped) return '';
+    const deltas = itemStatDeltas(item, equipped)
+      .map((d) => {
+        const cls = d.delta > 0 ? 'tt-green' : 'tt-red';
+        const sign = d.delta > 0 ? '+' : '−'; // proper minus sign
+        return `<div class="${cls}">${sign}${Math.abs(d.delta).toFixed(d.decimals)} ${esc(t(`itemUi.stats.${d.stat}` as TranslationKey))}</div>`;
+      })
+      .join('');
+    let html = `<div class="tt-cmp"><div class="tt-cmp-head">${esc(t('itemUi.tooltip.currentlyEquipped'))}</div>`;
+    html += `<div class="tt-cmp-body">${this.itemTooltip(equipped, false)}</div>`;
+    if (deltas) html += `<div class="tt-cmp-head">${esc(t('itemUi.tooltip.ifYouEquip'))}</div>${deltas}`;
+    html += `</div>`;
     return html;
   }
 
@@ -1834,6 +1899,7 @@ export class Hud {
     this.setText(this.pfResTextEl, `${Math.round(p.resource)} / ${p.maxResource}`);
     const resClass = 'bar ' + (p.resourceType === 'rage' ? 'rage' : p.resourceType === 'energy' ? 'energy' : 'mana');
     if (this.pfResourceEl.className !== resClass) this.pfResourceEl.className = resClass;
+    this.updateLowResource(p);
 
     // buff bar (player buffs + debuffs)
     this.renderAuras(this.buffBarEl, p, 'all');
@@ -2063,6 +2129,15 @@ export class Hud {
         }
       }
 
+      // subzone text: a smaller banner when you step into a named landmark
+      // (classic "subzone" display). POIs are the same labels the minimap pins.
+      const subzone = inDungeon ? null
+        : nearestSubzone(p.pos.x, p.pos.z, currentZone.pois, this.lastSubzone);
+      if (subzone !== this.lastSubzone) {
+        this.lastSubzone = subzone;
+        if (subzone) this.showSubzone(subzone);
+      }
+
       // soundtrack: pick the zone theme and layer in combat percussion.
       // Combat = a mob is on us, or we traded blows in the last few seconds
       // (the wire protocol doesn't ship the inCombat flag).
@@ -2082,6 +2157,15 @@ export class Hud {
 
       // classic combat indicator: crossed swords + red ring on the player portrait
       $('#player-frame').classList.toggle('combat', inCombat);
+      // classic "resting" zZz on the player portrait while seated / recovering.
+      // Reads the seated booleans IWorld exposes; works offline + online alike.
+      const rest = restView({ sitting: !!p.sitting, eating: !!p.eating, drinking: !!p.drinking });
+      if (rest.resting !== this.lastResting) {
+        this.lastResting = rest.resting;
+        const restEl = $('#pf-rest');
+        restEl.classList.toggle('on', rest.resting);
+        restEl.title = rest.label;
+      }
 
       this.updateQuestTracker();
       this.updatePartyFrames();
@@ -2105,7 +2189,7 @@ export class Hud {
       $('#arena-window').style.display = 'none';
     }
     this.arenaMatchSeen = inArenaMatch;
-    if (fastHud) this.updateMinimap();
+    if (fastHud) { this.updateMinimap(); this.updateClock(); this.updateMinimapCoords(); this.updateCompass(); }
     if (slowHud && $('#social-window').classList.contains('open')) {
       const struct = this.socialStructSig();
       if (struct !== this.lastSocialStruct) {
@@ -2130,6 +2214,28 @@ export class Hud {
     const v = e ? absorbBarView(e) : { fillFrac: 0, overshield: false, total: 0 };
     el.style.transform = `scaleX(${v.fillFrac})`;
     el.classList.toggle('overshield', v.overshield);
+  // Classic "low mana/energy" warning: pulse the player resource bar when power
+  // runs low. Pure read of replicated state (resource/maxResource/type) so it
+  // works offline and online alike. Touches the DOM only on state change.
+  private updateLowResource(p: Entity): void {
+    const v = lowResourceView({ resource: p.resource, maxResource: p.maxResource, resourceType: p.resourceType });
+    const bar = $('#pf-resource') as HTMLElement;
+    // The resource className is rebuilt every frame just above this call, so the
+    // `.low` flag must be re-applied every frame too. Only the expensive style /
+    // label writes are diffed against the cached signature.
+    bar.classList.toggle('low', v.active);
+    const sig = v.active ? `${v.opacity.toFixed(2)}|${v.pulseSeconds.toFixed(2)}|${v.label}` : '';
+    if (sig === this.lastLowResourceSig) return;
+    this.lastLowResourceSig = sig;
+    const label = $('#pf-low-resource') as HTMLElement;
+    if (v.active) {
+      bar.style.setProperty('--lr-opacity', String(v.opacity));
+      bar.style.setProperty('--lr-pulse', `${v.pulseSeconds}s`);
+      label.textContent = v.label;
+      label.style.display = 'block';
+    } else {
+      label.style.display = 'none';
+    }
   }
 
   private renderAuras(el: HTMLElement, e: Entity, mode: 'all' | 'debuffs'): void {
@@ -2226,6 +2332,104 @@ export class Hud {
     return c;
   }
 
+  // Refresh the minimap clock to the current real local time. Cheap to call
+  // every frame: the formatted string only changes once a minute, and we skip
+  // the DOM write whenever it is unchanged.
+  private updateClock(): void {
+    if (!this.clockEl) return;
+    const text = formatClockTime(new Date(), this.clock24);
+    if (text !== this.lastClockText) {
+      this.lastClockText = text;
+      this.clockEl.textContent = text;
+    }
+  }
+
+  // Classic-style coordinate readout pinned under the minimap. Reads only the
+  // player position (already mirrored online), and diffs against the last text
+  // so the DOM node is touched at most once per whole-yard step.
+  private updateMinimapCoords(): void {
+    const p = this.sim.player;
+    const text = formatMinimapCoords(p.pos.x, p.pos.z);
+    if (text === this.lastCoordsText) return;
+    this.lastCoordsText = text;
+    const el = $('#minimap-coords');
+    if (el) el.textContent = text;
+  }
+
+  // Build the compass rose-label pool once. Each of the 8 points gets a span
+  // that we later slide horizontally; positioning happens in updateCompass().
+  private initCompass(): void {
+    const track = $('#compass-track');
+    if (!track) return;
+    for (const label of ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']) {
+      const el = document.createElement('span');
+      el.className = 'compass-mark' + (label.length === 1 ? ' major' : '');
+      el.textContent = label;
+      track.appendChild(el);
+      this.compassMarks.set(label, el);
+    }
+    this.compassHeadingEl = $('#compass-heading');
+  }
+
+  private updateCompass(): void {
+    if (this.compassMarks.size === 0) return;
+    const view = compassView(this.sim.player.facing);
+    const visible = new Set<string>();
+    for (const m of view.marks) {
+      const el = this.compassMarks.get(m.label);
+      if (!el) continue;
+      visible.add(m.label);
+      // offsetFrac -1..1 → 0..100% across the strip; fade marks near the edges
+      el.style.left = `${(m.offsetFrac * 0.5 + 0.5) * 100}%`;
+      el.style.opacity = `${Math.max(0.2, 1 - Math.abs(m.offsetFrac) * 0.85)}`;
+      el.style.display = 'block';
+    }
+    for (const [label, el] of this.compassMarks) {
+      if (!visible.has(label)) el.style.display = 'none';
+    }
+    if (this.compassHeadingEl && view.heading !== this.lastCompassHeading) {
+      this.lastCompassHeading = view.heading;
+      this.compassHeadingEl.textContent = view.heading;
+    }
+  }
+
+  // Build the minimap zoom control: load the persisted level, wire the +/-
+  // buttons and a scroll-wheel handler over the minimap canvas. Pure DOM glue;
+  // all stepping/clamping math lives in minimap_zoom.ts.
+  private initMinimapZoom(mm: HTMLElement): void {
+    const saved = Number(localStorage.getItem('minimapZoom'));
+    this.minimapZoom = clampMinimapZoom(saved);
+    this.minimapZoomLabel = $('#minimap-zoom-label');
+    const inBtn = document.querySelector('#minimap-zoom-in');
+    const outBtn = document.querySelector('#minimap-zoom-out');
+    inBtn?.addEventListener('click', (e) => { e.stopPropagation(); this.setMinimapZoom(nextMinimapZoom(this.minimapZoom, +1)); });
+    outBtn?.addEventListener('click', (e) => { e.stopPropagation(); this.setMinimapZoom(nextMinimapZoom(this.minimapZoom, -1)); });
+    // scroll over the minimap to zoom (up = in), without scrolling the page
+    mm.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      this.setMinimapZoom(nextMinimapZoom(this.minimapZoom, (e as WheelEvent).deltaY < 0 ? +1 : -1));
+    }, { passive: false });
+    this.syncMinimapZoomUi();
+  }
+
+  private setMinimapZoom(z: number): void {
+    const next = clampMinimapZoom(z);
+    if (next === this.minimapZoom) return;
+    this.minimapZoom = next;
+    localStorage.setItem('minimapZoom', String(next));
+    this.syncMinimapZoomUi();
+  }
+
+  // Reflect the current zoom in the readout and disable the +/- buttons at the
+  // ends so the control communicates its own limits.
+  private syncMinimapZoomUi(): void {
+    if (this.minimapZoomLabel) this.minimapZoomLabel.textContent = formatMinimapZoom(this.minimapZoom);
+    const inBtn = document.querySelector('#minimap-zoom-in') as HTMLButtonElement | null;
+    const outBtn = document.querySelector('#minimap-zoom-out') as HTMLButtonElement | null;
+    if (inBtn) inBtn.disabled = isMaxMinimapZoom(this.minimapZoom);
+    if (outBtn) outBtn.disabled = isMinMinimapZoom(this.minimapZoom);
+  }
+
   private updateMinimap(): void {
     const ctx = this.minimapCtx;
     const S = 162;
@@ -2237,7 +2441,9 @@ export class Hud {
     ctx.arc(S / 2, S / 2, S / 2 - 2, 0, Math.PI * 2);
     ctx.clip();
     ctx.imageSmoothingEnabled = false;
-    const pxPerYard = 1.7;
+    // 1.7 is the historical base scale; the zoom multiplier shrinks the world
+    // radius shown so markers spread out as you zoom in (default 1 = unchanged).
+    const pxPerYard = 1.7 * this.minimapZoom;
     const bg = this.minimapBg;
     const bgPxPerYard = bg.width / (WORLD_MAX_X - WORLD_MIN_X);
     const sw = S / (pxPerYard / bgPxPerYard);
@@ -3432,6 +3638,13 @@ export class Hud {
     this.bannerEl.style.opacity = '1';
     clearTimeout(this.bannerTimer);
     this.bannerTimer = window.setTimeout(() => { this.bannerEl.style.opacity = '0'; }, 2600);
+  }
+
+  showSubzone(text: string): void {
+    this.subzoneEl.textContent = text;
+    this.subzoneEl.style.opacity = '1';
+    clearTimeout(this.subzoneTimer);
+    this.subzoneTimer = window.setTimeout(() => { this.subzoneEl.style.opacity = '0'; }, 2600);
   }
 
   // -------------------------------------------------------------------------

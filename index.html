@@ -514,6 +514,18 @@
   #target-frame .portrait-wrap { order: 2; }
   #target-frame .uf-bars { order: 1; margin-left: 0; margin-right: -8px; border-radius: 6px 0 0 6px; padding: 5px 14px 5px 8px; }
   #target-frame .level-chip { left: auto; right: -3px; }
+  /* "resting" zZz marker on the player portrait while seated / eating / drinking */
+  .rest-indicator {
+    position: absolute; top: -6px; right: -6px; width: 22px; height: 22px;
+    border-radius: 50%; z-index: 3; display: none;
+    align-items: center; justify-content: center;
+    color: #aee3ff; font-weight: bold; font-size: 13px; font-style: italic;
+    text-shadow: 0 0 6px #4fc3ff, 1px 1px 1px #000;
+    background: radial-gradient(circle at 40% 35%, #14304a, #08141c);
+    border: 2px solid #4fc3ff88; box-shadow: 0 0 8px #4fc3ff66;
+  }
+  .rest-indicator.on { display: flex; animation: rest-pulse 2s ease-in-out infinite; }
+  @keyframes rest-pulse { 0%, 100% { opacity: 1; transform: translateY(0); } 50% { opacity: 0.55; transform: translateY(-2px); } }
   .uf-name { font-size: 13px; font-weight: bold; font-family: var(--title-font); color: var(--gold);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 1px 1px 2px #000; }
   .bar { position: relative; height: 15px; background: #1a1a1a; border: 1px solid #000; margin-top: 3px; border-radius: 2px; overflow: hidden; }
@@ -531,6 +543,27 @@
     box-shadow: inset 0 0 6px rgba(255,255,255,0.4); pointer-events: none; transition: transform 0.12s linear; }
   .bar-absorb.overshield { background: repeating-linear-gradient(115deg, rgba(255,236,160,0.55) 0 5px, rgba(255,214,90,0.24) 5px 10px);
     box-shadow: inset 0 0 7px rgba(255,225,140,0.6); }
+  /* Low-mana/energy warning: the resource fill pulses brighter and a short
+     caption appears at the end of the bar. Driven by --lr-opacity / --lr-pulse
+     set from the HUD (intensity scales as the bar nears empty). */
+  .bar.low { --lr-opacity: 0.7; --lr-pulse: 1s; }
+  .bar.low .bar-fill {
+    box-shadow: 0 0 5px 1px rgba(150, 205, 255, var(--lr-opacity)), inset 0 0 4px rgba(220, 240, 255, 0.9);
+    animation: low-resource-pulse var(--lr-pulse) ease-in-out infinite;
+  }
+  .bar.energy.low .bar-fill { box-shadow: 0 0 5px 1px rgba(255, 225, 110, var(--lr-opacity)), inset 0 0 4px rgba(255, 245, 200, 0.9); }
+  .low-resource-label {
+    display: none; position: absolute; top: 0; right: 5px; line-height: 15px;
+    font-size: 9px; font-weight: bold; letter-spacing: 0.5px;
+    color: #eaf4ff; text-shadow: 0 0 3px #000, 1px 1px 1px #000; text-transform: uppercase; pointer-events: none;
+    animation: low-resource-pulse var(--lr-pulse, 1s) ease-in-out infinite;
+  }
+  .bar.energy.low .low-resource-label { color: #fff3c2; }
+  @keyframes low-resource-pulse { 0%, 100% { filter: brightness(1); opacity: 0.6; } 50% { filter: brightness(1.7); opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .bar.low .bar-fill, .low-resource-label { animation: none; }
+    .low-resource-label { opacity: 1; }
+  }
   .combo-row { display: flex; gap: 4px; margin-top: 4px; height: 10px; }
   .combo-pip { width: 12px; height: 10px; border-radius: 50%; border: 1px solid #5c2020; background: #2a0d0d; }
   .combo-pip.on { background: radial-gradient(circle at 35% 30%, #ff7a5e, #c0392b); box-shadow: 0 0 5px #ff5533aa; border-color: #ffad99; }
@@ -725,6 +758,49 @@
   #minimap-wrap { position: absolute; right: 12px; top: 10px; width: 170px; text-align: center; }
   #zone-label { font-size: 13px; color: var(--gold); font-family: var(--title-font); text-shadow: 1px 1px 3px #000; margin-bottom: 3px; letter-spacing: 0.5px; }
   #minimap { border-radius: 50%; border: 4px solid var(--border); outline: 1px solid #000; box-shadow: 0 0 14px #000c, inset 0 0 20px #0008; }
+  /* Digital clock pinned to the bottom of the minimap ring, classic-WoW style. */
+  #minimap-clock { position: absolute; left: 50%; bottom: -3px; transform: translateX(-50%);
+    min-width: 52px; padding: 1px 8px; cursor: pointer; user-select: none;
+    font-family: var(--font-ui); font-size: 12px; font-weight: 600; letter-spacing: .4px;
+    color: var(--gold); text-shadow: 1px 1px 2px #000;
+    background: radial-gradient(circle at 50% 30%, #2c2c3a, #14141d);
+    border: 2px solid var(--border); border-radius: 8px; box-shadow: 0 2px 4px #0009, inset 0 1px 0 #ffffff14; }
+  #minimap-clock:hover { color: #fff; border-color: #c9a86a; }
+  #minimap-coords { margin-top: 4px; display: inline-block; padding: 1px 8px; font-size: 11px; font-variant-numeric: tabular-nums;
+    color: #e8d9b0; background: #0008; border: 1px solid var(--border); border-radius: 9px; text-shadow: 1px 1px 2px #000; letter-spacing: 0.3px; }
+
+  /* heading compass — a horizontal rose strip beneath the minimap */
+  #compass { position: relative; width: 162px; margin: 5px auto 0; }
+  #compass-strip { position: relative; height: 18px; overflow: hidden;
+    border: 2px solid var(--border); border-radius: 5px;
+    background: linear-gradient(#1c1a14, #100f0b);
+    box-shadow: inset 0 0 8px #000a;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); }
+  #compass-track { position: absolute; inset: 0; }
+  .compass-mark { position: absolute; top: 50%; transform: translate(-50%, -50%);
+    font-family: var(--title-font); font-size: 11px; color: #b9ad86;
+    text-shadow: 1px 1px 2px #000; pointer-events: none; white-space: nowrap; }
+  .compass-mark.major { font-size: 13px; color: var(--gold); font-weight: 700; }
+  /* the fixed centre caret marks the direction the player faces */
+  #compass-center { position: absolute; left: 50%; top: -2px; width: 0; height: 0;
+    transform: translateX(-50%); border-left: 5px solid transparent;
+    border-right: 5px solid transparent; border-top: 6px solid var(--gold);
+    filter: drop-shadow(0 1px 1px #000); }
+  #compass-heading { margin-top: 2px; font-family: var(--title-font); font-size: 12px;
+    color: var(--gold); letter-spacing: 1px; text-shadow: 1px 1px 2px #000; }
+  /* minimap zoom control: a compact gold pill pinned to the bottom rim of the
+     round minimap. Vertical centre holds the live zoom readout (e.g. "2×"). */
+  #minimap-zoom { position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 4px; padding: 1px 4px; z-index: 2;
+    background: radial-gradient(circle at 50% 30%, #2c2c3a, #15151f); border: 1px solid #4a3d1d;
+    border-radius: 9px; box-shadow: 0 1px 3px #000a; }
+  .minimap-zoom-btn { width: 17px; height: 17px; padding: 0; line-height: 1; font-size: 14px; font-weight: bold;
+    color: #d8c89a; background: none; border: none; cursor: pointer; border-radius: 4px; font-family: var(--title-font); }
+  .minimap-zoom-btn:hover:not(:disabled) { color: #fff; background: #ffffff1a; }
+  .minimap-zoom-btn:disabled { opacity: 0.3; cursor: default; }
+  #minimap-zoom-label { min-width: 24px; font-size: 11px; color: var(--gold); font-family: var(--title-font);
+    text-shadow: 1px 1px 2px #000; letter-spacing: 0.3px; }
 
   /* ---------- community HUD ---------- */
   /* Discord/GitHub: bottom-right, directly below the micro-menu, right-aligned with it. */
@@ -1292,6 +1368,11 @@
   #tooltip .tt-desc { color: #ffd100; margin-top: 4px; font-size: 11.5px; }
   #tooltip .tt-stat { color: #fff; font-size: 11.5px; }
   #tooltip .tt-green { color: #1eff00; font-size: 11.5px; }
+  #tooltip .tt-red { color: #ff5040; font-size: 11.5px; }
+  /* item comparison block (hover an equippable item to see the worn one + deltas) */
+  #tooltip .tt-cmp { margin-top: 6px; padding-top: 5px; border-top: 1px solid #3a3526; }
+  #tooltip .tt-cmp-head { color: #8a7f5e; font-size: 10px; text-transform: uppercase; letter-spacing: .5px; margin-top: 3px; }
+  #tooltip .tt-cmp-body { opacity: .7; }
 
   /* ---------- floating combat text ---------- */
   .fct { position: absolute; font-weight: bold; pointer-events: none; text-shadow: 1px 1px 3px #000;
@@ -1308,6 +1389,9 @@
     opacity: 0; transition: opacity .4s; pointer-events: none; }
   #banner { position: absolute; left: 50%; top: 28%; transform: translateX(-50%); color: var(--gold);
     font-size: 38px; font-weight: bold; text-shadow: 0 0 18px #00000088, 2px 2px 6px #000; opacity: 0;
+    transition: opacity 1.2s; pointer-events: none; font-family: var(--title-font); letter-spacing: 1px; white-space: nowrap; }
+  #subzone-banner { position: absolute; left: 50%; top: 35%; transform: translateX(-50%); color: #fff;
+    font-size: 22px; font-weight: bold; text-shadow: 0 0 14px #00000088, 1px 1px 4px #000; opacity: 0;
     transition: opacity 1.2s; pointer-events: none; font-family: var(--title-font); letter-spacing: 1px; white-space: nowrap; }
 
   /* ---------- low-health screen vignette ---------- */
@@ -4986,6 +5070,7 @@
       white-space: normal;
       overflow-wrap: anywhere;
     }
+    body.mobile-touch #subzone-banner { top: 25%; font-size: 18px; }
     body.mobile-touch #error-msg { top: 16%; font-size: 16px; }
     body.mobile-touch #mobile-preflight .preflight-panel { width: min(520px, 84vw); padding: 18px 22px; }
     body.mobile-touch #mobile-preflight h2 { font-size: 22px; }
@@ -5946,6 +6031,17 @@
     <div id="minimap-wrap">
       <div id="zone-label" data-i18n="entities.zones.eastbrook_vale.name">Eastbrook Vale</div>
       <canvas id="minimap" width="162" height="162"></canvas>
+      <div id="minimap-clock" title="Local time — click to toggle 12/24-hour">--:--</div>
+      <div id="minimap-coords" title="Your current world coordinates" aria-label="Coordinates">0, 0</div>
+      <div id="compass" aria-label="Heading compass">
+        <div id="compass-strip"><div id="compass-track"></div></div>
+        <div id="compass-center"></div>
+        <div id="compass-heading">N</div>
+      <div id="minimap-zoom" aria-label="Minimap zoom">
+        <button class="minimap-zoom-btn" id="minimap-zoom-out" title="Zoom out" aria-label="Zoom out minimap">&minus;</button>
+        <span id="minimap-zoom-label" aria-live="polite">1×</span>
+        <button class="minimap-zoom-btn" id="minimap-zoom-in" title="Zoom in" aria-label="Zoom in minimap">+</button>
+      </div>
     </div>
 
     <div id="community-hud" data-i18n-aria="hud.core.communityLinks" aria-label="Community links">
@@ -5980,11 +6076,12 @@
               <div class="portrait"><canvas id="pf-portrait" width="54" height="54"></canvas></div>
               <div class="level-chip" id="pf-level">1</div>
               <div class="combat-flash" id="pf-combat" title="In Combat">⚔</div>
+              <div class="rest-indicator" id="pf-rest" title="Resting">z</div>
             </div>
             <div class="uf-bars">
               <div class="uf-name" id="pf-name"></div>
               <div class="bar hp"><div class="bar-fill" id="pf-hp"></div><div class="bar-absorb" id="pf-absorb"></div><div class="bar-text" id="pf-hp-text"></div></div>
-              <div class="bar mana" id="pf-resource"><div class="bar-fill" id="pf-res"></div><div class="bar-text" id="pf-res-text"></div></div>
+              <div class="bar mana" id="pf-resource"><div class="bar-fill" id="pf-res"></div><div class="bar-text" id="pf-res-text"></div><div class="low-resource-label" id="pf-low-resource"></div></div>
             </div>
           </div>
           <div id="petbar" class="panel"></div>
@@ -6066,6 +6163,7 @@
     <div id="error-msg"></div>
     <div id="banner"></div>
     <div id="low-health-vignette"></div>
+    <div id="subzone-banner"></div>
 
     <div id="death-overlay">
       <h2 data-i18n="hud.core.deathTitle">You have died.</h2>
