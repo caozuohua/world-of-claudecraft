@@ -248,6 +248,26 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     loot: [],
     scale: 1.0, color: 0xc9c2b5,
   },
+  // Voskar the Emberwing — a young drake the Wyrmcult chained above the Sanctum
+  // and starved into a weapon. The only dragonkin rare on the peaks: it breathes
+  // fire in a wide cone, and its searing bite leaves wounds that refuse to close.
+  voskar_emberwing: {
+    id: 'voskar_emberwing', name: 'Voskar the Emberwing', minLevel: 19, maxLevel: 19, family: 'dragonkin', rare: true,
+    elite: true, canSwim: true, ccImmune: true, respawnMult: 864,
+    hpBase: 470, hpPerLevel: 78, dmgBase: 22, dmgPerLevel: 4.9, attackSpeed: 2.5,
+    armorPerLevel: 42, moveSpeed: 7, aggroRadius: 13,
+    aoePulse: { min: 30, max: 44, radius: 10, every: 9, name: 'Ember Breath', school: 'fire', fx: 'nova' },
+    // Searing Maw: the drake's molten bite cauterizes flesh shut, blunting healing.
+    mortalStrike: { chance: 0.35, healReduction: 0.5, duration: 8, name: 'Searing Maw', school: 'fire' },
+    enrage: { belowHpPct: 0.3, dmgMult: 1.5, hasteMult: 1.3 },
+    loot: [
+      { copper: 700, chance: 1 },
+      { itemId: 'emberwing_cinderscale', chance: 1 },
+      { itemId: 'emberwing_legguards', chance: 0.25, rollGroup: 'voskar_emberwing_chase' },
+      { itemId: 'emberfang_warblade', chance: 0.25, rollGroup: 'voskar_emberwing_chase' },
+    ],
+    scale: 1.3, color: 0xe8702a,
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -588,6 +608,10 @@ export const ZONE3_CAMPS: CampDef[] = [
   { mobId: 'boneclad_revenant', center: { x: -40, z: 830 }, radius: 20, count: 8 },
   { mobId: 'boneclad_revenant', center: { x: -15, z: 860 }, radius: 16, count: 6 },
   { mobId: 'marrowlord_varkas', center: { x: -34, z: 842 }, radius: 5, count: 1 },
+  // Voskar the Emberwing: perched on a scorched crag east of the Sanctum tents,
+  // with two zealot drakebinders posted to keep their captive on its chain.
+  { mobId: 'voskar_emberwing', center: { x: 80, z: 845 }, radius: 4, count: 1 },
+  { mobId: 'wyrmcult_zealot', center: { x: 80, z: 845 }, radius: 7, count: 2 },
 ];
 
 export const ZONE3_OBJECTS: GroundObjectDef[] = [
@@ -688,6 +712,19 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
   skullsmasher_warbelt: {
     id: 'skullsmasher_warbelt', name: "Skullsmasher's Warbelt", kind: 'armor', slot: 'chest', quality: 'uncommon',
     stats: { armor: 96, sta: 5, str: 3 }, sellValue: 1050,
+  },
+  // Voskar the Emberwing drops (rare elite dragonkin)
+  emberwing_cinderscale: {
+    id: 'emberwing_cinderscale', name: 'Emberwing Cinderscale', kind: 'junk', quality: 'common',
+    sellValue: 320,
+  },
+  emberwing_legguards: {
+    id: 'emberwing_legguards', name: 'Emberwing Legguards', kind: 'armor', slot: 'legs', quality: 'rare',
+    stats: { armor: 120, sta: 6, str: 4 }, sellValue: 2200, requiredClass: ['warrior', 'paladin', 'shaman'],
+  },
+  emberfang_warblade: {
+    id: 'emberfang_warblade', name: 'Emberfang Warblade', kind: 'weapon', slot: 'mainhand', quality: 'rare',
+    weapon: { min: 26, max: 41, speed: 2.5 }, stats: { str: 8, sta: 3 }, sellValue: 2400, requiredClass: ['warrior', 'paladin', 'shaman'],
   },
   // --- quest & dungeon blues (rare) ---
   // Brutok Skullsmasher chase weapons (mutually exclusive: brutok_chase)
