@@ -5,6 +5,8 @@ const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8').rep
 const mainTs = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const hudTs = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const mobileControlsTs = readFileSync(new URL('../src/game/mobile_controls.ts', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+const robotsTxt = readFileSync(new URL('../public/robots.txt', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+const sitemapXml = readFileSync(new URL('../public/sitemap.xml', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 
 function splitGameUiTemplate(): { templateHtml: string; liveHtml: string } {
   const marker = '<template id="game-ui-template">';
@@ -32,6 +34,20 @@ describe('client HTML shell', () => {
     expect(liveHtml).not.toContain('Release Spirit');
     expect(liveHtml).not.toContain('Combat Log');
     expect(liveHtml).not.toContain('id="chat-input"');
+  });
+
+  it('ships crawlable SEO metadata and sitemap hints', () => {
+    expect(html).toContain('<meta name="robots" content="index, follow, max-image-preview:large" />');
+    expect(html).toContain('<link rel="canonical" href="https://worldofclaudecraft.com/" />');
+    expect(html).toContain('<meta property="og:site_name" content="World of ClaudeCraft" />');
+    expect(html).toContain('"alternateName": "World of Claudecraft"');
+    expect(html).toContain('"https://github.com/levy-street/world-of-claudecraft"');
+    expect(mainTs).toContain("alternateName: 'World of Claudecraft'");
+    expect(mainTs).toContain("'https://github.com/levy-street/world-of-claudecraft'");
+    expect(robotsTxt.trim()).toBe('User-agent: *\nAllow: /\n\nSitemap: https://worldofclaudecraft.com/sitemap.xml');
+    expect(robotsTxt).toContain('Sitemap: https://worldofclaudecraft.com/sitemap.xml');
+    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/</loc>');
+    expect(sitemapXml).toContain('<loc>https://worldofclaudecraft.com/links</loc>');
   });
 
   it('offers the quest log in the mobile controls drawer', () => {

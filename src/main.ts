@@ -2314,6 +2314,7 @@ function updateSeoMetadata(lang: SupportedLanguage): void {
       '@context': 'https://schema.org',
       '@type': 'VideoGame',
       name: 'World of ClaudeCraft',
+      alternateName: 'World of Claudecraft',
       genre: t('seo.genre'),
       playMode: t('seo.playMode'),
       applicationCategory: t('seo.applicationCategory'),
@@ -2322,6 +2323,10 @@ function updateSeoMetadata(lang: SupportedLanguage): void {
       image: 'https://worldofclaudecraft.com/woc_logo_square.webp',
       description: t('seo.description'),
       inLanguage: languageTag(lang),
+      sameAs: [
+        'https://github.com/levy-street/world-of-claudecraft',
+        'https://discord.gg/GjhnUsBtw',
+      ],
     }, null, 2);
   }
 }
