@@ -9820,9 +9820,22 @@ export const mergeExtra = {
       ["rake", "Zarpazo", "Una apertura sigilosa que desgarra al enemigo causando el daño del arma más {damage} y provoca daño por sangrado durante 9 s. Otorga 1 punto de combo. Solo en Forma de lobo."],
       ["revive_pet", "Revivir mascota", "Revive a tu mascota muerta y la devuelve a tu lado."],
     ]),
-    items: mergeNameTranslations(DROWNED_ITEM_IDS, [
+    items: {
+      ...mergeNameTranslations(DROWNED_ITEM_IDS, [
       "Ídolo salobre", "Ofrenda ahogada", "Kris de la Luna Ahogada", "Maza de la Luna Ahogada", "Cetro de la Luna Ahogada", "Escarpes de Paso Ahogado", "Babuchas de Paso Ahogado", "Botas de Paso Ahogado", "Calco protector", "Escama de Lunapálida", "Sable de Escama Lunar", "Peto del Sudario Lunar", "Túnica del Sudario Lunar", "Sobreveste del Sudario Lunar", "Perla pálida", "Escama del corazón de Sethrael", "Vara de Espiral Pálida", "Zancadas marinas de Selthe", "Daga de Vidriomarea", "Vendas del Vigía de la Marea", "Grebas de perla de Ysolei"
-    ], 'drowned item'),
+      ], 'drowned item'),
+      boundstone_girdle: { name: "Cinturón Piedravínculo" },
+      boundstone_helm: { name: "Yelmo Piedravínculo" },
+      cryptbone_helm: { name: "Yelmo Huesocripta" },
+      cryptbone_pauldrons: { name: "Hombreras Huesocripta" },
+      deathlords_dread_visage: { name: "Visaje aterrador del Señor de la Muerte" },
+      gravewyrm_gauntlets: { name: "Guanteletes del Gravewyrm" },
+      gravewyrm_mantle: { name: "Manto del Gravewyrm" },
+      mistveil_cord: { name: "Cordón Veloniebla" },
+      mistveil_grips: { name: "Agarraderas Veloniebla" },
+      necromancers_soulspire_mantle: { name: "Manto Aguja de Almas del nigromante" },
+      wyrmshadow_talongrips: { name: "Agarraderas Garra Sombravermis" },
+    },
     mobs: mergeNameTranslations(DROWNED_MOB_IDS, [
       "Selthe, madre del coro", "Guardián ahogado del templo", "Devoto ahogado", "Vadeador de Glimmermere", "Acechador de Escama Reluciente", "Engendro lunar", "Acólito del Coro Pálido", "Centinela de la Guardia de Perla", "Sethrael, la Espiral Pálida", "Demonio de fuego", "Demonio del vacío", "Ysolei, Avatar de la Luna Ahogada"
     ], 'drowned mob'),
@@ -9879,9 +9892,22 @@ export const mergeExtra = {
       ["rake", "Lacérer", "Une attaque d'ouverture en camouflage qui lacère l'ennemi pour les dégâts de l'arme plus {damage} et inflige des dégâts de saignement sur 9 sec. Octroie 1 point de combo. Forme de loup uniquement."],
       ["revive_pet", "Ranimer le familier", "Ranime votre familier mort et le ramène à vos côtés."],
     ]),
-    items: mergeNameTranslations(DROWNED_ITEM_IDS, [
+    items: {
+      ...mergeNameTranslations(DROWNED_ITEM_IDS, [
       "Idole saumâtre", "Offrande noyée", "Kriss de la Lune noyée", "Maillet de la Lune noyée", "Sceptre de la Lune noyée", "Solerets du Pas noyé", "Chaussons du Pas noyé", "Sandales du Pas noyé", "Frottis de protection", "Écaille de Pâlelune", "Sabre en écailles de lune", "Plastron du Linceul de lune", "Robe du Linceul de lune", "Tunique du Linceul de lune", "Perle blafarde", "Écaille de cœur de Sethrael", "Verge de Pâlanneau", "Arpenteuses des mers de Selthe", "Dague de verre de marée", "Bandes du Veille-marées", "Jambières de perle d'Ysolei"
-    ], 'drowned item'),
+      ], 'drowned item'),
+      boundstone_girdle: { name: "Ceinturon de pierre-liée" },
+      boundstone_helm: { name: "Heaume de pierre-liée" },
+      cryptbone_helm: { name: "Heaume d'os de crypte" },
+      cryptbone_pauldrons: { name: "Espauliers d'os de crypte" },
+      deathlords_dread_visage: { name: "Visage d'effroi du Seigneur de mort" },
+      gravewyrm_gauntlets: { name: "Gantelets du Gravewyrm" },
+      gravewyrm_mantle: { name: "Mantelet du Gravewyrm" },
+      mistveil_cord: { name: "Corde Voilebrume" },
+      mistveil_grips: { name: "Poignes Voilebrume" },
+      necromancers_soulspire_mantle: { name: "Mantelet Flèche-d'âme du nécromancien" },
+      wyrmshadow_talongrips: { name: "Poignes Serre Ombrewyrm" },
+    },
     mobs: mergeNameTranslations(DROWNED_MOB_IDS, [
       "Selthe, mère de chœur", "Garde du temple noyé", "Dévot noyé", "Pataugeur de Lac-miroitant", "Rôdeur aux écailles miroitantes", "Engeance de lune", "Acolyte du Chœur blafard", "Sentinelle de la Garde de perle", "Sethrael le Pâlanneau", "Démon de feu", "Démon du néant", "Ysolei, avatar de la Lune noyée"
     ], 'drowned mob'),
