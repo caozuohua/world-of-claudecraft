@@ -2111,6 +2111,7 @@ export class Renderer {
     switch (ev.type) {
       case 'spellfx':
         if (ev.fx === 'projectile') this.vfx.projectile(ev.sourceId, ev.targetId, ev.school);
+        else if (ev.fx === 'beam') this.vfx.beam(ev.sourceId, ev.targetId, ev.school);
         else if (ev.fx === 'tick') this.vfx.tick(ev.targetId, ev.school);
         else this.vfx.nova(ev.targetId, ev.school);
         break;
@@ -2577,7 +2578,7 @@ export class Renderer {
   // ---------------------------------------------------------------------
 
   private builtInteriors = new Set<string>();
-  private fogState: 'outdoor' | 'dungeon' | 'temple' | 'underwater' = 'outdoor';
+  private fogState: 'outdoor' | 'dungeon' | 'temple' | 'nythraxis' | 'underwater' = 'outdoor';
 
   private buildInterior(interior: string, ox: number, oz: number): void {
     this.dungeons ??= new DungeonInteriors(this.scene, this.lowGfx, this.flames, this.fireLights);
@@ -2632,9 +2633,12 @@ export class Renderer {
     }
     // the Drowned Temple reads as submerged: a teal murk instead of the
     // crypt's near-black, so its flooded halls feel underwater, not just dark
-    const inTemple = inside && !isArenaPos(px) && dungeonAt(px)?.interior === 'temple';
+    const interior = inside && !isArenaPos(px) ? dungeonAt(px)?.interior : null;
+    const inTemple = interior === 'temple';
+    const inNythraxis = interior === 'nythraxis';
     const desired = inTemple ? 'temple'
-      : inside ? 'dungeon'
+      : inNythraxis ? 'nythraxis'
+        : inside ? 'dungeon'
         : camY < WATER_LEVEL - 0.05 ? 'underwater' : 'outdoor';
     const fog = this.scene.fog as THREE.Fog;
     if (desired !== this.fogState) {
@@ -2647,6 +2651,12 @@ export class Renderer {
         fog.color.setHex(0x0a3a44);
         fog.near = 12;
         fog.far = 78;
+      } else if (desired === 'nythraxis') {
+        // the raid arena is huge (±230) — push the murk back so ~50yd reads
+        // clear (linear-fog midpoint (near+far)/2 = 50), not the old ~30
+        fog.color.setHex(0x020106);
+        fog.near = 20;
+        fog.far = 80;
       } else if (desired === 'underwater') {
         fog.color.setHex(0x17506e);
         fog.near = 2;
@@ -2661,7 +2671,7 @@ export class Renderer {
       // underground so the torch point lights own the scene; restore outside.
       // The rim glow cranks up instead — silhouettes must split from the murk.
       if (!this.lowGfx) {
-        const underground = desired === 'dungeon' || desired === 'temple';
+        const underground = desired === 'dungeon' || desired === 'temple' || desired === 'nythraxis';
         this.sun.intensity = underground ? DUNGEON_SUN_INTENSITY : SUN_INTENSITY;
         this.hemi.intensity = underground ? DUNGEON_HEMI_INTENSITY : HEMI_INTENSITY;
         this.scene.environmentIntensity = underground ? DUNGEON_ENV_INTENSITY : this.envOutdoorIntensity;
@@ -2857,6 +2867,9 @@ export class Renderer {
           v.sparkle.scale.set(pulse, pulse, 1);
           v.sparkle.material.rotation = this.time * 0.8;
         }
+        if (vis && e.objectItemId === 'bastion_ward_stone' && e.auras.some((a) => a.id === 'nythraxis_wardstone_lit')) {
+          this.vfx.castSparkle(e.id, 'arcane', dt * 2.6);
+        }
         if (v.portal && vis) {
           v.portal.rotation.z = this.time * 1.4;
           (v.portal.material as THREE.MeshBasicMaterial).opacity = 0.45 + Math.sin(this.time * 2.2 + e.id) * 0.15;
@@ -3000,6 +3013,9 @@ export class Renderer {
 
       if (st.casting) {
         this.vfx.castSparkle(e.id, e.castingAbility === 'demon_heal' ? 'shadow' : ABILITIES[e.castingAbility!]?.school ?? 'arcane', dt);
+      }
+      if (e.auras.some((a) => a.id === 'nythraxis_soul_rend')) {
+        this.vfx.castSparkle(e.id, 'shadow', dt * 3.2);
       }
       if (swimming) this.vfx.swimRipple(v.group.position, moving ? dt * 3 : dt);
     }
@@ -3363,6 +3379,9 @@ export class Renderer {
       const hidden = (isSelf && !hasOverheadEmote) || d2 > NAMEPLATE_RANGE_SQ
         || (e.dead && !e.lootable && e.kind === 'mob')
         || (e.kind === 'object' && !isDoor)
+        // the sealed royal door inside the crypt carries no floating label —
+        // it reads as part of the back wall, not a portal billboard
+        || (isDoor && e.dungeonId === 'nythraxis_boss_arena')
         || (!this.showNameplates && e.kind === 'mob' && !e.dead);
       if (hidden) {
         if (v.nameplateDisplay !== 'none') {

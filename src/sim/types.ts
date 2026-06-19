@@ -664,6 +664,8 @@ export interface DungeonObjectSpawn {
   name: string;
   x: number; // relative to instance origin
   z: number;
+  templateId?: 'dungeon_door' | 'dungeon_exit';
+  dungeonId?: string;
 }
 
 export interface DungeonDef {
@@ -671,11 +673,12 @@ export interface DungeonDef {
   name: string;
   index: number; // x-band for instance origins; must be unique
   doorPos: { x: number; z: number }; // overworld entrance portal
+  overworldDoor?: boolean; // false for rooms only reached by internal instance doors
   entry: { x: number; z: number }; // player arrival point (instance-local)
   exitOffset: { x: number; z: number }; // exit portal (instance-local)
   spawns: DungeonSpawn[];
   objects?: DungeonObjectSpawn[];
-  interior: 'crypt' | 'sanctum' | 'temple'; // renderer + collider interior builder key
+  interior: 'crypt' | 'sanctum' | 'temple' | 'nythraxis'; // renderer + collider interior builder key
   suggestedPlayers: number;
   enterText: string;
   leaveText: string;
@@ -878,6 +881,7 @@ export interface Entity {
   summonedIds: number[]; // live adds this boss summoned; despawned on reset
   enraged: boolean; // enrage mechanic active
   healedThisPull: boolean; // desperation self-heal already used this pull
+  nythraxis?: NythraxisEncounterState; // sim-only state for the Nythraxis raid encounter
   spawnPos: Vec3;
   leashAnchor: Vec3 | null; // refreshed by hostile player/pet actions; spawnPos remains the true home
   evadeStall: number; // seconds an evading mob has failed to get closer to home; snaps it home if it can't path back (e.g. across water)
@@ -915,6 +919,44 @@ export interface Entity {
   // Exact $WOC balance backing the tier, for the inspect-profile readout. Rides
   // alongside holderTier in identity fields; like it, the sim never reads it.
   holderBalance?: number;
+}
+
+export interface NythraxisWardChannel {
+  objectId: number;
+  playerId: number | null;
+  remaining: number;
+  complete: boolean;
+}
+
+export interface NythraxisSoulRendMark {
+  playerId: number;
+  remaining: number;
+}
+
+export interface NythraxisDialogueCue {
+  at: number;
+  speaker: 'nythraxis' | 'aldric';
+  text: string;
+}
+
+export interface NythraxisEncounterState {
+  phase: 1 | 'transition' | 2 | 'dead';
+  introSpoken: boolean;
+  transitionStarted: boolean;
+  transitionTimer: number;
+  transitionCues: NythraxisDialogueCue[];
+  transitionReleased: boolean;
+  gravebreakerTimer: number;
+  raiseFallenTimer: number;
+  soulRendTimer: number;
+  soulRendMarks: NythraxisSoulRendMark[];
+  soulRendLockout: number;
+  deathlessTimer: number;
+  deathlessCastRemaining: number;
+  deathlessStunRemaining: number;
+  wardChannels: NythraxisWardChannel[];
+  finalStand: boolean;
+  deathSpoken: boolean;
 }
 
 // `pid` (when present) marks a personal event that should only be delivered to
@@ -981,8 +1023,8 @@ export type SimEvent = { pid?: number } & (
   // Whether it's "mine" is decided client-side (entityId === local player).
   | { type: 'fiestaPowerup'; entityId: number; defId: string; glow: number; duration: number }
   | { type: 'heal2'; sourceId: number; targetId: number; amount: number; crit: boolean; ability: string }
-  // visual-only cue for the renderer: spell projectiles, dot ticks, aoe novas
-  | { type: 'spellfx'; sourceId: number; targetId: number; school: string; fx: 'projectile' | 'tick' | 'nova' }
+  // visual-only cue for the renderer: spell projectiles, channel beams, dot ticks, aoe novas
+  | { type: 'spellfx'; sourceId: number; targetId: number; school: string; fx: 'projectile' | 'beam' | 'tick' | 'nova' }
   // entityId (when set) anchors the log to that entity so the server only
   // delivers it to nearby players; anchorless logs broadcast server-wide
   | { type: 'log'; text: string; color?: string; entityId?: number }
@@ -1010,6 +1052,7 @@ export interface SimConfig {
   playerName?: string;
   noPlayer?: boolean; // multiplayer server: start with an empty world and addPlayer() later
   devCommands?: boolean; // local dev: /dev level|tp|give chat cheats
+  lockoutNowMs?: () => number; // host wall-clock for persisted raid lockouts
 }
 
 export function emptyMoveInput(): MoveInput {

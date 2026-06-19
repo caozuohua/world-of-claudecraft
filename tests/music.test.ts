@@ -1,49 +1,67 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MusicDirector } from '../src/game/music';
 
-// MusicDirector is WebAudio; jsdom has no AudioContext, so we stub the minimal
-// surface init() touches. We only assert layer gain *targets* (the mix logic),
-// not actual audio output.
 class FakeParam {
   value = 0;
-  setTargetAtTime = vi.fn();
+  setTargetAtTime = vi.fn((value: number) => { this.value = value; });
 }
-class FakeGain {
+
+class FakeNode {
+  connect = vi.fn(() => this);
+  disconnect = vi.fn();
+}
+
+class FakeGain extends FakeNode {
   gain = new FakeParam();
-  connect = vi.fn();
 }
+
+class FakeBufferSource extends FakeNode {
+  static instances: FakeBufferSource[] = [];
+  buffer: unknown = null;
+  loop = false;
+  start = vi.fn();
+  stop = vi.fn();
+
+  constructor() {
+    super();
+    FakeBufferSource.instances.push(this);
+  }
+}
+
 class FakeAudioContext {
   currentTime = 0;
-  sampleRate = 44100;
-  destination = {};
-  createGain(): FakeGain { return new FakeGain(); }
-  createDynamicsCompressor() {
-    return {
-      threshold: new FakeParam(), knee: new FakeParam(), ratio: new FakeParam(),
-      attack: new FakeParam(), release: new FakeParam(), connect: vi.fn(),
-    };
-  }
-  createConvolver() { return { buffer: null, connect: vi.fn() }; }
-  createBuffer(_ch: number, len: number) { return { getChannelData: () => new Float32Array(len) }; }
-  resume() { return Promise.resolve(); }
+  sampleRate = 8000;
+  destination = new FakeNode();
+  decodeAudioData = vi.fn(async () => ({ decoded: true }));
+  createGain = vi.fn(() => new FakeGain());
+  createDynamicsCompressor = vi.fn(() => ({
+    ...new FakeNode(),
+    threshold: new FakeParam(), knee: new FakeParam(), ratio: new FakeParam(),
+    attack: new FakeParam(), release: new FakeParam(),
+  }));
+  createConvolver = vi.fn(() => ({ ...new FakeNode(), buffer: null }));
+  createBuffer = vi.fn((_channels: number, length: number) => ({
+    getChannelData: () => new Float32Array(length),
+  }));
+  createBufferSource = vi.fn(() => new FakeBufferSource());
+  resume = vi.fn(async () => undefined);
 }
 
 describe('MusicDirector — combat / background mix', () => {
   let director: MusicDirector;
 
   beforeEach(() => {
-    const g = globalThis as unknown as { AudioContext: unknown; window: unknown };
-    g.AudioContext = FakeAudioContext;
-    // init() schedules via window.setInterval; tests run in node, so stub it to a
-    // no-op (we drive update() synchronously and never need the scheduler to fire)
-    g.window = { setInterval: () => 0 };
+    vi.stubGlobal('AudioContext', FakeAudioContext);
+    vi.stubGlobal('window', { setInterval: vi.fn(() => 1) });
     director = new MusicDirector();
     director.init();
   });
 
   afterEach(() => {
-    // init() registers a scheduler interval; stop it so it can't leak across tests
     clearInterval((director as unknown as { timer: number }).timer);
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+    FakeBufferSource.instances = [];
   });
 
   const layers = () => (director as unknown as {
@@ -59,7 +77,6 @@ describe('MusicDirector — combat / background mix', () => {
   it('silences the zone theme so ONLY combat music plays in combat (no layering)', () => {
     director.update('vale', false);
     director.update('vale', true);
-    // the bug was a 0.45 duck here — the zone must be fully silenced now
     expect(layers().vale.target).toBe(0);
     expect(layers().combat.target).toBe(1);
   });
@@ -78,5 +95,38 @@ describe('MusicDirector — combat / background mix', () => {
       const combat = layers().combat.target;
       expect(Math.min(zone, combat)).toBe(0);
     }
+  });
+});
+
+describe('MusicDirector boss combat loop', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+    FakeBufferSource.instances = [];
+  });
+
+  it('loads and loops the boss track through the unlocked music AudioContext', async () => {
+    const fetchMock = vi.fn(async () => ({
+      arrayBuffer: async () => new ArrayBuffer(8),
+    }));
+    vi.stubGlobal('AudioContext', FakeAudioContext);
+    vi.stubGlobal('fetch', fetchMock);
+    vi.stubGlobal('window', { setInterval: vi.fn(() => 1) });
+
+    const director = new MusicDirector();
+    director.init();
+    director.setBossCombat(true);
+    for (let i = 0; i < 10 && FakeBufferSource.instances.length === 0; i++) {
+      await Promise.resolve();
+    }
+
+    expect(fetchMock).toHaveBeenCalledWith('/audio/dungeon-boss-fight.mp3');
+    const source = FakeBufferSource.instances[0];
+    expect(source.loop).toBe(true);
+    expect(source.start).toHaveBeenCalledTimes(1);
+
+    director.setBossCombat(false);
+    expect(source.stop).toHaveBeenCalledTimes(1);
+    expect(source.disconnect).toHaveBeenCalledTimes(1);
   });
 });

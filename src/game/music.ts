@@ -1008,6 +1008,11 @@ export class MusicDirector {
   private master: GainNode | null = null;
   private reverb: ConvolverNode | null = null;
   private reverbSend: GainNode | null = null;
+  private bossGain: GainNode | null = null;
+  private bossBuffer: AudioBuffer | null = null;
+  private bossSource: AudioBufferSourceNode | null = null;
+  private bossElement: HTMLAudioElement | null = null;
+  private bossLoading = false;
   private layers: Record<string, Layer> = {};
   private timer: number | undefined;
   // null until the first update() so the initial state always applies
@@ -1016,15 +1021,101 @@ export class MusicDirector {
   private _enabled = (typeof localStorage === 'undefined') ? true : localStorage.getItem(STORAGE_KEY) !== '0';
   private _vol = 1; // 0..1 volume, set from the settings menu
   private _menuPaused = false; // temporary mute while the game menu is open
+  // Boss-fight override: a looped file track routed through the same AudioContext
+  // that user gestures already unlock for the procedural soundtrack.
+  private bossActive = false;
 
   get enabled(): boolean {
     return this._enabled;
   }
 
-  // master gain target given the enabled flag and volume (base level 0.15)
+  // master gain target given the enabled flag and volume (base level 0.15).
+  // The dedicated Nythraxis track owns the mix while active.
   private masterTarget(): number {
-    if (!this._enabled || this._menuPaused) return 0;
+    if (!this._enabled || this._menuPaused || this.bossActive) return 0;
     return 0.15 * this._vol;
+  }
+
+  /** Engage/disengage the dedicated boss-fight loop. Idempotent; called every
+   *  frame by the HUD. Ducks the procedural score while active. */
+  setBossCombat(on: boolean): void {
+    if (on === this.bossActive) {
+      if (on) this.applyBossPlayback();
+      return;
+    }
+    this.bossActive = on;
+    if (on) this.ensureBossBuffer();
+    if (!on) this.stopBossSource();
+    this.applyBossPlayback();
+    if (this.ctx && this.master) this.master.gain.setTargetAtTime(this.masterTarget(), this.ctx.currentTime, on ? 0.4 : 0.7);
+  }
+
+  private applyBossPlayback(): void {
+    if (!this.ctx || !this.bossGain) return;
+    const target = this.bossActive && this._enabled && !this._menuPaused ? 0.6 * this._vol : 0;
+    this.bossGain.gain.setTargetAtTime(target, this.ctx.currentTime, target > 0 ? 0.25 : 0.12);
+    if (target > 0) {
+      void this.ctx.resume?.();
+      const element = this.ensureBossElement();
+      if (element) {
+        element.volume = target;
+        void element.play().catch(() => {
+          this.ensureBossBuffer();
+          this.startBossSource();
+        });
+        this.stopBossSource();
+      } else {
+        this.ensureBossBuffer();
+        this.startBossSource();
+      }
+    }
+    else {
+      if (this.bossElement) this.bossElement.pause();
+      this.stopBossSource();
+    }
+  }
+
+  private ensureBossElement(): HTMLAudioElement | null {
+    if (this.bossElement) return this.bossElement;
+    if (typeof Audio !== 'function') return null;
+    const el = new Audio('/audio/dungeon-boss-fight.mp3');
+    el.loop = true;
+    el.preload = 'auto';
+    this.bossElement = el;
+    return el;
+  }
+
+  private ensureBossBuffer(): void {
+    const ctx = this.ctx;
+    if (!ctx || this.bossBuffer || this.bossLoading || typeof fetch !== 'function') return;
+    this.bossLoading = true;
+    void fetch('/audio/dungeon-boss-fight.mp3')
+      .then((res) => res.arrayBuffer())
+      .then((bytes) => ctx.decodeAudioData(bytes))
+      .then((buffer) => {
+        this.bossBuffer = buffer;
+        this.bossLoading = false;
+        this.applyBossPlayback();
+      })
+      .catch(() => { this.bossLoading = false; });
+  }
+
+  private startBossSource(): void {
+    const ctx = this.ctx;
+    if (!ctx || !this.bossGain || !this.bossBuffer || this.bossSource) return;
+    const src = ctx.createBufferSource();
+    src.buffer = this.bossBuffer;
+    src.loop = true;
+    src.connect(this.bossGain);
+    src.start();
+    this.bossSource = src;
+  }
+
+  private stopBossSource(): void {
+    if (!this.bossSource) return;
+    try { this.bossSource.stop(); } catch { /* already stopped */ }
+    this.bossSource.disconnect();
+    this.bossSource = null;
   }
 
   /** Set music volume (0..1). Safe before init(); applied to the master gain. */
@@ -1033,6 +1124,7 @@ export class MusicDirector {
     if (this.ctx && this.master) {
       this.master.gain.setTargetAtTime(this.masterTarget(), this.ctx.currentTime, 0.2);
     }
+    this.applyBossPlayback();
   }
 
   get volume(): number {
@@ -1058,6 +1150,9 @@ export class MusicDirector {
     compressor.release.value = 0.25;
     this.master.connect(compressor);
     compressor.connect(ctx.destination);
+    this.bossGain = ctx.createGain();
+    this.bossGain.gain.value = 0;
+    this.bossGain.connect(compressor);
 
     // generated hall impulse response
     const seconds = 2.6;
@@ -1095,6 +1190,7 @@ export class MusicDirector {
     if (this.ctx && this.master) {
       this.master.gain.setTargetAtTime(this.masterTarget(), this.ctx.currentTime, 0.3);
     }
+    this.applyBossPlayback();
   }
 
   /** Fade out while the game menu is open; does not change the music toggle. */
@@ -1106,6 +1202,7 @@ export class MusicDirector {
     if (this.master) {
       this.master.gain.setTargetAtTime(0, this.ctx.currentTime, 0.2);
     }
+    this.applyBossPlayback();
   }
 
   /** Restore playback after closing the game menu. */
@@ -1117,6 +1214,7 @@ export class MusicDirector {
     if (this.master) {
       this.master.gain.setTargetAtTime(this.masterTarget(), this.ctx.currentTime, 0.35);
     }
+    this.applyBossPlayback();
   }
 
   // called every frame by the HUD; cheap unless the state changed

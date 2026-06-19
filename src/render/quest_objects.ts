@@ -22,14 +22,15 @@ const QUEST_OBJECT_URLS: Record<string, string> = {
   bastion_ward_stone: '/models/quest/bastion_ward_stone.glb',
   ogre_war_totem: '/models/quest/ogre_war_totem.glb',
   sanctum_key_shard: '/models/quest/sanctum_key_shard.glb',
-  ancient_crypt_door: '/models/dungeon/wall_gated.glb',
   grave_sir_aldren: '/models/dungeon/gravestone.glb',
   grave_high_priest_malric: '/models/dungeon/gravestone.glb',
   grave_captain_voss: '/models/dungeon/gravestone.glb',
 };
 
 const QUEST_OBJECT_HEIGHTS: Record<string, number> = {
-  ancient_crypt_door: 4.2,
+  // The Nythraxis soul wardstones are an active raid mechanic — make them a tall,
+  // obvious glowing pillar rather than a small sigil so all three read at range.
+  bastion_ward_stone: 3.4,
   crypt_ritual_circle: 1.65,
   grave_sir_aldren: 1.6,
   grave_high_priest_malric: 1.6,

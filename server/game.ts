@@ -377,6 +377,7 @@ export class GameServer {
       playerClass: 'warrior',
       noPlayer: true,
       devCommands: process.env.ALLOW_DEV_COMMANDS === '1',
+      lockoutNowMs: () => Date.now(),
     });
     this.social = new SocialService(this.socialDb, this.socialTransport());
   }

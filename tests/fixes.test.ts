@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
 import { ACTIONS, encodeObs } from '../src/sim/obs';
 import { Entity, SimEvent, dist2d } from '../src/sim/types';
-import { CLASSES, CRYPT_DOOR_POS, DUNGEON_LIST, DUNGEON_X_THRESHOLD, ITEMS, LAKE, MOBS, NPCS, QUESTS, instanceOrigin, zoneAt, zoneWelcomeText } from '../src/sim/data';
+import { CLASSES, CRYPT_DOOR_POS, DUNGEON_LIST, DUNGEON_X_THRESHOLD, ITEMS, LAKE, MOBS, NPCS, QUESTS, dungeonAt, instanceOrigin, zoneAt, zoneWelcomeText } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
 import { generateDecorations, groundHeight, WATER_LEVEL } from '../src/sim/world';
 import { cameraOcclusion, isBlocked, lineOfSightClear, resolvePosition } from '../src/sim/colliders';
@@ -413,7 +413,7 @@ describe('dungeon instance placement and targetability', () => {
   it('places every dungeon entry and mob spawn on unblocked instance ground', () => {
     for (const dungeon of DUNGEON_LIST) {
       const sim = makeSim();
-      if (dungeon.id === 'nythraxis_crypt') {
+      if (dungeon.id === 'nythraxis_boss_arena') {
         sim.questLog.set('q_nythraxis_sealed_crypt', { questId: 'q_nythraxis_sealed_crypt', counts: [0, 0, 0], state: 'active' });
       }
       sim.enterDungeon(dungeon.id);
@@ -422,7 +422,7 @@ describe('dungeon instance placement and targetability', () => {
       expect(isBlocked(SEED, p.pos.x, p.pos.z, 0.5), `${dungeon.id} entry spawned in geometry`).toBe(false);
 
       const mobs = [...sim.entities.values()].filter((e) => e.kind === 'mob' && e.spawnPos.x > DUNGEON_X_THRESHOLD);
-      const objects = [...sim.entities.values()].filter((e) => e.kind === 'object' && e.objectItemId && e.pos.x > DUNGEON_X_THRESHOLD);
+      const objects = [...sim.entities.values()].filter((e) => e.kind === 'object' && (e.objectItemId || e.templateId === 'dungeon_door') && e.pos.x > DUNGEON_X_THRESHOLD);
       expect(mobs.length + objects.length, `${dungeon.id} spawned no instance encounters`).toBeGreaterThan(0);
       for (const mob of mobs) {
         expect(mob.hostile, `${dungeon.id} ${mob.name} is not hostile`).toBe(true);
@@ -796,13 +796,17 @@ describe('quest npc roles', () => {
   it('gates the sealed crypt and grave visions behind Nythraxis quests', () => {
     const sim = makeSim();
     const crypt = DUNGEON_LIST.find((d) => d.id === 'nythraxis_crypt')!;
+    const bossArena = DUNGEON_LIST.find((d) => d.id === 'nythraxis_boss_arena')!;
 
-    sim.enterDungeon(crypt.id);
-    expect(sim.player.pos.x).toBeLessThan(DUNGEON_X_THRESHOLD);
-
-    sim.questLog.set('q_nythraxis_sealed_crypt', { questId: 'q_nythraxis_sealed_crypt', counts: [0, 0, 0], state: 'active' });
     sim.enterDungeon(crypt.id);
     expect(sim.player.pos.x).toBeGreaterThan(DUNGEON_X_THRESHOLD);
+    const outerCryptPos = { ...sim.player.pos };
+    sim.enterDungeon(bossArena.id);
+    expect(dist2d(sim.player.pos, outerCryptPos)).toBeLessThan(0.1);
+
+    sim.questLog.set('q_nythraxis_sealed_crypt', { questId: 'q_nythraxis_sealed_crypt', counts: [0, 0, 0], state: 'active' });
+    sim.enterDungeon(bossArena.id);
+    expect(dungeonAt(sim.player.pos.x)?.id).toBe('nythraxis_boss_arena');
 
     teleportTo(sim, 0, 660);
     sim.questLog.delete('q_nythraxis_sealed_crypt');

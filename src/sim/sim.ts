@@ -87,6 +87,36 @@ const NYTHRAXIS_CRYPT_QUESTS = new Set([
   'q_nythraxis_sealed_crypt',
   'q_nythraxis_bound_guardian',
 ]);
+const NYTHRAXIS_BOSS_ID = 'nythraxis_scourge_of_thornpeak';
+const NYTHRAXIS_ADD_ID = 'nythraxis_skeleton_warrior';
+const NYTHRAXIS_ALDRIC_ID = 'brother_aldric_raid';
+const NYTHRAXIS_WARDSTONE_ITEM_ID = 'bastion_ward_stone';
+// How far a wardstone may sit from the boss spawn and still belong to this
+// encounter. The three arena wards form a wide forward triangle (~54yd out), so
+// this must comfortably exceed that; far above any cross-instance false match.
+const NYTHRAXIS_WARDSTONE_RANGE = 100;
+const NYTHRAXIS_GRAVEBREAKER_EVERY = 12;
+const NYTHRAXIS_GRAVEBREAKER_RANGE = 11;
+const NYTHRAXIS_GRAVEBREAKER_HALF_ARC = 0.75;
+const NYTHRAXIS_RAISE_FALLEN_EVERY = 30;
+const NYTHRAXIS_SOUL_REND_EVERY = 24;
+const NYTHRAXIS_SOUL_REND_DURATION = 8;
+const NYTHRAXIS_SOUL_REND_STACK_RANGE = 2;
+const NYTHRAXIS_DEATHLESS_EVERY = 45;
+const NYTHRAXIS_DEATHLESS_CAST = 10;
+const NYTHRAXIS_DEATHLESS_CHANNEL = 5;
+const NYTHRAXIS_DEATHLESS_STUN = 5;
+const NYTHRAXIS_DEATHLESS_SOUL_REND_LOCKOUT = 15;
+const NYTHRAXIS_LOCKOUT_MS = 24 * 60 * 60 * 1000;
+const NYTHRAXIS_TRANSITION_DURATION = 15;
+const NYTHRAXIS_TRANSITION_STUN = 15.5;
+const NYTHRAXIS_FINAL_STAND_HP = 0.05;
+const NYTHRAXIS_ROOM_RADIUS = 260;
+// Brother Aldric enters on the door side of the arena (the raid's side, lower z
+// than the boss spawn) and walks toward the boss. Distances are yards in front
+// of the boss spawn: appears 50yd out, walks up to 30yd out (between door + boss).
+const NYTHRAXIS_ALDRIC_SPAWN_DIST = 50;
+const NYTHRAXIS_ALDRIC_WALK_DIST = 30;
 const PARTY_MAX = 5;
 const PARTY_XP_RANGE = 80; // yards: members this close share kill xp/credit
 // Rested XP (classic inn-rested bonus). Resting inside an inn footprint accrues a
@@ -477,6 +507,7 @@ export interface PlayerMeta {
   fiestaRestore: { level: number; xp: number; talents: TalentAllocation } | null;
   loadouts: SavedLoadout[];
   activeLoadout: number; // index into loadouts, or -1 for none
+  raidLockouts: Map<string, number>; // dungeon id -> epoch ms expiry
   // Transient presence status. Set by /afk and /dnd, cleared when the player
   // chats again. Session-only — never persisted, so it resets on login.
   away: AwayStatus | null;
@@ -571,6 +602,7 @@ export interface CharacterState {
   talents?: TalentAllocation;
   loadouts?: SavedLoadout[];
   activeLoadout?: number;
+  raidLockouts?: Record<string, number>;
   pet?: PetState | null;
   skin?: number; // appearance index (JSONB; optional so pre-skin saves load as 0)
   skinCatalog?: SkinCatalog;
@@ -727,6 +759,7 @@ export class Sim {
       autoEquip: cfg.autoEquip ?? false,
       playerName: cfg.playerName ?? 'Adventurer',
       devCommands: this.devCommands,
+      lockoutNowMs: cfg.lockoutNowMs,
     };
     this.rng = new Rng(cfg.seed);
 
@@ -769,6 +802,12 @@ export class Sim {
 
     // Dungeon entrances + their private instance slots
     for (const dungeon of DUNGEON_LIST) {
+      if (dungeon.overworldDoor === false) {
+        for (let i = 0; i < INSTANCE_SLOT_COUNT; i++) {
+          this.instances.push({ dungeonId: dungeon.id, slot: i, partyKey: null, mobIds: [], objectIds: [], exitId: null, emptyFor: 0 });
+        }
+        continue;
+      }
       const doorName = dungeon.id === 'nythraxis_crypt' ? 'Abandoned Crypt' : dungeon.name;
       const door = createGroundObject(this.nextId++, '', doorName, this.groundPos(dungeon.doorPos.x, dungeon.doorPos.z));
       door.templateId = 'dungeon_door';
@@ -786,6 +825,10 @@ export class Sim {
     }
   }
 
+  private lockoutNowMs(): number {
+    return this.cfg.lockoutNowMs?.() ?? Math.floor(this.time * 1000);
+  }
+
   // -------------------------------------------------------------------------
   // Entity roster: every add/remove/teleport goes through these so the
   // spatial indexes always match the entities map
@@ -795,6 +838,7 @@ export class Sim {
     this.entities.set(e.id, e);
     this.grid.insert(e);
     if (e.kind === 'player') this.playerGrid.insert(e);
+    if (e.templateId === 'dungeon_door' && this.dungeonDoorIds) this.dungeonDoorIds.push(e.id);
   }
 
   private dropEntity(id: number): void {
@@ -896,6 +940,7 @@ export class Sim {
       fiestaRestore: null,
       loadouts: [],
       activeLoadout: -1,
+      raidLockouts: new Map(),
       away: null,
       marketFilter: '',
     };
@@ -928,6 +973,12 @@ export class Sim {
       if (s.talents) meta.talents = { spec: s.talents.spec ?? null, ranks: { ...s.talents.ranks }, choices: { ...s.talents.choices } };
       if (s.loadouts) meta.loadouts = s.loadouts.map((l) => ({ name: l.name, alloc: cloneAllocation(l.alloc), bar: [...(l.bar ?? [])] }));
       if (typeof s.activeLoadout === 'number') meta.activeLoadout = s.activeLoadout;
+      if (s.raidLockouts) {
+        const now = this.lockoutNowMs();
+        for (const [dungeonId, until] of Object.entries(s.raidLockouts)) {
+          if (Number.isFinite(until) && until > now) meta.raidLockouts.set(dungeonId, until);
+        }
+      }
     }
 
     // Resolve the flat talent struct once, before the stat pass + ability
@@ -1034,6 +1085,7 @@ export class Sim {
       talents: cloneAllocation(restore ? restore.talents : meta.talents),
       loadouts: meta.loadouts.map((l) => ({ name: l.name, alloc: cloneAllocation(l.alloc), bar: [...l.bar] })),
       activeLoadout: meta.activeLoadout,
+      raidLockouts: Object.fromEntries([...meta.raidLockouts].filter(([, until]) => until > this.lockoutNowMs())),
       pet: this.serializePet(pid),
       skin: meta.skin,
       skinCatalog: meta.skinCatalog,
@@ -3072,7 +3124,7 @@ export class Sim {
 
   private applyAura(target: Entity, aura: Aura): void {
     if (target.kind === 'npc' && isRejectedFriendlyNpcAura(aura)) return;
-    if (target.kind === 'mob' && MOBS[target.templateId]?.ccImmune && this.isControlAura(aura.kind)) return;
+    if (target.kind === 'mob' && MOBS[target.templateId]?.ccImmune && this.isControlAura(aura.kind) && aura.sourceId !== target.id) return;
     const existing = target.auras.findIndex((a) => a.id === aura.id && a.sourceId === aura.sourceId);
     if (existing >= 0) {
       this.applyNonPlayerStatAura(target, target.auras[existing], -1);
@@ -3643,6 +3695,13 @@ export class Sim {
     if (!t || t.dead || !this.isHostileTo(p, t)) { this.error(p.id, 'Invalid attack target.'); return; }
     if (p.sitting) this.standUp(p);
     p.autoAttack = true;
+    if (t.kind === 'mob' && t.hostile && t.ownerId === null && t.aiState !== 'evade') {
+      if (t.aiState === 'idle') this.aggroMob(t, p, true);
+      else if (t.aggroTargetId === null) t.aggroTargetId = p.id;
+      addThreat(t, p.id, 1);
+      p.combatTimer = 0;
+      p.inCombat = true;
+    }
   }
 
   stopAutoAttack(pid?: number): void {
@@ -4110,6 +4169,7 @@ export class Sim {
 
     if (e.kind === 'mob') {
       const template = MOBS[e.templateId];
+      if (e.templateId === NYTHRAXIS_BOSS_ID) this.grantNythraxisLockout(e);
       e.aiState = 'dead';
       e.corpseTimer = CORPSE_DURATION;
       e.respawnTimer = this.cfg.respawnSeconds * (template?.respawnMult ?? (template?.rare ? 4 : 1));
@@ -4495,6 +4555,14 @@ export class Sim {
     if (best !== cur) mob.aggroTargetId = best.id;
   }
 
+  // Effective melee reach. Large creatures measure range from their centre, which
+  // sits deep inside an oversized body — so a giant (e.g. Nythraxis at scale 3.1)
+  // can never close to the flat MELEE_RANGE and barely swings. Scale reach with
+  // size so big mobs connect from where the player actually stands (their feet).
+  private mobMeleeRange(mob: Entity): number {
+    return MELEE_RANGE + Math.max(0, mob.scale - 1) * 3;
+  }
+
   private aggroMob(mob: Entity, target: Entity, social: boolean): void {
     if (mob.dead || mob.aiState === 'evade' || mob.aiState === 'chase' || mob.aiState === 'attack' || mob.aiState === 'flee') return;
     mob.aiState = 'chase';
@@ -4537,6 +4605,12 @@ export class Sim {
 
   private updateMob(mob: Entity): void {
     if (mob.dead) {
+      if (mob.templateId === NYTHRAXIS_BOSS_ID && mob.nythraxis && !mob.nythraxis.deathSpoken) {
+        mob.nythraxis.deathSpoken = true;
+        mob.nythraxis.phase = 'dead';
+        this.nythraxisSay(mob, 'nythraxis', 'Malric...');
+        this.nythraxisSay(mob, 'nythraxis', 'What have you done');
+      }
       if (mob.ownerId !== null && MOBS[mob.templateId]?.family !== 'demon') return;
       mob.corpseTimer -= DT;
       mob.respawnTimer -= DT;
@@ -4582,9 +4656,29 @@ export class Sim {
     // non-hostile mob is therefore a leak — exactly the "immortal, invalid
     // target" wolves players hit. Restore hostility so no mob can ever be left
     // permanently untargetable, whatever path corrupted it.
+    if (mob.templateId === NYTHRAXIS_ALDRIC_ID) {
+      mob.hostile = false;
+      mob.aiState = 'idle';
+      mob.inCombat = false;
+      mob.aggroTargetId = null;
+      clearThreat(mob);
+      return;
+    }
+
     if (!mob.hostile) mob.hostile = true;
 
-    if (mob.inCombat) this.updateBossMechanics(mob);
+    const isNythraxis = mob.templateId === NYTHRAXIS_BOSS_ID;
+    if (mob.inCombat || (isNythraxis && mob.nythraxis && mob.nythraxis.phase !== 'dead')) {
+      const nythraxisScriptLocked = isNythraxis
+        && mob.nythraxis
+        && (mob.nythraxis.phase === 'transition' || mob.nythraxis.deathlessCastRemaining > 0 || mob.nythraxis.deathlessStunRemaining > 0);
+      if (isNythraxis) {
+        this.updateNythraxisEncounter(mob);
+        if (nythraxisScriptLocked || (mob.nythraxis && (mob.nythraxis.phase === 'transition' || mob.nythraxis.deathlessCastRemaining > 0 || mob.nythraxis.deathlessStunRemaining > 0))) return;
+      } else {
+        this.updateBossMechanics(mob);
+      }
+    }
 
     if (this.isStunned(mob)) {
       if (this.updateFearMovement(mob)) return;
@@ -4604,6 +4698,15 @@ export class Sim {
 
     switch (mob.aiState) {
       case 'idle': {
+        if (mob.templateId === NYTHRAXIS_BOSS_ID && !mob.inCombat) {
+          mob.wanderTarget = null;
+          mob.wanderTimer = 3;
+          mob.pos = { ...mob.spawnPos };
+          mob.prevPos = { ...mob.pos };
+          mob.facing = Math.PI;
+          mob.prevFacing = Math.PI;
+          return;
+        }
         const template = MOBS[mob.templateId];
         let detected: Entity | null = null;
         let detectedD = Infinity;
@@ -4656,7 +4759,9 @@ export class Sim {
           mob.fleeReturnTimer = Math.max(0, mob.fleeReturnTimer - DT);
           if (dist2d(mob.pos, leashAnchor) <= leash - 1) mob.fleeReturnTimer = 0;
         }
-        if (dist2d(mob.pos, leashAnchor) > leash && mob.fleeReturnTimer <= 0) {
+        // Nythraxis is a raid boss: he never leashes/resets from being kited.
+        // Only a full wipe resets him (handled in updateNythraxisEncounter).
+        if (!isNythraxis && dist2d(mob.pos, leashAnchor) > leash && mob.fleeReturnTimer <= 0) {
           mob.aiState = 'evade';
           mob.aggroTargetId = null;
           clearThreat(mob);
@@ -4669,7 +4774,7 @@ export class Sim {
           mob.swingTimer = Math.min(mob.swingTimer, 0.4);
           break;
         }
-        if (d <= MELEE_RANGE * 0.8) {
+        if (d <= this.mobMeleeRange(mob) * 0.8) {
           mob.aiState = 'attack';
           mob.swingTimer = Math.min(mob.swingTimer, 0.4);
           break;
@@ -4690,7 +4795,7 @@ export class Sim {
           this.updateRangedPetAttack(mob, target, spell);
           break;
         }
-        if (d > MELEE_RANGE) { mob.aiState = 'chase'; break; }
+        if (d > this.mobMeleeRange(mob)) { mob.aiState = 'chase'; break; }
         mob.facing = angleTo(mob.pos, target.pos);
         mob.swingTimer -= DT;
         if (mob.swingTimer <= 0) {
@@ -4871,6 +4976,7 @@ export class Sim {
     mob.rallyTimer = MOBS[mob.templateId]?.rally?.every ?? 0;
     mob.warcryTimer = MOBS[mob.templateId]?.warcry?.every ?? 0;
     mob.wanderTimer = this.rng.range(2, 8);
+    if (mob.templateId === NYTHRAXIS_BOSS_ID) this.resetNythraxisEncounter(mob);
   }
 
   // Cowardly mobs panic once per pull at low HP: turn and run from the attacker
@@ -5823,6 +5929,10 @@ export class Sim {
     mob.aiState = 'idle';
     mob.aggroTargetId = null;
     mob.inCombat = false;
+    if (mob.templateId === NYTHRAXIS_BOSS_ID) {
+      mob.facing = Math.PI;
+      mob.prevFacing = Math.PI;
+    }
     mob.leashAnchor = null;
     mob.evadeStall = 0;
     mob.fleeTimer = 0;
@@ -5841,6 +5951,7 @@ export class Sim {
     mob.rallyTimer = MOBS[mob.templateId]?.rally?.every ?? 0;
     mob.warcryTimer = MOBS[mob.templateId]?.warcry?.every ?? 0;
     mob.wanderTimer = this.rng.range(2, 8);
+    if (mob.templateId === NYTHRAXIS_BOSS_ID) this.resetNythraxisEncounter(mob);
     for (const meta of this.players.values()) {
       const e = this.entities.get(meta.entityId);
       if (e && e.targetId === mob.id) e.targetId = null;
@@ -6087,6 +6198,487 @@ export class Sim {
         }
       }
     }
+  }
+
+  private initNythraxisEncounter(boss: Entity): NonNullable<Entity['nythraxis']> {
+    if (!boss.nythraxis) {
+      boss.nythraxis = {
+        phase: 1,
+        introSpoken: false,
+        transitionStarted: false,
+        transitionTimer: 0,
+        transitionCues: [],
+        transitionReleased: false,
+        gravebreakerTimer: 1.5,
+        raiseFallenTimer: NYTHRAXIS_RAISE_FALLEN_EVERY,
+        soulRendTimer: NYTHRAXIS_SOUL_REND_EVERY,
+        soulRendMarks: [],
+        soulRendLockout: 0,
+        deathlessTimer: NYTHRAXIS_DEATHLESS_EVERY,
+        deathlessCastRemaining: 0,
+        deathlessStunRemaining: 0,
+        wardChannels: [],
+        finalStand: false,
+        deathSpoken: false,
+      };
+    }
+    return boss.nythraxis;
+  }
+
+  private resetNythraxisEncounter(boss: Entity): void {
+    for (const p of this.playersInNythraxisRoom(boss)) {
+      p.auras = p.auras.filter((a) => a.id !== 'nythraxis_soul_rend' && a.id !== 'nythraxis_transition_stun');
+      this.clearNythraxisWardChannelCast(p);
+    }
+    const aldric = this.findNythraxisAldric(boss);
+    if (aldric) this.dropEntity(aldric.id);
+    for (const ward of this.nythraxisWardstones(boss)) {
+      ward.auras = ward.auras.filter((a) => a.id !== 'nythraxis_wardstone_lit');
+    }
+    boss.nythraxis = undefined;
+    boss.castingAbility = null;
+    boss.castRemaining = 0;
+    boss.castTotal = 0;
+    boss.channeling = false;
+  }
+
+  // Full wipe: every player in the arena is dead. Send Nythraxis home at full
+  // health, clear his adds/Aldric/wards/auras, and drop combat so the sealed
+  // doors reopen and the raid can run back in for another attempt.
+  private wipeNythraxisEncounter(boss: Entity): void {
+    boss.pos = { ...boss.spawnPos };
+    boss.prevPos = { ...boss.spawnPos };
+    this.rebucket(boss);
+    this.resetEvadingMob(boss); // restores hp, clears threat/auras/adds + resetNythraxisEncounter
+  }
+
+  private updateNythraxisEncounter(boss: Entity): void {
+    const st = this.initNythraxisEncounter(boss);
+    if (!st.introSpoken) {
+      st.introSpoken = true;
+      this.nythraxisSay(boss, 'nythraxis', 'Another kingdom comes to challenge me');
+      this.delayedEvents.push({
+        at: this.time + 3,
+        event: { type: 'chat', fromPid: boss.id, from: boss.name, text: 'You will join the rest', channel: 'yell', entityId: boss.id },
+      });
+    }
+
+    // Wipe-or-kill is the only reset: if every player in the arena is dead the
+    // encounter resets for a retry; otherwise keep the boss locked onto a live
+    // target so kiting him out of melee never sends him home.
+    const room = this.playersInNythraxisRoom(boss);
+    if (room.length === 0) { this.wipeNythraxisEncounter(boss); return; }
+    const tgt = boss.aggroTargetId !== null ? this.entities.get(boss.aggroTargetId) : null;
+    if (!tgt || tgt.dead || tgt.kind !== 'player' || dist2d(tgt.pos, boss.spawnPos) > NYTHRAXIS_ROOM_RADIUS) {
+      const topId = threatEntries(boss, 1)[0]?.[0] ?? null;
+      const top = topId !== null ? this.entities.get(topId) : null;
+      const next = (top && !top.dead && top.kind === 'player') ? top : room[0];
+      boss.aggroTargetId = next.id;
+      boss.inCombat = true;
+      if (boss.aiState === 'idle' || boss.aiState === 'evade') boss.aiState = 'chase';
+    }
+    if (boss.aggroTargetId !== null && (boss.aiState === 'idle' || boss.aiState === 'evade')) {
+      boss.inCombat = true;
+      boss.aiState = 'chase';
+    }
+
+    if (st.soulRendLockout > 0) st.soulRendLockout = Math.max(0, st.soulRendLockout - DT);
+    this.updateNythraxisSoulRend(boss, st);
+    if (st.phase === 'transition') {
+      this.updateNythraxisTransition(boss, st);
+      return;
+    }
+    if (st.phase === 'dead') return;
+
+    const hpFrac = boss.hp / Math.max(1, boss.maxHp);
+    if (st.phase === 1 && hpFrac <= 0.5) {
+      this.startNythraxisTransition(boss, st);
+      return;
+    }
+
+    if (st.phase === 2 && !st.finalStand && hpFrac <= NYTHRAXIS_FINAL_STAND_HP) {
+      st.finalStand = true;
+      boss.enraged = true;
+      this.nythraxisSay(boss, 'nythraxis', 'I built a kingdom');
+      this.nythraxisSay(boss, 'nythraxis', 'I will not lose it again');
+      this.applyAura(boss, {
+        id: 'nythraxis_final_stand', name: 'Final Stand', kind: 'buff_haste',
+        remaining: 600, duration: 600, value: 1.45, sourceId: boss.id, school: 'shadow',
+      });
+      this.emit({ type: 'spellfx', sourceId: boss.id, targetId: boss.id, school: 'shadow', fx: 'nova' });
+    }
+
+    if (st.deathlessStunRemaining > 0) {
+      st.deathlessStunRemaining = Math.max(0, st.deathlessStunRemaining - DT);
+      return;
+    }
+    if (st.deathlessCastRemaining > 0) {
+      this.updateNythraxisDeathlessRage(boss, st);
+      return;
+    }
+
+    this.updateNythraxisGravebreaker(boss, st);
+    if (st.phase === 1) this.updateNythraxisRaiseFallen(boss, st);
+    if (st.phase === 2) {
+      st.deathlessTimer -= DT;
+      if (st.deathlessTimer <= 0) {
+        if (st.soulRendMarks.length === 0 && st.soulRendLockout <= 0) this.startNythraxisDeathlessRage(boss, st);
+        else st.deathlessTimer = 1;
+      }
+      st.soulRendTimer -= DT;
+      if (st.soulRendTimer <= 0) {
+        if (this.canCastNythraxisSoulRend(st)) this.castNythraxisSoulRend(boss, st);
+        else st.soulRendTimer = 1;
+      }
+    }
+  }
+
+  private nythraxisSay(boss: Entity, speaker: 'nythraxis' | 'aldric', text: string): void {
+    const actor = speaker === 'aldric' ? this.findNythraxisAldric(boss) : boss;
+    const from = actor?.name ?? (speaker === 'aldric' ? 'Brother Aldric' : boss.name);
+    const fromPid = actor?.id ?? boss.id;
+    for (const meta of this.players.values()) {
+      const p = this.entities.get(meta.entityId);
+      if (!p || dist2d(p.pos, boss.pos) > YELL_RANGE) continue;
+      this.emit({ type: 'chat', fromPid, from, text, channel: 'yell', entityId: actor?.id ?? boss.id, pid: meta.entityId });
+    }
+  }
+
+  private findNythraxisAldric(boss: Entity): Entity | null {
+    for (const e of this.entities.values()) {
+      if (e.kind === 'mob' && e.templateId === NYTHRAXIS_ALDRIC_ID && dist2d(e.spawnPos, boss.spawnPos) < NYTHRAXIS_ROOM_RADIUS) return e;
+    }
+    return null;
+  }
+
+  private playersInNythraxisRoom(boss: Entity): Entity[] {
+    const out: Entity[] = [];
+    for (const meta of this.players.values()) {
+      const p = this.entities.get(meta.entityId);
+      if (p && !p.dead && dist2d(p.pos, boss.spawnPos) <= NYTHRAXIS_ROOM_RADIUS) out.push(p);
+    }
+    out.sort((a, b) => a.id - b.id);
+    return out;
+  }
+
+  private nythraxisRoomMetas(boss: Entity): PlayerMeta[] {
+    const out: PlayerMeta[] = [];
+    for (const meta of this.players.values()) {
+      const p = this.entities.get(meta.entityId);
+      if (p && dist2d(p.pos, boss.spawnPos) <= NYTHRAXIS_ROOM_RADIUS) out.push(meta);
+    }
+    out.sort((a, b) => a.entityId - b.entityId);
+    return out;
+  }
+
+  private grantNythraxisLockout(boss: Entity): void {
+    const until = this.lockoutNowMs() + NYTHRAXIS_LOCKOUT_MS;
+    for (const meta of this.nythraxisRoomMetas(boss)) {
+      meta.raidLockouts.set('nythraxis_boss_arena', until);
+    }
+  }
+
+  private updateNythraxisGravebreaker(boss: Entity, st: NonNullable<Entity['nythraxis']>): void {
+    st.gravebreakerTimer -= DT;
+    if (st.gravebreakerTimer > 0) return;
+    st.gravebreakerTimer = NYTHRAXIS_GRAVEBREAKER_EVERY;
+    this.nythraxisSay(boss, 'nythraxis', 'Kneel before your king');
+    this.emit({ type: 'spellfx', sourceId: boss.id, targetId: boss.id, school: 'physical', fx: 'nova' });
+    for (const p of this.playersInNythraxisRoom(boss)) {
+      const d = dist2d(p.pos, boss.pos);
+      if (d > NYTHRAXIS_GRAVEBREAKER_RANGE) continue;
+      const delta = Math.abs(normAngle(angleTo(boss.pos, p.pos) - boss.facing));
+      if (delta > NYTHRAXIS_GRAVEBREAKER_HALF_ARC) continue;
+      const dmg = Math.round(this.rng.range(58, 82));
+      this.dealDamage(boss, p, dmg, false, 'physical', 'Gravebreaker', 'hit', true);
+    }
+  }
+
+  private updateNythraxisRaiseFallen(boss: Entity, st: NonNullable<Entity['nythraxis']>): void {
+    st.raiseFallenTimer -= DT;
+    if (st.raiseFallenTimer > 0) return;
+    st.raiseFallenTimer = NYTHRAXIS_RAISE_FALLEN_EVERY;
+    this.nythraxisSay(boss, 'nythraxis', 'Rise once more');
+    this.nythraxisSay(boss, 'nythraxis', 'Your king commands it');
+    this.spawnNythraxisAdds(boss);
+  }
+
+  private spawnNythraxisAdds(boss: Entity): void {
+    const template = MOBS[NYTHRAXIS_ADD_ID];
+    if (!template) return;
+    // Raise the guards from BEHIND the boss (toward the back wall), so they rise
+    // up behind him and march out around him, not between the boss and the raid.
+    const back = boss.spawnPos.z + 16;
+    const spawnPoints = [
+      this.groundPos(boss.spawnPos.x - 12, back),
+      this.groundPos(boss.spawnPos.x + 12, back),
+    ];
+    const inst = this.instances.find((i) => i.partyKey !== null && i.mobIds.includes(boss.id));
+    const victimId = boss.aggroTargetId ?? threatEntries(boss, 1)[0]?.[0] ?? null;
+    const victim = victimId !== null ? this.entities.get(victimId) : null;
+    for (const pos of spawnPoints) {
+      const add = createMob(this.nextId++, template, template.maxLevel, pos);
+      add.spawnPos = { ...boss.spawnPos };
+      add.tappedById = boss.tappedById;
+      this.addEntity(add);
+      boss.summonedIds.push(add.id);
+      inst?.mobIds.push(add.id);
+      if (victim && !victim.dead && victim.kind === 'player') this.aggroMob(add, victim, false);
+    }
+    this.emit({ type: 'spellfx', sourceId: boss.id, targetId: boss.id, school: 'shadow', fx: 'nova' });
+  }
+
+  private startNythraxisTransition(boss: Entity, st: NonNullable<Entity['nythraxis']>): void {
+    st.phase = 'transition';
+    st.transitionStarted = true;
+    st.transitionTimer = NYTHRAXIS_TRANSITION_DURATION;
+    st.transitionReleased = false;
+    st.soulRendMarks = [];
+    st.deathlessCastRemaining = 0;
+    boss.castingAbility = null;
+    boss.castRemaining = 0;
+    boss.castTotal = 0;
+    this.nythraxisSay(boss, 'nythraxis', 'Another priest...');
+    this.emit({ type: 'spellfx', sourceId: boss.id, targetId: boss.id, school: 'physical', fx: 'nova' });
+    for (const e of this.entities.values()) {
+      if (e.dead || dist2d(e.pos, boss.spawnPos) > NYTHRAXIS_ROOM_RADIUS) continue;
+      if (e.kind !== 'player' && !(e.kind === 'mob' && e.templateId === NYTHRAXIS_ADD_ID)) continue;
+      this.applyAura(e, {
+        id: 'nythraxis_transition_stun', name: 'War Stomp', kind: 'stun',
+        remaining: NYTHRAXIS_TRANSITION_STUN, duration: NYTHRAXIS_TRANSITION_STUN,
+        value: 0, sourceId: boss.id, school: 'physical',
+      });
+    }
+    this.applyAura(boss, {
+      id: 'nythraxis_transition_pause', name: 'War Stomp', kind: 'stun',
+      remaining: NYTHRAXIS_TRANSITION_STUN, duration: NYTHRAXIS_TRANSITION_STUN,
+      value: 0, sourceId: boss.id, school: 'physical',
+    });
+    this.spawnNythraxisAldric(boss);
+    this.lightNythraxisWardstones(boss);
+    st.transitionCues = [
+      { at: 2.5, speaker: 'aldric', text: 'Your kingdom is gone, Nythraxis' },
+      { at: 5.2, speaker: 'aldric', text: 'Yet you still cling to it' },
+      { at: 7.3, speaker: 'aldric', text: 'Champions, listen carefully!' },
+      { at: 9.0, speaker: 'aldric', text: 'The wardstones still bind his soul.' },
+      { at: 11.0, speaker: 'aldric', text: 'When the time comes, do not ignore them.' },
+      { at: 13.2, speaker: 'aldric', text: 'Fail and we all perish' },
+    ];
+  }
+
+  private spawnNythraxisAldric(boss: Entity): void {
+    if (this.findNythraxisAldric(boss)) return;
+    const template = MOBS[NYTHRAXIS_ALDRIC_ID];
+    if (!template) return;
+    const aldric = createMob(this.nextId++, template, template.maxLevel,
+      this.groundPos(boss.spawnPos.x, boss.spawnPos.z - NYTHRAXIS_ALDRIC_SPAWN_DIST));
+    aldric.hostile = false;
+    aldric.facing = 0;
+    aldric.prevFacing = 0;
+    aldric.spawnPos = { ...aldric.pos };
+    this.addEntity(aldric);
+    const inst = this.instances.find((i) => i.partyKey !== null && i.mobIds.includes(boss.id));
+    inst?.mobIds.push(aldric.id);
+  }
+
+  private updateNythraxisTransition(boss: Entity, st: NonNullable<Entity['nythraxis']>): void {
+    const elapsed = NYTHRAXIS_TRANSITION_DURATION - st.transitionTimer;
+    for (let i = st.transitionCues.length - 1; i >= 0; i--) {
+      const cue = st.transitionCues[i];
+      if (elapsed >= cue.at) {
+        this.nythraxisSay(boss, cue.speaker, cue.text);
+        st.transitionCues.splice(i, 1);
+      }
+    }
+    const aldric = this.findNythraxisAldric(boss);
+    if (aldric) {
+      const dest = this.groundPos(boss.spawnPos.x, boss.spawnPos.z - NYTHRAXIS_ALDRIC_WALK_DIST);
+      this.moveToward(aldric, dest, aldric.moveSpeed);
+    }
+    st.transitionTimer -= DT;
+    if (st.transitionTimer > 0) return;
+    st.phase = 2;
+    st.transitionReleased = true;
+    st.gravebreakerTimer = 3;
+    st.soulRendTimer = 12;
+    st.deathlessTimer = 26;
+    boss.auras = boss.auras.filter((a) => a.id !== 'nythraxis_transition_pause');
+    for (const p of this.playersInNythraxisRoom(boss)) {
+      p.auras = p.auras.filter((a) => a.id !== 'nythraxis_transition_stun');
+    }
+  }
+
+  private lightNythraxisWardstones(boss: Entity): void {
+    for (const ward of this.nythraxisWardstones(boss)) {
+      this.applyAura(ward, {
+        id: 'nythraxis_wardstone_lit', name: 'Soul Ward', kind: 'absorb',
+        remaining: 600, duration: 600, value: 1, sourceId: boss.id, school: 'arcane',
+      });
+      this.emit({ type: 'spellfx', sourceId: ward.id, targetId: boss.id, school: 'arcane', fx: 'projectile' });
+    }
+  }
+
+  private canCastNythraxisSoulRend(st: NonNullable<Entity['nythraxis']>): boolean {
+    return st.deathlessCastRemaining <= 0 && st.deathlessStunRemaining <= 0 && st.deathlessTimer > NYTHRAXIS_DEATHLESS_SOUL_REND_LOCKOUT;
+  }
+
+  private castNythraxisSoulRend(boss: Entity, st: NonNullable<Entity['nythraxis']>): void {
+    const candidates = this.playersInNythraxisRoom(boss).filter((p) => p.id !== boss.aggroTargetId);
+    if (candidates.length === 0) {
+      st.soulRendTimer = 3;
+      return;
+    }
+    const picked: Entity[] = [];
+    while (picked.length < 3 && candidates.length > 0) {
+      const idx = this.rng.int(0, candidates.length - 1);
+      picked.push(candidates.splice(idx, 1)[0]);
+    }
+    st.soulRendMarks = picked.map((p) => ({ playerId: p.id, remaining: NYTHRAXIS_SOUL_REND_DURATION }));
+    st.soulRendTimer = NYTHRAXIS_SOUL_REND_EVERY;
+    this.nythraxisSay(boss, 'nythraxis', 'Your spirit belongs to me');
+    for (const p of picked) {
+      this.applyAura(p, {
+        id: 'nythraxis_soul_rend', name: 'Soul Rend', kind: 'vulnerability',
+        remaining: NYTHRAXIS_SOUL_REND_DURATION, duration: NYTHRAXIS_SOUL_REND_DURATION,
+        value: 0, sourceId: boss.id, school: 'shadow',
+      });
+      this.emit({ type: 'spellfx', sourceId: boss.id, targetId: p.id, school: 'shadow', fx: 'projectile' });
+    }
+  }
+
+  private updateNythraxisSoulRend(boss: Entity, st: NonNullable<Entity['nythraxis']>): void {
+    if (st.soulRendMarks.length === 0) return;
+    for (const mark of st.soulRendMarks) mark.remaining -= DT;
+    if (st.soulRendMarks.some((m) => m.remaining > 0)) return;
+    const marked = st.soulRendMarks
+      .map((m) => this.entities.get(m.playerId))
+      .filter((e): e is Entity => !!e && !e.dead);
+    for (const p of marked) {
+      const stacked = marked.filter((other) => dist2d(other.pos, p.pos) <= NYTHRAXIS_SOUL_REND_STACK_RANGE).length;
+      const share = Math.max(1, stacked);
+      this.dealDamage(boss, p, Math.ceil(p.maxHp / share), false, 'shadow', 'Soul Rend', 'hit', true);
+      p.auras = p.auras.filter((a) => a.id !== 'nythraxis_soul_rend');
+      this.emit({ type: 'spellfx', sourceId: boss.id, targetId: p.id, school: 'shadow', fx: 'nova' });
+    }
+    st.soulRendMarks = [];
+  }
+
+  private startNythraxisDeathlessRage(boss: Entity, st: NonNullable<Entity['nythraxis']>): void {
+    st.deathlessTimer = NYTHRAXIS_DEATHLESS_EVERY;
+    st.deathlessCastRemaining = NYTHRAXIS_DEATHLESS_CAST;
+    st.soulRendLockout = NYTHRAXIS_DEATHLESS_SOUL_REND_LOCKOUT;
+    st.wardChannels = this.nythraxisWardstones(boss).map((ward) => ({
+      objectId: ward.id,
+      playerId: null,
+      remaining: NYTHRAXIS_DEATHLESS_CHANNEL,
+      complete: false,
+    }));
+    boss.castingAbility = 'nythraxis_deathless_rage';
+    boss.castTotal = NYTHRAXIS_DEATHLESS_CAST;
+    boss.castRemaining = NYTHRAXIS_DEATHLESS_CAST;
+    boss.channeling = false;
+    this.nythraxisSay(boss, 'nythraxis', 'Witness true eternity!');
+    this.emit({ type: 'spellfx', sourceId: boss.id, targetId: boss.id, school: 'shadow', fx: 'nova' });
+  }
+
+  private updateNythraxisDeathlessRage(boss: Entity, st: NonNullable<Entity['nythraxis']>): void {
+    st.deathlessCastRemaining = Math.max(0, st.deathlessCastRemaining - DT);
+    boss.castingAbility = 'nythraxis_deathless_rage';
+    boss.castTotal = NYTHRAXIS_DEATHLESS_CAST;
+    boss.castRemaining = st.deathlessCastRemaining;
+    this.updateNythraxisWardChannels(boss, st);
+    if (this.nythraxisWardstoneInterruptReady(st)) {
+      st.deathlessCastRemaining = 0;
+      boss.castingAbility = null;
+      boss.castRemaining = 0;
+      boss.castTotal = 0;
+      st.deathlessStunRemaining = NYTHRAXIS_DEATHLESS_STUN;
+      this.applyAura(boss, {
+        id: 'nythraxis_deathless_stun', name: 'Deathless Rage Interrupted', kind: 'stun',
+        remaining: NYTHRAXIS_DEATHLESS_STUN, duration: NYTHRAXIS_DEATHLESS_STUN,
+        value: 0, sourceId: boss.id, school: 'arcane',
+      });
+      this.emit({ type: 'spellfx', sourceId: boss.id, targetId: boss.id, school: 'arcane', fx: 'nova' });
+      return;
+    }
+    if (st.deathlessCastRemaining > 0) return;
+    boss.castingAbility = null;
+    boss.castRemaining = 0;
+    boss.castTotal = 0;
+    this.nythraxisSay(boss, 'nythraxis', 'You cannot stop what was promised..');
+    this.emit({ type: 'spellfx', sourceId: boss.id, targetId: boss.id, school: 'shadow', fx: 'nova' });
+    for (const p of this.playersInNythraxisRoom(boss)) {
+      this.dealDamage(boss, p, Math.ceil(p.maxHp * 0.82), false, 'shadow', 'Deathless Rage', 'hit', true);
+    }
+  }
+
+  private nythraxisWardstoneInterruptReady(st: NonNullable<Entity['nythraxis']>): boolean {
+    if (st.wardChannels.length !== 3 || !st.wardChannels.every((c) => c.complete && c.playerId !== null)) return false;
+    return new Set(st.wardChannels.map((c) => c.playerId)).size === 3;
+  }
+
+  private updateNythraxisWardChannels(boss: Entity, st: NonNullable<Entity['nythraxis']>): void {
+    for (const channel of st.wardChannels) {
+      if (channel.complete || channel.playerId === null) continue;
+      const ward = this.entities.get(channel.objectId);
+      const p = this.entities.get(channel.playerId);
+      if (!ward || !p || p.dead || this.isStunned(p) || dist2d(p.pos, ward.pos) > INTERACT_RANGE + 1) {
+        if (p) this.clearNythraxisWardChannelCast(p);
+        channel.playerId = null;
+        channel.remaining = NYTHRAXIS_DEATHLESS_CHANNEL;
+        continue;
+      }
+      channel.remaining = Math.max(0, channel.remaining - DT);
+      p.castingAbility = 'nythraxis_ward_channel';
+      p.channeling = true;
+      p.castTotal = NYTHRAXIS_DEATHLESS_CHANNEL;
+      p.castRemaining = channel.remaining;
+      this.emit({ type: 'spellfx', sourceId: ward.id, targetId: boss.id, school: 'shadow', fx: 'beam' });
+      if (channel.remaining <= 0) {
+        channel.complete = true;
+        this.clearNythraxisWardChannelCast(p);
+        this.emit({ type: 'spellfx', sourceId: ward.id, targetId: boss.id, school: 'arcane', fx: 'nova' });
+      }
+    }
+  }
+
+  private clearNythraxisWardChannelCast(p: Entity): void {
+    if (p.castingAbility !== 'nythraxis_ward_channel') return;
+    p.castingAbility = null;
+    p.channeling = false;
+    p.castRemaining = 0;
+    p.castTotal = 0;
+  }
+
+  private nythraxisWardstones(boss: Entity): Entity[] {
+    const wards = [...this.entities.values()].filter((e) =>
+      e.kind === 'object'
+      && e.objectItemId === NYTHRAXIS_WARDSTONE_ITEM_ID
+      && dist2d(e.pos, boss.spawnPos) < NYTHRAXIS_WARDSTONE_RANGE);
+    wards.sort((a, b) => a.id - b.id);
+    return wards;
+  }
+
+  private tryStartNythraxisWardChannel(ward: Entity, player: Entity): boolean {
+    if (ward.objectItemId !== NYTHRAXIS_WARDSTONE_ITEM_ID) return false;
+    const boss = [...this.entities.values()].find((e) =>
+      e.kind === 'mob'
+      && e.templateId === NYTHRAXIS_BOSS_ID
+      && !e.dead
+      && dist2d(e.spawnPos, ward.pos) < NYTHRAXIS_WARDSTONE_RANGE);
+    if (!boss?.nythraxis || boss.nythraxis.deathlessCastRemaining <= 0) return true;
+    const channel = boss.nythraxis.wardChannels.find((c) => c.objectId === ward.id);
+    if (!channel || channel.complete) return true;
+    if (channel.playerId === player.id) return true;
+    if (channel.playerId !== null && channel.playerId !== player.id) return true;
+    channel.playerId = player.id;
+    channel.remaining = NYTHRAXIS_DEATHLESS_CHANNEL;
+    player.castingAbility = 'nythraxis_ward_channel';
+    player.channeling = true;
+    player.castTotal = NYTHRAXIS_DEATHLESS_CHANNEL;
+    player.castRemaining = NYTHRAXIS_DEATHLESS_CHANNEL;
+    this.emit({ type: 'spellfx', sourceId: ward.id, targetId: boss.id, school: 'shadow', fx: 'beam' });
+    return true;
   }
 
   private spawnBossAdds(boss: Entity, mobId: string, count: number): void {
@@ -6578,6 +7170,7 @@ export class Sim {
     const obj = this.entities.get(objId);
     if (!obj || obj.kind !== 'object' || !obj.lootable || !obj.objectItemId) return;
     if (dist2d(p.pos, obj.pos) > INTERACT_RANGE) { this.error(meta.entityId, 'Too far away.'); return; }
+    if (this.tryStartNythraxisWardChannel(obj, p)) return;
     if (this.activateNythraxisRelic(obj, meta)) return;
     if (this.interactObjectForQuests(obj, meta)) return;
     const def = ITEMS[obj.objectItemId];
@@ -6790,6 +7383,7 @@ export class Sim {
         if (target.kind === 'object' && target.lootable) {
           if (target.templateId === 'dungeon_door' && target.dungeonId) { this.enterDungeon(target.dungeonId, p.id); return; }
           if (target.templateId === 'dungeon_exit') { this.leaveDungeon(p.id); return; }
+          if (this.tryStartNythraxisWardChannel(target, p)) return;
           this.pickUpObject(target.id, p.id);
           return;
         }
@@ -6815,6 +7409,7 @@ export class Sim {
     if (obj) {
       if (obj.templateId === 'dungeon_door' && obj.dungeonId) { this.enterDungeon(obj.dungeonId, p.id); return; }
       if (obj.templateId === 'dungeon_exit') { this.leaveDungeon(p.id); return; }
+      if (this.tryStartNythraxisWardChannel(obj, p)) return;
       this.pickUpObject(obj.id, p.id);
       return;
     }
@@ -7580,6 +8175,10 @@ export class Sim {
       || this.hasActiveInvite(this.duelInvites, targetPid);
   }
 
+  private entityInDungeon(e: Entity, dungeonId: string): boolean {
+    return dungeonAt(e.pos.x)?.id === dungeonId;
+  }
+
   partyInvite(targetPid: number, pid?: number): void {
     const r = this.resolve(pid);
     const target = this.players.get(targetPid);
@@ -7743,6 +8342,10 @@ export class Sim {
     const targetE = this.entities.get(targetPid);
     if (!r || !target || !targetE) return;
     if (targetPid === r.meta.entityId) return;
+    if (this.entityInDungeon(r.e, 'nythraxis_boss_arena') || this.entityInDungeon(targetE, 'nythraxis_boss_arena')) {
+      this.error(r.meta.entityId, 'You cannot duel in Nythraxis Raid Arena.');
+      return;
+    }
     if (this.duels.has(r.meta.entityId) || this.duels.has(targetPid)) { this.error(r.meta.entityId, 'A duel is already in progress.'); return; }
     if (dist2d(r.e.pos, targetE.pos) > 30) { this.error(r.meta.entityId, 'Target is too far away.'); return; }
     if (this.hasPendingSocialInvite(targetPid)) { this.error(r.meta.entityId, `${target.name} already has a pending invitation.`); return; }
@@ -7759,6 +8362,11 @@ export class Sim {
     this.duelInvites.delete(r.meta.entityId);
     const other = this.players.get(invite.fromPid);
     if (!other) return;
+    const otherE = this.entities.get(invite.fromPid);
+    if (!otherE || this.entityInDungeon(r.e, 'nythraxis_boss_arena') || this.entityInDungeon(otherE, 'nythraxis_boss_arena')) {
+      this.error(r.meta.entityId, 'You cannot duel in Nythraxis Raid Arena.');
+      return;
+    }
     if (this.duels.has(invite.fromPid) || this.duels.has(r.meta.entityId)) {
       this.error(r.meta.entityId, 'A duel is already in progress.');
       return;
@@ -9605,7 +10213,6 @@ export class Sim {
           return;
         }
       }
-      return;
     }
     if (this.dungeonDoorIds === null) {
       this.dungeonDoorIds = [];
@@ -9626,9 +10233,20 @@ export class Sim {
     const r = this.resolve(pid);
     const dungeon = DUNGEONS[dungeonId];
     if (!r || !dungeon || r.e.dead) return;
-    if (dungeonId === 'nythraxis_crypt' && !this.canEnterNythraxisCrypt(r.meta)) {
-      this.error(r.meta.entityId, 'The crypt entrance is sealed to you.');
+    if (dungeonId === 'nythraxis_boss_arena' && !this.canEnterNythraxisCrypt(r.meta)) {
+      this.error(r.meta.entityId, 'The royal door is sealed to you.');
       return;
+    }
+    if (dungeonId === 'nythraxis_boss_arena' && this.isRaidLocked(r.meta, dungeonId)) {
+      this.error(r.meta.entityId, 'You are locked to Nythraxis Raid Arena.');
+      return;
+    }
+    if (dungeonId === 'nythraxis_boss_arena') {
+      const engaged = this.instances.find((i) => i.dungeonId === dungeonId && i.partyKey === this.instanceKeyFor(r.meta.entityId));
+      if (engaged && this.nythraxisInstanceSealed(engaged)) {
+        this.error(r.meta.entityId, 'Nythraxis is engaged — the royal door has sealed shut.');
+        return;
+      }
     }
     const key = this.instanceKeyFor(r.meta.entityId);
     let inst = this.instances.find((i) => i.dungeonId === dungeonId && i.partyKey === key);
@@ -9662,6 +10280,26 @@ export class Sim {
     return false;
   }
 
+  private isRaidLocked(meta: PlayerMeta, dungeonId: string): boolean {
+    const until = meta.raidLockouts.get(dungeonId) ?? 0;
+    if (until <= this.lockoutNowMs()) {
+      meta.raidLockouts.delete(dungeonId);
+      return false;
+    }
+    return true;
+  }
+
+  // The royal door seals once Nythraxis is engaged (pulled, alive, pre-death).
+  // It reopens on his death or a full raid wipe (handled in the encounter loop).
+  private nythraxisInstanceSealed(inst: InstanceSlot): boolean {
+    for (const id of inst.mobIds) {
+      const e = this.entities.get(id);
+      if (e && e.templateId === NYTHRAXIS_BOSS_ID && !e.dead && e.inCombat
+        && e.nythraxis && e.nythraxis.phase !== 'dead') return true;
+    }
+    return false;
+  }
+
   leaveDungeon(pid?: number): void {
     const r = this.resolve(pid);
     if (!r || r.e.dead) return;
@@ -9670,6 +10308,13 @@ export class Sim {
     // that silently teleported outdoor callers to the Hollow Crypt door)
     const dungeon = dungeonAt(p.pos.x);
     if (!dungeon) return;
+    if (dungeon.id === 'nythraxis_boss_arena') {
+      const inst = this.instances.find((i) => i.dungeonId === dungeon.id && i.partyKey === this.instanceKeyFor(p.id));
+      if (inst && this.nythraxisInstanceSealed(inst)) {
+        this.error(r.meta.entityId, 'The royal door is sealed — Nythraxis must fall first.');
+        return;
+      }
+    }
     p.pos = this.groundPos(dungeon.doorPos.x, dungeon.doorPos.z - 4);
     p.prevPos = { ...p.pos };
     this.rebucket(p);
@@ -9703,6 +10348,12 @@ export class Sim {
     }
     for (const objDef of dungeon.objects ?? []) {
       const obj = createGroundObject(this.nextId++, objDef.itemId, objDef.name, this.groundPos(origin.x + objDef.x, origin.z + objDef.z));
+      if (objDef.templateId) {
+        obj.templateId = objDef.templateId;
+        obj.dungeonId = objDef.dungeonId ?? null;
+        obj.objectItemId = null;
+        obj.lootable = true;
+      }
       this.addEntity(obj);
       inst.objectIds.push(obj.id);
     }

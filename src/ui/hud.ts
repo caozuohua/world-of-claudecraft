@@ -1,6 +1,7 @@
 import type { ResolvedAbility } from '../sim/sim';
 import { OVERHEAD_EMOTES, isOverheadEmoteId, type ArenaFormat, type FriendInfo, type IWorld, type LeaderboardEntry, type MarketInfo, type OverheadEmoteId } from '../world_api';
 import { Renderer } from '../render/renderer';
+import { castBarState } from '../render/cast_bar';
 import { CharacterPreview } from '../render/characters';
 import { portraitChipHtml, hydratePortraits } from './portrait_chip';
 import { playerPortraitDataUrl, visualPortraitDataUrl, onPortraitsReady } from '../render/characters/portrait';
@@ -407,6 +408,10 @@ export class Hud {
   private castbarFillEl = this.castbarEl.querySelector('.fill') as HTMLElement;
   private castbarLabelEl = this.castbarEl.querySelector('.label') as HTMLElement;
   private castbarTimerEl = this.castbarEl.querySelector('.timer') as HTMLElement;
+  private targetCastbarEl = $('#tf-castbar');
+  private targetCastbarFillEl = this.targetCastbarEl.querySelector('.fill') as HTMLElement;
+  private targetCastbarLabelEl = this.targetCastbarEl.querySelector('.label') as HTMLElement;
+  private targetCastbarTimerEl = this.targetCastbarEl.querySelector('.timer') as HTMLElement;
   private actionbarEl = $('#actionbar');
   private xpFillEl = $('#xpbar .fill');
   private xpLabelEl = $('#xpbar .label');
@@ -483,6 +488,7 @@ export class Hud {
   // entity ids with a sustained cast-loop SFX playing, so reconcileSfx can stop
   // loops for casters that left interest mid-channel (no castStop/death arrives).
   private castLoopIds = new Set<number>();
+  private lastNythraxisCombatEventAt = 0;
   private lastResting = false;
   private lastZoneId = '';
   private mapZoneId = ''; // zone the cached map-window canvas was rendered for
@@ -2235,6 +2241,18 @@ export class Hud {
         }
       }
       this.renderAuras(this.targetDebuffsEl, target, 'debuffs');
+      // target/boss cast bar (e.g. Nythraxis' Deathless Rage) — shown under the
+      // name + HP so the raid sees exactly when to channel the wardstones
+      const tcb = castBarState(target);
+      if (tcb.visible) {
+        this.setDisplay(this.targetCastbarEl, 'block');
+        this.targetCastbarEl.classList.toggle('channel', tcb.channel);
+        this.setWidth(this.targetCastbarFillEl, `${(tcb.fill * 100).toFixed(1)}%`);
+        this.setText(this.targetCastbarLabelEl, tcb.label);
+        this.setText(this.targetCastbarTimerEl, formatNumber(Math.max(0, target.castRemaining), { minimumFractionDigits: 1, maximumFractionDigits: 1 }));
+      } else {
+        this.setDisplay(this.targetCastbarEl, 'none');
+      }
       // combo points
       if (p.resourceType === 'energy') {
         this.setDisplay(this.comboRowEl, 'flex');
@@ -2451,18 +2469,31 @@ export class Hud {
       // Combat = a mob is on us, or we traded blows in the last few seconds
       // (the wire protocol doesn't ship the inCombat flag).
       let aggroed = false;
+      let nythraxisAlive = false;
+      let bossEngaged = false; // the Nythraxis raid boss is pulled -> its own track
+      const dungeon = dungeonAt(p.pos.x);
+      const inNythraxisArena = dungeon?.id === 'nythraxis_boss_arena';
       for (const e of sim.entities.values()) {
-        if (e.kind === 'mob' && !e.dead && e.aggroTargetId === sim.playerId) { aggroed = true; break; }
+        if (e.kind !== 'mob' || e.dead) continue;
+        if (e.aggroTargetId === sim.playerId) aggroed = true;
+        if (e.templateId === 'nythraxis_scourge_of_thornpeak') {
+          nythraxisAlive = true;
+          if (e.aggroTargetId !== null) bossEngaged = true;
+        }
       }
       const inCombat = aggroed || now - this.lastCombatEventAt < 5000;
+      const musicCombat = inCombat || inNythraxisArena;
+      bossEngaged = bossEngaged
+        || inNythraxisArena
+        || now - this.lastNythraxisCombatEventAt < 10000;
       const hub = currentZone.hub;
       const inHub = !inDungeon
         && Math.hypot(p.pos.x - hub.x, p.pos.z - hub.z) < hub.radius + 10;
-      const dungeon = inDungeon ? dungeonAt(p.pos.x) : null;
       const zone = musicZoneForLocation(
-        currentZone.id, currentZone.biome, inHub, inDungeon, dungeon?.id ?? null,
+        currentZone.id, currentZone.biome, inHub, inDungeon || inNythraxisArena, dungeon?.id ?? null,
       );
-      music.update(zone, inCombat);
+      music.update(zone, musicCombat);
+      music.setBossCombat(bossEngaged);
 
       // classic combat indicator: crossed swords + red ring on the player portrait
       $('#player-frame').classList.toggle('combat', inCombat);
@@ -3428,6 +3459,20 @@ export class Hud {
     }
   }
 
+  private isNythraxisEntity(id: number | null | undefined): boolean {
+    if (id === null || id === undefined) return false;
+    const e = this.sim.entities.get(id);
+    return e?.templateId === 'nythraxis_scourge_of_thornpeak'
+      || e?.templateId === 'nythraxis_skeleton_warrior';
+  }
+
+  private isNythraxisEvent(ev: SimEvent): boolean {
+    if ('sourceId' in ev && this.isNythraxisEntity(ev.sourceId)) return true;
+    if ('targetId' in ev && this.isNythraxisEntity(ev.targetId)) return true;
+    if ('entityId' in ev && this.isNythraxisEntity(ev.entityId)) return true;
+    return false;
+  }
+
   handleEvents(events: SimEvent[]): void {
     const sim = this.sim;
     for (const ev of events) {
@@ -3436,6 +3481,7 @@ export class Hud {
       this.renderer.handleEvent(ev);
       this.playEventSfx(ev); // positional sound for nearby combat/creatures
       this.meters.onEvent(ev);
+      if (this.isNythraxisEvent(ev)) this.lastNythraxisCombatEventAt = performance.now();
       switch (ev.type) {
         case 'damage': {
           const src = sim.entities.get(ev.sourceId);
