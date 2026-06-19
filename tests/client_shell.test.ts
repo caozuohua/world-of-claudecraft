@@ -159,6 +159,15 @@ describe('client HTML shell', () => {
     expect(mainTs).not.toContain("visualViewport?.addEventListener('scroll', syncAppViewport)");
   });
 
+  it('places news release metadata below the heading on mobile', () => {
+    expect(mainTs).toContain('<h3 class="news-item-title">${title}</h3><div class="news-item-meta">${tag}${badge}${when}</div></div>');
+    expect(html).toContain('body.mobile-touch .news-item-head {\n    flex-direction: column;\n    align-items: flex-start;');
+    expect(html).toContain('body.mobile-touch .news-item-meta {\n    width: 100%;\n    margin-left: 0;');
+    expect(html).toContain('overflow-wrap: break-word;\n    word-break: normal;');
+    expect(html).toContain('body.mobile-touch .news-body {\n    text-align: left;');
+    expect(html).toContain('body.mobile-touch .news-body ul {\n    list-style: none;\n    padding-left: 0;');
+  });
+
   it('stacks selected character details on mobile', () => {
     expect(html).toContain('id="charselect-class-details"');
     expect(html).toContain('body.mobile-touch #charselect-panel #charselect-class-details .class-details-grid,\n  body.mobile-touch #charselect-panel #online-class-details .class-details-grid {\n    display: flex;\n    flex-direction: column;');

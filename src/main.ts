@@ -2642,7 +2642,7 @@ async function loadNews(): Promise<void> {
       : '';
     return `<article class="news-item">`
       + `<div class="news-item-head">`
-      + `<h3 class="news-item-title">${title}</h3>${tag}${badge}${when}</div>`
+      + `<h3 class="news-item-title">${title}</h3><div class="news-item-meta">${tag}${badge}${when}</div></div>`
       + `<div class="news-body">${renderReleaseBody(r.body)}</div>${link}</article>`;
   }).join('');
 }

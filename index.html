@@ -2279,6 +2279,13 @@
     margin: 0;
     text-shadow: 1px 1px 2px #000;
   }
+  .news-item-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+    margin-left: auto;
+  }
   .news-tag {
     font-family: var(--font-sans);
     font-size: 11px;
@@ -2296,7 +2303,6 @@
     padding: 1px 6px;
   }
   .news-date {
-    margin-left: auto;
     font-family: var(--font-sans);
     font-size: 11px;
     color: var(--color-text-muted, #b9ac82);
@@ -2307,7 +2313,8 @@
     line-height: 1.55;
     color: var(--color-text-light);
     word-wrap: break-word;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
+    word-break: normal;
     max-height: 460px;
     overflow-y: auto;
     padding-right: 8px;
@@ -2347,6 +2354,28 @@
     text-decoration: none;
   }
   .news-link:hover, .news-link:focus-visible { text-decoration: underline; }
+
+  body.mobile-touch .news-item-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  body.mobile-touch .news-item-title {
+    width: 100%;
+  }
+  body.mobile-touch .news-item-meta {
+    width: 100%;
+    margin-left: 0;
+  }
+  body.mobile-touch .news-body {
+    text-align: left;
+  }
+  body.mobile-touch .news-body ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  body.mobile-touch .news-body li {
+    margin: var(--spacing-xs) 0;
+  }
 
   /* Wiki view with integrated Controls Guide */
   .wiki-container-layout {
