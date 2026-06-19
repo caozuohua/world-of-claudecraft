@@ -19,6 +19,22 @@ export const EVENT_SKIN_TOKEN_ID = 'event_skin_token';
 /** Ranks ordered low → high. A rolled rank unlocks its tier and all below it. */
 export const SKIN_RANKS: readonly SkinRank[] = ['uncommon', 'rare', 'epic'] as const;
 
+export const SKIN_RANK_ROLL_WEIGHTS: Readonly<Record<SkinRank, number>> = {
+  uncommon: 70,
+  rare: 25,
+  epic: 5,
+} as const;
+
+export function rollSkinRank(unitRoll: number): SkinRank {
+  const total = SKIN_RANKS.reduce((sum, rank) => sum + SKIN_RANK_ROLL_WEIGHTS[rank], 0);
+  let roll = Math.max(0, Math.min(0.999999999, unitRoll)) * total;
+  for (const rank of SKIN_RANKS) {
+    roll -= SKIN_RANK_ROLL_WEIGHTS[rank];
+    if (roll < 0) return rank;
+  }
+  return 'uncommon';
+}
+
 /** One selectable skin per tier (placeholder mapping onto existing alt skins). */
 export interface SkinTier {
   rank: SkinRank;
@@ -90,7 +106,7 @@ export function mechChromaSkinIndex(chromaId: string): number {
 }
 
 export function mechChromaItemId(chromaId: string): string | null {
-  return chromaId === ALDRIC_MECH_CHROMA_ID ? ALDRIC_MECH_CHROMA_ITEM_ID : null;
+  return MECH_CHROMAS.some((chroma) => chroma.id === chromaId) ? `${chromaId}_armor_plate` : null;
 }
 
 export function rankAllowsMechChroma(granted: SkinRank, skin: number): boolean {

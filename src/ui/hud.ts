@@ -462,10 +462,6 @@ export class Hud {
   private skinEventSelectedKey = '';
   private skinEventRevealTimer: number | null = null;
   private skinEventWheelAngle = 0;
-  // DEV-ONLY (remove with the dev button in renderOptions): when true the overlay
-  // was opened with mock data, so Lock In applies via the free changeSkin path
-  // instead of claimEventSkin (which needs a server-rolled rank + token).
-  private skinEventDev = false;
   // 'class' = per-class event skins; 'mech' = the Combat Mech chroma catalog.
   private skinEventMode: 'class' | 'mech' = 'class';
   // Pending lazy-load of the mech GLB + chromas; the reveal waits on it.
@@ -4468,6 +4464,9 @@ export class Hud {
     el.setAttribute('aria-labelledby', 'quest-dialog-title');
     el.setAttribute('tabindex', '-1');
     let html = `<div class="panel-title"><span id="quest-dialog-title">${esc(questTitle(questId))}${this.questSuggestedPlayersHtml(quest.suggestedPlayers)}</span><button type="button" class="x-btn" data-close aria-label="${esc(t('questUi.dialog.close'))}">${svgIcon('close')}</button></div>`;
+    if (state === 'available' && quest.minLevel) {
+      html += `<div class="qd-req">${esc(t('questUi.detail.requiresLevel', { level: this.questNumber(quest.minLevel) }))}</div>`;
+    }
     html += `<div class="qd-text">${esc(text)}</div>`;
     if (state !== 'ready') {
       const qp = this.sim.questLog.get(questId);
@@ -5449,18 +5448,16 @@ export class Hud {
 
   /** Open the skin-select overlay for a server-rolled rank, defaulting the
    *  selection to the best skin the rank unlocks.
-   *  `opts.dev` opens it with mock data (no token/roll) for quick previewing.
    *  `opts.mech` opens the real Combat Mech cosmetic catalog. */
-  openSkinEvent(rank: SkinRank, opts?: { dev?: boolean; mech?: boolean }): void {
+  openSkinEvent(rank: SkinRank, opts?: { mech?: boolean }): void {
     for (let i = 0; i < 20 && this.closeAll(); i++) { /* close stacked HUD overlays before the roll reveal */ }
     this.skinEventRank = rank;
-    this.skinEventDev = opts?.dev ?? false;
     this.skinEventMode = opts?.mech ? 'mech' : 'class';
     if (this.skinEventMode === 'mech') {
       // Kick off the lazy asset fetch; the reveal waits on it before rendering.
       this.mechAssetsPromise = preloadMechAssets();
     } else {
-      this.skinEventTiers = this.skinEventDev ? this.randomDevSkinTiers() : EVENT_SKIN_TIERS;
+      this.skinEventTiers = EVENT_SKIN_TIERS;
     }
     this.skinEventWheelAngle = this.randomSkinEventLandingAngle(rank);
     const selected = this.defaultChoiceSelection(rank);
@@ -5500,7 +5497,6 @@ export class Hud {
     this.skinEventRank = null;
     this.skinEventTiers = EVENT_SKIN_TIERS;
     this.skinEventMode = 'class';
-    this.skinEventDev = false;
     this.skinEventSelectedKey = '';
     this.skinEventWheelAngle = 0;
     audio.bagClose();
@@ -5508,28 +5504,6 @@ export class Hud {
 
   private skinTierKey(tier: SkinTier): string {
     return `${tier.rank}:${tier.skin}`;
-  }
-
-  private randomSkinEventRank(): SkinRank {
-    const roll = Math.random();
-    if (roll < 0.58) return 'uncommon';
-    if (roll < 0.88) return 'rare';
-    return 'epic';
-  }
-
-  private randomDevSkinTiers(): SkinTier[] {
-    const count = skinCount(`player_${this.sim.cfg.playerClass}`);
-    const preferred = Array.from({ length: Math.max(0, count - 1) }, (_, i) => i + 1);
-    const fallback = Array.from({ length: Math.max(1, count) }, (_, i) => i);
-    const source = preferred.length >= SKIN_RANKS.length ? preferred : fallback;
-    const pool = [...source];
-
-    return SKIN_RANKS.map((rank) => {
-      if (!pool.length) pool.push(...source);
-      const idx = Math.floor(Math.random() * pool.length);
-      const [skin] = pool.splice(idx, 1);
-      return { rank, skin: skin ?? 0 };
-    });
   }
 
   private randomSkinEventLandingAngle(rank: SkinRank): number {
@@ -5700,20 +5674,14 @@ export class Hud {
     lockInBtn.addEventListener('click', () => {
       if (this.skinEventSelected < 0 || lockInBtn.disabled) return;
       if (mech) {
-        if (this.skinEventDev) this.showBanner(t('skinEvent.previewOnly'));
-        else {
-          this.sim.claimEventSkin(this.skinEventSelected);
-          this.showBanner(t('skinEvent.unlocked'));
-        }
+        this.sim.claimEventSkin(this.skinEventSelected);
+        this.showBanner(t('skinEvent.unlocked'));
         audio.levelUp();
         this.closeSkinEvent();
         if ($('#bags').style.display !== 'none') this.renderBags();
         return;
       }
-      // Dev preview has no server-rolled rank/token, so apply via the free skin
-      // changer; the real event commits through claimEventSkin.
-      if (this.skinEventDev) this.sim.changeSkin(this.skinEventSelected);
-      else this.sim.claimEventSkin(this.skinEventSelected);
+      this.sim.claimEventSkin(this.skinEventSelected);
       this.showBanner(t('skinEvent.unlocked'));
       audio.levelUp();
       this.closeSkinEvent();
@@ -7445,11 +7413,6 @@ export class Hud {
     add(t('hud.options.graphics'), () => goto('graphics'));
     add(t('hud.options.interface'), () => goto('interface'));
     add(t('hud.options.audio'), () => goto('audio'));
-    add(t('hud.options.interface'), () => goto('interface'));
-    // DEV-ONLY temporary trigger (remove when the event ships): opens the
-    // skin-select overlay previewing the real Combat Mech chroma catalog, without
-    // the item/server flow. English literal is intentional — it's throwaway.
-    add('Skin Select (dev)', () => { this.closeOptions(); this.openSkinEvent(this.randomSkinEventRank(), { dev: true, mech: true }); });
     add(t('hud.options.logout'), () => this.optionsHooks?.logout());
     add(t('hud.options.returnToGame'), () => this.closeOptions());
     el.appendChild(list);

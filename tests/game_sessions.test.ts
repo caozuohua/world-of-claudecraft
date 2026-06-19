@@ -19,6 +19,7 @@ vi.mock('../server/db', () => ({
 }));
 
 import { GameServer, type ClientSession } from '../server/game';
+import { saveCharacterState } from '../server/db';
 
 function fakeWs() {
   return {
@@ -149,6 +150,97 @@ describe('GameServer sessions', () => {
 
     const rejoined = expectJoined(server.join(fakeWs(), 13, 101, 'Indexa', 'warrior', null));
     expect((server as any).sessionByCharacterId(101)).toBe(rejoined);
+  });
+
+  it('blocks a fast relog until the disconnect save releases the character id', async () => {
+    const server = new GameServer();
+    const first = expectJoined(server.join(fakeWs(), 11, 101, 'Indexa', 'warrior', null));
+
+    let resolveSave!: () => void;
+    const slowSave = new Promise<void>((resolve) => { resolveSave = resolve; });
+    vi.mocked(saveCharacterState).mockImplementationOnce(() => slowSave);
+
+    const leaving = server.leave(first, 'test');
+    await vi.waitFor(() => {
+      expect(saveCharacterState).toHaveBeenCalled();
+    });
+
+    expect((server as any).sessionByCharacterId(101)).toBe(first);
+    expect(server.join(fakeWs(), 13, 101, 'Indexa', 'warrior', null)).toEqual({
+      error: 'character already in world',
+    });
+
+    resolveSave();
+    await leaving;
+
+    expect((server as any).sessionByCharacterId(101)).toBeNull();
+    const rejoined = expectJoined(server.join(fakeWs(), 13, 101, 'Indexa', 'warrior', null));
+    expect((server as any).sessionByCharacterId(101)).toBe(rejoined);
+  });
+
+  it('retries failed disconnect saves before releasing the character for rejoin', async () => {
+    vi.useFakeTimers();
+    vi.mocked(saveCharacterState).mockReset();
+    vi.mocked(saveCharacterState)
+      .mockRejectedValueOnce(new Error('temporary database outage'))
+      .mockRejectedValueOnce(new Error('temporary database outage'))
+      .mockResolvedValueOnce(undefined);
+
+    try {
+      const server = new GameServer();
+      const session = expectJoined(server.join(fakeWs(), 11, 101, 'Indexa', 'warrior', null));
+      const leaving = server.leave(session, 'test');
+
+      await vi.waitFor(() => {
+        expect(saveCharacterState).toHaveBeenCalledTimes(1);
+      });
+      expect(server.join(fakeWs(), 12, 101, 'Indexa', 'warrior', null)).toEqual({
+        error: 'character already in world',
+      });
+
+      await vi.runOnlyPendingTimersAsync();
+      await vi.waitFor(() => {
+        expect(saveCharacterState).toHaveBeenCalledTimes(2);
+      });
+
+      await vi.runOnlyPendingTimersAsync();
+      await leaving;
+
+      expect(saveCharacterState).toHaveBeenCalledTimes(3);
+      expect((server as any).sessionByCharacterId(101)).toBeNull();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('serializes overlapping saves for one character so an older write cannot land last', async () => {
+    vi.mocked(saveCharacterState).mockReset();
+    vi.mocked(saveCharacterState).mockResolvedValue(undefined);
+
+    const server = new GameServer();
+    const session = expectJoined(server.join(fakeWs(), 11, 101, 'Saverace', 'warrior', null));
+
+    let resolveFirstSave!: () => void;
+    const firstSave = new Promise<void>((resolve) => { resolveFirstSave = resolve; });
+    vi.mocked(saveCharacterState).mockImplementationOnce(() => firstSave);
+
+    const first = server.saveCharacter(session);
+    await vi.waitFor(() => {
+      expect(saveCharacterState).toHaveBeenCalledTimes(1);
+    });
+    expect(vi.mocked(saveCharacterState).mock.calls[0][2].questsDone).not.toContain('q_wolves');
+
+    server.sim.meta(session.pid)!.questsDone.add('q_wolves');
+    const second = server.saveCharacter(session);
+    await Promise.resolve();
+    expect(saveCharacterState).toHaveBeenCalledTimes(1);
+
+    resolveFirstSave();
+    await first;
+    await second;
+
+    expect(saveCharacterState).toHaveBeenCalledTimes(2);
+    expect(vi.mocked(saveCharacterState).mock.calls[1][2].questsDone).toContain('q_wolves');
   });
 
   it('closes the play session even when the open insert lands after the player has left', async () => {

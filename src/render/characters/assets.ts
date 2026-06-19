@@ -172,8 +172,9 @@ for (const url of preloadUrls) {
 }
 
 // Skin textures: player alternate body atlases, loaded sRGB + flipY=false so
-// they line up with the glTF-embedded UVs. Standard tier only — low tier aliases
-// character models and keeps the default look.
+// they line up with the glTF-embedded UVs. These load on every tier so skin
+// selection previews and cosmetics keep distinct colours even on low graphics;
+// only emissive glow maps stay standard-tier only.
 const skinTexByUrl = new Map<string, THREE.Texture>();
 const skinEmisTexByUrl = new Map<string, THREE.Texture>();
 
@@ -186,19 +187,17 @@ function loadSkinTexInto(url: string, into: Map<string, THREE.Texture>): Promise
   });
 }
 
-if (GFX.standardMaterials) {
-  // Boot sweep skips lazyPreload keys (e.g. the cosmetic mech) — those load on
-  // demand via preloadMechAssets().
-  const bootUrls = new Set<string>();
-  for (const [key, list] of Object.entries(SKINS)) {
-    if (VISUALS[key]?.lazyPreload) continue;
-    for (const u of list) if (u) bootUrls.add(u);
-  }
-  for (const url of bootUrls) registerPreload(loadSkinTexInto(url, skinTexByUrl));
+// Boot sweep skips lazyPreload keys (e.g. the cosmetic mech) — those load on
+// demand via preloadMechAssets().
+const bootSkinUrls = new Set<string>();
+for (const [key, list] of Object.entries(SKINS)) {
+  if (VISUALS[key]?.lazyPreload) continue;
+  for (const u of list) if (u) bootSkinUrls.add(u);
 }
+for (const url of bootSkinUrls) registerPreload(loadSkinTexInto(url, skinTexByUrl));
 
 /** Resolved skin texture for a visual key + skin index, or null for the model's
- *  embedded default (index 0, unknown key, or low tier). */
+ *  embedded default (index 0, unknown key, or an atlas that is not loaded yet). */
 export function skinTexture(key: string, skinIndex: number): THREE.Texture | null {
   const url = SKINS[key]?.[skinIndex] ?? null;
   return url ? skinTexByUrl.get(url) ?? null : null;
@@ -222,8 +221,8 @@ export function preloadMechAssets(): Promise<void> {
   const jobs: Promise<unknown>[] = [
     loadGltf(def.url).then((g) => { gltfByUrl.set(def.url, g); }),
   ];
+  for (const url of SKINS.player_mech ?? []) if (url) jobs.push(loadSkinTexInto(url, skinTexByUrl));
   if (GFX.standardMaterials) {
-    for (const url of SKINS.player_mech ?? []) if (url) jobs.push(loadSkinTexInto(url, skinTexByUrl));
     for (const url of SKIN_EMISSIVE.player_mech ?? []) if (url) jobs.push(loadSkinTexInto(url, skinEmisTexByUrl));
   }
   mechAssetsPromise = Promise.all(jobs).then(() => undefined);
@@ -233,9 +232,9 @@ export function preloadMechAssets(): Promise<void> {
 export function mechAssetsReady(): boolean {
   const def = VISUALS.player_mech;
   if (!def || !gltfByUrl.has(assetUrl(def.url))) return false;
-  if (!GFX.standardMaterials) return true;
-  return (SKINS.player_mech ?? []).every((url) => !url || skinTexByUrl.has(url))
-    && (SKIN_EMISSIVE.player_mech ?? []).every((url) => !url || skinEmisTexByUrl.has(url));
+  const skinsReady = (SKINS.player_mech ?? []).every((url) => !url || skinTexByUrl.has(url));
+  if (!GFX.standardMaterials) return skinsReady;
+  return skinsReady && (SKIN_EMISSIVE.player_mech ?? []).every((url) => !url || skinEmisTexByUrl.has(url));
 }
 
 function resolvedGltf(url: string): GLTF {

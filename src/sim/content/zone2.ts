@@ -433,7 +433,7 @@ export const ZONE2_QUESTS: Record<string, QuestDef> = {
     objectives: [{ type: 'collect', itemId: 'unknown_alien_weaponry', count: 1, label: 'Unknown Alien Weaponry' }],
     xpReward: 900, copperReward: 300,
     itemRewards: { warrior: 'alien_armor_plate', mage: 'alien_armor_plate', rogue: 'alien_armor_plate' },
-    minLevel: 6,
+    minLevel: 5,
   },
   q_deepfen_purge: {
     id: 'q_deepfen_purge', name: 'Back to the Shallows',
@@ -705,6 +705,76 @@ export const ZONE2_ITEMS: Record<string, ItemDef> = {
   amber_crimson_armor_plate: {
     id: 'amber_crimson_armor_plate', name: 'Amber Crimson', kind: 'tool', quality: 'uncommon',
     use: { type: 'mechChroma', chromaId: 'amber_crimson' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  crimson_amber_armor_plate: {
+    id: 'crimson_amber_armor_plate', name: 'Crimson Amber', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'crimson_amber' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  cyan_magenta_armor_plate: {
+    id: 'cyan_magenta_armor_plate', name: 'Cyan Magenta', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'cyan_magenta' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  magenta_cyan_armor_plate: {
+    id: 'magenta_cyan_armor_plate', name: 'Magenta Cyan', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'magenta_cyan' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  orange_steel_armor_plate: {
+    id: 'orange_steel_armor_plate', name: 'Orange Steel', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'orange_steel' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  steel_orange_armor_plate: {
+    id: 'steel_orange_armor_plate', name: 'Steel Orange', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'steel_orange' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  forest_pink_armor_plate: {
+    id: 'forest_pink_armor_plate', name: 'Forest Pink', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'forest_pink' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  pink_forest_armor_plate: {
+    id: 'pink_forest_armor_plate', name: 'Pink Forest', kind: 'tool', quality: 'uncommon',
+    use: { type: 'mechChroma', chromaId: 'pink_forest' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  amethyst_silver_armor_plate: {
+    id: 'amethyst_silver_armor_plate', name: 'Amethyst Silver', kind: 'tool', quality: 'rare',
+    use: { type: 'mechChroma', chromaId: 'amethyst_silver' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  ivory_copper_armor_plate: {
+    id: 'ivory_copper_armor_plate', name: 'Ivory Copper', kind: 'tool', quality: 'rare',
+    use: { type: 'mechChroma', chromaId: 'ivory_copper' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  onyx_gold_armor_plate: {
+    id: 'onyx_gold_armor_plate', name: 'Onyx Gold', kind: 'tool', quality: 'rare',
+    use: { type: 'mechChroma', chromaId: 'onyx_gold' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  imperial_crimson_armor_plate: {
+    id: 'imperial_crimson_armor_plate', name: 'Imperial Crimson', kind: 'tool', quality: 'epic',
+    use: { type: 'mechChroma', chromaId: 'imperial_crimson' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  imperial_gold_armor_plate: {
+    id: 'imperial_gold_armor_plate', name: 'Imperial Gold', kind: 'tool', quality: 'epic',
+    use: { type: 'mechChroma', chromaId: 'imperial_gold' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  vanguard_azure_armor_plate: {
+    id: 'vanguard_azure_armor_plate', name: 'Vanguard Azure', kind: 'tool', quality: 'epic',
+    use: { type: 'mechChroma', chromaId: 'vanguard_azure' },
+    sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
+  },
+  vanguard_chrome_armor_plate: {
+    id: 'vanguard_chrome_armor_plate', name: 'Vanguard Chrome', kind: 'tool', quality: 'epic',
+    use: { type: 'mechChroma', chromaId: 'vanguard_chrome' },
     sellValue: 0, noVendorSell: true, noDiscard: true, noMarketList: true,
   },
   deacons_cleaver: {

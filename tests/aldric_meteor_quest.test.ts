@@ -94,6 +94,28 @@ describe('Brother Aldric fallen star quest', () => {
     expect(sim.equipment.chest).not.toBe(REWARD_ITEM_ID);
   });
 
+  it('opens to level-5 players (minLevel 5) and stays gated below', () => {
+    expect(QUESTS[QUEST_ID].minLevel).toBe(5);
+
+    const sim = new Sim({ seed: 20061, playerClass: 'warrior', playerName: 'Reuben', autoEquip: false });
+    const aldric = [...sim.entities.values()].find((e) => e.kind === 'npc' && e.templateId === 'brother_aldric_fen');
+    expect(aldric).toBeTruthy();
+    teleportTo(sim, aldric!.pos.x + 1, aldric!.pos.z);
+
+    // Below the requirement: the quest is unavailable and accepting is a no-op.
+    sim.setPlayerLevel(4);
+    expect(sim.questState(QUEST_ID)).toBe('unavailable');
+    sim.acceptQuest(QUEST_ID);
+    expect(sim.questLog.has(QUEST_ID)).toBe(false);
+    expect(sim.questState(QUEST_ID)).toBe('unavailable');
+
+    // Exactly at the requirement: the gate is inclusive, so a level-5 player can start.
+    sim.setPlayerLevel(5);
+    expect(sim.questState(QUEST_ID)).toBe('available');
+    sim.acceptQuest(QUEST_ID);
+    expect(sim.questState(QUEST_ID)).toBe('active');
+  });
+
   it('keeps the cosmetic item out of vendor sell, destroy, and market flows while allowing trade', () => {
     const sim = new Sim({ seed: 20061, playerClass: 'warrior', playerName: 'Seller' });
     sim.addItem(REWARD_ITEM_ID, 1);

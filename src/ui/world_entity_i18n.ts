@@ -3,7 +3,7 @@ import { DUNGEONS, MOBS, NPCS, QUESTS, ZONES } from '../sim/data';
 // English world-entity names + narratives (mobs, NPCs, quests, zones, dungeons).
 //
 // This module is the SINGLE English source for those entities: makeEnglishWorldEntities()
-// reads the canonical sim data and shapes it into the `en` slice that src/ui/i18n.en.ts
+// reads the canonical sim data and shapes it into the `en` slice that src/ui/i18n.catalog
 // spreads into the authoritative nested `en` (imported there as `worldNames.en`). The
 // build then overlays each per-locale flat overlay (src/ui/i18n.locales/<lang>.ts) onto
 // that `en` to produce the dense resolved table.
@@ -167,7 +167,7 @@ function makeEnglishWorldEntities(): WorldEntityTranslations {
   };
 }
 
-// Only `.en` is consumed (by src/ui/i18n.en.ts); non-English entity names live in the
+// Only `.en` is consumed (by src/ui/i18n.catalog); non-English entity names live in the
 // flat per-locale overlays, and dialect inheritance is a declared-base merge in the
 // build resolver. So this object intentionally carries English only.
 export const worldEntityText = {

@@ -15,6 +15,38 @@
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="manifest" href="/manifest.webmanifest" />
 
+<!-- i18n stored-locale modulepreload (Phase 4 / Lazy Locales). For a returning visitor
+     whose stored locale (localStorage key "locale") is non-English, inject a high-priority
+     <link rel="modulepreload"> for THAT locale's content-hashed chunk before the main
+     module parses, so the locale chunk is parser-discoverable and in flight early rather
+     than discovered only after main parses + runs its runtime-keyed dynamic import (the
+     main-then-locale waterfall). The production build templates the { locale: chunkUrl }
+     map over the build sentinel below (see scripts/i18n_modulepreload.mjs); in dev the
+     sentinel is undefined and the try/catch makes this a no-op. Reads ONLY
+     localStorage.locale, injects ONLY one
+     same-origin preload for the ONE stored locale - never speculative, no third-party
+     origin. crossorigin matches Vite's module request so the browser dedupes to one fetch. -->
+<script>
+  (function () {
+    try {
+      var loc = localStorage.getItem('locale');
+      if (!loc) return;
+      var map = __I18N_LOCALE_CHUNKS__;
+      var href = map && map[loc];
+      // Require a string so an attacker-set localStorage.locale ("__proto__" etc.) that
+      // resolves a prototype key to a non-URL value cannot reach link.href.
+      if (typeof href !== 'string') return;
+      var link = document.createElement('link');
+      link.rel = 'modulepreload';
+      link.href = href;
+      link.crossOrigin = 'anonymous';
+      document.head.appendChild(link);
+    } catch (e) {
+      // No stored locale / no templated map (dev) / storage blocked: do nothing.
+    }
+  })();
+</script>
+
 <!-- Cloudflare Turnstile (bot gate on login/registration). Rendered explicitly
      by src/main.ts only when VITE_TURNSTILE_SITEKEY is configured. -->
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -353,6 +385,23 @@
   }
   #start-screen :is(input, textarea) {
     cursor: text;
+  }
+
+  /* Mobile zoom prevention: iOS Safari (10+) auto-zooms the page whenever a focused
+     text-entry control renders below 16px, and it ignores the viewport scale-lock
+     in the <meta> above (that obedience was dropped for accessibility). 16px is the
+     documented threshold. Floor every focusable control at 16px on coarse-pointer
+     (touch) devices, which also covers tablets/iPad that the JS-driven
+     body.mobile-touch class (gated to <=940px) would miss. !important guarantees the
+     floor wins over the small classic-font rules regardless of selector specificity
+     (e.g. .prompt .prompt-number, which out-specifies a plain catch-all); pointer:coarse
+     leaves desktop (fine pointer) untouched. New inputs are covered automatically. */
+  @media (pointer: coarse) {
+    input,
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
   }
 
   #nameplates { position: fixed; left: 0; top: 0; width: var(--app-vw); height: var(--app-vh); overflow: hidden; pointer-events: none; z-index: 1; }
@@ -840,6 +889,9 @@
   .qd-text { font-size: 12.5px; line-height: 1.55; color: #e8e0c8; margin-bottom: 10px; font-family: var(--font-serif); }
   .qd-sub { font-family: var(--title-font); color: var(--gold); font-size: 13px; margin: 8px 0 4px; }
   .qd-obj { font-size: 12px; color: #cfc6a8; margin: 2px 0; }
+  .qd-req { display: inline-block; margin: 0 0 10px; padding: 2px 9px; font-family: var(--title-font);
+    font-size: 11px; letter-spacing: 0.3px; color: var(--gold); background: #1a140a66;
+    border: 1px solid var(--color-border-default); border-radius: 4px; }
   .quest-muted { color: var(--color-text-muted); font-size: 11px; }
   .quest-suggested { color: var(--color-text-error); font-size: 11px; }
   .quest-return { margin-top: var(--spacing-sm); color: var(--color-text-muted); }
@@ -847,7 +899,7 @@
   .qd-reward-label { color: var(--color-text-muted); font-size: 11px; }
   .qd-reward-name { font-size: 12px; }
   .qd-list-item { display: block; width: 100%; padding: 5px 8px; cursor: var(--cursor-point); border: 0; border-radius: 4px; background: transparent; text-align: left; font-size: 13px; color: var(--gold); font-family: var(--title-font); }
-  .qd-text, .qd-sub, .qd-obj, .qd-reward-label, .qd-reward-name, .qd-list-item,
+  .qd-text, .qd-sub, .qd-obj, .qd-req, .qd-reward-label, .qd-reward-name, .qd-list-item,
   .quest-muted, .quest-suggested, .ql-item, .ql-empty { overflow-wrap: anywhere; }
   .qd-reward-row { flex-wrap: wrap; }
   .qd-reward-name { min-width: 0; }
@@ -2198,6 +2250,129 @@
   .hs-lvl, .hs-vlvl { text-align: center; }
   .hs-xp { text-align: right; color: #ffe27a; font-variant-numeric: tabular-nums; }
   .hs-prestige { color: #ffd100; font-size: 11px; margin-right: 4px; }
+  body.mobile-touch .hs-panel {
+    width: 100%;
+    max-width: 560px;
+    padding: var(--spacing-md);
+  }
+  body.mobile-touch .hs-leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+  body.mobile-touch .hs-head {
+    display: none;
+  }
+  body.mobile-touch .hs-row {
+    grid-template-columns: 38px minmax(0, 1fr);
+    grid-template-areas:
+      "rank name"
+      "rank realm"
+      "rank lvl"
+      "rank vlvl"
+      "rank xp";
+    align-items: start;
+    gap: 4px 10px;
+    padding: 10px 12px;
+    border: 1px solid rgba(78, 61, 29, 0.35);
+    background: rgba(255, 255, 255, 0.025);
+  }
+  body.mobile-touch .hs-rank { grid-area: rank; align-self: center; }
+  body.mobile-touch .hs-name {
+    grid-area: name;
+    min-width: 0;
+  }
+  body.mobile-touch .hs-realm { grid-area: realm; }
+  body.mobile-touch .hs-lvl { grid-area: lvl; }
+  body.mobile-touch .hs-vlvl { grid-area: vlvl; }
+  body.mobile-touch .hs-xp { grid-area: xp; }
+  body.mobile-touch .hs-realm,
+  body.mobile-touch .hs-lvl,
+  body.mobile-touch .hs-vlvl,
+  body.mobile-touch .hs-xp {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+    min-width: 0;
+    text-align: right;
+  }
+  body.mobile-touch .hs-realm::before,
+  body.mobile-touch .hs-lvl::before,
+  body.mobile-touch .hs-vlvl::before,
+  body.mobile-touch .hs-xp::before {
+    content: attr(data-label);
+    color: var(--color-primary-dim);
+    font-family: var(--font-heading);
+    font-size: 10px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 680px) {
+    .hs-panel {
+      width: 100%;
+      max-width: 560px;
+      padding: var(--spacing-md);
+    }
+    .hs-leaderboard {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+      overflow-x: hidden;
+    }
+    .hs-head {
+      display: none;
+    }
+    .hs-row {
+      grid-template-columns: 38px minmax(0, 1fr);
+      grid-template-areas:
+        "rank name"
+        "rank realm"
+        "rank lvl"
+        "rank vlvl"
+        "rank xp";
+      align-items: start;
+      gap: 4px 10px;
+      padding: 10px 12px;
+      border: 1px solid rgba(78, 61, 29, 0.35);
+      background: rgba(255, 255, 255, 0.025);
+    }
+    .hs-rank { grid-area: rank; align-self: center; }
+    .hs-name {
+      grid-area: name;
+      min-width: 0;
+    }
+    .hs-realm { grid-area: realm; }
+    .hs-lvl { grid-area: lvl; }
+    .hs-vlvl { grid-area: vlvl; }
+    .hs-xp { grid-area: xp; }
+    .hs-realm,
+    .hs-lvl,
+    .hs-vlvl,
+    .hs-xp {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--spacing-sm);
+      min-width: 0;
+      text-align: right;
+    }
+    .hs-realm::before,
+    .hs-lvl::before,
+    .hs-vlvl::before,
+    .hs-xp::before {
+      content: attr(data-label);
+      color: var(--color-primary-dim);
+      font-family: var(--font-heading);
+      font-size: 10px;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+  }
 
   /* News & Updates view (mirrored from GitHub Releases) */
   .news-panel {
@@ -2247,6 +2422,13 @@
     margin: 0;
     text-shadow: 1px 1px 2px #000;
   }
+  .news-item-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+    margin-left: auto;
+  }
   .news-tag {
     font-family: var(--font-sans);
     font-size: 11px;
@@ -2264,7 +2446,6 @@
     padding: 1px 6px;
   }
   .news-date {
-    margin-left: auto;
     font-family: var(--font-sans);
     font-size: 11px;
     color: var(--color-text-muted, #b9ac82);
@@ -2275,7 +2456,8 @@
     line-height: 1.55;
     color: var(--color-text-light);
     word-wrap: break-word;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
+    word-break: normal;
     max-height: 460px;
     overflow-y: auto;
     padding-right: 8px;
@@ -2315,6 +2497,28 @@
     text-decoration: none;
   }
   .news-link:hover, .news-link:focus-visible { text-decoration: underline; }
+
+  body.mobile-touch .news-item-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  body.mobile-touch .news-item-title {
+    width: 100%;
+  }
+  body.mobile-touch .news-item-meta {
+    width: 100%;
+    margin-left: 0;
+  }
+  body.mobile-touch .news-body {
+    text-align: left;
+  }
+  body.mobile-touch .news-body ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  body.mobile-touch .news-body li {
+    margin: var(--spacing-xs) 0;
+  }
 
   /* Wiki view with integrated Controls Guide */
   .wiki-container-layout {
@@ -6138,8 +6342,23 @@
   body.mobile-touch .header-actions {
     width: 100%;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     margin-top: 0;
+  }
+  body.mobile-touch .footer-bar {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  body.mobile-touch .footer-left {
+    align-items: center;
+  }
+  body.mobile-touch .footer-lang-row {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
   }
   body.mobile-touch .language-selector {
     width: 100%;
@@ -6215,8 +6434,23 @@
     .header-actions {
       width: 100%;
       display: flex;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
       margin-top: 0;
+    }
+    .footer-bar {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .footer-left {
+      align-items: center;
+    }
+    .footer-lang-row {
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
     }
     .language-selector {
       width: 100%;
@@ -7139,6 +7373,7 @@
             <option value="pt_BR">Português (Brasil)</option>
             <option value="ru_RU">Русский</option>
           </select>
+          <span id="lang-select-status" class="visually-hidden" role="status" aria-live="polite"></span>
         </div>
       </div>
       </div>

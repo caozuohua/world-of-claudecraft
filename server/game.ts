@@ -49,6 +49,9 @@ const WIRE_CACHE_SWEEP_TICKS = 1200;
 const EVENT_RADIUS = 90;
 const AUTOSAVE_SECONDS = 30;
 const SAVE_CONCURRENCY = 4;
+const LEAVE_SAVE_MAX_ATTEMPTS = 5;
+const LEAVE_SAVE_RETRY_BASE_MS = 250;
+const LEAVE_SAVE_RETRY_MAX_MS = 4000;
 const CHAT_RATE_BURST = 5;
 const CHAT_RATE_REFILL_PER_SECOND = 1 / 3; // sustained 20 messages/minute
 const CHAT_RATE_ERROR_COOLDOWN_SECONDS = 4;
@@ -322,6 +325,10 @@ function chatChannelHint(session: ClientSession, text: string): string {
   return session.rememberedChat.channel;
 }
 
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export class GameServer {
   sim: Sim;
   clients = new Map<number, ClientSession>(); // by pid
@@ -339,6 +346,7 @@ export class GameServer {
   private saveTimer = 0;
   private socialPosTimer = 0;
   private saveAllInFlight: Promise<void> | null = null;
+  private readonly characterSaveQueues = new Map<number, Promise<void>>();
   private restartCountdownStartedAt: number | null = null;
   private readonly restartCountdownTimers: NodeJS.Timeout[] = [];
   private readonly startedAt = Date.now();
@@ -742,10 +750,9 @@ export class GameServer {
   }
 
   async leave(session: ClientSession, reason: string): Promise<void> {
-    if (!this.clients.has(session.pid)) return;
+    if (session.left || !this.clients.has(session.pid)) return;
     session.left = true;
     this.clients.delete(session.pid);
-    this.sessionsByCharacterId.delete(session.characterId);
     if (session.ip) {
       const prev = this.ipSessionCounts.get(session.ip) ?? 1;
       if (prev <= 1) this.ipSessionCounts.delete(session.ip);
@@ -759,21 +766,53 @@ export class GameServer {
     if (session.dbSessionId !== null) {
       void closePlaySession(session.dbSessionId).catch((err) => console.error('failed to close play session:', err));
     }
-    await this.saveCharacter(session).catch((err) => console.error('save on leave failed:', err));
+    await this.saveCharacterOnLeave(session);
+    this.sessionsByCharacterId.delete(session.characterId);
     this.sim.removePlayer(session.pid);
     // Departures are no longer broadcast to the realm — the leaving player has
     // already disconnected, so there is no one to show their own notice to.
   }
 
+  private async saveCharacterOnLeave(session: ClientSession): Promise<void> {
+    for (let attempt = 1; attempt <= LEAVE_SAVE_MAX_ATTEMPTS; attempt++) {
+      try {
+        await this.saveCharacter(session);
+        return;
+      } catch (err) {
+        if (attempt === LEAVE_SAVE_MAX_ATTEMPTS) {
+          console.error(`save on leave failed after ${attempt} attempts for ${session.name}:`, err);
+          return;
+        }
+        const retryMs = Math.min(
+          LEAVE_SAVE_RETRY_BASE_MS * 2 ** (attempt - 1),
+          LEAVE_SAVE_RETRY_MAX_MS,
+        );
+        console.error(`save on leave failed for ${session.name}; retrying in ${retryMs}ms:`, err);
+        await delay(retryMs);
+      }
+    }
+  }
+
   async saveCharacter(session: ClientSession): Promise<void> {
-    const state = this.sim.serializeCharacter(session.pid);
-    const e = this.sim.entities.get(session.pid);
-    if (state && e) {
-      // Use the SERIALIZED level (not e.level): during a 2v2 Fiesta bout e.level
-      // is temporarily 20, but serializeCharacter reports the real level — so the
-      // character-list/leaderboard `level` column never reflects the temp state.
-      await saveCharacterState(session.characterId, state.level, state);
-      session.lastSave = Date.now();
+    const previous = this.characterSaveQueues.get(session.characterId);
+    const run = (previous ? previous.catch(() => {}) : Promise.resolve()).then(async () => {
+      const state = this.sim.serializeCharacter(session.pid);
+      const e = this.sim.entities.get(session.pid);
+      if (state && e) {
+        // Use the SERIALIZED level (not e.level): during a 2v2 Fiesta bout e.level
+        // is temporarily 20, but serializeCharacter reports the real level — so the
+        // character-list/leaderboard `level` column never reflects the temp state.
+        await saveCharacterState(session.characterId, state.level, state);
+        session.lastSave = Date.now();
+      }
+    });
+    this.characterSaveQueues.set(session.characterId, run);
+    try {
+      await run;
+    } finally {
+      if (this.characterSaveQueues.get(session.characterId) === run) {
+        this.characterSaveQueues.delete(session.characterId);
+      }
     }
   }
 

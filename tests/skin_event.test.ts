@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
 import {
-  EVENT_SKIN_TIERS, EVENT_SKIN_TOKEN_ID, MECH_CHROMAS, SKIN_COUNTS, SKIN_RANKS, rankAllowsSkin,
+  EVENT_SKIN_TIERS, EVENT_SKIN_TOKEN_ID, MECH_CHROMAS, SKIN_COUNTS, SKIN_RANK_ROLL_WEIGHTS, SKIN_RANKS, mechChromaItemId, rankAllowsSkin, rollSkinRank,
 } from '../src/sim/content/skins';
 import { SKINS } from '../src/render/characters/manifest';
 import type { PlayerClass, SimEvent, SkinRank } from '../src/sim/types';
@@ -50,6 +50,16 @@ describe('cosmetic skin-select event', () => {
 
   it('is deterministic: the same seed rolls the same rank', () => {
     expect(rollRank(123).rank).toBe(rollRank(123).rank);
+  });
+
+  it('uses 70/25/5 rarity roll weights', () => {
+    expect(SKIN_RANK_ROLL_WEIGHTS).toEqual({ uncommon: 70, rare: 25, epic: 5 });
+    expect(rollSkinRank(0)).toBe('uncommon');
+    expect(rollSkinRank(0.69999)).toBe('uncommon');
+    expect(rollSkinRank(0.7)).toBe('rare');
+    expect(rollSkinRank(0.94999)).toBe('rare');
+    expect(rollSkinRank(0.95)).toBe('epic');
+    expect(rollSkinRank(0.99999)).toBe('epic');
   });
 
   it('locks in an in-rank skin: applies it, consumes the token, clears the pending rank', () => {
@@ -116,6 +126,46 @@ describe('cosmetic skin-select event', () => {
     expect(sim.player.skin).toBe(0);
     expect(sim.player.skinCatalog).toBe('mech');
     expect(sim.countItem('amber_crimson_armor_plate')).toBe(0);
+  });
+
+  it('returns a non-vendorable, non-discardable, non-marketable mech cosmetic item when unequipped', () => {
+    const sim = new Sim({ seed: 1, playerClass: 'shaman', playerName: 'Seller' });
+    const merchant = [...sim.entities.values()].find((e) => e.kind === 'npc' && e.templateId === 'the_merchant');
+    if (!merchant) throw new Error('merchant not found');
+    const pos = sim.groundPos(merchant.pos.x, merchant.pos.z);
+    sim.player.pos = { ...pos };
+    sim.player.prevPos = { ...pos };
+
+    sim.addItem('amber_crimson_armor_plate', 1);
+    sim.useItem('amber_crimson_armor_plate');
+    expect((sim as any).unequipMechChroma('amber_crimson')).toBe(true);
+
+    sim.sellItem('amber_crimson_armor_plate');
+    sim.discardItem('amber_crimson_armor_plate');
+    expect(sim.countItem('amber_crimson_armor_plate')).toBe(1);
+
+    sim.marketList('amber_crimson_armor_plate', 1, 100);
+
+    expect(sim.countItem('amber_crimson_armor_plate')).toBe(1);
+    expect(sim.marketListings.some((listing) => listing.itemId === 'amber_crimson_armor_plate')).toBe(false);
+  });
+
+  it('returns and reuses a specific item for every mech chroma', () => {
+    for (const chroma of MECH_CHROMAS) {
+      const itemId = mechChromaItemId(chroma.id);
+      expect(itemId, chroma.id).toBeTruthy();
+
+      const sim = new Sim({ seed: 1, playerClass: 'shaman', playerName: `Mech-${chroma.id}` });
+      sim.accountCosmetics = { completedQuestIds: [], mechChromaIds: [chroma.id] };
+      expect((sim as any).unequipMechChroma(chroma.id)).toBe(true);
+      expect(sim.accountCosmetics.mechChromaIds).not.toContain(chroma.id);
+      expect(sim.countItem(itemId!)).toBe(1);
+
+      sim.useItem(itemId!);
+
+      expect(sim.accountCosmetics.mechChromaIds).toContain(chroma.id);
+      expect(sim.countItem(itemId!)).toBe(0);
+    }
   });
 
   it('can equip a mech cosmetic as the active live appearance catalog', () => {

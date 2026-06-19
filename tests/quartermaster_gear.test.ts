@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Sim } from '../src/sim/sim';
 import { ITEMS, MOBS } from '../src/sim/data';
-import { setLanguage } from '../src/ui/i18n';
+import { ensureLocaleLoaded, setLanguage } from '../src/ui/i18n';
 import { tEntity } from '../src/ui/entity_i18n';
 
 // The Quartermaster's Consignment — 12 uncommon gear pieces. Eight are stocked
@@ -51,7 +51,10 @@ describe("Quartermaster's Consignment gear pack", () => {
     }
   });
 
-  it('localizes every new item name in a non-English locale', () => {
+  it('localizes every new item name in a non-English locale', async () => {
+    // Lazy locale flip: await the de_DE chunk so tEntity's synchronous read resolves the
+    // German item names instead of the English fallback.
+    await ensureLocaleLoaded('de_DE');
     setLanguage('de_DE');
     try {
       for (const id of ALL) {
