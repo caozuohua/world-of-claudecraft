@@ -15,6 +15,38 @@
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="manifest" href="/manifest.webmanifest" />
 
+<!-- i18n stored-locale modulepreload (Phase 4 / Lazy Locales). For a returning visitor
+     whose stored locale (localStorage key "locale") is non-English, inject a high-priority
+     <link rel="modulepreload"> for THAT locale's content-hashed chunk before the main
+     module parses, so the locale chunk is parser-discoverable and in flight early rather
+     than discovered only after main parses + runs its runtime-keyed dynamic import (the
+     main-then-locale waterfall). The production build templates the { locale: chunkUrl }
+     map over the build sentinel below (see scripts/i18n_modulepreload.mjs); in dev the
+     sentinel is undefined and the try/catch makes this a no-op. Reads ONLY
+     localStorage.locale, injects ONLY one
+     same-origin preload for the ONE stored locale - never speculative, no third-party
+     origin. crossorigin matches Vite's module request so the browser dedupes to one fetch. -->
+<script>
+  (function () {
+    try {
+      var loc = localStorage.getItem('locale');
+      if (!loc) return;
+      var map = __I18N_LOCALE_CHUNKS__;
+      var href = map && map[loc];
+      // Require a string so an attacker-set localStorage.locale ("__proto__" etc.) that
+      // resolves a prototype key to a non-URL value cannot reach link.href.
+      if (typeof href !== 'string') return;
+      var link = document.createElement('link');
+      link.rel = 'modulepreload';
+      link.href = href;
+      link.crossOrigin = 'anonymous';
+      document.head.appendChild(link);
+    } catch (e) {
+      // No stored locale / no templated map (dev) / storage blocked: do nothing.
+    }
+  })();
+</script>
+
 <!-- Cloudflare Turnstile (bot gate on login/registration). Rendered explicitly
      by src/main.ts only when VITE_TURNSTILE_SITEKEY is configured. -->
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>

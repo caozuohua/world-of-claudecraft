@@ -186,6 +186,38 @@ export async function ensureLocaleLoaded(lang: SupportedLanguage): Promise<void>
   return task;
 }
 
+// --- runtime prefetch (Phase 4, mechanism 1) -------------------------------------
+//
+// Start the current (stored / ?lang) locale's chunk fetch as EARLY as possible - the
+// moment this module evaluates - so the network request is already in flight before the
+// bootstrap await (src/main.ts startGame) reaches it. This complements the
+// parser-discoverable <link rel="modulepreload"> injected from index.html (mechanism 2):
+// the link makes the request high-priority and discoverable before main.ts parses; this
+// prefetch guarantees the dynamic import() is issued as soon as the i18n module runs. Both
+// target the SAME content-hashed chunk and dedupe to a single network fetch (the inflight
+// map coalesces app-side; the browser module map coalesces the request). Fire-and-forget:
+// the real await at startGame / the picker still gates first paint and owns the failure UI
+// (settings.languageLoadFailed) - the swallowed rejection here only prevents an early
+// failed fetch from surfacing as an unhandled rejection (the awaited caller re-runs
+// ensureLocaleLoaded, which cleared inflight on reject, so a retry restarts a fresh
+// import). English and an already-resident locale are no-ops; never speculative (only the
+// one active locale, never the other 12).
+export function prefetchLocale(lang: SupportedLanguage = currentLanguage): void {
+  if (lang === "en" || isLocaleResident(lang)) return;
+  void ensureLocaleLoaded(lang).catch(() => {
+    // Swallowed: the awaited bootstrap/picker call re-runs the load and surfaces the error.
+  });
+}
+
+// Auto-fire on module evaluation in a browser so a stored / ?lang non-en visitor's chunk
+// is in flight immediately (i18n.ts is among the earliest modules the main chunk pulls in).
+// No-op for English (the default - preserves the zero-non-en-bytes guarantee for an English
+// visitor), for an unresolved locale, and outside a browser (vitest/node has no window); it
+// never throws.
+if (typeof window !== "undefined") {
+  prefetchLocale();
+}
+
 function interpolate(template: string, values?: InterpolationValues): string {
   if (!values) return template;
   return template.replace(/\{([A-Za-z0-9_]+)\}/g, (match, name: string) => {
