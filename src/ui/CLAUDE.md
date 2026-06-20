@@ -78,6 +78,13 @@ named method) rather than a line number. `update()` is the per-frame entry;
 Toggle/open methods (`toggleBags`, `openVendor`, `openContextMenu`, …) are the
 public surface `main.ts`/input call.
 
+**New self-contained windows go in their own module, not a new banner section.**
+`hud.ts` is the worst monolith to grow: a new window or panel that does not need `Hud`'s
+private per-frame state belongs in its own `src/ui/` module the HUD composes (the
+direction the HUD modularization is heading; see the root Modularity section). The pure
+painters (`unit_portrait*`, `xp_bar.ts`) are the template: a host-agnostic core a Vitest
+drives directly, plus a thin DOM/canvas consumer.
+
 ## i18n - IMPORTANT (sparse-overlay model; contributors add ENGLISH ONLY)
 The locale data is split across files. Touch the right one:
 - `i18n.catalog/` (nested) is the **authoritative source catalog** and drives
