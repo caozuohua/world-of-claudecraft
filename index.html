@@ -959,6 +959,11 @@
   .char-stats { font-size: 12px; line-height: 1.65; color: #cfc6a8; margin-top: 10px; border-top: 1px solid #463a1c; padding-top: 8px;
     display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
   .char-stats b { color: #fff; font-weight: normal; }
+  /* Each stat is a hoverable/focusable cell that opens a class-aware breakdown
+     tooltip. Color/background only (no transform) per the motion-sickness rule. */
+  .char-stats .stat-cell { cursor: help; border-radius: 3px; transition: color .12s, background-color .12s; }
+  .char-stats .stat-cell:hover { color: #fff; background: rgba(255, 215, 120, 0.08); }
+  .char-stats .stat-cell:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
 
   /* spellbook */
   #spellbook { width: 430px; }
@@ -1584,6 +1589,10 @@
   #tooltip .tt-stat { color: #fff; font-size: 11.5px; }
   #tooltip .tt-green { color: #1eff00; font-size: 11.5px; }
   #tooltip .tt-red { color: #ff5040; font-size: 11.5px; }
+  /* stat-tooltip prose (what a stat does) + the "From your N {stat}:" breakdown head */
+  #tooltip .tt-body { color: #cfc6a8; font-size: 11.5px; margin-top: 3px; }
+  #tooltip .tt-bd-head { color: #c2a86a; font-size: 10px; text-transform: uppercase; letter-spacing: .5px;
+    margin-top: 6px; padding-top: 5px; border-top: 1px solid #3a3526; }
   /* item comparison block (hover an equippable item to see the worn one + deltas) */
   #tooltip .tt-cmp { margin-top: 6px; padding-top: 5px; border-top: 1px solid #3a3526; }
   #tooltip .tt-cmp-head { color: #8a7f5e; font-size: 10px; text-transform: uppercase; letter-spacing: .5px; margin-top: 3px; }
@@ -1609,7 +1618,8 @@
   #tooltip { font-size: calc(12px * var(--tooltip-scale, 1)); }
   #tooltip .tt-title { font-size: calc(13.5px * var(--tooltip-scale, 1)); }
   #tooltip .tt-sub { font-size: calc(11px * var(--tooltip-scale, 1)); }
-  #tooltip .tt-desc, #tooltip .tt-stat, #tooltip .tt-green { font-size: calc(11.5px * var(--tooltip-scale, 1)); }
+  #tooltip .tt-desc, #tooltip .tt-stat, #tooltip .tt-green, #tooltip .tt-body { font-size: calc(11.5px * var(--tooltip-scale, 1)); }
+  #tooltip .tt-bd-head { font-size: calc(10px * var(--tooltip-scale, 1)); }
   /* Chat Text Size (--chat-font-scale) + Chat Background Opacity (--chat-opacity). */
   .chat-pane { font-size: calc(11px * var(--chat-font-scale, 1)); }
   #chatlog-frame { background: linear-gradient(170deg,
