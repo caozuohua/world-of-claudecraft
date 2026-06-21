@@ -94,6 +94,7 @@ import {
   type TalentAllocation, type TalentNode, type SpecDef, type Role,
 } from '../sim/content/talents';
 import { talentChoiceIconDataUrl, talentNodeIconDataUrl } from './talent_icons';
+import { dropdownKeyNav } from './dropdown_nav';
 import { augmentCategory, type AugmentCategory } from '../sim/content/augments';
 import {
   buildDefaultFormBar, classHasFormBars, clearHotbarSlot, encodeHotbarAction, HOTBAR_ACTION_MIME, HotbarAction,
@@ -382,6 +383,7 @@ function yellVoiceKey(text: string): string {
 
 export class Hud {
   private static readonly BAR_ABILITY_SLOTS = 11; // bar slots 1..11; slot 0 is the fixed Attack toggle
+  private static ddSeq = 0; // monotonic id source for buildDropdown listbox/option ARIA wiring
   private static readonly FORM_TOGGLE_IDS = new Set(['bear_form', 'cat_form']); // shift toggles, castable in any form
   private abilityButtons: { btn: HTMLButtonElement; label: HTMLSpanElement; countEl: HTMLSpanElement; keybindEl: HTMLSpanElement; cdOverlay: HTMLDivElement; cdText: HTMLDivElement; lastIcon: string }[] = [];
   private hotbarActions: HotbarAction[] = []; // index = barSlot-1
@@ -6832,31 +6834,104 @@ export class Hud {
 
   // Generic in-app dropdown (replaces native <select>). The selected value lives
   // in root.dataset.value; pass onChange to react live. Closes on click-away.
-  private buildDropdown(options: { value: string; label: string }[], current: string, onChange?: (value: string) => void, placeholder?: string): HTMLElement {
+  // Implements the WAI-ARIA listbox pattern so it keeps the keyboard + screen
+  // reader semantics a native <select> has: the trigger is aria-haspopup, the
+  // menu is role="listbox" with aria-selected options, and Enter/Space/Arrows/
+  // Home/End/Esc are all handled (see dropdown_nav.ts for the pure key math).
+  private buildDropdown(options: { value: string; label: string }[], current: string, onChange?: (value: string) => void, placeholder?: string, a11y?: { ariaLabel?: string; labelledBy?: string }): HTMLElement {
+    const uid = `ui-dd-${++Hud.ddSeq}`;
     const root = document.createElement('div');
     root.className = 'ui-dd';
     root.dataset.value = current;
+    // Accessible name for both the trigger button and the listbox: prefer an
+    // explicit aria-label, else associate an existing <label>/heading via id.
+    const nameAttr = a11y?.ariaLabel
+      ? ` aria-label="${esc(a11y.ariaLabel)}"`
+      : a11y?.labelledBy
+        ? ` aria-labelledby="${esc(a11y.labelledBy)}"`
+        : '';
     const labelOf = (v: string) => options.find((o) => o.value === v)?.label ?? placeholder ?? '';
-    root.innerHTML = `<button type="button" class="btn ui-dd-btn"><span class="ui-dd-label">${esc(labelOf(current))}</span><span class="ui-dd-caret">▾</span></button>`
-      + `<div class="ui-dd-menu" hidden>${options.map((o) => `<div class="ui-dd-item${o.value === current ? ' sel' : ''}" data-val="${esc(o.value)}">${esc(o.label)}</div>`).join('')}</div>`;
+    root.innerHTML = `<button type="button" class="btn ui-dd-btn" aria-haspopup="listbox" aria-expanded="false" aria-controls="${uid}"${nameAttr}><span class="ui-dd-label">${esc(labelOf(current))}</span><span class="ui-dd-caret" aria-hidden="true">▾</span></button>`
+      + `<div class="ui-dd-menu" id="${uid}" role="listbox"${nameAttr} hidden>${options.map((o, i) => `<div class="ui-dd-item${o.value === current ? ' sel' : ''}" id="${uid}-o${i}" role="option" aria-selected="${o.value === current ? 'true' : 'false'}" data-val="${esc(o.value)}">${esc(o.label)}</div>`).join('')}</div>`;
+    const btn = root.querySelector('.ui-dd-btn') as HTMLButtonElement;
     const menu = root.querySelector('.ui-dd-menu') as HTMLElement;
     const labelEl = root.querySelector('.ui-dd-label') as HTMLElement;
-    root.querySelector('.ui-dd-btn')!.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (menu.hasAttribute('hidden')) {
-        menu.removeAttribute('hidden');
-        setTimeout(() => document.addEventListener('click', () => menu.setAttribute('hidden', ''), { once: true }), 0);
-      } else menu.setAttribute('hidden', '');
-    });
-    root.querySelectorAll('.ui-dd-item').forEach((item) => item.addEventListener('click', () => {
+    const items = [...root.querySelectorAll<HTMLElement>('.ui-dd-item')];
+    const isOpen = () => !menu.hasAttribute('hidden');
+    const focusedIndex = () => items.findIndex((it) => it === document.activeElement);
+
+    const open = (focusIndex: number) => {
+      menu.removeAttribute('hidden');
+      btn.setAttribute('aria-expanded', 'true');
+      items[focusIndex]?.focus();
+      setTimeout(() => document.addEventListener('click', onAway, { once: true }), 0);
+    };
+    const close = (returnFocus = true) => {
+      if (!isOpen()) return;
+      menu.setAttribute('hidden', '');
+      btn.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('click', onAway);
+      if (returnFocus) btn.focus();
+    };
+    const onAway = () => close(false);
+    const commit = (item: HTMLElement) => {
       const v = item.getAttribute('data-val') ?? '';
       root.dataset.value = v;
       labelEl.textContent = labelOf(v);
-      root.querySelectorAll('.ui-dd-item').forEach((x) => x.classList.toggle('sel', x === item));
-      menu.setAttribute('hidden', '');
+      items.forEach((x) => {
+        const sel = x === item;
+        x.classList.toggle('sel', sel);
+        x.setAttribute('aria-selected', sel ? 'true' : 'false');
+      });
+      close();
       onChange?.(v);
-    }));
+    };
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (isOpen()) close(false);
+      else open(Math.max(0, items.findIndex((it) => it.classList.contains('sel'))));
+    });
+    // tabindex=-1 keeps options out of the Tab order but programmatically focusable.
+    items.forEach((item) => {
+      item.tabIndex = -1;
+      item.addEventListener('click', () => commit(item));
+    });
+    root.addEventListener('keydown', (e) => {
+      const action = dropdownKeyNav(e.key, isOpen(), focusedIndex(), items.length);
+      if (action.kind === 'none') return;
+      // Tab closes the menu and returns focus to the trigger button (a real
+      // tab-order element) WITHOUT preventDefault, so the native Tab/Shift+Tab
+      // then deterministically advances/retreats from there. Without returning
+      // focus, display:none-ing the focused option would drop focus to <body>.
+      if (action.kind === 'tab') { close(true); return; }
+      e.preventDefault();
+      switch (action.kind) {
+        case 'open': open(action.index); break;
+        case 'move': items[action.index]?.focus(); break;
+        case 'select': { const cur = items[focusedIndex()]; if (cur) commit(cur); break; }
+        case 'close': close(); break;
+      }
+    });
     return root;
+  }
+
+  // Reset a buildDropdown's visible label + dataset.value + aria-selected to a
+  // value in place, WITHOUT firing onChange or rebuilding the node. Used to
+  // revert the language picker after a failed locale switch so the trigger never
+  // advertises a language that never loaded (and so the adjacent aria-live status
+  // node survives to announce the failure). Mirrors commit()'s DOM writes.
+  private setDropdownValue(root: HTMLElement, value: string): void {
+    const items = [...root.querySelectorAll<HTMLElement>('.ui-dd-item')];
+    const match = items.find((x) => x.getAttribute('data-val') === value) ?? null;
+    root.dataset.value = value;
+    const labelEl = root.querySelector('.ui-dd-label');
+    if (labelEl && match) labelEl.textContent = match.textContent;
+    items.forEach((x) => {
+      const sel = x === match;
+      x.classList.toggle('sel', sel);
+      x.setAttribute('aria-selected', sel ? 'true' : 'false');
+    });
   }
 
   // classic-MMO-style choice-node picker: clicking an octagon node opens a flyout of its
@@ -7392,7 +7467,7 @@ export class Hud {
         this.applyLoadoutBar(lo.bar);
         this.talentStage = cloneAllocation(lo.alloc);
         this.renderTalents();
-      }, t('game.talents.loadouts')));
+      }, t('game.talents.loadouts'), { ariaLabel: t('game.talents.loadouts') }));
     }
     el.querySelector('[data-act="del"]')?.addEventListener('click', () => {
       if (this.sim.activeLoadout < 0) { this.showError(t('game.talents.selectBuildFirst')); return; }
@@ -7872,7 +7947,11 @@ export class Hud {
       { value: 'cheating', label: t('hud.report.reasons.cheating') },
       { value: 'offensive_name_or_chat', label: t('hud.report.reasons.offensiveNameOrChat') },
       { value: 'other', label: t('hud.report.reasons.other') },
-    ], 'harassment');
+    ], 'harassment', undefined, undefined, { ariaLabel: t('hud.report.reason') });
+    // Give the trigger the id the <label for="report-reason"> points at, so the
+    // label (which lost its original target when the slot div was replaced)
+    // associates with a real focusable control again.
+    reasonDD.querySelector('.ui-dd-btn')?.setAttribute('id', 'report-reason');
     el.querySelector('#report-reason-slot')?.replaceWith(reasonDD);
     el.querySelectorAll('[data-close]').forEach((btn) => btn.addEventListener('click', () => { el.style.display = 'none'; }));
     const submit = $('#report-submit') as HTMLButtonElement;
@@ -8556,9 +8635,19 @@ export class Hud {
     const fmt = opts?.fmt ?? ((v: number) => formatNumber(v, { style: 'percent', maximumFractionDigits: 0 }));
     const readout = () => fmt(hooks.settings.get(key));
     val.textContent = readout();
+    // Paint a gold fill up to the current value on every engine (CSS alone can't
+    // read the value; --range-fill drives the webkit track gradient and Firefox's
+    // native progress is recolored to match). Set initially + on every input.
+    const paintFill = () => {
+      const min = Number(slider.min), max = Number(slider.max), v = Number(slider.value);
+      const pct = max > min ? ((v - min) / (max - min)) * 100 : 0;
+      slider.style.setProperty('--range-fill', `${Math.max(0, Math.min(100, pct))}%`);
+    };
+    paintFill();
     slider.addEventListener('input', () => {
       hooks.onSettingChange(key, Number(slider.value));
       val.textContent = readout();
+      paintFill();
     });
     row.append(name, slider, val);
     parent.appendChild(row);
@@ -8795,48 +8884,49 @@ export class Hud {
     const name = document.createElement('span');
     name.className = 'set-name';
     name.textContent = t('hud.options.language');
-    const select = document.createElement('select');
-    select.className = 'lang-select-dropdown set-lang-select';
-    select.setAttribute('aria-label', t('hud.options.language'));
-    for (const lang of supportedLanguages) {
-      const opt = document.createElement('option');
-      opt.value = lang;
-      opt.textContent = LANGUAGE_ENDONYMS[lang];
-      select.appendChild(opt);
-    }
-    select.value = getLanguage();
+    // Custom gold-themed dropdown (.ui-dd) rather than a native <select>, so the
+    // open option list matches the MMO theme; buildDropdown carries the listbox
+    // ARIA + keyboard semantics a native <select> would have.
+    const options = supportedLanguages.map((lang) => ({ value: lang, label: LANGUAGE_ENDONYMS[lang] }));
     // aria-live status for the async locale load (loading / load-failed).
     const status = document.createElement('span');
     status.className = 'visually-hidden';
     status.setAttribute('role', 'status');
     status.setAttribute('aria-live', 'polite');
-    select.addEventListener('change', () => {
-      const selected = select.value;
-      if (!isSupportedLanguage(selected) || selected === getLanguage()) return;
+    let busy = false;
+    const dropdown = this.buildDropdown(options, getLanguage(), (selected) => {
+      if (busy || !isSupportedLanguage(selected) || selected === getLanguage()) return;
       audio.click();
-      select.disabled = true;
+      busy = true;
       void hooks.changeLanguage(selected, (msg) => { status.textContent = msg; })
         .then((ok) => {
-          if (!ok) {
-            // The locale chunk failed to load — restore the picker to the locale that stayed active.
-            select.value = getLanguage();
-          } else if (this.optionsOpen && this.optionsView === 'interface') {
-            // Rebuild the panel in the new language, then return keyboard focus to the
-            // fresh picker (the control the user just operated) so it isn't lost to <body>.
-            // The refocus also lets screen readers announce the switch via the select's value.
-            this.renderInterface();
-            this.focusFirstInteractive($('#options-menu'), '.set-lang-select');
+          if (ok) {
+            // Success: rebuild the panel in the new language (re-creates this picker
+            // at the now-active locale).
+            if (this.optionsOpen && this.optionsView === 'interface') {
+              this.renderInterface();
+              // Return keyboard focus to the fresh picker trigger so it isn't lost to <body>.
+              this.focusFirstInteractive($('#options-menu'), '.set-lang-select .ui-dd-btn');
+            }
+          } else {
+            // Graceful failure (the locale chunk failed to load): the active locale
+            // is unchanged. Revert the trigger IN PLACE — don't renderInterface(),
+            // which would rebuild and wipe the aria-live `status` node that
+            // changeLanguage just wrote the failure message into.
+            this.setDropdownValue(dropdown, getLanguage());
           }
         })
         .catch(() => {
-          // A relocalization step threw after the locale loaded; keep the picker usable and
-          // surface the failure rather than leaving the control stuck disabled.
-          select.value = getLanguage();
+          // Defensive: changeLanguage swallows load errors and resolves false, so
+          // this is unreachable today — but if it ever throws, keep the same
+          // in-place revert + intact live region rather than rebuilding.
           status.textContent = t('settings.languageLoadFailed');
+          this.setDropdownValue(dropdown, getLanguage());
         })
-        .finally(() => { select.disabled = false; });
-    });
-    row.append(name, select);
+        .finally(() => { busy = false; });
+    }, undefined, { ariaLabel: t('hud.options.language') });
+    dropdown.classList.add('set-lang-select');
+    row.append(name, dropdown);
     parent.append(row, status);
   }
 

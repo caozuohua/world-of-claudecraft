@@ -262,6 +262,93 @@
     background: transparent;
   }
 
+  /* ---------- MMO-themed native form controls ----------
+     Global element-level theming so every slider/spinner/checkbox/textarea
+     inherits the dark-fantasy look (matches the scrollbar palette above),
+     replacing the default browser chrome. Keyed off element + type so new
+     controls are covered for free. Native <select> menus can't be themed
+     cross-browser, so those are migrated to the .ui-dd custom dropdown. */
+
+  /* Range sliders — inset groove with gold fill + a raised gem thumb. */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 18px;
+    background: transparent;
+    cursor: var(--cursor-point);
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 3px;
+    border: 1px solid var(--scrollbar-border);
+    /* gold fill up to --range-fill (set per-slider in JS), dark groove beneath */
+    background:
+      linear-gradient(180deg, #ffef9e 0%, var(--gold) 100%) no-repeat,
+      linear-gradient(180deg, #15110a 0%, #0b0b10 100%);
+    background-size: var(--range-fill, 0%) 100%, 100% 100%;
+    box-shadow: inset 0 1px 2px #000a;
+  }
+  input[type="range"]::-moz-range-track {
+    height: 6px;
+    border-radius: 3px;
+    border: 1px solid var(--scrollbar-border);
+    background: linear-gradient(180deg, #15110a 0%, #0b0b10 100%);
+    box-shadow: inset 0 1px 2px #000a;
+  }
+  input[type="range"]::-moz-range-progress {
+    height: 6px;
+    border-radius: 3px;
+    /* gold to match the webkit fill (was the brown scrollbar palette) */
+    background: linear-gradient(180deg, #ffef9e 0%, var(--gold) 100%);
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    margin-top: -6px; /* center the 16px thumb on the 6px track */
+    border-radius: 50%;
+    border: 1px solid #2a2008;
+    background: radial-gradient(circle at 35% 30%, #ffef9e 0%, var(--gold) 45%, #b8860b 100%);
+    box-shadow: 0 1px 3px #000b, 0 0 5px var(--color-primary-glow);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid #2a2008;
+    background: radial-gradient(circle at 35% 30%, #ffef9e 0%, var(--gold) 45%, #b8860b 100%);
+    box-shadow: 0 1px 3px #000b, 0 0 5px var(--color-primary-glow);
+  }
+  input[type="range"]:hover::-webkit-slider-thumb { background: radial-gradient(circle at 35% 30%, #fff7c8 0%, #ffe14d 45%, #c79410 100%); }
+  input[type="range"]:hover::-moz-range-thumb { background: radial-gradient(circle at 35% 30%, #fff7c8 0%, #ffe14d 45%, #c79410 100%); }
+  input[type="range"]:focus-visible { outline: none; }
+  input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--color-border-focus), 0 1px 3px #000b; }
+  input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(--color-border-focus), 0 1px 3px #000b; }
+
+  /* Number inputs — drop the cramped native spinner arrows (all such inputs
+     have explicit min/max validation, so the micro-steppers add nothing but
+     browser chrome and sub-40px tap targets). */
+  input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; appearance: none; margin: 0; }
+
+  /* Checkboxes — gold accent + themed focus ring instead of OS blue. */
+  input[type="checkbox"], input[type="radio"] { accent-color: var(--gold); cursor: var(--cursor-point); }
+  input[type="checkbox"]:focus-visible, input[type="radio"]:focus-visible {
+    outline: 2px solid var(--color-border-focus); outline-offset: 2px;
+  }
+
+  /* Textareas — keep vertical resize but swap the native diagonal grip for a
+     themed gold corner that matches the chat-window resize grip. */
+  textarea { resize: vertical; }
+  textarea::-webkit-resizer {
+    background:
+      linear-gradient(135deg, transparent 0 46%, var(--scrollbar-border) 46% 54%, transparent 54% 71%, var(--scrollbar-border) 71% 79%, transparent 79%);
+    border-bottom-right-radius: 4px;
+  }
+
   [hidden] { display: none !important; }
   html, body {
     width: var(--app-vw); height: var(--app-vh); min-width: 100%; min-height: 100%;
@@ -1239,6 +1326,14 @@
   .ui-dd-item { padding: 5px 8px; font-size: 12px; color: #e8dcb0; border-radius: 3px; cursor: var(--cursor-point); white-space: nowrap; }
   .ui-dd-item:hover { background: #ffffff12; }
   .ui-dd-item.sel { color: var(--gold); }
+  .ui-dd-item:focus-visible { outline: none; background: #ffffff1f; color: var(--gold); box-shadow: inset 0 0 0 1px var(--color-border-focus); }
+  /* Touch: option rows are role="option" tap targets — meet the 40px / 16px floor. */
+  @media (pointer: coarse) {
+    .ui-dd-item { min-height: 40px; display: flex; align-items: center; font-size: 16px; }
+    /* The custom trigger replaces a native <select>; keep its ≥40px tap target
+       (the global coarse floor only covers input/textarea/select). */
+    .ui-dd-btn { min-height: 40px; }
+  }
   /* report dialog: dropdown drops downward (dialog sits high), full width */
   #report-window .ui-dd { display: block; }
   #report-window .ui-dd-menu { bottom: auto; top: calc(100% + 4px); }
