@@ -8,6 +8,7 @@ import {
   pruneChatLogs, pruneClientPerfReports, searchCharacters, characterCountsByRealm, moderationStatusForAccount, renameCharacter,
   findCharacterReportTargetByName, topArenaRatings, topLifetimeXp, chatMuteStatusForAccount, loadAccountCosmetics,
   referralCountForAccount, primarySlugForAccount, lifetimeXpStanding, isAdminAccount,
+  accountById, characterCountForAccount, updatePasswordHash, revokeTokensExcept, setAccountEmail, setAccountDeactivated,
 } from './db';
 import { virtualLevel } from '../src/sim/types';
 import { Sim } from '../src/sim/sim';
@@ -20,10 +21,13 @@ import {
   hashPassword, verifyPassword, newToken, validUsernameShape, offensiveName, validPassword, normalizeCharName,
 } from './auth';
 import { json, readBody, isUniqueViolation } from './http_util';
-import { requestIp, rateLimited, authThrottled, recordAuthFailure, clearAuthFailures, cardUploadRateLimited } from './ratelimit';
+import { requestIp, rateLimited, authThrottled, recordAuthFailure, clearAuthFailures, cardUploadRateLimited, wocBalanceRateLimited } from './ratelimit';
 import { verifyTurnstile } from './turnstile';
 import { handleWalletChallenge, handleWalletLink, handleWalletGet, handleWalletUnlink } from './wallet';
-import { handleWocBalance } from './woc_balance';
+import { handleWocBalance, parseWocBalanceQuery } from './woc_balance';
+import {
+  handleAccountWhoami, handleAccountChangePassword, handleAccountLogout, handleAccountSetEmail, handleAccountDeactivate,
+} from './account';
 import { handleCardUpload, handleCardRoutes, captureReferral, cardUploadContentLengthTooLarge } from './player_card';
 import { handleAdminApi } from './admin';
 import { pruneExpiredBlockedIps } from './ip_block_db';
@@ -49,6 +53,10 @@ const STATIC_PAGE_ALIASES = new Map([
   ['/social-media-links/', '/links.html'],
   ['/play', '/play.html'],
   ['/play/', '/play.html'],
+  ['/privacy', '/privacy.html'],
+  ['/privacy/', '/privacy.html'],
+  ['/terms', '/terms.html'],
+  ['/terms/', '/terms.html'],
 ]);
 // How long chat logs are kept (0 = forever); pruned at boot and daily.
 const CHAT_LOG_RETENTION_DAYS = Number(process.env.CHAT_LOG_RETENTION_DAYS ?? 90);
@@ -205,6 +213,13 @@ async function bearerAccount(req: http.IncomingMessage): Promise<number | null> 
   const m = /^Bearer ([a-f0-9]{64})$/.exec(auth);
   if (!m) return null;
   return accountForToken(m[1]);
+}
+
+// Raw bearer token string (or null) — needed when an account action must keep
+// the caller's own session alive while revoking the rest (password change).
+function bearerToken(req: http.IncomingMessage): string | null {
+  const m = /^Bearer ([a-f0-9]{64})$/.exec(req.headers.authorization ?? '');
+  return m ? m[1] : null;
 }
 
 async function bearerActiveAccount(req: http.IncomingMessage, res: http.ServerResponse): Promise<number | null> {
@@ -587,6 +602,42 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       const entries = await getReleases();
       return json(res, 200, { repo: GITHUB_REPO, releases: entries.slice(0, limit) });
     }
+    // Account self-service portal — all bearer-auth, account-scoped. Each route
+    // delegates to an exported, testable handler in server/account.ts (mirroring
+    // server/wallet.ts); main.ts only resolves the bearer account first.
+    if (req.method === 'GET' && url === '/api/account') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleAccountWhoami(res, accountId);
+    }
+    if (req.method === 'POST' && url === '/api/account/password') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      // Resolve the caller's own token once so the revoke inside the handler can
+      // never accidentally fall back to null (which would nuke this session too).
+      const callerToken = bearerToken(req);
+      if (!callerToken) return json(res, 401, { error: 'not authenticated' });
+      return handleAccountChangePassword(req, res, accountId, callerToken);
+    }
+    if (req.method === 'POST' && url === '/api/account/logout') {
+      const callerToken = bearerToken(req);
+      if (!callerToken || await accountForToken(callerToken) === null) return json(res, 401, { error: 'not authenticated' });
+      return handleAccountLogout(res, callerToken);
+    }
+    if (req.method === 'POST' && url === '/api/account/email') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleAccountSetEmail(req, res, accountId);
+    }
+    if (req.method === 'POST' && url === '/api/account/deactivate') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleAccountDeactivate(req, res, accountId, {
+        anyCharacterOnline: (characterIds) =>
+          [...game.clients.values()].some((s) => s.characterId != null && characterIds.includes(s.characterId)),
+        disconnectAccount: (id, reason) => game.disconnectAccount(id, reason),
+      });
+    }
     // Non-custodial Solana wallet linking — all account-scoped.
     if (req.method === 'POST' && url === '/api/wallet/link/challenge') {
       const accountId = await bearerActiveAccount(req, res);
@@ -612,12 +663,13 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
     // server-side so it never ships in the client bundle. Public (on-chain
     // balances are public) but narrow + IP rate-limited + per-wallet cached.
     if (req.method === 'GET' && url === '/api/woc/balance') {
-      if (rateLimited(req)) {
+      if (wocBalanceRateLimited(req)) {
         recordUsageMetric('woc.balance.rate_limited');
         return json(res, 429, { error: 'rate limited' });
       }
-      const owner = new URLSearchParams((req.url ?? '').split('?')[1] ?? '').get('owner') ?? '';
-      return handleWocBalance(res, owner);
+      // `fresh=1` is parsed AFTER the IP rate-limit above, so it can't be used to hammer the RPC.
+      const { owner, fresh } = parseWocBalanceQuery(req.url ?? '');
+      return handleWocBalance(res, owner, fresh);
     }
     // Shareable player card: publish (PNG body) + referral stats for the card.
     if (req.method === 'POST' && url === '/api/card') {
