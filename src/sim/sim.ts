@@ -9530,9 +9530,19 @@ export class Sim {
       const nb = ITEMS[b.itemId]?.name ?? b.itemId;
       return na.localeCompare(nb) || a.price - b.price;
     });
-    const listings = sorted.slice(0, MARKET_WIRE_LIMIT).map((l) => ({
+    // Always wire the seller their own listings first, then fill the rest of the
+    // wire budget with everyone else's. Without this, on a busy shared market a
+    // seller's goods can sort past MARKET_WIRE_LIMIT and never reach them — the
+    // SELL tab would then read "12/12" while only a handful of their listings
+    // are visible. MARKET_MAX_LISTINGS (12) ≪ MARKET_WIRE_LIMIT (120), so a
+    // seller's own goods always fit alongside a healthy slice of the market.
+    const isMine = (l: MarketListing) => !l.house && l.sellerKey === meta.name;
+    const mineSorted = sorted.filter(isMine);
+    const others = sorted.filter((l) => !isMine(l));
+    const wired = [...mineSorted, ...others.slice(0, Math.max(0, MARKET_WIRE_LIMIT - mineSorted.length))];
+    const listings = wired.map((l) => ({
       id: l.id, sellerName: l.sellerName, itemId: l.itemId, count: l.count,
-      price: l.price, mine: !l.house && l.sellerKey === meta.name, house: l.house,
+      price: l.price, mine: isMine(l), house: l.house,
     }));
     const col = this.marketCollections.get(meta.name);
     const myListingCount = this.marketListings.reduce((n, l) => n + (!l.house && l.sellerKey === meta.name ? 1 : 0), 0);
