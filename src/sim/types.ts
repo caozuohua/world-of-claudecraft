@@ -789,6 +789,7 @@ export interface Entity {
   templateId: string; // mob/npc template id, or class for player
   name: string;
   level: number;
+  guild: string;
   pos: Vec3;
   prevPos: Vec3; // for render interpolation
   facing: number; // radians, 0 = +Z

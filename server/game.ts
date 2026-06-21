@@ -211,6 +211,7 @@ function identityFields(e: Entity): Record<string, unknown> {
   if (e.skin) out.sk = e.skin;
   if (e.holderTier) out.ht = e.holderTier; // $WOC holder-tier flair (cosmetic)
   if (e.holderBalance) out.hb = Math.round(e.holderBalance); // exact $WOC, for inspect
+  if (e.guild) out.gd = e.guild;
   if (e.dungeonId) out.dgn = e.dungeonId;
   if (e.objectItemId) out.obj = e.objectItemId;
   if (e.scale !== 1) out.sc = e.scale;
@@ -453,6 +454,10 @@ export class GameServer {
     try {
       const snap = await this.social.snapshot(charId);
       this.send(session, { t: 'social', ...snap });
+      // Stamp the guild name onto the player's world entity so it rides the
+      // identity wire and shows under their nameplate for everyone nearby. This
+      // is the single chokepoint hit on join and on every membership change.
+      this.sim.setPlayerGuild(session.pid, snap.guild?.name ?? '');
       // remember who to track for the live position push (friends + guildmates)
       session.socialTrackedIds = [
         ...snap.friends.map((f) => f.id),

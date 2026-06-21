@@ -362,6 +362,7 @@ interface EntityView {
   clickTarget: THREE.Object3D;
   nameplate: HTMLDivElement;
   nameEl: HTMLDivElement;
+  guildEl: HTMLDivElement; // <Guild> tag under the name (players only)
   hpBar: HTMLDivElement;
   hpFill: HTMLDivElement;
   emoteEl: HTMLDivElement;
@@ -2486,12 +2487,16 @@ export class Renderer {
     const nameEl = document.createElement('div');
     nameEl.className = 'np-name';
     nameEl.textContent = e.kind === 'object' ? objectDisplayName(e) : e.name;
+    // guild tag under the name (players in a guild); hidden until set
+    const guildEl = document.createElement('div');
+    guildEl.className = 'np-guild';
+    guildEl.style.display = 'none';
     const hpBar = document.createElement('div');
     hpBar.className = 'np-hpbar';
     const hpFill = document.createElement('div');
     hpFill.className = 'np-hpfill';
     hpBar.appendChild(hpFill);
-    // overhead cast bar — hidden until the entity starts casting/channeling
+    // overhead cast bar: hidden until the entity starts casting/channeling
     const castBar = document.createElement('div');
     castBar.className = 'np-castbar';
     castBar.style.display = 'none';
@@ -2500,7 +2505,7 @@ export class Renderer {
     const castLabel = document.createElement('div');
     castLabel.className = 'np-castlabel';
     castBar.append(castFill, castLabel);
-    np.append(emoteEl, raidMark, comboRow, marker, tierEl, nameEl, hpBar, castBar);
+    np.append(emoteEl, raidMark, comboRow, marker, tierEl, nameEl, guildEl, hpBar, castBar);
     this.nameplateLayer.appendChild(np);
 
     // object views gate their own casters; character shadows live in visual
@@ -2508,7 +2513,7 @@ export class Renderer {
     if (!visual) collectCasters(group, objectCasters);
     this.views.set(e.id, {
       group, visual, visualKey: visual ? visualKeyFor(e) : null, visualPoolKey, sheepVisual: null, bearVisual: null, catVisual: null, travelVisual: null, height, clickTarget,
-      nameplate: np, nameEl, hpBar, hpFill, emoteEl, emoteIconEl, emoteLabelEl, markerEl: marker, raidMarkEl: raidMark, comboRow, comboPips, castBar, castFill, castLabel, tierEl, sparkle, objectMesh, objectPoolKey, portal,
+      nameplate: np, nameEl, guildEl, hpBar, hpFill, emoteEl, emoteIconEl, emoteLabelEl, markerEl: marker, raidMarkEl: raidMark, comboRow, comboPips, castBar, castFill, castLabel, tierEl, sparkle, objectMesh, objectPoolKey, portal,
       nameplateDisplay: 'none', nameplateTransform: '', nameplateSig: '', nameplateHpWidth: '', comboSig: '', tierValue: 0,
       objectCasters, shadowOn: true, isFar: false, lastOverheadEmoteKey: null,
       lastX: e.pos.x, lastZ: e.pos.z, skin: e.skin, liveScale: e.scale,
@@ -3434,11 +3439,13 @@ export class Renderer {
         const objName = objectDisplayName(e);
         this.setNameplateStatic(v, `object|${objName}`, objName, '#c084ff', 'none', '', 'np-marker', '1');
       } else if (e.kind === 'player') {
-        // other players: friendly blue with an hp bar
+        // other players: friendly blue with an hp bar; <Guild> tag under the name.
+        // Self has no overhead nameplate, so its guild line stays hidden too.
         const opacity = e.auras.some((a) => a.kind === 'stealth') ? '0.55' : '1';
         const nameDisplay = isSelf ? 'none' : '';
         const hpDisplay = e.dead || isSelf ? 'none' : '';
-        this.setNameplateStatic(v, `player|${e.name}|${nameDisplay}|${hpDisplay}|${opacity}`, e.name, '#7fb8ff', hpDisplay, '', 'np-marker', opacity);
+        const guild = isSelf ? '' : e.guild;
+        this.setNameplateStatic(v, `player|${e.name}|${guild}|${nameDisplay}|${hpDisplay}|${opacity}`, e.name, '#7fb8ff', hpDisplay, '', 'np-marker', opacity, '', guild);
         v.nameEl.style.display = nameDisplay;
         // $WOC holder-tier flair, shown on OTHER players (own nameplate is hidden).
         this.setNameplateTier(v, isSelf ? 0 : (e.holderTier ?? 0));
@@ -3491,6 +3498,7 @@ export class Renderer {
     markerClass: string,
     opacity: string,
     frame = '',
+    guild = '',
   ): void {
     if (sig === v.nameplateSig) return;
     v.nameplateSig = sig;
@@ -3502,6 +3510,13 @@ export class Renderer {
     v.markerEl.textContent = marker;
     v.markerEl.className = markerClass;
     v.nameplate.style.opacity = opacity;
+    // guild tag rides in the sig (players only); empty for every other kind
+    if (guild) {
+      v.guildEl.textContent = `<${guild}>`;
+      v.guildEl.style.display = '';
+    } else {
+      v.guildEl.style.display = 'none';
+    }
   }
 
   // Show/hide the $WOC holder-tier badge on a player's nameplate. Cheap-diffed

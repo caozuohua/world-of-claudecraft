@@ -1063,6 +1063,14 @@ export class Sim {
     this.setPlayerSkin(this.primaryId, skin, catalog);
   }
 
+  /** Set a player's guild name (online only) so it rides the entity wire and
+   *  shows under their nameplate. Guilds live in the server social DB, not the
+   *  Sim, so this is a passive display field. Offline/headless leave it ''. */
+  setPlayerGuild(pid: number, guild: string): void {
+    const e = this.entities.get(pid);
+    if (e) e.guild = guild;
+  }
+
   /** Cosmetic skin-select event: rolls a rarity rank (once) and emits the
    *  personal `skinEvent` cue that opens the client overlay. Re-using the token
    *  re-shows the already-rolled rank — no reroll — so a player can't spam-roll.

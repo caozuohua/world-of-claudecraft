@@ -145,6 +145,10 @@ describe('collision & terrain', () => {
     expect(open.z).toBe(-40);
   });
 
+  it('keeps the Fenbridge south approach clear of generated rock blockers', () => {
+    expect(isBlocked(SEED, 2, 212, 0.5)).toBe(false);
+  });
+
   it('camera ghosts through village buildings (hidden instead of pulling in)', () => {
     const groundY = groundHeight(10, 4, SEED);
     const eyeY = groundY + 2;
