@@ -186,6 +186,13 @@ export const es_ES: EnTranslations = {
       "clock24h": "24 horas",
       "note": "Antepone a cada nueva línea de chat la hora en que llegó, p. ej. [14:32]. Solo afecta a los mensajes recibidos mientras la opción está activada."
     },
+    "chatWindow": {
+      "move": "Arrastra para mover la ventana de chat",
+      "resize": "Arrastra para cambiar el tamaño de la ventana de chat",
+      "reset": "Restablecer ventana de chat",
+      "resetAction": "Restablecer",
+      "note": "Arrastra la pestaña del chat para mover la ventana, o el tirador de la esquina para cambiar su tamaño. Restablecer la devuelve a su posición y tamaño predeterminados."
+    },
     "swing": {
       "ready": "Golpe",
       "seconds": "{seconds} s"
@@ -233,7 +240,14 @@ export const es_ES: EnTranslations = {
     "options": {
       "clickMoveLeft": "Clic izquierdo",
       "clickMoveRight": "Clic derecho",
+      "browserEffects": "Efectos del navegador",
+      "browserEffectsAuto": "Auto",
+      "browserEffectsFull": "Completos",
+      "browserEffectsReduced": "Reducidos",
+      "browserEffectsMinimal": "Mínimos",
+      "browserEffectsNote": "El modo automático atenúa los efectos CSS pesados (desenfoque, brillo, movimiento de fondo) según tu navegador y dispositivo. Redúcelo manualmente si la interfaz va lenta.",
       "footstepSounds": "Sonidos de pasos",
+      "clickFeedback": "Marcador de clic",
       "showWalletOnCharacterScreen": "Mostrar cartera en la pantalla de personajes",
       "showWalletOnPlayerCard": "Mostrar cartera en la tarjeta de jugador",
       "uiScale": "Escala de la interfaz",
@@ -391,6 +405,24 @@ export const es_ES: EnTranslations = {
         "many": "Quién: {count} jugadores conectados en {realm}.",
         "other": "Quién: {count} jugadores conectados en {realm}."
       }
+    },
+    "bugReport": {
+      "menuButton": "Informar de un error",
+      "realm": "Reino",
+      "character": "Personaje",
+      "position": "Posición",
+      "unknown": "Desconocido",
+      "description": "¿Qué salió mal?",
+      "descriptionPlaceholder": "Describe el error: qué hiciste, qué esperabas y qué ocurrió.",
+      "includeScreenshot": "Incluir captura de pantalla",
+      "screenshotAlt": "Captura de pantalla de la vista actual adjunta a este informe de error",
+      "submit": "Enviar informe",
+      "submitted": "Informe de error enviado. ¡Gracias!",
+      "submittedNoShot": "Informe de error enviado, pero la captura de pantalla era demasiado grande para incluirla.",
+      "describeFirst": "Describe el error antes de enviarlo.",
+      "tooLarge": "Ese informe es demasiado grande para enviarlo. Inténtalo de nuevo sin la captura de pantalla.",
+      "rateLimited": "Has enviado varios informes hace poco. Espera un momento antes de enviar otro.",
+      "failed": "No se pudo enviar el informe de error. Inténtalo de nuevo."
     },
     "paperdoll": {
       "unequipAria": "Desequipar {item}",
@@ -1070,7 +1102,9 @@ export const es_ES: EnTranslations = {
       "webLoginOnly": "El inicio de sesión solo se permite desde el cliente del juego.",
       "accountSuspended": "Esta cuenta está suspendida hasta {date}.",
       "alreadyInWorld": "El personaje ya está en el mundo.",
-      "renameBeforeEntering": "Este personaje debe cambiar de nombre antes de entrar en el mundo."
+      "takenOver": "Otra sesión tomó el control de tu personaje.",
+      "renameBeforeEntering": "Este personaje debe cambiar de nombre antes de entrar en el mundo.",
+      "renameNotPermitted": "No se permite cambiar el nombre de este personaje."
     }
   },
   "realm": {
@@ -1096,6 +1130,9 @@ export const es_ES: EnTranslations = {
     "noneYet": "Aún no hay personajes. Crea uno abajo.",
     "levelClass": "Nivel {level} {className}",
     "inWorld": "en el mundo",
+    "takeOver": "Tomar control",
+    "inWorldHint": "Ya está en el mundo. Cierra la sesión en otro lugar, o toma el control.",
+    "takeOverConfirm": "Esto desconectará a este personaje de otra sesión y lo traerá aquí. ¿Continuar?",
     "renameRequired": "cambio de nombre requerido",
     "delete": "Eliminar",
     "rename": "Renombrar",
@@ -1823,6 +1860,10 @@ export const es_ES: EnTranslations = {
       "completedStatus": "Completada",
       "returnTo": "Regresa con {name}",
       "abandon": "Abandonar misión",
+      "abandonConfirmTitle": "Abandonar misión",
+      "abandonConfirmBody": "¿Seguro que quieres abandonar {name}?",
+      "abandonConfirm": "Sí",
+      "abandonCancel": "Cancelar",
       "suggestedPlayers": "Jugadores sugeridos: {count}"
     },
     "dialog": {

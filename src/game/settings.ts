@@ -16,6 +16,13 @@ export const SETTING_RANGES = {
   // 1 low, 2 medium, 3 high, 4 ultra, 5 advanced. The renderer reads this
   // from localStorage during startup because tier choice controls preload.
   graphicsPreset: { min: 1, max: 5, def: 4 },
+  // Adaptive browser-effects tier for the DOM/CSS layer (distinct from the WebGL
+  // graphicsPreset above). 0 = Auto: detect the engine (Chromium/WebKit/Gecko),
+  // version and desktop-vs-mobile and tone down the most GPU-expensive CSS
+  // (backdrop-filter, big blurs/shadows, decorative background animations) so
+  // weaker engines stay smooth. 1 = Full (force all effects), 2 = Reduced,
+  // 3 = Minimal. Purely presentational; never touches the sim. See browser_env.ts.
+  browserEffects: { min: 0, max: 3, def: 0 },
   // Advanced-only: 0 keeps terrain/foliage cheap, 1 enables high terrain.
   terrainDetail: { min: 0, max: 1, def: 1 },
   foliageDensity: { min: 0, max: 1, def: 1 },
@@ -153,10 +160,15 @@ export const BOOL_SETTINGS = {
   // players who want them back can re-enable. Independent of the SFX volume
   // slider — jump/land/splash/swim and combat one-shots are unaffected.
   footstepSfx: { def: false },
+  // on by default: a brief OSRS-style ground marker (an expanding ring plus a
+  // crossed "X") where you left-click in the world, gold for a normal click and
+  // red when the click lands on a hostile. Purely a local presentation cue; it
+  // never touches sim state. Off removes the marker entirely.
+  clickFeedback: { def: true },
   // off by default: swap the looping landing-page trailer for a static, dimmed,
   // high-contrast backdrop so the start-screen text stays legible (and the
   // 5.7 MB video is never fetched). Forced on regardless for phones / Save-Data /
-  // prefers-reduced-motion — see shouldUseStaticBackdrop in landing_backdrop.ts.
+  // prefers-reduced-motion, see shouldUseStaticBackdrop in landing_backdrop.ts.
   landingHighContrast: { def: false },
   // off by default (expanded): when on, the on-screen quest tracker is collapsed
   // to just its "Quests (N)" header. Toggled by clicking the tracker header; kept

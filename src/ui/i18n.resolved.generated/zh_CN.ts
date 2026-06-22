@@ -186,6 +186,13 @@ export const zh_CN: EnTranslations = {
       "clock24h": "24小时制",
       "note": "在每条新聊天消息前加上其到达时间，例如 [14:32]。仅对开启此选项后收到的消息生效。"
     },
+    "chatWindow": {
+      "move": "拖动以移动聊天窗口",
+      "resize": "拖动以调整聊天窗口大小",
+      "reset": "重置聊天窗口",
+      "resetAction": "重置",
+      "note": "拖动聊天标签栏可移动窗口，拖动右下角手柄可调整大小。重置可恢复到默认位置和大小。"
+    },
     "swing": {
       "ready": "挥击",
       "seconds": "{seconds}秒"
@@ -233,7 +240,14 @@ export const zh_CN: EnTranslations = {
     "options": {
       "clickMoveLeft": "左键",
       "clickMoveRight": "右键",
+      "browserEffects": "浏览器特效",
+      "browserEffectsAuto": "自动",
+      "browserEffectsFull": "完整",
+      "browserEffectsReduced": "精简",
+      "browserEffectsMinimal": "最低",
+      "browserEffectsNote": "自动模式会根据你的浏览器和设备调低高开销的 CSS 特效（模糊、光晕、背景动画）。如果界面感觉卡顿，可手动降低。",
       "footstepSounds": "脚步声",
+      "clickFeedback": "点击标记",
       "showWalletOnCharacterScreen": "在角色界面显示钱包",
       "showWalletOnPlayerCard": "在玩家卡片显示钱包",
       "uiScale": "界面缩放",
@@ -391,6 +405,24 @@ export const zh_CN: EnTranslations = {
         "many": "查询：{realm}上有{count}名玩家在线。",
         "other": "查询：{realm}上有{count}名玩家在线。"
       }
+    },
+    "bugReport": {
+      "menuButton": "报告错误",
+      "realm": "服务器",
+      "character": "角色",
+      "position": "坐标",
+      "unknown": "未知",
+      "description": "出了什么问题？",
+      "descriptionPlaceholder": "描述这个错误：你做了什么、预期会发生什么、实际发生了什么。",
+      "includeScreenshot": "包含截图",
+      "screenshotAlt": "附加到此错误报告的当前画面截图",
+      "submit": "发送报告",
+      "submitted": "错误报告已发送。谢谢！",
+      "submittedNoShot": "错误报告已发送，但截图过大，未能一并附上。",
+      "describeFirst": "请先描述错误再发送。",
+      "tooLarge": "该报告过大，无法发送。请去掉截图后重试。",
+      "rateLimited": "你最近已发送多份报告。请稍后再发送。",
+      "failed": "无法发送错误报告。请重试。"
     },
     "paperdoll": {
       "unequipAria": "卸下 {item}",
@@ -1070,7 +1102,9 @@ export const zh_CN: EnTranslations = {
       "webLoginOnly": "只能从游戏客户端登录。",
       "accountSuspended": "此账号被停用至 {date}。",
       "alreadyInWorld": "角色已在世界中。",
-      "renameBeforeEntering": "此角色必须先改名才能进入世界。"
+      "takenOver": "你的角色已被另一个会话接管。",
+      "renameBeforeEntering": "此角色必须先改名才能进入世界。",
+      "renameNotPermitted": "不允许为此角色改名。"
     }
   },
   "realm": {
@@ -1096,6 +1130,9 @@ export const zh_CN: EnTranslations = {
     "noneYet": "还没有角色。请在下方创建一个。",
     "levelClass": "{level} 级 {className}",
     "inWorld": "在世界中",
+    "takeOver": "接管",
+    "inWorldHint": "已在世界中。请在别处登出，或接管会话。",
+    "takeOverConfirm": "这将使该角色从另一个会话断开并切换到此处。是否继续？",
     "renameRequired": "需要改名",
     "delete": "删除",
     "rename": "改名",
@@ -1823,6 +1860,10 @@ export const zh_CN: EnTranslations = {
       "completedStatus": "已完成",
       "returnTo": "返回 {name} 处",
       "abandon": "放弃任务",
+      "abandonConfirmTitle": "放弃任务",
+      "abandonConfirmBody": "确定要放弃{name}吗？",
+      "abandonConfirm": "是",
+      "abandonCancel": "取消",
       "suggestedPlayers": "建议玩家数：{count}"
     },
     "dialog": {

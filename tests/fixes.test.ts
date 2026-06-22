@@ -572,7 +572,7 @@ describe('boss loot and encounter resets', () => {
     expect(mob.loot).toBeNull();
   });
 
-  it('poor and common corpse drops open need-greed rolls among nearby party members', () => {
+  it('poor and common corpse drops are looted directly by the looter without need-greed rolls', () => {
     const sim = makeSim();
     const a = sim.playerId;
     const b = sim.addPlayer('mage', 'Bert');
@@ -590,12 +590,12 @@ describe('boss loot and encounter resets', () => {
     sim.events.length = 0;
     sim.lootCorpse(mob.id, a);
 
-    expect(sim.countItem('wolf_fang', a) + sim.countItem('wolf_fang', b)).toBe(0);
-    expect(sim.countItem('raw_mirror_trout', a) + sim.countItem('raw_mirror_trout', b)).toBe(0);
+    expect(sim.countItem('wolf_fang', a)).toBe(1);
+    expect(sim.countItem('raw_mirror_trout', a)).toBe(1);
+    expect(sim.countItem('wolf_fang', b)).toBe(0);
+    expect(sim.countItem('raw_mirror_trout', b)).toBe(0);
     const prompts = sim.events.filter((e) => e.type === 'lootRoll');
-    expect(prompts).toHaveLength(4);
-    expect(prompts.filter((e) => e.itemId === 'wolf_fang')).toHaveLength(2);
-    expect(prompts.filter((e) => e.itemId === 'raw_mirror_trout')).toHaveLength(2);
+    expect(prompts).toHaveLength(0);
     expect(mob.loot).toBeNull();
   });
 
@@ -1119,12 +1119,15 @@ describe('quest npc roles', () => {
     }
   });
 
-  it('despawns Varkas Boneguards after 60 seconds without damage and resets on damage taken', () => {
+  it('despawns Varkas Boneguards after 60 seconds out of combat without damage and resets on damage taken', () => {
     const sim = makeSim();
     const boneguard = createMob(909900, MOBS.varkas_boneguard, 19, { x: 0, y: 0, z: 0 });
     boneguard.maxHp = 1000;
     boneguard.hp = 1000;
     (sim as unknown as { addEntity(e: Entity): void }).addEntity(boneguard);
+    teleportTo(sim, 0, -2);
+    sim.player.maxHp = 100000;
+    sim.player.hp = sim.player.maxHp;
 
     for (let i = 0; i < 59 * 20; i++) sim.tick();
     expect(sim.entities.has(boneguard.id)).toBe(true);
@@ -1134,11 +1137,58 @@ describe('quest npc roles', () => {
     }).dealDamage(sim.player, boneguard, 5, false, 'physical', 'Test Strike', 'hit', true);
     expect(boneguard.damageIdleDespawnTimer).toBe(60);
 
+    boneguard.damageIdleDespawnTimer = 1;
+    boneguard.inCombat = true;
+    sim.tick();
+    expect(sim.entities.has(boneguard.id)).toBe(true);
+    expect(boneguard.damageIdleDespawnTimer).toBe(1);
+
+    teleportTo(sim, 100, 100);
+    boneguard.inCombat = false;
+    boneguard.aiState = 'idle';
+    boneguard.aggroTargetId = null;
+    boneguard.damageIdleDespawnTimer = 60;
     for (let i = 0; i < 59 * 20; i++) sim.tick();
     expect(sim.entities.has(boneguard.id)).toBe(true);
 
     for (let i = 0; i < 2 * 20; i++) sim.tick();
     expect(sim.entities.has(boneguard.id)).toBe(false);
+  });
+
+  it('despawns the Bound Guardian after 60 seconds out of combat without damage and resets on damage taken', () => {
+    const sim = makeSim();
+    const ritual = [...sim.entities.values()].find((e) => e.kind === 'object' && e.objectItemId === 'crypt_ritual_circle')!;
+    teleportTo(sim, ritual.pos.x, ritual.pos.z);
+    sim.questLog.set('q_nythraxis_bound_guardian', { questId: 'q_nythraxis_bound_guardian', counts: [0, 0, 0], state: 'active' });
+    sim.addItem('crypt_keystone', 1);
+    sim.player.maxHp = 100000;
+    sim.player.hp = sim.player.maxHp;
+
+    sim.pickUpObject(ritual.id);
+
+    const guardian = [...sim.entities.values()].find((e) => e.templateId === 'bound_guardian')!;
+    expect(guardian).toBeTruthy();
+
+    guardian.damageIdleDespawnTimer = 1;
+    sim.tick();
+    expect(sim.entities.has(guardian.id)).toBe(true);
+    expect(guardian.damageIdleDespawnTimer).toBe(1);
+
+    (sim as unknown as {
+      dealDamage(source: Entity, target: Entity, amount: number, crit: boolean, school: string, ability: string | null, kind: 'hit', noRage?: boolean): void;
+    }).dealDamage(sim.player, guardian, 5, false, 'physical', 'Test Strike', 'hit', true);
+    expect(guardian.damageIdleDespawnTimer).toBe(60);
+
+    teleportTo(sim, ritual.pos.x + 100, ritual.pos.z + 100);
+    guardian.inCombat = false;
+    guardian.aiState = 'idle';
+    guardian.aggroTargetId = null;
+    guardian.damageIdleDespawnTimer = 60;
+    for (let i = 0; i < 59 * 20; i++) sim.tick();
+    expect(sim.entities.has(guardian.id)).toBe(true);
+
+    for (let i = 0; i < 2 * 20; i++) sim.tick();
+    expect(sim.entities.has(guardian.id)).toBe(false);
   });
 
   it('shares Nythraxis ritual circle progress with nearby party members', () => {
@@ -1260,20 +1310,23 @@ describe('pet heel warp', () => {
   it('keeps the spatial grid exact when a pet warps to its owner', () => {
     const sim = makeSim();
     const p = sim.player;
-    // park the owner in open space away from the spawn camp
-    teleportTo(sim, p.pos.x + 400, p.pos.z + 400);
+    // park the owner behind the spawn building, far enough that no heel route
+    // exists: the gap (87yd) exceeds the pet's A* search window and the building
+    // breaks line of sight, so the pet can only fall back to the last-resort warp.
+    teleportTo(sim, 0, 82);
 
-    // adopt a wild beast as a heeling pet and strand it far from the owner
+    // adopt a wild beast as a heeling pet and strand it on the far side of the wall
     const pet = [...sim.entities.values()].find((e) => e.kind === 'mob' && !e.dead)!;
     pet.ownerId = p.id;
     pet.hostile = false;
     pet.aggroTargetId = null;
     pet.inCombat = false;
-    pet.pos = { x: p.pos.x + 200, z: p.pos.z, y: p.pos.y };
+    pet.petMode = 'passive';
+    pet.pos = { x: 0, z: -5, y: p.pos.y };
     pet.prevPos = { ...pet.pos };
     (sim as any).grid.update(pet); // grid now buckets the pet at its far cell
 
-    // 200 yds away with nothing to fight: the pet warps back to heel
+    // unreachable owner with nothing to fight: the pet warps back to heel
     (sim as any).updatePet(pet);
     expect(dist2d(pet.pos, p.pos)).toBeLessThan(1);
 
@@ -1345,20 +1398,23 @@ describe('pet heel warp', () => {
   it('keeps the spatial grid exact when a pet warps to its owner', () => {
     const sim = makeSim();
     const p = sim.player;
-    // park the owner in open space away from the spawn camp
-    teleportTo(sim, p.pos.x + 400, p.pos.z + 400);
+    // park the owner behind the spawn building, far enough that no heel route
+    // exists: the gap (87yd) exceeds the pet's A* search window and the building
+    // breaks line of sight, so the pet can only fall back to the last-resort warp.
+    teleportTo(sim, 0, 82);
 
-    // adopt a wild beast as a heeling pet and strand it far from the owner
+    // adopt a wild beast as a heeling pet and strand it on the far side of the wall
     const pet = [...sim.entities.values()].find((e) => e.kind === 'mob' && !e.dead)!;
     pet.ownerId = p.id;
     pet.hostile = false;
     pet.aggroTargetId = null;
     pet.inCombat = false;
-    pet.pos = { x: p.pos.x + 200, z: p.pos.z, y: p.pos.y };
+    pet.petMode = 'passive';
+    pet.pos = { x: 0, z: -5, y: p.pos.y };
     pet.prevPos = { ...pet.pos };
     (sim as any).grid.update(pet); // grid now buckets the pet at its far cell
 
-    // 200 yds away with nothing to fight: the pet warps back to heel
+    // unreachable owner with nothing to fight: the pet warps back to heel
     (sim as any).updatePet(pet);
     expect(dist2d(pet.pos, p.pos)).toBeLessThan(1);
 

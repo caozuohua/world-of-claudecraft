@@ -92,6 +92,7 @@ import { localizeSimText, localizeSimAuraName } from './sim_i18n';
 import { tTalent, localizeTalentTitle } from './talent_i18n';
 import { armorTypeForItem, weaponArchetypeForItem } from '../sim/equipment_rules';
 import { type ChatClock, clampChatClock, formatChatTimestamp } from './chat_timestamp';
+import { type ChatBoxGeometry, clampChatBox, serializeChatBox, parseChatBox } from './chat_window';
 import {
   talentsFor, computeTalentModifiers, validateAllocation, dormantNodes, pointsSpent,
   exportBuild, importBuild, cloneAllocation, talentPointsAtLevel, FIRST_TALENT_LEVEL,
@@ -140,6 +141,23 @@ export interface GamepadBindingsHooks {
 export interface ReportHooks {
   submit(targetPid: number, reason: string, details: string): Promise<void>;
   submitByName?(targetName: string, reason: string, details: string): Promise<void>;
+}
+
+export interface BugReportPayload {
+  description: string;
+  screenshot: string | null;
+  meta: unknown;
+}
+
+export interface BugReportHooks {
+  // Submit a captured bug report to the server. Resolves on success (screenshotStored
+  // is false when the server dropped the screenshot), rejects with a server error
+  // message the hud maps via localizeBugReportError.
+  submit(payload: BugReportPayload): Promise<{ screenshotStored: boolean }>;
+  // Grab a JPEG data URL of the current frame, or null if capture failed/unavailable.
+  capture(): string | null;
+  // Auto-collected context (build, userAgent, viewport, zone, level/class, camera).
+  collectMeta(): unknown;
 }
 
 const $ = <T extends HTMLElement = HTMLElement>(sel: string): T => document.querySelector(sel) as T;
@@ -276,6 +294,9 @@ const IGNORED_CHAT_NAMES_KEY = 'woc_ignored_chat_names';
 // implicit and never stored.
 const CHAT_TABS_KEY = 'woc_chat_tabs';
 const CHAT_ACTIVE_TAB_KEY = 'woc_chat_active_tab';
+// Persisted chat-window geometry (drag position + resize size). Desktop only —
+// the mobile layout owns its own placement and ignores this.
+const CHAT_GEOMETRY_KEY = 'woc_chat_geometry';
 const BIND_CATEGORY_LABEL_KEYS: Partial<Record<string, TranslationKey>> = {
   Movement: 'hud.keybinds.categories.movement',
   Targeting: 'hud.keybinds.categories.targeting',
@@ -399,7 +420,7 @@ function yellVoiceKey(text: string): string {
 export class Hud {
   private static readonly BAR_ABILITY_SLOTS = 11; // bar slots 1..11; slot 0 is the fixed Attack toggle
   private static ddSeq = 0; // monotonic id source for buildDropdown listbox/option ARIA wiring
-  private static readonly FORM_TOGGLE_IDS = new Set(['bear_form', 'cat_form']); // shift toggles, castable in any form
+  private static readonly FORM_TOGGLE_IDS = new Set(['bear_form', 'cat_form', 'travel_form']); // shift toggles, castable in any form
   private abilityButtons: { btn: HTMLButtonElement; label: HTMLSpanElement; countEl: HTMLSpanElement; keybindEl: HTMLSpanElement; cdOverlay: HTMLDivElement; cdText: HTMLDivElement; lastIcon: string }[] = [];
   private hotbarActions: HotbarAction[] = []; // index = barSlot-1
   private loadedSlotMapFromStorage = false;
@@ -412,10 +433,11 @@ export class Hud {
   private suppressNextActionClick = false;
   private optionsHooks: OptionsHooks | null = null;
   private reportHooks: ReportHooks | null = null;
+  private bugReportHooks: BugReportHooks | null = null;
   // Soft swear terms from the server (online only), masked in chat when the
   // player's "Filter Profanity" setting is on. Fed by main.ts from ClientWorld.
   private profanityWords: string[] = [];
-  private optionsView: 'main' | 'keybinds' | 'graphics' | 'audio' | 'interface' | 'performance' | 'controller' = 'main';
+  private optionsView: 'main' | 'keybinds' | 'graphics' | 'audio' | 'interface' | 'performance' | 'controller' | 'bugreport' = 'main';
   // The Options > Performance panel, lazily built and reused (it caches the live
   // position-slider handles so a drag-to-move can update them in place).
   private perfSettings: PerfOverlaySettingsPanel | null = null;
@@ -579,6 +601,13 @@ export class Hud {
   private mapView: { spanX: number; spanZ: number; minX: number; maxX: number; minZ: number; maxZ: number } | null = null;
   private mapDecorations: Decoration[] | null = null; // cached trees/rocks (whole world)
   private windowDrag: { el: HTMLElement; pointerId: number; offsetX: number; offsetY: number } | null = null;
+  // Movable/resizable chat box: current geometry (null = stock CSS default) plus
+  // the in-progress pointer gesture, if any. See chat_window.ts for the math.
+  private chatBox: ChatBoxGeometry | null = null;
+  private chatBoxGesture:
+    | { kind: 'move'; pointerId: number; grabX: number; grabY: number }
+    | { kind: 'resize'; pointerId: number; startX: number; startY: number; startW: number; startH: number }
+    | null = null;
   private windowObserver: MutationObserver | null = null;
   private windowZ = 50;
   private ignoredChatNames = new Set<string>();
@@ -631,6 +660,7 @@ export class Hud {
     this.ignoredChatNames = this.loadIgnoredChatNames();
     this.meters = new Meters(sim);
     this.initChatTabs();
+    this.initChatBoxGeometry();
     this.initWindowManagement();
     this.emoteWheelSlots = this.loadEmoteWheelSlots();
     this.loadSlotMap();
@@ -976,7 +1006,7 @@ export class Hud {
   }
 
   private placeNewWindow(el: HTMLElement): void {
-    if (el.dataset.windowMoved === '1' || el.id === 'loot-window') return;
+    if (el.dataset.windowMoved === '1' || el.id === 'loot-window' || el.id === 'confirm-dialog') return;
     if (document.body.classList.contains('vendor-open') && (el.id === 'vendor-window' || el.id === 'bags')) return;
     const openCount = [...document.querySelectorAll<HTMLElement>('.window.panel')]
       .filter((win) => win !== el && this.isWindowVisible(win)).length;
@@ -1108,6 +1138,154 @@ export class Hud {
       localStorage.setItem(CHAT_TABS_KEY, serializeChatTabs(this.chatTabs));
       localStorage.setItem(CHAT_ACTIVE_TAB_KEY, this.activeChatTab);
     } catch { /* storage unavailable */ }
+  }
+
+  // -------------------------------------------------------------------------
+  // Movable / resizable chat window (desktop only). The pure geometry math
+  // (clamping, (de)serialization) lives in chat_window.ts; this section is just
+  // the DOM wiring: a drag handle on the tab strip, a corner resize grip, and
+  // localStorage persistence with a reset path back to the CSS default.
+  // -------------------------------------------------------------------------
+
+  private isMobileLayout(): boolean {
+    return document.body.classList.contains('mobile-touch');
+  }
+
+  private initChatBoxGeometry(): void {
+    const wrap = document.getElementById('chatlog-wrap');
+    const tabs = document.getElementById('chatlog-tabs');
+    const frame = document.getElementById('chatlog-frame');
+    if (!wrap || !tabs || !frame) return;
+
+    // Resize grip pinned to the frame's bottom-right corner.
+    const grip = document.createElement('div');
+    grip.className = 'chat-resize-grip';
+    grip.title = t('hudChrome.chatWindow.resize');
+    grip.setAttribute('aria-hidden', 'true');
+    frame.appendChild(grip);
+
+    tabs.style.touchAction = 'none';
+    tabs.setAttribute('aria-label', t('hudChrome.chatWindow.move'));
+    tabs.addEventListener('pointerdown', (ev) => this.onChatBoxMoveStart(ev, wrap, tabs));
+    grip.addEventListener('pointerdown', (ev) => this.onChatBoxResizeStart(ev, wrap, frame));
+    document.addEventListener('pointermove', (ev) => this.onChatBoxPointerMove(ev));
+    const end = (ev: PointerEvent) => this.onChatBoxPointerEnd(ev);
+    document.addEventListener('pointerup', end);
+    document.addEventListener('pointercancel', end);
+    // Re-clamp into view when the viewport changes (mirrors the .window.panel logic).
+    window.addEventListener('resize', () => { if (this.chatBox) this.applyChatBoxGeometry(); });
+
+    let saved: string | null = null;
+    try { saved = localStorage.getItem(CHAT_GEOMETRY_KEY); } catch { /* storage unavailable */ }
+    this.chatBox = parseChatBox(saved);
+    if (this.chatBox) this.applyChatBoxGeometry();
+  }
+
+  // Seed this.chatBox from the live layout the first time a gesture starts, so a
+  // box still on its CSS default converts cleanly to explicit px coordinates.
+  private ensureChatBoxGeometry(wrap: HTMLElement, tabs: HTMLElement): void {
+    if (this.chatBox) return;
+    const wrapRect = wrap.getBoundingClientRect();
+    const frameRect = document.getElementById('chatlog-frame')?.getBoundingClientRect();
+    const chromeH = tabs.getBoundingClientRect().height;
+    this.chatBox = {
+      left: wrapRect.left,
+      top: wrapRect.top,
+      width: wrapRect.width,
+      height: frameRect ? frameRect.height : Math.max(0, wrapRect.height - chromeH),
+    };
+  }
+
+  private onChatBoxMoveStart(ev: PointerEvent, wrap: HTMLElement, tabs: HTMLElement): void {
+    if (ev.button !== 0 || this.isMobileLayout()) return;
+    const target = ev.target as HTMLElement | null;
+    // Tab buttons (select / add / close) keep their own click behaviour; only the
+    // empty strip area initiates a move.
+    if (!target || target.closest('button')) return;
+    ev.preventDefault();
+    this.ensureChatBoxGeometry(wrap, tabs);
+    const rect = wrap.getBoundingClientRect();
+    this.chatBoxGesture = { kind: 'move', pointerId: ev.pointerId, grabX: ev.clientX - rect.left, grabY: ev.clientY - rect.top };
+    document.body.classList.add('chat-box-dragging');
+    try { tabs.setPointerCapture?.(ev.pointerId); } catch { /* synthetic pointer */ }
+  }
+
+  private onChatBoxResizeStart(ev: PointerEvent, wrap: HTMLElement, frame: HTMLElement): void {
+    if (ev.button !== 0 || this.isMobileLayout()) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    const tabs = document.getElementById('chatlog-tabs');
+    if (tabs) this.ensureChatBoxGeometry(wrap, tabs);
+    if (!this.chatBox) return;
+    this.chatBoxGesture = {
+      kind: 'resize', pointerId: ev.pointerId,
+      startX: ev.clientX, startY: ev.clientY,
+      startW: this.chatBox.width, startH: this.chatBox.height,
+    };
+    document.body.classList.add('chat-box-dragging');
+    try { frame.setPointerCapture?.(ev.pointerId); } catch { /* synthetic pointer */ }
+  }
+
+  private onChatBoxPointerMove(ev: PointerEvent): void {
+    const g = this.chatBoxGesture;
+    if (!g || g.pointerId !== ev.pointerId || !this.chatBox) return;
+    ev.preventDefault();
+    if (g.kind === 'move') {
+      this.chatBox = { ...this.chatBox, left: ev.clientX - g.grabX, top: ev.clientY - g.grabY };
+    } else {
+      this.chatBox = { ...this.chatBox, width: g.startW + (ev.clientX - g.startX), height: g.startH + (ev.clientY - g.startY) };
+    }
+    this.applyChatBoxGeometry();
+  }
+
+  private onChatBoxPointerEnd(ev: PointerEvent): void {
+    const g = this.chatBoxGesture;
+    if (!g || g.pointerId !== ev.pointerId) return;
+    this.chatBoxGesture = null;
+    document.body.classList.remove('chat-box-dragging');
+    this.persistChatBoxGeometry();
+  }
+
+  private applyChatBoxGeometry(): void {
+    if (!this.chatBox || this.isMobileLayout()) return;
+    const wrap = document.getElementById('chatlog-wrap');
+    const tabs = document.getElementById('chatlog-tabs');
+    const frame = document.getElementById('chatlog-frame');
+    if (!wrap || !tabs || !frame) return;
+    const chromeH = tabs.getBoundingClientRect().height || 22;
+    const clamped = clampChatBox(this.chatBox, { w: window.innerWidth, h: window.innerHeight }, chromeH);
+    this.chatBox = clamped;
+    wrap.style.left = `${clamped.left}px`;
+    wrap.style.top = `${clamped.top}px`;
+    wrap.style.right = 'auto';
+    wrap.style.bottom = 'auto';
+    wrap.style.width = `${clamped.width}px`;
+    frame.style.height = `${clamped.height}px`;
+    // Keep the (separately positioned) chat input bar aligned above the box.
+    const input = document.getElementById('chat-input');
+    if (input) {
+      input.style.left = `${clamped.left}px`;
+      input.style.width = `${clamped.width}px`;
+      input.style.bottom = `${Math.max(0, window.innerHeight - clamped.top + 4)}px`;
+    }
+  }
+
+  private persistChatBoxGeometry(): void {
+    if (!this.chatBox) return;
+    try { localStorage.setItem(CHAT_GEOMETRY_KEY, serializeChatBox(this.chatBox)); } catch { /* storage unavailable */ }
+  }
+
+  // Public: snap the chat window back to its stock CSS position/size and forget
+  // the saved geometry. Wired to the "Reset Chat Window" interface option.
+  resetChatWindow(): void {
+    this.chatBox = null;
+    try { localStorage.removeItem(CHAT_GEOMETRY_KEY); } catch { /* storage unavailable */ }
+    const ids = ['chatlog-wrap', 'chatlog-frame', 'chat-input'];
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      for (const prop of ['left', 'top', 'right', 'bottom', 'width', 'height']) el.style.removeProperty(prop);
+    }
   }
 
   private renderChatTabs(): void {
@@ -5097,12 +5275,14 @@ export class Hud {
 
   private lootRollRoot(): HTMLElement {
     let root = document.getElementById('loot-rolls');
+    const uiRoot = document.getElementById('ui');
     if (!root) {
       root = document.createElement('div');
       root.id = 'loot-rolls';
       root.setAttribute('aria-live', 'polite');
-      document.body.appendChild(root);
     }
+    if (uiRoot && root.parentElement !== uiRoot) uiRoot.appendChild(root);
+    else if (!root.parentElement) document.body.appendChild(root);
     return root;
   }
 
@@ -7072,18 +7252,22 @@ export class Hud {
     );
   }
 
-  // Minimal modal confirm dialog (reuses the .window/.panel chrome). Used by the
-  // prestige flow; built on demand and removed on dismiss.
+  // Minimal modal confirm dialog (reuses the .window/.panel chrome). Built on
+  // demand and removed on dismiss.
   private confirmDialog(title: string, body: string, okText: string, cancelText: string, onOk: () => void): void {
     document.getElementById('confirm-dialog')?.remove();
     const el = document.createElement('div');
     el.id = 'confirm-dialog';
     el.className = 'window panel';
     el.style.display = 'block';
-    el.innerHTML = `<div class="panel-title"><span>${title}</span><span class="x-btn" data-cancel>${svgIcon('close')}</span></div>`
-      + `<div class="cd-body">${body}</div>`
-      + `<div class="cd-actions"><button class="btn" data-cancel>${cancelText}</button><button class="btn cd-ok" data-ok>${okText}</button></div>`;
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.innerHTML = `<div class="panel-title"><span>${esc(title)}</span><button type="button" class="x-btn" data-cancel aria-label="${esc(cancelText)}">${svgIcon('close')}</button></div>`
+      + `<div class="cd-body">${esc(body)}</div>`
+      + `<div class="cd-actions"><button type="button" class="btn" data-cancel>${esc(cancelText)}</button><button type="button" class="btn cd-ok" data-ok>${esc(okText)}</button></div>`;
     document.body.appendChild(el);
+    this.bringWindowToFront(el);
+    el.querySelector<HTMLElement>('[data-ok]')?.focus();
     const close = () => el.remove();
     el.querySelectorAll('[data-cancel]').forEach((b) => b.addEventListener('click', () => { audio.click(); close(); }));
     el.querySelector('[data-ok]')?.addEventListener('click', () => { close(); onOk(); });
@@ -7770,7 +7954,7 @@ export class Hud {
       if (this.sim.activeLoadout < 0) { this.showError(t('game.talents.selectBuildFirst')); return; }
       const active = this.sim.loadouts[this.sim.activeLoadout];
       if (!active) { this.showError(t('game.talents.selectBuildFirst')); return; }
-      const body = esc(t('game.talents.deleteBuildBody').replace('{name}', active.name));
+      const body = t('game.talents.deleteBuildBody', { name: active.name });
       this.confirmDialog(t('game.talents.deleteBuildTitle'), body, t('game.talents.deleteBuildConfirm'), t('game.talents.cancel'), () => {
         this.sim.deleteLoadout(this.sim.activeLoadout);
         this.renderTalents();
@@ -7852,7 +8036,7 @@ export class Hud {
     const quests = [...sim.questLog.values()];
     if (quests.length === 0) {
       list.innerHTML = `<div class="ql-empty">${esc(t('questUi.log.emptyTitle'))}</div>`;
-      detail.innerHTML = `<div class="qd-text">${esc(t('questUi.log.emptyHint'))}</div>`;
+      detail.innerHTML = `<div class="ql-detail-body"><div class="qd-text">${esc(t('questUi.log.emptyHint'))}</div></div>`;
     }
     if (!this.selectedQuestLogId || !sim.questLog.has(this.selectedQuestLogId)) {
       this.selectedQuestLogId = quests[0]?.questId ?? null;
@@ -7884,15 +8068,35 @@ export class Hud {
       }
       const giver = NPCS[quest.turnInNpcId];
       html += `<div class="qd-obj quest-return">${esc(t('questUi.log.returnTo', { name: giver ? npcDisplayName(giver.id) : '?' }))}</div>`;
-      detail.innerHTML = html;
-      const rewardRow = detail.querySelector('[data-reward]') as HTMLElement | null;
+      const body = document.createElement('div');
+      body.className = 'ql-detail-body';
+      body.innerHTML = html;
+      detail.replaceChildren(body);
+      const rewardRow = body.querySelector('[data-reward]') as HTMLElement | null;
       if (rewardRow && rewardItem) this.attachTooltip(rewardRow, () => this.itemTooltip(ITEMS[rewardItem]));
+      const actions = document.createElement('div');
+      actions.className = 'ql-detail-actions';
       const abandon = document.createElement('button');
       abandon.className = 'btn';
       abandon.type = 'button';
       abandon.textContent = t('questUi.log.abandon');
-      abandon.addEventListener('click', () => { sim.abandonQuest(this.selectedQuestLogId!); this.renderQuestLog(); });
-      detail.appendChild(abandon);
+      abandon.addEventListener('click', () => {
+        const questId = this.selectedQuestLogId;
+        if (!questId) return;
+        this.confirmDialog(
+          t('questUi.log.abandonConfirmTitle'),
+          t('questUi.log.abandonConfirmBody', { name: questTitle(questId) }),
+          t('questUi.log.abandonConfirm'),
+          t('questUi.log.abandonCancel'),
+          () => {
+            sim.abandonQuest(questId);
+            this.selectedQuestLogId = null;
+            this.renderQuestLog();
+          },
+        );
+      });
+      actions.appendChild(abandon);
+      detail.appendChild(actions);
     }
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeQuestLog());
     this.focusFirstInteractive(el);
@@ -8839,6 +9043,12 @@ export class Hud {
     this.reportHooks = hooks;
   }
 
+  // Only wired online (main.ts), so its presence is what gates the "Report a Bug"
+  // option (the offline browser world has no server to receive reports).
+  attachBugReporting(hooks: BugReportHooks): void {
+    this.bugReportHooks = hooks;
+  }
+
   get optionsOpen(): boolean {
     return $('#options-menu').style.display === 'block';
   }
@@ -8888,6 +9098,7 @@ export class Hud {
     if (this.optionsView === 'interface') { this.renderInterface(); return; }
     if (this.optionsView === 'controller') { this.renderController(); return; }
     if (this.optionsView === 'performance') { this.renderPerformance(); return; }
+    if (this.optionsView === 'bugreport') { this.renderBugReport(); return; }
     const el = $('#options-menu');
     el.innerHTML = `<div class="panel-title"><span>${esc(t('hud.options.gameMenu'))}</span><button type="button" class="x-btn" data-close aria-label="${esc(t('hud.options.returnToGame'))}">${svgIcon('close')}</button></div>`;
     const list = document.createElement('div');
@@ -8899,13 +9110,15 @@ export class Hud {
       b.addEventListener('click', () => { audio.click(); onClick(); });
       list.appendChild(b);
     };
-    const goto = (view: 'keybinds' | 'graphics' | 'audio' | 'interface' | 'performance' | 'controller') => { this.optionsView = view; this.keybindNote = ''; this.renderOptions(); };
+    const goto = (view: 'keybinds' | 'graphics' | 'audio' | 'interface' | 'performance' | 'controller' | 'bugreport') => { this.optionsView = view; this.keybindNote = ''; this.renderOptions(); };
     add(t('hud.options.keyBindings'), () => goto('keybinds'));
     add(t('hudChrome.controller.title'), () => goto('controller'));
     add(t('hud.options.graphics'), () => goto('graphics'));
     add(t('hud.options.interface'), () => goto('interface'));
     add(t('hud.options.audio'), () => goto('audio'));
     add(t('hudChrome.perf.title'), () => goto('performance'));
+    // Online-only: capturing realm/character/position needs an authoritative server.
+    if (this.bugReportHooks) add(t('hudChrome.bugReport.menuButton'), () => goto('bugreport'));
     add(t('hud.options.logout'), () => this.optionsHooks?.logout());
     add(t('hud.options.returnToGame'), () => this.closeOptions());
     el.appendChild(list);
@@ -9079,6 +9292,130 @@ export class Hud {
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeOptions());
   }
 
+  private renderBugReport(): void {
+    const hooks = this.bugReportHooks;
+    if (!hooks) { this.optionsView = 'main'; this.renderOptions(); return; }
+    const body = this.settingsViewShell(t('hudChrome.bugReport.menuButton'));
+    const p = this.sim.player;
+    const realm = this.sim.realm || t('hudChrome.bugReport.unknown');
+    const coords = `${formatNumber(p.pos.x, { maximumFractionDigits: 0, useGrouping: false })}, ` +
+      `${formatNumber(p.pos.y, { maximumFractionDigits: 0, useGrouping: false })}, ` +
+      `${formatNumber(p.pos.z, { maximumFractionDigits: 0, useGrouping: false })}`;
+
+    const info = document.createElement('div');
+    info.className = 'bug-info';
+    const row = (label: string, value: string): string =>
+      `<div class="bug-info-row"><span class="bug-info-label">${esc(label)}</span><span class="bug-info-val">${esc(value)}</span></div>`;
+    info.innerHTML =
+      row(t('hudChrome.bugReport.realm'), realm) +
+      row(t('hudChrome.bugReport.character'), p.name) +
+      row(t('hudChrome.bugReport.position'), coords);
+    body.appendChild(info);
+
+    // Capture once when the form opens so the screenshot reflects what the player
+    // saw, not a later frame. null when capture is unavailable/failed.
+    const shot = hooks.capture();
+
+    const descLabel = document.createElement('label');
+    descLabel.className = 'bug-label';
+    descLabel.setAttribute('for', 'bug-desc');
+    descLabel.textContent = t('hudChrome.bugReport.description');
+    const desc = document.createElement('textarea');
+    desc.id = 'bug-desc';
+    desc.className = 'bug-desc';
+    desc.maxLength = 2000;
+    desc.setAttribute('placeholder', t('hudChrome.bugReport.descriptionPlaceholder'));
+    desc.setAttribute('aria-describedby', 'bug-error');
+    body.append(descLabel, desc);
+
+    let includeShot = shot !== null;
+    if (shot) {
+      const shotWrap = document.createElement('div');
+      shotWrap.className = 'bug-shot';
+      const img = document.createElement('img');
+      img.className = 'bug-shot-img';
+      img.src = shot;
+      img.alt = t('hudChrome.bugReport.screenshotAlt');
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'btn set-toggle';
+      const syncToggle = () => {
+        toggle.textContent = includeShot ? t('hud.options.on') : t('hud.options.off');
+        toggle.classList.toggle('off', !includeShot);
+        toggle.setAttribute('aria-pressed', String(includeShot));
+        toggle.setAttribute('aria-label', t('hudChrome.bugReport.includeScreenshot'));
+        img.style.display = includeShot ? '' : 'none';
+      };
+      toggle.addEventListener('click', () => { audio.click(); includeShot = !includeShot; syncToggle(); });
+      syncToggle();
+      const toggleRow = document.createElement('div');
+      toggleRow.className = 'set-row';
+      const name = document.createElement('span');
+      name.className = 'set-name';
+      name.textContent = t('hudChrome.bugReport.includeScreenshot');
+      toggleRow.append(name, toggle);
+      shotWrap.append(toggleRow, img);
+      body.appendChild(shotWrap);
+    }
+
+    const error = document.createElement('div');
+    error.className = 'report-error';
+    error.id = 'bug-error';
+    // role="alert" already implies an assertive live region; a second aria-live
+    // would conflict, so it is the only announcement hook on this node.
+    error.setAttribute('role', 'alert');
+    body.appendChild(error);
+
+    const actions = document.createElement('div');
+    actions.className = 'report-actions';
+    const submit = document.createElement('button');
+    submit.className = 'btn';
+    submit.type = 'button';
+    submit.textContent = t('hudChrome.bugReport.submit');
+    const back = document.createElement('button');
+    back.className = 'btn';
+    back.type = 'button';
+    back.textContent = t('hud.options.back');
+    back.addEventListener('click', () => { audio.click(); this.optionsView = 'main'; this.renderOptions(); });
+    actions.append(submit, back);
+    body.appendChild(actions);
+
+    submit.addEventListener('click', () => {
+      const description = desc.value.trim();
+      if (!description) { error.textContent = t('hudChrome.bugReport.describeFirst'); return; }
+      submit.disabled = true;
+      error.textContent = '';
+      const sentShot = includeShot && shot !== null;
+      hooks.submit({ description, screenshot: includeShot ? shot : null, meta: hooks.collectMeta() })
+        .then(({ screenshotStored }) => {
+          // Be honest when the server dropped a screenshot the player asked to send.
+          const droppedShot = sentShot && !screenshotStored;
+          this.log(t(droppedShot ? 'hudChrome.bugReport.submittedNoShot' : 'hudChrome.bugReport.submitted'), '#ffd100');
+          this.optionsView = 'main';
+          this.renderOptions();
+        })
+        .catch((err: unknown) => {
+          submit.disabled = false;
+          error.textContent = this.localizeBugReportError(err);
+        });
+    });
+
+    $('#options-menu').querySelector('[data-close]')?.addEventListener('click', () => this.closeOptions());
+    // Focus the description so a keyboard/screen-reader user lands in the field.
+    window.setTimeout(() => desc.focus(), 0);
+  }
+
+  private localizeBugReportError(err: unknown): string {
+    const text = err instanceof Error ? err.message : '';
+    const keyByMessage: Record<string, TranslationKey> = {
+      'describe the bug': 'hudChrome.bugReport.describeFirst',
+      'bug report too large': 'hudChrome.bugReport.tooLarge',
+      'too many bug reports, try again later': 'hudChrome.bugReport.rateLimited',
+    };
+    const key = keyByMessage[text.toLowerCase()];
+    return key ? t(key) : t('hudChrome.bugReport.failed');
+  }
+
   private renderGraphics(): void {
     const body = this.settingsViewShell(t('hud.options.graphics'));
     this.settingChoice(body, t('hud.options.graphicsQuality'), 'graphicsPreset', [
@@ -9106,6 +9443,18 @@ export class Hud {
         { value: 1, label: t('hud.options.terrainHigh') },
       ]);
     }
+    // Adaptive CSS-effects tier (DOM layer, separate from the WebGL preset above).
+    // Auto detects the browser engine/version + device; manual values pin it.
+    this.settingChoice(body, t('hudChrome.options.browserEffects'), 'browserEffects', [
+      { value: 0, label: t('hudChrome.options.browserEffectsAuto') },
+      { value: 1, label: t('hudChrome.options.browserEffectsFull') },
+      { value: 2, label: t('hudChrome.options.browserEffectsReduced') },
+      { value: 3, label: t('hudChrome.options.browserEffectsMinimal') },
+    ]);
+    const fxNote = document.createElement('div');
+    fxNote.className = 'set-note';
+    fxNote.textContent = t('hudChrome.options.browserEffectsNote');
+    body.appendChild(fxNote);
     this.settingSlider(body, t('hud.options.cameraSpeed'), 'cameraSpeed');
     // Camera Speed only scales mouselook; on touch the camera joystick has its
     // own rate, so phones get a dedicated sensitivity slider here.
@@ -9167,6 +9516,7 @@ export class Hud {
     body.appendChild(row);
     this.settingBoolToggle(body, t('hud.options.npcVoices'), 'voiceEnabled');
     this.settingBoolToggle(body, t('hudChrome.options.footstepSounds'), 'footstepSfx');
+    this.settingBoolToggle(body, t('hudChrome.options.clickFeedback'), 'clickFeedback');
     this.settingsViewFooter();
   }
 
@@ -9307,10 +9657,28 @@ export class Hud {
     tsRow.append(tsName, tsToggle);
     body.append(tsRow, fmtRow);
 
+    // Reset the movable/resizable chat window back to its default placement.
+    const resetRow = document.createElement('div');
+    resetRow.className = 'set-row';
+    const resetName = document.createElement('span');
+    resetName.className = 'set-name';
+    resetName.textContent = t('hudChrome.chatWindow.reset');
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'btn set-toggle';
+    resetBtn.textContent = t('hudChrome.chatWindow.resetAction');
+    resetBtn.addEventListener('click', () => { audio.click(); this.resetChatWindow(); });
+    resetRow.append(resetName, resetBtn);
+    body.append(resetRow);
+
     const note = document.createElement('div');
     note.className = 'set-note';
     note.textContent = t('hudChrome.chatTimestamps.note');
     $('#options-menu').appendChild(note);
+
+    const chatWinNote = document.createElement('div');
+    chatWinNote.className = 'set-note';
+    chatWinNote.textContent = t('hudChrome.chatWindow.note');
+    $('#options-menu').appendChild(chatWinNote);
 
     const back = document.createElement('button');
     back.className = 'btn';

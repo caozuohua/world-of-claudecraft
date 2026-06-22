@@ -908,7 +908,18 @@
   .chat-tab-add:hover { color: var(--gold); }
   /* a channel tab filters the shared chat pane to its own messages */
   .chat-pane .chat-hidden { display: none; }
-  #chatlog-frame { height: 184px; padding: 0; overflow: hidden; border-radius: 0 6px 6px 6px; }
+  #chatlog-frame { height: 184px; padding: 0; overflow: hidden; border-radius: 0 6px 6px 6px; position: relative; }
+  /* the empty area of the tab strip is a move handle (the tab buttons sit above it) */
+  #chatlog-tabs { cursor: var(--cursor-move, move); }
+  #chatlog-tabs .chat-tab { cursor: var(--cursor-point); }
+  body.chat-box-dragging, body.chat-box-dragging * { user-select: none; }
+  /* corner resize grip, classic diagonal hatch in the frame's bottom-right */
+  .chat-resize-grip { position: absolute; right: 0; bottom: 0; width: 16px; height: 16px;
+    cursor: nwse-resize; z-index: 3; opacity: 0.45;
+    background: linear-gradient(135deg, transparent 0 45%, #95886a 45% 55%, transparent 55% 70%, #95886a 70% 80%, transparent 80%); }
+  .chat-resize-grip:hover { opacity: 0.9; }
+  body.mobile-touch .chat-resize-grip { display: none; }
+  body.mobile-touch #chatlog-tabs { cursor: default; }
   .chat-pane { display: none; height: 100%; overflow-y: auto; overflow-x: hidden; padding: 7px 10px;
     font-size: 11px; line-height: 1.45; }
   .chat-pane.active { display: block; }
@@ -929,6 +940,19 @@
   #report-window textarea { height: 96px; resize: none; }
   .report-error { min-height: 16px; color: #ff7a5e; font-size: 12px; margin-top: 6px; }
   .report-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
+
+  /* ---------- bug report (options sub-view) ---------- */
+  .bug-info { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px;
+    background: #101018; border: 1px solid #4a3d1d; border-radius: 4px; padding: 8px; }
+  .bug-info-row { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; }
+  .bug-info-label { color: #c9b27a; }
+  .bug-info-val { color: #e8d8a8; text-align: right; overflow-wrap: anywhere; }
+  .bug-label { display: block; color: #c9b27a; font-size: 12px; margin: 8px 0 4px; }
+  .bug-desc { width: 100%; height: 90px; resize: none; background: #101018;
+    border: 1px solid #4a3d1d; border-radius: 4px; color: #e8d8a8; padding: 6px; font-size: 16px; }
+  .bug-shot { margin-top: 8px; }
+  .bug-shot-img { display: block; width: 100%; max-width: 100%; margin-top: 6px;
+    border: 1px solid #4a3d1d; border-radius: 4px; }
 
   /* ---------- quest tracker ---------- */
   #quest-tracker { position: absolute; right: 14px; top: 262px; width: 240px; font-size: 12px;
@@ -1114,6 +1138,7 @@
     right: max(14px, env(safe-area-inset-right));
     bottom: calc(112px + env(safe-area-inset-bottom));
     z-index: 65;
+    pointer-events: auto;
     display: none;
     flex-direction: column;
     gap: 8px;
@@ -1248,7 +1273,9 @@
   .ql-list { width: 180px; border-right: 1px solid #463a1c; padding-right: 8px; }
   .ql-item { display: block; width: 100%; padding: 4px 6px; border: 0; background: transparent; text-align: left; font-size: 12px; color: #d8c89a; cursor: var(--cursor-point); border-radius: 3px; font-family: var(--title-font); }
   .ql-item:hover, .ql-item.sel { background: #ffffff14; color: var(--gold); }
-  .ql-detail { flex: 1; font-size: 12px; max-height: 380px; overflow-y: auto; }
+  .ql-detail { flex: 1; font-size: 12px; max-height: 380px; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+  .ql-detail-body { min-height: 0; overflow-y: auto; padding-right: var(--spacing-xs); }
+  .ql-detail-actions { flex: 0 0 auto; padding-top: var(--spacing-sm); }
   .ql-empty { color: var(--color-text-muted); font-size: 12px; padding: var(--spacing-xs); }
   .ql-detail-title { font-size: 15px; }
   .ql-detail-text { margin-top: var(--spacing-sm); }
@@ -1936,6 +1963,37 @@
   /* Frosted Panels — opt-in backdrop blur behind HUD panels & windows. */
   body.frosted-panels .panel, body.frosted-panels .window {
     backdrop-filter: blur(7px) saturate(1.05); -webkit-backdrop-filter: blur(7px) saturate(1.05); }
+
+  /* ---------- Adaptive browser-effects tiers (src/game/browser_env.ts) ----------
+     Engine/version/device-aware downgrade of the most GPU-expensive *decorative*
+     CSS so weaker engines (Safari/WebKit backdrop-filter, older Firefox/Gecko
+     blur compositing, mobile GPUs) stay smooth. main.ts stamps one of
+     fx-full | fx-reduced | fx-minimal on <body> (plus engine-* / is-mobile /
+     is-desktop). fx-full applies no overrides. Gameplay-critical feedback (FCT,
+     cast bar, unit-frame bars) is deliberately untouched — only ambience. */
+
+  /* Reduced + Minimal: drop backdrop-filter everywhere — it is Safari's single
+     most expensive compositing path — and stop the opt-in frosted panels from
+     re-adding it. Panels keep their solid translucent background, just no blur. */
+  body.fx-reduced *, body.fx-reduced *::before, body.fx-reduced *::after,
+  body.fx-minimal *, body.fx-minimal *::before, body.fx-minimal *::after {
+    backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+  /* Minimal: also retire the decorative start/loading-screen background work —
+     freeze the infinite ambient animations (portal spin, nebula breathe, ember
+     float, trailer drift, logo pulse) and drop the giant blur layers (the two
+     portal rings carry filter: blur(80–100px), a heavy fullscreen GPU pass). */
+  body.fx-minimal .portal-ring,
+  body.fx-minimal .portal-ring-reverse,
+  body.fx-minimal .nebula-overlay,
+  body.fx-minimal .bg-trailer,
+  body.fx-minimal .ember,
+  body.fx-minimal #title-logo { animation: none !important; }
+  body.fx-minimal .portal-ring,
+  body.fx-minimal .portal-ring-reverse { filter: none !important; }
+  /* The ember particle field is pure ambience; hide it outright on Minimal. */
+  body.fx-minimal .embers-container { display: none !important; }
+
   /* ---------- Performance overlay (customizable stats panel) ----------
      Hidden until toggled on (showFps). perf_overlay.ts sets the inline left/top
      (free positioning) and writes the --perf-* custom properties below; it is
@@ -4054,6 +4112,15 @@
     gap: 8px;
     flex: 0 0 auto;
   }
+  .char-row .char-inworld-hint {
+    display: block;
+    color: #ffbf66;
+    font-size: 11px;
+    margin-top: 3px;
+    line-height: 1.3;
+  }
+  .char-row .take-over-btn { background: #3a2f12; border-color: #c79a3a; color: #ffcf73; }
+  .char-row .take-over-btn:hover { background: #4a3c18; }
   .char-row.online .char-name { color: var(--color-text-success); text-shadow: 0 0 8px rgba(127,220,79,0.3); }
   .char-row.rename-required .char-name { color: #ffbf66; }
   .char-row .rename-input {
@@ -6292,6 +6359,9 @@
     min-width: 0;
   }
   body.mobile-touch #quest-log-window .ql-detail {
+    min-width: 0;
+  }
+  body.mobile-touch #quest-log-window .ql-detail-body {
     min-width: 0;
   }
   body.mobile-touch #options-menu .btn {

@@ -186,6 +186,13 @@ export const ko_KR: EnTranslations = {
       "clock24h": "24시간제",
       "note": "새 채팅 줄마다 수신된 시각을 앞에 붙입니다(예: [14:32]). 이 옵션이 켜져 있는 동안 받은 메시지에만 적용됩니다."
     },
+    "chatWindow": {
+      "move": "드래그하여 채팅 창 이동",
+      "resize": "드래그하여 채팅 창 크기 조절",
+      "reset": "채팅 창 초기화",
+      "resetAction": "초기화",
+      "note": "채팅 탭 줄을 드래그하면 창을 이동하고, 모서리 손잡이를 드래그하면 크기를 조절할 수 있습니다. 초기화하면 기본 위치와 크기로 돌아갑니다."
+    },
     "swing": {
       "ready": "공격",
       "seconds": "{seconds}초"
@@ -233,7 +240,14 @@ export const ko_KR: EnTranslations = {
     "options": {
       "clickMoveLeft": "왼쪽 클릭",
       "clickMoveRight": "오른쪽 클릭",
+      "browserEffects": "브라우저 효과",
+      "browserEffectsAuto": "자동",
+      "browserEffectsFull": "전체",
+      "browserEffectsReduced": "감소",
+      "browserEffectsMinimal": "최소",
+      "browserEffectsNote": "자동은 브라우저와 기기에 맞춰 무거운 CSS 효과(흐림, 글로우, 배경 모션)를 낮춥니다. 인터페이스가 느리게 느껴지면 수동으로 낮추세요.",
       "footstepSounds": "발소리",
+      "clickFeedback": "클릭 표시",
       "showWalletOnCharacterScreen": "캐릭터 화면에 지갑 표시",
       "showWalletOnPlayerCard": "플레이어 카드에 지갑 표시",
       "uiScale": "UI 배율",
@@ -391,6 +405,24 @@ export const ko_KR: EnTranslations = {
         "many": "검색: {realm} 서버에 {count}명의 플레이어가 접속 중입니다.",
         "other": "검색: {realm} 서버에 {count}명의 플레이어가 접속 중입니다."
       }
+    },
+    "bugReport": {
+      "menuButton": "버그 신고",
+      "realm": "서버",
+      "character": "캐릭터",
+      "position": "좌표",
+      "unknown": "알 수 없음",
+      "description": "무엇이 잘못되었나요?",
+      "descriptionPlaceholder": "버그를 설명해 주세요: 무엇을 했고, 무엇을 기대했으며, 무엇이 일어났는지.",
+      "includeScreenshot": "스크린샷 포함",
+      "screenshotAlt": "이 버그 신고에 첨부된 현재 화면의 스크린샷",
+      "submit": "신고 보내기",
+      "submitted": "버그 신고가 전송되었습니다. 감사합니다!",
+      "submittedNoShot": "버그 신고가 전송되었습니다. 다만 스크린샷이 너무 커서 첨부하지 못했습니다.",
+      "describeFirst": "보내기 전에 버그를 설명해 주세요.",
+      "tooLarge": "신고가 너무 커서 보낼 수 없습니다. 스크린샷 없이 다시 시도하세요.",
+      "rateLimited": "최근에 여러 건의 신고를 보냈습니다. 잠시 후 다시 보내 주세요.",
+      "failed": "버그 신고를 보낼 수 없습니다. 다시 시도해 주세요."
     },
     "paperdoll": {
       "unequipAria": "{item} 장착 해제",
@@ -1070,7 +1102,9 @@ export const ko_KR: EnTranslations = {
       "webLoginOnly": "로그인은 게임 클라이언트에서만 허용됩니다.",
       "accountSuspended": "이 계정은 {date}까지 정지되었습니다.",
       "alreadyInWorld": "캐릭터가 이미 세계에 있습니다.",
-      "renameBeforeEntering": "이 캐릭터는 세계에 들어가기 전에 이름을 변경해야 합니다."
+      "takenOver": "다른 세션이 캐릭터를 넘겨받았습니다.",
+      "renameBeforeEntering": "이 캐릭터는 세계에 들어가기 전에 이름을 변경해야 합니다.",
+      "renameNotPermitted": "이 캐릭터의 이름을 변경할 수 없습니다."
     }
   },
   "realm": {
@@ -1096,6 +1130,9 @@ export const ko_KR: EnTranslations = {
     "noneYet": "아직 캐릭터가 없습니다. 아래에서 하나를 만드세요.",
     "levelClass": "{level}레벨 {className}",
     "inWorld": "세계에 있음",
+    "takeOver": "넘겨받기",
+    "inWorldHint": "이미 세계에 있습니다. 다른 곳에서 로그아웃하거나 넘겨받으세요.",
+    "takeOverConfirm": "이 캐릭터를 다른 세션에서 연결 해제하고 여기로 가져옵니다. 계속하시겠습니까?",
     "renameRequired": "이름 변경 필요",
     "delete": "삭제",
     "rename": "이름 변경",
@@ -1823,6 +1860,10 @@ export const ko_KR: EnTranslations = {
       "completedStatus": "완료됨",
       "returnTo": "{name}에게 돌아가기",
       "abandon": "퀘스트 포기",
+      "abandonConfirmTitle": "퀘스트 포기",
+      "abandonConfirmBody": "{name} 퀘스트를 정말 포기할까요?",
+      "abandonConfirm": "예",
+      "abandonCancel": "취소",
       "suggestedPlayers": "권장 플레이어: {count}"
     },
     "dialog": {

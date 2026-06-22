@@ -186,6 +186,13 @@ export const ru_RU: EnTranslations = {
       "clock24h": "24-часовой",
       "note": "Добавляет к каждой новой строке чата время её получения, например [14:32]. Влияет только на сообщения, полученные при включённой настройке."
     },
+    "chatWindow": {
+      "move": "Перетащите, чтобы переместить окно чата",
+      "resize": "Перетащите, чтобы изменить размер окна чата",
+      "reset": "Сбросить окно чата",
+      "resetAction": "Сбросить",
+      "note": "Перетащите полосу вкладок чата, чтобы переместить окно, или угловой маркер, чтобы изменить размер. Сброс возвращает окно в положение и размер по умолчанию."
+    },
     "swing": {
       "ready": "Замах",
       "seconds": "{seconds} сек."
@@ -233,7 +240,14 @@ export const ru_RU: EnTranslations = {
     "options": {
       "clickMoveLeft": "Левая кнопка",
       "clickMoveRight": "Правая кнопка",
+      "browserEffects": "Эффекты браузера",
+      "browserEffectsAuto": "Авто",
+      "browserEffectsFull": "Полные",
+      "browserEffectsReduced": "Сниженные",
+      "browserEffectsMinimal": "Минимальные",
+      "browserEffectsNote": "Авто снижает тяжёлые CSS-эффекты (размытие, свечение, движение фона) в зависимости от браузера и устройства. Если интерфейс тормозит, понизьте вручную.",
       "footstepSounds": "Звуки шагов",
+      "clickFeedback": "Метка клика",
       "showWalletOnCharacterScreen": "Показывать кошелек на экране персонажей",
       "showWalletOnPlayerCard": "Показывать кошелек на карточке игрока",
       "uiScale": "Масштаб интерфейса",
@@ -391,6 +405,24 @@ export const ru_RU: EnTranslations = {
         "many": "Список игроков: на {realm} в сети {count} игроков.",
         "other": "Список игроков: на {realm} в сети {count} игрока."
       }
+    },
+    "bugReport": {
+      "menuButton": "Сообщить об ошибке",
+      "realm": "Мир",
+      "character": "Персонаж",
+      "position": "Позиция",
+      "unknown": "Неизвестно",
+      "description": "Что пошло не так?",
+      "descriptionPlaceholder": "Опишите ошибку: что вы делали, что ожидали и что произошло.",
+      "includeScreenshot": "Приложить скриншот",
+      "screenshotAlt": "Скриншот текущего вида, приложенный к этому отчёту об ошибке",
+      "submit": "Отправить отчёт",
+      "submitted": "Отчёт об ошибке отправлен. Спасибо!",
+      "submittedNoShot": "Отчёт об ошибке отправлен, но скриншот слишком большой и не был приложен.",
+      "describeFirst": "Пожалуйста, опишите ошибку перед отправкой.",
+      "tooLarge": "Этот отчёт слишком большой для отправки. Попробуйте без скриншота.",
+      "rateLimited": "Вы недавно отправили несколько отчётов. Подождите немного перед следующим.",
+      "failed": "Не удалось отправить отчёт об ошибке. Попробуйте снова."
     },
     "paperdoll": {
       "unequipAria": "Снять {item}",
@@ -1070,7 +1102,9 @@ export const ru_RU: EnTranslations = {
       "webLoginOnly": "Вход разрешён только из игрового клиента.",
       "accountSuspended": "Эта учетная запись заблокирована до {date}.",
       "alreadyInWorld": "Персонаж уже находится в мире.",
-      "renameBeforeEntering": "Перед входом в мир этому персонажу нужно сменить имя."
+      "takenOver": "Вашего персонажа перехватила другая сессия.",
+      "renameBeforeEntering": "Перед входом в мир этому персонажу нужно сменить имя.",
+      "renameNotPermitted": "Переименование этого персонажа не разрешено."
     }
   },
   "realm": {
@@ -1096,6 +1130,9 @@ export const ru_RU: EnTranslations = {
     "noneYet": "Персонажей пока нет. Создайте одного ниже.",
     "levelClass": "{className}, уровень {level}",
     "inWorld": "в мире",
+    "takeOver": "Перехватить",
+    "inWorldHint": "Уже в мире. Выйдите в другом месте или перехватите сессию.",
+    "takeOverConfirm": "Это отключит персонажа от другой сессии и перенесёт его сюда. Продолжить?",
     "renameRequired": "требуется переименование",
     "delete": "Удалить",
     "rename": "Переименовать",
@@ -1823,6 +1860,10 @@ export const ru_RU: EnTranslations = {
       "completedStatus": "Завершено",
       "returnTo": "Вернитесь к {name}",
       "abandon": "Отказаться от задания",
+      "abandonConfirmTitle": "Отказаться от задания",
+      "abandonConfirmBody": "Вы уверены, что хотите отказаться от {name}?",
+      "abandonConfirm": "Да",
+      "abandonCancel": "Отмена",
       "suggestedPlayers": "Рекомендуется игроков: {count}"
     },
     "dialog": {

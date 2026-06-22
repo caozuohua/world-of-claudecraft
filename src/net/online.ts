@@ -337,12 +337,34 @@ export class Api {
     await this.delete(`/api/characters/${characterId}`, { name });
   }
 
+  // Force-disconnect this character's live session (a stale tab, a crash, or
+  // another device) so we can enter the world on it. Returns whether a session
+  // was actually displaced (false = it was already offline).
+  async takeoverCharacter(characterId: number): Promise<boolean> {
+    const data = await this.post(`/api/characters/${characterId}/takeover`, {});
+    return data.takenOver === true;
+  }
+
   async reportPlayer(reporterCharacterId: number, targetPid: number, reason: string, details: string): Promise<void> {
     await this.post('/api/reports', { reporterCharacterId, targetPid, reason, details });
   }
 
   async reportPlayerByName(reporterCharacterId: number, targetCharacterName: string, reason: string, details: string): Promise<void> {
     await this.post('/api/reports', { reporterCharacterId, targetCharacterName, reason, details });
+  }
+
+  async submitBugReport(payload: {
+    characterId: number;
+    characterName: string;
+    pos: { x: number; y: number; z: number };
+    description: string;
+    screenshot: string | null;
+    meta: unknown;
+  }): Promise<{ screenshotStored: boolean }> {
+    const res = await this.post('/api/bug-reports', payload);
+    // The server drops a screenshot that fails its allowlist/size gate; surface
+    // that so the player is not told the screenshot was attached when it was not.
+    return { screenshotStored: res?.screenshotStored !== false };
   }
 
   async projectStats(): Promise<{ accounts_created: number; players_online: number; realm: string }> {
@@ -479,6 +501,7 @@ const DESPAWN_GRACE_MIN_DIST_SQ = 70 * 70;
 function blankEntity(id: number): Entity {
   return {
     id, kind: 'mob', templateId: '', name: '', level: 1, mendTimer: 0, wardTimer: 0, rallyTimer: 0, warcryTimer: 0,
+    petPath: [], petPathCooldown: 0,
     pos: { x: 0, y: 0, z: 0 }, prevPos: { x: 0, y: 0, z: 0 }, facing: 0, prevFacing: 0,
     vx: 0, vz: 0, vy: 0, onGround: true, jumping: false, fallStartY: 0,
     hp: 1, maxHp: 1, resource: 0, maxResource: 0, resourceType: null,
@@ -1123,6 +1146,9 @@ export class ClientWorld implements IWorld {
     this.cmd({ cmd: 'turnin', quest: questId });
   }
   abandonQuest(questId: string): void {
+    if (!this.canSendCommand()) return;
+    this.questLog.delete(questId);
+    this.pendingQuestCommands.delete(questId);
     this.cmd({ cmd: 'abandon', quest: questId });
   }
   equipItem(itemId: string): void {

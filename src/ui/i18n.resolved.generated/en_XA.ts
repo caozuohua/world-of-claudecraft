@@ -186,6 +186,13 @@ export const en_XA: EnTranslations = {
       "clock24h": "[24-ĥóúŕ]",
       "note": "[Þŕéƒíẋéš éáçĥ ñéŵ çĥáţ ļíñé ŵíţĥ ţĥé ţíɱé íţ áŕŕíʋéð, é.ĝ. [14:32]. Óñļý áƒƒéçţš ɱéššáĝéš ŕéçéíʋéð ŵĥíļé ţĥé óþţíóñ íš óñ.]"
     },
+    "chatWindow": {
+      "move": "[Ðŕáĝ ţó ɱóʋé ţĥé çĥáţ ŵíñðóŵ]",
+      "resize": "[Ðŕáĝ ţó ŕéšížé ţĥé çĥáţ ŵíñðóŵ]",
+      "reset": "[Ŕéšéţ Çĥáţ Ŵíñðóŵ]",
+      "resetAction": "[Ŕéšéţ]",
+      "note": "[Ðŕáĝ ţĥé çĥáţ ţáƀ šţŕíþ ţó ɱóʋé ţĥé ŵíñðóŵ, óŕ ţĥé çóŕñéŕ ĝŕíþ ţó ŕéšížé íţ. Ŕéšéţ ŕéţúŕñš íţ ţó ţĥé ðéƒáúļţ þóšíţíóñ áñð šížé.]"
+    },
     "swing": {
       "ready": "[Šŵíñĝ]",
       "seconds": "[{seconds}š]"
@@ -233,7 +240,14 @@ export const en_XA: EnTranslations = {
     "options": {
       "clickMoveLeft": "[Ļéƒţ Çļíçķ]",
       "clickMoveRight": "[Ŕíĝĥţ Çļíçķ]",
+      "browserEffects": "[Ɓŕóŵšéŕ Éƒƒéçţš]",
+      "browserEffectsAuto": "[Áúţó]",
+      "browserEffectsFull": "[Ƒúļļ]",
+      "browserEffectsReduced": "[Ŕéðúçéð]",
+      "browserEffectsMinimal": "[Ɱíñíɱáļ]",
+      "browserEffectsNote": "[Áúţó ţóñéš ðóŵñ ĥéáʋý ÇŠŠ éƒƒéçţš (ƀļúŕ, ĝļóŵ, ƀáçķĝŕóúñð ɱóţíóñ) ƀášéð óñ ýóúŕ ƀŕóŵšéŕ áñð ðéʋíçé. Ļóŵéŕ íţ ɱáñúáļļý íƒ ţĥé íñţéŕƒáçé ƒééļš šļúĝĝíšĥ.]",
       "footstepSounds": "[Ƒóóţšţéþ Šóúñðš]",
+      "clickFeedback": "[Çļíçķ Ɱáŕķéŕ]",
       "showWalletOnCharacterScreen": "[Šĥóŵ Ŵáļļéţ óñ Çĥáŕáçţéŕ Šçŕééñ]",
       "showWalletOnPlayerCard": "[Šĥóŵ Ŵáļļéţ óñ Þļáýéŕ Çáŕð]",
       "uiScale": "[ÚÍ Šçáļé]",
@@ -391,6 +405,24 @@ export const en_XA: EnTranslations = {
         "many": "[Ŵĥó: {count} þļáýéŕš óñļíñé óñ {realm}.]",
         "other": "[Ŵĥó: {count} þļáýéŕš óñļíñé óñ {realm}.]"
       }
+    },
+    "bugReport": {
+      "menuButton": "[Ŕéþóŕţ á Ɓúĝ]",
+      "realm": "[Ŕéáļɱ]",
+      "character": "[Çĥáŕáçţéŕ]",
+      "position": "[Þóšíţíóñ]",
+      "unknown": "[Úñķñóŵñ]",
+      "description": "[Ŵĥáţ ŵéñţ ŵŕóñĝ?]",
+      "descriptionPlaceholder": "[Ðéšçŕíƀé ţĥé ƀúĝ: ŵĥáţ ýóú ðíð, ŵĥáţ ýóú éẋþéçţéð, áñð ŵĥáţ ĥáþþéñéð.]",
+      "includeScreenshot": "[Íñçļúðé Šçŕééñšĥóţ]",
+      "screenshotAlt": "[Šçŕééñšĥóţ óƒ ţĥé çúŕŕéñţ ʋíéŵ áţţáçĥéð ţó ţĥíš ƀúĝ ŕéþóŕţ]",
+      "submit": "[Šéñð Ŕéþóŕţ]",
+      "submitted": "[Ɓúĝ ŕéþóŕţ šéñţ. Ţĥáñķ ýóú!]",
+      "submittedNoShot": "[Ɓúĝ ŕéþóŕţ šéñţ, ƀúţ ţĥé šçŕééñšĥóţ ŵáš ţóó ļáŕĝé ţó íñçļúðé.]",
+      "describeFirst": "[Þļéášé ðéšçŕíƀé ţĥé ƀúĝ ƀéƒóŕé šéñðíñĝ.]",
+      "tooLarge": "[Ţĥáţ ŕéþóŕţ íš ţóó ļáŕĝé ţó šéñð. Ţŕý áĝáíñ ŵíţĥóúţ ţĥé šçŕééñšĥóţ.]",
+      "rateLimited": "[Ýóú'ʋé šéñţ šéʋéŕáļ ŕéþóŕţš ŕéçéñţļý. Þļéášé ŵáíţ á ƀíţ ƀéƒóŕé šéñðíñĝ áñóţĥéŕ.]",
+      "failed": "[Çóúļð ñóţ šéñð ţĥé ƀúĝ ŕéþóŕţ. Þļéášé ţŕý áĝáíñ.]"
     },
     "paperdoll": {
       "unequipAria": "[Úñéɋúíþ {item}]",
@@ -1070,7 +1102,9 @@ export const en_XA: EnTranslations = {
       "webLoginOnly": "[Ļóĝíñš áŕé óñļý áļļóŵéð ƒŕóɱ ţĥé ĝáɱé çļíéñţ.]",
       "accountSuspended": "[Ţĥíš áççóúñţ íš šúšþéñðéð úñţíļ {date}.]",
       "alreadyInWorld": "[Çĥáŕáçţéŕ íš áļŕéáðý íñ ŵóŕļð.]",
-      "renameBeforeEntering": "[Ţĥíš çĥáŕáçţéŕ ɱúšţ ƀé ŕéñáɱéð ƀéƒóŕé éñţéŕíñĝ ţĥé ŵóŕļð.]"
+      "takenOver": "[Ýóúŕ çĥáŕáçţéŕ ŵáš ţáķéñ óʋéŕ ƀý áñóţĥéŕ šéššíóñ.]",
+      "renameBeforeEntering": "[Ţĥíš çĥáŕáçţéŕ ɱúšţ ƀé ŕéñáɱéð ƀéƒóŕé éñţéŕíñĝ ţĥé ŵóŕļð.]",
+      "renameNotPermitted": "[Ŕéñáɱíñĝ ţĥíš çĥáŕáçţéŕ íš ñóţ áļļóŵéð.]"
     }
   },
   "realm": {
@@ -1096,6 +1130,9 @@ export const en_XA: EnTranslations = {
     "noneYet": "[Ñó çĥáŕáçţéŕš ýéţ. Çŕéáţé óñé ƀéļóŵ.]",
     "levelClass": "[Ļéʋéļ {level} {className}]",
     "inWorld": "[íñ ŵóŕļð]",
+    "takeOver": "[Ţáķé Óʋéŕ]",
+    "inWorldHint": "[Áļŕéáðý íñ ŵóŕļð. Ļóĝ óúţ éļšéŵĥéŕé, óŕ ţáķé óʋéŕ.]",
+    "takeOverConfirm": "[Ţĥíš ŵíļļ ðíšçóññéçţ ţĥíš çĥáŕáçţéŕ ƒŕóɱ áñóţĥéŕ šéššíóñ áñð ƀŕíñĝ íţ ĥéŕé. Çóñţíñúé?]",
     "renameRequired": "[ŕéñáɱé ŕéɋúíŕéð]",
     "delete": "[Ðéļéţé]",
     "rename": "[Ŕéñáɱé]",
@@ -1823,6 +1860,10 @@ export const en_XA: EnTranslations = {
       "completedStatus": "[Çóɱþļéţéð]",
       "returnTo": "[Ŕéţúŕñ ţó {name}]",
       "abandon": "[Áƀáñðóñ Ɋúéšţ]",
+      "abandonConfirmTitle": "[Áƀáñðóñ Ɋúéšţ]",
+      "abandonConfirmBody": "[Áŕé ýóú šúŕé ýóú ŵáñţ ţó áƀáñðóñ {name}?]",
+      "abandonConfirm": "[Ýéš]",
+      "abandonCancel": "[Çáñçéļ]",
       "suggestedPlayers": "[Šúĝĝéšţéð þļáýéŕš: {count}]"
     },
     "dialog": {
