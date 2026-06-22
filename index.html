@@ -2852,6 +2852,37 @@
     margin: 0;
   }
   .account-portal .auth-field { margin-bottom: var(--spacing-sm); }
+  /* Two-factor setup key + recovery codes: legible monospace gold so the user
+     can read and copy them off the screen. */
+  .account-2fa-secret {
+    display: block;
+    font-family: var(--font-mono, monospace);
+    font-size: 1.05rem;
+    letter-spacing: 0.12em;
+    color: var(--color-gold, #e8c474);
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(232, 196, 116, 0.35);
+    border-radius: 4px;
+    padding: var(--spacing-sm);
+    margin: var(--spacing-xs) 0;
+    word-break: break-all;
+    user-select: all;
+  }
+  .account-2fa-codes {
+    list-style: none;
+    margin: var(--spacing-sm) 0;
+    padding: var(--spacing-sm);
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(232, 196, 116, 0.25);
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px var(--spacing-md);
+    font-family: var(--font-mono, monospace);
+    font-size: 1rem;
+    color: var(--color-gold, #e8c474);
+    letter-spacing: 0.08em;
+  }
   .account-portal input {
     display: block;
     width: 100%;
