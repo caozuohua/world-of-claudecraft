@@ -298,7 +298,7 @@ export const ru_RU: EnTranslations = {
         "network": "Сеть",
         "renderer": "Рендер",
         "system": "Система",
-        "input": "Input"
+        "input": "Ввод"
       },
       "labels": {
         "fps": "FPS",

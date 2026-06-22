@@ -298,7 +298,7 @@ export const ko_KR: EnTranslations = {
         "network": "네트워크",
         "renderer": "렌더러",
         "system": "시스템",
-        "input": "Input"
+        "input": "입력"
       },
       "labels": {
         "fps": "FPS",

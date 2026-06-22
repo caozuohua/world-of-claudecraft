@@ -72,6 +72,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   "hudChrome.perf.groups.network": "Сеть",
   "hudChrome.perf.groups.renderer": "Рендер",
   "hudChrome.perf.groups.system": "Система",
+  "hudChrome.perf.groups.input": "Ввод",
   "hudChrome.perf.labels.fps": "FPS",
   "hudChrome.perf.labels.frameTime": "Время кадра",
   "hudChrome.perf.labels.fps1Low": "1% мин.",

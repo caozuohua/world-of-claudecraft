@@ -37,7 +37,8 @@ import { handleInternalApi } from './internal';
 import { handlePerfReport } from './perf_report';
 import { GameServer } from './game';
 import { REALM, REALM_DIRECTORY, REALM_ORIGINS } from './realm';
-import { webLoginEnforced, isWebClientRequest, NATIVE_APP_ORIGINS } from './web_login_guard';
+import { webLoginEnforced, isWebClientRequest, isNativeAppRequest, NATIVE_APP_ORIGINS } from './web_login_guard';
+import { createNativeAttestationChallenge, verifyNativeAttestation } from './native_attestation';
 import { cacheControlFor, etagFor, isNotModified } from './static_cache';
 import { recordUsageCacheEvent, recordUsageMetric, setUsageCacheSize } from './provider_usage';
 
@@ -255,6 +256,7 @@ function requestMetadata(req: http.IncomingMessage): { ip: string; userAgent: st
 // client-supplied token must verify. The English error is matched to a t() key
 // by userFacingApiError() in src/main.ts — keep the two strings in sync.
 async function passesTurnstile(req: http.IncomingMessage, body: Record<string, unknown>): Promise<boolean> {
+  if (isNativeAppRequest(req)) return verifyNativeAttestation(req, body.nativeAttestation);
   if (!TURNSTILE_SECRET) return true;
   return verifyTurnstile(String(body.turnstileToken ?? ''), TURNSTILE_SECRET, requestIp(req));
 }
@@ -362,6 +364,11 @@ const REQUIRE_WEB_LOGIN = webLoginEnforced();
 async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
   const url = (req.url ?? '').split('?')[0];
   try {
+    if (req.method === 'POST' && url === '/api/native-attestation/challenge') {
+      const body = await readBody(req);
+      const action = typeof body.action === 'string' ? body.action : 'auth';
+      return json(res, 200, createNativeAttestationChallenge(req, action));
+    }
     if (REQUIRE_WEB_LOGIN && req.method === 'POST' && (url === '/api/register' || url === '/api/login') && !isWebClientRequest(req)) {
       return json(res, 403, { error: 'logins are only allowed from the game client' });
     }

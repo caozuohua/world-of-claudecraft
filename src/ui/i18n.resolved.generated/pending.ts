@@ -10,52 +10,40 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
-    "hudChrome.perf.groups.input",
     "hudChrome.perf.labels.apm"
   ],
   "es_ES": [
-    "hudChrome.perf.groups.input",
     "hudChrome.perf.labels.apm"
   ],
   "fr_FR": [
-    "hudChrome.perf.groups.input",
     "hudChrome.perf.labels.apm"
   ],
   "fr_CA": [
-    "hudChrome.perf.groups.input",
     "hudChrome.perf.labels.apm"
   ],
   "en_CA": [],
   "it_IT": [
-    "hudChrome.perf.groups.input",
     "hudChrome.perf.labels.apm"
   ],
   "de_DE": [
-    "hudChrome.perf.groups.input",
     "hudChrome.perf.labels.apm"
   ],
   "zh_CN": [
-    "hudChrome.perf.groups.input",
     "hudChrome.perf.labels.apm"
   ],
   "zh_TW": [
-    "hudChrome.perf.groups.input",
     "hudChrome.perf.labels.apm"
   ],
   "ko_KR": [
-    "hudChrome.perf.groups.input",
     "hudChrome.perf.labels.apm"
   ],
   "ja_JP": [
-    "hudChrome.perf.groups.input",
     "hudChrome.perf.labels.apm"
   ],
   "pt_BR": [
-    "hudChrome.perf.groups.input",
     "hudChrome.perf.labels.apm"
   ],
   "ru_RU": [
-    "hudChrome.perf.groups.input",
     "hudChrome.perf.labels.apm"
   ]
 };

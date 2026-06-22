@@ -191,14 +191,14 @@ export class Api {
     return data;
   }
 
-  async register(username: string, password: string, turnstileToken = '', ref = ''): Promise<void> {
-    const data = await this.post('/api/register', { username, password, turnstileToken, ref });
+  async register(username: string, password: string, turnstileToken = '', ref = '', nativeAttestation: unknown = undefined): Promise<void> {
+    const data = await this.post('/api/register', { username, password, turnstileToken, ref, nativeAttestation });
     this.token = data.token;
     this.username = data.username;
   }
 
-  async login(username: string, password: string, turnstileToken = ''): Promise<void> {
-    const data = await this.post('/api/login', { username, password, turnstileToken });
+  async login(username: string, password: string, turnstileToken = '', nativeAttestation: unknown = undefined): Promise<void> {
+    const data = await this.post('/api/login', { username, password, turnstileToken, nativeAttestation });
     this.token = data.token;
     this.username = data.username;
   }

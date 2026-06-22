@@ -23,6 +23,7 @@ import { sfx } from './game/sfx';
 import { activePvpOpponentIds, handlePickedEntity, hoverCursorKind, isAttackableEntity } from './game/interactions';
 import { clickMoveShouldWalk, clickMoveStep, distance2d, latencyAdjustedStopDistance, resolveClickMoveAction, stepAngleToward } from './game/click_move';
 import { Api, isAuthError, ClientWorld, CharacterSummary, NATIVE_APP, type ReleaseEntry } from './net/online';
+import { createNativeAttestationProof } from './net/native_attestation';
 import { setWalletDisplayAvailable, setWocBalance, setWalletUiEnabled, resolveWocBalanceUpdate } from './ui/wallet_balance';
 import {
   accountPortalModel, validatePasswordChange, validateEmailShape, deactivateConfirmReady,
@@ -4364,13 +4365,14 @@ function wireStartScreens(): void {
     const password = ($('#login-pass') as unknown as HTMLInputElement).value;
     loginError('');
     const token = turnstileToken();
-    if (TURNSTILE_SITEKEY && !token) {
+    if (!NATIVE_APP && TURNSTILE_SITEKEY && !token) {
       loginError(t('errors.api.verificationFailed'));
       return;
     }
     try {
-      if (mode === 'login') await api.login(username, password, token);
-      else await api.register(username, password, token, REFERRAL_SLUG);
+      const nativeAttestation = NATIVE_APP ? await createNativeAttestationProof(api.base, mode) : undefined;
+      if (mode === 'login') await api.login(username, password, token, nativeAttestation);
+      else await api.register(username, password, token, REFERRAL_SLUG, nativeAttestation);
     } catch (err) {
       // Auth itself failed (bad credentials, taken username, Turnstile reject…).
       // The token is single-use, so refresh the widget for the next attempt.

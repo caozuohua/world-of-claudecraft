@@ -72,6 +72,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   "hudChrome.perf.groups.network": "ネットワーク",
   "hudChrome.perf.groups.renderer": "レンダラー",
   "hudChrome.perf.groups.system": "システム",
+  "hudChrome.perf.groups.input": "入力",
   "hudChrome.perf.labels.fps": "FPS",
   "hudChrome.perf.labels.frameTime": "フレームタイム",
   "hudChrome.perf.labels.fps1Low": "下位1%",

@@ -298,7 +298,7 @@ export const zh_CN: EnTranslations = {
         "network": "网络",
         "renderer": "渲染器",
         "system": "系统",
-        "input": "Input"
+        "input": "输入"
       },
       "labels": {
         "fps": "FPS",

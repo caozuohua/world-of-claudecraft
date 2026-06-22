@@ -72,6 +72,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   "hudChrome.perf.groups.network": "네트워크",
   "hudChrome.perf.groups.renderer": "렌더러",
   "hudChrome.perf.groups.system": "시스템",
+  "hudChrome.perf.groups.input": "입력",
   "hudChrome.perf.labels.fps": "FPS",
   "hudChrome.perf.labels.frameTime": "프레임 시간",
   "hudChrome.perf.labels.fps1Low": "1% 최저",

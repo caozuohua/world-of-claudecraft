@@ -89,6 +89,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   "hudChrome.perf.groups.network": "Red",
   "hudChrome.perf.groups.renderer": "Renderizador",
   "hudChrome.perf.groups.system": "Sistema",
+  "hudChrome.perf.groups.input": "Entrada",
   "hudChrome.perf.labels.fps": "FPS",
   "hudChrome.perf.labels.frameTime": "Tiempo de fotograma",
   "hudChrome.perf.labels.fps1Low": "1% inferior",

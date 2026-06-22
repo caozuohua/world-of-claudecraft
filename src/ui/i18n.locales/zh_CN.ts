@@ -72,6 +72,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   "hudChrome.perf.groups.network": "网络",
   "hudChrome.perf.groups.renderer": "渲染器",
   "hudChrome.perf.groups.system": "系统",
+  "hudChrome.perf.groups.input": "输入",
   "hudChrome.perf.labels.fps": "FPS",
   "hudChrome.perf.labels.frameTime": "帧时间",
   "hudChrome.perf.labels.fps1Low": "1% 低帧",

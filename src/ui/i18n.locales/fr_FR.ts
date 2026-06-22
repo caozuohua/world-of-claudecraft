@@ -89,6 +89,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   "hudChrome.perf.groups.network": "Réseau",
   "hudChrome.perf.groups.renderer": "Rendu",
   "hudChrome.perf.groups.system": "Système",
+  "hudChrome.perf.groups.input": "Entrée",
   "hudChrome.perf.labels.fps": "FPS",
   "hudChrome.perf.labels.frameTime": "Temps par image",
   "hudChrome.perf.labels.fps1Low": "1 % min.",

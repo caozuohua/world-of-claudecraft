@@ -298,7 +298,7 @@ export const ja_JP: EnTranslations = {
         "network": "ネットワーク",
         "renderer": "レンダラー",
         "system": "システム",
-        "input": "Input"
+        "input": "入力"
       },
       "labels": {
         "fps": "FPS",
