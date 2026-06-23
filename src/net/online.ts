@@ -7,17 +7,19 @@ import {
   type TalentAllocation, type SavedLoadout, type Role,
 } from '../sim/content/talents';
 import { mechChromaItemId, mechChromaSkinIndex } from '../sim/content/skins';
+import { signChallenge } from '../sim/client_challenge';
 import {
-  Entity, EquipSlot, InvSlot, LootRollChoice, MoveInput, PlayerClass, QuestProgress, QuestState, SimEvent,
+  Entity, EquipSlot, InvSlot, LootRollChoice, LootRollPrompt, MoveInput, PlayerClass, QuestProgress, QuestState, SimEvent,
   emptyMoveInput,
 } from '../sim/types';
 import { normalizeMoveFacing, sanitizeMoveInput } from '../sim/move_input';
 import {
   isOverheadEmoteId,
   type AccountCosmetics, type ArenaInfo, type CharacterSearchResult, type DuelInfo, type FriendInfo,
-  type IWorld, type LeaderboardEntry, type MarketInfo, type OverheadEmoteId, type PartyInfo,
-  type PresenceStatus, type SocialInfo, type TradeInfo,
+  type IWorld, type LeaderboardEntry, type LeaderboardPage, type MarketInfo, type OverheadEmoteId,
+  type PartyInfo, type PresenceStatus, type SocialInfo, type TradeInfo,
 } from '../world_api';
+import { LEADERBOARD_PAGE_SIZE } from '../sim/leaderboard_page';
 
 // ---------------------------------------------------------------------------
 // REST
@@ -63,8 +65,8 @@ export function apiUrl(path: string, base = ''): string {
   return origin ? `${origin}${path}` : path;
 }
 
-export function buildWebSocketAuthMessage(token: string, characterId: number): { t: 'auth'; token: string; character: number } {
-  return { t: 'auth', token, character: characterId };
+export function buildWebSocketAuthMessage(token: string, characterId: number, clientSeed = ''): { t: 'auth'; token: string; character: number; clientSeed: string } {
+  return { t: 'auth', token, character: characterId, clientSeed };
 }
 
 export type RealmType = 'Normal' | 'PvP' | 'RP' | 'RP-PvP';
@@ -98,6 +100,7 @@ export interface AccountInfo {
   email: string;
   createdAt: string;
   characterCount: number;
+  twoFactorEnabled: boolean;
 }
 
 // Carries the HTTP status alongside the server's error text so callers can
@@ -190,16 +193,28 @@ export class Api {
     return data;
   }
 
-  async register(username: string, password: string, turnstileToken = '', ref = ''): Promise<void> {
-    const data = await this.post('/api/register', { username, password, turnstileToken, ref });
+  async register(username: string, password: string, turnstileToken = '', ref = '', nativeAttestation: unknown = undefined): Promise<void> {
+    const data = await this.post('/api/register', { username, password, turnstileToken, ref, nativeAttestation });
     this.token = data.token;
     this.username = data.username;
   }
 
-  async login(username: string, password: string, turnstileToken = ''): Promise<void> {
-    const data = await this.post('/api/login', { username, password, turnstileToken });
+  // Returns { twoFactorRequired: true } when the account has 2FA on and no code
+  // was supplied: the caller then re-invokes with `code` (or `recoveryCode`). A
+  // wrong code throws ApiError(401), like a wrong password.
+  async login(
+    username: string,
+    password: string,
+    turnstileToken = '',
+    code = '',
+    recoveryCode = '',
+    nativeAttestation: unknown = undefined,
+  ): Promise<{ twoFactorRequired?: boolean }> {
+    const data = await this.post('/api/login', { username, password, turnstileToken, code, recoveryCode, nativeAttestation });
+    if (data.twoFactorRequired && !data.token) return { twoFactorRequired: true };
     this.token = data.token;
     this.username = data.username;
+    return {};
   }
 
   // ── Persistent session (home-page account portal) ──────────────────────────
@@ -263,6 +278,48 @@ export class Api {
 
   async deactivateAccount(username: string, password: string): Promise<void> {
     await this.post('/api/account/deactivate', { username, password });
+  }
+
+  // Request a verified email change: server mails a confirm link to the new
+  // address and a notice to the old one. The address only changes on verify.
+  async changeEmail(password: string, newEmail: string): Promise<void> {
+    await this.post('/api/account/email/change', { password, newEmail });
+  }
+
+  // ── Two-factor (TOTP) ──────────────────────────────────────────────────────
+  // setup returns the secret + otpauth URI to render as a QR code; enable
+  // confirms a live code and returns the one-time recovery codes.
+  async twoFactorSetup(password: string): Promise<{ secret: string; otpauthUri: string }> {
+    return this.post('/api/account/2fa/setup', { password });
+  }
+
+  async twoFactorEnable(code: string): Promise<{ recoveryCodes: string[] }> {
+    const data = await this.post('/api/account/2fa/enable', { code });
+    return { recoveryCodes: Array.isArray(data.recoveryCodes) ? data.recoveryCodes : [] };
+  }
+
+  async twoFactorDisable(password: string): Promise<void> {
+    await this.post('/api/account/2fa/disable', { password });
+  }
+
+  // GDPR data export: downloads the account + characters as a JSON file. Returns
+  // the parsed bundle too, so the caller can trigger a browser download.
+  async exportData(): Promise<unknown> {
+    const res = await fetch(apiUrl('/api/account/export', this.base), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
+      },
+      body: '{}',
+    });
+    const text = await res.text();
+    if (!res.ok) {
+      let msg = `request failed (${res.status})`;
+      try { msg = JSON.parse(text).error ?? msg; } catch { /* non-JSON error body */ }
+      throw new ApiError(msg, res.status);
+    }
+    return JSON.parse(text);
   }
 
   async characters(): Promise<CharacterSummary[]> {
@@ -505,6 +562,7 @@ export class ClientWorld implements IWorld {
   arenaInfo: ArenaInfo | null = null;
   marketInfo: MarketInfo | null = null;
   markers: Record<number, number> = {}; // entityId -> markerId, mirrored from the self-wire
+  private lootRollPrompts: LootRollPrompt[] = []; // open need-greed rolls, mirrored from the self-wire
   realm = '';
   // bumped whenever a fresh social snapshot lands, so an open panel re-renders
   private socialDirty = false;
@@ -523,6 +581,7 @@ export class ClientWorld implements IWorld {
   private ws: WebSocket;
   private readonly token: string;
   private readonly base: string;
+  private readonly clientSeed: string;
   private eventQueue: SimEvent[] = [];
   // inventory deltas arrive in snapshots, separate from the event frames the
   // HUD redraws on — the frame loop polls this so open panels re-render
@@ -543,10 +602,11 @@ export class ClientWorld implements IWorld {
   private ackedInputSeq = 0;
   private inputEchoSamples: number[] = [];
 
-  constructor(token: string, characterId: number, cls: PlayerClass, base = '') {
+  constructor(token: string, characterId: number, cls: PlayerClass, base = '', clientSeed = '') {
     this.characterId = characterId;
     this.token = token;
     this.base = normalizeOrigin(base) || NATIVE_API_ORIGIN;
+    this.clientSeed = clientSeed;
     this.cfg = { seed: 20061, playerClass: cls };
     // when a realm was picked, connect to that realm's origin; otherwise the
     // page's own host
@@ -555,7 +615,7 @@ export class ClientWorld implements IWorld {
       : buildWebSocketUrl(location.protocol, location.host);
     this.ws = new WebSocket(wsUrl);
     this.ws.onopen = () => {
-      this.ws.send(JSON.stringify(buildWebSocketAuthMessage(token, characterId)));
+      this.ws.send(JSON.stringify(buildWebSocketAuthMessage(token, characterId, this.clientSeed)));
     };
     this.ws.onmessage = (ev) => this.onMessage(String(ev.data));
     this.ws.onclose = () => {
@@ -717,6 +777,16 @@ export class ClientWorld implements IWorld {
         };
         apply(this.socialInfo.friends);
         if (this.socialInfo.guild) apply(this.socialInfo.guild.members);
+      }
+      return;
+    }
+    if (msg.t === 'challenge') {
+      // Server-presented challenge: solve it and return the answer signed with
+      // this client's seed so the answer is bound to us. WIP not yet interactive.
+      if (typeof msg.nonce === 'string' && typeof msg.challenge === 'string') {
+        const challengeResponse = '42';
+        const signature = signChallenge(msg.nonce, challengeResponse, this.clientSeed);
+        this.cmd({ cmd: 'challengeResponse', n: msg.nonce, r: challengeResponse, sig: signature });
       }
       return;
     }
@@ -946,6 +1016,7 @@ export class ClientWorld implements IWorld {
       if (s.duel !== undefined) this.duelInfo = s.duel;
       if (s.arena !== undefined) this.arenaInfo = s.arena;
       if (s.market !== undefined) this.marketInfo = s.market;
+      if (s.lroll !== undefined) this.lootRollPrompts = s.lroll ?? [];
       // camera follows server-side facing changes when not mouselooking
       if (prevSelfFacing !== undefined && this.mouselookFacing === null) {
         let d = e.facing - prevSelfFacing;
@@ -1078,6 +1149,9 @@ export class ClientWorld implements IWorld {
   submitLootRoll(rollId: number, choice: LootRollChoice): void {
     this.cmd({ cmd: 'lootRoll', rollId, choice });
   }
+  activeLootRolls(): LootRollPrompt[] {
+    return this.lootRollPrompts;
+  }
   pickUpObject(id: number): void {
     this.cmd({ cmd: 'pickup', id });
   }
@@ -1090,6 +1164,10 @@ export class ClientWorld implements IWorld {
     if (!this.canSendCommand()) return;
     this.pendingQuestCommands.set(questId, 'turnin');
     this.cmd({ cmd: 'turnin', quest: questId });
+  }
+  reportTelemetry(kind: string, data: Record<string, number>): void {
+    if (!this.canSendCommand()) return;
+    this.cmd({ cmd: 'telemetry', kind, ...data });
   }
   abandonQuest(questId: string): void {
     if (!this.canSendCommand()) return;
@@ -1307,13 +1385,21 @@ export class ClientWorld implements IWorld {
   leaveDungeon(): void {
     this.cmd({ cmd: 'leave_dungeon' });
   }
-  async leaderboard(): Promise<LeaderboardEntry[]> {
+  async leaderboard(page = 0, pageSize = LEADERBOARD_PAGE_SIZE): Promise<LeaderboardPage> {
+    const empty: LeaderboardPage = { leaders: [], page: 0, pageCount: 1, total: 0, pageSize };
     try {
-      const res = await fetch(apiUrl('/api/leaderboard?metric=lifetimeXp&limit=100', this.base));
-      if (!res.ok) return [];
-      return (await res.json()).leaders ?? [];
+      const res = await fetch(apiUrl(`/api/leaderboard?metric=lifetimeXp&page=${page}&pageSize=${pageSize}`, this.base));
+      if (!res.ok) return empty;
+      const data = await res.json();
+      return {
+        leaders: data.leaders ?? [],
+        page: data.page ?? page,
+        pageCount: data.pageCount ?? 1,
+        total: data.total ?? (data.leaders?.length ?? 0),
+        pageSize: data.pageSize ?? pageSize,
+      };
     } catch {
-      return [];
+      return empty;
     }
   }
   prestige(): void {

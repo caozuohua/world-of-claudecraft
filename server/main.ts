@@ -11,6 +11,7 @@ import {
   accountById, characterCountForAccount, updatePasswordHash, revokeTokensExcept, setAccountEmail, setAccountDeactivated,
 } from './db';
 import { virtualLevel } from '../src/sim/types';
+import { paginateLeaderboard, LEADERBOARD_PAGE_SIZE, LEADERBOARD_MAX } from '../src/sim/leaderboard_page';
 import { Sim } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
 import type { LeaderboardEntry } from '../src/world_api';
@@ -28,7 +29,10 @@ import { handleWalletChallenge, handleWalletLink, handleWalletGet, handleWalletU
 import { handleWocBalance, parseWocBalanceQuery } from './woc_balance';
 import {
   handleAccountWhoami, handleAccountChangePassword, handleAccountLogout, handleAccountSetEmail, handleAccountDeactivate,
+  handleAccountEmailChange, handleAccountEmailVerify, handleAccountExport, handleAccountMarketing, handleEmailUnsubscribe,
+  handleAccount2faSetup, handleAccount2faEnable, handleAccount2faDisable, verifyLoginTwoFactor,
 } from './account';
+import { emailAccountCreated } from './email';
 import { handleCardUpload, handleCardRoutes, captureReferral, cardUploadContentLengthTooLarge } from './player_card';
 import { handleAdminApi } from './admin';
 import { pruneExpiredBlockedIps } from './ip_block_db';
@@ -37,12 +41,16 @@ import { handleInternalApi } from './internal';
 import { handlePerfReport } from './perf_report';
 import { GameServer } from './game';
 import { REALM, REALM_DIRECTORY, REALM_ORIGINS } from './realm';
-import { webLoginEnforced, isWebClientRequest, NATIVE_APP_ORIGINS } from './web_login_guard';
+import { webLoginEnforced, isWebClientRequest, isNativeAppRequest, NATIVE_APP_ORIGINS } from './web_login_guard';
+import { createNativeAttestationChallenge, verifyNativeAttestation } from './native_attestation';
 import { cacheControlFor, etagFor, isNotModified } from './static_cache';
 import { recordUsageCacheEvent, recordUsageMetric, setUsageCacheSize } from './provider_usage';
 
 const PORT = Number(process.env.PORT ?? 8787);
 const STATIC_DIR = path.join(__dirname, '..', 'dist');
+// DEPRECATED: the standalone community MediaWiki is being retired in favour of the
+// curated in-app guide, which now serves at /wiki. This constant and its (now removed)
+// /wiki -> MediaWiki redirect are dead and slated for deletion in a follow-up ticket.
 const WIKI_URL = process.env.WIKI_URL ?? 'http://localhost:8080/wiki/index.php/Main_Page';
 // Pretty URLs that serve standalone static HTML pages.
 const STATIC_PAGE_ALIASES = new Map([
@@ -64,6 +72,8 @@ const STATIC_PAGE_ALIASES = new Map([
   ['/data-deletion/', '/data-deletion.html'],
   ['/support', '/support.html'],
   ['/support/', '/support.html'],
+  ['/wiki', '/guide.html'],
+  ['/wiki/', '/guide.html'],
 ]);
 // How long chat logs are kept (0 = forever); pruned at boot and daily.
 const CHAT_LOG_RETENTION_DAYS = Number(process.env.CHAT_LOG_RETENTION_DAYS ?? 90);
@@ -94,7 +104,9 @@ function initialCharacterState(cls: PlayerClass, name: string, skin: number): im
 // most once per LEADERBOARD_TTL_MS, plus the boot warm-up below.
 // ---------------------------------------------------------------------------
 const LEADERBOARD_TTL_MS = 30_000;
-const LEADERBOARD_SIZE = 100;
+// Cache the full exposed depth (LEADERBOARD_MAX) once per scope; the REST handler
+// pages through it as an in-memory slice, so no extra query per page click.
+const LEADERBOARD_SIZE = LEADERBOARD_MAX;
 // One cache per scope: 'realm' for the in-game panel, 'global' for the
 // cross-realm home-page board.
 const leaderboardCache: Record<'realm' | 'global', { at: number; entries: LeaderboardEntry[] } | null> = {
@@ -255,6 +267,7 @@ function requestMetadata(req: http.IncomingMessage): { ip: string; userAgent: st
 // client-supplied token must verify. The English error is matched to a t() key
 // by userFacingApiError() in src/main.ts — keep the two strings in sync.
 async function passesTurnstile(req: http.IncomingMessage, body: Record<string, unknown>): Promise<boolean> {
+  if (isNativeAppRequest(req)) return verifyNativeAttestation(req, body.nativeAttestation);
   if (!TURNSTILE_SECRET) return true;
   return verifyTurnstile(String(body.turnstileToken ?? ''), TURNSTILE_SECRET, requestIp(req));
 }
@@ -277,13 +290,12 @@ function isAdminRequest(req: http.IncomingMessage): boolean {
 }
 
 function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void {
-  const shell = isAdminRequest(req) ? 'admin.html' : 'index.html';
   let urlPath = (req.url ?? '/').split('?')[0];
-  if (urlPath === '/wiki' || urlPath === '/wiki/' || urlPath.startsWith('/wiki/')) {
-    res.writeHead(302, { Location: WIKI_URL });
-    res.end();
-    return;
-  }
+  // The curated Guide is the site wiki: a client-routed SPA served at /wiki with its
+  // own shell, so deep paths (/wiki/classes/...) fall back to guide.html rather than the
+  // game's index.html. (It previously 302'd to a standalone MediaWiki; that is retired.)
+  const isGuide = urlPath === '/wiki' || urlPath.startsWith('/wiki/');
+  const shell = isGuide ? 'guide.html' : isAdminRequest(req) ? 'admin.html' : 'index.html';
   // Pretty-URL aliases for standalone static pages.
   urlPath = STATIC_PAGE_ALIASES.get(urlPath) ?? urlPath;
   if (urlPath === '/' || urlPath === '/admin' || urlPath === '/admin/') urlPath = `/${shell}`;
@@ -362,6 +374,11 @@ const REQUIRE_WEB_LOGIN = webLoginEnforced();
 async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
   const url = (req.url ?? '').split('?')[0];
   try {
+    if (req.method === 'POST' && url === '/api/native-attestation/challenge') {
+      const body = await readBody(req);
+      const action = typeof body.action === 'string' ? body.action : 'auth';
+      return json(res, 200, createNativeAttestationChallenge(req, action));
+    }
     if (REQUIRE_WEB_LOGIN && req.method === 'POST' && (url === '/api/register' || url === '/api/login') && !isWebClientRequest(req)) {
       return json(res, 403, { error: 'logins are only allowed from the game client' });
     }
@@ -394,6 +411,18 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       }
       const token = newToken();
       await saveToken(token, account.id);
+      // Optional email at signup: if a valid address is supplied, store it and
+      // send the welcome mail. Kept optional so existing clients that register
+      // without an email are unaffected (the email is otherwise set later via
+      // the account portal).
+      const signupEmailRaw = typeof body.email === 'string' ? body.email.trim() : '';
+      if (signupEmailRaw && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signupEmailRaw) && signupEmailRaw.length <= 254) {
+        await setAccountEmail(account.id, signupEmailRaw);
+        emailAccountCreated({
+          id: account.id, username: account.username, email: signupEmailRaw,
+          locale: null, marketing_opt_in: false,
+        });
+      }
       void createSuspiciousRegistrationReport({
         accountId: account.id,
         username: account.username,
@@ -426,6 +455,20 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       // we accept, since moving the check before the password would lock admins out.
       if (game.isIpBlocked(requestIp(req)) && !(await isAdminAccount(account.id))) {
         return json(res, 429, { error: 'too many attempts — wait a minute and try again' });
+      }
+      // Second factor: if 2FA is enabled, the password alone is not enough. With
+      // no code supplied we return a challenge (not a token) so the client shows
+      // the code step; with a code (or recovery code) we verify it before issuing.
+      if (account.totp_enabled_at) {
+        const code = typeof body.code === 'string' ? body.code : '';
+        const recoveryCode = typeof body.recoveryCode === 'string' ? body.recoveryCode : '';
+        if (!code && !recoveryCode) {
+          return json(res, 200, { twoFactorRequired: true });
+        }
+        if (!(await verifyLoginTwoFactor(account, code, recoveryCode))) {
+          recordAuthFailure(username);
+          return json(res, 401, { error: 'invalid authentication code', twoFactorRequired: true });
+        }
       }
       clearAuthFailures(username); // correct password: forgive earlier typos
       await touchLogin(account.id, requestMetadata(req));
@@ -671,13 +714,23 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       // lifetime-XP leaderboard (Max-Level XP Overflow), served from the
       // in-memory cache. metric is fixed to lifetimeXp. ?scope=global ranks
       // across every realm (home page); default is this process's realm (the
-      // in-game panel). Optional ?limit=N (1..100). `url` is the path only, so
-      // the query string is parsed from req.url.
+      // in-game panel). `url` is the path only, so the query string is parsed
+      // from req.url.
       const params = new URLSearchParams((req.url ?? '').split('?')[1] ?? '');
       const scope: 'realm' | 'global' = params.get('scope') === 'global' ? 'global' : 'realm';
-      const limit = Math.max(1, Math.min(LEADERBOARD_SIZE, Number(params.get('limit')) || LEADERBOARD_SIZE));
       const entries = await getLeaderboard(scope);
-      return json(res, 200, { realm: REALM, scope, metric: 'lifetimeXp', leaders: entries.slice(0, limit) });
+      // Legacy ?limit=N (home-page board): top N as a single page, no paging UI.
+      const limitParam = params.get('limit');
+      if (limitParam !== null) {
+        const limit = Math.max(1, Math.min(LEADERBOARD_SIZE, Number(limitParam) || LEADERBOARD_SIZE));
+        const leaders = entries.slice(0, limit);
+        return json(res, 200, { realm: REALM, scope, metric: 'lifetimeXp', leaders, page: 0, pageCount: 1, total: leaders.length, pageSize: limit });
+      }
+      // Paged in-game board: ?page=N (0-based) & ?pageSize=M, clamped server-side.
+      const pageSize = Number(params.get('pageSize')) || LEADERBOARD_PAGE_SIZE;
+      const page = Number(params.get('page')) || 0;
+      const slice = paginateLeaderboard(entries, page, pageSize);
+      return json(res, 200, { realm: REALM, scope, metric: 'lifetimeXp', ...slice });
     }
     if (req.method === 'GET' && url === '/api/releases') {
       recordUsageMetric('github.releases.api');
@@ -724,6 +777,47 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
           [...game.clients.values()].some((s) => s.characterId != null && characterIds.includes(s.characterId)),
         disconnectAccount: (id, reason) => game.disconnectAccount(id, reason),
       });
+    }
+    if (req.method === 'POST' && url === '/api/account/email/change') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleAccountEmailChange(req, res, accountId);
+    }
+    // Email-change verification is a link click from the inbox: unauthenticated,
+    // the token is the authorization. Parse the token off the query string.
+    if (req.method === 'GET' && url === '/api/account/email/verify') {
+      const token = new URL(req.url ?? '', 'http://localhost').searchParams.get('token') ?? '';
+      return handleAccountEmailVerify(res, token);
+    }
+    if (req.method === 'POST' && url === '/api/account/export') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleAccountExport(req, res, accountId);
+    }
+    if (req.method === 'POST' && url === '/api/account/marketing') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleAccountMarketing(req, res, accountId);
+    }
+    if (req.method === 'POST' && url === '/api/account/2fa/setup') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleAccount2faSetup(req, res, accountId);
+    }
+    if (req.method === 'POST' && url === '/api/account/2fa/enable') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleAccount2faEnable(req, res, accountId);
+    }
+    if (req.method === 'POST' && url === '/api/account/2fa/disable') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      return handleAccount2faDisable(req, res, accountId);
+    }
+    // Public one-click marketing unsubscribe (link from a marketing email).
+    if (req.method === 'GET' && url === '/api/email/unsubscribe') {
+      const token = new URL(req.url ?? '', 'http://localhost').searchParams.get('token') ?? '';
+      return handleEmailUnsubscribe(res, token);
     }
     // Non-custodial Solana wallet linking — all account-scoped.
     if (req.method === 'POST' && url === '/api/wallet/link/challenge') {
@@ -881,6 +975,7 @@ async function main(): Promise<void> {
 
     const token = typeof msg.token === 'string' ? msg.token : '';
     const characterId = Number(msg.character ?? 'NaN');
+    const clientSeed = typeof msg.clientSeed === 'string' ? msg.clientSeed : '';
     const accountId = await accountForToken(token);
     if (accountId === null || !Number.isFinite(characterId)) {
       ws.send(JSON.stringify({ t: 'error', error: 'not authenticated' }));
@@ -930,6 +1025,7 @@ async function main(): Promise<void> {
         chatStrikes: status.chatStrikes,
         accountCosmetics,
         isAdmin,
+        clientSeed,
       },
     );
     if ('error' in result) {

@@ -1,6 +1,9 @@
-import { OVERHEAD_EMOTE_IDS, type ArenaCombatant, type ArenaFormat, type ArenaStanding, type Entity, type EquipSlot, type InvSlot, type LootRollChoice, type MoveInput, type OverheadEmoteId, type PetMode, type PlayerClass, type QuestProgress, type QuestState, type ResourceType } from './sim/types';
+import { OVERHEAD_EMOTE_IDS, type ArenaCombatant, type ArenaFormat, type ArenaStanding, type Entity, type EquipSlot, type InvSlot, type LootRollChoice, type LootRollPrompt, type MoveInput, type OverheadEmoteId, type PetMode, type PlayerClass, type QuestProgress, type QuestState, type ResourceType } from './sim/types';
 import type { ResolvedAbility } from './sim/sim';
 import type { TalentAllocation, SavedLoadout, Role } from './sim/content/talents';
+import type { LeaderboardPage } from './sim/leaderboard_page';
+
+export type { LeaderboardPage } from './sim/leaderboard_page';
 
 export interface PartyMemberInfo {
   pid: number;
@@ -279,9 +282,13 @@ export interface IWorld {
   interact(): void;
   lootCorpse(id: number): void;
   submitLootRoll(rollId: number, choice: LootRollChoice): void;
+  // Open need-greed rolls the local player may still answer; lets the HUD
+  // reconcile prompts from authoritative state so a missed event is recoverable.
+  activeLootRolls(): LootRollPrompt[];
   pickUpObject(id: number): void;
   acceptQuest(questId: string): void;
   turnInQuest(questId: string): void;
+  reportTelemetry(kind: string, data: Record<string, number>): void;
   abandonQuest(questId: string): void;
   equipItem(itemId: string): void;
   unequipItem(slot: EquipSlot): void;
@@ -365,8 +372,9 @@ export interface IWorld {
   enterDungeon(dungeonId: string): void;
   leaveDungeon(): void;
   // Post-cap progression: the realm-scoped lifetime-XP leaderboard, and the
-  // opt-in cosmetic prestige action.
-  leaderboard(): Promise<LeaderboardEntry[]>;
+  // opt-in cosmetic prestige action. Paged server-side (a realm can hold far
+  // more than one page of max-level players); page is 0-based.
+  leaderboard(page?: number, pageSize?: number): Promise<LeaderboardPage>;
   prestige(): void;
   // Talents & Specializations. State is server-authoritative; the client stages
   // edits locally and commits via applyTalents (the server re-validates).
