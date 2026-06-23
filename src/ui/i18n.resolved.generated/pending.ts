@@ -25,7 +25,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.theme.presets.highContrast",
     "hudChrome.theme.presets.midnight",
     "hudChrome.theme.presets.parchment",
-    "hudChrome.theme.reset"
+    "hudChrome.theme.reset",
+    "realm.popTipFull",
+    "realm.popTipHigh",
+    "realm.popTipLow",
+    "realm.popTipMedium",
+    "realm.popTipOffline"
   ],
   "es_ES": [
     "hudChrome.theme.customColors",
@@ -43,7 +48,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.theme.presets.highContrast",
     "hudChrome.theme.presets.midnight",
     "hudChrome.theme.presets.parchment",
-    "hudChrome.theme.reset"
+    "hudChrome.theme.reset",
+    "realm.popTipFull",
+    "realm.popTipHigh",
+    "realm.popTipLow",
+    "realm.popTipMedium",
+    "realm.popTipOffline"
   ],
   "fr_FR": [
     "hudChrome.theme.customColors",
@@ -61,7 +71,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.theme.presets.highContrast",
     "hudChrome.theme.presets.midnight",
     "hudChrome.theme.presets.parchment",
-    "hudChrome.theme.reset"
+    "hudChrome.theme.reset",
+    "realm.popTipFull",
+    "realm.popTipHigh",
+    "realm.popTipLow",
+    "realm.popTipMedium",
+    "realm.popTipOffline"
   ],
   "fr_CA": [
     "hudChrome.theme.customColors",
@@ -79,7 +94,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.theme.presets.highContrast",
     "hudChrome.theme.presets.midnight",
     "hudChrome.theme.presets.parchment",
-    "hudChrome.theme.reset"
+    "hudChrome.theme.reset",
+    "realm.popTipFull",
+    "realm.popTipHigh",
+    "realm.popTipLow",
+    "realm.popTipMedium",
+    "realm.popTipOffline"
   ],
   "en_CA": [],
   "it_IT": [
@@ -98,7 +118,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.theme.presets.highContrast",
     "hudChrome.theme.presets.midnight",
     "hudChrome.theme.presets.parchment",
-    "hudChrome.theme.reset"
+    "hudChrome.theme.reset",
+    "realm.popTipFull",
+    "realm.popTipHigh",
+    "realm.popTipLow",
+    "realm.popTipMedium",
+    "realm.popTipOffline"
   ],
   "de_DE": [
     "hudChrome.theme.customColors",
@@ -116,7 +141,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.theme.presets.highContrast",
     "hudChrome.theme.presets.midnight",
     "hudChrome.theme.presets.parchment",
-    "hudChrome.theme.reset"
+    "hudChrome.theme.reset",
+    "realm.popTipFull",
+    "realm.popTipHigh",
+    "realm.popTipLow",
+    "realm.popTipMedium",
+    "realm.popTipOffline"
   ],
   "zh_CN": [],
   "zh_TW": [],
@@ -138,7 +168,12 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.theme.presets.highContrast",
     "hudChrome.theme.presets.midnight",
     "hudChrome.theme.presets.parchment",
-    "hudChrome.theme.reset"
+    "hudChrome.theme.reset",
+    "realm.popTipFull",
+    "realm.popTipHigh",
+    "realm.popTipLow",
+    "realm.popTipMedium",
+    "realm.popTipOffline"
   ],
   "ru_RU": []
 };

@@ -15,6 +15,13 @@
     "native:open:ios": "npm run native:sync && npx cap open ios",
     "native:open:android": "npm run native:sync && npx cap open android",
     "preview": "vite preview",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "ci:changed": "biome ci --changed --no-errors-on-unmatched",
     "pretest": "npm run i18n:build && npm run i18n:admin && npm run i18n:scan && npm run wiki:content",
     "test": "vitest run",
     "security:scan": "node scripts/malware_scan.mjs",
@@ -59,6 +66,7 @@
     "ws": "^8.21.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.0",
     "@capacitor/android": "^8.4.0",
     "@capacitor/cli": "^8.4.0",
     "@capacitor/core": "^8.4.0",

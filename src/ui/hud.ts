@@ -51,6 +51,8 @@ import { iconDataUrl, QUALITY_COLOR, raidMarkerDataUrl, RAID_MARKER_NAMES } from
 import { UnitPortraitPainter } from './unit_portrait_painter';
 import { crestIdForEntity } from './unit_portrait';
 import { svgIcon } from './ui_icons';
+import { buildVendorView } from './vendor_view';
+import { renderVendorWindow } from './vendor_window';
 import { shouldPlayCombatImpactForTarget, shouldPlayCritSfxForTarget, shouldPlayMobVoiceSfxForEntity } from './combat_sfx';
 import { nextVoicedYell, voicedYellGain, type VoicedYellState } from './voice_events';
 import { walletDisplayAvailable, walletUiEnabled, wocBalance, wocBalanceVerified, verifiedWocBalance, onWalletUiChange } from './wallet_balance';
@@ -87,7 +89,7 @@ import {
 import { TouchPeekGuard, TOOLTIP_PEEK_MS } from './touch_peek';
 import { maskProfanity } from './profanity';
 import { formatMoney as formatLocalizedMoney, formatNumber, getLanguage, isSupportedLanguage, moneyParts, supportedLanguages, t, tOptional, tPlural, type SupportedLanguage, type TranslationKey } from './i18n';
-import { tEntity } from './entity_i18n';
+import { itemDisplayName, tEntity } from './entity_i18n';
 import { localizeServerText, localizeZone } from './server_i18n';
 import { localizeSimText, localizeSimAuraName } from './sim_i18n';
 import { tTalent, localizeTalentTitle } from './talent_i18n';
@@ -1439,7 +1441,7 @@ export class Hud {
   }
 
   private syncChatPlaceholder(): void {
-    const input = document.getElementById('chat-input') as HTMLInputElement | null;
+    const input = document.getElementById('chat-input') as HTMLTextAreaElement | null;
     if (input) input.placeholder = this.activeChatPlaceholder();
   }
 
@@ -5444,66 +5446,26 @@ export class Hud {
     if (this.openVendorNpcId === null) return;
     const npc = this.sim.entities.get(this.openVendorNpcId);
     if (!npc) return;
-    const el = $('#vendor-window');
-    // the rebuild replaces the hovered row (its mouseleave never fires) and
-    // collapses the scrolled list — drop the tooltip and restore the scroll
-    this.hideTooltip();
-    const scrollTop = el.scrollTop;
-    let html = `<div class="panel-title"><span>${esc(t('itemUi.vendor.goodsTitle', { name: entityDisplayName(npc) }))}</span><button type="button" class="x-btn" data-close aria-label="${esc(t('itemUi.vendor.close'))}">${svgIcon('close')}</button></div>`;
-    el.innerHTML = html;
-    for (const itemId of npc.vendorItems) {
-      const item = ITEMS[itemId];
-      if (!item?.buyValue) continue;
-      const row = document.createElement('button');
-      row.type = 'button';
-      row.className = 'vendor-item';
-      const price = formatLocalizedMoney(item.buyValue);
-      const itemName = itemDisplayName(item);
-      row.setAttribute('aria-label', t('itemUi.vendor.buyAria', { item: itemName, price }));
-      row.innerHTML = `${this.itemIcon(item)}<span class="vi-name">${esc(itemName)}</span><span class="vi-price">${this.moneyHtml(item.buyValue)}</span>`;
-      row.addEventListener('click', () => {
-        this.sim.buyItem(npc.id, itemId);
-        if ($('#bags').style.display !== 'none') this.renderBags();
-        this.renderVendor();
-      });
-      this.attachTooltip(row, () => this.itemTooltip(item) + `<div class="tt-sub">${esc(t('itemUi.tooltip.clickBuy'))}</div>`);
-      el.appendChild(row);
-    }
-    const buybackTitle = document.createElement('div');
-    buybackTitle.className = 'vendor-section-title';
-    buybackTitle.textContent = t('itemUi.vendor.buybackTitle');
-    el.appendChild(buybackTitle);
-    const buyback = this.sim.vendorBuyback.filter((s) => ITEMS[s.itemId] && s.count > 0);
-    if (buyback.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'vendor-empty';
-      empty.textContent = t('itemUi.vendor.buybackEmpty');
-      el.appendChild(empty);
-    }
-    for (const s of buyback) {
-      const item = ITEMS[s.itemId]!;
-      const row = document.createElement('button');
-      row.type = 'button';
-      row.className = 'vendor-item';
-      const price = formatLocalizedMoney(item.sellValue);
-      const itemName = itemDisplayName(item);
-      row.setAttribute('aria-label', t('itemUi.vendor.buybackAria', { item: itemName, price }));
-      row.innerHTML = `${this.itemIcon(item)}<span class="vi-name">${esc(itemName)}${s.count > 1 ? ` x${s.count}` : ''}</span><span class="vi-price">${this.moneyHtml(item.sellValue)}</span>`;
-      row.addEventListener('click', () => {
-        this.sim.buyBackItem(s.itemId);
-        if ($('#bags').style.display !== 'none') this.renderBags();
-        this.renderVendor();
-      });
-      this.attachTooltip(row, () => this.itemTooltip(item) + `<div class="tt-sub">${esc(t('itemUi.tooltip.clickBuyback'))}</div>`);
-      el.appendChild(row);
-    }
-    const hint = document.createElement('div');
-    hint.className = 'vendor-hint';
-    hint.textContent = t('itemUi.vendor.hint');
-    el.appendChild(hint);
-    el.querySelector('[data-close]')?.addEventListener('click', () => this.closeVendor());
-    el.style.display = 'block';
-    el.scrollTop = scrollTop;
+    const buyAndRefresh = (buy: () => void) => {
+      buy();
+      if ($('#bags').style.display !== 'none') this.renderBags();
+      this.renderVendor();
+    };
+    renderVendorWindow(
+      $('#vendor-window'),
+      entityDisplayName(npc),
+      buildVendorView(npc.vendorItems, this.sim.vendorBuyback, ITEMS),
+      {
+        itemIcon: (item) => this.itemIcon(item),
+        moneyHtml: (copper) => this.moneyHtml(copper),
+        itemTooltip: (item) => this.itemTooltip(item),
+        attachTooltip: (el, html) => this.attachTooltip(el, html),
+        hideTooltip: () => this.hideTooltip(),
+        onBuy: (itemId) => buyAndRefresh(() => this.sim.buyItem(npc.id, itemId)),
+        onBuyBack: (itemId) => buyAndRefresh(() => this.sim.buyBackItem(itemId)),
+        onClose: () => this.closeVendor(),
+      },
+    );
   }
 
   closeVendor(): void {
@@ -8910,11 +8872,14 @@ export class Hud {
   // Open the chat bar pre-filled with a whisper to this player (classic-MMO-style DM).
   private startWhisper(name: string): void {
     if (!name || name === this.sim.player.name) return;
-    const input = $('#chat-input') as unknown as HTMLInputElement;
+    const input = $('#chat-input') as unknown as HTMLTextAreaElement;
     input.value = `/w ${name} `;
     input.style.display = 'block';
     input.focus();
     input.setSelectionRange(input.value.length, input.value.length);
+    // Re-anchor + autosize the bar for the pre-filled value even if it was
+    // already open (focus alone won't re-fire); main.ts listens for 'input'.
+    input.dispatchEvent(new Event('input'));
   }
 
   // -------------------------------------------------------------------------
@@ -10114,10 +10079,6 @@ function abilityDisplayDescription(def: AbilityDef, damageText: string): string 
 
 function classDisplayName(cls: PlayerClass): string {
   return tEntity({ kind: 'class', id: cls, field: 'name' });
-}
-
-function itemDisplayName(item: ItemDef): string {
-  return tEntity({ kind: 'item', id: item.id, field: 'name' });
 }
 
 function itemDisplayNameFromSource(name: string): string {

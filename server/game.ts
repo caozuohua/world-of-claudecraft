@@ -1,5 +1,5 @@
 import type { WebSocket } from 'ws';
-import { Sim } from '../src/sim/sim';
+import { Sim, MAX_CHAT_MESSAGE_LEN } from '../src/sim/sim';
 import type { PlayerMeta } from '../src/sim/sim';
 import { DT, Entity, EQUIP_SLOTS, EquipSlot, RUN_SPEED, SimEvent, dist2d, emptyMoveInput } from '../src/sim/types';
 import { parseMoveInputFrame } from '../src/sim/move_input';
@@ -1317,7 +1317,7 @@ export class GameServer {
             if (sent) {
               this.chatLog.log({
                 accountId: session.accountId, characterId: session.characterId,
-                characterName: session.name, channel, message: body.trim().slice(0, 200),
+                characterName: session.name, channel, message: body.trim().slice(0, MAX_CHAT_MESSAGE_LEN),
               });
             }
           }).catch((err) => console.error(`${channel} chat failed:`, err));
@@ -1814,7 +1814,7 @@ export class GameServer {
             if (sent) {
               this.chatLog.log({
                 accountId: session.accountId, characterId: session.characterId,
-                characterName: session.name, channel, message: body.trim().slice(0, 200),
+                characterName: session.name, channel, message: body.trim().slice(0, MAX_CHAT_MESSAGE_LEN),
               });
             }
           }).catch((err) => console.error(`${channel} chat failed:`, err));

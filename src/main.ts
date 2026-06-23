@@ -47,6 +47,7 @@ import { DT, INTERACT_RANGE, MELEE_RANGE, PlayerClass, RUN_SPEED, dist2d } from 
 import { togglePasswordVisibility, syncInputAriaState, validateForm, handleKeyboardActivation, validateCharacterName } from './ui/auth_utils';
 import { CLASSES, ABILITIES } from './sim/content/classes';
 import { CLASS_DETAILS, SIGNATURE_ABILITIES } from './ui/class_details_data';
+import { chatInputSize } from './ui/chat_input_autosize';
 import { iconDataUrl } from './ui/icons';
 import { ensureLocaleLoaded, formatDateTime, formatNumber, getLanguage, isLocaleResident, isSupportedLanguage, languageTag, setLanguage, t, tPlural, type SupportedLanguage, type TranslationKey } from './ui/i18n';
 import { tServer } from './ui/server_i18n';
@@ -682,8 +683,40 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
   // Offline only: expose the dev "2v2 Fiesta vs Bots" practice toggle to the HUD.
   if (offlineSim) hud.setFiestaPracticeHook(() => offlineSim.startFiestaPractice());
 
-  const chatInput = $('#chat-input') as unknown as HTMLInputElement;
+  const chatInput = $('#chat-input') as unknown as HTMLTextAreaElement;
   const clickMoveMarker = $('#click-move-marker') as HTMLDivElement;
+  // Grow the chat bar to fit what's typed (up to its CSS max-height) so a long
+  // message wraps instead of scrolling a single line. Anchored by its bottom
+  // edge, the extra height extends upward, away from the chat log beneath it.
+  const CHAT_INPUT_MIN_H = 36;
+  const CHAT_INPUT_MAX_H = 110;
+  const autosizeChatInput = (): void => {
+    // Empty: pin to one line. (A long placeholder otherwise inflates a textarea's
+    // scrollHeight in Chromium, making the bar tall when empty and snapping to one
+    // line on the first keystroke.)
+    if (chatInput.value === '') {
+      chatInput.style.height = `${CHAT_INPUT_MIN_H}px`;
+      chatInput.style.overflowY = 'hidden';
+      return;
+    }
+    chatInput.style.height = 'auto';
+    const size = chatInputSize(chatInput.scrollHeight, {
+      minHeight: CHAT_INPUT_MIN_H, maxHeight: CHAT_INPUT_MAX_H,
+    });
+    chatInput.style.height = `${size.height}px`;
+    chatInput.style.overflowY = size.overflowY;
+  };
+  // Re-anchor the bar just above the (possibly moved / resized / tab-wrapped)
+  // chat box so it never overlaps it. Mobile keeps its own CSS placement.
+  const CHAT_INPUT_GAP = 6;
+  const anchorChatInput = (): void => {
+    if (document.body.classList.contains('mobile-touch')) return;
+    const wrap = document.getElementById('chatlog-wrap');
+    if (!wrap) return;
+    const rect = wrap.getBoundingClientRect();
+    if (rect.height <= 0) return;
+    chatInput.style.bottom = `${Math.round(window.innerHeight - rect.top + CHAT_INPUT_GAP)}px`;
+  };
   const recoverFromMobileKeyboard = (): void => {
     document.body.classList.remove('mobile-chat-open');
     syncAppViewport();
@@ -694,6 +727,8 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
   const closeChat = (): void => {
     chatInput.value = '';
     chatInput.style.display = 'none';
+    chatInput.style.height = '';
+    chatInput.style.overflowY = '';
     chatInput.blur();
     recoverFromMobileKeyboard();
   };
@@ -701,11 +736,23 @@ async function startGame(world: IWorld, offlineSim: Sim | null, online: ClientWo
     // reflect the active chat-channel tab in the placeholder (e.g. "Message World")
     chatInput.placeholder = hud.activeChatPlaceholder();
     chatInput.style.display = 'block';
+    anchorChatInput();
+    autosizeChatInput();
     chatInput.focus();
   }
+  // Fired for every open path (keybind, whisper context menu, mobile toggle)
+  // since they all call focus().
+  chatInput.addEventListener('focus', () => { anchorChatInput(); autosizeChatInput(); });
+  chatInput.addEventListener('input', () => { autosizeChatInput(); anchorChatInput(); });
+  window.addEventListener('resize', () => {
+    if (chatInput.style.display === 'block') { anchorChatInput(); autosizeChatInput(); }
+  });
   chatInput.addEventListener('keydown', (e) => {
     e.stopPropagation();
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.isComposing) {
+      // single-message semantics (like classic chat): Enter always sends,
+      // never inserts a newline into the textarea.
+      e.preventDefault();
       // the active channel tab supplies the send prefix, so plain text goes to
       // that channel without the player retyping "/world" etc.
       const raw = chatInput.value;
@@ -2090,12 +2137,12 @@ const LAST_REALM_KEY = 'woc_last_realm';
 // Classic-MMO population bands, derived from the realm's current online count
 // (the classic MMO's own labels are relative to peak; current count is a fair
 // local stand-in).
-function realmPopulation(online: boolean, players: number): { labelKey: TranslationKey; cls: string } {
-  if (!online) return { labelKey: 'realm.offline', cls: 'offline' };
-  if (players >= 80) return { labelKey: 'realm.full', cls: 'full' };
-  if (players >= 40) return { labelKey: 'realm.high', cls: 'high' };
-  if (players >= 15) return { labelKey: 'realm.medium', cls: 'med' };
-  return { labelKey: 'realm.low', cls: 'low' };
+function realmPopulation(online: boolean, players: number): { labelKey: TranslationKey; tipKey: TranslationKey; cls: string } {
+  if (!online) return { labelKey: 'realm.offline', tipKey: 'realm.popTipOffline', cls: 'offline' };
+  if (players >= 80) return { labelKey: 'realm.full', tipKey: 'realm.popTipFull', cls: 'full' };
+  if (players >= 40) return { labelKey: 'realm.high', tipKey: 'realm.popTipHigh', cls: 'high' };
+  if (players >= 15) return { labelKey: 'realm.medium', tipKey: 'realm.popTipMedium', cls: 'med' };
+  return { labelKey: 'realm.low', tipKey: 'realm.popTipLow', cls: 'low' };
 }
 
 // After login the classic MMO drops you onto a Realm List screen (then character select for
@@ -2337,6 +2384,11 @@ function showRealmList(dir?: import('./net/online').RealmDirectory): void {
       const popEl = row.querySelector('[data-pop]') as HTMLElement;
       popEl.textContent = t(pop.labelKey);
       popEl.className = `realm-pop ${pop.cls}`;
+      // The band label alone ("Low") doesn't say what it means, explain the
+      // threshold on hover (title) and to assistive tech (aria-label).
+      const popTip = t(pop.tipKey);
+      popEl.title = popTip;
+      popEl.setAttribute('aria-label', popTip);
       (row.querySelector('[data-sub]') as HTMLElement).textContent = st.online
         ? t('realm.onlineNow', { count: st.players })
         : t('realm.down');
@@ -2413,6 +2465,11 @@ function renderRealmDropdown(): void {
       const popEl = row.querySelector('[data-pop]') as HTMLElement;
       popEl.textContent = t(pop.labelKey);
       popEl.className = `realm-pop ${pop.cls}`;
+      // The band label alone ("Low") doesn't say what it means, explain the
+      // threshold on hover (title) and to assistive tech (aria-label).
+      const popTip = t(pop.tipKey);
+      popEl.title = popTip;
+      popEl.setAttribute('aria-label', popTip);
       row.classList.toggle('offline', !st.online);
     }));
   });

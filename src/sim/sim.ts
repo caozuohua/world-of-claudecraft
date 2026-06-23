@@ -245,6 +245,10 @@ const NEARBY_RANGE = 40; // /nearby scan radius — wider than say, tighter than
 const NEARBY_MAX = 10; // cap the /nearby list so a crowded camp can't spam chat
 const CHAT_BURST = 8; // messages a player may send back-to-back...
 const CHAT_REFILL = 2; // ...then this many more per second (caps spam amplifiers)
+// Max characters in a single chat line, matching classic WoW's 255-char editbox.
+// Authoritative cap: enforced here in the deterministic core so every host agrees;
+// the client maxlength + server chat-log slices mirror it.
+export const MAX_CHAT_MESSAGE_LEN = 255;
 const DUEL_FORFEIT_DISTANCE = 60;
 const TRADE_RANGE = 10;
 // The World Market (the Merchant's auction house)
@@ -1886,7 +1890,12 @@ export class Sim {
     for (const pid of party.members) {
       const candidate = this.players.get(pid);
       const e = this.entities.get(pid);
-      if (candidate && e && !e.dead && dist2d(e.pos, mob.pos) <= PARTY_XP_RANGE) candidates.push(candidate);
+      // A member downed during the fight (corpse still in range) keeps loot
+      // rights, exactly like the kill-credit gate in handleDeath. Do not filter
+      // on `e.dead` here: that locked fallen members out of currency splits and
+      // need/greed rolls. Releasing to the graveyard moves the corpse out of
+      // range, which is what actually forfeits the rights.
+      if (candidate && e && dist2d(e.pos, mob.pos) <= PARTY_XP_RANGE) candidates.push(candidate);
     }
     return candidates;
   }
@@ -4389,14 +4398,17 @@ export class Sim {
       if (meta && creditEntity) {
         const eliteMult = MOBS[e.templateId]?.elite ? 2 : 1;
         // party play: kill credit, xp split and quest progress shared with
-        // members alive and nearby (classic group rules + group bonus)
+        // members nearby (classic group rules + group bonus). A member downed
+        // during the fight still counts while their corpse is in range: classic
+        // groups credit fallen members (and their loot rights), they are not
+        // erased for dying. Releasing to the graveyard moves them out of range.
         const party = this.partyOf(creditEntity.id);
         const eligible: PlayerMeta[] = [];
         if (party) {
           for (const mPid of party.members) {
             const mMeta = this.players.get(mPid);
             const mE = this.entities.get(mPid);
-            if (mMeta && mE && !mE.dead && dist2d(mE.pos, e.pos) <= PARTY_XP_RANGE) eligible.push(mMeta);
+            if (mMeta && mE && dist2d(mE.pos, e.pos) <= PARTY_XP_RANGE) eligible.push(mMeta);
           }
         }
         if (eligible.length === 0) eligible.push(meta);
@@ -7784,11 +7796,23 @@ export class Sim {
       quest.objectives.forEach((objective, objectiveIndex) => {
         if (objective.type !== 'interact' || objective.targetObjectItemId !== obj.objectItemId) return;
         handled = true;
-        if (qp.counts[objectiveIndex] >= objective.count) return;
-        if (obj.objectItemId === 'crypt_ritual_circle' && !this.countItem('crypt_keystone', meta.entityId)) {
+        const isRitual = obj.objectItemId === 'crypt_ritual_circle';
+        if (isRitual && !this.countItem('crypt_keystone', meta.entityId)) {
           this.error(meta.entityId, 'The ritual circle is silent without the Crypt Keystone.');
           return;
         }
+        // Re-summon the Bound Guardian whenever the player still owes the kill.
+        // The interact objective is one-shot, but a guardian lost to the idle
+        // despawn (leash, wipe) must stay reachable or the kill/collect/signet
+        // dead-ends with no way to retry. summonQuestMob no-ops if one is alive.
+        if (isRitual) {
+          const killIdx = quest.objectives.findIndex((o) => o.type === 'kill' && o.targetMobId === 'bound_guardian');
+          if (killIdx >= 0 && qp.counts[killIdx] < quest.objectives[killIdx].count) {
+            this.summonQuestMob('bound_guardian', obj.pos, meta.entityId);
+          }
+        }
+        // The interact objective itself (and its one-time vision) only credits once.
+        if (qp.counts[objectiveIndex] >= objective.count) return;
         const shared = this.sharedNythraxisObjectParticipants(meta, obj, qp.questId, objectiveIndex);
         for (const member of shared) {
           const memberQp = member.questLog.get(qp.questId);
@@ -7806,7 +7830,6 @@ export class Sim {
         }
         const visionId = this.summonQuestVision(obj.objectItemId, obj.pos);
         this.emitQuestObjectVision(obj.objectItemId, shared.map((m) => m.entityId), visionId);
-        if (obj.objectItemId === 'crypt_ritual_circle') this.summonQuestMob('bound_guardian', obj.pos, meta.entityId);
       });
     }
     return handled;
@@ -8279,7 +8302,7 @@ export class Sim {
   chat(text: string, pid?: number): SentChat | null {
     const r = this.resolve(pid);
     if (!r) return null;
-    const raw = text.trim().slice(0, 200);
+    const raw = text.trim().slice(0, MAX_CHAT_MESSAGE_LEN);
     if (!raw) return null;
     if (!this.chatAllowed(r.meta.entityId)) {
       this.error(r.meta.entityId, 'You are sending messages too quickly.');
@@ -8664,7 +8687,7 @@ export class Sim {
   // actor). `from` carries the actor's name so the client can render it as a
   // clickable name; `text` is the action predicate (e.g. "waves at Bet.").
   private broadcastEmote(actor: PlayerMeta, actorEntity: Entity, text: string): void {
-    const body = text.slice(0, 200);
+    const body = text.slice(0, MAX_CHAT_MESSAGE_LEN);
     for (const meta of this.players.values()) {
       const e = this.entities.get(meta.entityId);
       if (!e || dist2d(actorEntity.pos, e.pos) > SAY_RANGE) continue;
