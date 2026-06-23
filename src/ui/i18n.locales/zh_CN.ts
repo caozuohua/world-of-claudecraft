@@ -323,7 +323,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   "auth.twoFactorLabel": "验证码",
   "auth.twoFactorPlaceholder": "6 位验证码或恢复码",
   "auth.twoFactorHint": "请输入身份验证器应用中的验证码，或一个恢复码。",
-  "auth.twoFactorError": "验证码无效。",
   "wallet.label": "$WOC 钱包",
   "wallet.connect": "验证钱包",
   "wallet.connectTitle": "验证你的 Solana 钱包",

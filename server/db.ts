@@ -843,14 +843,6 @@ export async function consumeRecoveryCode(accountId: number, codeHash: string): 
   return res.rowCount! > 0;
 }
 
-export async function countUnusedRecoveryCodes(accountId: number): Promise<number> {
-  const res = await pool.query(
-    'SELECT COUNT(*)::int AS count FROM account_totp_recovery WHERE account_id = $1 AND consumed_at IS NULL',
-    [accountId],
-  );
-  return res.rows[0]?.count ?? 0;
-}
-
 // GDPR-style data export bundle: the account's own profile plus every character
 // it owns on this realm, as plain JSON. Excludes secrets (password hash, tokens).
 export async function exportAccountData(accountId: number): Promise<Record<string, unknown> | null> {

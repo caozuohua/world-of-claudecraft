@@ -10,7 +10,6 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
-    "auth.twoFactorError",
     "auth.twoFactorHint",
     "auth.twoFactorLabel",
     "auth.twoFactorPlaceholder",
@@ -49,7 +48,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.account.twoFactorVerifyBtn"
   ],
   "es_ES": [
-    "auth.twoFactorError",
     "auth.twoFactorHint",
     "auth.twoFactorLabel",
     "auth.twoFactorPlaceholder",
@@ -88,7 +86,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.account.twoFactorVerifyBtn"
   ],
   "fr_FR": [
-    "auth.twoFactorError",
     "auth.twoFactorHint",
     "auth.twoFactorLabel",
     "auth.twoFactorPlaceholder",
@@ -127,7 +124,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.account.twoFactorVerifyBtn"
   ],
   "fr_CA": [
-    "auth.twoFactorError",
     "auth.twoFactorHint",
     "auth.twoFactorLabel",
     "auth.twoFactorPlaceholder",
@@ -167,7 +163,6 @@ export const pending: Record<string, readonly string[]> = {
   ],
   "en_CA": [],
   "it_IT": [
-    "auth.twoFactorError",
     "auth.twoFactorHint",
     "auth.twoFactorLabel",
     "auth.twoFactorPlaceholder",
@@ -206,7 +201,6 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.account.twoFactorVerifyBtn"
   ],
   "de_DE": [
-    "auth.twoFactorError",
     "auth.twoFactorHint",
     "auth.twoFactorLabel",
     "auth.twoFactorPlaceholder",
@@ -249,7 +243,6 @@ export const pending: Record<string, readonly string[]> = {
   "ko_KR": [],
   "ja_JP": [],
   "pt_BR": [
-    "auth.twoFactorError",
     "auth.twoFactorHint",
     "auth.twoFactorLabel",
     "auth.twoFactorPlaceholder",

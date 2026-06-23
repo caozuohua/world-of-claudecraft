@@ -323,7 +323,6 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   "auth.twoFactorLabel": "인증 코드",
   "auth.twoFactorPlaceholder": "6자리 또는 복구 코드",
   "auth.twoFactorHint": "인증 앱에 표시된 코드 또는 복구 코드 중 하나를 입력하세요.",
-  "auth.twoFactorError": "인증 코드가 올바르지 않습니다.",
   "wallet.label": "$WOC 지갑",
   "wallet.connect": "지갑 인증",
   "wallet.connectTitle": "Solana 지갑 인증",

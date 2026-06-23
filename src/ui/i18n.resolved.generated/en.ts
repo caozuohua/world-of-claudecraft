@@ -1424,8 +1424,7 @@ export const en: EnTranslations = {
     "create": "Create",
     "twoFactorLabel": "Authentication code",
     "twoFactorPlaceholder": "6-digit or recovery code",
-    "twoFactorHint": "Enter the code from your authenticator app, or one of your recovery codes.",
-    "twoFactorError": "Invalid authentication code."
+    "twoFactorHint": "Enter the code from your authenticator app, or one of your recovery codes."
   },
   "wallet": {
     "label": "$WOC Wallet",

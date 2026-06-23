@@ -7425,6 +7425,13 @@
           <!-- Cloudflare Turnstile widget mounts here when configured (src/main.ts). -->
           <div id="cf-turnstile-container" class="auth-turnstile"></div>
 
+          <!-- Second-factor step: revealed when the server returns twoFactorRequired. -->
+          <div class="auth-field" id="login-2fa-field" hidden>
+            <label for="login-2fa-code" class="auth-label" data-i18n="auth.twoFactorLabel">Authentication code</label>
+            <input id="login-2fa-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="14" data-i18n-placeholder="auth.twoFactorPlaceholder" placeholder="6-digit or recovery code" />
+            <p class="account-hint" data-i18n="auth.twoFactorHint">Enter the code from your authenticator app, or one of your recovery codes.</p>
+          </div>
+
           <div id="login-error" class="auth-error" aria-live="polite"></div>
 
           <div class="auth-actions auth-actions-row">

@@ -323,7 +323,6 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   "auth.twoFactorLabel": "Код аутентификации",
   "auth.twoFactorPlaceholder": "6-значный код или код восстановления",
   "auth.twoFactorHint": "Введите код из приложения-аутентификатора или один из ваших кодов восстановления.",
-  "auth.twoFactorError": "Неверный код аутентификации.",
   "wallet.label": "Кошелек $WOC",
   "wallet.connect": "Подтвердить кошелек",
   "wallet.connectTitle": "Подтвердить ваш кошелек Solana",

@@ -1424,8 +1424,7 @@ export const zh_CN: EnTranslations = {
     "create": "创建",
     "twoFactorLabel": "验证码",
     "twoFactorPlaceholder": "6 位验证码或恢复码",
-    "twoFactorHint": "请输入身份验证器应用中的验证码，或一个恢复码。",
-    "twoFactorError": "验证码无效。"
+    "twoFactorHint": "请输入身份验证器应用中的验证码，或一个恢复码。"
   },
   "wallet": {
     "label": "$WOC 钱包",

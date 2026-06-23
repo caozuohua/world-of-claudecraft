@@ -323,7 +323,6 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   "auth.twoFactorLabel": "認証コード",
   "auth.twoFactorPlaceholder": "6桁のコードまたはリカバリーコード",
   "auth.twoFactorHint": "認証アプリに表示されたコード、またはリカバリーコードのいずれかを入力してください。",
-  "auth.twoFactorError": "認証コードが正しくありません。",
   "wallet.label": "$WOC ウォレット",
   "wallet.connect": "ウォレット認証",
   "wallet.connectTitle": "Solanaウォレットを認証",
