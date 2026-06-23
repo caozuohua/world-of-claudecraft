@@ -1651,7 +1651,7 @@
   body.frosted-panels .panel, body.frosted-panels .window {
     backdrop-filter: blur(7px) saturate(1.05); -webkit-backdrop-filter: blur(7px) saturate(1.05); }
   /* Show FPS — small readout, hidden until toggled on (main.ts flips display). */
-  #fps-overlay { position: absolute; top: 6px; right: 8px; display: none; z-index: 60;
+  #perf-overlay { position: absolute; top: 6px; right: 8px; display: none; z-index: 60;
     font-family: var(--title-font); font-size: 12px; color: var(--gold); pointer-events: none;
     text-shadow: 1px 1px 2px #000; background: rgba(8, 8, 13, 0.55); padding: 2px 7px;
     border-radius: 4px; border: 1px solid #463a1c; }
@@ -7108,7 +7108,7 @@
 
   <template id="game-ui-template">
   <div id="ui">
-    <div id="fps-overlay" aria-hidden="true"></div>
+    <div id="perf-overlay" aria-hidden="true"></div>
     <div id="click-move-marker" class="click-move-marker" aria-hidden="true">
       <span class="ctm-arrow ctm-n"></span>
       <span class="ctm-arrow ctm-e"></span>
@@ -7124,6 +7124,7 @@
       <div class="uf-bars">
         <div class="uf-name" id="tf-name"></div>
         <div class="bar hp"><div class="bar-fill" id="tf-hp"></div><div class="bar-absorb" id="tf-absorb"></div><div class="bar-text" id="tf-hp-text"></div></div>
+        <div id="tf-castbar"><div class="fill"></div><div class="label"></div><div class="timer"></div></div>
         <div class="combo-row" id="combo-row"></div>
         <div class="uf-buffs" id="tf-debuffs"></div>
       </div>
