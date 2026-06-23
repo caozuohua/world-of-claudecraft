@@ -18,6 +18,8 @@ import type { Keybinds } from '../game/keybinds';
 import { dist2d, INTERACT_RANGE } from '../sim/types';
 import { QUESTS, ZONES, PLAYER_START } from '../sim/data';
 import { t, formatNumber } from './i18n';
+import type { TranslationKey } from './i18n';
+import { tutorialBodyPlan, type TutorialParam } from './tutorial_copy';
 
 // Starter content the onboarding guides the player toward — all derived from the
 // shipped sim sources so a content rename or a moved spawn can't silently desync
@@ -216,18 +218,27 @@ export class TutorialOverlay {
     const questKey = keybinds.primaryLabel('questlog') || t('hud.options.unbound');
     const name = world.player.name || t('hud.core.you');
 
-    const copy: Record<TutorialStep, { title: string; body: string }> = {
-      move: { title: t('hud.tutorial.moveTitle'), body: t('hud.tutorial.moveBody', { moveKeys }) },
-      seek: { title: t('hud.tutorial.seekTitle'), body: t('hud.tutorial.seekBody') },
-      talk: { title: t('hud.tutorial.talkTitle'), body: t('hud.tutorial.talkBody', { interactKey }) },
-      slay: { title: t('hud.tutorial.slayTitle'), body: t('hud.tutorial.slayBody') },
-      return: { title: t('hud.tutorial.returnTitle'), body: t('hud.tutorial.returnBody', { interactKey }) },
-      done: { title: t('hud.tutorial.doneTitle'), body: t('hud.tutorial.doneBody', { name, questKey }) },
+    // On the touch interface the controls are on-screen sticks + Use/More
+    // buttons, so the keyboard/mouse phrasings ("W/A/S/D", "press {interactKey}")
+    // are wrong; tutorialBodyPlan swaps in the touch copy for those steps. Read
+    // the same body class the HUD uses so it tracks the Interface Mode override.
+    const touch = document.body.classList.contains('mobile-touch');
+    const allParams: Record<TutorialParam, string> = { moveKeys, interactKey, questKey, name };
+    const plan = tutorialBodyPlan(this.step!, touch);
+    const params: Partial<Record<TutorialParam, string>> = {};
+    for (const key of plan.params) params[key] = allParams[key];
+
+    const titleKey: Record<TutorialStep, TranslationKey> = {
+      move: 'hud.tutorial.moveTitle',
+      seek: 'hud.tutorial.seekTitle',
+      talk: 'hud.tutorial.talkTitle',
+      slay: 'hud.tutorial.slayTitle',
+      return: 'hud.tutorial.returnTitle',
+      done: 'hud.tutorial.doneTitle',
     };
 
-    const c = copy[this.step!];
-    this.titleEl.textContent = c.title;
-    this.bodyEl.textContent = c.body;
+    this.titleEl.textContent = t(titleKey[this.step!]);
+    this.bodyEl.textContent = t(plan.bodyKey, params);
 
     const idx = STEP_ORDER.indexOf(this.step!);
     this.stepEl.textContent = idx >= 0

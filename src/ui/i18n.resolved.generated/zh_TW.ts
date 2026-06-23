@@ -231,6 +231,12 @@ export const zh_TW: EnTranslations = {
       "hapticsOff": "觸覺回饋已關閉",
       "toggleHaptics": "切換觸覺回饋"
     },
+    "tutorial": {
+      "moveBodyTouch": "Use the left stick to move and drag the screen to look around. Take a few steps to begin.",
+      "talkBodyTouch": "Stand close to Marshal Redbrook and tap the Use button to speak, then accept his task.",
+      "returnBodyTouch": "Your task is done. Return to Marshal Redbrook and tap the Use button to turn it in.",
+      "doneBodyTouch": "You have the basics, {name}. The Vale is yours to explore. Tap the More button anytime to review your quests. Good hunting."
+    },
     "widgets": {
       "clockTitle": "本地時間 - 點擊切換 12／24 小時制",
       "worldCoordinates": "世界座標",

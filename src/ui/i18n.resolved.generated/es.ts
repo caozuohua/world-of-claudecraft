@@ -231,6 +231,12 @@ export const es: EnTranslations = {
       "hapticsOff": "Vibración desactivada",
       "toggleHaptics": "Alternar vibración"
     },
+    "tutorial": {
+      "moveBodyTouch": "Use the left stick to move and drag the screen to look around. Take a few steps to begin.",
+      "talkBodyTouch": "Stand close to Marshal Redbrook and tap the Use button to speak, then accept his task.",
+      "returnBodyTouch": "Your task is done. Return to Marshal Redbrook and tap the Use button to turn it in.",
+      "doneBodyTouch": "You have the basics, {name}. The Vale is yours to explore. Tap the More button anytime to review your quests. Good hunting."
+    },
     "widgets": {
       "clockTitle": "Hora local: haz clic para alternar 12/24 horas",
       "worldCoordinates": "Coordenadas del mundo",

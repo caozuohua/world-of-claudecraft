@@ -96,6 +96,22 @@ export const hudChromeStrings = {
     hapticsOff: 'Haptics Off',
     toggleHaptics: 'Toggle haptics',
   },
+  // New-adventurer tutorial copy for the touch interface. The default tutorial
+  // bodies (hud.tutorial.*Body) reference keyboard/mouse ("W/A/S/D", "press F"),
+  // which is wrong on a phone whose only controls are the on-screen sticks and
+  // the Use / More action buttons. These touch variants are swapped in when the
+  // mobile-touch interface is active (see tutorial_copy.ts). English-only add, so
+  // they live here in the hud_chrome domain rather than the constrained `hud` one.
+  tutorial: {
+    moveBodyTouch:
+      'Use the left stick to move and drag the screen to look around. Take a few steps to begin.',
+    talkBodyTouch:
+      'Stand close to Marshal Redbrook and tap the Use button to speak, then accept his task.',
+    returnBodyTouch:
+      'Your task is done. Return to Marshal Redbrook and tap the Use button to turn it in.',
+    doneBodyTouch:
+      'You have the basics, {name}. The Vale is yours to explore. Tap the More button anytime to review your quests. Good hunting.',
+  },
   // Minimap / compass / clock / coordinate widget tooltips and accessible names.
   widgets: {
     clockTitle: 'Local time - click to toggle 12/24-hour',
