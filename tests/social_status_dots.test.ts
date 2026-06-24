@@ -10,7 +10,10 @@ import { dirname, join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const indexHtml = readFileSync(join(root, 'index.html'), 'utf8');
+// P3 moved the social window CSS (the `.soc-dot.<status>` rules) out of index.html's
+// inline <style> into src/styles/components.css, loaded by both game entries via the
+// barrel. The JS<->CSS contract guarded below now reads the module.
+const componentsCss = readFileSync(join(root, 'src/styles/components.css'), 'utf8');
 const hud = readFileSync(join(root, 'src/ui/hud.ts'), 'utf8');
 
 // the online presence statuses the server sends and the client turns into a dot class
@@ -19,12 +22,12 @@ const ONLINE_STATUSES = ['online', 'combat', 'dungeon', 'dead'];
 describe('social presence dot styling (#100)', () => {
   it('every online status has a matching .soc-dot CSS color rule', () => {
     for (const status of ONLINE_STATUSES) {
-      expect(indexHtml, `missing CSS rule .soc-dot.${status}`).toContain(`.soc-dot.${status}`);
+      expect(componentsCss, `missing CSS rule .soc-dot.${status}`).toContain(`.soc-dot.${status}`);
     }
   });
 
   it('the dead-but-stale .soc-dot.on rule (which never matched) is gone', () => {
-    expect(indexHtml).not.toMatch(/\.soc-dot\.on\b/);
+    expect(componentsCss).not.toMatch(/\.soc-dot\.on\b/);
   });
 
   it('the client still renders the dot class from the status value (offline => no status class)', () => {

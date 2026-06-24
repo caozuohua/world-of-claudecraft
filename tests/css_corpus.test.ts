@@ -80,13 +80,19 @@ const CORPUS = [
 ].join('\n');
 const CORPUS_SECTIONS = new Set(sectionNames(CORPUS));
 
-// PINNED manifest: the 48 ten-dash section banners, enumerated live from the shipped
+// PINNED manifest: the 59 ten-dash section banners, enumerated live from the shipped
 // HTML at authoring time (not invented). 47 were inline in index.html; P2 added the
 // 48th by upgrading the lowercase tooltip banner to a ten-dash marker as it moved to
-// src/styles/hud.css. As P1 to P4b migrate sections out of the inline <style> they
-// reappear in src/styles modules, so the union corpus stays complete. play.html is a
-// near-clone that ships 46 of these (it omits the two in PLAY_OMITS; tooltip is shared
-// via hud.css, which play loads). play's set is a subset of index's, so this is the union.
+// src/styles/hud.css. P3 relocated the windows out of the inline <style> into
+// src/styles/layout.css (the .window shell) + components.css (the bodies), and split
+// the single coarse "windows" banner into per-window banners as it went, adding 11
+// (window shell, character window, spellbook, quest log, leaderboard, talents, modals
+// and dropdown, vendor, bags, social, map) so one window's body can no longer be
+// dropped without this guard going red. As P1 to P4b migrate sections out of the inline
+// <style> they reappear in src/styles modules, so the union corpus stays complete.
+// play.html is a near-clone that ships 57 of these (it omits the two in PLAY_OMITS;
+// tooltip is shared via hud.css and the windows via components.css / layout.css, all of
+// which play loads). play's set is a subset of index's, so this is the union.
 const INDEX_SECTIONS = [
   'UI chrome icons (inline SVG from ui_icons.ts, tinted via currentColor)',
   'nameplates',
@@ -106,6 +112,17 @@ const INDEX_SECTIONS = [
   'minimap',
   'community HUD',
   'windows',
+  'window shell',
+  'character window',
+  'spellbook',
+  'quest log',
+  'leaderboard',
+  'talents',
+  'modals and dropdown',
+  'vendor',
+  'bags',
+  'social',
+  'map',
   'Ashen Coliseum (arena)',
   "The World Market (the Merchant's auction house)",
   'options / game menu (Esc)',
@@ -138,7 +155,7 @@ const INDEX_SECTIONS = [
   'Cosmetic skin-select event overlay',
 ];
 
-// The two index-only sections play.html does not ship, so its count is 46.
+// The two index-only sections play.html does not ship, so its count is 57.
 const PLAY_OMITS = ['new-adventurer tutorial', 'UI theme picker'];
 const PLAY_SECTIONS = INDEX_SECTIONS.filter((name) => !PLAY_OMITS.includes(name));
 
@@ -146,12 +163,12 @@ const PLAY_SECTIONS = INDEX_SECTIONS.filter((name) => !PLAY_OMITS.includes(name)
 const MANIFEST = INDEX_SECTIONS;
 
 describe('css_corpus section manifest', () => {
-  it('pins a non-vacuous manifest: 48 index + 46 play sections, no duplicate names', () => {
-    expect(INDEX_SECTIONS.length).toBe(48);
-    expect(PLAY_SECTIONS.length).toBe(46);
-    expect(MANIFEST.length).toBe(48);
-    expect(new Set(INDEX_SECTIONS).size).toBe(48);
-    expect(new Set(PLAY_SECTIONS).size).toBe(46);
+  it('pins a non-vacuous manifest: 59 index + 57 play sections, no duplicate names', () => {
+    expect(INDEX_SECTIONS.length).toBe(59);
+    expect(PLAY_SECTIONS.length).toBe(57);
+    expect(MANIFEST.length).toBe(59);
+    expect(new Set(INDEX_SECTIONS).size).toBe(59);
+    expect(new Set(PLAY_SECTIONS).size).toBe(57);
   });
 
   it('captures the live corpus markers (the marker regex is non-vacuous, not a zero match)', () => {

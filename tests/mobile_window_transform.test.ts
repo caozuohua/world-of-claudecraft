@@ -15,18 +15,42 @@ import { describe, expect, it } from 'vitest';
 // Both-sides-pinned windows (left AND right set, e.g. #social-window,
 // #report-window) are a different, stretched layout and are out of scope here.
 //
-// The HUD chrome ships in two separate build entries that each carry their own
-// copy of these rules (`index.html` at `/` and `play.html` at `/play`,
-// vite.config.ts), so the guard runs over BOTH: a fix or a regression in one
-// must not silently diverge from the other.
+// The HUD chrome ships in two build entries (`index.html` at `/` and `play.html`
+// at `/play`, vite.config.ts). Both load the shared style modules through the
+// src/styles/index.css barrel, so the guard runs over BOTH entries: a fix or a
+// regression in one must not silently diverge from the other.
 const HTML_ENTRIES = ['../index.html', '../play.html'];
 
-// Strip CSS/HTML comments so they can't bleed into a rule's selector text
-// (the flat brace scan below treats everything between `}` and `{` as selector).
+// The shared style modules each entry loads via the barrel. P1 to P3 moved the
+// base chrome (base.css), the .window shell (layout.css), the HUD chrome (hud.css)
+// and the feature-window bodies (components.css) out of the inline <style>, so the
+// `.window` base rule this guard checks now lives in layout.css for index.html (play
+// still carries an inline copy until P4b). The effective stylesheet for an entry is
+// its inline <style> UNION these modules, so the guard reads both.
+const STYLE_MODULES = [
+  '../src/styles/base.css',
+  '../src/styles/layout.css',
+  '../src/styles/hud.css',
+  '../src/styles/components.css',
+];
+
+// Strip CSS/HTML comments so they can't bleed into a rule's selector text (the flat
+// brace scan below treats everything between `}` and `{` as selector). The modules
+// wrap their rules in a single `@layer name { ... }`; unwrap it (drop the opening
+// `@layer name {` and the file's final `}`) so the rules sit at top level, exactly as
+// the flattened cascade sees them, and the flat brace scan reads them like inline CSS.
 function loadHtml(relPath: string): string {
-  return readFileSync(fileURLToPath(new URL(relPath, import.meta.url)), 'utf8')
-    .replace(/\/\*[\s\S]*?\*\//g, '')
-    .replace(/<!--[\s\S]*?-->/g, '');
+  const stripComments = (s: string) =>
+    s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/<!--[\s\S]*?-->/g, '');
+  const html = stripComments(
+    readFileSync(fileURLToPath(new URL(relPath, import.meta.url)), 'utf8'),
+  );
+  const modules = STYLE_MODULES.map((p) =>
+    stripComments(readFileSync(fileURLToPath(new URL(p, import.meta.url)), 'utf8'))
+      .replace(/@layer[^{]*\{/, '')
+      .replace(/\}\s*$/, ''),
+  ).join('\n');
+  return `${html}\n${modules}`;
 }
 
 // Split the stylesheet into `selector { body }` blocks. The HUD CSS has no

@@ -9,8 +9,14 @@ const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8').rep
 // HUD chrome (nameplates, frames, bars, chat, trackers, meters, minimap, community
 // HUD, tooltip, FCT, the Interface/adaptive/perf rules, the Fiesta HUD, and the
 // center/vignette/death overlays) into src/styles/hud.css (@layer components), and
-// the UI-chrome-icon glyph sizing into base.css. Assertions on relocated rules read
-// base.css / hud.css; rules still inline in index.html keep reading `html`.
+// the UI-chrome-icon glyph sizing into base.css. Phase P3 moved the feature windows
+// (delve, lockpick, the classic stat windows, vendor/bags/social/map, arena/market/
+// options/theme/emote) into src/styles/components.css and the shared .window shell into
+// src/styles/layout.css. Assertions on relocated rules read base.css / hud.css /
+// components.css / layout.css; rules still inline in index.html (the pre-game shell and
+// the body.mobile-touch overrides, which are P4) keep reading `html`. Note biome
+// reformats the moved rules one-declaration-per-line, so the repointed expectations use
+// that format, not the compact inline form.
 const baseCss = readFileSync(new URL('../src/styles/base.css', import.meta.url), 'utf8').replace(
   /\r\n/g,
   '\n',
@@ -19,6 +25,10 @@ const hudCss = readFileSync(new URL('../src/styles/hud.css', import.meta.url), '
   /\r\n/g,
   '\n',
 );
+const componentsCss = readFileSync(
+  new URL('../src/styles/components.css', import.meta.url),
+  'utf8',
+).replace(/\r\n/g, '\n');
 const playHtml = readFileSync(new URL('../play.html', import.meta.url), 'utf8').replace(
   /\r\n/g,
   '\n',
@@ -483,12 +493,12 @@ describe('client HTML shell', () => {
     // own pan-y cannot re-enable it). pan-x pan-y still blocks pinch-zoom.
     expect(html).toContain('body.mobile-touch #ui { touch-action: pan-x pan-y; }');
     expect(html).not.toContain('body.mobile-touch #ui { touch-action: none; }');
-    // Scrollable lists get iOS momentum + scroll isolation.
-    expect(html).toContain(
-      '#bags .bag-grid { flex: 1 1 auto; min-height: 0; overflow-y: auto;\n    touch-action: pan-y; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }',
+    // Scrollable lists get iOS momentum + scroll isolation (moved to components.css in P3).
+    expect(componentsCss).toContain(
+      '#bags .bag-grid {\n    flex: 1 1 auto;\n    min-height: 0;\n    overflow-y: auto;\n    touch-action: pan-y;\n    -webkit-overflow-scrolling: touch;\n    overscroll-behavior: contain;\n  }',
     );
-    expect(html).toContain(
-      '#market-body { overflow-y: auto; flex: 1; min-height: 0; padding-right: 2px;\n    touch-action: pan-y; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }',
+    expect(componentsCss).toContain(
+      '#market-body {\n    overflow-y: auto;\n    flex: 1;\n    min-height: 0;\n    padding-right: 2px;\n    touch-action: pan-y;\n    -webkit-overflow-scrolling: touch;\n    overscroll-behavior: contain;\n  }',
     );
     // The world canvas still suppresses panning so camera drag is unaffected.
     expect(html).toContain('body.mobile-touch #game-canvas { touch-action: none; }');
@@ -638,12 +648,14 @@ describe('client HTML shell', () => {
   });
 
   it('keeps the World Market to one scroll container with browse filters below the tabs', () => {
-    expect(html).toContain(
-      '#market-window { width: 470px; height: min(640px, calc(85vh - 24px)); display: none; flex-direction: column; overflow: hidden;',
+    expect(componentsCss).toContain(
+      '#market-window {\n    width: 470px;\n    height: min(640px, calc(85vh - 24px));\n    display: none;\n    flex-direction: column;\n    overflow: hidden;',
     );
-    expect(html).toContain('#market-body { overflow-y: auto; flex: 1; min-height: 0;');
-    expect(html).toContain(
-      '.mkt-page { display: flex; align-items: center; justify-content: space-between;',
+    expect(componentsCss).toContain(
+      '#market-body {\n    overflow-y: auto;\n    flex: 1;\n    min-height: 0;',
+    );
+    expect(componentsCss).toContain(
+      '.mkt-page {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;',
     );
     expect(html).toContain(
       'body.mobile-touch #market-window {\n    max-height: calc(58vh - 20px);\n    overflow: hidden;',
@@ -760,7 +772,7 @@ describe('client HTML shell', () => {
   });
 
   it('shows mobile spellbook add and remove controls for the spell bar', () => {
-    expect(html).toContain('.spell-hotbar-toggle { display: none; }');
+    expect(componentsCss).toContain('.spell-hotbar-toggle {\n    display: none;\n  }');
     expect(html).toContain(
       'body.mobile-touch #spellbook .spell-hotbar-toggle {\n    min-width: 40px;\n    min-height: 40px;',
     );
