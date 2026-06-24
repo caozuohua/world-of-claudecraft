@@ -196,37 +196,13 @@ describe('handleAccountLogout', () => {
 });
 
 describe('handleAccountSetEmail', () => {
-  it('rejects a malformed address (400)', async () => {
-    const res = makeRes();
-    await handleAccountSetEmail(makeReq({ email: 'nope' }), res, 1);
-    expect(parse(res).status).toBe(400);
-  });
-  it('saves a valid address', async () => {
+  it('rejects the legacy direct email setter without writing account email', async () => {
     const res = makeRes();
     await handleAccountSetEmail(makeReq({ email: '  Player@example.com  ' }), res, 1);
     const { status, data } = parse(res);
-    expect(status).toBe(200);
-    expect(data.email).toBe('Player@example.com');
-    const upd = writes.find((w) => w.sql.includes('UPDATE accounts SET email'));
-    expect(upd!.params[1]).toBe('Player@example.com');
-  });
-  it('fires the welcome email when setting the first email on an account', async () => {
-    accountRow.email = null; // signed up without an email
-    const res = makeRes();
-    await handleAccountSetEmail(makeReq({ email: 'first@example.com' }), res, 1);
-    expect(parse(res).status).toBe(200);
-    // The welcome send is fire-and-forget; let its microtask flush, then assert
-    // an email_log row was written for it (no throw is the core guarantee).
-    await Promise.resolve();
-    expect(writes.some((w) => w.sql.includes('UPDATE accounts SET email'))).toBe(true);
-  });
-
-  it('clears the address when empty', async () => {
-    const res = makeRes();
-    await handleAccountSetEmail(makeReq({ email: '' }), res, 1);
-    expect(parse(res).status).toBe(200);
-    const upd = writes.find((w) => w.sql.includes('UPDATE accounts SET email'));
-    expect(upd!.params[1]).toBeNull();
+    expect(status).toBe(410);
+    expect(data.error).toBe('use verified email change');
+    expect(writes.some((w) => w.sql.includes('UPDATE accounts SET email'))).toBe(false);
   });
 });
 

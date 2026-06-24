@@ -8785,15 +8785,13 @@
                 <button type="submit" class="btn btn-primary" data-i18n="hudChrome.account.savePassword">Update Password</button>
               </form>
 
-              <form id="account-email-form" class="account-form" novalidate>
+              <div class="account-form">
                 <div class="auth-field">
                   <label for="account-email" class="auth-label" data-i18n="hudChrome.account.emailLabel">Email (optional)</label>
-                  <input id="account-email" type="email" maxlength="254" autocomplete="email" />
+                  <input id="account-email" type="email" maxlength="254" autocomplete="email" disabled />
                   <p class="account-hint" data-i18n="hudChrome.account.emailHint">Used only for account recovery. We never send marketing email.</p>
                 </div>
-                <div id="account-email-msg" class="auth-field-msg" aria-live="polite"></div>
-                <button type="submit" class="btn btn-secondary" data-i18n="hudChrome.account.saveEmail">Save Email</button>
-              </form>
+              </div>
             </section>
 
             <!-- Security: verified email change, two-factor, data export -->

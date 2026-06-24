@@ -2903,22 +2903,6 @@ function setupAccountPortal(): void {
     }
   });
 
-  ($('#account-email-form') as HTMLFormElement).addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = ($('#account-email') as HTMLInputElement).value;
-    if (!validateEmailShape(email)) {
-      setAccountFieldMsg('#account-email-msg', t('hudChrome.account.errEmailInvalid'), false);
-      return;
-    }
-    try {
-      const saved = await api.setEmail(email);
-      ($('#account-email') as HTMLInputElement).value = saved;
-      setAccountFieldMsg('#account-email-msg', t('hudChrome.account.emailSaved'), true);
-    } catch (e2) {
-      setAccountFieldMsg('#account-email-msg', userFacingApiError(e2), false);
-    }
-  });
-
   const deUser = $('#account-deactivate-user') as HTMLInputElement;
   const dePass = $('#account-deactivate-pass') as HTMLInputElement;
   const deBtn = $('#account-deactivate-btn') as HTMLButtonElement;
@@ -3521,8 +3505,8 @@ async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Prom
   // Wire shareable player cards for this online session: publishing uploads the
   // composited PNG to this realm and returns an absolute public page URL, and
   // the referral provider feeds the card footer. Both are cleared on disconnect.
-  setCardUploader(async (png, meta) => {
-    const r = await api.uploadCard(c.id, png, getLanguage(), meta.level);
+  setCardUploader(async (png) => {
+    const r = await api.uploadCard(c.id, png, getLanguage());
     return { url: absolutePublishedCardUrl(r.url, api.base, location.origin) };
   });
   setReferralProvider(() => api.referralStats());

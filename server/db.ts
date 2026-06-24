@@ -1177,12 +1177,9 @@ export async function getPlayerCardBySlug(slug: string): Promise<PlayerCardRow |
 
 // Metadata-only read for the OG-unfurl HTML page, which doesn't need the (up to
 // ~4 MB) PNG bytes — keeps getPlayerCardBySlug's heavy SELECT for the image route.
-export async function getPlayerCardMetaBySlug(slug: string): Promise<{
-  title: string;
-  description: string;
-  locale: string;
-  updatedAt: number;
-} | null> {
+export async function getPlayerCardMetaBySlug(
+  slug: string,
+): Promise<{ title: string; description: string; locale: string; updatedAt: number } | null> {
   const res = await pool.query(
     'SELECT title, description, locale, updated_at FROM player_cards WHERE slug = $1',
     [slug],

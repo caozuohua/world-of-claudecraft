@@ -1135,6 +1135,17 @@ export class GameServer {
       : null;
   }
 
+  // Live authoritative level for a currently-online character. This uses the
+  // serialized character state rather than entity.level so temporary event
+  // scaling does not leak into shared-card metadata. Callers must verify
+  // ownership before reading by raw character id.
+  liveLevelForCharacter(characterId: number): number | null {
+    const session = this.sessionsByCharacterId.get(characterId);
+    if (!session) return null;
+    const state = this.sim.serializeCharacter(session.pid);
+    return state ? state.level : null;
+  }
+
   disconnectAccount(accountId: number, reason: string): void {
     for (const session of [...this.clients.values()]) {
       if (session.accountId !== accountId) continue;
