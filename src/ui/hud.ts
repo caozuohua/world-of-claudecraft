@@ -663,6 +663,7 @@ function yellVoiceKey(text: string): string {
 
 export class Hud {
   private static readonly BAR_ABILITY_SLOTS = 11; // bar slots 1..11; slot 0 is the fixed Attack toggle
+  private static readonly PET_AUTOCAST_TOUCH_HOLD_MS = 2000;
   private static ddSeq = 0; // monotonic id source for buildDropdown listbox/option ARIA wiring
   private static readonly FORM_TOGGLE_IDS = new Set(['bear_form', 'cat_form', 'travel_form']); // shift toggles, castable in any form
   private abilityButtons: {
@@ -3265,8 +3266,9 @@ export class Hud {
     }
     const mode = pet.petMode ?? 'defensive';
     const cd = Math.ceil(Math.max(0, pet.petTauntTimer));
+    const autoTaunt = pet.petAutoTaunt === true;
     const ownerClass = this.sim.cfg.playerClass;
-    const sig = `${pet.id}:${ownerClass}:${mode}:${cd}:${this.pendingPetFeed ? 'feed' : ''}:${this.petModeMenuOpen ? 'modes' : ''}`;
+    const sig = `${pet.id}:${ownerClass}:${mode}:${cd}:${autoTaunt ? 'auto' : 'manual'}:${this.pendingPetFeed ? 'feed' : ''}:${this.petModeMenuOpen ? 'modes' : ''}`;
     bar.style.display = 'flex';
     if (sig === this.lastPetBarSig) return;
     this.lastPetBarSig = sig;
@@ -3285,13 +3287,22 @@ export class Hud {
       title: string,
       tooltip: string,
       onClick: () => void,
-      opts: { active?: boolean; cooldownText?: string } = {},
+      opts: {
+        active?: boolean;
+        autocast?: boolean;
+        cooldownText?: string;
+        onContextMenu?: () => void;
+        onTouchHold?: () => void;
+      } = {},
     ) => {
       const btn = document.createElement('button');
       btn.className = 'pet-btn';
       if (opts.active) btn.classList.add('active');
+      if (opts.autocast) btn.classList.add('autocast');
       if (opts.cooldownText) btn.classList.add('cooldown');
       btn.title = title;
+      btn.setAttribute('aria-label', title);
+      if (opts.active || opts.autocast) btn.setAttribute('aria-pressed', 'true');
       const icon = document.createElement('span');
       icon.className = 'icon-label';
       icon.style.backgroundImage = `url(${iconDataUrl('ability', iconId)})`;
@@ -3302,11 +3313,110 @@ export class Hud {
         cdText.textContent = opts.cooldownText;
         btn.appendChild(cdText);
       }
-      btn.addEventListener('click', () => {
+      let suppressNextClick = false;
+      let touchHoldTimer: number | undefined;
+      let touchHoldPointerId: number | null = null;
+      let touchHoldStartX = 0;
+      let touchHoldStartY = 0;
+      let touchHoldTriggered = false;
+      let touchHoldCanceled = false;
+      const clearTouchHoldTimer = () => {
+        if (touchHoldTimer !== undefined) window.clearTimeout(touchHoldTimer);
+        touchHoldTimer = undefined;
+      };
+      const runClickAction = () => {
         if (opts.cooldownText) return;
         audio.click();
         onClick();
+      };
+      btn.addEventListener('click', () => {
+        if (suppressNextClick) {
+          suppressNextClick = false;
+          this.peekGuard.consume();
+          this.hideTooltip();
+          btn.blur();
+          return;
+        }
+        if (this.peekGuard.consume()) {
+          this.hideTooltip();
+          btn.blur();
+          return;
+        }
+        runClickAction();
       });
+      if (opts.onContextMenu) {
+        btn.addEventListener('contextmenu', (event) => {
+          event.preventDefault();
+          if (document.body.classList.contains('mobile-touch')) return;
+          audio.click();
+          opts.onContextMenu?.();
+        });
+      }
+      if (opts.onTouchHold) {
+        btn.addEventListener('pointerdown', (event) => {
+          if (!document.body.classList.contains('mobile-touch') || event.pointerType !== 'touch') {
+            return;
+          }
+          event.preventDefault();
+          clearTouchHoldTimer();
+          suppressNextClick = false;
+          touchHoldTriggered = false;
+          touchHoldCanceled = false;
+          touchHoldPointerId = event.pointerId;
+          touchHoldStartX = event.clientX;
+          touchHoldStartY = event.clientY;
+          try {
+            btn.setPointerCapture?.(event.pointerId);
+          } catch {
+            /* pointer already released */
+          }
+          touchHoldTimer = window.setTimeout(() => {
+            if (touchHoldPointerId !== event.pointerId || touchHoldCanceled) return;
+            touchHoldTriggered = true;
+            suppressNextClick = true;
+            audio.click();
+            opts.onTouchHold?.();
+            this.hideTooltip();
+            this.peekGuard.consume();
+            btn.blur();
+          }, Hud.PET_AUTOCAST_TOUCH_HOLD_MS);
+        });
+        btn.addEventListener('pointermove', (event) => {
+          if (touchHoldPointerId !== event.pointerId) return;
+          const moved = Math.hypot(
+            event.clientX - touchHoldStartX,
+            event.clientY - touchHoldStartY,
+          );
+          if (moved > 9) {
+            touchHoldCanceled = true;
+            clearTouchHoldTimer();
+          }
+        });
+        const finishTouchHold = (event: PointerEvent, canceled: boolean) => {
+          if (touchHoldPointerId !== event.pointerId) return;
+          event.preventDefault();
+          const triggered = touchHoldTriggered;
+          const movedAway = touchHoldCanceled || canceled;
+          clearTouchHoldTimer();
+          touchHoldPointerId = null;
+          touchHoldTriggered = false;
+          touchHoldCanceled = false;
+          suppressNextClick = true;
+          if (triggered || movedAway) {
+            this.peekGuard.consume();
+            return;
+          }
+          if (this.peekGuard.consume()) {
+            this.hideTooltip();
+            btn.blur();
+            return;
+          }
+          runClickAction();
+          btn.blur();
+        };
+        btn.addEventListener('pointerup', (event) => finishTouchHold(event, false));
+        btn.addEventListener('pointercancel', (event) => finishTouchHold(event, true));
+      }
       this.attachTooltip(btn, () => tooltip);
       parent.appendChild(btn);
     };
@@ -3323,7 +3433,18 @@ export class Hud {
       t('hud.pet.taunt'),
       petTooltip(t('hud.pet.petTauntTitle'), t('hud.pet.petTauntDesc')),
       () => this.sim.petTaunt(),
-      { cooldownText: cd > 0 ? `${cd}` : undefined },
+      {
+        autocast: autoTaunt,
+        cooldownText: cd > 0 ? `${cd}` : undefined,
+        onContextMenu: () => {
+          this.sim.setPetAutoTaunt(!autoTaunt);
+          this.lastPetBarSig = '';
+        },
+        onTouchHold: () => {
+          this.sim.setPetAutoTaunt(!autoTaunt);
+          this.lastPetBarSig = '';
+        },
+      },
     );
     if (ownerClass === 'warlock') {
       addButton(

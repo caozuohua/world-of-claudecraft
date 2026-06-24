@@ -339,6 +339,7 @@ export interface IWorld {
   revivePet(): void;
   petAttack(): void;
   petTaunt(): void;
+  setPetAutoTaunt(enabled: boolean): void;
   feedPet(itemId: string): void;
   healPet(): void;
   setPetMode(mode: PetMode): void;
