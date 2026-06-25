@@ -208,6 +208,9 @@ export interface SimContextCallbacks {
   partyMembersForKey(key: string): number[];
   grantXp(amount: number, meta: PlayerMeta, opts?: { fromKill?: boolean }): void;
   addItem(itemId: string, count: number, pid?: number): void;
+  // L2 World Market escrow (marketList) pulls the listed stack from the seller's
+  // bags via removeItem; the inventory hub stays on Sim (points-at Sim).
+  removeItem(itemId: string, count: number, pid?: number): void;
   spawnBossAdds(boss: Entity, mobId: string, count: number): void;
   tradeFor(pid: number): TradeSession | null;
   duelFor(pid: number): DuelState | null;
@@ -366,6 +369,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     partyMembersForKey: host.partyMembersForKey,
     grantXp: host.grantXp,
     addItem: host.addItem,
+    removeItem: host.removeItem,
     spawnBossAdds: host.spawnBossAdds,
     tradeFor: host.tradeFor,
     duelFor: host.duelFor,

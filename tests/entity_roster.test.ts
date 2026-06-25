@@ -141,6 +141,7 @@ function makeCtx() {
     partyMembersForKey: vi.fn(() => []),
     grantXp: vi.fn(),
     addItem: vi.fn(),
+    removeItem: vi.fn(),
     spawnBossAdds: vi.fn(),
     tradeFor: vi.fn(() => null),
     duelFor: vi.fn(() => null),
