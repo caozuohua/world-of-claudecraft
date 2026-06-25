@@ -171,4 +171,27 @@ describe('coverage: each scenario fires its subsystem', () => {
     const sources = new Set(ev.filter((e) => e.type === 'damage' && e.targetId === gid).map((e) => e.sourceId));
     expect(sources.size).toBeGreaterThanOrEqual(2); // multiple class sources wounded the mob
   });
+
+  it('mob_targeting: pull-over (melee 110% / ranged 130%), taunt force+expiry, retarget-to-evade', () => {
+    const rec = run('mob_targeting');
+    const n = rec.notes as Record<string, any>;
+    const mob = entities(rec).find((e) => e.id === n.mobId);
+    expect(mob, 'tracked mob missing').toBeTruthy();
+    // 110% melee pull-over switched the mob from the tank to the in-melee bruiser.
+    expect(n.afterMelee).toBe(n.bruiserId);
+    // caster at EXACTLY 130% does NOT pull (strict `>` against RANGED_SWITCH_MULT).
+    expect(n.afterRangedBoundary).toBe(n.tankId);
+    // caster past 130% pulls the mob over at range.
+    expect(n.afterRanged).toBe(n.casterId);
+    // taunt forced the mob onto the tank despite the caster's higher threat.
+    expect(n.afterTauntForced).toBe(n.tankId);
+    // after the forced window expired, the threat scan reclaimed the caster.
+    expect(n.afterTauntExpired).toBe(n.casterId);
+    // retargetMob grabbed the highest-threat target (caster) and chased.
+    expect(n.afterRetarget).toBe(n.casterId);
+    // retargetMob with only stale threat pruned to empty and evaded home.
+    expect(n.finalAiState).toBe('evade');
+    expect(mob.aggroTargetId).toBe(null);
+    expect(mob.threat.size).toBe(0);
+  });
 });

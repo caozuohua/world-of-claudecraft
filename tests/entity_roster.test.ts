@@ -93,6 +93,8 @@ function makeCtx() {
     pushbackCast: vi.fn(),
     refreshMobLeashFromAction: vi.fn(),
     retargetMob: vi.fn(),
+    nythraxisAddFallbackTarget: vi.fn(() => null),
+    scheduleNythraxisAddDespawnIfBossReset: vi.fn(() => false),
     isArenaCrossTeam: vi.fn(() => false),
     arenaTeamOf: vi.fn(() => null),
     endArenaMatch: vi.fn(),

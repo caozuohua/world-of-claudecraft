@@ -86,6 +86,11 @@ export interface SimContextCallbacks {
   pushbackCast(entity: Entity): void;
   refreshMobLeashFromAction(source: Entity | null, target: Entity): void;
   retargetMob(mob: Entity): void;
+  // M1: Nythraxis boss-add target helpers that retargetMob consults (the extracted
+  // mob/targeting module reaches them through the seam). Owned by the later
+  // Nythraxis slice (N1); stay on Sim for now (findNythraxisBossForAdd bookkeeping).
+  nythraxisAddFallbackTarget(add: Entity): Entity | null;
+  scheduleNythraxisAddDespawnIfBossReset(add: Entity): boolean;
   isArenaCrossTeam(match: ArenaMatch, attackerPid: number, targetPid: number): boolean;
   arenaTeamOf(match: ArenaMatch, pid: number): 'A' | 'B' | null;
   endArenaMatch(
@@ -241,6 +246,8 @@ export function createSimContext(host: SimContextHost): SimContext {
     pushbackCast: host.pushbackCast,
     refreshMobLeashFromAction: host.refreshMobLeashFromAction,
     retargetMob: host.retargetMob,
+    nythraxisAddFallbackTarget: host.nythraxisAddFallbackTarget,
+    scheduleNythraxisAddDespawnIfBossReset: host.scheduleNythraxisAddDespawnIfBossReset,
     isArenaCrossTeam: host.isArenaCrossTeam,
     arenaTeamOf: host.arenaTeamOf,
     endArenaMatch: host.endArenaMatch,

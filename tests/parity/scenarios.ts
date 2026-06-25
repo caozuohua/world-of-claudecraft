@@ -21,8 +21,7 @@ import { MOBS, DELVES } from '../../src/sim/data';
 import { createMob } from '../../src/sim/entity';
 import { Sim } from '../../src/sim/sim';
 import { solveLockActions } from '../../src/sim/lockpick';
-import { FISHING_CAST_ID } from '../../src/sim/types';
-import type { Entity } from '../../src/sim/types';
+import { DT, FISHING_CAST_ID, type Entity } from '../../src/sim/types';
 import { terrainHeight } from '../../src/sim/world';
 import type { Recorder, Scenario } from './record';
 
@@ -772,6 +771,124 @@ function multiClassFrenzy(): Scenario {
   };
 }
 
+// Mob target selection + threat switching (M1): the per-tick target picker and the
+// threat-switch rules that decide which player a mob hits and when a taunt or
+// pull-over forces a swap. Drives updateMobTarget through the 110% melee and 130%
+// ranged pull-over branches (plus the strict-boundary no-switch), the forced-target/
+// taunt branch and its forcedTargetTimer expiry, then retargetMob through both the
+// highest-threat pick and the prune-to-evade path (which also exercises the two new
+// Nythraxis-add seam callbacks via a non-add mob, where they no-op). One hostile mob
+// and three players each hold different threat; the mob + players are tracked so
+// aggroTargetId, the threat table, forcedTargetTimer/Id, and aiState are pinned every
+// snapshot. The four methods draw no rng, so this scenario pins their STATE decisions
+// (the surrounding mob-AI draw order is already pinned by affix_mob / the solo runs).
+function mobTargeting(): Scenario {
+  return {
+    name: 'mob_targeting',
+    coverage: [
+      'updateMobTarget 110% melee pull-over (MELEE_SWITCH_MULT, inMelee MELEE_RANGE*1.2)',
+      'updateMobTarget 130% ranged pull-over (RANGED_SWITCH_MULT) + strict-boundary no-switch',
+      'forced-target/taunt branch + forcedTargetTimer -= DT expiry + forcedTargetId clear',
+      'retargetMob highest-threat pick + prune-to-evade (highestThreatTarget delete-during-iterate)',
+      'nythraxisAddFallbackTarget / scheduleNythraxisAddDespawnIfBossReset seam callbacks (non-add -> no-op)',
+    ],
+    sampleEvery: 2,
+    build: () => new Sim({ seed: 1014, playerClass: 'warrior', noPlayer: true }),
+    drive(rec: Recorder) {
+      const sim = rec.sim as AnySim;
+      const tankId = sim.addPlayer('warrior', 'Tank');
+      const bruiserId = sim.addPlayer('rogue', 'Bruiser');
+      const casterId = sim.addPlayer('mage', 'Caster');
+      const tank = sim.entities.get(tankId) as AnyEntity;
+      const bruiser = sim.entities.get(bruiserId) as AnyEntity;
+      const caster = sim.entities.get(casterId) as AnyEntity;
+      beef(tank);
+      beef(bruiser);
+      beef(caster);
+      const mob = spawnMob(sim, 'forest_wolf', 5, 0, terrainHeight(0, 0, sim.cfg.seed), 0);
+      beef(mob, 50000);
+      mob.hostile = true;
+      rec.track(mob.id, tankId, bruiserId, casterId);
+      rec.notes.mobId = mob.id;
+      rec.notes.tankId = tankId;
+      rec.notes.bruiserId = bruiserId;
+      rec.notes.casterId = casterId;
+      // tank + bruiser inside MELEE_RANGE*1.2 (=6) of the mob; caster well outside.
+      teleport(sim, tank, 2, 0);
+      teleport(sim, bruiser, -2, 0);
+      teleport(sim, caster, 0, 20);
+
+      // Baseline: mob on the tank (highest threat); no one is over a switch threshold.
+      mob.threat.set(tankId, 100);
+      mob.threat.set(bruiserId, 50);
+      mob.threat.set(casterId, 50);
+      mob.aggroTargetId = tankId;
+      mob.aiState = 'attack';
+      mob.inCombat = true;
+      (sim as any).updateMobTarget(mob);
+      rec.snapshot('baseline-tank');
+
+      // 110% melee pull-over: bruiser (in melee) crosses 110% of the tank's 100.
+      mob.threat.set(bruiserId, 120);
+      (sim as any).updateMobTarget(mob);
+      rec.notes.afterMelee = mob.aggroTargetId;
+      rec.snapshot('melee-pullover');
+
+      // Ranged strict boundary: caster at EXACTLY 130% does NOT pull (strict `>`).
+      mob.aggroTargetId = tankId;
+      mob.threat.set(bruiserId, 50);
+      mob.threat.set(casterId, 130);
+      (sim as any).updateMobTarget(mob);
+      rec.notes.afterRangedBoundary = mob.aggroTargetId;
+      rec.snapshot('ranged-boundary-no-switch');
+
+      // 130% ranged pull-over: caster (out of melee) crosses 130% of the tank's 100.
+      mob.aggroTargetId = tankId;
+      mob.threat.set(casterId, 140);
+      (sim as any).updateMobTarget(mob);
+      rec.notes.afterRanged = mob.aggroTargetId;
+      rec.snapshot('ranged-pullover');
+
+      // Forced-target/taunt branch: lock the mob onto the tank despite the caster's
+      // higher threat. The branch decrements the timer and early-returns first.
+      mob.aggroTargetId = casterId;
+      mob.forcedTargetId = tankId;
+      mob.forcedTargetTimer = 3;
+      (sim as any).updateMobTarget(mob);
+      rec.notes.afterTauntForced = mob.aggroTargetId;
+      rec.snapshot('taunt-forced');
+
+      // Timer about to expire: this call still honors the forced target (returns
+      // before the clear), but the `-= DT` drives forcedTargetTimer negative.
+      mob.forcedTargetTimer = DT / 2;
+      (sim as any).updateMobTarget(mob);
+      rec.snapshot('taunt-decrement');
+
+      // Timer expired: forcedTargetId clears and the threat scan reclaims the caster.
+      (sim as any).updateMobTarget(mob);
+      rec.notes.afterTauntExpired = mob.aggroTargetId;
+      rec.snapshot('taunt-expired');
+
+      // retargetMob: with living threat it grabs the highest (caster) and chases.
+      (sim as any).retargetMob(mob);
+      rec.notes.afterRetarget = mob.aggroTargetId;
+      rec.snapshot('retarget-highest');
+
+      // retargetMob with only stale (missing-entity) threat: highestThreatTarget
+      // prunes every entry mid-iterate -> no living target -> (non-add, so both
+      // Nythraxis seam callbacks no-op) -> evade home with an empty threat table.
+      mob.threat.clear();
+      mob.threat.set(900001, 30);
+      mob.threat.set(900002, 10);
+      mob.aggroTargetId = casterId;
+      mob.aiState = 'chase';
+      (sim as any).retargetMob(mob);
+      rec.notes.finalAiState = mob.aiState;
+      rec.snapshot('retarget-evade');
+    },
+  };
+}
+
 export const SCENARIOS: Scenario[] = [
   soloWarrior(),
   soloMage(),
@@ -788,4 +905,5 @@ export const SCENARIOS: Scenario[] = [
   delveDeath(),
   fiestaMidcastKill(),
   multiClassFrenzy(),
+  mobTargeting(),
 ];

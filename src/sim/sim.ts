@@ -136,6 +136,11 @@ import {
   stepLock,
   visibleCells,
 } from './lockpick';
+import {
+  isTrivialTo as isTrivialToFn,
+  retargetMob as retargetMobFn,
+  updateMobTarget as updateMobTargetFn,
+} from './mob/targeting';
 import { combatProfileForMob, effectiveMobMeleeRange, type MobCombatProfile } from './mob_combat';
 import {
   findPlayerPath,
@@ -166,8 +171,6 @@ import {
   addThreat,
   clearThreat,
   HEAL_THREAT_FACTOR,
-  MELEE_SWITCH_MULT,
-  RANGED_SWITCH_MULT,
   stealthDetectionRadius,
   TAUNT_FORCE_SECONDS,
   threatEntries,
@@ -249,10 +252,8 @@ import { groundHeight, WATER_LEVEL } from './world';
 
 const LEASH_DISTANCE = 45;
 const DUNGEON_LEASH_DISTANCE = 70;
-// Classic "trivial con": a wild mob this many levels below the player goes
-// passive and will not auto-aggro from proximity (it still fights back if
-// attacked). Elites, rares, and bosses are never trivial.
-const TRIVIAL_LEVEL_GAP = 10;
+// TRIVIAL_LEVEL_GAP moved to mob/targeting.ts (used only by isTrivialTo).
+// CORPSE_DURATION moved to combat/damage.ts (used only by the death path).
 const EVADE_SPEED_MULT = 1.6;
 // An evading mob walks a straight line home (no pathfinding) and stalls if deep
 // water or a collider sits between it and its spawn. Since evading mobs are
@@ -1984,6 +1985,8 @@ export class Sim {
       pushbackCast: sim.pushbackCast.bind(sim),
       refreshMobLeashFromAction: sim.refreshMobLeashFromAction.bind(sim),
       retargetMob: sim.retargetMob.bind(sim),
+      nythraxisAddFallbackTarget: sim.nythraxisAddFallbackTarget.bind(sim),
+      scheduleNythraxisAddDespawnIfBossReset: sim.scheduleNythraxisAddDespawnIfBossReset.bind(sim),
       isArenaCrossTeam: sim.isArenaCrossTeam.bind(sim),
       arenaTeamOf: sim.arenaTeamOf.bind(sim),
       endArenaMatch: sim.endArenaMatch.bind(sim),
@@ -5749,30 +5752,11 @@ export class Sim {
     target.leashAnchor = { ...target.pos };
   }
 
-  // When a mob's target dies/leaves it swings to its next-highest-threat
-  // attacker. With no living threat left, it evades home instead of grabbing a
-  // nearby bystander who never acted on the mob.
+  // Target selection + threat switching live in mob/targeting.ts (M1). These thin
+  // delegates keep every `this.retargetMob` / `this.updateMobTarget` / `this.isTrivialTo`
+  // call site (and the ctx.retargetMob seam binding) resolving unchanged through the seam.
   private retargetMob(mob: Entity): void {
-    const next = this.highestThreatTarget(mob);
-    if (next) {
-      mob.aggroTargetId = next.id;
-      mob.aiState = 'chase';
-      mob.inCombat = true;
-      mob.despawnTimer = undefined;
-      return;
-    }
-    const nythraxisFallback = this.nythraxisAddFallbackTarget(mob);
-    if (nythraxisFallback) {
-      mob.aggroTargetId = nythraxisFallback.id;
-      mob.aiState = 'chase';
-      mob.inCombat = true;
-      mob.despawnTimer = undefined;
-      addThreat(mob, nythraxisFallback.id, 1);
-      return;
-    }
-    if (this.scheduleNythraxisAddDespawnIfBossReset(mob)) return;
-    mob.aggroTargetId = null;
-    mob.aiState = 'evade';
+    retargetMobFn(this.ctx, mob);
   }
 
   private findNythraxisBossForAdd(add: Entity): Entity | null {
@@ -5804,61 +5788,11 @@ export class Sim {
     return true;
   }
 
-  /** Highest-threat living attacker on the table; prunes stale entries. */
-  private highestThreatTarget(mob: Entity): Entity | null {
-    let best: Entity | null = null;
-    let bestT = -1;
-    for (const [id, t] of mob.threat) {
-      const e = this.entities.get(id);
-      if (!e || e.dead) {
-        mob.threat.delete(id);
-        continue;
-      }
-      if (t > bestT) {
-        bestT = t;
-        best = e;
-      }
-    }
-    return best;
-  }
+  // highestThreatTarget moved to mob/targeting.ts (M1); retargetMob/updateMobTarget
+  // call it there. No Sim delegate: it had no caller outside those two methods.
 
-  // Classic pull-over rules, applied every AI tick while fighting: an attacker
-  // takes aggro past 110% of the current target's threat in melee range of
-  // the mob, or past 130% at range. A taunt forces the target outright.
   private updateMobTarget(mob: Entity): void {
-    if (mob.forcedTargetTimer > 0) {
-      mob.forcedTargetTimer -= DT;
-      const forced = mob.forcedTargetId !== null ? this.entities.get(mob.forcedTargetId) : null;
-      if (forced && !forced.dead) {
-        mob.aggroTargetId = forced.id;
-        return;
-      }
-    }
-    if (mob.forcedTargetTimer <= 0) mob.forcedTargetId = null;
-    const cur = mob.aggroTargetId !== null ? this.entities.get(mob.aggroTargetId) : null;
-    if (!cur || cur.dead) {
-      const next = this.highestThreatTarget(mob);
-      if (next) mob.aggroTargetId = next.id;
-      return;
-    }
-    const curThreat = mob.threat.get(cur.id) ?? 0;
-    let best = cur;
-    let bestT = curThreat;
-    for (const [id, t] of mob.threat) {
-      if (id === cur.id || t <= bestT) continue;
-      const e = this.entities.get(id);
-      if (!e || e.dead) {
-        mob.threat.delete(id);
-        continue;
-      }
-      const inMelee = dist2d(mob.pos, e.pos) <= MELEE_RANGE * 1.2;
-      const needed = curThreat * (inMelee ? MELEE_SWITCH_MULT : RANGED_SWITCH_MULT);
-      if (t > needed) {
-        best = e;
-        bestT = t;
-      }
-    }
-    if (best !== cur) mob.aggroTargetId = best.id;
+    updateMobTargetFn(this.ctx, mob);
   }
 
   // Effective melee reach. Large creatures measure range from their centre, which
@@ -5992,12 +5926,8 @@ export class Sim {
     }
   }
 
-  // Classic "trivial con": a wild mob far below the player's level stops
-  // auto-aggroing from proximity. Elites, rares, and bosses are never trivial.
   private isTrivialTo(mob: Entity, player: Entity): boolean {
-    const template = MOBS[mob.templateId];
-    if (template.elite || template.rare || template.boss) return false;
-    return player.level - mob.level >= TRIVIAL_LEVEL_GAP;
+    return isTrivialToFn(mob, player);
   }
 
   private updateMob(mob: Entity): void {
