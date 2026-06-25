@@ -9,8 +9,10 @@
 // getComputedStyle and are covered by the no-magic-values source guard instead.
 
 import { describe, expect, it } from 'vitest';
-import { QUESTS, WORLD_MAX_X, WORLD_MIN_X, ZONES } from '../src/sim/data';
+import { DUNGEON_LIST, QUESTS, WORLD_MAX_X, WORLD_MIN_X, ZONES } from '../src/sim/data';
+import { isQuestTurnInNpc } from '../src/sim/types';
 import type { Decoration } from '../src/sim/world';
+import { overworldDungeonPortals } from '../src/ui/map_dungeon_portals';
 import {
   buildOverworldMapModel,
   MAP_DETAIL_ZOOM,
@@ -31,6 +33,16 @@ function requireQuestWithGiver() {
   return quest;
 }
 const GIVER_QUEST = requireQuestWithGiver();
+// A quest whose giver is also a turn-in npc, so a single npc can carry a 'ready'
+// turn-in (the '?' glyph branch the painter renders, distinct from '!').
+function requireReadyQuest() {
+  const quest = Object.values(QUESTS).find(
+    (q) => q.giverNpcId && isQuestTurnInNpc(q, q.giverNpcId),
+  );
+  if (!quest) throw new Error('expected a quest whose giver is also a turn-in npc');
+  return quest;
+}
+const READY_QUEST = requireReadyQuest();
 
 // One scenario as plain data, so we can build two structurally-distinct IWorld
 // stubs (a "Sim-shaped" one carrying extra sim-only fields the core must ignore,
@@ -181,6 +193,48 @@ describe('buildOverworldMapModel (pure draw model)', () => {
     // the npc has an available quest from its own giver -> one '!' (not ready) glyph
     expect(model.npcs).toHaveLength(1);
     expect(model.npcs[0].ready).toBe(false);
+  });
+
+  it("marks the glyph ready when a turn-in is ready (the '?' branch, not '!')", () => {
+    const world = makeOverworldWorld('client') as unknown as {
+      entities: Map<number, { templateId: string; questIds: string[] }>;
+      questState: (q: string) => string;
+    };
+    // Re-point the in-zone npc (id 2) at a quest whose giver is its turn-in npc,
+    // and make that quest ready: hasReady wins, so the painter draws '?' not '!'.
+    const npc = world.entities.get(2);
+    if (!npc) throw new Error('expected the seeded in-zone npc');
+    npc.templateId = READY_QUEST.giverNpcId as string;
+    npc.questIds = [READY_QUEST.id];
+    world.questState = (q) => (q === READY_QUEST.id ? 'ready' : 'unavailable');
+    const model = buildOverworldMapModel(input(world as unknown as IWorld, 1));
+    expect(model.npcs).toHaveLength(1);
+    expect(model.npcs[0].ready).toBe(true);
+  });
+
+  it('projects zone POIs and the in-band dungeon portals into the model', () => {
+    // ZONE (eastbrook_vale) carries POIs and one overworld dungeon entrance, so
+    // the pois/portals projection the painter draws is actually exercised here; a
+    // regression that dropped or mis-projected either array would be caught.
+    const model = buildOverworldMapModel(input(makeOverworldWorld('sim'), 1));
+    expect(model.pois).toHaveLength(ZONE.pois.length);
+    expect(model.pois.map((p) => p.poiIndex)).toEqual(ZONE.pois.map((_, i) => i));
+    expect(model.pois.every((p) => p.zoneId === ZONE.id)).toBe(true);
+    // At zoom 1 the region is the whole committed zone, so a POI projects by the
+    // documented flip (+X is map-left): mx = (maxX - x)/spanX * S, my likewise in Z.
+    const poi0 = ZONE.pois[0];
+    expect(model.pois[0].mx).toBeCloseTo(
+      ((WORLD_MAX_X - poi0.x) / (WORLD_MAX_X - WORLD_MIN_X)) * CANVAS,
+      6,
+    );
+    expect(model.pois[0].my).toBeCloseTo(
+      ((ZONE.zMax - poi0.z) / (ZONE.zMax - ZONE.zMin)) * CANVAS,
+      6,
+    );
+    const expectedPortals = overworldDungeonPortals(DUNGEON_LIST, ZONE.zMin, ZONE.zMax);
+    expect(expectedPortals.length).toBeGreaterThan(0);
+    expect(model.portals.map((p) => p.dungeonId)).toEqual(expectedPortals.map((p) => p.id));
+    expect(model.portals.every((p) => Number.isFinite(p.mx) && Number.isFinite(p.my))).toBe(true);
   });
 
   it('dedups allies by id (friend wins ties) and orders friends before guild', () => {

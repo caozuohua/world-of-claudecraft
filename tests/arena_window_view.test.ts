@@ -173,6 +173,20 @@ describe('buildArenaView: ladder + all-time rows', () => {
     expect(v.ladder.every((r) => r.knownClass)).toBe(true);
   });
 
+  it('flags an unknown class id as knownClass=false and carries the raw id through', () => {
+    const info = makeArenaInfo('sim', {
+      ladders: {
+        ...structuredClone(LADDERS),
+        '1v1': [{ pid: 9, name: 'Mystery', cls: 'not_a_class', rating: 1200, wins: 1, losses: 1 }],
+      },
+    } as unknown as Partial<ArenaInfo>);
+    const v = live(buildArenaView(input({ info })));
+    expect(v.ladder).toHaveLength(1);
+    expect(v.ladder[0].knownClass).toBe(false);
+    // The core leaves the raw id intact; the painter falls back to it unlocalized.
+    expect(v.ladder[0].cls).toBe('not_a_class');
+  });
+
   it('derives all-time rows from the painter-owned cache, me-flagged by name', () => {
     const allTime: Partial<Record<ArenaFormat, ArenaAllTimeEntry[]>> = {
       '1v1': [

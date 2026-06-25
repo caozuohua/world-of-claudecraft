@@ -11,6 +11,7 @@ import { describe, expect, it } from 'vitest';
 
 const src = readFileSync(new URL('../src/ui/arena_window.ts', import.meta.url), 'utf8');
 const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+const hud = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8');
 
 describe('arena_window: WCAG chrome (focusable controls + focus-return)', () => {
   it('drives the panel from the pure view core', () => {
@@ -54,5 +55,16 @@ describe('arena_window: no magic values (decision 12, DOM painter)', () => {
     expect(code).toContain('< LEADERBOARD_REFETCH_MS');
     // The raw throttle interval is not inlined at the call site.
     expect(code).not.toContain('< 15000');
+  });
+});
+
+describe('arena_window: mediumHud redraw call site', () => {
+  it("still redraws the open arena window from hud.update()'s mediumHud band", () => {
+    // Symmetric to the map painter's cadence guard: pin the hud.ts call site so a
+    // refactor cannot silently stop the open arena window from refreshing (queue
+    // size, ladder, match state) while it is displayed.
+    expect(hud).toContain(
+      "if ($('#arena-window').style.display === 'block') this.arenaWindow.render();",
+    );
   });
 });
