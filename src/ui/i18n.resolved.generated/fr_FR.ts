@@ -247,6 +247,10 @@ export const fr_FR: EnTranslations = {
       "heading": "Cap",
       "minimapZoom": "Zoom de la minicarte"
     },
+    "castBar": {
+      "playerAria": "Your Cast Bar",
+      "targetAria": "Unit Cast Bar"
+    },
     "leaderboard": {
       "close": "Close"
     },

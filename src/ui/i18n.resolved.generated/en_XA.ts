@@ -247,6 +247,10 @@ export const en_XA: EnTranslations = {
       "heading": "[Ĥéáðíñĝ]",
       "minimapZoom": "[Ɱíñíɱáþ žóóɱ]"
     },
+    "castBar": {
+      "playerAria": "[Ýóúŕ Çášţ Ɓáŕ]",
+      "targetAria": "[Úñíţ Çášţ Ɓáŕ]"
+    },
     "leaderboard": {
       "close": "[Çļóšé]"
     },

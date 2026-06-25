@@ -247,6 +247,10 @@ export const ko_KR: EnTranslations = {
       "heading": "방향",
       "minimapZoom": "미니맵 확대/축소"
     },
+    "castBar": {
+      "playerAria": "Your Cast Bar",
+      "targetAria": "Unit Cast Bar"
+    },
     "leaderboard": {
       "close": "닫기"
     },

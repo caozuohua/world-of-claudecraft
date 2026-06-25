@@ -184,6 +184,22 @@ describe('client HTML shell', () => {
     }
   });
 
+  it('labels both cast bars as role=progressbar with a localized name in BOTH entries', () => {
+    // P11a drives #castbar (player) and #tf-castbar (target) through one cast_bar
+    // painter and makes each a progressbar with aria-value bounds + a t()-localized
+    // accessible name via data-i18n-aria (hydrated in main.ts). index.html and
+    // play.html ship the same in-game HUD, so both bars must carry the role +
+    // accessible name in BOTH entries or a screen reader on one announces a bare bar.
+    for (const entry of [html, playHtml]) {
+      expect(entry).toContain(
+        'id="castbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-i18n-aria="hudChrome.castBar.playerAria"',
+      );
+      expect(entry).toContain(
+        'id="tf-castbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-i18n-aria="hudChrome.castBar.targetAria"',
+      );
+    }
+  });
+
   it('keeps the Account nav tab hidden unless a session is restored', () => {
     expect(html).toContain('<li class="nav-item" id="nav-item-account" hidden>');
     expect(html).toContain('<li class="nav-item" id="nav-item-logout" hidden>');

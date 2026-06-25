@@ -215,7 +215,7 @@
       <div class="uf-bars">
         <div class="uf-name" id="tf-name"></div>
         <div class="bar hp"><div class="bar-fill" id="tf-hp"></div><div class="bar-absorb" id="tf-absorb"></div><div class="bar-text" id="tf-hp-text"></div></div>
-        <div id="tf-castbar"><div class="fill"></div><div class="label"></div><div class="timer"></div></div>
+        <div id="tf-castbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-i18n-aria="hudChrome.castBar.targetAria" aria-label="Unit Cast Bar"><div class="fill"></div><div class="label"></div><div class="timer"></div></div>
         <div class="combo-row" id="combo-row"></div>
         <div class="uf-buffs" id="tf-debuffs"></div>
       </div>
@@ -229,7 +229,7 @@
     <div id="prompt-stack"></div>
     <div id="trade-window" class="window panel"></div>
 
-    <div id="castbar"><div class="fill"></div><div class="label"></div><div class="timer"></div></div>
+    <div id="castbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-i18n-aria="hudChrome.castBar.playerAria" aria-label="Your Cast Bar"><div class="fill"></div><div class="label"></div><div class="timer"></div></div>
     <div id="swingbar"><div class="fill"></div><div class="label"></div></div>
 
     <div id="minimap-wrap">

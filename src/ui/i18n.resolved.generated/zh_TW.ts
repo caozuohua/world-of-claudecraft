@@ -247,6 +247,10 @@ export const zh_TW: EnTranslations = {
       "heading": "方位",
       "minimapZoom": "小地圖縮放"
     },
+    "castBar": {
+      "playerAria": "Your Cast Bar",
+      "targetAria": "Unit Cast Bar"
+    },
     "leaderboard": {
       "close": "關閉"
     },

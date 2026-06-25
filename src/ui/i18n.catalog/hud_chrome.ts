@@ -130,6 +130,13 @@ export const hudChromeStrings = {
     heading: 'Heading',
     minimapZoom: 'Minimap zoom',
   },
+  // Cast-bar progressbar accessible names (the visible spell name + seconds-left
+  // text are the live status; these name which bar is which). One for the player's
+  // own cast (#castbar) and one for the target/boss cast (#tf-castbar).
+  castBar: {
+    playerAria: 'Your Cast Bar',
+    targetAria: 'Unit Cast Bar',
+  },
   // Leaderboard window chrome: the close-control accessible label only. The board's
   // title / subtitle / column / loading / empty / retry strings live in the game.ts
   // catalog (game.leaderboard.*); this is the one control label the inline window

@@ -247,6 +247,10 @@ export const ru_RU: EnTranslations = {
       "heading": "Направление",
       "minimapZoom": "Масштаб миникарты"
     },
+    "castBar": {
+      "playerAria": "Your Cast Bar",
+      "targetAria": "Unit Cast Bar"
+    },
     "leaderboard": {
       "close": "Закрыть"
     },

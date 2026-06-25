@@ -247,6 +247,10 @@ export const ja_JP: EnTranslations = {
       "heading": "方角",
       "minimapZoom": "ミニマップのズーム"
     },
+    "castBar": {
+      "playerAria": "Your Cast Bar",
+      "targetAria": "Unit Cast Bar"
+    },
     "leaderboard": {
       "close": "閉じる"
     },
