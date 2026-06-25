@@ -1466,13 +1466,13 @@ describe('quests', () => {
     sim.interact();
     const qp = sim.questLog.get('q_wolves')!;
     qp.counts[0] = 8;
-    (sim as any).checkQuestReady(qp, (sim as any).primary);
+    (sim as any).ctx.checkQuestReady(qp, (sim as any).primary);
     sim.interact(); // turn in wolves
     // accept bandits specifically
     sim.acceptQuest('q_bandits');
     const qb = sim.questLog.get('q_bandits')!;
     qb.counts[0] = 10;
-    (sim as any).checkQuestReady(qb, (sim as any).primary);
+    (sim as any).ctx.checkQuestReady(qb, (sim as any).primary);
     sim.turnInQuest('q_bandits');
     expect(sim.equipment.mainhand).toBe('redbrook_blade');
   });

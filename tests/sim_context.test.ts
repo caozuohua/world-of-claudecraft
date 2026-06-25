@@ -47,7 +47,11 @@ const CALLBACK_KEYS = [
   'clearEntityMarker',
   'partyOf',
   'removeFromParty',
+  // Q1 quest-credit trio + the countItem it consumes.
+  'onMobKilledForQuests',
   'onInventoryChangedForQuests',
+  'checkQuestReady',
+  'countItem',
   // E1 entity-roster surface.
   'addEntity',
   'dropEntity',
@@ -137,7 +141,10 @@ function makeFakeHost() {
     clearEntityMarker: vi.fn(),
     partyOf: vi.fn(() => null),
     removeFromParty: vi.fn(),
+    onMobKilledForQuests: vi.fn(),
     onInventoryChangedForQuests: vi.fn(),
+    checkQuestReady: vi.fn(),
+    countItem: vi.fn(() => 0),
     addEntity: vi.fn(),
     dropEntity: vi.fn(),
     rebucket: vi.fn(),

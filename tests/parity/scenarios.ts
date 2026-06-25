@@ -17,7 +17,7 @@
 // mobSwing, spawnDelveModule), never reaching into not-yet-extracted internals
 // in a way the sim itself does not already expose.
 
-import { MOBS, DELVES } from '../../src/sim/data';
+import { MOBS, DELVES, QUESTS } from '../../src/sim/data';
 import { createMob } from '../../src/sim/entity';
 import { Sim } from '../../src/sim/sim';
 import { solveLockActions } from '../../src/sim/lockpick';
@@ -719,6 +719,55 @@ function fiestaMidcastKill(): Scenario {
   };
 }
 
+// Quest kill-credit (Q1): accept a kill quest at its giver NPC (driving
+// finalizeQuestAccept's onInventoryChangedForQuests), then slay the target mob one
+// at a time so handleDeath's party-credit loop fires onMobKilledForQuests (counts++
+// + questProgress) until checkQuestReady promotes active -> ready; finally turn the
+// quest in at the NPC for its xp + copper. Pins the quest-credit trio's kill path and
+// the promotion arm of checkQuestReady.
+function questKillCredit(): Scenario {
+  return {
+    name: 'quest_kill_credit',
+    coverage: [
+      'onMobKilledForQuests kill credit via handleDeath party loop (~5925)',
+      'checkQuestReady promotion (active -> ready)',
+      'acceptQuest -> finalizeQuestAccept -> onInventoryChangedForQuests',
+      'turnInQuest (xp + copper reward)',
+    ],
+    build: () => new Sim({ seed: 1014, playerClass: 'warrior', autoEquip: true }),
+    drive(rec: Recorder) {
+      const sim = rec.sim as AnySim;
+      sim.setPlayerLevel(10);
+      const p = sim.player as AnyEntity;
+      beef(p);
+      const quest = QUESTS.q_wolves;
+      // Accept at the giver NPC (marshal_redbrook): exercises finalizeQuestAccept's
+      // onInventoryChangedForQuests foreign call.
+      const giver = [...sim.entities.values()].find(
+        (e: AnyEntity) => e.kind === 'npc' && e.templateId === quest.giverNpcId,
+      ) as AnyEntity | undefined;
+      if (giver) teleport(sim, p, giver.pos.x, giver.pos.z);
+      sim.acceptQuest('q_wolves', sim.playerId);
+      rec.snapshot('quest-accepted');
+      // Slay each Forest Wolf one at a time (only one alive, so frenzyPackmates finds
+      // no living packmate), crediting the player on every death.
+      const need = quest.objectives[0].count; // 8
+      for (let i = 0; i < need; i++) {
+        const wolf = spawnMob(sim, 'forest_wolf', 2, p.pos.x + 2, p.pos.y, p.pos.z);
+        wolf.tappedById = p.id;
+        lethal(sim, p, wolf);
+        rec.tick(1); // flush the kill's credit events; sample progress
+      }
+      rec.snapshot('quest-ready');
+      // Turn in at the NPC (giver is also the turn-in for q_wolves).
+      if (giver) teleport(sim, p, giver.pos.x, giver.pos.z);
+      sim.turnInQuest('q_wolves', sim.playerId);
+      rec.snapshot('quest-turned-in');
+      rec.tick(2);
+    },
+  };
+}
+
 // C1 damage core: multiple classes wound a frenzyOnHit mob so maybeFrenzyOnHit (the
 // ONLY rng draw in this slice) fires once per qualifying hit, pinning that draw at
 // its global stream position. The frenzy chance is forced to 1 (the draw still
@@ -889,6 +938,57 @@ function mobTargeting(): Scenario {
   };
 }
 
+// Quest collect-credit + turn-in (Q1): accept a collect quest at its NPC, gather the
+// objective item one at a time so each addItem drives onInventoryChangedForQuests
+// (counts++ + questProgress) until checkQuestReady promotes active -> ready; then drop
+// one item so removeItem demotes ready -> active (the demotion arm), re-collect it, and
+// finally turn the quest in (turnInQuest's removeItem re-fires onInventoryChangedForQuests
+// before granting xp + copper). Pins the collect path and BOTH arms of checkQuestReady.
+function questCollectTurnIn(): Scenario {
+  return {
+    name: 'quest_collect_turnin',
+    coverage: [
+      'onInventoryChangedForQuests via addItem/removeItem inventory hub (~9782/9800)',
+      'checkQuestReady promotion AND demotion (ready <-> active)',
+      'acceptQuest -> finalizeQuestAccept -> onInventoryChangedForQuests',
+      'turnInQuest -> removeItem -> onInventoryChangedForQuests (xp + copper)',
+    ],
+    build: () => new Sim({ seed: 1015, playerClass: 'warrior', autoEquip: false }),
+    drive(rec: Recorder) {
+      const sim = rec.sim as AnySim;
+      const p = sim.player as AnyEntity;
+      const quest = QUESTS.q_boars;
+      const item = quest.objectives[0].itemId as string; // boar_hide
+      const need = quest.objectives[0].count; // 5
+      const npc = [...sim.entities.values()].find(
+        (e: AnyEntity) => e.kind === 'npc' && e.templateId === quest.giverNpcId,
+      ) as AnyEntity | undefined;
+      if (npc) teleport(sim, p, npc.pos.x, npc.pos.z);
+      sim.acceptQuest('q_boars', sim.playerId);
+      rec.snapshot('quest-accepted');
+      // Collect to completion, one hide at a time: each addItem drives the inventory
+      // hub -> onInventoryChangedForQuests; the last one promotes the quest to ready.
+      for (let i = 0; i < need; i++) {
+        sim.addItem(item, 1, sim.playerId);
+      }
+      rec.snapshot('collect-ready');
+      // Demotion arm: drop one hide -> onInventoryChangedForQuests recomputes have < count
+      // -> checkQuestReady demotes ready -> active.
+      sim.removeItem(item, 1, sim.playerId);
+      rec.snapshot('collect-demoted');
+      // Re-collect the dropped hide -> ready again.
+      sim.addItem(item, 1, sim.playerId);
+      rec.snapshot('collect-re-ready');
+      // Turn in at the NPC: turnInQuest removes the collected items (re-firing
+      // onInventoryChangedForQuests) then grants xp + copper.
+      if (npc) teleport(sim, p, npc.pos.x, npc.pos.z);
+      sim.turnInQuest('q_boars', sim.playerId);
+      rec.snapshot('quest-turned-in');
+      rec.tick(2);
+    },
+  };
+}
+
 export const SCENARIOS: Scenario[] = [
   soloWarrior(),
   soloMage(),
@@ -906,4 +1006,6 @@ export const SCENARIOS: Scenario[] = [
   fiestaMidcastKill(),
   multiClassFrenzy(),
   mobTargeting(),
+  questKillCredit(),
+  questCollectTurnIn(),
 ];

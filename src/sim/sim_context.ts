@@ -22,6 +22,7 @@ import type {
   CrowdControlDrCategory,
   DelveRun,
   Entity,
+  QuestProgress,
   SimConfig,
   SimEvent,
   Vec3,
@@ -132,11 +133,16 @@ export interface SimContextCallbacks {
   petOf(ownerPid: number, includeDead?: boolean): Entity | null;
   completeTame(player: Entity, target: Entity): void;
 
-  // A1/T1 raid markers + party; Q1 quest credit on inventory change.
+  // A1/T1 raid markers + party; Q1 quest-credit trio (kill/collect/turn-in credit,
+  // foreign-called from handleDeath + the inventory hub + the interaction/crypt
+  // dispatchers), reading inventory via countItem (stays on Sim / L2 inventory hub).
   clearEntityMarker(entityId: number): void;
   partyOf(pid: number): Party | null;
   removeFromParty(pid: number, verb: string): void;
+  onMobKilledForQuests(mob: Entity, meta: PlayerMeta): void;
   onInventoryChangedForQuests(meta: PlayerMeta): void;
+  checkQuestReady(qp: QuestProgress, meta: PlayerMeta): void;
+  countItem(itemId: string, pid?: number): number;
 
   // E1 entity roster: the moved roster ops, exposed so the foreign callers across
   // not-yet-extracted slices reach them through the seam. Implemented in
@@ -176,7 +182,6 @@ export interface SimContextCallbacks {
   grantNythraxisLockout(boss: Entity): void;
   frenzyPackmates(dead: Entity): void;
   armDeathThroes(dead: Entity): void;
-  onMobKilledForQuests(mob: Entity, meta: PlayerMeta): void;
   refreshKnownAbilities(meta: PlayerMeta, announce: boolean): void;
   syncPetLevel(owner: Entity): void;
 }
@@ -269,7 +274,10 @@ export function createSimContext(host: SimContextHost): SimContext {
     clearEntityMarker: host.clearEntityMarker,
     partyOf: host.partyOf,
     removeFromParty: host.removeFromParty,
+    onMobKilledForQuests: host.onMobKilledForQuests,
     onInventoryChangedForQuests: host.onInventoryChangedForQuests,
+    checkQuestReady: host.checkQuestReady,
+    countItem: host.countItem,
     addEntity: host.addEntity,
     dropEntity: host.dropEntity,
     rebucket: host.rebucket,
@@ -294,7 +302,6 @@ export function createSimContext(host: SimContextHost): SimContext {
     grantNythraxisLockout: host.grantNythraxisLockout,
     frenzyPackmates: host.frenzyPackmates,
     armDeathThroes: host.armDeathThroes,
-    onMobKilledForQuests: host.onMobKilledForQuests,
     refreshKnownAbilities: host.refreshKnownAbilities,
     syncPetLevel: host.syncPetLevel,
   };
