@@ -22,9 +22,22 @@
    In practice the two never share a selector, so this is precedence insurance, not an
    active tie-break.
 
+   P4b fills three more layers: hud-mobile (the in-game mobile-touch block, from
+   hud.mobile.css) ordered AFTER shell so the mobile overrides of pre-game shell
+   elements (mode-select / play-console / btn-play / char-select) win as they did
+   when the block was inline-unlayered; and the per-entry index-extra / play-extra
+   (loaded only by index.html / play.html via a <link>, holding the #rotate-device
+   orientation gate, decision 16a), last so they outrank everything.
+
+   LAYER NAMES ARE FLAT (hyphenated), NOT dotted: a DOT in a @layer name is a
+   SUBLAYER separator, so "hud.mobile" would be the "mobile" sublayer of the early
+   "hud" layer (and would lose to shell). hud-mobile / index-extra / play-extra are
+   top-level layers placed exactly where this declaration puts them.
+
    See docs/frontend-modernization/phase-01-css-lightning-tokens-base.md,
-   phase-02-css-hud-chrome.md and phase-03-css-windows.md. */
-@layer tokens, base, layout, components, hud, hud.mobile, shell, index.extra, play.extra;
+   phase-02-css-hud-chrome.md, phase-03-css-windows.md, phase-04a-css-shell.md and
+   phase-04b-css-mobile-extra.md. */
+@layer tokens, base, layout, components, hud, shell, hud-mobile, index-extra, play-extra;
 
 @import "./tokens.css";
 @import "./base.css";
@@ -32,3 +45,4 @@
 @import "./hud.css";
 @import "./components.css";
 @import "./shell.css";
+@import "./hud.mobile.css";
