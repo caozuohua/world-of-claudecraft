@@ -117,6 +117,8 @@ const UI_PURE_CORES = [
   'src/ui/raid_lockout_view.ts',
   'src/ui/stat_tooltip_view.ts',
   'src/ui/talents_view.ts',
+  'src/ui/social_view.ts',
+  'src/ui/bags_view.ts',
   'src/ui/vendor_view.ts',
   'src/game/ui_effects_profile.ts',
 ].map((rel) => join(repoRoot, rel));

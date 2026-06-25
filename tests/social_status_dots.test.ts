@@ -14,7 +14,9 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 // inline <style> into src/styles/components.css, loaded by both game entries via the
 // barrel. The JS<->CSS contract guarded below now reads the module.
 const componentsCss = readFileSync(join(root, 'src/styles/components.css'), 'utf8');
-const hud = readFileSync(join(root, 'src/ui/hud.ts'), 'utf8');
+// P7b moved the social list rendering out of hud.ts into the social window painter,
+// so the dot-class contract now lives there.
+const socialWindow = readFileSync(join(root, 'src/ui/social_window.ts'), 'utf8');
 
 // the online presence statuses the server sends and the client turns into a dot class
 const ONLINE_STATUSES = ['online', 'combat', 'dungeon', 'dead'];
@@ -32,6 +34,6 @@ describe('social presence dot styling (#100)', () => {
 
   it('the client still renders the dot class from the status value (offline => no status class)', () => {
     // guards the source line that builds the class, so the contract above stays meaningful
-    expect(hud).toContain("dot === 'off' ? '' : dot");
+    expect(socialWindow).toContain("=== 'off' ? '' :");
   });
 });
