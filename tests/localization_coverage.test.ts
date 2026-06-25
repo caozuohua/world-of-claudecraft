@@ -1216,7 +1216,7 @@ describe('i18n Localization Key Coverage', () => {
   it('should route rendered world-content labels through localized entity helpers', () => {
     const hudSource = fs.readFileSync(path.resolve(process.cwd(), 'src/ui/hud.ts'), 'utf8');
     expect(hudSource).toContain('zoneDisplayName');
-    expect(hudSource).toContain("$('#zone-label').textContent = zoneDisplayName");
+    expect(hudSource).toContain("this.setText($('#zone-label'), zoneDisplayName");
     expect(hudSource).toContain('zonePoiLabel');
     expect(hudSource).toContain('dungeonDisplayNameFromSource');
     expect(hudSource).not.toContain('zoneWelcomeText(');
