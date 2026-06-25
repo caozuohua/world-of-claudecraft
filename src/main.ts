@@ -49,6 +49,7 @@ import {
   Settings,
 } from './game/settings';
 import { sfx } from './game/sfx';
+import { resolveUiEffectsProfile } from './game/ui_effects_profile';
 import { voice } from './game/voice';
 import {
   CHAR_SORT_MODES,
@@ -74,7 +75,7 @@ import { CharacterPreview } from './render/characters';
 import { skinCount } from './render/characters/manifest';
 import { playerPortraitDataUrl } from './render/characters/portrait';
 import { installWebGLContextRelease } from './render/context_release';
-import { GFX } from './render/gfx';
+import { GFX, graphicsPresetLabel } from './render/gfx';
 import { Renderer } from './render/renderer';
 import { navigatorSaveData } from './render/sky';
 import { pathCrossesFence } from './sim/colliders';
@@ -137,6 +138,7 @@ import {
   formatSecretGroups,
   isCompleteTotpCode,
 } from './ui/two_factor_setup';
+import { UiEffectsApplier } from './ui/ui_effects_applier';
 import { hydrateIcons } from './ui/ui_icons';
 import {
   resolveWocBalanceUpdate,
@@ -833,6 +835,24 @@ async function startGame(
       document.documentElement.style.setProperty(name, vars[name]);
   }
   applyTheme();
+  // Graphics-tier HUD effects: publish the resolved effect profile (data-fx-level +
+  // the --fx-* tokens) on settings / OS reduced-motion changes only, never per
+  // frame. Driven by the STATIC graphics preset (the gfx.ts `ui` band stays
+  // governable:false): the FPS governor cannot measure compositor blur cost (the
+  // two-controller hazard). The pure resolver decides; this applier is the thin DOM
+  // consumer, mirroring applyTheme above. Motion has a single source of truth: the
+  // OS prefers-reduced-motion channel (owned by the applier) OR the in-game
+  // reduceMotion setting, both feeding the resolver's reduceMotion input; the
+  // body.reduce-motion class below stays only as the CSS hook it already is.
+  const uiEffectsApplier = new UiEffectsApplier({
+    resolve: (osReducedMotion) =>
+      resolveUiEffectsProfile({
+        presetLabel: graphicsPresetLabel(settings.get('graphicsPreset')),
+        effectsQuality: settings.get('effectsQuality'),
+        reduceMotion: osReducedMotion || settings.get('reduceMotion'),
+      }),
+  });
+  uiEffectsApplier.applyNow();
   let renderer!: Renderer;
   let hud!: Hud;
   const perf = createPerfMonitor(null);
@@ -1235,9 +1255,12 @@ async function startGame(
       return;
     }
     // Interface & Comfort booleans: each toggles a body class (CSS does the rest)
-    // or flips a live subsystem flag. No sim involvement — purely presentational.
+    // or flips a live subsystem flag. No sim involvement, purely presentational.
     if (key === 'reduceMotion') {
+      // body.reduce-motion stays the CSS hook it already is; the applier folds the
+      // same flag into the graphics-tier effect profile so the two never fight.
       document.body.classList.toggle('reduce-motion', settings.set('reduceMotion', !!value));
+      uiEffectsApplier.applyNow();
       return;
     }
     if (key === 'highContrastText') {
@@ -1390,6 +1413,17 @@ async function startGame(
         break;
       case 'uiScale':
         document.documentElement.style.setProperty('--ui-scale', String(v));
+        break;
+      // Graphics-tier HUD effects follow the STATIC preset + the advanced
+      // effectsQuality slider. The 3D renderer tier is resolved at renderer
+      // construction (a reload); here we only re-publish the HUD effect profile
+      // (data-fx-level + --fx-* tokens). The preset is a discrete change so it
+      // applies immediately; effectsQuality is a slider so it is debounced.
+      case 'graphicsPreset':
+        uiEffectsApplier.applyNow();
+        break;
+      case 'effectsQuality':
+        uiEffectsApplier.applyDebounced();
         break;
     }
   }
