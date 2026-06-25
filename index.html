@@ -185,9 +185,10 @@
 <link rel="stylesheet" href="/src/styles/index.extra.css" />
 <style>
   /* Game CSS now lives in src/styles/* (the P1 to P4b extraction). The shared
-     layers (tokens, base, layout, components, hud, hud.mobile, shell) load via the
+     layers (tokens, base, layout, components, hud, shell, hud-mobile) load via the
      src/main.ts barrel; this entry's per-entry layer (the #rotate-device
-     orientation gate, decision 16a) loads from index.extra.css linked above. This
+     orientation gate, decision 16a) loads from index.extra.css linked above. Layer
+     names are flat (hud-mobile, not hud.mobile): a dot is a sublayer separator. This
      inline block is intentionally empty. */
 </style>
 </head>

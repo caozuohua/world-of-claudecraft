@@ -9,8 +9,10 @@
    (the in-world HUD chrome). P3 adds layout.css (the shared .window shell, in @layer
    layout) and components.css (the feature-window bodies, in @layer components). P4
    fills the remaining layers against this fixed order, so no later CSS phase
-   re-litigates the cascade. The layers not yet filled are declared here but empty
-   until their phase lands. admin.html and guide.html keep their own inline CSS
+   re-litigates the cascade. After P4b the only intentionally-empty barrel layer is
+   the reserved `hud` slot (hud.css and components.css both target @layer components,
+   see below); index-extra and play-extra are filled per entry by the .extra files,
+   not by this barrel. admin.html and guide.html keep their own inline CSS
    (state.md decision 18) and do not load this barrel.
 
    Both hud.css and components.css put their rules in @layer components (the declared
