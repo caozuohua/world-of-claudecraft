@@ -580,4 +580,76 @@
   body:has(#start-screen:not([style*="display: none"])) #ui {
     display: none !important;
   }
+
+  /* ---------- skip links ---------- */
+  /* P15a a11y: the first focusable elements on both game entries, parked off-screen
+     until they take keyboard focus, then slid into view (mirrors the src/guide
+     .guide-skip precedent). Only the position transitions; the :focus-visible ring is
+     steady (no transition / animation / filter on the outline) per the focus-ring
+     rule. Colours / spacing / radius reference tokens; the off-screen offset and the
+     anti-zoom 16px font floor are intentional literals (no token exists for either). */
+  .hud-skip {
+    position: fixed;
+    inset-block-start: -120px;
+    inset-inline-start: var(--spacing-sm);
+    /* matches the topmost overlay tier so a focused skip link is never occluded */
+    z-index: 100000;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--panel-base);
+    color: var(--color-text-light);
+    border: 1px solid var(--color-border-focus);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-ui);
+    font-size: 16px;
+    text-decoration: none;
+    transition: inset-block-start var(--transition-speed) var(--transition-ease);
+  }
+  .hud-skip:focus-visible {
+    inset-block-start: var(--spacing-sm);
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+  }
+  /* The skip links target the in-game HUD, so hide them while the pre-game start
+     screen is up (they would otherwise sit ahead of the login / char-select flow). */
+  body:has(#start-screen:not([style*="display: none"])) .hud-skip {
+    display: none;
+  }
+
+  /* ---------- forced-colors ---------- */
+  /* P15a a11y: the one dark aesthetic stays; forced-colors is the ONLY contrast
+     adaptation (decision 11: no light theme, no prefers-color-scheme branch). Borders
+     and the focus ring must survive when the OS forces its own palette, and no state
+     may be carried by a background alone, so system-color keywords are pinned where
+     the forced palette applies. */
+  @media (forced-colors: active) {
+    /* Keep every focus ring visible against the forced palette. */
+    :focus-visible {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+    }
+    /* Panels / windows / skip links keep a real border (forced-colors drops box-shadow
+       and most backgrounds, so a shadow-only or fill-only edge would vanish). */
+    .panel,
+    .window,
+    .hud-skip {
+      border: 1px solid CanvasText;
+    }
+    /* The skip link must still read as actionable in high contrast. */
+    .hud-skip {
+      background: Canvas;
+      color: CanvasText;
+    }
+  }
+
+  /* ---------- print reset ---------- */
+  /* P15a a11y: a full-screen real-time WebGL game has no print layout (decision 14),
+     so hide the canvas and the HUD chrome rather than reflow. Minimal by design. */
+  @media print {
+    #game-canvas,
+    #ui,
+    #nameplates,
+    .hud-skip {
+      display: none !important;
+    }
+  }
 }

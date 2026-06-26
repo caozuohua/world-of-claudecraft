@@ -80,7 +80,7 @@ const CORPUS = [
 ].join('\n');
 const CORPUS_SECTIONS = new Set(sectionNames(CORPUS));
 
-// PINNED manifest: the 59 ten-dash section banners, enumerated live from the shipped
+// PINNED manifest: the ten-dash section banners, enumerated live from the shipped
 // HTML at authoring time (not invented). 47 were inline in index.html; P2 added the
 // 48th by upgrading the lowercase tooltip banner to a ten-dash marker as it moved to
 // src/styles/hud.css. P3 relocated the windows out of the inline <style> into
@@ -153,9 +153,15 @@ const INDEX_SECTIONS = [
   'mobile touch controls (runtime-gated with body.mobile-touch + game-active)',
   'Unified Character Select Layout',
   'Cosmetic skin-select event overlay',
+  // P15a accessibility infra: three global sections added to base.css (loaded by both
+  // game entries, so each lands in the union corpus for both).
+  'skip links',
+  'forced-colors',
+  'print reset',
 ];
 
-// The two index-only sections play.html does not ship, so its count is 57.
+// The two index-only sections play.html does not ship, so its count is 57 (plus the
+// three P15a global sections both entries load via base.css = 60).
 const PLAY_OMITS = ['new-adventurer tutorial', 'UI theme picker'];
 const PLAY_SECTIONS = INDEX_SECTIONS.filter((name) => !PLAY_OMITS.includes(name));
 
@@ -163,12 +169,12 @@ const PLAY_SECTIONS = INDEX_SECTIONS.filter((name) => !PLAY_OMITS.includes(name)
 const MANIFEST = INDEX_SECTIONS;
 
 describe('css_corpus section manifest', () => {
-  it('pins a non-vacuous manifest: 59 index + 57 play sections, no duplicate names', () => {
-    expect(INDEX_SECTIONS.length).toBe(59);
-    expect(PLAY_SECTIONS.length).toBe(57);
-    expect(MANIFEST.length).toBe(59);
-    expect(new Set(INDEX_SECTIONS).size).toBe(59);
-    expect(new Set(PLAY_SECTIONS).size).toBe(57);
+  it('pins a non-vacuous manifest: 62 index + 60 play sections, no duplicate names', () => {
+    expect(INDEX_SECTIONS.length).toBe(62);
+    expect(PLAY_SECTIONS.length).toBe(60);
+    expect(MANIFEST.length).toBe(62);
+    expect(new Set(INDEX_SECTIONS).size).toBe(62);
+    expect(new Set(PLAY_SECTIONS).size).toBe(60);
   });
 
   it('captures the live corpus markers (the marker regex is non-vacuous, not a zero match)', () => {
