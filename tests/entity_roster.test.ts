@@ -183,6 +183,8 @@ function makeCtx() {
     duels: new Map(),
     pendingLootRolls: new Map(),
     nextLootRollId: 1,
+    devCommands: false,
+    marketListings: [],
     grantXp: vi.fn(),
     enterCombat: vi.fn(),
     hexOutputMult: vi.fn(() => 1),
@@ -283,6 +285,10 @@ function makeCtx() {
     // W3 interaction: the two still-on-Sim quest-NPC delegates the moved interact dispatches to.
     talkToNpc: vi.fn(),
     isQuestInteractionEntity: vi.fn(() => false),
+    // W5 chat router/readouts reach-backs.
+    targetEntity: vi.fn(),
+    partyCapacity: vi.fn(() => 5),
+    marketListingBelongsTo: vi.fn(() => false),
   };
   const ctx = createSimContext(host);
   return {

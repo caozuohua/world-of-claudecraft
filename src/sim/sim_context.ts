@@ -15,6 +15,7 @@
 import type { TalentModifiers } from './content/talents';
 import type { DelayedEvent, GroundAoE } from './entity_roster';
 import type { PendingLootRoll } from './loot/loot_roll';
+import type { MarketListing } from './market';
 import type { Rng } from './rng';
 import type {
   ArenaMatch,
@@ -138,6 +139,13 @@ export interface SimContextPrimitives {
   // read-write primitive (get + set). Backing fields stay on Sim.
   readonly pendingLootRolls: Map<number, PendingLootRoll>;
   nextLootRollId: number;
+  // W5 chat router/readouts. `devCommands` gates the /dev chat cheats (the router's
+  // `if (ctx.devCommands)` guard, exactly the Sim field). `marketListings` is the live
+  // World Market book the /listings readout filters to the player's own listings; the
+  // backing field stays Sim-owned (the Market instance owns it), exposed here as a live
+  // read-only view (never reassigned by the readout).
+  readonly devCommands: boolean;
+  readonly marketListings: MarketListing[];
 }
 
 // Cross-system callbacks. Each signature mirrors the still-on-`Sim` method it
@@ -521,6 +529,16 @@ export interface SimContextCallbacks {
   // (append-only). talkToNpc MUST stay a resolvable Sim delegate (external test call sites).
   talkToNpc(npcId: number, pid?: number): void;
   isQuestInteractionEntity(e: Entity): boolean;
+
+  // W5 chat router/readouts (src/sim/social/chat.ts + chat_readouts.ts): the three
+  // reach-backs the moved code CONSUMES that stay on Sim / a sibling machine.
+  // `targetEntity` is the T1 player target-selection entry the /assist branch calls
+  // (thin Sim delegate -> targeting.ts); `partyCapacity` is the party-machine read the
+  // partyReadout shows the roster cap against; `marketListingBelongsTo` is the Market
+  // ownership test the /listings readout filters with. All append-only, late-bound to Sim.
+  targetEntity(id: number | null, pid?: number): void;
+  partyCapacity(party: Party | null): number;
+  marketListingBelongsTo(listing: MarketListing, meta: PlayerMeta): boolean;
 }
 
 // The seam consumed by extracted modules.
@@ -661,6 +679,12 @@ export function createSimContext(host: SimContextHost): SimContext {
     },
     set nextLootRollId(v) {
       host.nextLootRollId = v;
+    },
+    get devCommands() {
+      return host.devCommands;
+    },
+    get marketListings() {
+      return host.marketListings;
     },
     emit: host.emit,
     error: host.error,
@@ -834,5 +858,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     // W3 interaction: the two still-on-Sim quest-NPC delegates the moved interact dispatches to.
     talkToNpc: host.talkToNpc,
     isQuestInteractionEntity: host.isQuestInteractionEntity,
+    // W5 chat router/readouts reach-backs (targetEntity/partyCapacity/marketListingBelongsTo).
+    targetEntity: host.targetEntity,
+    partyCapacity: host.partyCapacity,
+    marketListingBelongsTo: host.marketListingBelongsTo,
   };
 }

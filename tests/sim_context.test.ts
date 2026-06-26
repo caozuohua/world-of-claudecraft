@@ -195,6 +195,10 @@ const CALLBACK_KEYS = [
   // W3 interaction: the two still-on-Sim quest-NPC delegates the moved interact dispatches to.
   'talkToNpc',
   'isQuestInteractionEntity',
+  // W5 chat router/readouts reach-backs.
+  'targetEntity',
+  'partyCapacity',
+  'marketListingBelongsTo',
 ] as const;
 
 // A fully-spied fake host. `clock` is mutable so a test can prove the context reads
@@ -245,6 +249,8 @@ function makeFakeHost() {
     channelSubs: new Map(),
     pendingLootRolls: new Map(),
     nextLootRollId: 1,
+    devCommands: false,
+    marketListings: [],
     emit: vi.fn(),
     error: vi.fn(),
     dealDamage: vi.fn(),
@@ -415,6 +421,10 @@ function makeFakeHost() {
     // W3 interaction: the two still-on-Sim quest-NPC delegates the moved interact dispatches to.
     talkToNpc: vi.fn(),
     isQuestInteractionEntity: vi.fn(() => false),
+    // W5 chat router/readouts reach-backs.
+    targetEntity: vi.fn(),
+    partyCapacity: vi.fn(() => 5),
+    marketListingBelongsTo: vi.fn(() => false),
   };
   return { host, rng, entities, clock };
 }
