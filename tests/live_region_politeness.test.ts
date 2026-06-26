@@ -37,20 +37,26 @@ describe('liveRegionPoliteness', () => {
   });
 });
 
-describe('combat-line politeness parity (decision 15: Sim vs ClientWorld)', () => {
-  it('picks the same politeness for a combat event whether Sim-emitted or ClientWorld-mirrored', () => {
-    // The HUD routes both hosts' combat through the one combatLog funnel, so a combat
-    // damage event classifies to the same kind offline (Sim) and online (ClientWorld
-    // mirror). Model both event shapes and confirm the picked politeness is identical.
-    const simEvent = { type: 'damage', source: 'sim', amount: 42 };
-    const mirrorEvent = { type: 'damage', origin: 'clientworld', amount: 42, mirrored: true };
-    const simPoliteness = liveRegionPoliteness(combatLineKind());
-    const mirrorPoliteness = liveRegionPoliteness(combatLineKind());
-    // (combatLineKind is host-agnostic; the event shapes differ but both feed the same
-    // funnel, so both resolve to the polite, throttled combat region.)
-    expect(simEvent.type).toBe(mirrorEvent.type);
-    expect(simPoliteness).toBe(mirrorPoliteness);
-    expect(simPoliteness).toBe('polite');
+describe('combat-line politeness parity + safety (decision 15: Sim vs ClientWorld)', () => {
+  // The HUD funnels BOTH hosts' combat lines through the one combatLog() path, and
+  // combatLineKind() takes NO host argument: it is parameterless and always classifies a
+  // combat line as 'combat'. So there is no input by which a Sim-emitted line and a
+  // ClientWorld-mirrored line could diverge; the parity is structural, not coincidental.
+  // (An earlier version of this test built two decorative event objects and asserted
+  // liveRegionPoliteness('combat') === liveRegionPoliteness('combat'), which is vacuous;
+  // it now pins the real properties that make the parity hold.)
+  it('classifies a combat line host-agnostically (no parameter the host could vary)', () => {
+    expect(combatLineKind.length).toBe(0); // parameterless: nothing host-specific feeds it
+    expect(combatLineKind()).toBe('combat');
+  });
+
+  it('always announces a combat line polite and NEVER assertive, on either host', () => {
+    // The real safety guarantee: a routine combat line is throttled-polite, never
+    // escalated to assertive spam. Because the kind is host-fixed, this holds identically
+    // offline (Sim) and online (the ClientWorld mirror).
+    const politeness = liveRegionPoliteness(combatLineKind());
+    expect(politeness).toBe('polite');
+    expect(politeness).not.toBe('assertive');
   });
 });
 
