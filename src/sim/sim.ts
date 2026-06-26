@@ -112,7 +112,6 @@ import {
   NPCS,
   PLAYER_START,
   QUESTS,
-  questRewardItemId,
   ZONES,
   zoneAt,
 } from './data';
@@ -154,7 +153,6 @@ import {
   PLAYER_SWIM_DEPTH,
 } from './pathfind';
 import { prestige as prestigeImpl, updateRested } from './progression/xp';
-import { questFallbackGrants } from './quest_fallback';
 import { sanitizeRemovedZone1Content } from './removed_zone1_content';
 import { Rng } from './rng';
 import {
@@ -205,6 +203,11 @@ import {
   updateInstances as updateInstancesImpl,
 } from './instances/dungeons';
 import { checkQuestReady, onInventoryChangedForQuests, onMobKilledForQuests } from './quests/quest_credit';
+import * as questCommands from './quests/quest_commands';
+// computeQuestState (the pure quest-state fn) moved to quests/quest_commands.ts (W4);
+// re-export it here so ClientWorld's `import { computeQuestState } from '../sim/sim'`
+// (online.ts) stays byte-identical.
+export { computeQuestState } from './quests/quest_commands';
 import * as arenaMod from './social/arena';
 import * as duelMod from './social/duel';
 // A2: eloDelta (with ARENA_K_FACTOR) moved to social/arena.ts. Re-exported so the
@@ -257,7 +260,6 @@ import {
   FISHING_CAST_ID,
   FISHING_CAST_TIME,
   GCD,
-  INTERACT_RANGE,
   type InvSlot,
   isConsuming,
   isPetClass,
@@ -275,10 +277,8 @@ import {
   type OverheadEmoteId,
   type PetMode,
   type PlayerClass,
-  type QuestDef,
   type QuestProgress,
   type QuestState,
-  questTurnInNpcIds,
   RUN_SPEED,
   type SimConfig,
   type SimEvent,
@@ -825,23 +825,9 @@ export interface PendingMobRespawn {
   timer: number;
 }
 
-// Pure quest-state computation, shared by the sim and the network client.
-export function computeQuestState(
-  questId: string,
-  questLog: Map<string, QuestProgress>,
-  questsDone: Set<string>,
-  playerLevel: number,
-): QuestState {
-  if (questsDone.has(questId)) return 'done';
-  const qp = questLog.get(questId);
-  if (qp) return qp.state === 'ready' ? 'ready' : 'active';
-  const quest = QUESTS[questId];
-  if (!quest) return 'unavailable';
-  if (quest.requiresQuest && !questsDone.has(quest.requiresQuest)) return 'unavailable';
-  if (quest.minLevel && playerLevel < quest.minLevel) return 'unavailable';
-  if (quest.retired) return 'unavailable';
-  return 'available';
-}
+// computeQuestState (the pure quest-state fn) moved to quests/quest_commands.ts (W4),
+// re-exported from sim.ts (see the import region) so the ClientWorld import stays
+// byte-identical.
 
 // copyPos moved to entity_roster.ts (used only by the despawn prologue).
 
@@ -4399,167 +4385,32 @@ export class Sim {
   // Quests
   // -------------------------------------------------------------------------
 
+  // The quest command surface (questState + acceptQuest/acceptLinkedQuest/abandonQuest/
+  // turnInQuest, plus the private helpers questNpcFor/finalizeQuestAccept and the pure
+  // computeQuestState) moved to quests/quest_commands.ts (W4) behind SimContext. Sim
+  // keeps these thin same-named PUBLIC delegates (the widened `pid?` overload preserved)
+  // so the IWorld surface, server/game.ts, and the in-file interaction path (talkToNpc
+  // above) resolve them on the Sim facade unchanged; each forwards via this.ctx. The
+  // moved questNpcFor reaches the still-on-Sim isQuestInteractionEntity predicate via the
+  // ctx.isQuestInteractionEntity callback.
   questState(questId: string, pid?: number): QuestState {
-    const r = this.resolve(pid);
-    if (!r) return 'unavailable';
-    return computeQuestState(questId, r.meta.questLog, r.meta.questsDone, r.e.level);
-  }
-
-  private questNpcFor(
-    questId: string,
-    role: 'giver' | 'turnIn',
-    p: Entity,
-  ): { npc: Entity | null; tooFar: boolean } {
-    const quest = QUESTS[questId];
-    const templateIds = role === 'giver' ? [quest.giverNpcId] : questTurnInNpcIds(quest);
-    let sawNpc = false;
-    for (const e of this.entities.values()) {
-      if (!this.isQuestInteractionEntity(e) || !templateIds.includes(e.templateId)) continue;
-      if (role === 'giver' && e.kind !== 'npc') continue;
-      sawNpc = true;
-      if (dist2d(p.pos, e.pos) <= INTERACT_RANGE + 2) return { npc: e, tooFar: false };
-    }
-    return { npc: null, tooFar: sawNpc };
-  }
-
-  // Shared accept core for the NPC and linked-share paths. Records progress, then
-  // re-grants any requiredItem the player no longer holds so a lost prerequisite item
-  // can never permanently block the quest, and announces the accept. Both callers go
-  // through here so the two paths cannot drift (notably this re-grant).
-  private finalizeQuestAccept(questId: string, quest: QuestDef, meta: PlayerMeta): void {
-    meta.questLog.set(questId, { questId, counts: quest.objectives.map(() => 0), state: 'active' });
-    for (const itemId of questFallbackGrants(
-      quest,
-      (id) => this.countItem(id, meta.entityId) > 0,
-    )) {
-      this.addItem(itemId, 1, meta.entityId);
-    }
-    this.emit({ type: 'questAccepted', questId, pid: meta.entityId });
-    this.emit({
-      type: 'log',
-      text: `Quest accepted: ${quest.name}`,
-      color: '#ff0',
-      pid: meta.entityId,
-    });
-    this.ctx.onInventoryChangedForQuests(meta);
+    return questCommands.questState(this.ctx, questId, pid);
   }
 
   acceptQuest(questId: string, pid?: number): void {
-    const r = this.resolve(pid);
-    if (!r) return;
-    const quest = QUESTS[questId];
-    const { meta, e: p } = r;
-    if (!quest) {
-      this.error(meta.entityId, 'That quest is not available.');
-      return;
-    }
-    if (this.questState(questId, meta.entityId) !== 'available') {
-      this.error(meta.entityId, 'That quest is not available.');
-      return;
-    }
-    const nearby = this.questNpcFor(questId, 'giver', p);
-    if (!nearby.npc) {
-      this.error(
-        meta.entityId,
-        nearby.tooFar ? 'Too far away.' : 'That quest giver is not nearby.',
-      );
-      return;
-    }
-    this.finalizeQuestAccept(questId, quest, meta);
+    questCommands.acceptQuest(this.ctx, questId, pid);
   }
 
   acceptLinkedQuest(questId: string, sharerPid: number, pid?: number): void {
-    const r = this.resolve(pid);
-    if (!r) return;
-    const { meta } = r;
-    const quest = QUESTS[questId];
-    if (!quest || quest.retired || quest.shareable === false) {
-      this.error(meta.entityId, "This quest can't be shared.");
-      return;
-    }
-    const myParty = this.partyOf(meta.entityId);
-    const sharerParty = this.partyOf(sharerPid);
-    const sharer = this.players.get(sharerPid);
-    if (!myParty || !sharerParty || myParty.id !== sharerParty.id) {
-      const sharerName = sharer ? sharer.name : 'that player';
-      this.error(meta.entityId, `You must be in ${sharerName}'s party to accept that quest.`);
-      return;
-    }
-    if (this.questState(questId, meta.entityId) !== 'available') {
-      this.error(meta.entityId, 'That quest is not available.');
-      return;
-    }
-    this.finalizeQuestAccept(questId, quest, meta);
-    if (sharer) this.notice(sharerPid, `${meta.name} accepted your shared quest.`);
+    questCommands.acceptLinkedQuest(this.ctx, questId, sharerPid, pid);
   }
 
   abandonQuest(questId: string, pid?: number): void {
-    const r = this.resolve(pid);
-    if (!r) return;
-    const { meta } = r;
-    if (!meta.questLog.has(questId)) return;
-    meta.questLog.delete(questId);
-    this.emit({
-      type: 'log',
-      text: `Quest abandoned: ${QUESTS[questId].name}`,
-      color: '#f66',
-      pid: meta.entityId,
-    });
+    questCommands.abandonQuest(this.ctx, questId, pid);
   }
 
   turnInQuest(questId: string, pid?: number): void {
-    const r = this.resolve(pid);
-    if (!r) return;
-    const { meta, e: p } = r;
-    const quest = QUESTS[questId];
-    if (!quest) {
-      this.error(meta.entityId, 'That quest is not available.');
-      return;
-    }
-    const qp = meta.questLog.get(questId);
-    if (!qp) {
-      this.error(meta.entityId, 'That quest is not in your log.');
-      return;
-    }
-    if (qp.state !== 'ready') {
-      this.error(meta.entityId, 'That quest is not complete.');
-      return;
-    }
-    const nearby = this.questNpcFor(questId, 'turnIn', p);
-    if (!nearby.npc) {
-      this.error(
-        meta.entityId,
-        nearby.tooFar ? 'Too far away.' : 'That quest turn-in is not nearby.',
-      );
-      return;
-    }
-
-    for (const obj of quest.objectives) {
-      if (obj.type === 'collect' && obj.itemId)
-        this.removeItem(obj.itemId, obj.count, meta.entityId);
-    }
-    qp.state = 'done';
-    meta.questLog.delete(questId);
-    meta.questsDone.add(questId);
-    meta.counters.questsCompleted++;
-    if (quest.copperReward > 0) {
-      meta.copper += quest.copperReward;
-      this.emit({
-        type: 'loot',
-        text: `You receive ${formatMoney(quest.copperReward)}.`,
-        pid: meta.entityId,
-      });
-    }
-    const rewardItem = questRewardItemId(quest, meta.cls);
-    if (rewardItem) this.addItem(rewardItem, 1, meta.entityId);
-    this.grantXp(quest.xpReward, meta);
-    this.emit({ type: 'questDone', questId, pid: meta.entityId });
-    this.emit({
-      type: 'log',
-      text: `Quest completed: ${quest.name}`,
-      color: '#ff0',
-      pid: meta.entityId,
-    });
+    questCommands.turnInQuest(this.ctx, questId, pid);
   }
 
   // No-op in offline mode
