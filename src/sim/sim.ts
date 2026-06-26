@@ -336,7 +336,7 @@ const FALL_SAFE_DISTANCE = 12; // yards of free fall before damage
 // (I1: read only by enterDungeon's raid gate).
 // DAMAGE_IDLE_DESPAWN_SECONDS / DAMAGE_IDLE_DESPAWN_MOB_IDS moved to entity_roster.ts
 // (the despawn prologue's home); imported above for the damage-path timer reset.
-// PARTY_XP_RANGE moved to types.ts (C1; used by the damage-core xp-split + M1 assist), imported above.
+// PARTY_XP_RANGE moved to types.ts (C1; read by the damage-core xp-split + M1 assist); no longer imported by sim.ts.
 // RESTED_* rested-XP tuning + isResting/updateRested moved to progression/xp.ts (G1b),
 // the only code that reads them.
 // A2: DUEL_COUNTDOWN/DUEL_FORFEIT_DISTANCE moved to social/duel.ts; the Ashen
@@ -435,14 +435,14 @@ export const MAX_CHAT_MESSAGE_LEN = 255;
 // MARKET_* consts live there now. MARKET_MAX_LISTINGS is re-imported above for the
 // /listings readout (the one in-sim.ts consumer left behind).
 const VENDOR_BUYBACK_LIMIT = 12;
-// INSTANCE_EMPTY_TIMEOUT relocated to types.ts (I1: shared with the delve reaper below);
-// imported above.
+// INSTANCE_EMPTY_TIMEOUT relocated to types.ts (I1); no longer referenced in sim.ts.
 // Delve run-lifecycle consts moved to src/sim/delves/runs.ts (I2a): the solid-prop
 // radii (DELVE_CHEST/GRAVE/WALL_SOLID_R), DELVE_INTERACT_RANGE, DELVE_BAD_AIR_INTERVAL,
 // DELVE_RAISE_DEAD_CHANNEL, DELVE_EXIT_PORTAL_RADIUS, DELVE_LORE_ORDER, and (re-exported
 // below) DELVE_MODULE_NAMES + DELVE_IMPLEMENTED_AFFIXES. DELVE_PLATE_RADIUS +
 // DELVE_COMPANION_MAX_RANK + DELVE_COMPANION_HEAL_INTERVAL relocated to types.ts
-// (shared by the I2a run module / Sim.spawnDelveCompanion and the I2c companion AI).
+// (consumed by the I2a run module + I2c companion AI; of these sim.ts still reads only
+// DELVE_COMPANION_HEAL_INTERVAL, in the delve-companion path).
 // The companion (I2c) AI tuning consts (HEAL_RANGE/FOLLOW/HEAL_PCT) now live with the
 // per-tick brain in src/sim/delves/companion.ts; only LEVEL_PCT (spawn-only) stays.
 // Tessa's combat level as a fraction of the owner's, indexed by rank (1-3): she
@@ -483,9 +483,9 @@ const FOLLOW_MAX_RANGE = 60; // give up follow once the leader is this far away
 // Pet-AI tick tuning (PET_LEASH/PET_FOLLOW_DISTANCE/PET_PATH_*/PET_WAYPOINT_REACHED/
 // PET_ASSIST_RANGE/PET_AGGRESSIVE_RANGE/PET_OWNER_IDLE_TICKS) moved with the slice to
 // src/sim/pet/pet_ai.ts (P1a). PET_GROWL_INTERVAL + PET_TELEPORT_DISTANCE relocated to
-// ./types: PET_GROWL_INTERVAL is now consumed only by pet_ai.ts + pet_commands.ts
-// (petTaunt, P1b); PET_TELEPORT_DISTANCE is still imported above for the on-Sim
-// delve-companion follow.
+// ./types: PET_GROWL_INTERVAL is consumed by pet_ai.ts + pet_commands.ts (petTaunt, P1b),
+// PET_TELEPORT_DISTANCE by pet_ai.ts + the delve-companion follow (delves/companion.ts);
+// sim.ts imports neither now.
 // A pet only keeps its OWNER flagged in combat while it is actively trading blows
 // (its combatTimer resets to 0 on every hit dealt/taken). A pet that merely holds a
 // target it is chasing or can't reach stops dragging the owner into perpetual combat
@@ -494,8 +494,8 @@ const FOLLOW_MAX_RANGE = 60; // give up follow once the leader is this far away
 const PET_COMBAT_LINGER = 5;
 // PET_TAUNT_RANGE / PET_FEED_DURATION / PET_FEED_TICK / DEMON_HEAL_MANA_COST /
 // DEMON_HEAL_DURATION / DEMON_HEAL_TICK / TAMED_TARGET_RESPAWN_SECONDS moved with the
-// slice to src/sim/pet/pet_commands.ts (P1b); DEMON_HEAL_CAST_ID -> ./types (shared
-// with the still-on-Sim updateCasting channel-tick arm).
+// slice to src/sim/pet/pet_commands.ts (P1b); DEMON_HEAL_CAST_ID -> ./types (read by the
+// casting channel-tick arm now in combat/casting_lifecycle.ts; sim.ts no longer imports it).
 // LOOT_ROLL_TIMEOUT moved with the loot slice to src/sim/loot/loot_roll.ts (L1).
 
 export interface Party {
