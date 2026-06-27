@@ -508,7 +508,9 @@ tourDescribe(
         fctBurst?: { spawnPerWave: number; max: number; min: number; drove: boolean };
       }>;
     } {
-      const abs = fileURLToPath(new URL(`../${resultPath}`, import.meta.url));
+      const abs = resultPath.startsWith('/')
+        ? resultPath
+        : fileURLToPath(new URL(`../${resultPath}`, import.meta.url));
       return JSON.parse(readFileSync(abs, 'utf8'));
     }
 

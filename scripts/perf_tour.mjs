@@ -13,7 +13,9 @@ const STEP_MS = Number(process.env.PERF_STEP_MS ?? 2500);
 const SETTLE_MS = Number(process.env.PERF_SETTLE_MS ?? 600);
 const BOOT_TIMEOUT_MS = Number(process.env.PERF_BOOT_TIMEOUT_MS ?? 120000);
 const NAV_TIMEOUT_MS = Number(process.env.PERF_NAV_TIMEOUT_MS ?? 30000);
-const OUTPUT = process.env.PERF_OUT ?? path.join('tmp', `perf-tour-${new Date().toISOString().replace(/[:.]/g, '-')}.json`);
+const OUTPUT =
+  process.env.PERF_OUT ??
+  path.join('tmp', `perf-tour-${new Date().toISOString().replace(/[:.]/g, '-')}.json`);
 // PERF_PRESET seeds the STATIC graphics preset before boot so the P5 applier stamps
 // data-fx-level and the per-element P14a tier knobs engage (the per-tier perf gate). Unset
 // = the app's own default (ultra). Maps the preset label to the woc_settings numeric value
@@ -59,9 +61,14 @@ const VIEWPORTS = {
     hasTouch: false,
   },
   mobile: {
+    // LANDSCAPE on purpose (P17a): the in-game world is landscape-only on web mobile
+    // (decision 16a), so a portrait 390x844 surfaces the #rotate-device gate and the
+    // world never boots. A landscape 844x390 (an iPhone-class phone rotated) keeps the
+    // rotate gate hidden while still matching PHONE_TOUCH_QUERY (max-width 940 /
+    // max-height 760 under pointer:coarse), so the touch HUD is what gets measured.
     label: 'mobile',
-    width: 390,
-    height: 844,
+    width: 844,
+    height: 390,
     deviceScaleFactor: 3,
     isMobile: true,
     hasTouch: true,
@@ -89,12 +96,15 @@ function perfUrl() {
 function selectedViewports() {
   if (VIEWPORT_MODE === 'both') return [VIEWPORTS.desktop, VIEWPORTS.mobile];
   const viewport = VIEWPORTS[VIEWPORT_MODE];
-  if (!viewport) throw new Error(`Unknown PERF_VIEWPORT=${VIEWPORT_MODE}; use desktop, mobile, or both.`);
+  if (!viewport)
+    throw new Error(`Unknown PERF_VIEWPORT=${VIEWPORT_MODE}; use desktop, mobile, or both.`);
   return [viewport];
 }
 
 function isIgnorableConsoleError(text) {
-  return text.includes('/api/project-stats') || text.includes('project stats') || text.includes('502');
+  return (
+    text.includes('/api/project-stats') || text.includes('project stats') || text.includes('502')
+  );
 }
 
 async function bootOffline(page, viewport) {
@@ -103,13 +113,30 @@ async function bootOffline(page, viewport) {
   await page.waitForSelector('#btn-offline', { timeout: 30000 });
   await page.$eval('#btn-offline', (el) => el.click());
   await page.waitForSelector('#char-name', { timeout: 30000 });
-  await page.$eval('#char-name', (el, value) => {
-    el.value = value;
-    el.dispatchEvent(new Event('input', { bubbles: true }));
-    el.dispatchEvent(new Event('change', { bubbles: true }));
-  }, viewport.label === 'mobile' ? 'MobilePerf' : 'DesktopPerf');
+  await page.$eval(
+    '#char-name',
+    (el, value) => {
+      el.value = value;
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    },
+    viewport.label === 'mobile' ? 'MobilePerf' : 'DesktopPerf',
+  );
   await page.$eval('#offline-select .mini-class[data-class="warrior"]', (el) => el.click());
   await page.$eval('#btn-start-offline', (el) => el.click());
+  if (viewport.isMobile) {
+    // The touch boot raises the #mobile-preflight "play in landscape fullscreen"
+    // overlay, and prepareWorldEntry() awaits its Continue button before entering the
+    // world. Dismiss it so the world boots (same as the offline E2E scripts); the
+    // fullscreen / orientation-lock requests it fires both swallow their rejection in
+    // headless, so this is safe.
+    await page
+      .waitForSelector('#mobile-preflight-continue', { visible: true, timeout: 30000 })
+      .catch(() => {});
+    await page.evaluate(() => {
+      document.querySelector('#mobile-preflight-continue')?.click();
+    });
+  }
   try {
     await page.waitForFunction(
       () => Boolean(window.__game?.sim?.player && window.__game?.perf?.report),
@@ -117,8 +144,12 @@ async function bootOffline(page, viewport) {
     );
   } catch (err) {
     const state = await page.evaluate(() => {
-      const visiblePanel = [...document.querySelectorAll('#mode-select,#login-panel,#realm-panel,#charselect-panel,#offline-select')]
-        .find((el) => !el.hasAttribute('hidden'))?.id ?? null;
+      const visiblePanel =
+        [
+          ...document.querySelectorAll(
+            '#mode-select,#login-panel,#realm-panel,#charselect-panel,#offline-select',
+          ),
+        ].find((el) => !el.hasAttribute('hidden'))?.id ?? null;
       const loading = document.querySelector('#loading-screen');
       const fatal = document.querySelector('#fatal-overlay, .fatal-overlay');
       return {
@@ -127,14 +158,18 @@ async function bootOffline(page, viewport) {
         loadingVisible: loading?.classList.contains('visible') ?? false,
         loadingStatus: document.querySelector('#ls-status')?.textContent ?? '',
         offlineError: document.querySelector('#offline-error')?.textContent ?? '',
-        selectedClass: document.querySelector('#offline-select .mini-class.sel')?.getAttribute('data-class') ?? null,
+        selectedClass:
+          document.querySelector('#offline-select .mini-class.sel')?.getAttribute('data-class') ??
+          null,
         name: document.querySelector('#char-name')?.value ?? '',
         hasGame: Boolean(window.__game),
         bodyClass: document.body.className,
         fatalText: fatal?.textContent ?? '',
       };
     });
-    throw new Error(`Timed out waiting for offline world boot: ${JSON.stringify(state)}`, { cause: err });
+    throw new Error(`Timed out waiting for offline world boot: ${JSON.stringify(state)}`, {
+      cause: err,
+    });
   }
   await sleep(SETTLE_MS);
 }
@@ -276,7 +311,11 @@ function lastOf(samples) {
 
 function logicalAssetPath(url) {
   const pathname = (() => {
-    try { return new URL(url, BASE_URL).pathname; } catch { return url; }
+    try {
+      return new URL(url, BASE_URL).pathname;
+    } catch {
+      return url;
+    }
   })().replace(/^\/+/, '');
   if (!pathname.startsWith('media/')) return pathname;
   const parts = pathname.slice('media/'.length).split('/');
@@ -286,14 +325,19 @@ function logicalAssetPath(url) {
   const stem = file.slice(0, dot);
   const ext = file.slice(dot);
   const hashDot = stem.lastIndexOf('.');
-  const logicalStem = hashDot > 0 && /^[a-f0-9]{12}$/.test(stem.slice(hashDot + 1)) ? stem.slice(0, hashDot) : stem;
+  const logicalStem =
+    hashDot > 0 && /^[a-f0-9]{12}$/.test(stem.slice(hashDot + 1)) ? stem.slice(0, hashDot) : stem;
   return [...parts, `${logicalStem}${ext}`].join('/');
 }
 
 function staticAssetBytes(url) {
   const logical = logicalAssetPath(url);
   const file = path.join(process.cwd(), 'public', logical);
-  try { return fs.statSync(file).size; } catch { return 0; }
+  try {
+    return fs.statSync(file).size;
+  } catch {
+    return 0;
+  }
 }
 
 function bootBytesByType(report) {
@@ -377,17 +421,18 @@ function summarizeResult(result) {
     prewarmFailedEntries: prewarm?.manifestFailed ?? 0,
     prewarmTimedOutEntryIds: prewarm?.timedOutEntryIds ?? [],
     prewarmFailedEntryIds: prewarm?.failedEntryIds ?? [],
-    prewarmEntries: prewarm?.manifestEntries?.map((entry) => ({
-      id: entry.id,
-      category: entry.category,
-      required: entry.required,
-      status: entry.status,
-      elapsedMs: entry.elapsedMs,
-      remainingMsAfter: entry.remainingMsAfter,
-      programDelta: entry.programDelta,
-      textureDelta: entry.textureDelta,
-      detail: entry.detail,
-    })) ?? [],
+    prewarmEntries:
+      prewarm?.manifestEntries?.map((entry) => ({
+        id: entry.id,
+        category: entry.category,
+        required: entry.required,
+        status: entry.status,
+        elapsedMs: entry.elapsedMs,
+        remainingMsAfter: entry.remainingMsAfter,
+        programDelta: entry.programDelta,
+        textureDelta: entry.textureDelta,
+        detail: entry.detail,
+      })) ?? [],
     contextLost: renderer?.contextLost ?? 0,
     hudHotDomWrites: hud?.hotDomWrites ?? 0,
     hudHotDomSkippedWrites: hud?.hotDomSkippedWrites ?? 0,
@@ -409,7 +454,12 @@ function budgetFailures(summary) {
     ['texture count', summary.textureCount, THRESHOLDS.maxTextureCount, ''],
     ['boot bytes', summary.bootMib, THRESHOLDS.maxBootMib, ' MiB'],
     ['boot gltf bytes', summary.bootByType.gltf?.mib ?? 0, THRESHOLDS.maxBootGltfMib, ' MiB'],
-    ['boot texture bytes', summary.bootByType.texture?.mib ?? 0, THRESHOLDS.maxBootTextureMib, ' MiB'],
+    [
+      'boot texture bytes',
+      summary.bootByType.texture?.mib ?? 0,
+      THRESHOLDS.maxBootTextureMib,
+      ' MiB',
+    ],
     ['boot hdr bytes', summary.bootByType.hdr?.mib ?? 0, THRESHOLDS.maxBootHdrMib, ' MiB'],
     ['draw calls', summary.calls, THRESHOLDS.maxCalls, ''],
     ['triangles', summary.triangles, THRESHOLDS.maxTriangles, ''],
@@ -418,10 +468,25 @@ function budgetFailures(summary) {
     ['renderer views', summary.maxViews, THRESHOLDS.maxViews, ''],
     ['prewarm elapsed', summary.prewarmElapsedMs, THRESHOLDS.maxPrewarmMs, 'ms'],
     ['prewarm budget ratio', summary.prewarmBudgetUsedRatio, THRESHOLDS.maxPrewarmBudgetRatio, ''],
-    ['prewarm timed-out entries', summary.prewarmTimedOutEntries, THRESHOLDS.maxPrewarmTimedOut, ''],
+    [
+      'prewarm timed-out entries',
+      summary.prewarmTimedOutEntries,
+      THRESHOLDS.maxPrewarmTimedOut,
+      '',
+    ],
     ['prewarm failed entries', summary.prewarmFailedEntries, THRESHOLDS.maxPrewarmFailed, ''],
-    ['input intent->frame p95', summary.inputIntentToFrameP95, THRESHOLDS.maxInputIntentToFrameP95, 'ms'],
-    ['input intent->visible p95', summary.inputIntentToVisibleP95, THRESHOLDS.maxInputIntentToVisibleP95, 'ms'],
+    [
+      'input intent->frame p95',
+      summary.inputIntentToFrameP95,
+      THRESHOLDS.maxInputIntentToFrameP95,
+      'ms',
+    ],
+    [
+      'input intent->visible p95',
+      summary.inputIntentToVisibleP95,
+      THRESHOLDS.maxInputIntentToVisibleP95,
+      'ms',
+    ],
   ];
   const failures = [];
   for (const [label, actual, max, unit] of checks) {
@@ -491,7 +556,8 @@ async function runViewport(browser, viewport) {
 
     const firstFrame = samples[0]?.report?.frames ?? 0;
     const lastFrame = samples.at(-1)?.report?.frames ?? 0;
-    if (lastFrame <= firstFrame) errors.push(`Frame counter did not advance for ${viewport.label}.`);
+    if (lastFrame <= firstFrame)
+      errors.push(`Frame counter did not advance for ${viewport.label}.`);
 
     // P13b: run the bounded-node FCT burst AFTER the tour samples, so its hot DOM writes do
     // not skew the steady-state frameP95 / skip-rate the summary reads from the last sample.
@@ -526,11 +592,7 @@ fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
 const browser = await puppeteer.launch({
   executablePath: BROWSER_PATH,
   headless: 'new',
-  args: [
-    '--window-size=1600,900',
-    '--use-angle=swiftshader',
-    '--enable-unsafe-swiftshader',
-  ],
+  args: ['--window-size=1600,900', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
 });
 
 const startedAt = new Date().toISOString();
@@ -562,12 +624,17 @@ fs.writeFileSync(OUTPUT, `${JSON.stringify(artifact, null, 2)}\n`);
 console.log(`wrote ${OUTPUT}`);
 for (const r of results) {
   const s = r.summary;
-  console.log(`${r.viewport}: fps ${s.fps} (10s ${s.fps10s}) p95 ${s.frameP95}ms maxP95 ${s.maxFrameP95}ms longtask ${s.longTasks}/${s.longTaskP95}ms tasks ${s.preloadTasks} gltf ${s.gltfCount} tex ${s.textureCount} boot ${s.bootMib}MiB calls ${s.calls}/${s.maxSampleCalls} tris ${s.triangles}/${s.maxSampleTriangles} views ${s.views}/${s.maxViews} foliage q${s.foliageModelQuality} buckets ${s.foliageModelVisibleBuckets} draws ${s.foliageModelVisibleDraws} tris ${s.foliageModelVisibleTriangles} prewarm ${s.prewarmElapsedMs}/${s.prewarmMaxMs}ms ${s.prewarmCompleted}/${s.prewarmPlanned} fail ${s.prewarmFailedEntries} timeout ${s.prewarmTimedOutEntries} input ${s.inputIntentToVisibleP95}ms tier ${s.rendererTier} hudSkip ${Math.round(s.hudHotDomSkipRate * 100)}%`);
+  console.log(
+    `${r.viewport}: fps ${s.fps} (10s ${s.fps10s}) p95 ${s.frameP95}ms maxP95 ${s.maxFrameP95}ms longtask ${s.longTasks}/${s.longTaskP95}ms tasks ${s.preloadTasks} gltf ${s.gltfCount} tex ${s.textureCount} boot ${s.bootMib}MiB calls ${s.calls}/${s.maxSampleCalls} tris ${s.triangles}/${s.maxSampleTriangles} views ${s.views}/${s.maxViews} foliage q${s.foliageModelQuality} buckets ${s.foliageModelVisibleBuckets} draws ${s.foliageModelVisibleDraws} tris ${s.foliageModelVisibleTriangles} prewarm ${s.prewarmElapsedMs}/${s.prewarmMaxMs}ms ${s.prewarmCompleted}/${s.prewarmPlanned} fail ${s.prewarmFailedEntries} timeout ${s.prewarmTimedOutEntries} input ${s.inputIntentToVisibleP95}ms tier ${s.rendererTier} hudSkip ${Math.round(s.hudHotDomSkipRate * 100)}%`,
+  );
 }
 
 for (const r of results) {
   const b = r.fctBurst;
-  if (b) console.log(`${r.viewport}: fct burst ${b.spawnPerWave}/wave x${b.waves} -> live nodes [${b.counts.join(', ')}] (cap-bounded)`);
+  if (b)
+    console.log(
+      `${r.viewport}: fct burst ${b.spawnPerWave}/wave x${b.waves} -> live nodes [${b.counts.join(', ')}] (cap-bounded)`,
+    );
 }
 
 const hardErrors = results.flatMap((r) => [
