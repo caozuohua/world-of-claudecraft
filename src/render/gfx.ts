@@ -28,7 +28,7 @@ export const GFX_BUCKET_IDS = [
   'ui',
 ] as const;
 
-export type GfxBucketId = typeof GFX_BUCKET_IDS[number];
+export type GfxBucketId = (typeof GFX_BUCKET_IDS)[number];
 export type GfxBucketCost = 'gpu' | 'cpu' | 'mixed';
 
 export interface GfxBucketBand {
@@ -187,7 +187,14 @@ export const GFX_BUCKET_BANDS: Record<GfxTier, GfxBucketBands> = {
     vfx: { min: 0.84, baseline: 1.0, max: 1.0, roi: 0.9, cost: 'mixed', governable: true },
     characters: { min: 1.0, baseline: 1.0, max: 1.0, roi: 1.0, cost: 'mixed', governable: false },
     weapons: { min: 1.0, baseline: 1.0, max: 1.0, roi: 1.0, cost: 'mixed', governable: false },
-    worldStreaming: { min: 0.25, baseline: 0.5, max: 0.68, roi: 0.62, cost: 'cpu', governable: true },
+    worldStreaming: {
+      min: 0.25,
+      baseline: 0.5,
+      max: 0.68,
+      roi: 0.62,
+      cost: 'cpu',
+      governable: true,
+    },
     ui: { min: 0.75, baseline: 0.9, max: 1.0, roi: 0.86, cost: 'cpu', governable: false },
   },
   medium: {
@@ -201,7 +208,14 @@ export const GFX_BUCKET_BANDS: Record<GfxTier, GfxBucketBands> = {
     vfx: { min: 0.58, baseline: 0.8, max: 0.9, roi: 0.7, cost: 'mixed', governable: true },
     characters: { min: 0.86, baseline: 1.0, max: 1.0, roi: 1.0, cost: 'mixed', governable: false },
     weapons: { min: 1.0, baseline: 1.0, max: 1.0, roi: 1.0, cost: 'mixed', governable: false },
-    worldStreaming: { min: 0.42, baseline: 0.7, max: 0.82, roi: 0.62, cost: 'cpu', governable: true },
+    worldStreaming: {
+      min: 0.42,
+      baseline: 0.7,
+      max: 0.82,
+      roi: 0.62,
+      cost: 'cpu',
+      governable: true,
+    },
     ui: { min: 0.82, baseline: 1.0, max: 1.0, roi: 0.86, cost: 'cpu', governable: false },
   },
   high: {
@@ -215,7 +229,14 @@ export const GFX_BUCKET_BANDS: Record<GfxTier, GfxBucketBands> = {
     vfx: { min: 0.68, baseline: 0.92, max: 1.0, roi: 0.7, cost: 'mixed', governable: true },
     characters: { min: 0.9, baseline: 1.0, max: 1.0, roi: 1.0, cost: 'mixed', governable: false },
     weapons: { min: 1.0, baseline: 1.0, max: 1.0, roi: 1.0, cost: 'mixed', governable: false },
-    worldStreaming: { min: 0.55, baseline: 0.88, max: 1.0, roi: 0.62, cost: 'cpu', governable: true },
+    worldStreaming: {
+      min: 0.55,
+      baseline: 0.88,
+      max: 1.0,
+      roi: 0.62,
+      cost: 'cpu',
+      governable: true,
+    },
     ui: { min: 0.86, baseline: 1.0, max: 1.0, roi: 0.86, cost: 'cpu', governable: false },
   },
   ultra: {
@@ -251,18 +272,28 @@ function bucketBaselines(bands: GfxBucketBands): GfxBucketLevels {
   };
 }
 
-export function graphicsPresetLabel(value: number | undefined): 'low' | 'medium' | 'high' | 'ultra' | 'advanced' {
+export function graphicsPresetLabel(
+  value: number | undefined,
+): 'low' | 'medium' | 'high' | 'ultra' | 'advanced' {
   switch (Math.round(value ?? DEFAULT_PRESET)) {
-    case PRESET_LOW: return 'low';
-    case PRESET_MEDIUM: return 'medium';
-    case PRESET_HIGH: return 'high';
-    case PRESET_ULTRA: return 'ultra';
-    case PRESET_ADVANCED: return 'advanced';
-    default: return 'low';
+    case PRESET_LOW:
+      return 'low';
+    case PRESET_MEDIUM:
+      return 'medium';
+    case PRESET_HIGH:
+      return 'high';
+    case PRESET_ULTRA:
+      return 'ultra';
+    case PRESET_ADVANCED:
+      return 'advanced';
+    default:
+      return 'low';
   }
 }
 
-export function shouldUseAutoGovernor(hints?: Pick<GfxRuntimeHints, 'search' | 'graphicsPreset'>): boolean {
+export function shouldUseAutoGovernor(
+  hints?: Pick<GfxRuntimeHints, 'search' | 'graphicsPreset'>,
+): boolean {
   if (!hints) return false;
   const params = new URLSearchParams(hints.search);
   const override = params.get('governor') ?? params.get('autoGovernor');
@@ -284,7 +315,16 @@ export function configureMaskedDoubleSidedVegetationMaterial<T extends THREE.Mat
 
 function settingsFor(
   tier: GfxTier,
-  hints?: Pick<GfxRuntimeHints, 'search' | 'graphicsPreset' | 'terrainDetail' | 'foliageDensity' | 'effectsQuality' | 'shadowQuality' | 'gpuRenderer'>,
+  hints?: Pick<
+    GfxRuntimeHints,
+    | 'search'
+    | 'graphicsPreset'
+    | 'terrainDetail'
+    | 'foliageDensity'
+    | 'effectsQuality'
+    | 'shadowQuality'
+    | 'gpuRenderer'
+  >,
 ): GfxSettings {
   const bucketBands = GFX_BUCKET_BANDS[tier];
   const weakIntegratedGpu = isWeakIntegratedGpu(hints?.gpuRenderer);
@@ -313,8 +353,10 @@ function settingsFor(
   };
   if (hints?.graphicsPreset === PRESET_ADVANCED) {
     if ((hints.terrainDetail ?? 1) < 0.5) settings = { ...settings, terrainSplat: false };
-    if ((hints.foliageDensity ?? 1) < 0.5) settings = { ...settings, grassRadius: 34, grassStep: 3.8 };
-    if ((hints.effectsQuality ?? 1) < EFFECTS_QUALITY_LOW_CUTOFF) settings = { ...settings, composer: false, ao: false, msaaSamples: 0, maxPointLights: 3 };
+    if ((hints.foliageDensity ?? 1) < 0.5)
+      settings = { ...settings, grassRadius: 34, grassStep: 3.8 };
+    if ((hints.effectsQuality ?? 1) < EFFECTS_QUALITY_LOW_CUTOFF)
+      settings = { ...settings, composer: false, ao: false, msaaSamples: 0, maxPointLights: 3 };
     if ((hints.shadowQuality ?? 1) < 0.5) settings = { ...settings, shadowMap: 1024 };
   }
   return settings;
@@ -330,7 +372,10 @@ export function forcedTierFromSearch(search: string): GfxTier | null {
 function storedNumericSetting(key: string): number | undefined {
   if (typeof localStorage === 'undefined') return undefined;
   try {
-    const raw = JSON.parse(localStorage.getItem('woc_settings') ?? 'null') as Record<string, unknown> | null;
+    const raw = JSON.parse(localStorage.getItem('woc_settings') ?? 'null') as Record<
+      string,
+      unknown
+    > | null;
     const value = raw && typeof raw === 'object' ? raw[key] : undefined;
     return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
   } catch {
@@ -363,7 +408,9 @@ function readGpuRendererString(): string | undefined {
     gl = canvas.getContext('webgl2') ?? canvas.getContext('webgl');
     if (!gl) return undefined;
     const dbg = gl.getExtension('WEBGL_debug_renderer_info');
-    return String(dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
+    return String(
+      dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER),
+    );
   } catch {
     return undefined;
   } finally {
@@ -378,18 +425,19 @@ export function urlForcedTier(): GfxTier | null {
 }
 
 function runtimeHints(): GfxRuntimeHints {
-  const nav = typeof navigator !== 'undefined'
-    ? navigator as Navigator & { deviceMemory?: number }
-    : null;
+  const nav =
+    typeof navigator !== 'undefined' ? (navigator as Navigator & { deviceMemory?: number }) : null;
   return {
     search: typeof location !== 'undefined' ? location.search : '',
     deviceMemory: nav?.deviceMemory,
     hardwareConcurrency: nav?.hardwareConcurrency,
     maxTouchPoints: nav?.maxTouchPoints ?? 0,
-    coarsePointer: typeof matchMedia !== 'undefined' ? matchMedia('(pointer: coarse)').matches : false,
-    narrowViewport: typeof matchMedia !== 'undefined'
-      ? (matchMedia('(max-width: 940px)').matches || matchMedia('(max-height: 760px)').matches)
-      : false,
+    coarsePointer:
+      typeof matchMedia !== 'undefined' ? matchMedia('(pointer: coarse)').matches : false,
+    narrowViewport:
+      typeof matchMedia !== 'undefined'
+        ? matchMedia('(max-width: 940px)').matches || matchMedia('(max-height: 760px)').matches
+        : false,
     gpuRenderer: probeGpuRenderer(),
     graphicsPreset: storedNumericSetting('graphicsPreset'),
     terrainDetail: storedNumericSetting('terrainDetail'),
@@ -434,7 +482,9 @@ export function classifyGpuRenderer(name: string | undefined): GpuClass {
   if (isWeakIntegratedGpu(name)) return 'weak';
   // Strong desktop discrete + Apple Silicon. The `(\(tm\))?` tolerates the "(TM)" some Windows
   // drivers print after "Radeon" ("Radeon(TM) RX 580").
-  if (/\b(rtx|gtx)\b|geforce|radeon(\(tm\))?\s?(rx|pro|vii)|\barc\b|\bnvidia\b|apple\s?m[1-9]/.test(n))
+  if (
+    /\b(rtx|gtx)\b|geforce|radeon(\(tm\))?\s?(rx|pro|vii)|\barc\b|\bnvidia\b|apple\s?m[1-9]/.test(n)
+  )
     return 'strongDesktop';
   // Recent flagship mobile.
   if (
@@ -453,7 +503,9 @@ export function classifyGpuRenderer(name: string | undefined): GpuClass {
   // Mid mobile. The Mali clause excludes G50-G52 (the entry-level Valhall parts the weak ladder
   // below claims) so they fall through to LOW; G53+ stay mid.
   if (
-    /apple a1[1-3]|adreno \(tm\) (5\d\d|6[0-5]\d)|mali-g(5[3-9]|6\d|7[0-8])|powervr (gt|gm|b)/.test(n)
+    /apple a1[1-3]|adreno \(tm\) (5\d\d|6[0-5]\d)|mali-g(5[3-9]|6\d|7[0-8])|powervr (gt|gm|b)/.test(
+      n,
+    )
   )
     return 'midMobile';
   // Old / low mobile + old integrated.
@@ -499,8 +551,7 @@ export function resolveDefaultGraphicsPreset(hints: GfxRuntimeHints): number {
     (cores !== undefined && cores >= AMPLE_LOGICAL_CORES);
 
   if (gpu === 'software' || gpu === 'weak') return PRESET_LOW;
-  if (gpu === 'strongDesktop' && !isMobile)
-    return ampleOrUnknownMem ? PRESET_ULTRA : PRESET_HIGH;
+  if (gpu === 'strongDesktop' && !isMobile) return ampleOrUnknownMem ? PRESET_ULTRA : PRESET_HIGH;
   // A strong/flagship GPU on a touch device: capped at HIGH (ultra is desktop-only) for thermals.
   if (gpu === 'flagshipMobile' || (gpu === 'strongDesktop' && isMobile)) return PRESET_HIGH;
   if (gpu === 'midIntegrated' || gpu === 'midMobile') return PRESET_MEDIUM;
@@ -539,11 +590,16 @@ export function tierFromHints(hints: GfxRuntimeHints, softwareGl: boolean): GfxT
   const forced = forcedTierFromSearch(hints.search);
   if (forced) return forced;
   switch (Math.round(hints.graphicsPreset ?? DEFAULT_PRESET)) {
-    case PRESET_LOW: return 'low';
-    case PRESET_MEDIUM: return 'medium';
-    case PRESET_HIGH: return 'high';
-    case PRESET_ULTRA: return 'ultra';
-    case PRESET_ADVANCED: return 'high';
+    case PRESET_LOW:
+      return 'low';
+    case PRESET_MEDIUM:
+      return 'medium';
+    case PRESET_HIGH:
+      return 'high';
+    case PRESET_ULTRA:
+      return 'ultra';
+    case PRESET_ADVANCED:
+      return 'high';
   }
   return 'low';
 }
@@ -555,7 +611,9 @@ function rendererName(webgl: THREE.WebGLRenderer): string {
   try {
     const gl = webgl.getContext();
     const dbg = gl.getExtension('WEBGL_debug_renderer_info');
-    return String(dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
+    return String(
+      dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER),
+    );
   } catch {
     return '';
   }
@@ -567,7 +625,12 @@ export function isSoftwareGL(webgl: THREE.WebGLRenderer): boolean {
 
 export function isWeakIntegratedGpu(name: string | undefined): boolean {
   const n = name ?? '';
-  return /intel/i.test(n) && /(iris\(tm\) plus graphics 6|iris plus graphics 6|uhd graphics 6|hd graphics 5|hd graphics 6)/i.test(n);
+  return (
+    /intel/i.test(n) &&
+    /(iris\(tm\) plus graphics 6|iris plus graphics 6|uhd graphics 6|hd graphics 5|hd graphics 6)/i.test(
+      n,
+    )
+  );
 }
 
 // Best-guess settings from the URL alone (so module-load consumers see sane
@@ -632,8 +695,11 @@ export function addRimGlow(mat: THREE.Material): void {
   mat.onBeforeCompile = (sh) => {
     sh.uniforms.uRimBoost = sharedUniforms.uRimBoost;
     sh.fragmentShader = sh.fragmentShader
-      .replace('#include <common>', `#include <common>
-      uniform float uRimBoost;`)
+      .replace(
+        '#include <common>',
+        `#include <common>
+      uniform float uRimBoost;`,
+      )
       .replace(
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
@@ -661,26 +727,26 @@ export function surfaceMat(opts: SurfaceMatOpts): THREE.Material {
   if (cached) return cached;
   const mat = GFX.standardMaterials
     ? new THREE.MeshStandardMaterial({
-      color: opts.color ?? 0xffffff,
-      map: opts.map ?? null,
-      normalMap: opts.normalMap ?? null,
-      roughnessMap: opts.roughnessMap ?? null,
-      aoMap: opts.aoMap ?? null,
-      roughness: opts.roughness ?? 0.85,
-      metalness: opts.metalness ?? 0,
-      flatShading: opts.flatShading ?? false,
-      emissive: opts.emissive ?? 0x000000,
-      emissiveIntensity: opts.emissiveIntensity ?? 1,
-      side: opts.side ?? THREE.FrontSide,
-    })
+        color: opts.color ?? 0xffffff,
+        map: opts.map ?? null,
+        normalMap: opts.normalMap ?? null,
+        roughnessMap: opts.roughnessMap ?? null,
+        aoMap: opts.aoMap ?? null,
+        roughness: opts.roughness ?? 0.85,
+        metalness: opts.metalness ?? 0,
+        flatShading: opts.flatShading ?? false,
+        emissive: opts.emissive ?? 0x000000,
+        emissiveIntensity: opts.emissiveIntensity ?? 1,
+        side: opts.side ?? THREE.FrontSide,
+      })
     : new THREE.MeshLambertMaterial({
-      color: opts.color ?? 0xffffff,
-      map: opts.map ?? null,
-      flatShading: opts.flatShading ?? false,
-      emissive: opts.emissive ?? 0x000000,
-      emissiveIntensity: opts.emissiveIntensity ?? 1,
-      side: opts.side ?? THREE.FrontSide,
-    });
+        color: opts.color ?? 0xffffff,
+        map: opts.map ?? null,
+        flatShading: opts.flatShading ?? false,
+        emissive: opts.emissive ?? 0x000000,
+        emissiveIntensity: opts.emissiveIntensity ?? 1,
+        side: opts.side ?? THREE.FrontSide,
+      });
   if (opts.rim && GFX.standardMaterials) addRimGlow(mat);
   matCache.set(key, mat);
   return mat;
