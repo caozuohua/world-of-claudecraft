@@ -21,16 +21,13 @@ import {
 } from './combat/auto_attack';
 import {
   cancelCast as cancelCastImpl,
-  castAbility as castAbilityImpl,
   castAbilityBySlot as castAbilityBySlotImpl,
+  castAbility as castAbilityImpl,
   pushbackCast as pushbackCastImpl,
   spendResource as spendResourceImpl,
   updateCasting as updateCastingImpl,
 } from './combat/casting_lifecycle';
-import {
-  isRooted,
-  isStunned,
-} from './combat/cc';
+import { isRooted, isStunned } from './combat/cc';
 import {
   dealDamage as dealDamageImpl,
   grantXp as grantXpImpl,
@@ -50,17 +47,6 @@ import {
 // moved to social/fiesta.ts with that logic; sim.ts keeps only the type used by
 // the PlayerMeta interface + the power-up catalog the fiestaMatchInfo accessor reads.
 import { type AugmentSpecial, type AugmentTier, POWERUPS_BY_ID } from './content/augments';
-// L1: the loot-distribution layer (party-loot strategy, the rollLoot roller, copper
-// split, need-greed roll lifecycle, corpse-loot helpers) moved to ./loot/loot_roll.ts;
-// Sim keeps thin same-named delegates that call these.
-import {
-  activeLootRolls as activeLootRollsImpl,
-  partyLootCandidatesForMob as partyLootCandidatesForMobImpl,
-  type PendingLootRoll,
-  resolveLootRoll as resolveLootRollImpl,
-  rollLoot as rollLootImpl,
-  submitLootRoll as submitLootRollImpl,
-} from './loot/loot_roll';
 import {
   classHasSkin,
   EVENT_SKIN_TOKEN_ID,
@@ -108,6 +94,10 @@ import {
   QUESTS,
   zoneAt,
 } from './data';
+import * as companionMod from './delves/companion';
+import * as lockpickMod from './delves/lockpick_controller';
+import * as runsMod from './delves/runs';
+import * as nythraxis from './encounters/nythraxis';
 // A3: ARENA_SPAWNS_A_2v2/B_2v2 (read only by the moved fiestaRevive) now live with
 // social/fiesta.ts. The dungeon-wall consts (DUNGEON_WALL_HW/X) are now read only by
 // delves/runs.ts + render/dungeon.ts; W11 dropped the stranded sim.ts import. I2a's delve
@@ -120,34 +110,6 @@ import {
   type PlayerEquipment,
   recalcPlayerStats,
 } from './entity';
-import { canEquipItem } from './equipment_rules';
-import {
-  LEADERBOARD_PAGE_SIZE,
-  type LeaderboardPage,
-  paginateLeaderboard,
-} from './leaderboard_page';
-import { type Ante, type PickAction } from './lockpick';
-import {
-  isTrivialTo as isTrivialToFn,
-  retargetMob as retargetMobFn,
-  updateMobTarget as updateMobTargetFn,
-} from './mob/targeting';
-import * as nythraxis from './encounters/nythraxis';
-import { resetEvadingMob as resetEvadingMobFn, updateMob as updateMobFn } from './mob/locomotion';
-import { runMobSwingAffixes } from './mob/mob_swing';
-import * as lifecycle from './mob/lifecycle';
-import * as petAi from './pet/pet_ai';
-import * as petCommands from './pet/pet_commands';
-import { combatProfileForMob, effectiveMobMeleeRange, type MobCombatProfile } from './mob_combat';
-import {
-  findPlayerPath,
-  PLAYER_BODY_RADIUS,
-  PLAYER_MAX_CLIMB_SLOPE,
-  PLAYER_SWIM_DEPTH,
-} from './pathfind';
-import { prestige as prestigeImpl, updateRested } from './progression/xp';
-import { sanitizeRemovedZone1Content } from './removed_zone1_content';
-import { Rng } from './rng';
 import {
   addEntityToRoster,
   type DelayedEvent,
@@ -160,6 +122,45 @@ import {
   runDespawnDecay,
   tickGroundAoEs,
 } from './entity_roster';
+import { canEquipItem } from './equipment_rules';
+import { formatMoney } from './format_money';
+import * as interaction from './interaction';
+import * as items from './items';
+import {
+  LEADERBOARD_PAGE_SIZE,
+  type LeaderboardPage,
+  paginateLeaderboard,
+} from './leaderboard_page';
+import type { Ante, PickAction } from './lockpick';
+// L1: the loot-distribution layer (party-loot strategy, the rollLoot roller, copper
+// split, need-greed roll lifecycle, corpse-loot helpers) moved to ./loot/loot_roll.ts;
+// Sim keeps thin same-named delegates that call these.
+import {
+  activeLootRolls as activeLootRollsImpl,
+  type PendingLootRoll,
+  partyLootCandidatesForMob as partyLootCandidatesForMobImpl,
+  resolveLootRoll as resolveLootRollImpl,
+  rollLoot as rollLootImpl,
+  submitLootRoll as submitLootRollImpl,
+} from './loot/loot_roll';
+import { Market, type MarketListing, type MarketSave } from './market';
+import * as lifecycle from './mob/lifecycle';
+import { resetEvadingMob as resetEvadingMobFn, updateMob as updateMobFn } from './mob/locomotion';
+import { runMobSwingAffixes } from './mob/mob_swing';
+import {
+  isTrivialTo as isTrivialToFn,
+  retargetMob as retargetMobFn,
+  updateMobTarget as updateMobTargetFn,
+} from './mob/targeting';
+import { combatProfileForMob, effectiveMobMeleeRange, type MobCombatProfile } from './mob_combat';
+import {
+  findPlayerPath,
+  PLAYER_BODY_RADIUS,
+  PLAYER_MAX_CLIMB_SLOPE,
+  PLAYER_SWIM_DEPTH,
+} from './pathfind';
+import * as petAi from './pet/pet_ai';
+import * as petCommands from './pet/pet_commands';
 import {
   applyTalentAllocation,
   deleteTalentLoadout,
@@ -170,19 +171,17 @@ import {
   switchTalentLoadout,
   talentPointBudget,
 } from './progression/talents';
-import * as companionMod from './delves/companion';
-import * as lockpickMod from './delves/lockpick_controller';
-import { Market, type MarketListing, type MarketSave } from './market';
-import * as items from './items';
-import * as interaction from './interaction';
-import { formatMoney } from './format_money';
-import * as runsMod from './delves/runs';
+import { prestige as prestigeImpl, updateRested } from './progression/xp';
+import { sanitizeRemovedZone1Content } from './removed_zone1_content';
+import { Rng } from './rng';
+import { createSimContext, type SimContext, type SimContextHost } from './sim_context';
 import * as chatMod from './social/chat';
 import * as tradeMod from './social/trade';
-import { createSimContext, type SimContext, type SimContextHost } from './sim_context';
+
 // Re-export so server/db.ts's `import type { MarketSave } from '../src/sim/sim'`
 // stays valid now that the type lives in market.ts.
 export type { MarketSave } from './market';
+
 import {
   enterCrypt as enterCryptImpl,
   enterDungeon as enterDungeonImpl,
@@ -194,17 +193,25 @@ import {
   updateDoorTriggers as updateDoorTriggersImpl,
   updateInstances as updateInstancesImpl,
 } from './instances/dungeons';
-import { checkQuestReady, onInventoryChangedForQuests, onMobKilledForQuests } from './quests/quest_credit';
 import * as questCommands from './quests/quest_commands';
+import {
+  checkQuestReady,
+  onInventoryChangedForQuests,
+  onMobKilledForQuests,
+} from './quests/quest_credit';
+
 // computeQuestState (the pure quest-state fn) moved to quests/quest_commands.ts (W4);
 // re-export it here so ClientWorld's `import { computeQuestState } from '../sim/sim'`
 // (online.ts) stays byte-identical.
 export { computeQuestState } from './quests/quest_commands';
+
 import * as arenaMod from './social/arena';
 import * as duelMod from './social/duel';
+
 // A2: eloDelta (with ARENA_K_FACTOR) moved to social/arena.ts. Re-exported so the
 // public path `import { Sim, eloDelta } from './sim'` (tests/arena.test.ts) holds.
 export { eloDelta } from './social/arena';
+
 import * as fiestaMod from './social/fiesta';
 // A3: Fiesta tuning consts moved to social/fiesta.ts; these five are read back here
 // by the fiestaMatchInfo presentation accessor (which STAYS on Sim).
@@ -243,8 +250,8 @@ import {
   type DelveModuleDef,
   type DelveRun,
   DT,
-  dist2d,
   DUNGEON_LEASH_DISTANCE,
+  dist2d,
   type Entity,
   type EquipSlot,
   type ErrorReason,
@@ -375,9 +382,11 @@ export const MAX_CHAT_MESSAGE_LEN = 255;
 // arrives a junior aide and grows into a true peer as you invest Marks. Pairs with
 // DELVE_COMPANION_HEAL_PCT so a rank-up lifts both her survivability and her healing.
 const DELVE_COMPANION_LEVEL_PCT = [0, 0.5, 0.75, 1.0]; // index = rank
+
 // DELVE_MODULE_NAMES + DELVE_IMPLEMENTED_AFFIXES now live in src/sim/delves/runs.ts;
 // re-exported from there so external importers (src/ui/sim_i18n.ts, tests) are unchanged.
 export { DELVE_IMPLEMENTED_AFFIXES, DELVE_MODULE_NAMES } from './delves/runs';
+
 const MAX_CLIMB_SLOPE = PLAYER_MAX_CLIMB_SLOPE; // rise/run above which a ground move is blocked (cliffs, world rim)
 
 // How far a mob pulls same-family neighbours into a fight ("social aggro").
@@ -3647,8 +3656,7 @@ export class Sim {
   ): void {
     const d = dist2d(pet.pos, target.pos);
     if (d > spell.range) {
-      if (!isRooted(pet))
-        this.moveToward(pet, target.pos, pet.moveSpeed * this.moveSpeedMult(pet));
+      if (!isRooted(pet)) this.moveToward(pet, target.pos, pet.moveSpeed * this.moveSpeedMult(pet));
       pet.swingTimer = Math.max(0, pet.swingTimer - DT);
       return;
     }

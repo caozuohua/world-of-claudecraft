@@ -19,15 +19,7 @@
 // mobSwing, spawnDelveModule), never reaching into not-yet-extracted internals
 // in a way the sim itself does not already expose.
 
-import {
-  arenaOrigin,
-  DELVES,
-  DUNGEONS,
-  instanceOrigin,
-  MOBS,
-  PROPS,
-  QUESTS,
-} from '../../src/sim/data';
+import { arenaOrigin, DELVES, instanceOrigin, MOBS, PROPS, QUESTS } from '../../src/sim/data';
 import { createMob } from '../../src/sim/entity';
 import { solveLockActions } from '../../src/sim/lockpick';
 import { Sim } from '../../src/sim/sim';

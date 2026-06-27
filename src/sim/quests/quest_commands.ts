@@ -91,10 +91,7 @@ function finalizeQuestAccept(
   meta: PlayerMeta,
 ): void {
   meta.questLog.set(questId, { questId, counts: quest.objectives.map(() => 0), state: 'active' });
-  for (const itemId of questFallbackGrants(
-    quest,
-    (id) => ctx.countItem(id, meta.entityId) > 0,
-  )) {
+  for (const itemId of questFallbackGrants(quest, (id) => ctx.countItem(id, meta.entityId) > 0)) {
     ctx.addItem(itemId, 1, meta.entityId);
   }
   ctx.emit({ type: 'questAccepted', questId, pid: meta.entityId });
@@ -122,10 +119,7 @@ export function acceptQuest(ctx: SimContext, questId: string, pid?: number): voi
   }
   const nearby = questNpcFor(ctx, questId, 'giver', p);
   if (!nearby.npc) {
-    ctx.error(
-      meta.entityId,
-      nearby.tooFar ? 'Too far away.' : 'That quest giver is not nearby.',
-    );
+    ctx.error(meta.entityId, nearby.tooFar ? 'Too far away.' : 'That quest giver is not nearby.');
     return;
   }
   finalizeQuestAccept(ctx, questId, quest, meta);
@@ -195,16 +189,12 @@ export function turnInQuest(ctx: SimContext, questId: string, pid?: number): voi
   }
   const nearby = questNpcFor(ctx, questId, 'turnIn', p);
   if (!nearby.npc) {
-    ctx.error(
-      meta.entityId,
-      nearby.tooFar ? 'Too far away.' : 'That quest turn-in is not nearby.',
-    );
+    ctx.error(meta.entityId, nearby.tooFar ? 'Too far away.' : 'That quest turn-in is not nearby.');
     return;
   }
 
   for (const obj of quest.objectives) {
-    if (obj.type === 'collect' && obj.itemId)
-      ctx.removeItem(obj.itemId, obj.count, meta.entityId);
+    if (obj.type === 'collect' && obj.itemId) ctx.removeItem(obj.itemId, obj.count, meta.entityId);
   }
   qp.state = 'done';
   meta.questLog.delete(questId);

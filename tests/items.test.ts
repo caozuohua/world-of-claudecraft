@@ -23,7 +23,16 @@ function vendorPlayer(sim: Sim, name = 'Aleph') {
   const pid = sim.addPlayer('warrior', name);
   const anySim = sim as unknown as {
     entities: Map<number, Entity>;
-    players: Map<number, { copper: number; equipment: Record<string, string>; vendorBuyback: { itemId: string; count: number }[]; inventory: { itemId: string; count: number }[]; pendingSkinRank: number | null }>;
+    players: Map<
+      number,
+      {
+        copper: number;
+        equipment: Record<string, string>;
+        vendorBuyback: { itemId: string; count: number }[];
+        inventory: { itemId: string; count: number }[];
+        pendingSkinRank: number | null;
+      }
+    >;
     rebucket(e: Entity): void;
   };
   const wilkes = [...anySim.entities.values()].find(

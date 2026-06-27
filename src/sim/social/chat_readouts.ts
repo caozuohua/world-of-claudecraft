@@ -10,6 +10,13 @@
 // S3 i18n guard never scanned their internal `return '...'` strings; the existing en/
 // em-dash readout literals are preserved byte-for-byte under the move-not-rewrite waiver.
 
+import { isRooted } from '../combat/cc';
+import {
+  FIRST_TALENT_LEVEL,
+  pointsSpent,
+  talentPointsAtLevel,
+  talentsFor,
+} from '../content/talents';
 import {
   ABILITIES,
   abilitiesKnownAt,
@@ -20,13 +27,6 @@ import {
   ZONES,
   zoneAt,
 } from '../data';
-import { isRooted } from '../combat/cc';
-import {
-  FIRST_TALENT_LEVEL,
-  pointsSpent,
-  talentPointsAtLevel,
-  talentsFor,
-} from '../content/talents';
 import { formatMoney } from '../format_money';
 import { MARKET_MAX_LISTINGS } from '../market';
 import * as petCommands from '../pet/pet_commands';

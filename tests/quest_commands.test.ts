@@ -68,7 +68,12 @@ describe('quest_commands: computeQuestState projection', () => {
     expect(computeQuestState('q_greyjaw', new Map(), new Set(['q_wolves']), 1)).toBe('available');
     // minLevel gate (q_nythraxis_bound_guardian is level 20) with its prereq satisfied.
     expect(
-      computeQuestState('q_nythraxis_bound_guardian', new Map(), new Set(['q_nythraxis_sealed_crypt']), 1),
+      computeQuestState(
+        'q_nythraxis_bound_guardian',
+        new Map(),
+        new Set(['q_nythraxis_sealed_crypt']),
+        1,
+      ),
     ).toBe('unavailable');
     // fresh, gateless quest -> available.
     expect(computeQuestState('q_wolves', new Map(), new Set(), 1)).toBe('available');
@@ -94,7 +99,9 @@ describe('quest_commands: acceptQuest', () => {
 
     acceptQuest(sim.ctx, 'q_wolves', pid);
     const ev = sim.drainEvents();
-    expect(ev.some((e) => e.type === 'questAccepted' && (e as any).questId === 'q_wolves')).toBe(true);
+    expect(ev.some((e) => e.type === 'questAccepted' && (e as any).questId === 'q_wolves')).toBe(
+      true,
+    );
     expect(logsTo(ev, pid)).toContain('Quest accepted: Wolves at the Door');
     expect(sim.players.get(pid)!.questLog.has('q_wolves')).toBe(true);
   });
@@ -171,7 +178,9 @@ describe('quest_commands: turnInQuest', () => {
     const ev = sim.drainEvents();
     expect(ev.some((e) => e.type === 'questDone' && (e as any).questId === 'q_wolves')).toBe(true);
     expect(logsTo(ev, pid)).toContain('Quest completed: Wolves at the Door');
-    expect(ev.some((e) => e.type === 'loot' && /^You receive /.test(String((e as any).text)))).toBe(true);
+    expect(ev.some((e) => e.type === 'loot' && /^You receive /.test(String((e as any).text)))).toBe(
+      true,
+    );
 
     expect(meta.questsDone.has('q_wolves')).toBe(true);
     expect(meta.questLog.has('q_wolves')).toBe(false);
@@ -189,7 +198,9 @@ describe('quest_commands: acceptLinkedQuest', () => {
 
     // Not partied: the party gate rejects with the sharer's name.
     acceptLinkedQuest(sim.ctx, 'q_wolves', a, b);
-    expect(errorsTo(sim.drainEvents(), b)).toContain("You must be in Aleph's party to accept that quest.");
+    expect(errorsTo(sim.drainEvents(), b)).toContain(
+      "You must be in Aleph's party to accept that quest.",
+    );
     expect(sim.players.get(b)!.questLog.has('q_wolves')).toBe(false);
 
     // A non-existent quest can never be shared.
@@ -202,7 +213,12 @@ describe('quest_commands: acceptLinkedQuest', () => {
     sim.drainEvents();
     acceptLinkedQuest(sim.ctx, 'q_wolves', a, b);
     const ev = sim.drainEvents();
-    expect(ev.some((e) => e.type === 'questAccepted' && (e as any).questId === 'q_wolves' && (e as any).pid === b)).toBe(true);
+    expect(
+      ev.some(
+        (e) =>
+          e.type === 'questAccepted' && (e as any).questId === 'q_wolves' && (e as any).pid === b,
+      ),
+    ).toBe(true);
     expect(logsTo(ev, a)).toContain('Bet accepted your shared quest.');
     expect(sim.players.get(b)!.questLog.has('q_wolves')).toBe(true);
   });

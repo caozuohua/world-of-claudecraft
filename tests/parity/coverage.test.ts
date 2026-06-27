@@ -424,9 +424,13 @@ describe('coverage: each scenario fires its subsystem', () => {
       ev.some((e) => e.type === 'error' && e.pid === b && /party to accept/.test(String(e.text))),
     ).toBe(true);
     // Once partied, finalizeQuestAccept ran for B (questAccepted + the sharer notice to A).
-    expect(ev.some((e) => e.type === 'questAccepted' && e.questId === 'q_wolves' && e.pid === b)).toBe(true);
     expect(
-      ev.some((e) => e.type === 'log' && e.pid === a && /accepted your shared quest/.test(String(e.text))),
+      ev.some((e) => e.type === 'questAccepted' && e.questId === 'q_wolves' && e.pid === b),
+    ).toBe(true);
+    expect(
+      ev.some(
+        (e) => e.type === 'log' && e.pid === a && /accepted your shared quest/.test(String(e.text)),
+      ),
     ).toBe(true);
     // abandonQuest emitted its log and cleared B's quest log entry.
     expect(

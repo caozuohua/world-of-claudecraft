@@ -66,6 +66,7 @@ interface IWorldMember {
 
 // The 142 members of `interface IWorld`, in interface order (world_api.ts:342-509).
 // Partition: 36 `data` + 106 `method` (98 command-void + 6 read-returning + 2 async).
+// biome-ignore lint/suspicious/noExportsInTest: IWORLD_MEMBERS is the W0c pinned structural-parity contract (the authoritative IWorld member list)
 export const IWORLD_MEMBERS = [
   // --- core world / player roster + economy reads (data) ---
   { name: 'cfg', kind: 'data' },
@@ -332,64 +333,300 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
   // these deliberately, forcing a reviewed edit. NOT length-only.
   it('the full sorted member set is exactly the pinned 142', () => {
     expect(IWORLD_MEMBERS.map((m) => m.name).sort()).toEqual([
-      'abandonPet', 'abandonQuest', 'acceptLinkedQuest', 'acceptQuest', 'accountCosmetics', 'activeLoadout',
-      'activeLootRolls', 'applyTalents', 'arenaAugmentPick', 'arenaInfo', 'arenaQueueJoin', 'arenaQueueLeave',
-      'blockAdd', 'blockRemove', 'buyBackItem', 'buyItem', 'castAbility', 'castAbilityBySlot',
-      'cfg', 'changeSkin', 'chat', 'claimEventSkin', 'clearMarker', 'collectDelveChestLoot',
-      'companionState', 'companionUpgrade', 'companionUpgrades', 'convertPartyToRaid', 'convertRaidToParty', 'copper',
-      'deleteLoadout', 'delveBuyShopItem', 'delveDaily', 'delveInteract', 'delveMarks', 'delveRun',
-      'delveShopOffers', 'discardItem', 'duelAccept', 'duelDecline', 'duelInfo', 'duelRequest',
-      'enterDelve', 'enterDungeon', 'entities', 'equipItem', 'equipment', 'feedPet',
-      'friendAdd', 'friendRemove', 'friendlyTabTarget', 'guildAccept', 'guildCreate', 'guildDecline',
-      'guildDemote', 'guildDisband', 'guildInvite', 'guildKick', 'guildLeave', 'guildPromote',
-      'guildTransfer', 'healPet', 'interact', 'inventory', 'known', 'leaderboard',
-      'leaveDelve', 'leaveDungeon', 'lifetimeXp', 'loadouts', 'lockpickAbort', 'lockpickAction',
-      'lockpickEngage', 'lockpickState', 'lootCorpse', 'markerFor', 'marketBuy', 'marketCancel',
-      'marketCollect', 'marketInfo', 'marketList', 'marketSearch', 'moveInput', 'moveRaidMember',
-      'partyAccept', 'partyDecline', 'partyInfo', 'partyInvite', 'partyKick', 'partyLeave',
-      'petAttack', 'petTaunt', 'pickUpObject', 'playEmote', 'player', 'playerId',
-      'prestige', 'prestigeRank', 'questLog', 'questState', 'questsDone', 'raidLockouts',
-      'realm', 'releaseSpirit', 'renamePet', 'reportTelemetry', 'respec', 'restedXp',
-      'revivePet', 'saveLoadout', 'searchCharacters', 'sellAllJunk', 'sellItem', 'setMarker',
-      'setPetAutoTaunt', 'setPetMode', 'setSpec', 'socialInfo', 'startAutoAttack', 'stopAutoAttack',
-      'submitLootRoll', 'switchLoadout', 'tabTarget', 'talentPoints', 'talentRole', 'talentSpec',
-      'talents', 'targetEntity', 'targetNearestFriendly', 'tradeAccept', 'tradeCancel', 'tradeConfirm',
-      'tradeInfo', 'tradeRequest', 'tradeSetOffer', 'turnInQuest', 'unequipItem', 'unequipMechChroma',
-      'unlockedMilestones', 'useItem', 'vendorBuyback', 'xp',
+      'abandonPet',
+      'abandonQuest',
+      'acceptLinkedQuest',
+      'acceptQuest',
+      'accountCosmetics',
+      'activeLoadout',
+      'activeLootRolls',
+      'applyTalents',
+      'arenaAugmentPick',
+      'arenaInfo',
+      'arenaQueueJoin',
+      'arenaQueueLeave',
+      'blockAdd',
+      'blockRemove',
+      'buyBackItem',
+      'buyItem',
+      'castAbility',
+      'castAbilityBySlot',
+      'cfg',
+      'changeSkin',
+      'chat',
+      'claimEventSkin',
+      'clearMarker',
+      'collectDelveChestLoot',
+      'companionState',
+      'companionUpgrade',
+      'companionUpgrades',
+      'convertPartyToRaid',
+      'convertRaidToParty',
+      'copper',
+      'deleteLoadout',
+      'delveBuyShopItem',
+      'delveDaily',
+      'delveInteract',
+      'delveMarks',
+      'delveRun',
+      'delveShopOffers',
+      'discardItem',
+      'duelAccept',
+      'duelDecline',
+      'duelInfo',
+      'duelRequest',
+      'enterDelve',
+      'enterDungeon',
+      'entities',
+      'equipItem',
+      'equipment',
+      'feedPet',
+      'friendAdd',
+      'friendRemove',
+      'friendlyTabTarget',
+      'guildAccept',
+      'guildCreate',
+      'guildDecline',
+      'guildDemote',
+      'guildDisband',
+      'guildInvite',
+      'guildKick',
+      'guildLeave',
+      'guildPromote',
+      'guildTransfer',
+      'healPet',
+      'interact',
+      'inventory',
+      'known',
+      'leaderboard',
+      'leaveDelve',
+      'leaveDungeon',
+      'lifetimeXp',
+      'loadouts',
+      'lockpickAbort',
+      'lockpickAction',
+      'lockpickEngage',
+      'lockpickState',
+      'lootCorpse',
+      'markerFor',
+      'marketBuy',
+      'marketCancel',
+      'marketCollect',
+      'marketInfo',
+      'marketList',
+      'marketSearch',
+      'moveInput',
+      'moveRaidMember',
+      'partyAccept',
+      'partyDecline',
+      'partyInfo',
+      'partyInvite',
+      'partyKick',
+      'partyLeave',
+      'petAttack',
+      'petTaunt',
+      'pickUpObject',
+      'playEmote',
+      'player',
+      'playerId',
+      'prestige',
+      'prestigeRank',
+      'questLog',
+      'questState',
+      'questsDone',
+      'raidLockouts',
+      'realm',
+      'releaseSpirit',
+      'renamePet',
+      'reportTelemetry',
+      'respec',
+      'restedXp',
+      'revivePet',
+      'saveLoadout',
+      'searchCharacters',
+      'sellAllJunk',
+      'sellItem',
+      'setMarker',
+      'setPetAutoTaunt',
+      'setPetMode',
+      'setSpec',
+      'socialInfo',
+      'startAutoAttack',
+      'stopAutoAttack',
+      'submitLootRoll',
+      'switchLoadout',
+      'tabTarget',
+      'talentPoints',
+      'talentRole',
+      'talentSpec',
+      'talents',
+      'targetEntity',
+      'targetNearestFriendly',
+      'tradeAccept',
+      'tradeCancel',
+      'tradeConfirm',
+      'tradeInfo',
+      'tradeRequest',
+      'tradeSetOffer',
+      'turnInQuest',
+      'unequipItem',
+      'unequipMechChroma',
+      'unlockedMilestones',
+      'useItem',
+      'vendorBuyback',
+      'xp',
     ]);
   });
 
   it('the sorted data-kind set is exactly the pinned 36', () => {
     expect(DATA_MEMBERS.map((m) => m.name).sort()).toEqual([
-      'accountCosmetics', 'activeLoadout', 'arenaInfo', 'cfg', 'companionState', 'companionUpgrades',
-      'copper', 'delveDaily', 'delveMarks', 'delveRun', 'duelInfo', 'entities',
-      'equipment', 'inventory', 'known', 'lifetimeXp', 'loadouts', 'lockpickState',
-      'marketInfo', 'moveInput', 'partyInfo', 'player', 'playerId', 'prestigeRank',
-      'questLog', 'questsDone', 'realm', 'restedXp', 'socialInfo', 'talentRole',
-      'talentSpec', 'talents', 'tradeInfo', 'unlockedMilestones', 'vendorBuyback', 'xp',
+      'accountCosmetics',
+      'activeLoadout',
+      'arenaInfo',
+      'cfg',
+      'companionState',
+      'companionUpgrades',
+      'copper',
+      'delveDaily',
+      'delveMarks',
+      'delveRun',
+      'duelInfo',
+      'entities',
+      'equipment',
+      'inventory',
+      'known',
+      'lifetimeXp',
+      'loadouts',
+      'lockpickState',
+      'marketInfo',
+      'moveInput',
+      'partyInfo',
+      'player',
+      'playerId',
+      'prestigeRank',
+      'questLog',
+      'questsDone',
+      'realm',
+      'restedXp',
+      'socialInfo',
+      'talentRole',
+      'talentSpec',
+      'talents',
+      'tradeInfo',
+      'unlockedMilestones',
+      'vendorBuyback',
+      'xp',
     ]);
   });
 
   it('the sorted method-kind set is exactly the pinned 106', () => {
     expect(METHOD_MEMBERS.map((m) => m.name).sort()).toEqual([
-      'abandonPet', 'abandonQuest', 'acceptLinkedQuest', 'acceptQuest', 'activeLootRolls', 'applyTalents',
-      'arenaAugmentPick', 'arenaQueueJoin', 'arenaQueueLeave', 'blockAdd', 'blockRemove', 'buyBackItem',
-      'buyItem', 'castAbility', 'castAbilityBySlot', 'changeSkin', 'chat', 'claimEventSkin',
-      'clearMarker', 'collectDelveChestLoot', 'companionUpgrade', 'convertPartyToRaid', 'convertRaidToParty', 'deleteLoadout',
-      'delveBuyShopItem', 'delveInteract', 'delveShopOffers', 'discardItem', 'duelAccept', 'duelDecline',
-      'duelRequest', 'enterDelve', 'enterDungeon', 'equipItem', 'feedPet', 'friendAdd',
-      'friendRemove', 'friendlyTabTarget', 'guildAccept', 'guildCreate', 'guildDecline', 'guildDemote',
-      'guildDisband', 'guildInvite', 'guildKick', 'guildLeave', 'guildPromote', 'guildTransfer',
-      'healPet', 'interact', 'leaderboard', 'leaveDelve', 'leaveDungeon', 'lockpickAbort',
-      'lockpickAction', 'lockpickEngage', 'lootCorpse', 'markerFor', 'marketBuy', 'marketCancel',
-      'marketCollect', 'marketList', 'marketSearch', 'moveRaidMember', 'partyAccept', 'partyDecline',
-      'partyInvite', 'partyKick', 'partyLeave', 'petAttack', 'petTaunt', 'pickUpObject',
-      'playEmote', 'prestige', 'questState', 'raidLockouts', 'releaseSpirit', 'renamePet',
-      'reportTelemetry', 'respec', 'revivePet', 'saveLoadout', 'searchCharacters', 'sellAllJunk',
-      'sellItem', 'setMarker', 'setPetAutoTaunt', 'setPetMode', 'setSpec', 'startAutoAttack',
-      'stopAutoAttack', 'submitLootRoll', 'switchLoadout', 'tabTarget', 'talentPoints', 'targetEntity',
-      'targetNearestFriendly', 'tradeAccept', 'tradeCancel', 'tradeConfirm', 'tradeRequest', 'tradeSetOffer',
-      'turnInQuest', 'unequipItem', 'unequipMechChroma', 'useItem',
+      'abandonPet',
+      'abandonQuest',
+      'acceptLinkedQuest',
+      'acceptQuest',
+      'activeLootRolls',
+      'applyTalents',
+      'arenaAugmentPick',
+      'arenaQueueJoin',
+      'arenaQueueLeave',
+      'blockAdd',
+      'blockRemove',
+      'buyBackItem',
+      'buyItem',
+      'castAbility',
+      'castAbilityBySlot',
+      'changeSkin',
+      'chat',
+      'claimEventSkin',
+      'clearMarker',
+      'collectDelveChestLoot',
+      'companionUpgrade',
+      'convertPartyToRaid',
+      'convertRaidToParty',
+      'deleteLoadout',
+      'delveBuyShopItem',
+      'delveInteract',
+      'delveShopOffers',
+      'discardItem',
+      'duelAccept',
+      'duelDecline',
+      'duelRequest',
+      'enterDelve',
+      'enterDungeon',
+      'equipItem',
+      'feedPet',
+      'friendAdd',
+      'friendRemove',
+      'friendlyTabTarget',
+      'guildAccept',
+      'guildCreate',
+      'guildDecline',
+      'guildDemote',
+      'guildDisband',
+      'guildInvite',
+      'guildKick',
+      'guildLeave',
+      'guildPromote',
+      'guildTransfer',
+      'healPet',
+      'interact',
+      'leaderboard',
+      'leaveDelve',
+      'leaveDungeon',
+      'lockpickAbort',
+      'lockpickAction',
+      'lockpickEngage',
+      'lootCorpse',
+      'markerFor',
+      'marketBuy',
+      'marketCancel',
+      'marketCollect',
+      'marketList',
+      'marketSearch',
+      'moveRaidMember',
+      'partyAccept',
+      'partyDecline',
+      'partyInvite',
+      'partyKick',
+      'partyLeave',
+      'petAttack',
+      'petTaunt',
+      'pickUpObject',
+      'playEmote',
+      'prestige',
+      'questState',
+      'raidLockouts',
+      'releaseSpirit',
+      'renamePet',
+      'reportTelemetry',
+      'respec',
+      'revivePet',
+      'saveLoadout',
+      'searchCharacters',
+      'sellAllJunk',
+      'sellItem',
+      'setMarker',
+      'setPetAutoTaunt',
+      'setPetMode',
+      'setSpec',
+      'startAutoAttack',
+      'stopAutoAttack',
+      'submitLootRoll',
+      'switchLoadout',
+      'tabTarget',
+      'talentPoints',
+      'targetEntity',
+      'targetNearestFriendly',
+      'tradeAccept',
+      'tradeCancel',
+      'tradeConfirm',
+      'tradeRequest',
+      'tradeSetOffer',
+      'turnInQuest',
+      'unequipItem',
+      'unequipMechChroma',
+      'useItem',
     ]);
   });
 });
@@ -447,85 +684,156 @@ describe('membership, not equality: world extras do not fail the gate', () => {
 type AssertNever<T extends never> = T;
 
 const FACET_ENTITY_ROSTER = [
-  'cfg', 'entities', 'playerId', 'player', 'moveInput', 'realm',
+  'cfg',
+  'entities',
+  'playerId',
+  'player',
+  'moveInput',
+  'realm',
 ] as const satisfies readonly (keyof IWorldEntityRoster)[];
 type _ExhaustEntityRoster = AssertNever<
   Exclude<keyof IWorldEntityRoster, (typeof FACET_ENTITY_ROSTER)[number]>
 >;
 
 const FACET_COMBAT = [
-  'known', 'castAbility', 'castAbilityBySlot', 'startAutoAttack', 'stopAutoAttack', 'releaseSpirit',
+  'known',
+  'castAbility',
+  'castAbilityBySlot',
+  'startAutoAttack',
+  'stopAutoAttack',
+  'releaseSpirit',
 ] as const satisfies readonly (keyof IWorldCombat)[];
 type _ExhaustCombat = AssertNever<Exclude<keyof IWorldCombat, (typeof FACET_COMBAT)[number]>>;
 
 const FACET_TARGETING = [
-  'targetEntity', 'tabTarget', 'targetNearestFriendly', 'friendlyTabTarget',
+  'targetEntity',
+  'tabTarget',
+  'targetNearestFriendly',
+  'friendlyTabTarget',
 ] as const satisfies readonly (keyof IWorldTargeting)[];
 type _ExhaustTargeting = AssertNever<
   Exclude<keyof IWorldTargeting, (typeof FACET_TARGETING)[number]>
 >;
 
 const FACET_INTERACTION = [
-  'interact', 'lootCorpse', 'pickUpObject',
+  'interact',
+  'lootCorpse',
+  'pickUpObject',
 ] as const satisfies readonly (keyof IWorldInteraction)[];
 type _ExhaustInteraction = AssertNever<
   Exclude<keyof IWorldInteraction, (typeof FACET_INTERACTION)[number]>
 >;
 
 const FACET_LOOT = [
-  'submitLootRoll', 'activeLootRolls',
+  'submitLootRoll',
+  'activeLootRolls',
 ] as const satisfies readonly (keyof IWorldLoot)[];
 type _ExhaustLoot = AssertNever<Exclude<keyof IWorldLoot, (typeof FACET_LOOT)[number]>>;
 
 const FACET_INVENTORY = [
-  'inventory', 'vendorBuyback', 'equipment', 'copper', 'equipItem', 'unequipItem',
-  'useItem', 'discardItem', 'buyItem', 'sellItem', 'sellAllJunk', 'buyBackItem',
+  'inventory',
+  'vendorBuyback',
+  'equipment',
+  'copper',
+  'equipItem',
+  'unequipItem',
+  'useItem',
+  'discardItem',
+  'buyItem',
+  'sellItem',
+  'sellAllJunk',
+  'buyBackItem',
 ] as const satisfies readonly (keyof IWorldInventory)[];
 type _ExhaustInventory = AssertNever<
   Exclude<keyof IWorldInventory, (typeof FACET_INVENTORY)[number]>
 >;
 
 const FACET_COSMETICS = [
-  'accountCosmetics', 'changeSkin', 'claimEventSkin', 'unequipMechChroma',
+  'accountCosmetics',
+  'changeSkin',
+  'claimEventSkin',
+  'unequipMechChroma',
 ] as const satisfies readonly (keyof IWorldCosmetics)[];
 type _ExhaustCosmetics = AssertNever<
   Exclude<keyof IWorldCosmetics, (typeof FACET_COSMETICS)[number]>
 >;
 
 const FACET_QUESTS = [
-  'questLog', 'questsDone', 'questState', 'acceptQuest', 'turnInQuest', 'abandonQuest',
+  'questLog',
+  'questsDone',
+  'questState',
+  'acceptQuest',
+  'turnInQuest',
+  'abandonQuest',
   'acceptLinkedQuest',
 ] as const satisfies readonly (keyof IWorldQuests)[];
 type _ExhaustQuests = AssertNever<Exclude<keyof IWorldQuests, (typeof FACET_QUESTS)[number]>>;
 
 const FACET_PROGRESSION_XP = [
-  'xp', 'lifetimeXp', 'prestigeRank', 'unlockedMilestones', 'restedXp', 'leaderboard', 'prestige',
+  'xp',
+  'lifetimeXp',
+  'prestigeRank',
+  'unlockedMilestones',
+  'restedXp',
+  'leaderboard',
+  'prestige',
 ] as const satisfies readonly (keyof IWorldProgressionXp)[];
 type _ExhaustProgressionXp = AssertNever<
   Exclude<keyof IWorldProgressionXp, (typeof FACET_PROGRESSION_XP)[number]>
 >;
 
 const FACET_TALENTS = [
-  'talents', 'talentSpec', 'talentRole', 'loadouts', 'activeLoadout', 'talentPoints',
-  'applyTalents', 'respec', 'setSpec', 'saveLoadout', 'switchLoadout', 'deleteLoadout',
+  'talents',
+  'talentSpec',
+  'talentRole',
+  'loadouts',
+  'activeLoadout',
+  'talentPoints',
+  'applyTalents',
+  'respec',
+  'setSpec',
+  'saveLoadout',
+  'switchLoadout',
+  'deleteLoadout',
 ] as const satisfies readonly (keyof IWorldTalents)[];
 type _ExhaustTalents = AssertNever<Exclude<keyof IWorldTalents, (typeof FACET_TALENTS)[number]>>;
 
 const FACET_PET = [
-  'abandonPet', 'renamePet', 'revivePet', 'petAttack', 'petTaunt', 'setPetAutoTaunt',
-  'feedPet', 'healPet', 'setPetMode',
+  'abandonPet',
+  'renamePet',
+  'revivePet',
+  'petAttack',
+  'petTaunt',
+  'setPetAutoTaunt',
+  'feedPet',
+  'healPet',
+  'setPetMode',
 ] as const satisfies readonly (keyof IWorldPet)[];
 type _ExhaustPet = AssertNever<Exclude<keyof IWorldPet, (typeof FACET_PET)[number]>>;
 
 const FACET_PARTY = [
-  'partyInfo', 'partyInvite', 'partyAccept', 'partyDecline', 'partyLeave', 'partyKick',
-  'convertPartyToRaid', 'convertRaidToParty', 'moveRaidMember', 'markerFor', 'setMarker',
+  'partyInfo',
+  'partyInvite',
+  'partyAccept',
+  'partyDecline',
+  'partyLeave',
+  'partyKick',
+  'convertPartyToRaid',
+  'convertRaidToParty',
+  'moveRaidMember',
+  'markerFor',
+  'setMarker',
   'clearMarker',
 ] as const satisfies readonly (keyof IWorldParty)[];
 type _ExhaustParty = AssertNever<Exclude<keyof IWorldParty, (typeof FACET_PARTY)[number]>>;
 
 const FACET_TRADE = [
-  'tradeInfo', 'tradeRequest', 'tradeAccept', 'tradeSetOffer', 'tradeConfirm', 'tradeCancel',
+  'tradeInfo',
+  'tradeRequest',
+  'tradeAccept',
+  'tradeSetOffer',
+  'tradeConfirm',
+  'tradeCancel',
 ] as const satisfies readonly (keyof IWorldTrade)[];
 type _ExhaustTrade = AssertNever<Exclude<keyof IWorldTrade, (typeof FACET_TRADE)[number]>>;
 
@@ -533,45 +841,79 @@ const FACET_CHAT = ['chat', 'playEmote'] as const satisfies readonly (keyof IWor
 type _ExhaustChat = AssertNever<Exclude<keyof IWorldChat, (typeof FACET_CHAT)[number]>>;
 
 const FACET_DUEL_ARENA = [
-  'duelInfo', 'duelRequest', 'duelAccept', 'duelDecline', 'arenaInfo', 'arenaQueueJoin',
-  'arenaQueueLeave', 'arenaAugmentPick',
+  'duelInfo',
+  'duelRequest',
+  'duelAccept',
+  'duelDecline',
+  'arenaInfo',
+  'arenaQueueJoin',
+  'arenaQueueLeave',
+  'arenaAugmentPick',
 ] as const satisfies readonly (keyof IWorldDuelArena)[];
 type _ExhaustDuelArena = AssertNever<
   Exclude<keyof IWorldDuelArena, (typeof FACET_DUEL_ARENA)[number]>
 >;
 
 const FACET_SOCIAL_GRAPH = [
-  'socialInfo', 'friendAdd', 'friendRemove', 'blockAdd', 'blockRemove', 'guildCreate',
-  'guildInvite', 'guildAccept', 'guildDecline', 'guildLeave', 'guildKick', 'guildPromote',
-  'guildDemote', 'guildTransfer', 'guildDisband', 'searchCharacters',
+  'socialInfo',
+  'friendAdd',
+  'friendRemove',
+  'blockAdd',
+  'blockRemove',
+  'guildCreate',
+  'guildInvite',
+  'guildAccept',
+  'guildDecline',
+  'guildLeave',
+  'guildKick',
+  'guildPromote',
+  'guildDemote',
+  'guildTransfer',
+  'guildDisband',
+  'searchCharacters',
 ] as const satisfies readonly (keyof IWorldSocialGraph)[];
 type _ExhaustSocialGraph = AssertNever<
   Exclude<keyof IWorldSocialGraph, (typeof FACET_SOCIAL_GRAPH)[number]>
 >;
 
 const FACET_MARKET = [
-  'marketInfo', 'marketSearch', 'marketList', 'marketBuy', 'marketCancel', 'marketCollect',
+  'marketInfo',
+  'marketSearch',
+  'marketList',
+  'marketBuy',
+  'marketCancel',
+  'marketCollect',
 ] as const satisfies readonly (keyof IWorldMarket)[];
 type _ExhaustMarket = AssertNever<Exclude<keyof IWorldMarket, (typeof FACET_MARKET)[number]>>;
 
 const FACET_DUNGEONS = [
-  'enterDungeon', 'leaveDungeon', 'raidLockouts',
+  'enterDungeon',
+  'leaveDungeon',
+  'raidLockouts',
 ] as const satisfies readonly (keyof IWorldDungeons)[];
-type _ExhaustDungeons = AssertNever<
-  Exclude<keyof IWorldDungeons, (typeof FACET_DUNGEONS)[number]>
->;
+type _ExhaustDungeons = AssertNever<Exclude<keyof IWorldDungeons, (typeof FACET_DUNGEONS)[number]>>;
 
 const FACET_DELVES = [
-  'enterDelve', 'leaveDelve', 'delveInteract', 'companionUpgrade', 'delveBuyShopItem',
-  'delveShopOffers', 'lockpickState', 'lockpickEngage', 'lockpickAction', 'lockpickAbort',
-  'collectDelveChestLoot', 'delveRun', 'companionState', 'delveMarks', 'companionUpgrades',
+  'enterDelve',
+  'leaveDelve',
+  'delveInteract',
+  'companionUpgrade',
+  'delveBuyShopItem',
+  'delveShopOffers',
+  'lockpickState',
+  'lockpickEngage',
+  'lockpickAction',
+  'lockpickAbort',
+  'collectDelveChestLoot',
+  'delveRun',
+  'companionState',
+  'delveMarks',
+  'companionUpgrades',
   'delveDaily',
 ] as const satisfies readonly (keyof IWorldDelves)[];
 type _ExhaustDelves = AssertNever<Exclude<keyof IWorldDelves, (typeof FACET_DELVES)[number]>>;
 
-const FACET_TELEMETRY = [
-  'reportTelemetry',
-] as const satisfies readonly (keyof IWorldTelemetry)[];
+const FACET_TELEMETRY = ['reportTelemetry'] as const satisfies readonly (keyof IWorldTelemetry)[];
 type _ExhaustTelemetry = AssertNever<
   Exclude<keyof IWorldTelemetry, (typeof FACET_TELEMETRY)[number]>
 >;

@@ -119,7 +119,17 @@ describe('W9 socialInfo via the social/socialpos frames (non-snapshot)', () => {
         id: 1,
         name: 'Guild',
         rank: 'leader',
-        members: [{ id: 3, name: 'Mate', cls: 'priest', level: 9, realm: 'R1', online: false, rank: 'member' }],
+        members: [
+          {
+            id: 3,
+            name: 'Mate',
+            cls: 'priest',
+            level: 9,
+            realm: 'R1',
+            online: false,
+            rank: 'member',
+          },
+        ],
       },
     });
 
@@ -130,7 +140,17 @@ describe('W9 socialInfo via the social/socialpos frames (non-snapshot)', () => {
         id: 1,
         name: 'Guild',
         rank: 'leader',
-        members: [{ id: 3, name: 'Mate', cls: 'priest', level: 9, realm: 'R1', online: false, rank: 'member' }],
+        members: [
+          {
+            id: 3,
+            name: 'Mate',
+            cls: 'priest',
+            level: 9,
+            realm: 'R1',
+            online: false,
+            rank: 'member',
+          },
+        ],
       },
     });
     // the dirty flag flips true once, then back to false (HUD re-render poll)
@@ -156,7 +176,17 @@ describe('W9 socialInfo via the social/socialpos frames (non-snapshot)', () => {
         id: 1,
         name: 'Guild',
         rank: 'leader',
-        members: [{ id: 4, name: 'Mate', cls: 'priest', level: 9, realm: 'R1', online: false, rank: 'member' }],
+        members: [
+          {
+            id: 4,
+            name: 'Mate',
+            cls: 'priest',
+            level: 9,
+            realm: 'R1',
+            online: false,
+            rank: 'member',
+          },
+        ],
       },
     };
     c.socialInfo = social;
@@ -234,7 +264,10 @@ describe('W9 fiesta via the events queue + the arena_augment command', () => {
     const sim = (server as any).sim;
     const spy = vi.spyOn(sim, 'arenaAugmentPick');
 
-    server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'arena_augment', augment: 'silver_haste' }));
+    server.handleMessage(
+      session,
+      JSON.stringify({ t: 'cmd', cmd: 'arena_augment', augment: 'silver_haste' }),
+    );
     expect(spy).toHaveBeenCalledWith('silver_haste', session.pid);
 
     // the server guards the field: a missing/invalid augment never reaches the sim

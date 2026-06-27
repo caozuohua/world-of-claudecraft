@@ -1,13 +1,9 @@
-import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { describe, expect, it } from 'vitest';
 
-import {
-  COMMAND_NAMES,
-  DISPATCH_ONLY_COMMANDS,
-  type CommandName,
-} from '../src/world_api';
+import { COMMAND_NAMES, type CommandName, DISPATCH_ONLY_COMMANDS } from '../src/world_api';
 
 // W0b boundary gate: the command-schema lockstep invariant (00-SHARED-CONVENTIONS
 // #2). Every command ClientWorld sends (`cmd:'X'` through the private cmd()
@@ -171,9 +167,10 @@ describe('command schema parity (W0b)', () => {
       expect(dispatchSet.has(label), `chat-channel label leaked into dispatch-set: ${label}`).toBe(
         false,
       );
-      expect(tableSet.has(label as CommandName), `chat-channel label in COMMAND_NAMES: ${label}`).toBe(
-        false,
-      );
+      expect(
+        tableSet.has(label as CommandName),
+        `chat-channel label in COMMAND_NAMES: ${label}`,
+      ).toBe(false);
     }
   });
 });

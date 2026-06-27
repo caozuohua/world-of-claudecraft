@@ -317,11 +317,7 @@ export function sellAllJunk(ctx: SimContext, pid?: number): void {
     .filter((s) => {
       const def = ITEMS[s.itemId];
       return (
-        !!def &&
-        def.quality === 'poor' &&
-        def.kind !== 'quest' &&
-        !def.noVendorSell &&
-        s.count > 0
+        !!def && def.quality === 'poor' && def.kind !== 'quest' && !def.noVendorSell && s.count > 0
       );
     })
     .map((s) => ({ itemId: s.itemId, count: s.count }));

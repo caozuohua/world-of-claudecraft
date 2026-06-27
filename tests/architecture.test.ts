@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { describe, expect, it } from 'vitest';
 
 // Enforces the two load-bearing src/sim invariants from the root CLAUDE.md as a
 // real, always-on check instead of convention-only prose: the sim is the
@@ -82,7 +82,10 @@ describe('src/sim architecture invariants', () => {
 
   it('touches no DOM/browser globals', () => {
     const violations = scanLines(DOM_GLOBAL_RE);
-    expect(violations, `src/sim must run headless (no DOM globals):\n${violations.join('\n')}`).toEqual([]);
+    expect(
+      violations,
+      `src/sim must run headless (no DOM globals):\n${violations.join('\n')}`,
+    ).toEqual([]);
   });
 
   it('draws no randomness or wall-clock time outside Rng + the sim clock', () => {
@@ -184,7 +187,10 @@ describe('src/world_api IWorld seam purity invariants', () => {
         if (bad) violations.push(`${relative(repoRoot, file)} imports '${spec}' (${bad})`);
       }
     }
-    expect(violations, `the IWorld seam must stay layer-agnostic:\n${violations.join('\n')}`).toEqual([]);
+    expect(
+      violations,
+      `the IWorld seam must stay layer-agnostic:\n${violations.join('\n')}`,
+    ).toEqual([]);
   });
 
   it('pulls only TYPES from src/sim (a value sim import would drag the engine into the seam)', () => {
@@ -198,7 +204,9 @@ describe('src/world_api IWorld seam purity invariants', () => {
         if (!isSimSpecifier(spec)) continue;
         for (const name of runtimeBindings(clause)) {
           if (!allowed.has(name)) {
-            violations.push(`${rel} value-imports '${name}' from '${spec}' (sim imports must be type-only)`);
+            violations.push(
+              `${rel} value-imports '${name}' from '${spec}' (sim imports must be type-only)`,
+            );
           }
         }
       }
@@ -219,6 +227,9 @@ describe('src/world_api IWorld seam purity invariants', () => {
 
   it('touches no DOM/browser globals', () => {
     const violations = scanLines(DOM_GLOBAL_RE, worldApiFiles);
-    expect(violations, `the IWorld seam must run headless (no DOM globals):\n${violations.join('\n')}`).toEqual([]);
+    expect(
+      violations,
+      `the IWorld seam must run headless (no DOM globals):\n${violations.join('\n')}`,
+    ).toEqual([]);
   });
 });
