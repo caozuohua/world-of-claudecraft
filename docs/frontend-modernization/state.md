@@ -425,7 +425,7 @@ all PRESENTATION-FIRST: src/ui / src/render / src/styles / tests / docs only, no
 | Phase | Title | Risk | Kind | Status |
 |---|---|---|---|---|
 | P18a | Shared keyboard-nav + dialog-root a11y primitives (roving_index core + dialog_root helper + market-filter kbd nav + purity-guard widen) | low | extract+adopt | done (NEW src/ui/roving_index.ts [pure, UI_PURE_CORES] folds the 3 triplicated talents roving handlers via the normalized wrap (((x%n)+n)%n), byte-faithful; NEW src/ui/dialog_root.ts markDialogRoot adopted at 13 roots, 2 left inline [hud confirm-dialog + bags prompt: no tabindex today]; dropdownKeyNav wired into the market filter listboxes [the one behavior ADD]; forbiddenUiCore/RenderCoreImport regex widened to flag a *_window import with teeth, no registered core trips it. roving_index = visible-siblings primitive, dropdown_nav = open/collapse primitive. tests: roving_index/dialog_root units + 3 market keyboard_nav.browser cases + the widened guard teeth + 3 re-pointed window guards. reviewers qa-checklist + adversarial coverage + completeness, all no-blocking; tsc/biome clean, full vitest 5068 pass/11 skip, test:browser 34. talents_window -42, hud.ts -7. commits local) |
-| P18b | Per-window interactive ARIA + structure polish (social tablist, bags/char/party a11y, axe coverage) | low | a11y polish | planned (9 items) |
+| P18b | Per-window interactive ARIA + structure polish (social tablist, bags/char/party a11y, axe coverage) | low | a11y polish | done (9 items: social role=tablist + roving nav; bags non-modal focus-return [no trap] + inert prompt; char preview name; party leader-star split / raid-group / focus-opacity; + the social-tablist-keyboard / char-close / expanded-combobox test pins). The party leader-star + raid-group rode the PER-FRAME perf gate (perf_tour desktop+mobile: hudHotDomWrites=152 == P0, frameP95=250 == P0, fail 0; tagged frontend-v016-p18b-perf-gate); social/bags/char were cold. 2 review-found bag bugs fixed in-session (close() guard on display==='none' since bags shows 'flex' OR 'block'; inert cleared on EVERY prompt teardown incl confirm, not just cancel/Escape) + tests added. The new EXPANDED-combobox axe case surfaced + fixed a real WCAG 1.4.3 contrast bug (scoped .soc-sugg-item .soc-meta color). i18n DEVIATION from the packet's "English-only / never edit overlays": both new keys are WORDY so the M16 non-Latin completeness guard required real fills -> the 5 non-Latin overlays (zh_CN/zh_TW/ja_JP/ko_KR/ru_RU) were translated; Latin stays pending. |
 | P18c | Visual a11y: forced-colors cues + residual-hex tokenize + target-size + focus-indicator check | low | a11y/css | planned (6 items) |
 | P18d | Live regions + FocusManager unification (target-name / combat / chat live regions + wallet-picker fold) | medium | a11y/new | planned (6 items) |
 | P18e | Render-tier, content-i18n, perf nits + structural dedup (nameplate ceiling, aura i18n, arena perf, entity dedup, FCT internals) | medium | port+extend | planned (9 items) |
@@ -444,6 +444,15 @@ release), the cast eat/drink label resolved in the painter (P11a LANDED: reused 
 the only additions: `hudChrome.castBar.playerAria` = `'Your Cast Bar'` + `targetAria` = `'Unit Cast Bar'`,
 both NON-WORDY for M16, registered `pending`), skip-link + live-region-prefix labels (P15a),
 async-failure copy for leaderboard/market (P9b/P8b), and a lazy-window loading label (P17b).
+P18b LANDED two English-only `hud_chrome.ts` keys: `hudChrome.character.modelPreview` = `'Character Model Preview'`
+(the char role=img preview host name) and `hudChrome.unitFrame.partyGroup` = `'Group {n}'` (the visually-hidden raid
+party-group cue, `{n}` via formatNumber). UNLIKE every prior unit-frame label, BOTH are WORDY by the M16 rule
+(`/[a-z]{4,}/` after stripping `{...}`: "Group" -> "roup", "Character"/"Model"/"Preview" all match), so an
+English-filled non-Latin locale WOULD trip the completeness leak guard. The packet's "Title Case keeps it non-wordy"
+premise is therefore wrong for these two; the M16 mechanism is per-WORD consecutive-lowercase, not per-word-count.
+So the 5 non-Latin overlays (zh_CN/zh_TW/ja_JP/ko_KR/ru_RU) were filled with real translations (the documented
+non-Latin-completeness exception, consistent with prior feature PRs); the Latin overlays stay `pending` (release-tier
+maintainer fill). This is the one i18n case in the P18 wave where English-only does NOT suffice.
 
 ### Key file paths (V16 line numbers from the recon; the deep-review corrections are inline)
 - Per-frame entry: `Hud.update()` at `src/ui/hud.ts:3627` (frame-divider: every-frame +
