@@ -129,7 +129,14 @@ export function serializePet(ctx: SimContext, ownerPid: number): PetState | null
 
 export function restorePet(ctx: SimContext, owner: Entity, state: PetState): void {
   const template = MOBS[state.templateId];
-  if (!template) return;
+  if (!template) {
+    // The stored pet's creature template was removed or renamed by a content
+    // update, so we can no longer rebuild it. Drop the pet (it cannot exist),
+    // but tell the owner instead of silently emptying the pet slot.
+    const lost = cleanPetName(state.name) ?? 'Your pet';
+    ctx.notice(owner.id, `${lost} could not be restored and has been lost.`);
+    return;
+  }
   const level = owner.level;
   const pos = ctx.groundPos(owner.pos.x + 2, owner.pos.z + 1);
   const pet = createMob(ctx.nextId++, template, level, pos);

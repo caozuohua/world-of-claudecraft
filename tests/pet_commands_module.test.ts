@@ -8,13 +8,14 @@ import {
   feedPet,
   healPet,
   petOf,
+  restorePet,
   revivePet,
   serializePet,
   setPetMode,
   summonPet,
 } from '../src/sim/pet/pet_commands';
 import { Sim } from '../src/sim/sim';
-import type { Entity } from '../src/sim/types';
+import type { Entity, SimEvent } from '../src/sim/types';
 
 // Direct unit tests for the extracted pet command/lifecycle module (P1b). They drive
 // the moved functions through the real Sim.ctx seam (so the still-on-Sim helpers they
@@ -80,6 +81,31 @@ describe('pet_commands module (P1b)', () => {
     // Abandon -> the pet is gone.
     abandonPet(sim.ctx, hid);
     expect(petOf(sim.ctx, hid, true)).toBeNull();
+  });
+
+  it('restorePet notifies the owner when the stored template no longer exists', () => {
+    const { sim, hid, hunter } = hunterWorld();
+    // Stale save: the pet's templateId was removed/renamed by a content update.
+    const stale = {
+      templateId: 'forest_wolf_REMOVED',
+      name: 'Rex',
+      level: hunter.level,
+      hp: 50,
+      dead: false,
+      mode: 'defensive' as const,
+      autoTaunt: false,
+    };
+    restorePet(sim.ctx, hunter, stale);
+
+    // No pet is created from an unknown template (we cannot rebuild it)...
+    expect(petOf(sim.ctx, hid, true)).toBeNull();
+    // ...but the owner is told, instead of silently finding an empty pet slot.
+    const ev = sim.drainEvents();
+    const notice = ev.find(
+      (e): e is Extract<SimEvent, { type: 'log' }> => e.type === 'log' && e.pid === hid,
+    );
+    expect(notice).toBeTruthy();
+    expect(notice?.text).toContain('Rex');
   });
 
   it("setPetMode('passive') clears aggroTargetId/inCombat/autoAttack", () => {
