@@ -54,7 +54,7 @@ Read all in-scope files. Also read the CLAUDE.md files that govern each domain i
 - `src/sim/CLAUDE.md` and `src/sim/content/CLAUDE.md` (sim or content in scope)
 - `server/CLAUDE.md` (server in scope)
 - `src/net/CLAUDE.md` (net / wire protocol in scope)
-- `src/render/CLAUDE.md` (and its `assets/` / `characters/` sub-files) (renderer in scope)
+- `src/render/CLAUDE.md` (and its `characters/` sub-file; the `assets/` notes are a section inside it) (renderer in scope)
 - `src/ui/CLAUDE.md` and `src/styles/CLAUDE.md` (HUD / i18n / CSS in scope)
 - `src/game/CLAUDE.md` (input / camera / mobile in scope)
 - `src/admin/CLAUDE.md` (admin dashboard SPA in scope)
@@ -139,9 +139,10 @@ Skip if no player-visible text changed.
 - Every new player-visible string is a `t()` key whose ENGLISH is added to the matching
   `src/ui/i18n.catalog/<domain>.ts` module and rendered via `t()`. Contributors add English
   ONLY. The locale overlays in `src/ui/i18n.locales/<lang>.ts` are partial maps, not
-  `: typeof en`, so a missing non-English fill is NOT a `tsc` error and NOT a PR-tier failure;
-  the build English-fills and marks the row `pending`, and only the release tier
-  (`I18N_RELEASE_TIER=1`) hard-fails on a `pending` row. Do not flag a missing translation. A
+  `: typeof en`, so a missing non-English fill is NOT a `tsc` error and (except the M16 case
+  below) NOT a PR-tier failure; the build English-fills and marks the row `pending`, and only
+  the release tier (`I18N_RELEASE_TIER=1`) hard-fails on a `pending` row. Do not flag a missing
+  translation. A
   new key absent from the `en` catalog, or a hand-edited `i18n.locales/<lang>.ts` overlay, IS a
   `[FAIL]`.
 - `src/sim/` and `server/` stay language-agnostic but emit a stable key plus values, or English
@@ -152,7 +153,10 @@ Skip if no player-visible text changed.
 - No user-readable literal escapes the system: no `?? 'English'` fallbacks, no concat of English
   fragments, no literal passed to `setAttribute('aria-label'|'title'|'placeholder'|'alt')` or
   `document.title`. The admin dashboard text is in scope (operators are users).
-- Watch the M16 trap: a wordy new English value still needs real non-Latin fills at release.
+- Watch the M16 trap: a wordy new English value (a run of 4+ consecutive lowercase letters)
+  needs its five non-Latin (`zh_CN`/`zh_TW`/`ja_JP`/`ko_KR`/`ru_RU`) fills in the SAME change,
+  because the always-on `tests/i18n_completeness.test.ts` reds at PR tier, not just release
+  (the maintainer normally adds them at merge).
   For any change to the wire/matcher seam, dispatch `cross-platform-sync`.
 
 ### 6. Renderer & UI

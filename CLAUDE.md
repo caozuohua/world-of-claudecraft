@@ -91,8 +91,10 @@ See `README.md` for the full host/develop/play guide and the classic-fidelity ch
     Add the key to `en` (the matching `src/ui/i18n.catalog/<domain>.ts` module) and
     render it via `t()`. Never edit the `src/ui/i18n.locales/<lang>.ts` overlays, and
     never put English, a placeholder, or a `// TODO` into one. The build English-fills
-    omissions (registry marks them `pending`): the PR-tier gate permits English-only,
-    the release-tier gate (`I18N_RELEASE_TIER=1`) hard-fails on any `pending` row.
+    omissions (registry marks them `pending`): the PR-tier gate permits English-only (the one
+    exception, M16: a new *wordy* English value also needs its five non-Latin fills in the same
+    change, see `src/ui/CLAUDE.md`), the release-tier gate (`I18N_RELEASE_TIER=1`) hard-fails on
+    any `pending` row.
   - **`src/sim/` and `server/` stay language-agnostic** (no `t()`, no DOM) but their
     player text is in scope: emit a stable key plus values, or English re-localized
     via the client matcher (`src/ui/sim_i18n.ts` + `server_i18n.ts`) in the SAME

@@ -91,10 +91,10 @@ Per-frame HUD code (anything reached from `Hud.update()`) holds these:
   layout-thrash killer); drives the non-pooled painters through a `makeWriterFacet` loop
   asserting establishing-write + elision for BOTH a Sim- and a `ClientWorld`-shaped input; and
   (gated behind `HUD_PERF_BUDGET_TOUR=1`) asserts on EVERY viewport the run-length-INDEPENDENT
-  elision-bypass COUNT `hudHotDomWrites <= 152` (a COUNT, NOT the skip RATIO, whose denominator
+  elision-bypass COUNT `hudHotDomWrites <= 153` (a COUNT, NOT the skip RATIO, whose denominator
   is the frame count and jitters run-to-run), plus the FCT pool stays at/under `FCT_POOL_CAP`.
-  The committed baseline (`perf-baseline-v016.md`) is READ for both anchors (it throws if
-  absent, never defaults).
+  The committed baseline (`tests/hud_perf_budget.baseline.md`) is READ for both anchors (it
+  throws if absent, never defaults).
 - **Two controllers stay separate.** HUD tier knobs read the STATIC graphics preset via
   `src/game/ui_effects_profile.ts` (the `data-fx-level` stamp), NEVER `governor.state()`;
   `Hud.fxTier()` resolves the static stamp through `coerceFxTier`. This is the perf half of the
@@ -236,14 +236,23 @@ feature branch is expected and fine at the PR-tier gate.
 3. Run `npm run i18n:scan` / `i18n:build` (+ `i18n:hash -- --write` if the resolved table
    changed) and commit the regenerated files. The PR is green at the PR-tier gate; the
    release-tier gate (`I18N_RELEASE_TIER=1`) hard-fails on any `pending` row.
+   - **The one PR-tier i18n exception (M16).** A new English value that is *wordy* (a run of
+     4+ consecutive lowercase letters after stripping `{tokens}`, i.e. most real prose) also
+     needs its five non-Latin fills (`zh_CN`/`zh_TW`/`ja_JP`/`ko_KR`/`ru_RU`) in the SAME
+     change, or the always-on `tests/i18n_completeness.test.ts` reds even at PR tier: the
+     build English-fills the omission, and untranslated English left byte-identical in a
+     non-Latin locale is exactly the leak it catches. The maintainer normally supplies those
+     five at merge; brand/URL leaves are the only ones that may stay identical.
 
-**Catalog-domain gotcha (where to put a new client key).** Every catalog domain EXCEPT
-`hud_chrome.ts` carries tsc-ENFORCED inline per-locale data, so adding a key to one of their
-`en` blocks red-fails `tsc` (TS2719) until you fill every non-en block too. For new HUD chrome,
-**add the key to `i18n.catalog/hud_chrome.ts`** (namespace `hudChrome.*`): it is the ONLY
-English-only domain (a flat object), so an English-only add compiles and the translations live
-solely in the overlays. **Never add `as const` to a catalog-domain object**: it narrows the
-literal types and breaks the `en_XA` pseudo-locale.
+**Catalog-domain gotcha (where to put a new client key).** Most catalog domains carry
+per-locale data that `tsc` ENFORCES (`merge.ts` / `index.ts` cross-reference every locale
+block against the merged `en` object), so adding a key to their `en` block red-fails `tsc`
+(TS2719) until you fill every non-en block too. `hud_chrome.ts` and `shell.ts` are the
+exceptions, consumed `en`-only, so an English-only add to either compiles. For new HUD chrome,
+**add the key to `i18n.catalog/hud_chrome.ts`** (namespace `hudChrome.*`): it is a flat object
+whose translations live solely in the overlays (`shell.ts` instead carries inline locale
+blocks). **Never add `as const` to a catalog-domain object**: it narrows the literal types and
+breaks the `en_XA` pseudo-locale.
 
 **Formatters, not hand-built numbers.** Every user-visible number/date/percent/coordinate/
 duration goes through `formatNumber` / `formatDateTime` / `formatMoney`. To keep English

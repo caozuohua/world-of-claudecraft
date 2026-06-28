@@ -66,8 +66,13 @@ edit the `i18n.locales/<lang>.ts` overlays and never fake a translation in one.
    `error.moderationFailed`. Admin numbers/dates localize via `Intl.*` with
    `adminLanguage()` (see `fmtDate` / `fmtBytes` in `src/admin/format.ts`).
 
-The PR is green at the PR-tier gate (no translations required); `tsc` and the
-`t()` untracked-key throw still guarantee English completeness.
+The PR is green at the PR-tier gate (no translations required), with one always-on
+exception: a NEW *wordy* English value (a run of 4+ consecutive lowercase letters after
+stripping `{tokens}`, i.e. most real prose) also needs its five non-Latin fills
+(`zh_CN`/`zh_TW`/`ja_JP`/`ko_KR`/`ru_RU`) in the same change, or `tests/i18n_completeness.test.ts`
+(the always-on M16 check) reds even at PR tier; the maintainer normally adds those five at
+merge, and only brand/URL leaves may stay byte-identical. `tsc` and the `t()` untracked-key
+throw still guarantee English completeness.
 
 ## The S3 drift guard and its blind spots
 

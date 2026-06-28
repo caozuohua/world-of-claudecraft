@@ -116,7 +116,9 @@ After an extraction or fix, these stay green (run the subset your change touches
 
 - `npx tsc --noEmit`
 - `npx vitest run tests/<affected>.test.ts` (or `npm test` for broad changes)
-- `npx vitest run tests/architecture.test.ts` if you touched `src/sim/`
+- `npx vitest run tests/architecture.test.ts` if you touched `src/sim/`, or added / renamed a
+  `src/ui` or `src/render` `*_view` / `*_core` pure core (the completeness sweep also checks
+  `UI_PURE_CORES` / `RENDER_PURE_CORES` registration)
 - `npx vitest run tests/localization_fixes.test.ts` if any player-visible text or a
   `src/sim`/`server` emit changed (the S3 i18n guard)
 - `npm run ci:changed` (Biome on the files you changed; this is what the `.githooks/pre-push`
