@@ -1,0 +1,52 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    - cron: "0 4 * * 1"  # Every Monday at 04:00 UTC
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/levy-street/world-of-claudecraft.git || true
+
+      - name: Fetch upstream
+        run: |
+          git fetch upstream --tags
+
+      - name: Merge upstream/main
+        run: |
+          git checkout main
+          git merge upstream/main --no-edit --allow-unrelated-histories || {
+            echo "::warning::Merge conflict detected. Creating a sync branch for manual resolution."
+            git merge --abort
+            BRANCH="sync/upstream-$(date +%Y%m%d-%H%M%S)"
+            git checkout -b "$BRANCH"
+            git merge upstream/main --no-edit --allow-unrelated-histories || true
+            git push origin "$BRANCH"
+            echo "::error::Merge conflict. Created branch $BRANCH for manual resolution."
+            exit 1
+          }
+
+      - name: Push to origin
+        run: |
+          git push origin main --tags
+
+      - name: Notify on success
+        if: success()
+        run: echo "::notice::Synced with upstream successfully!"
