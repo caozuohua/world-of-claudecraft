@@ -130,7 +130,6 @@ import {
   dropEntityFromRoster,
   type GroundAoE,
   rebucketEntity,
-  releasePlayerSpirit,
   releaseSpiritInDelve as releaseSpiritInDelveImpl,
   runDespawnDecay,
   tickGroundAoEs,
@@ -221,6 +220,13 @@ import {
   type WorldBossDaily,
   type WorldBossDef,
 } from './world_boss';
+import {
+  GHOST_RUN_MULT,
+  releasePlayerSpirit,
+  resurrectAtCorpse,
+  resurrectAtSpiritHealer,
+  spawnOverworldSpiritHealers,
+} from './spirit';
 
 // Same pattern for the Ravenpost mail book (server/db.ts persists it as a
 // per-realm world_state row alongside the market).
@@ -619,6 +625,9 @@ export interface InstanceSlot {
   mobIds: number[];
   objectIds: number[];
   exitId: number | null;
+  // The per-instance Spirit Healer (the angel at the dungeon/raid graveyard), spawned
+  // on claim and despawned when freed. null while the slot is idle. See spirit.ts.
+  spiritHealerId: number | null;
   emptyFor: number;
 }
 
@@ -859,6 +868,11 @@ export interface CharacterState {
   // longer wipes cooldowns and lets a player bypass them by relogging.
   cooldowns?: SavedCooldowns;
   pet?: PetState | null;
+  // WoW-style ghost state (JSONB; optional so pre-ghost saves load alive). A player who
+  // logs out as a released spirit resumes as a ghost at the graveyard with the corpse
+  // still marked, rather than free-resurrecting on relog. See src/sim/spirit.ts.
+  ghost?: boolean;
+  corpsePos?: { x: number; z: number } | null;
   skin?: number; // appearance index (JSONB; optional so pre-skin saves load as 0)
   skinCatalog?: SkinCatalog;
   // Pending skin-select event rank (JSONB; optional so older saves load as null).
@@ -1137,6 +1151,7 @@ export class Sim {
             mobIds: [],
             objectIds: [],
             exitId: null,
+            spiritHealerId: null,
             emptyFor: 0,
           });
         }
@@ -1162,10 +1177,16 @@ export class Sim {
           mobIds: [],
           objectIds: [],
           exitId: null,
+          spiritHealerId: null,
           emptyFor: 0,
         });
       }
     }
+
+    // Spirit Healers (the angels): one hovering at every overworld graveyard.
+    // Per-instance dungeon/raid healers spawn on claim (instances/dungeons.ts).
+    // createNpc draws no rng, so world-gen determinism is preserved.
+    spawnOverworldSpiritHealers(this.ctx);
 
     for (const delve of DELVE_LIST) {
       for (let i = 0; i < DELVE_SLOT_COUNT; i++) {
@@ -1537,6 +1558,17 @@ export class Sim {
     // the shared potion cooldown paints the action bar as READY (no swipe) while the
     // use-gate (which reads potionCooldownUntil) still rejects the quaff.
     player.potionCdRemaining = Math.max(0, player.potionCooldownUntil - this.time);
+    // Resume a ghost: a player who logged out as a released spirit comes back as a
+    // ghost at the graveyard (corpse still marked), not freely resurrected. dead stays
+    // unset for a non-ghost logout (the pre-existing revive-on-relog behavior).
+    if (savedState?.ghost) {
+      player.dead = true;
+      player.ghost = true;
+      player.corpsePos = savedState.corpsePos
+        ? this.groundPos(savedState.corpsePos.x, savedState.corpsePos.z)
+        : null;
+      player.hp = player.maxHp;
+    }
     if (savedState?.pet) this.restorePet(player, savedState.pet);
     // One-time Ravenpost welcome (doubles as the service announcement for
     // characters saved before mail existed). Flipped before the send so a
@@ -1668,6 +1700,9 @@ export class Sim {
       ),
       pos: { x: e.pos.x, z: e.pos.z },
       facing: e.facing,
+      // Ghost state, so a logged-out spirit resumes its corpse run on relog.
+      ghost: e.ghost,
+      corpsePos: e.corpsePos ? { x: e.corpsePos.x, z: e.corpsePos.z } : null,
       equipment: { ...meta.equipment },
       inventory: meta.inventory.map(cloneInvSlot),
       bags: [...meta.bags],
@@ -2715,6 +2750,11 @@ export class Sim {
         updateRegen(this.ctx, p, meta);
         updateRested(p, meta);
         drainGatheringGrants(meta);
+      } else if (p.ghost) {
+        // A released spirit only runs (boosted speed via moveSpeedMult); it does not
+        // fight, cast, regen, or trigger dungeon doors (those ignore the dead). It
+        // resurrects at its corpse or the graveyard's Spirit Healer.
+        this.updatePlayerMovement(p, meta);
       }
       updateTimers(p);
       updateComboExpiry(this.ctx, p);
@@ -2843,6 +2883,9 @@ export class Sim {
     return partyLootCandidatesForMobImpl(this.ctx, mob);
   }
   moveSpeedMult(e: Entity): number {
+    // A released spirit runs at a fixed boosted speed and is immune to snares (a ghost
+    // cannot be slowed): short-circuit the aura scan with the ghost-run multiplier.
+    if (e.ghost) return GHOST_RUN_MULT;
     let slow = 1,
       speed = 1;
     for (const a of e.auras) {
@@ -5058,6 +5101,17 @@ export class Sim {
   // keeps the public IWorld surface (`sim.releaseSpirit`) resolving unchanged.
   releaseSpirit(pid?: number): void {
     releasePlayerSpirit(this.ctx, pid);
+  }
+
+  // Ghost resurrection (src/sim/spirit.ts): run the spirit back to its corpse to
+  // resurrect penalty-free, or accept a Spirit Healer's resurrection (with
+  // Resurrection Sickness). Thin delegates so the IWorld surface resolves unchanged.
+  resurrectAtCorpse(pid?: number): void {
+    resurrectAtCorpse(this.ctx, pid);
+  }
+
+  resurrectAtSpiritHealer(pid?: number): void {
+    resurrectAtSpiritHealer(this.ctx, pid);
   }
 
   // chatAllowed / handleDevChat / whisperMessageForName / resolveWhisperTarget
