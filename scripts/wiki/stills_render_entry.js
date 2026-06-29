@@ -3,8 +3,10 @@
 // also serves public/ so loadGltf can fetch the real GLBs same-origin. Exposes
 // window.renderStill(spec, tint) returning a transparent PNG data URL.
 //
-// It reuses the Guide viewer's OWN model assembly (buildModel) and replicates scene.ts's
-// camera framing and light rig, so a baked still matches the live "View in 3D" turntable.
+// It reuses the Guide viewer's OWN model assembly (buildModel) and the same light rig and
+// bounding-sphere framing RULE as scene.ts, so a baked still closely approximates the live
+// "View in 3D" turntable. It is not pixel-identical: the still frames the model's POSED
+// bounds head-on, while the turntable frames bind-pose height with a slight downward tilt.
 // Everything is pinned for determinism: a fixed canvas size, pixelRatio 1, a fixed idle
 // pose time, and a fixed three-quarter yaw, so reruns produce the same framing.
 import * as THREE from 'three';
@@ -115,7 +117,9 @@ window.renderStill = (spec, tint) =>
         const radius = bounds.getBoundingSphere(new THREE.Sphere()).radius || built.radius || 1;
 
         const camera = new THREE.PerspectiveCamera(40, 1, 0.01, 1000);
-        // Aim slightly above the center for a flattering downward tilt, like scene.ts.
+        // Lift the framing center a touch so the subject sits slightly low with headroom above.
+        // frameCamera keeps the camera level with the center, so this reframes vertically; it is
+        // not a downward tilt.
         center.y += radius * 0.08;
         frameCamera(camera, radius, center);
 
