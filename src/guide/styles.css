@@ -2285,59 +2285,6 @@ a.guide-poi:hover {
   display: none;
 }
 
-/* Compact thumb variant: a small square turntable cell for dense lists (bestiary). */
-.guide-viewer-thumb {
-  margin: 0;
-  flex: none;
-}
-.guide-viewer-thumb .guide-viewer-stage {
-  width: 88px;
-  aspect-ratio: 1 / 1;
-  border-radius: var(--g-radius);
-}
-.guide-viewer-thumb .guide-viewer-load {
-  inset: 0;
-  inset-inline-start: 0;
-  transform: none;
-  width: 100%;
-  min-height: 100%;
-  padding: 0;
-  gap: 0;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-  color: var(--g-gold);
-}
-.guide-viewer-thumb .guide-viewer-load:hover {
-  filter: none;
-  background: var(--g-wash-gold);
-}
-.guide-viewer-thumb .guide-viewer-load-icon {
-  width: 16px;
-  height: 16px;
-  border-color: var(--g-gold);
-}
-.guide-viewer-thumb .guide-viewer-load-text {
-  display: none;
-}
-.guide-viewer-thumb .guide-viewer-status {
-  font-size: var(--g-text-2xs);
-  inset-block-end: var(--g-2xs);
-  padding: var(--g-2xs) var(--g-xs);
-}
-.guide-viewer-thumb .guide-viewer-status-error {
-  display: none;
-} /* too small for prose; poster returns on error */
-.guide-viewer-thumb[data-state="error"] .guide-viewer-status {
-  display: none;
-}
-.guide-viewer-thumb[data-state="error"] .guide-viewer-load {
-  display: inline-flex;
-}
-.guide-viewer-thumb .guide-viewer-hint {
-  display: none !important;
-}
-
 .guide-pet .guide-viewer {
   margin: 0 0 var(--g-sm);
 }

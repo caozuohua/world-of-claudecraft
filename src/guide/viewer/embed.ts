@@ -20,8 +20,8 @@ export interface ModelEmbedOptions {
    *  a real, crawlable image of the creature/class, so the reader sees the subject without
    *  any WebGL. Falls back to `poster` (the 2D crest) when absent. */
   still?: string;
-  /** Framing: inline (default), feature (hero/gallery), or thumb (compact list cell). */
-  variant?: 'inline' | 'feature' | 'thumb';
+  /** Framing: inline (default) or feature (hero/gallery). */
+  variant?: 'inline' | 'feature';
   /** Poster pixel box (square). Defaults to 96. */
   posterSize?: number;
 }
@@ -29,7 +29,6 @@ export interface ModelEmbedOptions {
 const VARIANT_CLASS: Record<NonNullable<ModelEmbedOptions['variant']>, string> = {
   inline: '',
   feature: ' guide-viewer-feature',
-  thumb: ' guide-viewer-thumb',
 };
 
 export function modelViewerEmbed(opts: ModelEmbedOptions): string {
