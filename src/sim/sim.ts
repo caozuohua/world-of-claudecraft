@@ -65,6 +65,7 @@ import {
   FIRST_TALENT_LEVEL,
   pointsSpent,
   repairAllocation,
+  talentPointsAtLevel,
   type Role,
   type SavedLoadout,
   type TalentAllocation,
