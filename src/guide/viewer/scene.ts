@@ -36,6 +36,9 @@ export class ModelViewer {
   private lastX = 0;
   private onscreen = true;
   private contextLost = false;
+  /** Set once in destroy(); makes destroy() idempotent and lets an in-flight load() that
+   *  resolved after teardown discard its freshly-built model instead of restarting the loop. */
+  private destroyed = false;
   private onLostCb: (() => void) | null = null;
   /** Drops this renderer from the page-teardown release set; called once in destroy(). */
   private readonly untrackContext: () => void;
@@ -127,7 +130,16 @@ export class ModelViewer {
       this.posedBounds = null;
     }
     this.turntable.rotation.y = 0;
-    this.built = await buildModel(spec, tint);
+    const built = await buildModel(spec, tint);
+    // Evicted/destroyed while the GLB was in flight: drop the just-built model (its tint
+    // material clones + bone DataTexture) instead of attaching it and restarting a render loop
+    // that destroy() can no longer cancel (it already cleared raf/teardown). Without this the
+    // ModelViewer + scene graph stay GC-pinned by the animate closure and wake the CPU forever.
+    if (this.destroyed) {
+      built.dispose();
+      return;
+    }
+    this.built = built;
     this.turntable.add(this.built.root);
     this.frameToPosedBounds();
     if (this.raf === null) this.animate();
@@ -276,7 +288,7 @@ export class ModelViewer {
   }
 
   private animate = (): void => {
-    if (this.contextLost) {
+    if (this.contextLost || this.destroyed) {
       this.raf = null;
       return;
     }
@@ -288,6 +300,10 @@ export class ModelViewer {
   };
 
   destroy(): void {
+    // Idempotent: the gallery defensively re-destroys after an in-flight load() resolves, and
+    // a double forceContextLoss/dispose on three internals is fragile, so bail on re-entry.
+    if (this.destroyed) return;
+    this.destroyed = true;
     this.onLostCb = null;
     if (this.raf !== null) {
       cancelAnimationFrame(this.raf);
