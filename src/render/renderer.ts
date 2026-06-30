@@ -731,6 +731,11 @@ export class Renderer {
   private baseExposure = 1.12; // tone-mapping exposure at brightness 1.0
   private tmpV = new THREE.Vector3();
   private viewCandidates: ViewCandidate[] = [];
+  // Persistent scratch for the sloppy-pick column build. pick() is also the
+  // per-frame hover-cursor path (updateHoverCursor in main.ts), so a fresh array
+  // here would be per-frame garbage on every cursor-over-empty-ground frame.
+  // Reused like viewCandidates: cleared with .length = 0, grown in place.
+  private sloppyCandidates: SloppyPickCandidate[] = [];
   private tmpV2 = new THREE.Vector3();
   private tmpV3 = new THREE.Vector3();
   // Manual frustum cull for characters. Their skinned meshes keep
@@ -4728,12 +4733,15 @@ export class Renderer {
     // precise capsule clicks fiddly. Objects (doors/loot) still need a
     // direct hit; the local player never competes for the click.
     //
-    // Each candidate is a vertical screen COLUMN from the body midpoint up to
-    // the overhead nameplate anchor (same offset the nameplate uses), so a click
-    // on the floating name (what a healer does to target a party member)
-    // registers on its owner instead of falling outside a body-only radius.
+    // Each candidate is a vertical screen COLUMN from the body midpoint up to an
+    // overhead anchor a touch above the head (the +1.0 the chat-bubble path uses;
+    // slightly higher than the nameplate's own NAMEPLATE_ANCHOR_LIFT of 0.8, which
+    // with the 26px radius just helps the column reach the floating name text).
+    // So a click on the floating name (what a healer does to target a party
+    // member) registers on its owner instead of falling outside a body-only radius.
     const SLOPPY_PICK_PX = 26;
-    const candidates: SloppyPickCandidate[] = [];
+    const candidates = this.sloppyCandidates;
+    candidates.length = 0;
     for (const [id, v] of this.views) {
       if (id === this.sim.playerId || !v.visual || !v.group.visible) continue;
       const e = this.sim.entities.get(id);
@@ -4745,7 +4753,7 @@ export class Renderer {
       if (this.tmpV.z > 1) continue;
       const midX = (this.tmpV.x * 0.5 + 0.5) * this.viewport.width;
       const midY = (-this.tmpV.y * 0.5 + 0.5) * this.viewport.height;
-      // Overhead nameplate anchor (matches the nameplate projection offset).
+      // Overhead anchor (the +1.0 chat-bubble offset, see the note above).
       // Collapse the column to the body point if the anchor is not safely in
       // front of the camera: a point behind the near plane projects to bogus
       // screen coords that could steal an unrelated click (close / first-person
