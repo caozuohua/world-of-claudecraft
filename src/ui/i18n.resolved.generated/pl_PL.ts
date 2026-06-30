@@ -270,7 +270,15 @@ export const pl_PL: EnTranslations = {
       "targetAria": "Pasek rzucania jednostki"
     },
     "leaderboard": {
-      "close": "Zamknij"
+      "close": "Zamknij",
+      "tabsLabel": "High-score boards",
+      "tabPlayers": "Players",
+      "tabGuilds": "Guilds",
+      "guildName": "Guild",
+      "members": "Members",
+      "topLevel": "Top",
+      "guildXp": "Total XP",
+      "guildEmpty": "No ranked guilds yet."
     },
     "raidLockout": {
       "title": "Blokady rajdów",

@@ -270,7 +270,15 @@ export const fr_FR: EnTranslations = {
       "targetAria": "Barre d'incantation de la cible"
     },
     "leaderboard": {
-      "close": "Fermer"
+      "close": "Fermer",
+      "tabsLabel": "High-score boards",
+      "tabPlayers": "Players",
+      "tabGuilds": "Guilds",
+      "guildName": "Guild",
+      "members": "Members",
+      "topLevel": "Top",
+      "guildXp": "Total XP",
+      "guildEmpty": "No ranked guilds yet."
     },
     "raidLockout": {
       "title": "Verrous de raid",

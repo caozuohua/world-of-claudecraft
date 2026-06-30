@@ -270,7 +270,15 @@ export const ko_KR: EnTranslations = {
       "targetAria": "대상 시전 막대"
     },
     "leaderboard": {
-      "close": "닫기"
+      "close": "닫기",
+      "tabsLabel": "최고 점수 순위표",
+      "tabPlayers": "플레이어",
+      "tabGuilds": "길드",
+      "guildName": "길드",
+      "members": "인원",
+      "topLevel": "최고",
+      "guildXp": "누적 경험치",
+      "guildEmpty": "아직 순위에 오른 길드가 없습니다."
     },
     "raidLockout": {
       "title": "공격대 잠금",

@@ -270,7 +270,15 @@ export const en_CA: EnTranslations = {
       "targetAria": "Unit Cast Bar"
     },
     "leaderboard": {
-      "close": "Close"
+      "close": "Close",
+      "tabsLabel": "High-score boards",
+      "tabPlayers": "Players",
+      "tabGuilds": "Guilds",
+      "guildName": "Guild",
+      "members": "Members",
+      "topLevel": "Top",
+      "guildXp": "Total XP",
+      "guildEmpty": "No ranked guilds yet."
     },
     "raidLockout": {
       "title": "Raid Lockouts",

@@ -133,8 +133,10 @@ import { formatMoney } from './format_money';
 import * as interaction from './interaction';
 import * as items from './items';
 import {
+  type GuildLeaderboardPage,
   LEADERBOARD_PAGE_SIZE,
   type LeaderboardPage,
+  paginateGuildLeaderboard,
   paginateLeaderboard,
 } from './leaderboard_page';
 import type { Ante, PickAction } from './lockpick';
@@ -1626,6 +1628,13 @@ export class Sim {
         prestigeRank: meta.prestigeRank,
       }));
     return Promise.resolve(paginateLeaderboard(rows, page, pageSize));
+  }
+  // Guilds are a server-only social system (they live in the server's social DB,
+  // never in the deterministic sim), so the offline world ranks no guilds: an
+  // empty page, paged through the same helper so the board renders its empty
+  // state. Online play overrides this with the cached, realm-scoped server query.
+  guildLeaderboard(page = 0, pageSize = LEADERBOARD_PAGE_SIZE): Promise<GuildLeaderboardPage> {
+    return Promise.resolve(paginateGuildLeaderboard([], page, pageSize));
   }
   get known(): ResolvedAbility[] {
     return this.primary.known;

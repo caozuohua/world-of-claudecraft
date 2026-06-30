@@ -270,7 +270,15 @@ export const vi_VN: EnTranslations = {
       "targetAria": "Thanh Niệm Chú Của Mục Tiêu"
     },
     "leaderboard": {
-      "close": "Đóng"
+      "close": "Đóng",
+      "tabsLabel": "High-score boards",
+      "tabPlayers": "Players",
+      "tabGuilds": "Guilds",
+      "guildName": "Guild",
+      "members": "Members",
+      "topLevel": "Top",
+      "guildXp": "Total XP",
+      "guildEmpty": "No ranked guilds yet."
     },
     "raidLockout": {
       "title": "Khóa Raid",

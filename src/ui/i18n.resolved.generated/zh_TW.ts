@@ -270,7 +270,15 @@ export const zh_TW: EnTranslations = {
       "targetAria": "目標施法條"
     },
     "leaderboard": {
-      "close": "關閉"
+      "close": "關閉",
+      "tabsLabel": "高分榜",
+      "tabPlayers": "玩家",
+      "tabGuilds": "公會",
+      "guildName": "公會",
+      "members": "成員",
+      "topLevel": "最高",
+      "guildXp": "總經驗",
+      "guildEmpty": "還沒有上榜的公會。"
     },
     "raidLockout": {
       "title": "團隊副本鎖定",

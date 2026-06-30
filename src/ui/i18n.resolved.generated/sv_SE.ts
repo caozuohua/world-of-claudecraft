@@ -270,7 +270,15 @@ export const sv_SE: EnTranslations = {
       "targetAria": "Enhetens besvärjelsemätare"
     },
     "leaderboard": {
-      "close": "Stäng"
+      "close": "Stäng",
+      "tabsLabel": "High-score boards",
+      "tabPlayers": "Players",
+      "tabGuilds": "Guilds",
+      "guildName": "Guild",
+      "members": "Members",
+      "topLevel": "Top",
+      "guildXp": "Total XP",
+      "guildEmpty": "No ranked guilds yet."
     },
     "raidLockout": {
       "title": "Raidlåsningar",

@@ -270,7 +270,15 @@ export const pt_BR: EnTranslations = {
       "targetAria": "Barra de conjuração do alvo"
     },
     "leaderboard": {
-      "close": "Fechar"
+      "close": "Fechar",
+      "tabsLabel": "High-score boards",
+      "tabPlayers": "Players",
+      "tabGuilds": "Guilds",
+      "guildName": "Guild",
+      "members": "Members",
+      "topLevel": "Top",
+      "guildXp": "Total XP",
+      "guildEmpty": "No ranked guilds yet."
     },
     "raidLockout": {
       "title": "Bloqueios de raide",

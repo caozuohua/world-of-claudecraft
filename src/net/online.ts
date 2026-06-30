@@ -44,6 +44,7 @@ import {
   type DelveShopOfferView,
   type DuelInfo,
   type FriendInfo,
+  type GuildLeaderboardPage,
   type IWorld,
   isOverheadEmoteId,
   type LeaderboardEntry,
@@ -1972,6 +1973,37 @@ export class ClientWorld implements IWorld {
     try {
       const res = await fetch(
         apiUrl(`/api/leaderboard?metric=lifetimeXp&page=${page}&pageSize=${pageSize}`, this.base),
+      );
+      if (!res.ok) return empty;
+      const data = await res.json();
+      return {
+        leaders: data.leaders ?? [],
+        page: data.page ?? page,
+        pageCount: data.pageCount ?? 1,
+        total: data.total ?? data.leaders?.length ?? 0,
+        pageSize: data.pageSize ?? pageSize,
+      };
+    } catch {
+      return empty;
+    }
+  }
+  // Guild high-score board (REST GET, no wire command): ?board=guilds ranks
+  // guilds by summed member lifetime XP. Realm-scoped (default), paged exactly
+  // like the player board above.
+  async guildLeaderboard(
+    page = 0,
+    pageSize = LEADERBOARD_PAGE_SIZE,
+  ): Promise<GuildLeaderboardPage> {
+    const empty: GuildLeaderboardPage = {
+      leaders: [],
+      page: 0,
+      pageCount: 1,
+      total: 0,
+      pageSize,
+    };
+    try {
+      const res = await fetch(
+        apiUrl(`/api/leaderboard?board=guilds&page=${page}&pageSize=${pageSize}`, this.base),
       );
       if (!res.ok) return empty;
       const data = await res.json();

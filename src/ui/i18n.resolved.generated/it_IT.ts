@@ -270,7 +270,15 @@ export const it_IT: EnTranslations = {
       "targetAria": "Barra di lancio del bersaglio"
     },
     "leaderboard": {
-      "close": "Chiudi"
+      "close": "Chiudi",
+      "tabsLabel": "High-score boards",
+      "tabPlayers": "Players",
+      "tabGuilds": "Guilds",
+      "guildName": "Guild",
+      "members": "Members",
+      "topLevel": "Top",
+      "guildXp": "Total XP",
+      "guildEmpty": "No ranked guilds yet."
     },
     "raidLockout": {
       "title": "Blocchi incursione",

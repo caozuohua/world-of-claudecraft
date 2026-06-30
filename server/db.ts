@@ -1858,6 +1858,64 @@ export async function topLifetimeXp(
 }
 
 // ---------------------------------------------------------------------------
+// Guild high-score board: ranks guilds by the SUM of every member's lifetimeXp.
+// Aggregate JOIN of guilds -> guild_members -> characters (all in this pool); an
+// INNER JOIN drops guilds with no seated members. Realm-scoped (the in-game
+// panel) or global (cross-realm), mirroring topLifetimeXp. Read through the
+// server-side cache in main.ts, never run per request under load.
+// ---------------------------------------------------------------------------
+
+export interface GuildLeaderRow {
+  name: string;
+  realm: string;
+  memberCount: number;
+  totalLifetimeXp: number;
+  topLevel: number;
+}
+
+export async function topGuilds(
+  limit = 100,
+  opts: { global?: boolean } = {},
+): Promise<GuildLeaderRow[]> {
+  // Capped at LEADERBOARD_MAX (1000) like the player board, so a realm with many
+  // guilds is fully ranked through the cached window.
+  const cap = Math.max(1, Math.min(LEADERBOARD_MAX, limit));
+  const selectAgg = `g.name, g.realm,
+                COUNT(gm.character_id)                                AS member_count,
+                COALESCE(SUM(COALESCE((c.state->>'lifetimeXp')::bigint, 0)), 0) AS total_lifetime_xp,
+                COALESCE(MAX(COALESCE((c.state->>'level')::int, 0)), 0)         AS top_level`;
+  const fromJoin = `FROM guilds g
+           JOIN guild_members gm ON gm.guild_id = g.id
+           JOIN characters c ON c.id = gm.character_id`;
+  const groupOrder = `GROUP BY g.id, g.name, g.realm
+          ORDER BY total_lifetime_xp DESC, member_count DESC, g.name ASC`;
+  const res = opts.global
+    ? await pool.query(
+        `SELECT ${selectAgg}
+           ${fromJoin}
+          WHERE c.state IS NOT NULL
+          ${groupOrder}
+          LIMIT $1`,
+        [cap],
+      )
+    : await pool.query(
+        `SELECT ${selectAgg}
+           ${fromJoin}
+          WHERE g.realm = $1 AND c.state IS NOT NULL
+          ${groupOrder}
+          LIMIT $2`,
+        [REALM, cap],
+      );
+  return res.rows.map((r) => ({
+    name: r.name,
+    realm: r.realm,
+    memberCount: Number(r.member_count),
+    totalLifetimeXp: Number(r.total_lifetime_xp),
+    topLevel: Number(r.top_level),
+  }));
+}
+
+// ---------------------------------------------------------------------------
 // Client performance telemetry: small, sanitized summaries from the browser.
 // Kept separate from play sessions because reports can come from offline
 // benchmark runs with no account, and one session may emit several samples.

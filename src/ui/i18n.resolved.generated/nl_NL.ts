@@ -270,7 +270,15 @@ export const nl_NL: EnTranslations = {
       "targetAria": "Spreukbalk van Doelwit"
     },
     "leaderboard": {
-      "close": "Sluiten"
+      "close": "Sluiten",
+      "tabsLabel": "High-score boards",
+      "tabPlayers": "Players",
+      "tabGuilds": "Guilds",
+      "guildName": "Guild",
+      "members": "Members",
+      "topLevel": "Top",
+      "guildXp": "Total XP",
+      "guildEmpty": "No ranked guilds yet."
     },
     "raidLockout": {
       "title": "Raidvergrendelingen",

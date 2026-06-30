@@ -5,12 +5,13 @@ import { type WebSocket, WebSocketServer } from 'ws';
 import {
   LEADERBOARD_MAX,
   LEADERBOARD_PAGE_SIZE,
+  paginateGuildLeaderboard,
   paginateLeaderboard,
 } from '../src/sim/leaderboard_page';
 import { Sim } from '../src/sim/sim';
 import type { PlayerClass } from '../src/sim/types';
 import { virtualLevel } from '../src/sim/types';
-import type { LeaderboardEntry } from '../src/world_api';
+import type { GuildLeaderboardEntry, LeaderboardEntry } from '../src/world_api';
 import {
   handleAccount2faDisable,
   handleAccount2faEnable,
@@ -79,6 +80,7 @@ import {
   setAccountEmail,
   type TokenScope,
   topArenaRatings,
+  topGuilds,
   topLifetimeXp,
   touchLogin,
 } from './db';
@@ -248,6 +250,44 @@ async function getLeaderboard(scope: 'realm' | 'global'): Promise<LeaderboardEnt
     return await refreshLeaderboard(scope);
   } catch (err) {
     console.error(`leaderboard refresh failed (${scope}):`, err);
+    return cached?.entries ?? [];
+  }
+}
+
+// Guild high-score board cache. Same compute-once/serve-from-memory shape as the
+// player board above, one cache per scope. Guilds are ranked by summed member
+// lifetime XP (topGuilds); the REST handler pages through the cached window.
+const guildLeaderboardCache: Record<
+  'realm' | 'global',
+  { at: number; entries: GuildLeaderboardEntry[] } | null
+> = {
+  realm: null,
+  global: null,
+};
+
+async function refreshGuildLeaderboard(
+  scope: 'realm' | 'global',
+): Promise<GuildLeaderboardEntry[]> {
+  const rows = await topGuilds(LEADERBOARD_SIZE, { global: scope === 'global' });
+  const entries: GuildLeaderboardEntry[] = rows.map((r, i) => ({
+    rank: i + 1,
+    name: r.name,
+    memberCount: r.memberCount,
+    totalLifetimeXp: r.totalLifetimeXp,
+    topLevel: r.topLevel,
+    ...(scope === 'global' ? { realm: r.realm } : {}),
+  }));
+  guildLeaderboardCache[scope] = { at: Date.now(), entries };
+  return entries;
+}
+
+async function getGuildLeaderboard(scope: 'realm' | 'global'): Promise<GuildLeaderboardEntry[]> {
+  const cached = guildLeaderboardCache[scope];
+  if (cached && Date.now() - cached.at < LEADERBOARD_TTL_MS) return cached.entries;
+  try {
+    return await refreshGuildLeaderboard(scope);
+  } catch (err) {
+    console.error(`guild leaderboard refresh failed (${scope}):`, err);
     return cached?.entries ?? [];
   }
 }
@@ -1091,6 +1131,22 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       // from req.url.
       const params = new URLSearchParams((req.url ?? '').split('?')[1] ?? '');
       const scope: 'realm' | 'global' = params.get('scope') === 'global' ? 'global' : 'realm';
+      // ?board=guilds ranks GUILDS by summed member lifetime XP (default 'players'
+      // is the per-character board below). Same cache + paging shape; the entry
+      // shape differs, so it is its own served slice.
+      if (params.get('board') === 'guilds') {
+        const guildEntries = await getGuildLeaderboard(scope);
+        const guildPageSize = Number(params.get('pageSize')) || LEADERBOARD_PAGE_SIZE;
+        const guildPage = Number(params.get('page')) || 0;
+        const guildSlice = paginateGuildLeaderboard(guildEntries, guildPage, guildPageSize);
+        return json(res, 200, {
+          realm: REALM,
+          scope,
+          board: 'guilds',
+          metric: 'guildLifetimeXp',
+          ...guildSlice,
+        });
+      }
       const entries = await getLeaderboard(scope);
       // Legacy ?limit=N (home-page board): top N as a single page, no paging UI.
       const limitParam = params.get('limit');
@@ -1411,6 +1467,12 @@ async function main(): Promise<void> {
     );
     void refreshLeaderboard('global').catch((err) =>
       console.error('leaderboard refresh failed (global):', err),
+    );
+    void refreshGuildLeaderboard('realm').catch((err) =>
+      console.error('guild leaderboard refresh failed (realm):', err),
+    );
+    void refreshGuildLeaderboard('global').catch((err) =>
+      console.error('guild leaderboard refresh failed (global):', err),
     );
   };
   warmLeaderboards();

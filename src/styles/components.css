@@ -1186,6 +1186,39 @@
     font-size: 12px;
     border-radius: 3px;
   }
+  /* Guild board: a wider 3rd column so the "Members" header + counts fit. */
+  .lb-row-guild {
+    grid-template-columns: 44px 1fr 64px 44px 96px;
+  }
+  .lb-members {
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+  /* Players / Guilds tab bar above the board. */
+  .lb-tabs {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .lb-tab {
+    flex: 1;
+    padding: 5px 8px;
+    font-family: var(--title-font);
+    font-size: 12px;
+    color: #cabb8c;
+    background: #ffffff08;
+    border: 1px solid #463a1c;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .lb-tab:hover {
+    background: #ffffff12;
+  }
+  .lb-tab-active {
+    color: var(--gold);
+    background: #f5c84322;
+    border-color: #b8902a;
+  }
   .lb-row:nth-child(odd) {
     background: #ffffff08;
   }

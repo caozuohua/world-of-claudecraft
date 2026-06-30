@@ -104,6 +104,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ],
   "es_ES": [
@@ -201,6 +209,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ],
   "fr_FR": [
@@ -298,6 +314,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ],
   "fr_CA": [
@@ -395,6 +419,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ],
   "en_CA": [],
@@ -493,6 +525,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ],
   "de_DE": [
@@ -590,6 +630,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ],
   "zh_CN": [
@@ -755,6 +803,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ],
   "ru_RU": [
@@ -869,6 +925,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ],
   "pl_PL": [
@@ -966,6 +1030,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ],
   "id_ID": [
@@ -1063,6 +1135,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ],
   "tr_TR": [
@@ -1160,6 +1240,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ],
   "sv_SE": [
@@ -1257,6 +1345,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ],
   "vi_VN": [
@@ -1354,6 +1450,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ],
   "da_DK": [
@@ -1451,6 +1555,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.voice.muted",
     "hudChrome.discord.voice.speaking",
     "hudChrome.discord.voice.title",
+    "hudChrome.leaderboard.guildEmpty",
+    "hudChrome.leaderboard.guildName",
+    "hudChrome.leaderboard.guildXp",
+    "hudChrome.leaderboard.members",
+    "hudChrome.leaderboard.tabGuilds",
+    "hudChrome.leaderboard.tabPlayers",
+    "hudChrome.leaderboard.tabsLabel",
+    "hudChrome.leaderboard.topLevel",
     "hudChrome.spectate.banner"
   ]
 };

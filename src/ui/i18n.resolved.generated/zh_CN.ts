@@ -270,7 +270,15 @@ export const zh_CN: EnTranslations = {
       "targetAria": "目标施法条"
     },
     "leaderboard": {
-      "close": "关闭"
+      "close": "关闭",
+      "tabsLabel": "高分榜",
+      "tabPlayers": "玩家",
+      "tabGuilds": "公会",
+      "guildName": "公会",
+      "members": "成员",
+      "topLevel": "最高",
+      "guildXp": "总经验",
+      "guildEmpty": "还没有上榜的公会。"
     },
     "raidLockout": {
       "title": "团队副本锁定",
