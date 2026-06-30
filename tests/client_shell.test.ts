@@ -124,6 +124,10 @@ const mobileControlsTs = readFileSync(
   new URL('../src/game/mobile_controls.ts', import.meta.url),
   'utf8',
 ).replace(/\r\n/g, '\n');
+const characterPreviewTs = readFileSync(
+  new URL('../src/render/characters/preview.ts', import.meta.url),
+  'utf8',
+).replace(/\r\n/g, '\n');
 // Per-frame keyed-pool painters. The per-member party rows,
 // the aura slots, and the FCT nodes used to be inline createElement / innerHTML in
 // hud.ts; they dissolved into these pooled painters, so the shape guards below grep
@@ -622,6 +626,20 @@ describe('client HTML shell', () => {
     expect(indexExtraCss).toContain(
       '@media (orientation: portrait) {\n    body.native-app.mobile-touch.game-active #rotate-device {\n      display: flex;',
     );
+  });
+
+  it('releases the start-screen character preview before entering the world', () => {
+    expect(mainTs).toContain('function releaseStartScreenPreview(): void {');
+    expect(mainTs).toContain('characterPreview.destroy();\n  characterPreview = null;');
+    expect(mainTs).toContain(
+      "$('#start-screen').style.display = 'none';\n  releaseStartScreenPreview();",
+    );
+    expect(characterPreviewTs).toContain('destroy(): void {\n    if (this.destroyed) return;');
+    expect(characterPreviewTs).toContain(
+      'this.unregisterContext?.();\n    this.unregisterContext = null;',
+    );
+    expect(characterPreviewTs).toContain('this.renderer.forceContextLoss();');
+    expect(characterPreviewTs).toContain('this.renderer.dispose();');
   });
 
   it('offers the quest log in the mobile controls drawer', () => {

@@ -158,7 +158,11 @@ export function useTouchInterface(win: Pick<Window, 'matchMedia'> = window): boo
 /** True inside the packaged native mobile app (VITE_NATIVE_APP build), which
  *  forces the touch UI regardless of the Interface Mode override. */
 export function isNativeAppShell(): boolean {
-  return typeof document !== 'undefined' && document.body.classList.contains('native-app');
+  if (typeof document !== 'undefined' && document.body.classList.contains('native-app'))
+    return true;
+  if (typeof window === 'undefined') return false;
+  const cap = (window as unknown as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor;
+  return cap?.isNativePlatform?.() === true;
 }
 
 export interface OriginBounds { left: number; top: number; right: number; bottom: number; }
