@@ -25,7 +25,8 @@ import type { Ctx, Middleware, Next } from './types';
 const FALLBACK_NO_RESPONSE_STATUS = 404;
 // An uncaught error escaped the onion. raw node:http would leave the socket
 // hanging, so we send a bare 500 with NO body (no stack, SQL, table, or prose).
-// Phase 7 replaces this with the real RFC 9457 problem+json envelope.
+// Phase 8's withErrors replaces this with the real RFC 9457 problem+json envelope
+// (the envelope and error codes are defined in Phase 7).
 const FALLBACK_ERROR_STATUS = 500;
 // Echoed on the structural fallbacks so a hung/errored request is still
 // correlatable. The echo-on-EVERY-response middleware lands in Phase 8/23.
