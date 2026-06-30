@@ -160,3 +160,25 @@ describe('authThrottled / recordAuthFailure: per-account window driven by the cl
     expect(authThrottled('Carol')).toBe(false);
   });
 });
+
+describe('default (un-injected) clock: the seam is a no-op without setRateLimitClock', () => {
+  // These cases deliberately do NOT call installClock, so clockNow stays the
+  // default Date.now restored by resetAll. They prove directly (not just via the
+  // other suites that happen to skip the clock) that the seam is a no-op by
+  // default: a burst that completes well inside the 60s/15min windows trips the
+  // limiter exactly as it did before the clock seam existed.
+  it('limits a per-IP burst on the real Date.now clock', () => {
+    const req = fakeReq('198.51.100.9'); // TEST-NET, a fresh per-IP bucket
+    const max = 3;
+    expect(rateLimited(req, max)).toBe(false); // count 1
+    expect(rateLimited(req, max)).toBe(false); // count 2
+    expect(rateLimited(req, max)).toBe(false); // count 3
+    expect(rateLimited(req, max)).toBe(true); // count 4 > 3
+  });
+
+  it('throttles a per-account burst on the real Date.now clock', () => {
+    const user = 'DefaultClockUser';
+    for (let i = 0; i < MAX_AUTH_FAILURES; i++) recordAuthFailure(user);
+    expect(authThrottled(user)).toBe(true);
+  });
+});
