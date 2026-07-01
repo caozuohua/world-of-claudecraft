@@ -57,6 +57,15 @@
       }
     },
     {
+      "includes": ["src/sim/content/talents_warrior.ts"],
+      "formatter": {
+        "enabled": false
+      },
+      "assist": {
+        "enabled": false
+      }
+    },
+    {
       "includes": ["src/styles/**"],
       "linter": {
         "rules": {

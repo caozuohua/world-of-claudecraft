@@ -16,6 +16,7 @@ import type { TranslationKey } from '../i18n.catalog';
 export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.spectate.banner': '正在觀察 {name}',
   'hudChrome.loot.chestTitle': '寶箱',
+  'hudChrome.itemTooltip.requiresLevel': '需要等級 {level}',
   'hudChrome.spellbook.addToBarAria': '將 {name} 加入動作列',
   'hudChrome.spellbook.removeFromBarAria': '將 {name} 從動作列移除',
   'hudChrome.nameplate.mob': '[{level}] {name}',
@@ -111,6 +112,16 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '自動會根據你的裝置選擇桌面或觸控操作。選擇桌面可強制使用鍵盤與滑鼠（適合有鍵盤的平板），選擇觸控則使用螢幕上的操作控制項。',
   // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': '來自你的 {value} 點{stat}：',
+  'hudChrome.statInfo.names.spellPower': '法術強度',
+  'hudChrome.statInfo.desc.spellPower':
+    '提高你法術造成的傷害與治療的強度。每點智力都會提供少量法術強度，此外還有來自裝備與增益的加成。',
+  'hudChrome.statInfo.sources.header': '構成：',
+  'hudChrome.statInfo.sources.base': '基礎：{value}',
+  'hudChrome.statInfo.sources.attributes': '來自屬性：{value}',
+  'hudChrome.statInfo.sources.fromAttribute': '來自{stat}：{value}',
+  'hudChrome.statInfo.sources.gear': '裝備：{value}',
+  'hudChrome.statInfo.sources.buff': '{name}：{value}',
+  'hudChrome.statInfo.sources.talents': '天賦與效果：{value}',
   'hudChrome.statInfo.desc.str': '提升你的攻擊強度，使你的武器攻擊更具威力。',
   'hudChrome.statInfo.desc.agi': '磨練你的反應與準度，提升多項戰鬥屬性。',
   'hudChrome.statInfo.desc.sta':
@@ -233,6 +244,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
     '拖曳旋轉鏡頭時將滑鼠游標保持在視窗內，使其無法到達螢幕邊緣或移動到另一台顯示器。若你偏好自由游標，請關閉此選項。',
   'hudChrome.options.showWalletOnCharacterScreen': '在角色畫面顯示錢包',
   'hudChrome.options.showWalletOnPlayerCard': '在玩家卡片顯示錢包',
+  'hudChrome.options.showDevBadges': '顯示開發者徽章',
   'hudChrome.playerCard.showWalletBadge': '顯示錢包徽章',
   'hudChrome.options.uiScale': '介面縮放',
   'hudChrome.options.highContrastBackground': '高對比度背景',
@@ -2333,6 +2345,10 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.loremaster_caddis.title': '博學者',
   'entities.npcs.loremaster_caddis.greeting':
     '小心鬆動的頁岩，{className}。這座山近來不安，我想知道原因。',
+  'entities.npcs.auctioneer_voss.name': '拍賣師沃斯',
+  'entities.npcs.auctioneer_voss.title': '世界市場守護者',
+  'entities.npcs.auctioneer_voss.greeting':
+    '世界市場在此亦可使用，{className}。從王國各地的冒險者手中購買，或出售你自己的貨物。',
   'entities.npcs.tidewatcher_ondrel.name': '翁德瑞爾·韋恩',
   'entities.npcs.tidewatcher_ondrel.title': '守潮者',
   'entities.npcs.tidewatcher_ondrel.greeting':
@@ -3150,6 +3166,11 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.leaderboard.topLevel': '最高',
   'hudChrome.leaderboard.guildXp': '總經驗',
   'hudChrome.leaderboard.guildEmpty': '還沒有上榜的公會。',
+  'hudChrome.leaderboard.tabDevs': '開發者',
+  'hudChrome.leaderboard.devName': '貢獻者',
+  'hudChrome.leaderboard.devTierCol': '徽章',
+  'hudChrome.leaderboard.mergedPrs': '已合併 PR',
+  'hudChrome.leaderboard.devEmpty': '還沒有上榜的貢獻者。',
   'hudChrome.widgets.worldCoordinates': '世界座標',
   'hudChrome.plurals.guildMembers.one': '你是{rank}，{count}名成員',
   'hudChrome.plurals.guildMembers.few': '你是{rank}，{count}名成員',
@@ -4654,4 +4675,26 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.discord.relay.wts.label': '想要出售',
   'hudChrome.discord.relay.wtb.label': '想要購買',
   'hudChrome.discord.relay.help.label': '需要協助',
+  // Developer badge (M16 non-Latin fills).
+  'hudChrome.devBadge.title': '開發者',
+  'hudChrome.devBadge.tiers.tinkerer': '修補匠',
+  'hudChrome.devBadge.tiers.artificer': '工巧師',
+  'hudChrome.devBadge.tiers.runesmith': '符文匠',
+  'hudChrome.devBadge.tiers.architect': '架構師',
+  'hudChrome.devBadge.tiers.worldwright': '世界鑄造者',
+  'hudChrome.devBadge.flavors.tinkerer': '你的第一個拉取請求已合併到這片大陸。',
+  'hudChrome.devBadge.flavors.artificer': '五次拉取請求合併後，世界開始順從你的程式碼。',
+  'hudChrome.devBadge.flavors.runesmith': '十五次拉取請求，已熔鑄進執行中的遊戲。',
+  'hudChrome.devBadge.flavors.architect': '這片大陸的架構師：已合併 30 次拉取請求。',
+  'hudChrome.devBadge.flavors.worldwright': '世界的鑄造者：70 次拉取請求塑造了這款遊戲。',
+  'hudChrome.devBadge.badgeTitle': '開發者：{tier}',
+  'hudChrome.devBadge.prsLanded': '已合併 {count} 次拉取請求',
+  'hudChrome.devBadge.contributor': '開源貢獻者',
+  'hudChrome.devBadge.link.cta': '連結 GitHub',
+  'hudChrome.devBadge.link.relink': '重新連結 GitHub',
+  'hudChrome.devBadge.link.benefits':
+    '連結你的 GitHub，即可憑你在開源儲存庫中已合併的拉取請求獲得開發者徽章。',
+  'hudChrome.devBadge.link.error': '無法連結 GitHub。請再試一次。',
+  'hudChrome.devBadge.linkedAs': '已連結為 {login}',
+  'hudChrome.devBadge.unlink': '取消連結 GitHub',
 };

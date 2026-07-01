@@ -274,11 +274,16 @@ export const zh_CN: EnTranslations = {
       "tabsLabel": "高分榜",
       "tabPlayers": "玩家",
       "tabGuilds": "公会",
+      "tabDevs": "开发者",
       "guildName": "公会",
       "members": "成员",
       "topLevel": "最高",
       "guildXp": "总经验",
-      "guildEmpty": "还没有上榜的公会。"
+      "guildEmpty": "还没有上榜的公会。",
+      "devName": "贡献者",
+      "devTierCol": "徽章",
+      "mergedPrs": "已合并 PR",
+      "devEmpty": "还没有上榜的贡献者。"
     },
     "raidLockout": {
       "title": "团队副本锁定",
@@ -331,6 +336,7 @@ export const zh_CN: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "拖动旋转镜头时将鼠标光标保持在窗口内，使其无法到达屏幕边缘或移动到另一台显示器。如果你喜欢自由光标，请关闭此选项。",
       "showWalletOnCharacterScreen": "在角色界面显示钱包",
       "showWalletOnPlayerCard": "在玩家卡片显示钱包",
+      "showDevBadges": "显示开发者徽章",
       "uiScale": "界面缩放",
       "highContrastBackground": "高对比度背景",
       "startAttackOnAbility": "使用技能时自动攻击",
@@ -430,6 +436,9 @@ export const zh_CN: EnTranslations = {
     },
     "statInfo": {
       "fromYour": "来自你的 {value} 点{stat}：",
+      "names": {
+        "spellPower": "法术强度"
+      },
       "desc": {
         "str": "提高你的攻击强度，使你的武器攻击造成更高的伤害。",
         "agi": "提高你的反应和准度，强化你的多项战斗属性。",
@@ -438,6 +447,7 @@ export const zh_CN: EnTranslations = {
         "spi": "加快施法者在脱离战斗、休息时恢复法力值的速度。",
         "armor": "减轻受到的物理打击。对等级较低的攻击者减伤效果更强，最高减伤上限为75%。",
         "attackPower": "强化你的武器攻击。每14点攻击强度可提高1点每秒伤害。",
+        "spellPower": "提高你法术造成的伤害和治疗的强度。每点智力都会提供少量法术强度，此外还有来自装备和增益的加成。",
         "dps": "你的预估武器每秒伤害，由武器的伤害与速度以及你的攻击强度共同计算得出。",
         "critChance": "你的攻击造成暴击的几率，暴击将造成双倍伤害。",
         "dodge": "你完全躲开来袭近战攻击、不受任何伤害的几率。"
@@ -460,6 +470,15 @@ export const zh_CN: EnTranslations = {
         "minorForClass": "对你的职业益处不大。",
         "baseChance": "包含所有冒险者共享的5%基础几率。",
         "dpsApprox": "此为预估值，不计入暴击和技能伤害。"
+      },
+      "sources": {
+        "header": "构成：",
+        "base": "基础：{value}",
+        "attributes": "来自属性：{value}",
+        "fromAttribute": "来自{stat}：{value}",
+        "gear": "装备：{value}",
+        "buff": "{name}：{value}",
+        "talents": "天赋与效果：{value}"
       }
     },
     "talents": {
@@ -747,6 +766,9 @@ export const zh_CN: EnTranslations = {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
     },
+    "itemTooltip": {
+      "requiresLevel": "需要等级 {level}"
+    },
     "discord": {
       "title": "Discord",
       "panelTitle": "World of ClaudeCraft",
@@ -889,6 +911,34 @@ export const zh_CN: EnTranslations = {
           "hint": "向社区寻求帮助"
         }
       }
+    },
+    "devBadge": {
+      "title": "开发者",
+      "tiers": {
+        "tinkerer": "修补匠",
+        "artificer": "工巧师",
+        "runesmith": "符文匠",
+        "architect": "架构师",
+        "worldwright": "世界铸造者"
+      },
+      "flavors": {
+        "tinkerer": "你的第一个拉取请求已合并到这片大陆。",
+        "artificer": "五次拉取请求合并后，世界开始顺从你的代码。",
+        "runesmith": "十五次拉取请求，已熔铸进运行中的游戏。",
+        "architect": "这片大陆的架构师：已合并 30 次拉取请求。",
+        "worldwright": "世界的铸造者：70 次拉取请求塑造了这款游戏。"
+      },
+      "badgeTitle": "开发者：{tier}",
+      "prsLanded": "已合并 {count} 次拉取请求",
+      "contributor": "开源贡献者",
+      "link": {
+        "cta": "关联 GitHub",
+        "relink": "重新关联 GitHub",
+        "benefits": "关联你的 GitHub，即可凭你在开源仓库中已合并的拉取请求获得开发者徽章。",
+        "error": "无法关联 GitHub，请重试。"
+      },
+      "linkedAs": "已关联为 {login}",
+      "unlink": "取消关联 GitHub"
     }
   },
   "guide": {
@@ -5645,6 +5695,11 @@ export const zh_CN: EnTranslations = {
         "name": "凯迪斯博学者",
         "title": "博学者",
         "greeting": "小心松动的页岩，{className}。这座山近来不安，我想知道原因。"
+      },
+      "auctioneer_voss": {
+        "name": "拍卖师沃斯",
+        "title": "世界市场守护者",
+        "greeting": "世界市场在此亦可使用，{className}。从王国各地的冒险者手中购买，或出售你自己的货物。"
       },
       "brother_aldric_raid": {
         "name": "奥德里克修士",

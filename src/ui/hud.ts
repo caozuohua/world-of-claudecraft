@@ -60,6 +60,7 @@ import {
 import { specialRoleColor } from '../sim/discord_roles';
 import { armorTypeForItem, canEquipItem, weaponArchetypeForItem } from '../sim/equipment_rules';
 import { isItemLevelEligible, itemLevel, itemScore } from '../sim/item_level';
+import { requiredLevelFor } from '../sim/item_level_req';
 import type { Ante, PickAction } from '../sim/lockpick';
 import { PICK_ACTIONS } from '../sim/lockpick';
 import type { ResolvedAbility } from '../sim/sim';
@@ -146,6 +147,7 @@ import {
 import { type CardinalId, compassView } from './compass';
 import { formatMinimapCoords } from './coords';
 import { DelveMapPainter } from './delve_map_painter';
+import { devTierBadgeDataUrl, devTierByIndex, devTierDisplayName } from './dev_tier';
 import { markDialogRoot } from './dialog_root';
 import { discordStatusBadgeDataUrl, discordStatusDisplayName } from './discord_tier';
 import { dropdownKeyNav } from './dropdown_nav';
@@ -253,7 +255,14 @@ import { localizeServerText } from './server_i18n';
 import { localizeSimAuraName, localizeSimText } from './sim_i18n';
 import { SocialWindow } from './social_window';
 import { SpellbookWindow } from './spellbook_window';
-import { buildStatTooltip, type StatId, type StatTooltipModel, weaponDps } from './stat_tooltip';
+import {
+  type BuffStatSource,
+  buildStatTooltip,
+  type GearStatSource,
+  type StatId,
+  type StatTooltipModel,
+  weaponDps,
+} from './stat_tooltip';
 import { type StatTooltipI18n, statCellHtml, statTooltipHtml } from './stat_tooltip_view';
 import { nearestSubzone } from './subzone';
 import { swingTimerState } from './swing_timer';
@@ -2770,6 +2779,7 @@ export class Hud {
     world: () => this.sim,
     closeOthers: () => this.closeOtherWindows('#leaderboard-window'),
     ...this.windowFocus('#leaderboard-window'),
+    showDevBadges: () => this.optionsHooks?.settings.get('showDevBadges') ?? true,
   });
   // Spellbook window painter (spellbook_view.ts core + spellbook_window.ts painter).
   // The window renders ability rows (not item rows), so it composes no presentation
@@ -3043,6 +3053,14 @@ export class Hud {
     if (item.requiredClass && !armorTypeForItem(item) && !weaponArchetypeForItem(item)) {
       html += `<div class="tt-sub">${esc(t('itemUi.tooltip.classes', { classes: item.requiredClass.map(classDisplayName).join(', ') }))}</div>`;
     }
+    // Classic "Requires Level N" line for equippable gear gated above level 1.
+    // Red when the viewer is below the requirement (cannot equip yet), otherwise
+    // a normal sub line. Level math/data lives in the pure sim leaf.
+    const req = requiredLevelFor(item);
+    if ((item.kind === 'weapon' || item.kind === 'armor') && req > 1) {
+      const meets = this.sim.player.level >= req;
+      html += `<div class="${meets ? 'tt-sub' : 'tt-red'}">${esc(t('hudChrome.itemTooltip.requiresLevel', { level: itemNumber(req) }))}</div>`;
+    }
     html += this.itemSetBlock(item);
     if (item.sellValue > 0)
       html += `<div class="tt-sub">${esc(t('itemUi.tooltip.sellPrice', { money: formatLocalizedMoney(item.sellValue) }))}</div>`;
@@ -3120,14 +3138,32 @@ export class Hud {
     const sim = this.sim;
     const p = sim.player;
     const wpn = sim.equipment.mainhand ? ITEMS[sim.equipment.mainhand] : null;
+    // Equipped items + active auras feed the upstream "Made up of:" source
+    // breakdown; names resolve the same way the buff bar resolves them.
+    const gear: GearStatSource[] = [];
+    for (const id of Object.values(sim.equipment)) {
+      const item = id ? ITEMS[id] : null;
+      if (!item || (!item.stats && !item.spellPower)) continue;
+      gear.push({ name: itemDisplayName(item), stats: item.stats, spellPower: item.spellPower });
+    }
+    const buffs: BuffStatSource[] = p.auras.map((a) => ({
+      kind: a.kind,
+      value: a.value,
+      name: ABILITIES[a.id]
+        ? abilityDisplayName(ABILITIES[a.id])
+        : auraDisplayNameFromSource(a.name),
+    }));
     return buildStatTooltip(stat, {
       cls: sim.cfg.playerClass,
       stats: p.stats,
       level: p.level,
       attackPower: p.attackPower,
+      spellPower: p.spellPower,
       critChance: p.critChance,
       dodgeChance: p.dodgeChance,
       dps: weaponDps(wpn?.weapon, p.attackPower),
+      gear,
+      buffs,
     });
   }
 
@@ -3215,12 +3251,23 @@ export class Hud {
     if (rangeLine) costLine.push(rangeLine);
     if (costLine.length) html += `<div class="tt-stat">${costLine.map(esc).join(' &nbsp; ')}</div>`;
     const castLine = [abilityCastLine(res)];
-    if (a.cooldown > 0)
+    // Use the RESOLVED cooldown (res.cooldown), not res.def.cooldown, so talents that
+    // reduce cooldown (Improved Mortal Strike, Barrage, Improved Fire Blast, ...) show
+    // their effect in the tooltip.
+    if (res.cooldown > 0)
       castLine.push(
-        t('abilityUi.tooltip.cooldownSeconds', { seconds: formatAbilityNumber(a.cooldown) }),
+        t('abilityUi.tooltip.cooldownSeconds', { seconds: formatAbilityNumber(res.cooldown) }),
       );
     html += `<div class="tt-stat">${castLine.map(esc).join(' &nbsp; ')}</div>`;
     html += `<div class="tt-desc">${esc(abilityDisplayDescription(a, damageText))}</div>`;
+    // Resolved buff/aura effect line(s). Reads the RESOLVED effect value, so a buff's
+    // tooltip reflects rank AND talents that strengthen it (Improved Devotion Aura /
+    // Aspect of the Hawk / Fortitude via buffPct) - which the static description can't.
+    for (const eff of res.effects) {
+      if (eff.type === 'selfBuff' || eff.type === 'buffTarget') {
+        html += this.auraEffectTooltipHtml({ kind: eff.kind, value: eff.value });
+      }
+    }
     const requirements = abilityRequirementLines(a);
     if (requirements.length) {
       html += requirements.map((line) => `<div class="tt-sub">${esc(line)}</div>`).join('');
@@ -9276,6 +9323,11 @@ export class Hud {
     if (sim.prestigeRank > 0)
       combatStats.push({ label: t('game.prestige.rank'), value: num(sim.prestigeRank) });
 
+    // Developer badge: a global display preference (no per-card modal toggle
+    // like the wallet flair has, since "hide dev badges" is meant to apply
+    // everywhere at once, not be re-decided per export).
+    const showDevBadges = this.optionsHooks?.settings.get('showDevBadges') ?? true;
+
     const slots: EquipSlot[] = ['mainhand', 'chest', 'legs', 'feet'];
     const gear = slots.map((slot) => {
       const id = sim.equipment[slot];
@@ -9299,6 +9351,8 @@ export class Hud {
       gear,
       topPercent,
       balance: showWallet ? verifiedWocBalance() : null,
+      devTier: showDevBadges ? (p.devTier ?? null) : null,
+      devMergedPrs: showDevBadges ? (p.devMergedPrs ?? null) : null,
       referralHandle: referral?.slug ?? this.cardSlug(p.name),
       referralCount: referral?.count ?? null,
       siteUrl: 'worldofclaudecraft.com',
@@ -9938,12 +9992,18 @@ export class Hud {
     });
   }
 
-  // Fill the target frame's Discord line: a linked player's nickname (with PFP),
-  // their staff-role tag, and Discord rank. Hidden for mobs and unlinked players.
+  // Fill the target frame's social/badge line: a linked player's nickname (with
+  // PFP), their staff-role tag, Discord rank, and developer badge. Hidden for mobs
+  // and players with no linked flair at all.
   private updateTargetDiscordLine(target: Entity): void {
     const el = this.targetDiscordEl;
     const tier = target.discordTier ?? 0;
-    if (target.kind !== 'player' || (!tier && !target.discordName && !target.discordRole)) {
+    const showDevBadges = this.optionsHooks?.settings.get('showDevBadges') ?? true;
+    const devIdx = showDevBadges ? (target.devTier ?? 0) : 0;
+    if (
+      target.kind !== 'player' ||
+      (!tier && !target.discordName && !target.discordRole && !devIdx)
+    ) {
       if (this.targetDiscordSig !== '') {
         this.targetDiscordSig = '';
         el.classList.remove('show');
@@ -9954,7 +10014,7 @@ export class Hud {
     // This runs every frame the target frame updates; only rebuild when the Discord
     // content actually changes (else a fresh <img> per frame would re-fetch the
     // avatar and, on a failing CDN load, flicker between the broken glyph and hidden).
-    const sig = `${tier}|${target.discordName ?? ''}|${target.discordRole ?? ''}|${target.discordAvatar ?? ''}`;
+    const sig = `${tier}|${target.discordName ?? ''}|${target.discordRole ?? ''}|${target.discordAvatar ?? ''}|${devIdx}`;
     if (sig === this.targetDiscordSig) return;
     this.targetDiscordSig = sig;
     const roleTagLabel = (key: string | undefined): string => {
@@ -9986,6 +10046,10 @@ export class Hud {
     }
     if (tier > 0) {
       parts.push(`<span class="uf-dc-chip rank">${esc(discordStatusDisplayName(tier))}</span>`);
+    }
+    const devDef = devTierByIndex(devIdx);
+    if (devDef) {
+      parts.push(`<span class="uf-dc-chip dev">${esc(devTierDisplayName(devDef))}</span>`);
     }
     el.innerHTML = parts.join('');
     // Hide the external Discord avatar if its CDN image fails to load, so the line
@@ -10059,6 +10123,29 @@ export class Hud {
           roleHtml +
           `</div></div>`
         : '';
+    // Developer badge: the cosmetic contributor tier, broadcast per-entity via the
+    // `dvt`/`dvc`/`dgl` identity fields. Shown only for an actual contributor
+    // (tier > 0), with the merged-PR count and the @login under the rung name,
+    // and only while the viewer's own showDevBadges display preference is on.
+    const showDevBadges = this.optionsHooks?.settings.get('showDevBadges') ?? true;
+    const devTierDef = showDevBadges ? devTierByIndex(e.devTier ?? 0) : undefined;
+    const devSub = e.devMergedPrs
+      ? t('hudChrome.devBadge.prsLanded', {
+          count: formatNumber(e.devMergedPrs, { maximumFractionDigits: 0 }),
+        })
+      : t('hudChrome.devBadge.contributor');
+    const devLoginHtml = e.githubLogin
+      ? `<div class="inspect-holder-sub inspect-dev-login">@${esc(e.githubLogin)}</div>`
+      : '';
+    const devHtml = devTierDef
+      ? `<div class="inspect-holder">` +
+        `<img class="inspect-holder-badge" src="${devTierBadgeDataUrl(devTierDef)}" alt="" draggable="false">` +
+        `<div class="inspect-holder-text">` +
+        `<div class="inspect-holder-name">${esc(devTierDisplayName(devTierDef))}</div>` +
+        `<div class="inspect-holder-sub">${esc(devSub)}</div>` +
+        devLoginHtml +
+        `</div></div>`
+      : '';
     el.innerHTML =
       `<div class="panel-title"><span>${esc(t('character.profile'))}</span>` +
       `<button type="button" class="x-btn" data-close aria-label="${esc(t('character.closeProfile'))}">${svgIcon('close')}</button></div>` +
@@ -10068,6 +10155,7 @@ export class Hud {
       `<div class="inspect-meta">${esc(t('itemUi.equipment.levelClass', { level: formatNumber(e.level, { maximumFractionDigits: 0 }), className }))}</div>` +
       holderHtml +
       discordHtml +
+      devHtml +
       `</div>` +
       // Worn gear, mirrored from the entity's render-only `equippedItems` (the
       // `eq` identity field). Item names/icons/tooltips resolve fully client-side
@@ -10690,9 +10778,10 @@ function describeAbilitySummary(known: ResolvedAbility, resourceType: ResourceTy
     );
   }
   parts.push(abilityCastLine(known));
-  if (known.def.cooldown > 0) {
+  // Resolved cooldown (after talent cooldown modifiers), not the base def cooldown.
+  if (known.cooldown > 0) {
     parts.push(
-      t('abilityUi.tooltip.cooldownSeconds', { seconds: formatAbilityNumber(known.def.cooldown) }),
+      t('abilityUi.tooltip.cooldownSeconds', { seconds: formatAbilityNumber(known.cooldown) }),
     );
   }
   return parts.join(' · ');

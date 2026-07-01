@@ -5,6 +5,7 @@ import { WebSocketServer } from 'ws';
 import {
   LEADERBOARD_MAX,
   LEADERBOARD_PAGE_SIZE,
+  paginateDevLeaderboard,
   paginateGuildLeaderboard,
   paginateLeaderboard,
 } from '../src/sim/leaderboard_page';
@@ -96,6 +97,14 @@ import {
 import { pruneDiscordOAuthStates, pruneDiscordPendingLogins } from './discord_db';
 import { emailAccountCreated } from './email';
 import { GameServer } from './game';
+import {
+  handleGitHubCallback,
+  handleGitHubStart,
+  handleGitHubStatus,
+  handleGitHubUnlink,
+} from './github';
+import { topContributors } from './github_contributors';
+import { pruneGitHubOAuthStates } from './github_db';
 import { handleClientError } from './http/client_error';
 import { DEFAULT_DISPATCH, type DispatchMode, loadConfig } from './http/config';
 import { type ApiDispatcher, createApiDispatcher, selectApiEntry } from './http/dispatch';
@@ -127,6 +136,7 @@ import {
   cardUploadRateLimited,
   clearAuthFailures,
   discordRateLimited,
+  githubRateLimited,
   publicReadRateLimited,
   rateLimited,
   recordAuthFailure,
@@ -1149,6 +1159,24 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
           ...guildSlice,
         });
       }
+      // ?board=devs ranks open-source CONTRIBUTORS by merged pull requests, sourced
+      // from the cached public GitHub PR stats. The same data for every realm,
+      // so it is realm-agnostic; rate-limited per IP like the other boards via the
+      // shared route limiter is unnecessary here (it reads an in-memory cache), but
+      // a failing GitHub fetch already backs off inside topContributors.
+      if (params.get('board') === 'devs') {
+        const devEntries = await topContributors();
+        const devPageSize = Number(params.get('pageSize')) || LEADERBOARD_PAGE_SIZE;
+        const devPage = Number(params.get('page')) || 0;
+        const devSlice = paginateDevLeaderboard(devEntries, devPage, devPageSize);
+        return json(res, 200, {
+          realm: REALM,
+          scope,
+          board: 'devs',
+          metric: 'landedCommits',
+          ...devSlice,
+        });
+      }
       const entries = await getLeaderboard(scope);
       // Legacy ?limit=N (home-page board): top N as a single page, no paging UI.
       const limitParam = params.get('limit');
@@ -1358,6 +1386,34 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       if (accountId === null) return;
       if (discordRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
       return handleDiscordUnlink(req, res, accountId);
+    }
+    // GitHub OAuth link (developer badge). Link-only: the start leg resolves the
+    // caller's account first, so the verified GitHub identity attaches to a known
+    // account. The callback carries no Origin (a github.com redirect) and is
+    // exempt from the web-login Origin guard, exactly like the Discord callback.
+    if (req.method === 'POST' && url === '/api/auth/github/start') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      if (githubRateLimited(req, accountId)) {
+        recordUsageMetric('github.link.rate_limited');
+        return json(res, 429, { error: 'rate limited' });
+      }
+      return handleGitHubStart(req, res, { accountId });
+    }
+    if (req.method === 'GET' && url === '/api/auth/github/callback') {
+      return handleGitHubCallback(req, res);
+    }
+    if (req.method === 'GET' && url === '/api/github') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      if (githubRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
+      return handleGitHubStatus(req, res, accountId);
+    }
+    if (req.method === 'DELETE' && url === '/api/github') {
+      const accountId = await bearerActiveAccount(req, res);
+      if (accountId === null) return;
+      if (githubRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
+      return handleGitHubUnlink(req, res, accountId);
     }
     // $WOC balance proxy — keeps the Solana RPC endpoint (and any key in it)
     // server-side so it never ships in the client bundle. Public (on-chain
@@ -1575,6 +1631,9 @@ export async function startServer(): Promise<http.Server> {
       );
       void pruneDiscordPendingLogins(pool).catch((err) =>
         console.error('discord pending login prune failed:', err),
+      );
+      void pruneGitHubOAuthStates(pool).catch((err) =>
+        console.error('github oauth state prune failed:', err),
       );
     },
     24 * 3600 * 1000,

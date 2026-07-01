@@ -675,6 +675,50 @@ export const SURFACE_INVENTORY: readonly SurfaceRoute[] = [
     limiter: 'discordRateLimited',
     requireOwnedExpected: null,
   },
+  // GitHub OAuth link (developer badge), mirroring the Discord link flow. Start
+  // is link-only (it resolves the caller's account first, so it needs a full
+  // session, unlike the Discord login-or-link start); the callback carries no
+  // bearer and answers with an HTML page (a github.com redirect).
+  {
+    dispatcher: DISPATCH.mainApi,
+    method: 'POST',
+    path: '/api/auth/github/start',
+    handler: 'handleApi arm: /api/auth/github/start (handleGitHubStart)',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.full,
+    limiter: 'githubRateLimited',
+    requireOwnedExpected: null,
+  },
+  {
+    dispatcher: DISPATCH.mainApi,
+    method: 'GET',
+    path: '/api/auth/github/callback',
+    handler: 'handleApi arm: /api/auth/github/callback (handleGitHubCallback)',
+    contentType: HTML,
+    authScope: AUTH_SCOPE.public,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
+  {
+    dispatcher: DISPATCH.mainApi,
+    method: 'GET',
+    path: '/api/github',
+    handler: 'handleApi arm: /api/github (GET, handleGitHubStatus)',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.full,
+    limiter: 'githubRateLimited',
+    requireOwnedExpected: null,
+  },
+  {
+    dispatcher: DISPATCH.mainApi,
+    method: 'DELETE',
+    path: '/api/github',
+    handler: 'handleApi arm: /api/github (DELETE, handleGitHubUnlink)',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.full,
+    limiter: 'githubRateLimited',
+    requireOwnedExpected: null,
+  },
   {
     dispatcher: DISPATCH.mainApi,
     method: 'GET',
