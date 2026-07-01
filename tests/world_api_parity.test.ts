@@ -112,6 +112,7 @@ export const IWORLD_MEMBERS = [
   { name: 'interact', kind: 'method' },
   { name: 'lootCorpse', kind: 'method' },
   { name: 'autoLoot', kind: 'method' },
+  { name: 'harvestCorpse', kind: 'method' },
   { name: 'submitLootRoll', kind: 'method' },
   { name: 'activeLootRolls', kind: 'method' }, // read-returning (2/6)
   { name: 'pickUpObject', kind: 'method' },
@@ -440,6 +441,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'guildLeave',
       'guildPromote',
       'guildTransfer',
+      'harvestCorpse',
       'healPet',
       'interact',
       'inventory',
@@ -643,6 +645,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'guildLeave',
       'guildPromote',
       'guildTransfer',
+      'harvestCorpse',
       'healPet',
       'interact',
       'leaderboard',
@@ -806,6 +809,7 @@ const FACET_INTERACTION = [
   'interact',
   'lootCorpse',
   'autoLoot',
+  'harvestCorpse',
   'pickUpObject',
 ] as const satisfies readonly (keyof IWorldInteraction)[];
 type _ExhaustInteraction = AssertNever<

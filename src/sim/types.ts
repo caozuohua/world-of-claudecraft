@@ -1577,6 +1577,10 @@ export interface Entity {
   respawnTimer: number;
   corpseTimer: number;
   lootFfaTimer: number; // seconds of owner-lock left before tap loot opens to all (FFA); Infinity until rollLoot starts it
+  // Profession harvest: single-use, first-come claim on this corpse's componentTags
+  // yield. null = unharvested; once set to a player's entity id, every later attempt
+  // (same tick or later) is denied. The opposite of a world gathering node (per-player).
+  harvestClaimedBy: number | null;
   despawnTimer?: number;
   damageIdleDespawnTimer?: number;
   lootable: boolean;
