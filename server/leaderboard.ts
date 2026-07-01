@@ -61,19 +61,22 @@ import { REALM, REALM_DIRECTORY } from './realm';
 // a different bound than the paginator clamps to.
 // ---------------------------------------------------------------------------
 
+// The scope/format keyword constants are module-private (used only by the decoders
+// and handlers here); the limit constants below are exported because the unit tests
+// import them to assert the decoders clamp to the same bound the handlers use.
 /** Default leaderboard scope: this process's realm (the in-game panel). */
-export const LEADERBOARD_SCOPE_DEFAULT = 'realm';
+const LEADERBOARD_SCOPE_DEFAULT = 'realm';
 /** The cross-realm scope keyword (the home-page board). */
-export const LEADERBOARD_SCOPE_GLOBAL = 'global';
+const LEADERBOARD_SCOPE_GLOBAL = 'global';
 /** The ?board value that selects the guild high-score fork. */
-export const LEADERBOARD_GUILD_BOARD = 'guilds';
+const LEADERBOARD_GUILD_BOARD = 'guilds';
 /** Upper bound for the legacy ?limit=N single-page board (mirrors LEADERBOARD_MAX). */
 export const LEADERBOARD_LEGACY_LIMIT_MAX = LEADERBOARD_MAX;
 /** How many arena ranks the public ladder returns (mirrors the legacy fixed arg). */
 export const ARENA_LEADERBOARD_LIMIT = 20;
 /** The ?format value that selects the 2v2 arena ladder; anything else is 1v1. */
-export const ARENA_FORMAT_2V2 = '2v2';
-export const ARENA_FORMAT_DEFAULT = '1v1';
+const ARENA_FORMAT_2V2 = '2v2';
+const ARENA_FORMAT_DEFAULT = '1v1';
 /** Max character-search results returned per query (mirrors the legacy fixed arg). */
 export const SEARCH_RESULT_LIMIT = 8;
 
@@ -164,7 +167,7 @@ export function firstQueryValue(value: string | string[] | undefined): string | 
 
 /** ?scope=global -> 'global'; anything else (incl. absent) -> the realm default. */
 export function decodeScope(raw: string | undefined): LeaderboardScope {
-  return raw === LEADERBOARD_SCOPE_GLOBAL ? 'global' : LEADERBOARD_SCOPE_DEFAULT;
+  return raw === LEADERBOARD_SCOPE_GLOBAL ? LEADERBOARD_SCOPE_GLOBAL : LEADERBOARD_SCOPE_DEFAULT;
 }
 
 /** ?page=N (0-based). Non-numeric/absent -> 0; the paginator clamps the range. */
@@ -187,7 +190,7 @@ export function decodeLegacyLimit(raw: string | undefined): number {
 
 /** ?format=2v2 -> '2v2'; anything else (incl. absent) -> 1v1. */
 export function decodeArenaFormat(raw: string | undefined): ArenaFormat {
-  return raw === ARENA_FORMAT_2V2 ? '2v2' : ARENA_FORMAT_DEFAULT;
+  return raw === ARENA_FORMAT_2V2 ? ARENA_FORMAT_2V2 : ARENA_FORMAT_DEFAULT;
 }
 
 /** ?limit=N for the releases feed, clamped to [1, max]. */
@@ -257,7 +260,7 @@ export function buildGuildBoard(
 // ---------------------------------------------------------------------------
 
 /** DB read the arena ladder needs. */
-export interface ArenaReadDb {
+interface ArenaReadDb {
   topArenaRatings(limit?: number, format?: ArenaFormat): Promise<ArenaLeaderRow[]>;
 }
 
@@ -272,7 +275,7 @@ export async function readArenaLeaderboard(
 }
 
 /** DB read the search route needs. */
-export interface SearchReadDb {
+interface SearchReadDb {
   searchCharacters(prefix: string, limit?: number): Promise<CharacterSearchRow[]>;
 }
 
@@ -292,7 +295,7 @@ export async function readSearch(
 }
 
 /** DB read the realms route needs. */
-export interface RealmsReadDb {
+interface RealmsReadDb {
   characterCountsByRealm(accountId: number): Promise<Record<string, number>>;
 }
 
@@ -308,7 +311,7 @@ export async function readRealms(
 }
 
 /** DB read project-stats needs (account-scoped, so not on the character Db). */
-export interface ProjectStatsReadDb {
+interface ProjectStatsReadDb {
   getAccountsCount(): Promise<number>;
 }
 
@@ -323,7 +326,7 @@ export async function readProjectStats(
 }
 
 /** DB reads the public character sheet needs. */
-export interface PublicSheetDb {
+interface PublicSheetDb {
   findCharacterReportTargetByName(name: string): Promise<LiveReportTarget | null>;
   getCharacterById(characterId: number): Promise<CharacterRow | null>;
   guildNameForCharacter(characterId: number): Promise<string | null>;
@@ -331,7 +334,7 @@ export interface PublicSheetDb {
 }
 
 /** The non-DB inputs the public sheet needs (realm, share origin, rank shaper). */
-export interface PublicSheetDeps {
+interface PublicSheetDeps {
   realm: string;
   origin: string;
   toSheetRank(rank: { rank: number; total: number } | null): SheetRank | null;
@@ -370,8 +373,11 @@ export async function readPublicSheet(
 }
 
 // The real db.ts reads, bundled once so each thin handler passes the same object
-// to its read function. The read functions only touch the subset they type.
-const dbReads = {
+// to its read function. The read functions only touch the subset they type. The
+// active bundle is a `let` behind a test-only setter so the two handlers that
+// ALWAYS hit the db (arena, project-stats) can be driven with a FakeDb; production
+// never calls the setter, so REAL_DB_READS is the only runtime binding.
+const REAL_DB_READS = {
   topArenaRatings,
   searchCharacters,
   characterCountsByRealm,
@@ -381,6 +387,17 @@ const dbReads = {
   guildNameForCharacter,
   lifetimeXpRankForCharacter,
 };
+let dbReads = REAL_DB_READS;
+
+/** Override the db reads with a fake bundle (test-only; merges over the real reads). */
+export function setLeaderboardDbForTests(reads: Partial<typeof REAL_DB_READS>): void {
+  dbReads = { ...REAL_DB_READS, ...reads };
+}
+
+/** Restore the real db reads after a setLeaderboardDbForTests override (test-only). */
+export function resetLeaderboardDbForTests(): void {
+  dbReads = REAL_DB_READS;
+}
 
 // ---------------------------------------------------------------------------
 // Handlers (thin Ctx adapters). Each decodes the query, reads through the
