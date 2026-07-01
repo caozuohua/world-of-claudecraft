@@ -26,7 +26,7 @@ Mark a row's Status as "In progress" or "Done" and fill Started / Completed
 | Phase 06 QA | Done | 2026-06-30 | 2026-06-30 |
 | Phase 07 | Done | 2026-06-30 | 2026-06-30 |
 | Phase 07 QA | Done | 2026-06-30 | 2026-06-30 |
-| Phase 08 | Not started |  |  |
+| Phase 08 | Done | 2026-06-30 | 2026-06-30 |
 | Phase 08 QA | Not started |  |  |
 | Phase 09 | Not started |  |  |
 | Phase 09 QA | Not started |  |  |
@@ -496,19 +496,96 @@ rateLimit adapter, phase-08-middleware.md).
 ## Phase 08: Core middleware set + metric/log hook seam + thin rateLimit adapter
 
 Deliverables:
-- [ ] withErrors (outermost), requestId+ALS, withCors(class), withBody(maxBytes) mapping overflow->413/bad-json->400 preserving the card pre-auth Content-Length 413 short-circuit, PLUS a withRawBody/binary variant for the card route
-- [ ] requireAccount({scope}) as the one bearer resolver modeling at least read/active/full scopes, applying the ban/moderation+scope gate uniformly
-- [ ] A THIN rateLimit(policy) adapter over today's existing limiter booleans (deep two-tier rework deferred to P19)
-- [ ] The per-route metric + access-log hook behind an INJECTABLE no-op sink (collection point must land now)
-- [ ] Always-drain-body on early reject; clientError handler at the top-level createServer setup (no req/res, destroy the socket)
+- [x] withErrors (outermost), requestId+ALS, withCors(class), withBody(maxBytes) mapping overflow->413/bad-json->400 preserving the card pre-auth Content-Length 413 short-circuit, PLUS a withRawBody/binary variant for the card route
+- [x] requireAccount({scope}) as the one bearer resolver modeling at least read/active/full scopes, applying the ban/moderation+scope gate uniformly
+- [x] A THIN rateLimit(policy) adapter over today's existing limiter booleans (deep two-tier rework deferred to P19)
+- [x] The per-route metric + access-log hook behind an INJECTABLE no-op sink (collection point must land now)
+- [x] Always-drain-body on early reject; clientError handler at the top-level createServer setup (no req/res, destroy the socket)
 
 QA:
-- [ ] Fixes applied
-- [ ] Tests added
-- [ ] Dead code removed
-- [ ] Reviews clean
+- [x] Fixes applied
+- [x] Tests added
+- [x] Dead code removed
+- [x] Reviews clean (privacy-security-review + qa-checklist, both 0 BLOCKING / 0 SHOULD-FIX)
 
 Notes:
+DONE (2026-06-30). Eight importable-but-UNMOUNTED onion middleware primitives plus one top-level
+handler land under server/http/middleware/ and server/http/; NOTHING is mounted in front of the live
+handleApi (Phase 9 mounts them), the dispatch flag and routing are untouched, and the WS wire and
+upgrade path are unchanged. Built as a 3-agent parallel fan-out (8a errors/requestId/cors/metricSink,
+8b-1 body/rawBody/clientError, 8b-2 requireAccount/rateLimit) integrated behind one onion-order test.
+
+New files:
+- server/http/middleware/with_errors.ts: `withErrors(opts?: { surface?, onUnexpected? })`, the OUTERMOST
+  frame and single response authority. Catches a throw from next(), calls Phase 7 mapError, and writes
+  ONE idempotent response via respondOnce (merging the SEPARATE contentType field onto headers). It does
+  NOT rethrow (it is the terminal boundary inside runOnion). 500-no-leak preserved (original only to
+  opts.onUnexpected).
+- server/http/middleware/request_id.ts: `withRequestId()` re-establishes the Phase 5 reqId ALS binding
+  around next() (`runWithReqId(ctx.reqId || newReqId(), next)`) so currentReqId() reads downstream even
+  when composed without runOnion. It does NOT write ctx.reqId (readonly on the frozen Ctx). No
+  X-Request-Id echo (Phase 23).
+- server/http/middleware/cors.ts: `withCors(allowClass: 'api'|'public', isAllowedOrigin?)`. 'api' reflects
+  a REALM_ORIGINS/NATIVE_APP_ORIGINS member (defaultApiAllow, byte-identical to the live maybeCors);
+  'public' is the unconditional wildcard (mirrors publicCors). Sets headers BEFORE next() so a 4xx/429
+  mapped downstream still carries CORS.
+- server/http/middleware/metric_sink.ts: the injectable `MetricSink` interface + `noopMetricSink` default
+  + `withMetrics(sink, route, now?)`. Records { route (the :param TEMPLATE, never a concrete path),
+  method, status, durationMs } per request. Placed directly inside withErrors; since withErrors does not
+  rethrow, the throw-path status is derived via toAppError(err).status (a pure read, so onUnexpected stays
+  exactly-once). Real logger + /metrics exporter are Phase 23.
+- server/http/middleware/body.ts: `withBody(maxBytes?)` wrapping readBody; over-cap -> HttpError(413,
+  'body.too_large', {maxBytes}), malformed JSON -> HttpError(400, 'json.malformed'). JSON-only, imposes NO
+  415 (Content-Type enforcement is Phase 21). The JSON cap is now a single source of truth:
+  `DEFAULT_JSON_BODY_MAX_BYTES` exported from server/http_util.ts and referenced by both readBody's default
+  and withBody (removes the re-typed-literal drift a QA nit flagged).
+- server/http/middleware/raw_body.ts: `withRawBody(maxBytes)` wrapping readBinaryBody (raw Buffer, NO JSON
+  parse). A Content-Length already over the cap rejects before reading; a mid-stream overflow rejects at
+  readBinaryBody's cap; both throw HttpError(413, 'body.too_large', {maxBytes}, { Connection: 'close' }) and
+  set res.shouldKeepAlive=false, preserving the live card route's pre-auth short-circuit semantics.
+- server/http/middleware/require_account.ts: `requireAccount({ scope: 'read'|'active'|'full', lookupToken?,
+  moderationStatus? })`, the ONE bearer resolver, mirroring the live bearerActiveAccount/bearerReadAccount.
+  401 auth.token_missing (no/malformed token) / 401 auth.token_invalid (unknown token, WWW-Authenticate via
+  the Phase 7 error model) / 403 auth.forbidden (insufficient scope: 'active' and 'full' both require
+  scopeAllowsMutation, 'read' accepts read|full) / 403 moderation.banned|suspended|suspended_until.
+  Populates ctx.account on success. The moderation/ban gate is applied UNIFORMLY for every scope tier, so no
+  route mounted behind it can skip the ban/suspension check (closes the Discord bearer-gap precedent). DB
+  calls are injected (deps-bag) for unit-testability, defaulting to the real accountAndScopeForToken /
+  moderationStatusForAccount. Object-level requireOwned* BOLA loaders are Phase 12.
+- server/http/middleware/rate_limit.ts: `rateLimit(policy)`, a THIN adapter over the existing boolean
+  limiters (server/ratelimit.ts). `RateLimitPolicy = { name, keyClass: 'ip'|'ip+account', limited(ctx),
+  retryAfterSeconds }`; on a limit throws HttpError(429, 'rate_limit.exceeded', { retryAfterSeconds }). Five
+  named policy constants (PUBLIC_READ, WOC_BALANCE, CARD_UPLOAD, WALLET_LINK, DISCORD); Retry-After is coarse
+  (WINDOW_MS/1000). 'ip+account' policies read ctx.account via accountIdOf (fail-closed 500 if absent, a
+  composition bug). No ratelimit_db, no RATELIMIT_SCHEMA, no new limiter behavior (all Phase 19).
+- server/http/client_error.ts: `handleClientError(err, socket)` destroys an undestroyed socket, no req/res.
+  Registered once in server/main.ts startServer (`server.on('clientError', handleClientError)` right after
+  http.createServer, before the noServer:true WebSocketServer setup). The ONLY main.ts edit this phase (an
+  import + one line). Does not touch routing or the WS upgrade handshake.
+
+Tests (tests/server/http/, 10 suites / 45 tests): with_errors, request_id, cors, metric_sink, body,
+raw_body, client_error, require_account, rate_limit, and onion_order (the integration test pinning the
+canonical sequence withErrors -> metric hook -> requestId -> withCors -> rateLimit(ip) -> withBody ->
+requireAccount -> rateLimit(ip+account) -> handler, plus cheap-reject-first, auth-before-account-limiter,
+and CORS-survives-a-429). No new error code was appended (every 4xx/401/403/413/429/500 body reuses a code
+already in error_codes.ts).
+
+Reviews: privacy-security-review PASS (0 BLOCKING / 0 SHOULD-FIX; confirmed the bearer-gap is closed, the
+401/403 split, no internal leakage, the clientError handler is not an abuse vector, CORS parity; it noted
+the primitive is a privacy IMPROVEMENT over the live resolver, which leaks the English status.message).
+qa-checklist READY (0 BLOCKING / 0 SHOULD-FIX). Both reviewers rated everything else NIT/informational; the
+one actionable nit (the re-typed JSON cap) was applied as the DEFAULT_JSON_BODY_MAX_BYTES single-source-of-
+truth. The remaining nits are deliberate forward-looking notes recorded in state.md (Phase 9 mount-order
+decision for auth-vs-body on account-scoped routes, Phase 9 must not widen the withCors origin predicate,
+the Phase 23 redirect-surface status nuance in the metric hook, and the defensive readBody/readBinaryBody
+throw-fall-through kept as intentional defense-in-depth). migration-safety NOT dispatched (no DDL / JSONB /
+db.ts schema change), cross-platform-sync + architecture-reviewer NOT dispatched (server-only, no
+src/sim / wire / matcher change). Determinism, three-host/IWorld parity, and persistence are N/A.
+
+Validation: tsc clean; the 10 primitive suites 45/45; full npm test 627 files / 6642 pass / 11 skip;
+build:env + build:server + build all exit 0; ci:changed exit 0 (changed files clean; the only remaining
+warnings are pre-existing noExplicitAny in main.ts and readBody's Promise<any>); ASCII-clean (no em/en
+dashes or emojis). Next: Phase 08 QA (docs/api-pipeline/phase-08-qa.md).
 
 ## Phase 09: Registry + dispatcher-in-front (per-path delegate) + dual-path parity harness + top-level CORS wrapper
 
