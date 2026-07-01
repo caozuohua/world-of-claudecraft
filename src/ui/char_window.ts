@@ -42,7 +42,7 @@ const QUALITY_DEFAULT_COLOR = 'var(--color-quality-default)';
 const SLOT_EMPTY_TEXT_COLOR = 'var(--color-slot-empty-text)';
 const SLOT_EMPTY_BORDER_COLOR = 'var(--color-slot-empty-border)';
 
-// The ten craft-archetype title keys (#1130), one per craft id on the ring (see
+// The ten craft-archetype title keys (issue 1130), one per craft id on the ring (see
 // src/sim/content/professions.ts CRAFT_RING and src/sim/professions/archetype.ts
 // getArchetypeTitle: the title identifier IS the craft id). Every player-visible
 // string is a t() key, so this is a literal id-to-key table, never a built string.
