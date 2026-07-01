@@ -2,12 +2,10 @@
 // PR that adds them (#1120). Boots the offline world, teleports the player
 // next to the Eastbrook Vale ore cluster, and captures the node markers.
 // Needs `npm run dev` running. Browser via scripts/browser_path.mjs.
-
 import fs from 'node:fs';
 import puppeteer from 'puppeteer-core';
 
 import { BROWSER_PATH as EDGE } from './browser_path.mjs';
-
 const URL = process.env.GAME_URL ?? 'http://localhost:5173';
 const OUT = 'docs/screenshots';
 fs.mkdirSync(OUT, { recursive: true });
