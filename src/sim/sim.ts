@@ -206,6 +206,11 @@ import {
   normalizeGatheringProficiency,
 } from './professions/gathering';
 import type { ProfessionRecipeRecord as RecipeDef } from './professions/types';
+  craftSkillsFor,
+  emptyCraftSkills,
+  gainCraftSkill,
+  normalizeCraftSkills,
+} from './professions/wheel';
 import {
   craftSkillsFor,
   emptyCraftSkills,
@@ -815,6 +820,7 @@ export interface PlayerMeta {
   // MARKET_WIRE_LIMIT listings per snapshot to bound wire cost, so this
   // server-side substring filter (matched against item names) is how a player
   // reaches goods past the cap. Never persisted, resets on login.
+  // reaches goods past the cap. Never persisted — resets on login.
   marketFilter: string;
   // Flat per-craft skill tracking (#1126): one independent, additive-only skill
   // value per craft on the ten-craft ring (see professions/wheel.ts). Persisted
@@ -1489,6 +1495,7 @@ export class Sim {
       raidLockouts: new Map(),
       away: null,
       marketQuery: defaultMarketQuery(),
+      marketFilter: '',
       craftSkills: emptyCraftSkills(),
       mailWelcomed: false,
       marketFilter: '',
