@@ -332,7 +332,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 402,
-      "state": "2c4eb4ef",
+      "state": "ee9f47d5",
       "events": "4b40b072",
       "rng": {
         "draws": 4,
@@ -378,11 +378,11 @@
           "attackPower": 20,
           "auras": [
             {
-              "duration": 600,
+              "duration": 60,
               "id": "resurrection_sickness",
               "kind": "buff_allstats_pct",
               "name": "Resurrection Sickness",
-              "remaining": 600,
+              "remaining": 60,
               "school": "shadow",
               "sourceId": 399,
               "value": -0.75
@@ -440,7 +440,7 @@
       "tick": 6,
       "time": 0.3,
       "nextId": 402,
-      "state": "3f213927",
+      "state": "c78fa538",
       "events": "741638a5",
       "rng": {
         "draws": 4,
@@ -451,7 +451,7 @@
       "tick": 7,
       "time": 0.35,
       "nextId": 402,
-      "state": "110a3acd",
+      "state": "cbd3e70c",
       "events": "741638a5",
       "rng": {
         "draws": 4,
@@ -497,11 +497,11 @@
           "attackPower": 20,
           "auras": [
             {
-              "duration": 600,
+              "duration": 60,
               "id": "resurrection_sickness",
               "kind": "buff_allstats_pct",
               "name": "Resurrection Sickness",
-              "remaining": 599.9,
+              "remaining": 59.9,
               "school": "shadow",
               "sourceId": 399,
               "value": -0.75

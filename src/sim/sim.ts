@@ -214,19 +214,21 @@ import { createSimContext, type SimContext, type SimContextHost } from './sim_co
 import * as chatMod from './social/chat';
 import * as tradeMod from './social/trade';
 import {
+  applyResurrectionSickness,
+  GHOST_RUN_MULT,
+  RESURRECTION_SICKNESS_ID,
+  releasePlayerSpirit,
+  resurrectAtCorpse,
+  resurrectAtSpiritHealer,
+  spawnOverworldSpiritHealers,
+} from './spirit';
+import {
   emptyWorldBossDaily,
   rollWorldBossLoot as rollWorldBossLootImpl,
   WORLD_BOSSES,
   type WorldBossDaily,
   type WorldBossDef,
 } from './world_boss';
-import {
-  GHOST_RUN_MULT,
-  releasePlayerSpirit,
-  resurrectAtCorpse,
-  resurrectAtSpiritHealer,
-  spawnOverworldSpiritHealers,
-} from './spirit';
 
 // Same pattern for the Ravenpost mail book (server/db.ts persists it as a
 // per-realm world_state row alongside the market).
@@ -625,9 +627,6 @@ export interface InstanceSlot {
   mobIds: number[];
   objectIds: number[];
   exitId: number | null;
-  // The per-instance Spirit Healer (the angel at the dungeon/raid graveyard), spawned
-  // on claim and despawned when freed. null while the slot is idle. See spirit.ts.
-  spiritHealerId: number | null;
   emptyFor: number;
 }
 
@@ -873,6 +872,9 @@ export interface CharacterState {
   // still marked, rather than free-resurrecting on relog. See src/sim/spirit.ts.
   ghost?: boolean;
   corpsePos?: { x: number; z: number } | null;
+  // The Keeper's Toll (Resurrection Sickness) remaining seconds (JSONB; optional/null when
+  // none). Persisted so the penalty cannot be shed by logging out and back in.
+  resSickness?: number | null;
   skin?: number; // appearance index (JSONB; optional so pre-skin saves load as 0)
   skinCatalog?: SkinCatalog;
   // Pending skin-select event rank (JSONB; optional so older saves load as null).
@@ -1151,7 +1153,6 @@ export class Sim {
             mobIds: [],
             objectIds: [],
             exitId: null,
-            spiritHealerId: null,
             emptyFor: 0,
           });
         }
@@ -1177,7 +1178,6 @@ export class Sim {
           mobIds: [],
           objectIds: [],
           exitId: null,
-          spiritHealerId: null,
           emptyFor: 0,
         });
       }
@@ -1558,6 +1558,14 @@ export class Sim {
     // the shared potion cooldown paints the action bar as READY (no swipe) while the
     // use-gate (which reads potionCooldownUntil) still rejects the quaff.
     player.potionCdRemaining = Math.max(0, player.potionCooldownUntil - this.time);
+    // Restore The Keeper's Toll (Resurrection Sickness) with its SAVED remaining, so the
+    // penalty cannot be shed by relogging. Applied after recalc so the aura re-reduces
+    // maxHp; hp is then clamped down to the reduced max (the ghost block below resets a
+    // ghost's greyed bar to that reduced max).
+    if (savedState?.resSickness && savedState.resSickness > 0) {
+      applyResurrectionSickness(this.ctx, player, savedState.resSickness);
+      player.hp = Math.min(player.hp, player.maxHp);
+    }
     // Resume a ghost: a player who logged out as a released spirit comes back as a
     // ghost at the graveyard (corpse still marked), not freely resurrected. dead stays
     // unset for a non-ghost logout (the pre-existing revive-on-relog behavior).
@@ -1703,6 +1711,8 @@ export class Sim {
       // Ghost state, so a logged-out spirit resumes its corpse run on relog.
       ghost: e.ghost,
       corpsePos: e.corpsePos ? { x: e.corpsePos.x, z: e.corpsePos.z } : null,
+      // The Keeper's Toll persists across logout (it cannot be shed by relogging).
+      resSickness: e.auras.find((a) => a.id === RESURRECTION_SICKNESS_ID)?.remaining ?? null,
       equipment: { ...meta.equipment },
       inventory: meta.inventory.map(cloneInvSlot),
       bags: [...meta.bags],
@@ -2752,9 +2762,11 @@ export class Sim {
         drainGatheringGrants(meta);
       } else if (p.ghost) {
         // A released spirit only runs (boosted speed via moveSpeedMult); it does not
-        // fight, cast, regen, or trigger dungeon doors (those ignore the dead). It
-        // resurrects at its corpse or the graveyard's Spirit Healer.
+        // fight, cast, or regen. It CAN walk into a dungeon/raid door to re-enter its
+        // instance and resurrect at the entrance (the corpse run under the instance
+        // death model), or resurrect at its corpse / an overworld Spirit Healer.
         this.updatePlayerMovement(p, meta);
+        this.updateDoorTriggers(p);
       }
       updateTimers(p);
       updateComboExpiry(this.ctx, p);
