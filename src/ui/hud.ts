@@ -7733,7 +7733,7 @@ export class Hud {
   }
 
   // The plain-text form of a chat string with [[q:id]]/[[i:id]] tokens replaced by
-  // [Name] — used for 3D chat bubbles, which can't host interactive spans.
+  // [Name]: used for 3D chat bubbles, which can't host interactive spans.
   private chatLinkPlainText(text: string): string {
     return parseChatSegments(text)
       .map((s) => {
