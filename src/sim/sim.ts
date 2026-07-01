@@ -76,7 +76,6 @@ import type { DelveShopGate, DelveShopOffer } from './data';
 import {
   abilitiesKnownAt,
   arenaOrigin,
-  CAMPS,
   CLASSES,
   DEEPFEN_SHALLOWS_LAKE,
   DELVE_COMPANIONS,
@@ -89,13 +88,11 @@ import {
   dungeonAt,
   FISHING_RARE_ID,
   FISHING_TABLES,
-  GROUND_OBJECTS,
+  getActiveWorldContent,
   INSTANCE_SLOT_COUNT,
   ITEMS,
   isDelvePos,
   MOBS,
-  NPCS,
-  PLAYER_START,
   QUESTS,
   zoneAt,
 } from './data';
@@ -821,7 +818,9 @@ function freshCounters(): RewardCounters {
 // isShamanShock/ignoresDamagePushback) live in combat/casting_lifecycle.ts (C4a).
 
 export class Sim {
-  cfg: Required<Omit<SimConfig, 'noPlayer'>>;
+  // `world` stays optional (a custom map for play-test, else undefined for the
+  // built-in world); everything else is defaulted to a concrete value below.
+  cfg: Required<Omit<SimConfig, 'noPlayer' | 'world'>> & Pick<SimConfig, 'world'>;
   rng: Rng;
   time = 0;
   tickCount = 0;
@@ -913,6 +912,9 @@ export class Sim {
       devCommands: this.devCommands,
       lockoutNowMs: cfg.lockoutNowMs ?? (() => Math.floor(this.time * 1000)),
       raidResetMs: cfg.raidResetMs ?? ((nowMs: number) => nowMs + DEFAULT_RAID_LOCKOUT_MS),
+      // Carried through so the renderer (which reaches the Sim as IWorld) can read
+      // the same custom world via sim.cfg.world. Undefined for the built-in world.
+      world: cfg.world,
     };
     this.rng = new Rng(cfg.seed);
     // S0b seam: the shared SimContext every extracted slice routes through. Built
@@ -932,8 +934,12 @@ export class Sim {
     // after the SimContext. The NPC loop below sets its merchantId, then seed().
     this.market = new Market(this.ctx);
 
+    // Spawn content: a custom world (editor play-test) or the built-in world.
+    // CAMPS order is a determinism contract; both bundles preserve it.
+    const worldContent = this.cfg.world ?? getActiveWorldContent();
+
     // NPCs — nudged out of buildings and deep water if their data position is bad
-    for (const npcDef of Object.values(NPCS)) {
+    for (const npcDef of Object.values(worldContent.npcs)) {
       if (npcDef.dynamic) continue; // spawned on demand by its owning system, not surface-placed
       const safe = this.findSafePos(npcDef.pos.x, npcDef.pos.z, WATER_LEVEL + 0.6);
       const npc = createNpc(this.nextId++, npcDef, this.groundPos(safe.x, safe.z));
@@ -943,7 +949,7 @@ export class Sim {
     this.market.seed();
 
     // Mobs from camps
-    for (const camp of CAMPS) {
+    for (const camp of worldContent.camps) {
       const template = MOBS[camp.mobId];
       // Aquatic/flagged swimmers may wade in the shallows; everyone else
       // still spawns on dry land even though combat movement can enter water.
@@ -967,7 +973,7 @@ export class Sim {
     }
 
     // Ground objects
-    for (const objDef of GROUND_OBJECTS) {
+    for (const objDef of worldContent.groundObjects) {
       for (const p of objDef.positions) {
         const obj = createGroundObject(
           this.nextId++,
@@ -1131,9 +1137,10 @@ export class Sim {
       const dungeon = dungeonAt(savedPos.x) ?? DUNGEON_LIST[0];
       savedPos = { x: dungeon.doorPos.x, z: dungeon.doorPos.z - 4 };
     }
+    const playerStart = (this.cfg.world ?? getActiveWorldContent()).playerStart;
     const startPos = savedPos
       ? this.groundPos(savedPos.x, savedPos.z)
-      : this.groundPos(PLAYER_START.x, PLAYER_START.z);
+      : this.groundPos(playerStart.x, playerStart.z);
     const savedArena1v1: ArenaStanding = {
       rating: savedState?.arena1v1Rating ?? savedState?.arenaRating ?? arenaMod.ARENA_BASE_RATING,
       wins: savedState?.arena1v1Wins ?? savedState?.arenaWins ?? 0,

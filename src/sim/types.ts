@@ -1737,6 +1737,66 @@ export interface MoveInput {
   jump: boolean;
 }
 
+// A bounded additive height edit (the raise/lower brush stamp), sampled inside
+// terrainHeight() exactly like MIREFEN_IMPACT_CRATER. Pure data, no RNG: the sim
+// and renderer both sample it so collision and the ground mesh stay in agreement.
+export interface HeightStamp {
+  x: number;
+  z: number;
+  radius: number;
+  delta: number; // +raise / -lower at the centre, tapering to 0 by `radius`
+  falloff: 'smooth' | 'flat';
+}
+
+// A freely placed GLB model the editor drops onto the world. COSMETIC and
+// render-only: the Sim never reads these (they are not entities and do not
+// collide); the renderer instances them from `path` and seats them on the terrain.
+// Carried on WorldContent so they reach the renderer via sim.cfg.world.
+export interface PlacedAsset {
+  path: string; // public GLB url, e.g. "/models/props/well.glb"
+  x: number;
+  z: number;
+  rotY: number; // radians
+  scale: number;
+}
+
+// A coarse 2D biome paint grid (editor). Each cell holds a biome id (0=vale,
+// 1=marsh, 2=peaks) or 255 for unpainted. Where painted, it overrides both the
+// terrain SHAPE (sim, in shapeAt) and the ground COLOR (render). Absent for the
+// built-in world, so terrain stays byte-identical.
+export interface BiomePaint {
+  cell: number; // cell size in yards
+  cols: number;
+  rows: number;
+  originX: number; // world x of the grid's (col 0) edge
+  originZ: number; // world z of the grid's (row 0) edge
+  ids: number[]; // length cols*rows; 0/1/2 = biome, 255 = unpainted
+}
+
+// A swappable world definition: the spatial + content data the terrain function
+// and the Sim spawn loop derive a playable world from. The built-in 3-zone world
+// is one of these (data.ts BUILTIN_WORLD); the map editor produces custom ones for
+// offline play-testing. Injected via SimConfig.world plus the data.ts active-content
+// registry (both, because terrain reaches the data by module global and the Sim
+// reaches it by config). CAMPS order is a determinism contract: append, never
+// reorder, since the Sim draws the shared Rng in array order.
+export interface WorldContent {
+  zones: ZoneDef[];
+  camps: CampDef[];
+  npcs: Record<string, NpcDef>;
+  groundObjects: GroundObjectDef[];
+  roads: { x: number; z: number }[][];
+  props: ZonePropsDef;
+  playerStart: { x: number; z: number };
+  // Additive heightfield edits sampled in terrainHeight(). Absent/empty for the
+  // built-in world, so its heightfield stays byte-identical.
+  terrainEdits?: HeightStamp[];
+  // Render-only freely placed GLB models (editor). The Sim ignores these.
+  placements?: PlacedAsset[];
+  // 2D biome paint overriding terrain shape (sim) and color (render).
+  biomePaint?: BiomePaint;
+}
+
 export interface SimConfig {
   seed: number;
   playerClass: PlayerClass;
@@ -1750,6 +1810,9 @@ export interface SimConfig {
   // authoritative server uses its realm-local 3 AM daily reset; offline/headless omit
   // this and fall back to a flat 24h day. Keeps the time zone out of the sim core.
   raidResetMs?: (nowMs: number) => number;
+  // Offline play-test: a custom world to run instead of the built-in one. The Sim
+  // ctor reads spawns from here; render/terrain read it via the data.ts registry.
+  world?: WorldContent;
 }
 
 export function emptyMoveInput(): MoveInput {

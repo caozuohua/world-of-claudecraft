@@ -76,6 +76,7 @@ import {
   isProjectedNameplateAnchorVisible,
   nameplateScreenTransform,
 } from './nameplate_projection';
+import { buildPlacedAssets } from './placed_assets';
 import { buildComposer, type PostPipeline } from './post';
 import { buildPropMaterialPrewarmGroup, buildProps } from './props';
 import { buildGroundQuestObject } from './quest_objects';
@@ -721,6 +722,10 @@ export class Renderer {
   camYaw = Math.PI;
   camPitch = 0.32;
   camDist = 12;
+  // Map-editor 3D mode: when set, the camera uses this free-cam pose instead of
+  // chasing the player (updateCamera honors it and returns early). Editor-only;
+  // always null in the shipped game.
+  editorCam: { pos: THREE.Vector3; target: THREE.Vector3 } | null = null;
   // Smoothed chase-cam occlusion (1 = no pull-in); see updateCamera.
   private camOcclusion: CameraOcclusionState = { pullT: 1, lensT: 1, fov: CAMERA_BASE_FOV };
   showNameplates = true;
@@ -1178,6 +1183,15 @@ export class Renderer {
     // numPointLights -> materials never recompile for a light-count change).
     this.fireLights.push(this.impactSite.light);
     this.propsView = props;
+
+    // Map-editor play-test: freely placed GLB models (cosmetic, render-only). Loads
+    // async and pops in; absent for the built-in world.
+    const placements = this.sim.cfg.world?.placements;
+    if (placements && placements.length > 0) {
+      const placed = buildPlacedAssets(placements, this.sim.cfg.seed);
+      setRenderCategory(placed, 'props');
+      this.scene.add(placed);
+    }
 
     // selection ring — a classic target reticle: a base ring plus four
     // inward-pointing ticks. The base ring is draped over the terrain each
@@ -4603,7 +4617,73 @@ export class Renderer {
     return this.selfRenderPosition;
   }
 
+  // ---- Map-editor 3D seams (editor-only) --------------------------------
+
+  /** The terrain chunk group, for the editor to raycast/rebuild. */
+  get terrainGroup(): THREE.Group {
+    return this.terrainView.group;
+  }
+
+  /**
+   * Raycast a screen point onto the actual terrain surface (follows sculpted
+   * height), returning the world hit point, or null. Falls back to the y=0 plane
+   * past the built terrain footprint. Editor-only (3D in-world editing).
+   */
+  surfacePoint(clientX: number, clientY: number): THREE.Vector3 | null {
+    const ndc = new THREE.Vector2(
+      (clientX / this.viewport.width) * 2 - 1,
+      -(clientY / this.viewport.height) * 2 + 1,
+    );
+    this.raycaster.setFromCamera(ndc, this.camera);
+    const hits = this.raycaster.intersectObjects(this.terrainView.group.children, false);
+    if (hits.length > 0 && hits[0].point) return hits[0].point.clone();
+    const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+    const pt = new THREE.Vector3();
+    return this.raycaster.ray.intersectPlane(plane, pt) ? pt : null;
+  }
+
+  /**
+   * Re-mesh the terrain from the current active world content (after a sculpt or
+   * biome-paint edit). Disposes the old chunk geometries and the one shared
+   * material (and its build-specific normal map) exactly once, but never the
+   * shared splat/detail textures. Editor-only.
+   */
+  rebuildTerrain(): void {
+    const old = this.terrainView.group;
+    this.scene.remove(old);
+    const firstMesh = old.children.find((c) => (c as THREE.Mesh).isMesh) as THREE.Mesh | undefined;
+    const sharedMat = firstMesh?.material as THREE.Material | THREE.Material[] | undefined;
+    old.traverse((o) => {
+      const m = o as THREE.Mesh;
+      if (m.isMesh) m.geometry.dispose();
+    });
+    const disposeMat = (mat: THREE.Material): void => {
+      const withMap = mat as THREE.Material & { normalMap?: THREE.Texture | null };
+      withMap.normalMap?.dispose();
+      mat.dispose();
+    };
+    if (Array.isArray(sharedMat)) sharedMat.forEach(disposeMat);
+    else if (sharedMat) disposeMat(sharedMat);
+    this.terrainView = buildTerrain(this.sim.cfg.seed);
+    setRenderCategory(this.terrainView.group, 'terrain');
+    this.scene.add(this.terrainView.group);
+  }
+
   private updateCamera(selfPos: THREE.Vector3, dt: number): void {
+    // Map-editor free camera: use the editor pose verbatim and skip the entire
+    // player-chase + occlusion path. Every camera-relative cull in sync() then
+    // runs off this free camera with no other change.
+    if (this.editorCam) {
+      this.camera.position.copy(this.editorCam.pos);
+      this.cameraLookAt.copy(this.editorCam.target);
+      if (Math.abs(this.camera.fov - CAMERA_BASE_FOV) > 0.01) {
+        this.camera.fov = CAMERA_BASE_FOV;
+        this.camera.updateProjectionMatrix();
+      }
+      this.camera.lookAt(this.cameraLookAt);
+      this.camera.updateMatrixWorld();
+      return;
+    }
     const p = this.sim.player;
     const seed = this.sim.cfg.seed;
     const px = selfPos.x;
