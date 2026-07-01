@@ -168,38 +168,48 @@ describe('registry completeness: the legacy /api ladder is fully covered', () =>
   });
 });
 
-describe('registry completeness: Phase 10 migrated baseline (public reads)', () => {
-  // The exact public-read paths Phase 10 moved onto RouteDefs (server/leaderboard.ts).
-  // The router owns them under flag 'new'; their legacy arms stay for rollback.
-  const MIGRATED_PATHS = [
-    '/api/leaderboard',
-    '/api/arena/leaderboard',
-    '/api/releases',
-    '/api/project-stats',
-    '/api/status',
-    '/api/perf',
-    '/api/search',
-    '/api/realms',
-    '/api/public/characters/:name/sheet',
+describe('registry completeness: migrated baseline (Phase 10 public reads + Phase 11 auth)', () => {
+  // The exact routes migrated onto RouteDefs so far: Phase 10 moved the public
+  // reads (GET, server/leaderboard.ts) and Phase 11 the auth credential surface
+  // (POST, server/auth_routes.ts). The router owns each under flag 'new'; their
+  // legacy arms stay for rollback. Method-aware, because the auth routes are POST
+  // (a GET to them resolves methodNotAllowed, not matched).
+  const MIGRATED_ROUTES: readonly LadderRoute[] = [
+    { method: 'GET', path: '/api/leaderboard' },
+    { method: 'GET', path: '/api/arena/leaderboard' },
+    { method: 'GET', path: '/api/releases' },
+    { method: 'GET', path: '/api/project-stats' },
+    { method: 'GET', path: '/api/status' },
+    { method: 'GET', path: '/api/perf' },
+    { method: 'GET', path: '/api/search' },
+    { method: 'GET', path: '/api/realms' },
+    { method: 'GET', path: '/api/public/characters/:name/sheet' },
+    { method: 'POST', path: '/api/register' },
+    { method: 'POST', path: '/api/login' },
+    { method: 'POST', path: '/api/native-attestation/challenge' },
   ];
+  const MIGRATED_PATHS = MIGRATED_ROUTES.map((r) => r.path);
 
-  it('registers exactly the Phase 10 public-read routes (one RouteDef per path)', () => {
+  it('registers exactly the migrated routes (one RouteDef per path)', () => {
     const registered = [...apiRoutes].map((r) => r.path).sort();
     expect(registered).toEqual([...MIGRATED_PATHS].sort());
   });
 
-  it('the router OWNS every migrated public-read path (GET resolves to matched)', () => {
-    for (const path of MIGRATED_PATHS) {
-      expect(apiRegistry.resolve('GET', concretePath(path)).kind).toBe('matched');
+  it('the router OWNS every migrated route (its method resolves to matched)', () => {
+    for (const route of MIGRATED_ROUTES) {
+      expect(apiRegistry.resolve(route.method, concretePath(route.path)).kind).toBe('matched');
     }
   });
 
-  it('every migrated path is a mainApi ladder route that stays delegate-served', () => {
-    // Each migrated path must also be an inventory ladder route AND retain its
+  it('every migrated route is a mainApi ladder route that stays delegate-served', () => {
+    // Each migrated route must also be an inventory ladder route AND retain its
     // legacy arm (rollback), so the flag can roll each one back per route.
-    for (const path of MIGRATED_PATHS) {
-      const row = legacyLadder.find((r) => r.path === path);
-      expect(row, `migrated path ${path} must be a mainApi ladder route`).toBeDefined();
+    for (const route of MIGRATED_ROUTES) {
+      const row = legacyLadder.find((r) => r.path === route.path && r.method === route.method);
+      expect(
+        row,
+        `migrated route ${route.method} ${route.path} must be a mainApi ladder route`,
+      ).toBeDefined();
       if (row) {
         expect(isRouterOwned(apiRegistry, row)).toBe(true);
         expect(legacyServes(row, legacyServed)).toBe(true);

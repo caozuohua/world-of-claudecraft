@@ -24,6 +24,8 @@ export const DEVIATION_ID = {
   perfReport200NotThrottle: 'perf-report-200-not-429-on-throttle',
   perfReportSitePresence405OkFalse: 'perf-report-and-site-presence-405-ok-false',
   registerLoginAntiEnumeration: 'register-login-anti-enumeration',
+  authRateLimitDashToComma: 'auth-rate-limit-dash-to-comma',
+  authBodyValidationRemap: 'auth-body-validation-remap-login-challenge',
   bolaOwned404: 'bola-owned-404',
   planned405BeforeAuth: 'planned-405-before-auth',
   validationStatusRemap: 'validation-status-remap-422-400-413',
@@ -151,6 +153,60 @@ export const KNOWN_DEVIATIONS: readonly KnownDeviation[] = [
   },
 
   // --- Phase-scheduled deviations (introducedInPhase names the change) ---------
+  {
+    id: DEVIATION_ID.authRateLimitDashToComma,
+    routes: ['/api/register', '/api/login'],
+    currentBehavior:
+      'The legacy handleApi rate-limit and IP-block 429 on register/login answers ' +
+      '{ error: "too many attempts" + an em dash (U+2014) + " wait a minute and try ' +
+      'again" }, and the login brute-force throttle answers the same shape with "too ' +
+      'many failed attempts" + the em dash + " wait a few minutes and try again".',
+    intendedBehavior:
+      'Phase 11 serves register/login through the new pipeline with the same { error } ' +
+      'body shape but a COMMA in place of the em dash, because the no-em-dash code ' +
+      'invariant forbids a U+2014 literal in the new module. The client prose-matcher ' +
+      '(src/main.ts userFacingApiError) keys on the "too many attempts" / "too many ' +
+      'failed attempts" prefix, BEFORE the punctuation, so the localized message is ' +
+      'unchanged. Phase 13 aligns the legacy ladder strings to the comma, retiring ' +
+      'this deviation.',
+    introducedInPhase: 11,
+    reason:
+      'Byte-for-byte parity would require re-emitting the legacy em dash, which the ' +
+      'no-em-dash invariant forbids in new code; the dash-to-comma swap is the minimal ' +
+      'matcher-safe divergence (the prose-matcher keys on the prefix, not the dash). ' +
+      'The legacy-string fix is Phase 13, so both messages read identically after it.',
+  },
+  {
+    id: DEVIATION_ID.authBodyValidationRemap,
+    routes: ['/api/login', '/api/native-attestation/challenge'],
+    currentBehavior:
+      'On the legacy handleApi ladder, POST /api/login and POST ' +
+      '/api/native-attestation/challenge parse the body with readBody, whose reject on ' +
+      "malformed JSON or an over-cap body falls to handleApi's outer catch and answers " +
+      '500 { error: "internal error" } (application/json); an unexpected handler throw ' +
+      'answers the same generic 500.',
+    intendedBehavior:
+      'Phase 11 serves these routes through the new pipeline, which parses the body with ' +
+      'the Phase 8 withBody middleware and surfaces errors through the Phase 7 RFC 9457 ' +
+      'boundary (withErrors): malformed JSON now answers 400 (json.malformed), an over-cap ' +
+      'body answers 413 (body.too_large), and an unexpected throw answers 500 ' +
+      '(internal.error), all as application/problem+json. The 400/413 status remap mirrors ' +
+      'what validationStatusRemap already documents for /api/register (so register is not ' +
+      'repeated here); Phase 11 realizes it for login and challenge too. The problem+json ' +
+      'body shape (vs the legacy { error } shape) is the systemic Phase 7/8 error-model ' +
+      'boundary shared by every migrated route, leak-free (the 500 detail is a static ' +
+      'generic sentence; the original error goes only to the logger); Phase 22 wires the ' +
+      'client code-matcher for these bodies.',
+    introducedInPhase: 11,
+    reason:
+      'The migrated routes parse the body via withBody (400 malformed / 413 over-cap) ' +
+      'instead of the legacy readBody-reject to outer-catch generic 500, a strictly more ' +
+      'correct and uniform status mapping. These framework-error paths are NOT exercised ' +
+      'by the db-free parity corpus (which replays valid bodies only), so the divergence ' +
+      "is documented here rather than caught by the harness. register's equivalent is " +
+      'tracked by validationStatusRemap (whose Phase 7 attribution is the pre-existing ' +
+      'error-model framing; the per-route realization lands as each route migrates).',
+  },
   {
     id: DEVIATION_ID.planned405BeforeAuth,
     routes: ['/api/register', '/api/me/characters'],
