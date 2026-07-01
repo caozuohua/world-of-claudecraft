@@ -2,8 +2,9 @@
 // forest_wolf corpse (componentTags: hide, fang; #1140), opens the loot
 // window (which now composes the harvest picker below the loot rows since
 // this corpse is harvestable and unclaimed), and screenshots the panel.
-import puppeteer from 'puppeteer-core';
+
 import fs from 'node:fs';
+import puppeteer from 'puppeteer-core';
 import { BROWSER_PATH as EDGE } from './browser_path.mjs';
 
 const URL = (process.env.GAME_URL ?? 'http://localhost:5173') + '/?gfx=ultra';
@@ -37,13 +38,24 @@ for (let i = 0; i < 120; i++) {
   await sleep(600);
   try {
     const ok = await page.evaluate(() => !!window.__game && window.__game.sim.entities.size > 0);
-    if (ok) { booted = true; break; }
-  } catch { /* context torn down during boot navigation; keep polling */ }
+    if (ok) {
+      booted = true;
+      break;
+    }
+  } catch {
+    /* context torn down during boot navigation; keep polling */
+  }
 }
-if (!booted) { console.log('world never booted'); await browser.close(); process.exit(1); }
+if (!booted) {
+  console.log('world never booted');
+  await browser.close();
+  process.exit(1);
+}
 
 await page.evaluate(() => {
-  const skip = [...document.querySelectorAll('button, .tut-skip, a')].find((el) => /skip tutorial/i.test(el.textContent || ''));
+  const skip = [...document.querySelectorAll('button, .tut-skip, a')].find((el) =>
+    /skip tutorial/i.test(el.textContent || ''),
+  );
   if (skip) skip.click();
 });
 await sleep(400);
@@ -52,7 +64,9 @@ const staged = await page.evaluate(() => {
   const g = window.__game;
   const sim = g.sim;
   const p = sim.player;
-  const mob = [...sim.entities.values()].find((e) => e.kind === 'mob' && e.templateId === 'forest_wolf');
+  const mob = [...sim.entities.values()].find(
+    (e) => e.kind === 'mob' && e.templateId === 'forest_wolf',
+  );
   if (!mob) return { error: 'no forest_wolf found in loaded zone' };
   mob.tappedById = p.id;
   mob.dead = true;
@@ -73,7 +87,11 @@ const staged = await page.evaluate(() => {
   // Open the loot window directly, at a fixed screen point, exactly as a
   // click-pick on the corpse would (src/game/interactions.ts handlePickedEntity).
   g.hud.openLoot(mob.id, 900, 500);
-  return { mob: mob.name, id: mob.id, componentTags: sim.constructor === Object ? null : undefined };
+  return {
+    mob: mob.name,
+    id: mob.id,
+    componentTags: sim.constructor === Object ? null : undefined,
+  };
 });
 console.log('staged:', JSON.stringify(staged));
 await sleep(700);
@@ -83,9 +101,16 @@ const clip = await page.evaluate(() => {
   const el = document.getElementById('loot-window');
   const r = el.getBoundingClientRect();
   const pad = 16;
-  return { x: Math.max(0, r.x - pad), y: Math.max(0, r.y - pad), width: r.width + pad * 2, height: r.height + pad * 2 };
+  return {
+    x: Math.max(0, r.x - pad),
+    y: Math.max(0, r.y - pad),
+    width: r.width + pad * 2,
+    height: r.height + pad * 2,
+  };
 });
 await page.screenshot({ path: 'tmp/corpse_harvest_focus_picker_crop.png', clip });
-console.log('screenshots written to tmp/corpse_harvest_focus_picker.png and tmp/corpse_harvest_focus_picker_crop.png');
+console.log(
+  'screenshots written to tmp/corpse_harvest_focus_picker.png and tmp/corpse_harvest_focus_picker_crop.png',
+);
 
 await browser.close();
