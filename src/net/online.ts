@@ -842,6 +842,11 @@ export class ClientWorld implements IWorld {
   lockpickState: LockpickView | null = null;
   delveMarks = 0;
   companionUpgrades: Record<string, number> = {};
+  // Flat per-craft skill tracking (#1126). NOT yet mirrored over the wire: this
+  // issue lands the sim-side state + persistence only, so online play sees the
+  // all-zero default until the wheel/mass-conservation follow-up wires a self-snap
+  // field the way `dmarks`/`dcomp` do for delveMarks/companionUpgrades above.
+  craftSkills: Record<string, number> = {};
   // Per-delve clears (key `${delveId}:${tierId}`), mirrored from the self-wire so
   // delveShopOffers can resolve the shop lock badge client-side.
   delveClears: Record<string, number> = {};
