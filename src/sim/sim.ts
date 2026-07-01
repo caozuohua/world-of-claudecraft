@@ -211,6 +211,8 @@ import type { ProfessionRecipeRecord as RecipeDef } from './professions/types';
   gainCraftSkill,
   normalizeCraftSkills,
 } from './professions/wheel';
+  normalizeGatheringProficiency,
+} from './professions/gathering';
 import {
   craftSkillsFor,
   emptyCraftSkills,
@@ -875,6 +877,7 @@ export interface CharacterState {
   // pre-rename key, kept for back-compat with old saves; `gatheringProficiency`
   // is the current key both read (preferred) and written going forward.
   professions?: Partial<Record<string, number>>;
+  // load cleanly, defaulting every profession to 0).
   gatheringProficiency?: Partial<Record<string, number>>;
   copper: number;
   hp: number;
@@ -1536,6 +1539,8 @@ export class Sim {
       meta.gatheringProficiency = normalizeGatheringProficiency(
         s.gatheringProficiency ?? s.professions,
       );
+      meta.gatheringProficiency = normalizeGatheringProficiency(s.professions);
+      meta.gatheringProficiency = normalizeGatheringProficiency(s.gatheringProficiency);
       if (s.unlockedMilestones)
         for (const id of s.unlockedMilestones) meta.unlockedMilestones.add(id);
       meta.copper = s.copper;
@@ -6657,6 +6662,15 @@ export class Sim {
 
   get craftSkills(): Record<string, number> {
     return this.craftSkillsFor(this.primaryId);
+  // Read-only gathering-profession proficiency surface for IWorld. Stubbed
+  // directly on IWorld pending issue #1164 (a broader professions facet); see
+  // that issue for the eventual reconciliation.
+  gatheringProficiencyFor(pid: number): Record<string, number> {
+    return { ...(this.players.get(pid)?.gatheringProficiency ?? emptyGatheringProficiency()) };
+  }
+
+  get gatheringProficiency(): Record<string, number> {
+    return this.gatheringProficiencyFor(this.primaryId);
   }
 
   /** The active-archetype craft id, or null before the zone-1 acceptance quest has
