@@ -4428,6 +4428,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.models.title': '3D 모델 뷰어',
   'guide.nav.economy': '경제와 거래',
   'guide.nav.gear': '장비와 물품',
+  'guide.nav.professions': '생산 전문직',
   'guide.nav.models': '3D 모델',
   'guide.nav.progression': '레벨과 성장',
   'guide.nav.social': '사교와 파티',
@@ -5130,4 +5131,45 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.crafting.craftedToast': '제작 완료:{name}',
   'hudChrome.crafting.insufficientMaterials': '재료가 부족합니다.',
   'hudChrome.crafting.unknownRecipe': '해당 제작법이 존재하지 않습니다.',
+  'guide.professions.intro':
+    '전투와 퀘스트를 넘어, 이 세계는 땅을 일구고 대장간에서 일하는 당신에게도 보상을 준다: 원재료를 채집하고, 열 가지 서로 다른 제작소에서 이를 장비로 바꾸며, 그 직업들이 상징하는 열 가지 원형 중 하나로서 정체성을 확립하는 것이다.',
+  'guide.professions.gatherTitle': '채집: 채광, 벌목, 약초학',
+  'guide.professions.gatherIntro':
+    '세 가지 채집 전문직을 통해 세계에서 직접 원재료를 얻을 수 있다: 채광은 광맥에서 광석과 돌을 캐고, 벌목은 나무숲에서 목재를 베어내며, 약초학은 야생에서 자라는 약초와 식물을 모은다. 각각 별도로 진행이 추적되므로, 하나를 익힌다고 해서 다른 하나의 진행이 늦어지지 않는다.',
+  'guide.professions.gatherWhatTitle': '자원 노드',
+  'guide.professions.gatherWhatBody':
+    '광맥, 나무숲, 약초 군락은 각 지역에 눈에 보이는 주인 없는 지형지물로 배치되어 있다. 다가가 상호작용하면 그 안에 있는 것을 채집할 수 있다. 한 번 채집한 노드는 당신이 다시 채집하려면 회복할 시간이 필요하지만, 다른 플레이어를 막는 일은 결코 없다: 그동안 다른 플레이어가 같은 노드를 채집할 수 있다.',
+  'guide.professions.gatherProficiencyTitle': '숙련도와 재료 품질',
+  'guide.professions.gatherProficiencyBody':
+    '채집에 성공할 때마다 해당 채집 전문직의 숙련도가 오른다. 숙련도가 높을수록 노드에서 얻는 재료는 더 희귀한 등급 쪽으로 치우치며, 일반 등급부터 위로 올라가지만, 가장 희귀한 등급은 숙련도가 높아도 여전히 드물다. 더 많은 연습은 결코 확률을 낮추지 않고, 오직 개선할 뿐이다.',
+  'guide.professions.gatherToolsTitle': '전문 도구',
+  'guide.professions.gatherToolsBody':
+    '상인들은 각 채집 전문직의 기본 도구를 판매하며, 더 좋은 도구는 제작할 수 있다. 그래서 자원 노드 작업은 그 자리에 머무르는 것이 아니라 장비를 갖출수록 점점 더 유능해지는 느낌을 주도록 설계되었다. 상위 등급 도구는 더 풍부한 노드에 접근하고 긴 플레이 세션 동안 더 효율적으로 작업하기 위한 의도된 수단이다.',
+  'guide.professions.craftTitle': '열 가지 제작 전문직',
+  'guide.professions.craftIntro':
+    '열 가지 제작 전문직은 채집한 재료를 완성된 장비와 물품으로 바꾼다: 방어구 제작, 무기 제작, 보석 세공은 원재료를 착용 가능한 장비로 형태를 잡고, 연금술과 공학은 시행착오에 기반하며, 요리, 문양학, 마법부여는 각각 다른 전문직의 결과물에 손을 대고, 재봉과 가죽 세공은 정확한 도안을 따라 작업한다. 이들은 함께 하나의 원환을 이루며, 각 전문직은 두 이웃과 인접하고 다른 하나와 마주 본다.',
+  'guide.professions.craftRingTitle': '전문직의 원환',
+  'guide.professions.craftRingBody':
+    '열 가지 전문직은 고정된 원환 위에 배치되어 있으며, 그 원환 위의 위치가 중요하다: 원환에서 서로 인접한 전문직은 반대편에 있는 전문직보다 서로 더 많은 공통점을 가진다. 하나의 전문직에 전념하는 것은 고립된 기술 하나를 고르는 것이 아니라 관련된 전문직 가족에 합류하는 듯한 느낌을 주어야 한다.',
+  'guide.professions.craftRecipesTitle': '제작법과 재료',
+  'guide.professions.craftRecipesBody':
+    '각 전문직은 저마다의 제작법을 가지고 있으며, 각각 당신이 채집하거나 구매하는 특정 재료를 필요로 한다. 각 전문직의 가장 기본적인 제작법은 일반 재료만으로 제작할 수 있고 처음부터 가능하므로, 전문직을 익히는 즉시 작업을 시작할 수 있으며 해금을 기다릴 필요가 없다.',
+  'guide.professions.craftMasteryTitle': '숙련도와 통달',
+  'guide.professions.craftMasteryBody':
+    '제작에 성공하면 해당 전문직의 숙련도가 오르며, 더 풍부한 제작법은 더 높은 숙련도 뒤에 잠겨 있다: 기본 제작법은 누구에게나 열려 있지만, 점점 더 고급스러운 제작법일수록 시도하려면 점점 더 높은 통달이 요구된다. 한 전문직의 숙련도를 키우는 것은 단순한 초기 물품에서 더 야심 찬 제작법으로 가는 길이다.',
+  'guide.professions.craftComboTitle': '조합 제작법',
+  'guide.professions.craftComboBody':
+    '단일 전문직 자체의 제작법 목록을 넘어, 이 원환은 인접한 두 전문직을 동시에 필요로 하는 조합 제작법도 지원하여, 원환 위에서 인접한 전문직에 투자한 캐릭터(또는 거래 파트너 한 쌍)에게 보상을 준다. 고립된 하나의 전문직에만 투자한 경우와는 다르다.',
+  'guide.professions.archetypeTitle': '열 가지 원형',
+  'guide.professions.archetypeIntro':
+    '열 가지 전문직은 각각 원형도 상징하며, 단순히 그 전문직에 종사하는 것을 넘어서는 더 넓은 정체성을 받아들일 수 있다. 당신의 현재 원형은 한 번에 하나뿐이며 목록이 아니다: 당신은 하나를 지니며, 원한다면 나중에 다른 것으로 바꿀 수 있다.',
+  'guide.professions.archetypeChooseTitle': '원형 선택하기',
+  'guide.professions.archetypeChooseBody':
+    '첫 원형은 존1의 초기 스토리 퀘스트를 통해 선언하며, 그 퀘스트가 당신을 그 정체성으로 공식적으로 받아들인다. 그 퀘스트를 완료하기 전까지 당신은 아직 어떤 원형도 선택하지 않은 상태다.',
+  'guide.professions.archetypeSwitchTitle': '마음을 바꾸기',
+  'guide.professions.archetypeSwitchBody':
+    "한 번 원형을 선언했다고 해서 영원히 그것에 묶이는 것은 아니다. 다른 원형으로 바꾸려면 먼저 옛 원형을 위한 반복 가능한 '속죄' 퀘스트를 완료해야 하며, 바꿀 때마다 다음번에 요구되는 속죄는 조금씩 더 무거워진다. 그래서 전환은 항상 의미가 있으며 대가 없이 이루어지지 않는다.",
+  'guide.professions.archetypeIdentityTitle': '당신의 원형이 의미하는 것',
+  'guide.professions.archetypeIdentityBody':
+    '당신의 현재 원형은 이 세계에서 당신의 캐릭터가 누구인지에 대한 선언이며, 다른 이들과 세계가 당신을 부르는 방식에 반영된다. 그에 따르는 구체적인 보상과 인정은 아직 다듬어지는 중이다. 시스템이 채워지는 대로 다시 확인해 보라.',
 };

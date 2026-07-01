@@ -4421,6 +4421,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'guide.models.title': '3Dモデルビューア',
   'guide.nav.economy': '経済と取引',
   'guide.nav.gear': 'ギアとアイテム',
+  'guide.nav.professions': '生産職',
   'guide.nav.models': '3Dモデル',
   'guide.nav.progression': 'レベリングと成長',
   'guide.nav.social': 'ソーシャルとグループ',
@@ -5123,4 +5124,45 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.crafting.craftedToast': '製作しました:{name}',
   'hudChrome.crafting.insufficientMaterials': '材料が不足しています。',
   'hudChrome.crafting.unknownRecipe': 'そのレシピは存在しません。',
+  'guide.professions.intro':
+    '戦闘やクエストだけでなく、この世界は大地を耕し鍛冶場に立つあなたにも報いてくれる。原材料を採集し、十種の異なる製作台でそれを装備へと変え、それらの職が体現する十の生き方のひとつとして自らのアイデンティティを築いていく。',
+  'guide.professions.gatherTitle': '採集：採掘、伐採、薬草学',
+  'guide.professions.gatherIntro':
+    '三つの採集職があり、世界から直接原材料を得られる。採掘は鉱脈から鉱石と石を掘り出し、伐採は木立から木材を切り出し、薬草学は野生に育つ薬草や植物を集める。それぞれ別々に進行が管理されるため、ひとつに取り組んでも他の進行が遅れることはない。',
+  'guide.professions.gatherWhatTitle': '資源ノード',
+  'guide.professions.gatherWhatBody':
+    '鉱脈、木立、薬草の茂みは、各ゾーンに目に見える所有者のない設備として配置されている。近づいて操作すれば、そこにあるものを採集できる。一度採集したノードは、あなた自身が再び採集できるようになるまで回復に時間がかかるが、他のプレイヤーを妨げることは決してない。その間に別のプレイヤーが同じノードを採集することもできる。',
+  'guide.professions.gatherProficiencyTitle': '熟練度と素材の品質',
+  'guide.professions.gatherProficiencyBody':
+    '採集に成功するたびに、その採集職の熟練度が上がる。熟練度が高いほど、ノードから得られる素材はより希少なグレードへと偏っていくが、コモンから始まり、最も希少なグレードは高熟練度でも依然として希少なままである。練習を重ねることは決して不利にならず、常に有利に働く。',
+  'guide.professions.gatherToolsTitle': '職の道具',
+  'guide.professions.gatherToolsBody':
+    '各採集職の基本的な道具は商人から購入でき、より優れた道具は製作できる。資源ノードでの作業は、装備を整えるにつれて着実に有能になっていく感覚であるべきで、その場に留まるものではない。上位ティアの道具は、より豊かなノードへのアクセスを解放し、長いセッションでもより効率よく作業するための意図された手段である。',
+  'guide.professions.craftTitle': '十の製作職',
+  'guide.professions.craftIntro':
+    '十の製作職は、採集した素材を完成した装備や品へと変える：防具製作、武器製作、宝石細工は原材料を装備品へと形作り、錬金術と工学は試行錯誤に基づき、料理、書記、エンチャントはそれぞれ他の職の産物に手を加え、裁縫と革細工は正確な型紙に沿って作業する。これらは合わせてひとつの輪を形成し、各職は二つの隣人と隣り合い、もう一つの職と向かい合う。',
+  'guide.professions.craftRingTitle': '専門職の輪',
+  'guide.professions.craftRingBody':
+    '十の職は固定された輪の上に配置され、その輪上での位置が重要な意味を持つ：輪の上で隣り合う職同士は、対角にある職同士よりも多くの共通点を持つ。ひとつの職に打ち込むことは、孤立した技能を選ぶのではなく、関連する職の一族に加わるような感覚であるべきだ。',
+  'guide.professions.craftRecipesTitle': 'レシピと材料',
+  'guide.professions.craftRecipesBody':
+    '各職には独自のレシピがあり、それぞれ採集または購入する特定の材料を必要とする。各職の最も基本的なレシピは一般的な材料だけで作れ、最初から製作可能なので、その職を手に入れた瞬間から作業を始められ、解放を待つ必要はない。',
+  'guide.professions.craftMasteryTitle': '技能と熟達',
+  'guide.professions.craftMasteryBody':
+    '製作に成功するとその職の技能が上がり、より豊かなレシピはより高い技能の先に解放される：基本的なレシピは誰にでも開かれているが、より高度なものへ進むほど、挑戦にはより高い熟達が求められる。ある職の技能を伸ばすことは、単純な初期の品からより野心的なレシピへと至る道のりである。',
+  'guide.professions.craftComboTitle': '組み合わせレシピ',
+  'guide.professions.craftComboBody':
+    '単独の職自身のレシピ一覧に加えて、この輪は隣り合う二つの職を同時に呼び出す組み合わせレシピにも対応しており、輪の上で隣接する職に投資したキャラクター（あるいは取引相手のペア）に報いる。孤立した一職だけに投資した場合は得られない。',
+  'guide.professions.archetypeTitle': '十の生き方',
+  'guide.professions.archetypeIntro':
+    '十の職はそれぞれ生き方も体現しており、その職に単に従事すること以上の、より広いアイデンティティを取り入れることができる。あなたの現在の生き方は一度にひとつだけであり、チェックリストではない：あなたは一つを担い、望むならば後で変更することもできる。',
+  'guide.professions.archetypeChooseTitle': '生き方を選ぶ',
+  'guide.professions.archetypeChooseBody':
+    '最初の生き方は、ゾーン1にある初期の物語クエストを通じて宣言し、そのクエストがあなたを正式にそのアイデンティティへと迎え入れる。そのクエストを完了するまで、あなたはまだ何の生き方も選んでいない。',
+  'guide.professions.archetypeSwitchTitle': '心変わり',
+  'guide.professions.archetypeSwitchBody':
+    '一度生き方を宣言しても、永遠にそれに縛られるわけではない。別の生き方に変えるには、まず古い生き方のために繰り返し可能な「償い」クエストを完了する必要があり、切り替えるたびに次に求められる償いは少しずつ厳しくなる。そのため切り替えは意味のあるものであり続け、代償のないものにはならない。',
+  'guide.professions.archetypeIdentityTitle': 'あなたの生き方が意味するもの',
+  'guide.professions.archetypeIdentityBody':
+    'あなたの現在の生き方は、あなたのキャラクターがこの世界で何者であるかについての表明であり、他者や世界があなたをどう呼ぶかに反映される。それに伴う具体的な報酬や認知はまだ調整中だ。システムが充実していくのを見守ってほしい。',
 };

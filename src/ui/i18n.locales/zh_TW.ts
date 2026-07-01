@@ -4191,6 +4191,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'guide.models.title': '3D模型檢視器',
   'guide.nav.economy': '經濟與交易',
   'guide.nav.gear': '裝備與物品',
+  'guide.nav.professions': '專業',
   'guide.nav.models': '3D模型',
   'guide.nav.progression': '升級與進程',
   'guide.nav.social': '社交與組隊',
@@ -4866,4 +4867,45 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.crafting.craftedToast': '已製作:{name}',
   'hudChrome.crafting.insufficientMaterials': '你沒有足夠的材料。',
   'hudChrome.crafting.unknownRecipe': '該配方不存在。',
+  'guide.professions.intro':
+    '除了戰鬥與任務之外，這個世界還會獎勵你耕耘土地與鍛造：採集原材料，在十種不同行業的製作站中將其打造成裝備，並在這些行業所代表的十種命途之一中確立自己的身分。',
+  'guide.professions.gatherTitle': '採集：採礦、伐木與草藥學',
+  'guide.professions.gatherIntro':
+    '三種採集行業讓你從世界中直接取得原材料：採礦從礦脈中開採礦石與石料，伐木從林地中砍伐木材，草藥學採集野生生長的草藥與植物。三者分別計算進度，從事其中一項不會拖慢你在另一項上的進展。',
+  'guide.professions.gatherWhatTitle': '資源節點',
+  'guide.professions.gatherWhatBody':
+    '礦脈、林地與藥草叢作為可見、無主的地物分布在各個區域中。走近並與之互動即可採集其中的資源。採集過一個節點後，它需要一段時間才能恢復供你本人再次採集，但這從不會阻擋其他玩家：其他人可以在此期間採集同一個節點。',
+  'guide.professions.gatherProficiencyTitle': '熟練度與材料品質',
+  'guide.professions.gatherProficiencyBody':
+    '每次成功採集都會提升你在該採集行業的熟練度。更高的熟練度會讓你從節點中獲得更稀有品級材料的機率提高，從普通往上依次遞增，不過最稀有的品級即便在高熟練度下依然稀少。多加練習永遠不會降低你的機率，只會不斷提升它。',
+  'guide.professions.gatherToolsTitle': '行業工具',
+  'guide.professions.gatherToolsBody':
+    '商人出售各採集行業的基礎工具，更好的工具則可以被製作出來，因此為節點採集做準備應當讓人感覺自己在不斷變強，而不是原地踏步。更高級的工具是解鎖更豐富節點、並在長時間遊玩中更有效率採集的既定途徑。',
+  'guide.professions.craftTitle': '十大製作行業',
+  'guide.professions.craftIntro':
+    '十種製作行業將採集到的材料轉化為成品裝備與物品：製甲、製械與珠寶加工將原材料塑形為可穿戴裝備；煉金術與工程學依靠反覆試驗；烹飪、銘文與附魔各自作用於其他行業的產出；裁縫與製皮則依照精確的圖樣進行。它們共同構成一個輪環，每種行業都與兩個鄰居相鄰，並與另一種行業相對。',
+  'guide.professions.craftRingTitle': '專精之輪',
+  'guide.professions.craftRingBody':
+    '十種行業排列在一個固定的輪環上，行業在輪環上的位置很重要：相鄰的行業彼此之間的共通之處比處於對面的行業更多。專注於一種行業應當讓人感覺像是加入了一個相關行業組成的家族，而不是選擇了一項孤立的技能。',
+  'guide.professions.craftRecipesTitle': '配方與材料',
+  'guide.professions.craftRecipesBody':
+    '每種行業都有自己的配方，各自需要你採集或購買的特定材料。每種行業中最基礎的配方只需要普通材料即可製作，從一開始就可以上手，因此你拿起一門行業後即可立刻開始製作，而無需等待解鎖。',
+  'guide.professions.craftMasteryTitle': '技能與精通',
+  'guide.professions.craftMasteryBody':
+    '成功製作會提升你在該行業的技能，而更豐富的配方需要更高的技能才能解鎖：基礎配方對所有人開放，而越進階的配方則需要越高的精通程度才能嘗試。提升你在某行業的技能，是從簡單的入門物品通往其更具野心的配方的必經之路。',
+  'guide.professions.craftComboTitle': '組合配方',
+  'guide.professions.craftComboBody':
+    '除了單一行業自身的配方列表之外，這個輪環還支援需要同時調用兩個相鄰行業的組合配方，用以獎勵那些（或是一對交易夥伴）投入了輪環上相鄰行業的角色，而非只專精孤立的一項。',
+  'guide.professions.archetypeTitle': '十大命途',
+  'guide.professions.archetypeIntro':
+    '十種行業各自也代表一種命途，一種超越單純從事該行業本身的更廣闊身分。你的當前命途一次只能有一個，而非一份清單：你只承載一個命途，但如果願意，之後可以更改。',
+  'guide.professions.archetypeChooseTitle': '選擇你的命途',
+  'guide.professions.archetypeChooseBody':
+    '你需要透過第一區域中一個正式接納你進入該身分的早期劇情任務，來宣告你的第一個命途。在完成該任務之前，你尚未選擇任何命途。',
+  'guide.professions.archetypeSwitchTitle': '回心轉意',
+  'guide.professions.archetypeSwitchBody':
+    '一旦宣告過一種命途，並不意味著你會永遠被束縛其中。改換成另一種命途，需要先為你的舊命途完成一個可重複的贖罪任務，而且每次轉換後，下一次所需的贖罪都會略微加重，因此轉換命途始終有意義，而不是毫無代價。',
+  'guide.professions.archetypeIdentityTitle': '你的命途意味著什麼',
+  'guide.professions.archetypeIdentityBody':
+    '你當前的命途，是關於你的角色在這個世界中是誰的一種宣告，會體現在他人與世界如何稱呼你之中。它所附帶的具體獎勵與認可仍在完善之中；請隨著系統的完善持續關注。',
 };
