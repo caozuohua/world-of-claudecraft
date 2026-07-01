@@ -12,6 +12,7 @@ const DEFAULT_BUDGETS_MIB = {
     'textures': 36,
     'env': 34,
     'models/chars': 18,
+    'models/biome': 4,
     'models/creatures': 4,
     'models/props': 4,
     'models/foliage': 4,
