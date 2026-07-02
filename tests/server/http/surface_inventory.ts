@@ -169,6 +169,31 @@ export const SURFACE_INVENTORY: readonly SurfaceRoute[] = [
     limiter: 'rateLimited',
     requireOwnedExpected: null,
   },
+  // Desktop-login handoff (v0.19.0, server/desktop_login.ts): a logged-in browser
+  // session mints a short-lived single-use IP-bound code (create, bearer-gated),
+  // which the Electron desktop shell trades for a session token (exchange,
+  // unauthenticated by design: the 160-bit code IS the credential). Both share
+  // the register/login per-IP rateLimited budget.
+  {
+    dispatcher: DISPATCH.mainApi,
+    method: 'POST',
+    path: '/api/desktop-login/create',
+    handler: 'handleApi arm: /api/desktop-login/create (handleDesktopLoginCreate)',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.bearer,
+    limiter: 'rateLimited',
+    requireOwnedExpected: null,
+  },
+  {
+    dispatcher: DISPATCH.mainApi,
+    method: 'POST',
+    path: '/api/desktop-login/exchange',
+    handler: 'handleApi arm: /api/desktop-login/exchange (handleDesktopLoginExchange)',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.public,
+    limiter: 'rateLimited',
+    requireOwnedExpected: null,
+  },
   {
     dispatcher: DISPATCH.mainApi,
     method: 'GET',

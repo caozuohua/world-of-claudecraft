@@ -58,6 +58,8 @@ export const API_CONTENT_TYPE: Readonly<Record<string, ContentTypeClass>> = {
   '/api/site-presence': LEGACY_OKFALSE_405,
   '/api/register': PROBLEM_JSON,
   '/api/login': PROBLEM_JSON,
+  '/api/desktop-login/create': PROBLEM_JSON,
+  '/api/desktop-login/exchange': PROBLEM_JSON,
   '/api/me/characters': PROBLEM_JSON,
   '/api/characters': PROBLEM_JSON,
   '/api/public/characters/:name/sheet': PROBLEM_JSON,

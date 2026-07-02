@@ -6,8 +6,7 @@
 // ctx.res.setHeader BEFORE calling next(), so a downstream error/429 response
 // mapped by withErrors still carries the CORS headers.
 
-import { REALM_ORIGINS } from '../../realm';
-import { NATIVE_APP_ORIGINS } from '../../web_login_guard';
+import { allowedCorsOrigin } from '../../web_login_guard';
 import type { Ctx, Middleware, Next } from '../types';
 
 /** 'api' reflects an allow-listed origin; 'public' always answers with '*'. */
@@ -18,9 +17,14 @@ const CORS_MAX_AGE = '600';
 const API_ALLOW_METHODS = 'GET, POST, DELETE, OPTIONS';
 const PUBLIC_ALLOW_METHODS = 'GET, OPTIONS';
 
-/** The default 'api' allow check: a configured realm origin or a native app shell. */
+/**
+ * The default 'api' allow check: exactly the legacy maybeCors allow-list (realm
+ * vhosts + native app shells + the Electron desktop shells), delegated to
+ * allowedCorsOrigin so the list lives in ONE place (server/web_login_guard.ts)
+ * and cannot drift from the top-level wrapper both dispatch arms share.
+ */
 function defaultApiAllow(origin: string): boolean {
-  return REALM_ORIGINS.has(origin) || NATIVE_APP_ORIGINS.has(origin);
+  return allowedCorsOrigin(origin) !== null;
 }
 
 function setCorsHeaders(ctx: Ctx, origin: string, methods: string): void {
@@ -33,9 +37,9 @@ function setCorsHeaders(ctx: Ctx, origin: string, methods: string): void {
 
 /**
  * Build the CORS middleware for `allowClass`. For 'api', the request Origin is
- * reflected only when isAllowedOrigin (default: a REALM_ORIGINS or
- * NATIVE_APP_ORIGINS member) accepts it; a disallowed or absent Origin gets no
- * Access-Control-Allow-Origin at all. For 'public', the wildcard is set
+ * reflected only when isAllowedOrigin (default: the allowedCorsOrigin
+ * realm/native/desktop allow-list) accepts it; a disallowed or absent Origin
+ * gets no Access-Control-Allow-Origin at all. For 'public', the wildcard is set
  * unconditionally, regardless of isAllowedOrigin.
  */
 export function withCors(
