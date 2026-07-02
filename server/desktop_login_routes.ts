@@ -115,7 +115,7 @@ function routeDeps(): DesktopLoginRouteDeps {
  * bounds how fast one authenticated client can grow the code store.
  */
 const desktopLoginRateGuard: Middleware = async (ctx: Ctx, next: Next) => {
-  if (rateLimited(ctx.req)) {
+  if (!rateLimited(ctx.req).allowed) {
     json(ctx.res, 429, { error: TOO_MANY_ATTEMPTS });
     return;
   }

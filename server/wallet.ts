@@ -50,7 +50,7 @@ export async function handleWalletChallenge(
   accountId: number,
 ): Promise<void> {
   recordUsageMetric('wallet.challenge.request');
-  if (walletLinkRateLimited(req, accountId)) {
+  if (!walletLinkRateLimited(req, accountId).allowed) {
     recordUsageMetric('wallet.challenge.rate_limited');
     return json(res, 429, { error: 'rate limited' });
   }
@@ -93,7 +93,7 @@ export async function handleWalletLink(
   accountId: number,
 ): Promise<void> {
   recordUsageMetric('wallet.link.request');
-  if (walletLinkRateLimited(req, accountId)) {
+  if (!walletLinkRateLimited(req, accountId).allowed) {
     recordUsageMetric('wallet.link.rate_limited');
     return json(res, 429, { error: 'rate limited' });
   }

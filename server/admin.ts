@@ -152,7 +152,7 @@ async function adminAccountId(req: http.IncomingMessage): Promise<number | null>
 }
 
 async function handleLogin(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
-  if (rateLimited(req, ADMIN_LOGIN_MAX_PER_MINUTE)) {
+  if (!rateLimited(req, ADMIN_LOGIN_MAX_PER_MINUTE).allowed) {
     return fail(res, 429, 'too many attempts, wait a minute and try again');
   }
   const body = await readBody(req);
@@ -761,7 +761,7 @@ const MODERATION_ACTION_SCHEMA = enum_(['suspend', 'unsuspend', 'ban', 'unban'] 
 
 /** POST /admin/api/login: anonymous, its own in-handler rateLimited limiter. */
 async function loginHandler(ctx: Ctx): Promise<void> {
-  if (adminDb().rateLimited(ctx.req, ADMIN_LOGIN_MAX_PER_MINUTE)) {
+  if (!adminDb().rateLimited(ctx.req, ADMIN_LOGIN_MAX_PER_MINUTE).allowed) {
     return fail(ctx.res, 429, 'too many attempts, wait a minute and try again');
   }
   const body = await readBody(ctx.req);

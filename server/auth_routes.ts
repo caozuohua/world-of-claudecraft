@@ -198,7 +198,7 @@ const webLoginGuard: Middleware = async (ctx, next) => {
 
 /** IP-keyed sliding-window rate limit, BEFORE the body is read or any DB call. */
 const ipRateLimitGuard: Middleware = async (ctx, next) => {
-  if (rateLimited(ctx.req)) {
+  if (!rateLimited(ctx.req).allowed) {
     json(ctx.res, 429, { error: TOO_MANY_ATTEMPTS });
     return;
   }
@@ -307,7 +307,7 @@ async function loginHandler(ctx: Ctx): Promise<void> {
   const username = typeof body.username === 'string' ? body.username : '';
   // Per-account brute-force throttle (#93). The message matches a bad-password
   // response so it never reveals whether the account exists.
-  if (username && authThrottled(username)) {
+  if (username && !authThrottled(username).allowed) {
     json(ctx.res, 429, { error: TOO_MANY_FAILED_ATTEMPTS });
     return;
   }

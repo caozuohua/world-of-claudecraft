@@ -500,8 +500,8 @@ describe('POST /api/auth/discord/start', () => {
       const r = await runRoute('POST', '/api/auth/discord/start', { body: {} });
       expect(r.status).toBe(503);
     }
-    // A fresh check records attempt #1 of DISCORD_MAX_PER_MINUTE: false proves empty.
-    expect(discordRateLimited(makeReq(), 7)).toBe(false);
+    // A fresh check records attempt #1 of DISCORD_MAX_PER_MINUTE: allowed proves empty.
+    expect(discordRateLimited(makeReq(), 7).allowed).toBe(true);
   });
 
   it('answers 503 (config) over 429 (drained bucket) on the new path: the rate check is deferred into the handler', async () => {

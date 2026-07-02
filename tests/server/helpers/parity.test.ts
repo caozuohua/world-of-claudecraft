@@ -64,15 +64,15 @@ describe('runParity: per-pass limiter isolation', () => {
   // A dispatcher whose response depends on the SHARED limiter: with limit 1, the
   // first hit for an IP is allowed (count 1) and the second is limited (count 2).
   const limiterDispatch: Dispatch = (req, res) => {
-    const limited = rateLimited(req, 1);
+    const limited = !rateLimited(req, 1).allowed;
     res.writeHead(200, { 'content-type': 'application/json' });
     res.end(JSON.stringify({ limited }));
   };
 
   it('two limiter hits WITHOUT a reset diverge (so isolation is what is being tested)', () => {
     resetRateLimits();
-    const first = rateLimited(makeReq({ url: '/api/x' }), 1);
-    const second = rateLimited(makeReq({ url: '/api/x' }), 1);
+    const first = !rateLimited(makeReq({ url: '/api/x' }), 1).allowed;
+    const second = !rateLimited(makeReq({ url: '/api/x' }), 1).allowed;
     expect(first).toBe(false);
     expect(second).toBe(true);
   });

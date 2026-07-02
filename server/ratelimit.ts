@@ -1,7 +1,13 @@
 import type * as http from 'node:http';
 import * as net from 'node:net';
+import type { RateLimitOutcome, RateLimitStore } from './http/types';
 
-// Simple in-memory rate limiter (per client IP, sliding minute window).
+// Simple in-memory rate limiter (per client IP, sliding minute window). Every
+// limiter reports the frozen RateLimitOutcome (server/http/types): { allowed,
+// remaining, resetSeconds }. allowed is the inverse of the old boolean return
+// (true here means the attempt is under the limit and served), remaining is the
+// attempts left in the window after this one, and resetSeconds is the whole
+// seconds until the window clears (for a Retry-After header).
 //
 // Client IP resolution must work behind the production stack: nginx on the
 // host proxies to the game CONTAINER, so connections arrive from the docker
@@ -37,6 +43,64 @@ export function setRateLimitClock(now: () => number): void {
 /** Restore the default Date.now clock (test-only). */
 export function resetRateLimitClock(): void {
   clockNow = Date.now;
+}
+
+/**
+ * The rate-limiter's current wall-clock reading. Exposed so other in-process
+ * limiters that want the same testable clock seam (e.g. perf_report.ts) can read
+ * time through setRateLimitClock instead of Date.now directly.
+ */
+export function rateLimitNow(): number {
+  return clockNow();
+}
+
+// Tier-2 (pg-backed GLOBAL) rate-limit store injection slot. The two-tier
+// resolver (server/http/middleware/rate_limit.ts) reads this getter once per
+// request AFTER its in-memory tier-1 check passes; server/main.ts wires the pg
+// store at boot via setRateLimitTier2Store. The slot lives HERE, not in the
+// middleware module, so ratelimit.ts + main.ts stay self-contained for commit
+// staging without pulling in the middleware file, and the type is imported
+// type-only (RateLimitStore) so no runtime cycle forms. Default null: tier-2 is
+// a no-op until wired, and the resolver treats a null store as tier-1-only.
+let tier2Store: RateLimitStore | null = null;
+
+/** Wire (or clear) the pg-backed tier-2 rate-limit store. main.ts calls this at boot. */
+export function setRateLimitTier2Store(store: RateLimitStore | null): void {
+  tier2Store = store;
+}
+
+/** The configured tier-2 store, or null when tier-2 is not wired (tier-1 only). */
+export function rateLimitTier2Store(): RateLimitStore | null {
+  return tier2Store;
+}
+
+// Build the outcome for a record-then-judge sliding-window limiter from the
+// updated timestamp list (already pruned to the window and with `now` pushed).
+// The list always holds at least `now`, so updated[0] is the oldest in-window
+// timestamp and the window clears once it ages out.
+function slidingWindowOutcome(
+  updated: number[],
+  maxPerMinute: number,
+  now: number,
+): RateLimitOutcome {
+  const count = updated.length;
+  return {
+    allowed: count <= maxPerMinute,
+    remaining: Math.max(0, maxPerMinute - count),
+    resetSeconds: Math.max(0, Math.ceil((updated[0] + WINDOW_MS - now) / 1000)),
+  };
+}
+
+// Merge two fused-bucket (IP AND account) outcomes into one, mirroring the old
+// `ipLimited || accountLimited` boolean OR: a fused request is allowed only if
+// BOTH buckets allow, remaining is the tighter (min) of the two, and resetSeconds
+// the longer (max) wait so a retry clears whichever bucket is more backed up.
+function mergeFusedOutcomes(ip: RateLimitOutcome, account: RateLimitOutcome): RateLimitOutcome {
+  return {
+    allowed: ip.allowed && account.allowed,
+    remaining: Math.min(ip.remaining, account.remaining),
+    resetSeconds: Math.max(ip.resetSeconds, account.resetSeconds),
+  };
 }
 
 // The strictest (lowest) limit any caller passes to rateLimited(). The `attempts`
@@ -114,7 +178,7 @@ export function requestIp(req: http.IncomingMessage): string {
   return chain[0] ?? remote;
 }
 
-export function rateLimited(req: http.IncomingMessage, maxPerMinute = 20): boolean {
+export function rateLimited(req: http.IncomingMessage, maxPerMinute = 20): RateLimitOutcome {
   const ip = requestIp(req);
   const now = clockNow();
   const windowStart = now - WINDOW_MS;
@@ -135,7 +199,7 @@ export function rateLimited(req: http.IncomingMessage, maxPerMinute = 20): boole
     // the bypass. Judge "currently limited" by the STRICTEST policy sharing this
     // map (not this call's maxPerMinute): a flood on a lenient route must not
     // evict an IP that a stricter route has already limited. count >= L+1 means
-    // a call at limit L would return true (rateLimited returns count > L). Shares
+    // a call at limit L is over its limit (its outcome.allowed is false). Shares
     // atOrOverLimit() with authThrottled() so the predicate can't drift.
     const isLimited = (times: number[]) =>
       atOrOverLimit(times, windowStart, STRICTEST_RATE_LIMIT + 1);
@@ -171,7 +235,7 @@ export function rateLimited(req: http.IncomingMessage, maxPerMinute = 20): boole
       attempts.delete(oldestKey);
     }
   }
-  return updated.length > maxPerMinute;
+  return slidingWindowOutcome(updated, maxPerMinute, now);
 }
 
 /** Number of IPs currently tracked. Exposed for the backstop-bound test. */
@@ -196,7 +260,7 @@ function recordSlidingWindowAttempt<K>(
   attemptsByKey: Map<K, number[]>,
   key: K,
   maxPerMinute: number,
-): boolean {
+): RateLimitOutcome {
   const now = clockNow();
   const windowStart = now - WINDOW_MS;
   const list = (attemptsByKey.get(key) ?? []).filter((t) => t > windowStart);
@@ -226,21 +290,24 @@ function recordSlidingWindowAttempt<K>(
     }
   }
 
-  return updated.length > maxPerMinute;
+  return slidingWindowOutcome(updated, maxPerMinute, now);
 }
 
-export function cardUploadRateLimited(req: http.IncomingMessage, accountId: number): boolean {
-  const ipLimited = recordSlidingWindowAttempt(
+export function cardUploadRateLimited(
+  req: http.IncomingMessage,
+  accountId: number,
+): RateLimitOutcome {
+  const ip = recordSlidingWindowAttempt(
     cardUploadIpAttempts,
     requestIp(req),
     CARD_UPLOAD_MAX_PER_MINUTE,
   );
-  const accountLimited = recordSlidingWindowAttempt(
+  const account = recordSlidingWindowAttempt(
     cardUploadAccountAttempts,
     accountId,
     CARD_UPLOAD_MAX_PER_MINUTE,
   );
-  return ipLimited || accountLimited;
+  return mergeFusedOutcomes(ip, account);
 }
 
 /** Reset player-card upload throttles. Test-only: keeps scoped buckets isolated. */
@@ -249,18 +316,21 @@ export function resetCardUploadRateLimits(): void {
   cardUploadAccountAttempts.clear();
 }
 
-export function walletLinkRateLimited(req: http.IncomingMessage, accountId: number): boolean {
-  const ipLimited = recordSlidingWindowAttempt(
+export function walletLinkRateLimited(
+  req: http.IncomingMessage,
+  accountId: number,
+): RateLimitOutcome {
+  const ip = recordSlidingWindowAttempt(
     walletLinkIpAttempts,
     requestIp(req),
     WALLET_LINK_MAX_PER_MINUTE,
   );
-  const accountLimited = recordSlidingWindowAttempt(
+  const account = recordSlidingWindowAttempt(
     walletLinkAccountAttempts,
     accountId,
     WALLET_LINK_MAX_PER_MINUTE,
   );
-  return ipLimited || accountLimited;
+  return mergeFusedOutcomes(ip, account);
 }
 
 /** Reset wallet-link verification throttles. Test-only: keeps scoped buckets isolated. */
@@ -277,17 +347,17 @@ export const DISCORD_MAX_PER_MINUTE = 15;
 const discordIpAttempts = new Map<string, number[]>();
 const discordAccountAttempts = new Map<number, number[]>();
 
-export function discordRateLimited(req: http.IncomingMessage, accountId: number): boolean {
-  const ipLimited = recordSlidingWindowAttempt(
-    discordIpAttempts,
-    requestIp(req),
+export function discordRateLimited(req: http.IncomingMessage, accountId: number): RateLimitOutcome {
+  const ip = recordSlidingWindowAttempt(discordIpAttempts, requestIp(req), DISCORD_MAX_PER_MINUTE);
+  // accountId 0 (unauthenticated start/callback) records IP only, so the IP
+  // outcome IS the result; a positive account fuses its own bucket in.
+  if (accountId <= 0) return ip;
+  const account = recordSlidingWindowAttempt(
+    discordAccountAttempts,
+    accountId,
     DISCORD_MAX_PER_MINUTE,
   );
-  const accountLimited =
-    accountId > 0
-      ? recordSlidingWindowAttempt(discordAccountAttempts, accountId, DISCORD_MAX_PER_MINUTE)
-      : false;
-  return ipLimited || accountLimited;
+  return mergeFusedOutcomes(ip, account);
 }
 
 /** Reset Discord throttles. Test-only: keeps scoped buckets isolated. */
@@ -303,17 +373,17 @@ export const GITHUB_MAX_PER_MINUTE = 15;
 const githubIpAttempts = new Map<string, number[]>();
 const githubAccountAttempts = new Map<number, number[]>();
 
-export function githubRateLimited(req: http.IncomingMessage, accountId: number): boolean {
-  const ipLimited = recordSlidingWindowAttempt(
-    githubIpAttempts,
-    requestIp(req),
+export function githubRateLimited(req: http.IncomingMessage, accountId: number): RateLimitOutcome {
+  const ip = recordSlidingWindowAttempt(githubIpAttempts, requestIp(req), GITHUB_MAX_PER_MINUTE);
+  // accountId 0 (unauthenticated callback) records IP only, so the IP outcome IS
+  // the result; a positive account fuses its own bucket in.
+  if (accountId <= 0) return ip;
+  const account = recordSlidingWindowAttempt(
+    githubAccountAttempts,
+    accountId,
     GITHUB_MAX_PER_MINUTE,
   );
-  const accountLimited =
-    accountId > 0
-      ? recordSlidingWindowAttempt(githubAccountAttempts, accountId, GITHUB_MAX_PER_MINUTE)
-      : false;
-  return ipLimited || accountLimited;
+  return mergeFusedOutcomes(ip, account);
 }
 
 /** Reset GitHub throttles. Test-only: keeps scoped buckets isolated. */
@@ -332,7 +402,7 @@ const wocBalanceIpAttempts = new Map<string, number[]>();
  * (each a fresh RPC read) can't burn their login budget, and a balance flood can't
  * lock them out of logging in (or vice-versa).
  */
-export function wocBalanceRateLimited(req: http.IncomingMessage): boolean {
+export function wocBalanceRateLimited(req: http.IncomingMessage): RateLimitOutcome {
   return recordSlidingWindowAttempt(
     wocBalanceIpAttempts,
     requestIp(req),
@@ -353,7 +423,7 @@ export function resetWocBalanceRateLimits(): void {
 export const PUBLIC_READ_MAX_PER_MINUTE = 60;
 const publicReadIpAttempts = new Map<string, number[]>();
 
-export function publicReadRateLimited(req: http.IncomingMessage): boolean {
+export function publicReadRateLimited(req: http.IncomingMessage): RateLimitOutcome {
   return recordSlidingWindowAttempt(
     publicReadIpAttempts,
     requestIp(req),
@@ -390,18 +460,18 @@ export function characterMutationRateLimited(
   req: http.IncomingMessage,
   accountId: number,
   action: CharacterMutationAction,
-): boolean {
-  const ipLimited = recordSlidingWindowAttempt(
+): RateLimitOutcome {
+  const ip = recordSlidingWindowAttempt(
     characterMutationIpAttempts,
     `${action}:${requestIp(req)}`,
     CHARACTER_MUTATION_MAX_PER_MINUTE,
   );
-  const accountLimited = recordSlidingWindowAttempt(
+  const account = recordSlidingWindowAttempt(
     characterMutationAccountAttempts,
     `${action}:${accountId}`,
     CHARACTER_MUTATION_MAX_PER_MINUTE,
   );
-  return ipLimited || accountLimited;
+  return mergeFusedOutcomes(ip, account);
 }
 
 /** Reset character-mutation throttles. Test-only: keeps scoped buckets isolated. */
@@ -421,18 +491,21 @@ export const REPORTS_CREATE_MAX_PER_MINUTE = 10;
 const reportsCreateIpAttempts = new Map<string, number[]>();
 const reportsCreateAccountAttempts = new Map<number, number[]>();
 
-export function reportsCreateRateLimited(req: http.IncomingMessage, accountId: number): boolean {
-  const ipLimited = recordSlidingWindowAttempt(
+export function reportsCreateRateLimited(
+  req: http.IncomingMessage,
+  accountId: number,
+): RateLimitOutcome {
+  const ip = recordSlidingWindowAttempt(
     reportsCreateIpAttempts,
     requestIp(req),
     REPORTS_CREATE_MAX_PER_MINUTE,
   );
-  const accountLimited = recordSlidingWindowAttempt(
+  const account = recordSlidingWindowAttempt(
     reportsCreateAccountAttempts,
     accountId,
     REPORTS_CREATE_MAX_PER_MINUTE,
   );
-  return ipLimited || accountLimited;
+  return mergeFusedOutcomes(ip, account);
 }
 
 /** Reset report-creation throttles. Test-only: keeps scoped buckets isolated. */
@@ -475,14 +548,27 @@ function isThrottled(times: number[], windowStart: number): boolean {
   return atOrOverLimit(times, windowStart, MAX_AUTH_FAILURES);
 }
 
-/** True once an account has hit the failed-attempt ceiling within the window. */
-export function authThrottled(username: string): boolean {
+/**
+ * The failed-login outcome for an account. READ-ONLY: it prunes stale failures
+ * but records NONE (only recordAuthFailure does). allowed is false once the
+ * account has hit the failed-attempt ceiling within the window; remaining counts
+ * the attempts left before the lockout, and resetSeconds is the wait until the
+ * oldest failure ages out (0 when there are no failures in the window).
+ */
+export function authThrottled(username: string): RateLimitOutcome {
   const key = authKey(username);
-  const windowStart = clockNow() - AUTH_FAIL_WINDOW_MS;
+  const now = clockNow();
+  const windowStart = now - AUTH_FAIL_WINDOW_MS;
   const recent = (authFailures.get(key) ?? []).filter((t) => t > windowStart);
   if (recent.length > 0) authFailures.set(key, recent);
   else authFailures.delete(key);
-  return isThrottled(recent, windowStart);
+  const count = recent.length;
+  return {
+    allowed: count < MAX_AUTH_FAILURES,
+    remaining: Math.max(0, MAX_AUTH_FAILURES - count),
+    resetSeconds:
+      count > 0 ? Math.max(0, Math.ceil((recent[0] + AUTH_FAIL_WINDOW_MS - now) / 1000)) : 0,
+  };
 }
 
 /** Record a failed login for an account (call on bad password / unknown user). */

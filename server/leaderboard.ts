@@ -518,7 +518,7 @@ async function perfHandler(ctx: Ctx): Promise<void> {
  * load; the 429 stays the legacy { error: 'rate limited' } body shape.
  */
 async function searchHandler(ctx: Ctx): Promise<void> {
-  if (publicReadRateLimited(ctx.req)) {
+  if (!publicReadRateLimited(ctx.req).allowed) {
     json(ctx.res, 429, { error: 'rate limited' });
     return;
   }
@@ -545,7 +545,7 @@ async function realmsHandler(ctx: Ctx): Promise<void> {
  * body shape unchanged, which the phase's rate-limit invariant requires.
  */
 async function publicSheetHandler(ctx: Ctx): Promise<void> {
-  if (publicReadRateLimited(ctx.req)) {
+  if (!publicReadRateLimited(ctx.req).allowed) {
     json(ctx.res, 429, { error: 'rate limited' });
     return;
   }

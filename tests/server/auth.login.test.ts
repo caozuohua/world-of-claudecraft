@@ -148,7 +148,7 @@ describe('login: per-account throttle', () => {
     setAuthDbForTests({ findAccount });
     // Trip the throttle by recording MAX_AUTH_FAILURES failures for the username.
     for (let i = 0; i < MAX_AUTH_FAILURES; i++) recordAuthFailure(USERNAME);
-    expect(authThrottled(USERNAME)).toBe(true);
+    expect(authThrottled(USERNAME).allowed).toBe(false);
 
     const res = await login({ username: USERNAME, password: CORRECT_PASSWORD });
     expect(res.status).toBe(429);
@@ -162,10 +162,10 @@ describe('login: per-account throttle', () => {
   it('clears the throttle after resetAuthFailures so a login is no longer 429', async () => {
     setAuthDbForTests({ findAccount: async () => null });
     for (let i = 0; i < MAX_AUTH_FAILURES; i++) recordAuthFailure(USERNAME);
-    expect(authThrottled(USERNAME)).toBe(true);
+    expect(authThrottled(USERNAME).allowed).toBe(false);
 
     resetAuthFailures();
-    expect(authThrottled(USERNAME)).toBe(false);
+    expect(authThrottled(USERNAME).allowed).toBe(true);
     // No longer throttled: a bad-credential login now falls through to the 401.
     const res = await login({ username: USERNAME, password: 'anything' });
     expect(res.status).toBe(401);

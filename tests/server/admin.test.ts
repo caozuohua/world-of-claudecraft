@@ -312,7 +312,7 @@ describe('POST /admin/api/login', () => {
 
   it('401s bad credentials db-free when the username is absent (anti-enumeration)', async () => {
     const findAccount = vi.fn(async () => null);
-    setDb({ findAccount, rateLimited: () => false });
+    setDb({ findAccount, rateLimited: () => ({ allowed: true, remaining: 1, resetSeconds: 0 }) });
     const r = await runRoute('POST', '/admin/api/login', { body: {} });
     expect(r.status).toBe(401);
     expect(r.body).toEqual({ success: false, data: null, error: 'invalid username or password' });
@@ -322,7 +322,7 @@ describe('POST /admin/api/login', () => {
 
   it('403s a valid non-admin account (no admin access)', async () => {
     setDb({
-      rateLimited: () => false,
+      rateLimited: () => ({ allowed: true, remaining: 1, resetSeconds: 0 }),
       findAccount: async () => ({ id: 9, username: 'bob', password_hash: 'h' }) as never,
       verifyPassword: async () => true,
       isAdminAccount: async () => false,
@@ -340,7 +340,7 @@ describe('POST /admin/api/login', () => {
 
   it('200s a valid admin login with the token + username', async () => {
     setDb({
-      rateLimited: () => false,
+      rateLimited: () => ({ allowed: true, remaining: 1, resetSeconds: 0 }),
       findAccount: async () => ({ id: 9, username: 'bob', password_hash: 'h' }) as never,
       verifyPassword: async () => true,
       isAdminAccount: async () => true,
@@ -1444,7 +1444,7 @@ describe('remaining legacy guard negatives (re-verification audit)', () => {
   it('login 401s a wrong password for an EXISTING account (verifyPassword negative)', async () => {
     const verifyPassword = vi.fn(async () => false);
     setDb({
-      rateLimited: () => false,
+      rateLimited: () => ({ allowed: true, remaining: 1, resetSeconds: 0 }),
       findAccount: async () => ({ id: 9, username: 'bob', password_hash: 'h' }) as never,
       verifyPassword,
       isAdminAccount: async () => true,

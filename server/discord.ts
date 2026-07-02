@@ -196,7 +196,7 @@ export async function handleDiscordStart(
   note('discord.start.request');
   const cfg = discordConfig();
   if (!cfg) return json(res, 503, { error: 'Discord integration is not configured' });
-  if (discordRateLimited(req, opts.accountId ?? 0)) {
+  if (!discordRateLimited(req, opts.accountId ?? 0).allowed) {
     note('discord.start.rate_limited');
     return json(res, 429, { error: 'rate limited' });
   }
@@ -377,7 +377,7 @@ export async function handleDiscordLoginNew(
   res: http.ServerResponse,
   isIpBlocked: (ip: string) => boolean,
 ): Promise<void> {
-  if (discordRateLimited(req, 0)) return json(res, 429, { error: 'rate limited' });
+  if (!discordRateLimited(req, 0).allowed) return json(res, 429, { error: 'rate limited' });
   // A blocked IP must not mint a fresh account + session through Discord, exactly as
   // /api/register and /api/login refuse one. Reuse the rate-limit response so the block
   // stays invisible (matches the throttle bucket above; the client already localizes it).
@@ -444,7 +444,7 @@ export async function handleDiscordLoginLink(
   res: http.ServerResponse,
   isIpBlocked: (ip: string) => boolean,
 ): Promise<void> {
-  if (discordRateLimited(req, 0)) return json(res, 429, { error: 'rate limited' });
+  if (!discordRateLimited(req, 0).allowed) return json(res, 429, { error: 'rate limited' });
   // A blocked IP must not log into (and link Discord onto) an account through this
   // unauthenticated path either, mirroring the /api/login IP gate. Same opaque 429.
   if (isIpBlocked(requestIp(req))) return json(res, 429, { error: 'rate limited' });
@@ -455,7 +455,7 @@ export async function handleDiscordLoginLink(
   const username = typeof body.username === 'string' ? body.username : '';
   // Per-account brute-force throttle, message identical to a bad password so it
   // never reveals whether the account exists (mirrors /api/login).
-  if (username && authThrottled(username)) {
+  if (username && !authThrottled(username).allowed) {
     return json(res, 429, { error: 'too many failed attempts, wait a few minutes and try again' });
   }
   const account = username ? await findAccount(username) : null;
@@ -748,7 +748,7 @@ export async function handleSwagClaim(
   grantCosmetic: (chromaId: string) => void,
 ): Promise<void> {
   note('discord.swag.claim.request');
-  if (discordRateLimited(req, accountId)) {
+  if (!discordRateLimited(req, accountId).allowed) {
     note('discord.swag.claim.rate_limited');
     return json(res, 429, { error: 'rate limited' });
   }
@@ -1038,7 +1038,7 @@ async function resolveActiveAccount(ctx: Ctx): Promise<number | null> {
  * mounted here (handleSwagClaim self-limits with the same call).
  */
 const discordActiveRateGuard: Middleware = async (ctx: Ctx, next: Next) => {
-  if (discordRateLimited(ctx.req, ctxAccountId(ctx))) {
+  if (!discordRateLimited(ctx.req, ctxAccountId(ctx)).allowed) {
     json(ctx.res, 429, { error: 'rate limited' });
     return;
   }

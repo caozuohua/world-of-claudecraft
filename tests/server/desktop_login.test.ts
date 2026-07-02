@@ -166,13 +166,13 @@ async function runRoute(
 
 /**
  * Exhaust the shared per-IP register/login/desktop-login bucket for 127.0.0.1. The cap
- * is 20/min and rateLimited returns true only OVER the cap, so 21 recorded attempts
- * leave it tripped. makeReq()'s socket is 127.0.0.1, the same IP fakeCtx assigns by
- * default, so the route's own rateLimited(ctx.req) call reads the same bucket.
+ * is 20/min and rateLimited reports allowed=false only OVER the cap, so 21 recorded
+ * attempts leave it tripped. makeReq()'s socket is 127.0.0.1, the same IP fakeCtx assigns
+ * by default, so the route's own rateLimited(ctx.req) call reads the same bucket.
  */
 function drainDefaultIpBucket(): void {
   let limited = false;
-  for (let i = 0; i < 21; i++) limited = rateLimited(makeReq());
+  for (let i = 0; i < 21; i++) limited = !rateLimited(makeReq()).allowed;
   if (!limited) throw new Error('expected the shared per-IP bucket to be exhausted');
 }
 

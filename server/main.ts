@@ -156,8 +156,10 @@ import {
   rateLimited,
   recordAuthFailure,
   requestIp,
+  setRateLimitTier2Store,
   wocBalanceRateLimited,
 } from './ratelimit';
+import { createPgRateLimitStore } from './ratelimit_db';
 import { isPublicCorsPath, publicOriginFromRequest, REALM, REALM_DIRECTORY } from './realm';
 import { resolveReportTarget } from './report_target';
 import { configureReportsRuntime } from './reports';
@@ -679,7 +681,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         url === '/api/login' ||
         url === '/api/desktop-login/create' ||
         url === '/api/desktop-login/exchange') &&
-      rateLimited(req)
+      !rateLimited(req).allowed
     ) {
       return json(res, 429, { error: 'too many attempts, wait a minute and try again' });
     }
@@ -754,7 +756,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       const username = typeof body.username === 'string' ? body.username : '';
       // Per-account brute-force throttle (#93). The message is identical to a
       // bad-password response so it never reveals whether the account exists.
-      if (username && authThrottled(username)) {
+      if (username && !authThrottled(username).allowed) {
         return json(res, 429, {
           error: 'too many failed attempts, wait a few minutes and try again',
         });
@@ -891,7 +893,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
     // come before generic /api routes; it never touches a bearer token.
     const publicSheetMatch = /^\/api\/public\/characters\/(.+)\/sheet$/.exec(url);
     if (req.method === 'GET' && publicSheetMatch) {
-      if (publicReadRateLimited(req)) return json(res, 429, { error: 'rate limited' });
+      if (!publicReadRateLimited(req).allowed) return json(res, 429, { error: 'rate limited' });
       const rawName = decodeURIComponent(publicSheetMatch[1]);
       const target = await findCharacterReportTargetByName(rawName);
       if (!target) return json(res, 404, { error: 'character not found' });
@@ -1387,7 +1389,8 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
         accountId = await bearerActiveAccount(req, res);
         if (accountId === null) return;
       }
-      if (discordRateLimited(req, accountId ?? 0)) return json(res, 429, { error: 'rate limited' });
+      if (!discordRateLimited(req, accountId ?? 0).allowed)
+        return json(res, 429, { error: 'rate limited' });
       return handleDiscordStart(req, res, { mode, accountId });
     }
     if (req.method === 'GET' && url === '/api/auth/discord/callback') {
@@ -1406,13 +1409,15 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
     if (req.method === 'GET' && url === '/api/discord') {
       const accountId = await bearerActiveAccount(req, res);
       if (accountId === null) return;
-      if (discordRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
+      if (!discordRateLimited(req, accountId).allowed)
+        return json(res, 429, { error: 'rate limited' });
       return handleDiscordStatus(req, res, accountId);
     }
     if (req.method === 'DELETE' && url === '/api/discord') {
       const accountId = await bearerActiveAccount(req, res);
       if (accountId === null) return;
-      if (discordRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
+      if (!discordRateLimited(req, accountId).allowed)
+        return json(res, 429, { error: 'rate limited' });
       return handleDiscordUnlink(req, res, accountId);
     }
     // GitHub OAuth link (developer badge). Link-only: the start leg resolves the
@@ -1422,7 +1427,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
     if (req.method === 'POST' && url === '/api/auth/github/start') {
       const accountId = await bearerActiveAccount(req, res);
       if (accountId === null) return;
-      if (githubRateLimited(req, accountId)) {
+      if (!githubRateLimited(req, accountId).allowed) {
         recordUsageMetric('github.link.rate_limited');
         return json(res, 429, { error: 'rate limited' });
       }
@@ -1434,20 +1439,22 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
     if (req.method === 'GET' && url === '/api/github') {
       const accountId = await bearerActiveAccount(req, res);
       if (accountId === null) return;
-      if (githubRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
+      if (!githubRateLimited(req, accountId).allowed)
+        return json(res, 429, { error: 'rate limited' });
       return handleGitHubStatus(req, res, accountId);
     }
     if (req.method === 'DELETE' && url === '/api/github') {
       const accountId = await bearerActiveAccount(req, res);
       if (accountId === null) return;
-      if (githubRateLimited(req, accountId)) return json(res, 429, { error: 'rate limited' });
+      if (!githubRateLimited(req, accountId).allowed)
+        return json(res, 429, { error: 'rate limited' });
       return handleGitHubUnlink(req, res, accountId);
     }
     // $WOC balance proxy, keeps the Solana RPC endpoint (and any key in it)
     // server-side so it never ships in the client bundle. Public (on-chain
     // balances are public) but narrow + IP rate-limited + per-wallet cached.
     if (req.method === 'GET' && url === '/api/woc/balance') {
-      if (wocBalanceRateLimited(req)) {
+      if (!wocBalanceRateLimited(req).allowed) {
         recordUsageMetric('woc.balance.rate_limited');
         return json(res, 429, { error: 'rate limited' });
       }
@@ -1471,7 +1478,7 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       }
       const accountId = await bearerActiveAccount(req, res);
       if (accountId === null) return;
-      if (cardUploadRateLimited(req, accountId)) {
+      if (!cardUploadRateLimited(req, accountId).allowed) {
         recordUsageMetric('card.publish.rate_limited');
         return json(res, 429, { error: 'rate limited' });
       }
@@ -1606,6 +1613,16 @@ configureAdminRuntime(game);
 // game satisfies it directly). The legacy handleInternalApi ladder stays intact as
 // the flag-off rollback path (and is the internal dispatcher's delegate).
 configureInternalRuntime(game);
+
+// Wire the pg-backed GLOBAL tier-2 rate-limit store (server/ratelimit_db.ts) into
+// the two-tier resolver (server/http/middleware/rate_limit.ts). Unconditional: the
+// authoritative server always has Postgres, and RATELIMIT_SCHEMA is created by
+// ensureSchema during boot (before listen), so the rate_limits table exists by the
+// time any request records a tier-2 hit. This only registers the store reference;
+// it opens no connection here (createPgRateLimitStore just wraps the shared pool),
+// so a bare import of main stays inert. Tier-2 fails open, so a pg outage degrades
+// to tier-1-only limiting rather than failing requests.
+setRateLimitTier2Store(createPgRateLimitStore({ pool }));
 
 // The in-house dispatcher that fronts the legacy handleApi ladder via a per-path
 // delegate. Built once; a path the registry owns (Phase 10 migrated the public

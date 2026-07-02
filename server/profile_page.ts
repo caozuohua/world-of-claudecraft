@@ -55,7 +55,7 @@ export async function handleProfilePage(
   res: http.ServerResponse,
 ): Promise<void> {
   try {
-    if (publicReadRateLimited(req)) {
+    if (!publicReadRateLimited(req).allowed) {
       res.writeHead(429, { 'Content-Type': 'text/plain' });
       res.end('rate limited');
       return;

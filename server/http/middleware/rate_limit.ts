@@ -56,28 +56,28 @@ const RETRY_AFTER_SECONDS = WINDOW_MS / 1000;
 export const PUBLIC_READ_POLICY: RateLimitPolicy = {
   name: 'public_read',
   keyClass: 'ip',
-  limited: (ctx) => publicReadRateLimited(ctx.req),
+  limited: (ctx) => !publicReadRateLimited(ctx.req).allowed,
   retryAfterSeconds: RETRY_AFTER_SECONDS,
 };
 
 export const WOC_BALANCE_POLICY: RateLimitPolicy = {
   name: 'woc_balance',
   keyClass: 'ip',
-  limited: (ctx) => wocBalanceRateLimited(ctx.req),
+  limited: (ctx) => !wocBalanceRateLimited(ctx.req).allowed,
   retryAfterSeconds: RETRY_AFTER_SECONDS,
 };
 
 export const CARD_UPLOAD_POLICY: RateLimitPolicy = {
   name: 'card_upload',
   keyClass: 'ip+account',
-  limited: (ctx) => cardUploadRateLimited(ctx.req, ctxAccountId(ctx)),
+  limited: (ctx) => !cardUploadRateLimited(ctx.req, ctxAccountId(ctx)).allowed,
   retryAfterSeconds: RETRY_AFTER_SECONDS,
 };
 
 export const WALLET_LINK_POLICY: RateLimitPolicy = {
   name: 'wallet_link',
   keyClass: 'ip+account',
-  limited: (ctx) => walletLinkRateLimited(ctx.req, ctxAccountId(ctx)),
+  limited: (ctx) => !walletLinkRateLimited(ctx.req, ctxAccountId(ctx)).allowed,
   retryAfterSeconds: RETRY_AFTER_SECONDS,
 };
 
@@ -94,7 +94,7 @@ function characterMutationPolicy(name: string, action: CharacterMutationAction):
   return {
     name,
     keyClass: 'ip+account',
-    limited: (ctx) => characterMutationRateLimited(ctx.req, ctxAccountId(ctx), action),
+    limited: (ctx) => !characterMutationRateLimited(ctx.req, ctxAccountId(ctx), action).allowed,
     retryAfterSeconds: RETRY_AFTER_SECONDS,
   };
 }
@@ -125,7 +125,7 @@ export const CHARACTER_TAKEOVER_POLICY: RateLimitPolicy = characterMutationPolic
 export const REPORTS_CREATE_POLICY: RateLimitPolicy = {
   name: 'reports_create',
   keyClass: 'ip+account',
-  limited: (ctx) => reportsCreateRateLimited(ctx.req, ctxAccountId(ctx)),
+  limited: (ctx) => !reportsCreateRateLimited(ctx.req, ctxAccountId(ctx)).allowed,
   retryAfterSeconds: RETRY_AFTER_SECONDS,
 };
 
@@ -137,6 +137,6 @@ export const REPORTS_CREATE_POLICY: RateLimitPolicy = {
 export const DISCORD_POLICY: RateLimitPolicy = {
   name: 'discord',
   keyClass: 'ip+account',
-  limited: (ctx) => discordRateLimited(ctx.req, ctxAccountId(ctx)),
+  limited: (ctx) => !discordRateLimited(ctx.req, ctxAccountId(ctx)).allowed,
   retryAfterSeconds: RETRY_AFTER_SECONDS,
 };

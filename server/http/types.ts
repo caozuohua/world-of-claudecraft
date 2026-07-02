@@ -205,10 +205,9 @@ export interface RouteDef {
 }
 
 /**
- * The outcome of recording one rate-limit attempt. This is the { remaining,
- * resetSeconds } shape the eventual Phase 19 PgRateLimitStore and the Phase 2
- * in-memory FakeRateLimitStore both speak. It is NOT the shape of the existing
- * ratelimit.ts boolean functions (those stay boolean until Phase 19).
+ * The outcome of recording one rate-limit attempt. This is the shape the Phase
+ * 19 PgRateLimitStore, the Phase 2 in-memory FakeRateLimitStore, and (since
+ * Phase 19) every ratelimit.ts limiter all speak.
  */
 export interface RateLimitOutcome {
   /** true if the attempt is under the limit and allowed. */

@@ -101,7 +101,7 @@ export async function handleGitHubCallback(
   // authenticated request), so key the bucket on IP alone, mirroring how the
   // Discord first-time-login chooser endpoints rate-limit their own
   // also-unauthenticated entry points (handleDiscordLoginNew/handleDiscordLoginLink).
-  if (githubRateLimited(req, 0)) {
+  if (!githubRateLimited(req, 0).allowed) {
     recordUsageMetric('github.link.rate_limited');
     return bouncePage(res, 429, { ok: false, error: 'rate_limited' });
   }
@@ -338,7 +338,7 @@ const activeGuard = createActiveGuard(() => githubDb());
  * AFTER the auth guard, exactly like the legacy arm (auth first, then limit).
  */
 const githubStartRateGuard: Middleware = async (ctx: Ctx, next: Next) => {
-  if (githubRateLimited(ctx.req, ctxAccountId(ctx))) {
+  if (!githubRateLimited(ctx.req, ctxAccountId(ctx)).allowed) {
     recordUsageMetric('github.link.rate_limited');
     json(ctx.res, 429, { error: 'rate limited' });
     return;
@@ -348,7 +348,7 @@ const githubStartRateGuard: Middleware = async (ctx: Ctx, next: Next) => {
 
 /** status/unlink's plain rate guard (no usage metric), after the auth guard. */
 const githubActiveRateGuard: Middleware = async (ctx: Ctx, next: Next) => {
-  if (githubRateLimited(ctx.req, ctxAccountId(ctx))) {
+  if (!githubRateLimited(ctx.req, ctxAccountId(ctx)).allowed) {
     json(ctx.res, 429, { error: 'rate limited' });
     return;
   }
