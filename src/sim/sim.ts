@@ -134,11 +134,14 @@ import { canEquipItem } from './equipment_rules';
 import { fleeSpeed } from './flee_speed';
 import { formatMoney } from './format_money';
 import * as interaction from './interaction';
+import { meetsLevelRequirement } from './item_level_req';
 import * as items from './items';
 import {
+  type DevLeaderboardPage,
   type GuildLeaderboardPage,
   LEADERBOARD_PAGE_SIZE,
   type LeaderboardPage,
+  paginateDevLeaderboard,
   paginateGuildLeaderboard,
   paginateLeaderboard,
 } from './leaderboard_page';
@@ -157,6 +160,7 @@ import {
   submitLootRoll as submitLootRollImpl,
 } from './loot/loot_roll';
 import { Market, type MarketListing, type MarketSave } from './market';
+import { defaultMarketQuery, type MarketQuery } from './market_query';
 import * as lifecycle from './mob/lifecycle';
 import { resetEvadingMob as resetEvadingMobFn, updateMob as updateMobFn } from './mob/locomotion';
 import { runMobSwingAffixes } from './mob/mob_swing';
@@ -732,6 +736,11 @@ export interface PlayerMeta {
   // value per craft on the ten-craft ring (see professions/wheel.ts). Persisted
   // in CharacterState.
   craftSkills: Record<string, number>;
+  // Session-only World Market browse query: the search string, the type / subtype /
+  // rarity filters, and the page index. The server filters + paginates against this,
+  // so the player can page through and filter the WHOLE market a window at a time.
+  // Never persisted — resets on login.
+  marketQuery: MarketQuery;
   // Delve meta progression (persisted in CharacterState).
   delveMarks: number;
   delveClears: Record<string, number>;
@@ -981,7 +990,7 @@ export class Sim {
       const safe = this.findSafePos(npcDef.pos.x, npcDef.pos.z, WATER_LEVEL + 0.6);
       const npc = createNpc(this.nextId++, npcDef, this.groundPos(safe.x, safe.z));
       this.addEntity(npc);
-      if (npcDef.market) this.market.merchantId = npc.id; // the World Market is anchored here
+      if (npcDef.market) this.market.merchantIds.push(npc.id); // every auctioneer anchors the shared World Market
     }
     this.market.seed();
 
@@ -1240,6 +1249,7 @@ export class Sim {
       away: null,
       marketFilter: '',
       craftSkills: emptyCraftSkills(),
+      marketQuery: defaultMarketQuery(),
       delveMarks: 0,
       delveClears: {},
       companionUpgrades: {},
@@ -1707,6 +1717,12 @@ export class Sim {
   // state. Online play overrides this with the cached, realm-scoped server query.
   guildLeaderboard(page = 0, pageSize = LEADERBOARD_PAGE_SIZE): Promise<GuildLeaderboardPage> {
     return Promise.resolve(paginateGuildLeaderboard([], page, pageSize));
+  }
+  // The developer board is sourced from GitHub's contributor stats, which the
+  // offline world cannot fetch, so it ranks none: an empty page through the same
+  // helper. Online play overrides this with the cached server query.
+  devLeaderboard(page = 0, pageSize = LEADERBOARD_PAGE_SIZE): Promise<DevLeaderboardPage> {
+    return Promise.resolve(paginateDevLeaderboard([], page, pageSize));
   }
   get known(): ResolvedAbility[] {
     return this.primary.known;
@@ -4469,6 +4485,11 @@ export class Sim {
     const def = ITEMS[itemId];
     if (!def?.slot) return;
     if (!canEquipItem(meta.cls, def)) return;
+    // Skip silently (no error toast) if the piece is gated above the player's
+    // level: auto-equip is a convenience, the explicit equip path is where the
+    // "must be level N" message belongs.
+    const e = this.entities.get(meta.entityId);
+    if (e && !meetsLevelRequirement(e.level, def)) return;
     if (def.kind === 'weapon') {
       const cur = meta.equipment.mainhand ? ITEMS[meta.equipment.mainhand]?.weapon : null;
       const next = def.weapon;
@@ -5238,7 +5259,7 @@ export class Sim {
     return this.market.rekeyMarketSeller(characterId, oldName, newName);
   }
 
-  marketSearch(query: string, pid?: number): void {
+  marketSearch(query: MarketQuery, pid?: number): void {
     this.market.marketSearch(query, pid);
   }
 

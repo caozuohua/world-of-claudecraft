@@ -274,11 +274,16 @@ export const da_DK: EnTranslations = {
       "tabsLabel": "Pointtavler",
       "tabPlayers": "Spillere",
       "tabGuilds": "Guilds",
+      "tabDevs": "Udviklere",
       "guildName": "Guild",
       "members": "Medlemmer",
       "topLevel": "Top",
       "guildXp": "Samlet XP",
-      "guildEmpty": "Ingen rangerede guilds endnu."
+      "guildEmpty": "Ingen rangerede guilds endnu.",
+      "devName": "Bidragyder",
+      "devTierCol": "Mærke",
+      "mergedPrs": "Flettede PR'er",
+      "devEmpty": "Ingen rangerede bidragydere endnu."
     },
     "raidLockout": {
       "title": "Raidlåse",
@@ -331,9 +336,10 @@ export const da_DK: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Holder musemarkøren inde i vinduet, mens du trækker for at dreje kameraet, så den ikke kan nå skærmkanten eller flytte til en anden skærm. Slå fra, hvis du foretrækker en fri markør.",
       "showWalletOnCharacterScreen": "Vis pengepung på karakterskærm",
       "showWalletOnPlayerCard": "Vis pengepung på spillerkort",
+      "showDevBadges": "Vis udviklermærker",
       "uiScale": "UI-skala",
       "highContrastBackground": "Baggrund med høj kontrast",
-      "startAttackOnAbility": "Auto-Attack on Ability Use",
+      "startAttackOnAbility": "Autoangreb ved brug af evne",
       "showItemLevel": "Vis genstandsniveau",
       "itemLevelLine": "Genstandsniveau {level}",
       "itemScoreLine": "Score {score}",
@@ -430,6 +436,9 @@ export const da_DK: EnTranslations = {
     },
     "statInfo": {
       "fromYour": "Fra din {value} {stat}:",
+      "names": {
+        "spellPower": "Besværgelseskraft"
+      },
       "desc": {
         "str": "Øger din angrebsstyrke, så dine våbenslag rammer hårdere.",
         "agi": "Skærper dine reflekser og dit sigte og forbedrer flere af dine kampegenskaber.",
@@ -438,6 +447,7 @@ export const da_DK: EnTranslations = {
         "spi": "Fremskynder hvor hurtigt en troldkasters mana vender tilbage under hvile, uden for kamp.",
         "armor": "Dæmper indkommende fysiske slag. Reduktionen er større mod angribere af lavere niveau og er begrænset til 75%.",
         "attackPower": "Driver dine våbenangreb. For hver 14 angrebsstyrke tilføjes 1 skade pr. sekund.",
+        "spellPower": "Øger skaden fra dine besværgelser og styrken af dine helbredelser. Hvert point Intellekt giver en smule Besværgelseskraft, oven i det, der kommer fra udstyr eller buffs.",
         "dps": "Din anslåede våbenskade pr. sekund, der kombinerer dit våbens skade og hastighed med din angrebsstyrke.",
         "critChance": "Din chance for at et angreb rammer kritisk og gør dobbelt skade.",
         "dodge": "Din chance for helt at undgå et indkommende nærkampsangreb og tage ingen skade."
@@ -460,6 +470,15 @@ export const da_DK: EnTranslations = {
         "minorForClass": "Af ringe gavn for din klasse.",
         "baseChance": "Inkluderer en 5% basischance, som deles af alle eventyrere.",
         "dpsApprox": "Et skøn, det udelader kritiske slag og evneskade."
+      },
+      "sources": {
+        "header": "Sammensat af:",
+        "base": "Basis: {value}",
+        "attributes": "Fra dine attributter: {value}",
+        "fromAttribute": "Fra {stat}: {value}",
+        "gear": "Udstyret grej: {value}",
+        "buff": "{name}: {value}",
+        "talents": "Talenter og effekter: {value}"
       }
     },
     "talents": {
@@ -485,7 +504,7 @@ export const da_DK: EnTranslations = {
       "linkTitle": "Shift-klik for at linke denne opgave i chatten."
     },
     "itemShare": {
-      "linkHint": "Shift-click to link this item in chat."
+      "linkHint": "Shift-klik for at linke denne genstand i chatten."
     },
     "plurals": {
       "guildMembers": {
@@ -513,10 +532,10 @@ export const da_DK: EnTranslations = {
         "other": "Hvem: {count} spillere online på {realm}."
       },
       "playersMatching": {
-        "one": "Who: {count} player matching \"{query}\" on {realm}.",
-        "few": "Who: {count} players matching \"{query}\" on {realm}.",
-        "many": "Who: {count} players matching \"{query}\" on {realm}.",
-        "other": "Who: {count} players matching \"{query}\" on {realm}."
+        "one": "Hvem: {count} spiller, der matcher \"{query}\" på {realm}.",
+        "few": "Hvem: {count} spillere, der matcher \"{query}\" på {realm}.",
+        "many": "Hvem: {count} spillere, der matcher \"{query}\" på {realm}.",
+        "other": "Hvem: {count} spillere, der matcher \"{query}\" på {realm}."
       }
     },
     "bugReport": {
@@ -635,10 +654,26 @@ export const da_DK: EnTranslations = {
       "methodGroup": "Lootmetode sat til gruppeloot.",
       "assigned": "{looter} tildelte {item} til {target}.",
       "unassigned": "{item} blev ikke tildelt og er frit for alle.",
-      "leaderOnly": "Kun gruppelederen kan aendre lootmetoden."
+      "leaderOnly": "Kun gruppelederen kan aendre lootmetoden.",
+      "rollingFor": "Slår terning om {item}.",
+      "looterChanged": "Bytteleder er nu {name}.",
+      "thresholdSet": "Byttetærskel sat til {threshold}.",
+      "summaryMaster": "Bytteindstillinger: Mesterbytte, bytteleder {name}, tærskel {threshold}.",
+      "summaryGroup": "Bytteindstillinger: Gruppebytte."
     },
     "party": {
-      "promoteLeader": "Promote to Leader"
+      "promoteLeader": "Forfrem til leder"
+    },
+    "lootSettings": {
+      "title": "Bytteindstillinger",
+      "close": "Luk byttindstillinger",
+      "menuItem": "Bytteindstillinger",
+      "method": "Byttemetode",
+      "rollThreshold": "Terningtærskel",
+      "groupLoot": "Gruppebytte",
+      "valueMaster": "Mesterbytte",
+      "leaderOption": "Bytteleder: Leder (dig)",
+      "masterOption": "Bytteleder: {name}"
     },
     "bags": {
       "filterGroupAria": "Filtrér tasker efter kategori",
@@ -746,6 +781,9 @@ export const da_DK: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "itemTooltip": {
+      "requiresLevel": "Kræver niveau {level}"
     },
     "discord": {
       "title": "Discord",
@@ -901,6 +939,34 @@ export const da_DK: EnTranslations = {
       "craftedToast": "Crafted: {name}",
       "insufficientMaterials": "You do not have the materials for that.",
       "unknownRecipe": "That recipe does not exist."
+    },
+    "devBadge": {
+      "title": "Udvikler",
+      "tiers": {
+        "tinkerer": "Pusler",
+        "artificer": "Kunstsmed",
+        "runesmith": "Runesmed",
+        "architect": "Arkitekt",
+        "worldwright": "Verdensbygger"
+      },
+      "flavors": {
+        "tinkerer": "Din første pull request landede i riget.",
+        "artificer": "Fem pull requests inde, og verden føjer sig efter din kode.",
+        "runesmith": "Femten pull requests smedet ind i det kørende spil.",
+        "architect": "En arkitekt af riget: 30 pull requests flettet ind.",
+        "worldwright": "En verdensbygger: 70 pull requests former spillet."
+      },
+      "badgeTitle": "Udvikler: {tier}",
+      "prsLanded": "{count} pull requests flettet ind",
+      "contributor": "Open source-bidragyder",
+      "link": {
+        "cta": "Tilknyt GitHub",
+        "relink": "Tilknyt GitHub igen",
+        "benefits": "Tilknyt din GitHub for at optjene et udviklermærke for de pull requests, du har fået flettet ind i open source-repoet.",
+        "error": "Kunne ikke tilknytte GitHub. Prøv igen."
+      },
+      "linkedAs": "Tilknyttet som {login}",
+      "unlink": "Fjern GitHub-tilknytning"
     }
   },
   "guide": {
@@ -5720,6 +5786,11 @@ export const da_DK: EnTranslations = {
         "name": "Lærdomsmester Caddis",
         "title": "Lærdomsmester",
         "greeting": "Pas på det løse skifer, {className}. Bjerget har været... rastløst på det seneste. Jeg agter at finde ud af hvorfor."
+      },
+      "auctioneer_voss": {
+        "name": "Auktionarius Voss",
+        "title": "Vogter af Verdensmarkedet",
+        "greeting": "Verdensmarkedet er også åbent her, {className}. Køb fra alle eventyrere i riget, eller læg dine egne varer frem."
       },
       "brother_aldric_raid": {
         "name": "Broder Aldric",

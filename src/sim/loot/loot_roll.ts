@@ -64,6 +64,10 @@ export interface PendingLootRoll {
   itemName: string;
   quality: ItemDef['quality'];
   candidates: number[];
+  // Full party/raid membership snapshot captured when the roll opened. Whole-group
+  // loot broadcasts target this, NOT the live party of a candidate: a snapshot stays
+  // anchored to the roll's own party even if a member re-groups during the window.
+  partyMembers: number[];
   choices: Map<number, { choice: LootRollChoice; roll: number | null }>;
   expiresAt: number;
   // When set, this is a master-loot assignment (not a need/greed vote): only the
@@ -96,6 +100,14 @@ export function partyLootCandidatesForMob(ctx: SimContext, mob: Entity): PlayerM
     if (candidate && e && dist2d(e.pos, mob.pos) <= PARTY_XP_RANGE) candidates.push(candidate);
   }
   return candidates;
+}
+
+// The full party/raid membership behind a roll (for whole-group broadcasts), vs
+// partyLootCandidatesForMob which is only the in-range, loot-eligible subset. Read
+// from the creation-time snapshot; falls back to the candidate set for any roll that
+// predates the snapshot (defensive, since partyMembers is set at every creation site).
+function partyMembersForRoll(roll: PendingLootRoll): number[] {
+  return roll.partyMembers.length > 0 ? roll.partyMembers : roll.candidates;
 }
 
 function effectiveCurrencyLootStrategy(ctx: SimContext, mob: Entity): CurrencyLootStrategy {
@@ -222,6 +234,8 @@ function startNeedGreedRoll(ctx: SimContext, itemId: string, mob: Entity): boole
   if (candidates.length <= 1) return false;
   const def = ITEMS[itemId];
   const itemName = def?.name ?? itemId;
+  const party = mob.tappedById !== null ? ctx.partyOf(mob.tappedById) : null;
+  const partyMembers = party ? [...party.members] : candidates.map((cand) => cand.entityId);
   const roll: PendingLootRoll = {
     id: ctx.nextLootRollId++,
     mobId: mob.id,
@@ -229,6 +243,7 @@ function startNeedGreedRoll(ctx: SimContext, itemId: string, mob: Entity): boole
     itemName,
     quality: def?.quality,
     candidates: candidates.map((candidate) => candidate.entityId),
+    partyMembers,
     choices: new Map(),
     expiresAt: ctx.time + LOOT_ROLL_TIMEOUT,
   };
@@ -245,6 +260,8 @@ function startNeedGreedRoll(ctx: SimContext, itemId: string, mob: Entity): boole
       pid: candidate.entityId,
     });
   }
+  for (const pid of partyMembers)
+    ctx.emit({ type: 'loot', text: `Rolling for [[i:${itemId}]].`, pid });
   return true;
 }
 
@@ -271,6 +288,7 @@ function startMasterLootRoll(ctx: SimContext, itemId: string, mob: Entity): bool
     itemName,
     quality: def?.quality,
     candidates: candidates.map((candidate) => candidate.entityId),
+    partyMembers: [...party.members],
     choices: new Map(),
     expiresAt: ctx.time + MASTER_LOOT_TIMEOUT,
     masterLooter: looterPid,
@@ -371,12 +389,11 @@ export function assignMasterLoot(
   if (targets.length === 1) {
     if (!ctx.pendingLootRolls.delete(roll.id)) return;
     const targetName = ctx.players.get(targets[0])?.name ?? 'Unknown';
-    const recipients = new Set([...roll.candidates, roll.masterLooter]);
-    for (const recipient of recipients)
+    for (const pid of partyMembersForRoll(roll))
       ctx.emit({
         type: 'loot',
-        text: `${r.meta.name} assigned ${roll.itemName} to ${targetName}.`,
-        pid: recipient,
+        text: `${r.meta.name} assigned [[i:${roll.itemId}]] to ${targetName}.`,
+        pid,
       });
     ctx.addItem(roll.itemId, 1, targets[0]);
     return;
@@ -430,18 +447,24 @@ export function setPartyLootMaster(
     return;
   }
   const looterPid = looter !== 0 && party.members.includes(looter) ? looter : 0;
-  party.lootStrategies.master = { enabled, looter: looterPid, threshold };
+  const prev = party.lootStrategies.master;
+  const next = { enabled, looter: looterPid, threshold };
+  party.lootStrategies.master = next;
   const looterName =
     ctx.players.get(looterPid === 0 ? party.leader : looterPid)?.name ?? 'the leader';
-  for (const member of party.members) {
-    ctx.emit({
-      type: 'log',
-      text: enabled
-        ? `Loot method set to master loot. Master looter: ${looterName}.`
-        : 'Loot method set to group loot.',
-      pid: member,
-    });
+  const messages: string[] = [];
+  if (prev.enabled !== next.enabled) {
+    messages.push(
+      next.enabled
+        ? `Loot method set to Master Loot. Master Looter: ${looterName}.`
+        : 'Loot method set to Group Loot.',
+    );
+  } else if (next.enabled) {
+    if (prev.looter !== next.looter) messages.push(`Master Looter is now ${looterName}.`);
+    if (prev.threshold !== next.threshold) messages.push(`Loot threshold set to ${threshold}.`);
   }
+  for (const member of party.members)
+    for (const text of messages) ctx.emit({ type: 'log', text, pid: member });
 }
 
 export function resolveLootRoll(ctx: SimContext, roll: PendingLootRoll): void {
@@ -464,8 +487,8 @@ export function resolveLootRoll(ctx: SimContext, roll: PendingLootRoll): void {
     needers.length > 0 ? needers : entries.filter((entry) => entry.result.choice === 'greed');
   if (contenders.length === 0) {
     returnLootRollItemToCorpse(ctx, roll);
-    for (const pid of roll.candidates)
-      ctx.emit({ type: 'loot', text: `Everyone passed on ${roll.itemName}.`, pid });
+    for (const pid of partyMembersForRoll(roll))
+      ctx.emit({ type: 'loot', text: `Everyone passed on [[i:${roll.itemId}]].`, pid });
     return;
   }
   const highestRoll = Math.max(...contenders.map((contender) => contender.result.roll ?? 0));
@@ -474,10 +497,10 @@ export function resolveLootRoll(ctx: SimContext, roll: PendingLootRoll): void {
     tiedWinners.length === 1 ? tiedWinners[0] : tiedWinners[ctx.rng.int(0, tiedWinners.length - 1)];
   const winnerMeta = ctx.players.get(winner.pid);
   const winnerName = winnerMeta?.name ?? 'Unknown';
-  for (const pid of roll.candidates) {
+  for (const pid of partyMembersForRoll(roll)) {
     ctx.emit({
       type: 'loot',
-      text: `${winnerName} wins ${roll.itemName} (${winner.result.roll ?? 0})`,
+      text: `${winnerName} wins [[i:${roll.itemId}]] (${winner.result.roll ?? 0})`,
       pid,
     });
   }
