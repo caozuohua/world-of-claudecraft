@@ -1,0 +1,8 @@
+{
+  "body": "{\"error\":\"not authenticated\"}",
+  "headers": {
+    "content-length": 29,
+    "content-type": "application/json"
+  },
+  "status": 401
+}

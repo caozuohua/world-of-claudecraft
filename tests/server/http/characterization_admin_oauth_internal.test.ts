@@ -82,7 +82,11 @@ async function characterize(
 const SECRET_ENV = {
   restartCountdown: 'RESTART_COUNTDOWN_SECRET',
   discordBot: 'DISCORD_BOT_SECRET',
+  dailyReward: 'WOC_DAILY_REWARD_SERVICE_SECRET',
 } as const;
+// The daily-reward gate's request header (presented only by the two gate-pass
+// cases below; every reject case omits it, like the other two gates).
+const DAILY_REWARD_HEADER = 'x-woc-daily-reward-secret';
 // A non-empty value to turn a secret-gated feature ON without presenting the
 // matching request secret, so the gate answers 401 (not 404 feature-off). The
 // value never reaches the wire, so its content is irrelevant.
@@ -360,6 +364,86 @@ describe('characterization: internal handleInternalApi', () => {
       'unknown_endpoint_404',
       makeReq({ method: 'GET', url: '/internal/no-such-op' }),
     );
+  });
+});
+
+// -----------------------------------------------------------------------------
+// internal handleDailyRewardInternalApi (/internal/daily-rewards/*): the Phase
+// 18b late-arrival backfill (the family arrived with the v0.19.0 merge, after
+// the Phase 3 capture, so its legacy contract is frozen write-if-absent here
+// before the Phase 25 flag flip). The x-woc-daily-reward-secret gate FAILS
+// CLOSED, unlike the two gates above: an unset env secret answers 401 not
+// authenticated (never the feature-off 404), and there is no
+// RESTART_COUNTDOWN_SECRET fallback. The gate spans the whole prefix BEFORE
+// path/method resolution.
+// -----------------------------------------------------------------------------
+describe('characterization: internal handleDailyRewardInternalApi (Phase 18b backfill)', () => {
+  const OPS_ROUTES = [
+    { path: '/internal/daily-rewards/pending-payouts', name: 'daily_rewards_pending_payouts' },
+    { path: '/internal/daily-rewards/payout-history', name: 'daily_rewards_payout_history' },
+    { path: '/internal/daily-rewards/mark-payout', name: 'daily_rewards_mark_payout' },
+  ] as const;
+
+  // Fail-closed gate, captured PER ROUTE: with the env secret UNSET the family
+  // answers 401 not authenticated (the deploy/discord gates would say 404 here).
+  for (const route of OPS_ROUTES) {
+    it(`POST ${route.path} (secret unset) -> fail-closed 401 not authenticated`, async () => {
+      await withEnv(SECRET_ENV.dailyReward, undefined, async () => {
+        await characterize(
+          FIXTURE_SUBDIR.internal,
+          `${route.name}_secret_unset_401`,
+          makeReq({ method: 'POST', url: route.path }),
+        );
+      });
+    });
+  }
+
+  // 401 with the env secret SET and the request header absent (same body as the
+  // unset case: the fail-closed gate is 401 on both reject paths).
+  for (const route of OPS_ROUTES) {
+    it(`POST ${route.path} (secret set, no header) -> 401 not authenticated`, async () => {
+      await withEnv(SECRET_ENV.dailyReward, GATE_ENABLED_VALUE, async () => {
+        await characterize(
+          FIXTURE_SUBDIR.internal,
+          `${route.name}_no_secret_401`,
+          makeReq({ method: 'POST', url: route.path }),
+        );
+      });
+    });
+  }
+
+  // Two GATE-PASS contract points that stay db-free:
+  // a wrong method resolves inside the family (gate first, then no branch
+  // matches) to the in-family 404 unknown endpoint, never a 405;
+  it('GET /internal/daily-rewards/pending-payouts (correct secret) -> in-family 404 unknown endpoint', async () => {
+    await withEnv(SECRET_ENV.dailyReward, GATE_ENABLED_VALUE, async () => {
+      await characterize(
+        FIXTURE_SUBDIR.internal,
+        'daily_rewards_pending_payouts_get_404',
+        makeReq({
+          method: 'GET',
+          url: '/internal/daily-rewards/pending-payouts',
+          headers: { [DAILY_REWARD_HEADER]: GATE_ENABLED_VALUE },
+        }),
+      );
+    });
+  });
+
+  // and mark-payout validates its payout target BEFORE the first query, so the
+  // empty-body 400 freezes the handler's validation prose through the real gate.
+  it('POST /internal/daily-rewards/mark-payout (correct secret, empty body) -> 400 invalid payout target', async () => {
+    await withEnv(SECRET_ENV.dailyReward, GATE_ENABLED_VALUE, async () => {
+      await characterize(
+        FIXTURE_SUBDIR.internal,
+        'daily_rewards_mark_payout_empty_400',
+        makeReq({
+          method: 'POST',
+          url: '/internal/daily-rewards/mark-payout',
+          headers: { [DAILY_REWARD_HEADER]: GATE_ENABLED_VALUE },
+          body: {},
+        }),
+      );
+    });
   });
 });
 

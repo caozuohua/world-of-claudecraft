@@ -338,6 +338,88 @@ describe('main /api characterization: register + login validation (empty body, p
   });
 });
 
+describe('main /api characterization: Phase 18b late-arrival backfill (github + desktop-login + daily-rewards)', () => {
+  // These routes arrived via release merges AFTER the Phase 3 capture (the
+  // v0.18.0 github family, the v0.19.0 desktop-login pair and daily-rewards
+  // player trio), so their db-free contract points are backfilled here
+  // write-if-absent, freezing the legacy contract on disk before the Phase 25
+  // flag flip. The desktop-login create 401 reflects the Phase 18b full-scope
+  // arm (bearerActiveAccount), identical prose to the pre-fix no-auth reject.
+  it('POST /api/auth/github/start with no auth is the bearer 401', async () => {
+    await characterize(
+      'github_start_post_noauth_401',
+      makeReq({ method: 'POST', url: '/api/auth/github/start', body: {} }),
+    );
+  });
+
+  it('GET /api/auth/github/callback with the feature unconfigured is the 503 HTML bounce', async () => {
+    const savedId = process.env.GITHUB_OAUTH_CLIENT_ID;
+    const savedSecret = process.env.GITHUB_OAUTH_CLIENT_SECRET;
+    delete process.env.GITHUB_OAUTH_CLIENT_ID;
+    delete process.env.GITHUB_OAUTH_CLIENT_SECRET;
+    try {
+      await characterize(
+        'github_callback_unconfigured_503',
+        makeReq({ method: 'GET', url: '/api/auth/github/callback?code=x&state=y' }),
+      );
+    } finally {
+      if (savedId === undefined) delete process.env.GITHUB_OAUTH_CLIENT_ID;
+      else process.env.GITHUB_OAUTH_CLIENT_ID = savedId;
+      if (savedSecret === undefined) delete process.env.GITHUB_OAUTH_CLIENT_SECRET;
+      else process.env.GITHUB_OAUTH_CLIENT_SECRET = savedSecret;
+    }
+  });
+
+  it('GET /api/github with no auth is the bearer 401', async () => {
+    await characterize(
+      'github_status_get_noauth_401',
+      makeReq({ method: 'GET', url: '/api/github' }),
+    );
+  });
+
+  it('DELETE /api/github with no auth is the bearer 401', async () => {
+    await characterize(
+      'github_unlink_delete_noauth_401',
+      makeReq({ method: 'DELETE', url: '/api/github' }),
+    );
+  });
+
+  it('POST /api/desktop-login/create with no auth is the bearer 401 (full-scope arm)', async () => {
+    await characterize(
+      'desktop_login_create_post_noauth_401',
+      makeReq({ method: 'POST', url: '/api/desktop-login/create', body: {} }),
+    );
+  });
+
+  it('POST /api/desktop-login/exchange with an invalid code is the 401 (in-process code store)', async () => {
+    await characterize(
+      'desktop_login_exchange_post_bad_code_401',
+      makeReq({ method: 'POST', url: '/api/desktop-login/exchange', body: { code: 'nope' } }),
+    );
+  });
+
+  it('GET /api/daily-rewards with no auth is the bearer 401 (prefix arm)', async () => {
+    await characterize(
+      'daily_rewards_status_get_noauth_401',
+      makeReq({ method: 'GET', url: '/api/daily-rewards' }),
+    );
+  });
+
+  it('POST /api/daily-rewards/spin with no auth is the bearer 401 (prefix arm)', async () => {
+    await characterize(
+      'daily_rewards_spin_post_noauth_401',
+      makeReq({ method: 'POST', url: '/api/daily-rewards/spin', body: {} }),
+    );
+  });
+
+  it('GET /api/daily-rewards/history with no auth is the bearer 401 (prefix arm)', async () => {
+    await characterize(
+      'daily_rewards_history_get_noauth_401',
+      makeReq({ method: 'GET', url: '/api/daily-rewards/history' }),
+    );
+  });
+});
+
 afterAll(() => {
   vi.unstubAllGlobals();
 });

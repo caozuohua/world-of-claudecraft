@@ -177,17 +177,20 @@ export const SURFACE_INVENTORY: readonly SurfaceRoute[] = [
     requireOwnedExpected: null,
   },
   // Desktop-login handoff (v0.19.0, server/desktop_login.ts): a logged-in browser
-  // session mints a short-lived single-use IP-bound code (create, bearer-gated),
-  // which the Electron desktop shell trades for a session token (exchange,
+  // session mints a short-lived single-use IP-bound code (create), which the
+  // Electron desktop shell trades for a session token (exchange,
   // unauthenticated by design: the 160-bit code IS the credential). Both share
-  // the register/login per-IP rateLimited budget.
+  // the register/login per-IP rateLimited budget. Create requires a FULL active
+  // session since the Phase 18b scope fix (bearerActiveAccount in the arm; the
+  // pre-18b scope-blind accountForToken let a read token escalate to the full
+  // session exchange mints: see the desktopLoginCreateFullScope deviation).
   {
     dispatcher: DISPATCH.mainApi,
     method: 'POST',
     path: '/api/desktop-login/create',
-    handler: 'handleApi arm: /api/desktop-login/create (handleDesktopLoginCreate)',
+    handler: 'handleApi arm: /api/desktop-login/create (issueDesktopLoginCode)',
     contentType: PROBLEM_JSON,
-    authScope: AUTH_SCOPE.bearer,
+    authScope: AUTH_SCOPE.full,
     limiter: 'rateLimited',
     requireOwnedExpected: null,
   },

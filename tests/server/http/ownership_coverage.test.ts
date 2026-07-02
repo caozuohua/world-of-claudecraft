@@ -39,6 +39,8 @@ import {
 import { compose } from '../../../server/http/compose';
 import { ADMIN_AUTH_REQUIRED } from '../../../server/http/middleware/require_admin';
 import {
+  DAILY_REWARD_SECRET_ENV,
+  DAILY_REWARD_SECRET_HEADER,
   DEPLOY_SECRET_ENV,
   DEPLOY_SECRET_HEADER,
   DISCORD_SECRET_ENV,
@@ -53,6 +55,7 @@ import {
   type InternalRuntime,
   resetInternalRuntimeForTests,
 } from '../../../server/internal';
+import { resetRateLimits } from '../../../server/ratelimit';
 import { fakeCtx } from '../helpers/fake_ctx';
 import type { FakeRes } from '../helpers/fake_http';
 
@@ -504,26 +507,29 @@ describe('admin auth-mounting sweep: every non-login admin route 401s an unauthe
 });
 
 // -------------------------------------------------------------------------
-// Internal secret-gate mounting sweep (Phase 18).
+// Internal secret-gate mounting sweep (Phase 18; the third gate pair 18b).
 //
 // The analogous gate-mounting sweep the Phase 17 QA mandated for every future
 // authed surface: requireInternalSecret carries no meta marker, so no metadata
 // clause can catch a forgotten gate; only this functional sweep can. An ungated
-// /internal route would serve the Discord-bot / deploy ops surface to the open
-// internet. It drives each route's real middleware chain twice, asserting the
-// gate short-circuits with the legacy bodies BEFORE the handler:
-//   1. env secret UNSET  -> the feature-off 404 { ...error: 'unknown endpoint' }
-//      (the endpoint hides entirely, anti-enumeration);
+// /internal route would serve the Discord-bot / deploy / payout ops surface to
+// the open internet. It drives each route's real middleware chain twice,
+// asserting the gate short-circuits with the legacy bodies BEFORE the handler:
+//   1. env secret UNSET  -> the deploy/discord gates hide with the feature-off
+//      404 { ...error: 'unknown endpoint' } (anti-enumeration); the Phase 18b
+//      daily-reward gate FAILS CLOSED with 401 { ...error: 'not authenticated' }
+//      instead (daily_rewards.ts internalAuthorized semantics, no fallback);
 //   2. env secret SET + a WRONG header secret -> 401 { ...error: 'not
-//      authenticated' }.
+//      authenticated' } on all three gates.
 // A negative control proves the sweep detects a route that forgot the gate.
 // -------------------------------------------------------------------------
 
-// Every registered internal-surface route (all 11 are secret-gated; there is no
+// Every registered internal-surface route (all 14 are secret-gated; there is no
 // anonymous internal route).
 const internalSurfaceRoutes: RouteDef[] = apiRoutes.filter((route) => route.surface === 'internal');
 
-// The legacy fail() bodies the gate writes (byte-parity with server/internal.ts).
+// The legacy fail() bodies the gates write (byte-parity with server/internal.ts
+// and server/daily_rewards.ts).
 const INTERNAL_FEATURE_OFF = { success: false, data: null, error: 'unknown endpoint' };
 const INTERNAL_NOT_AUTHENTICATED = { success: false, data: null, error: 'not authenticated' };
 
@@ -531,23 +537,50 @@ const INTERNAL_NOT_AUTHENTICATED = { success: false, data: null, error: 'not aut
 const RIGHT_SECRET = 'sweep-expected-secret-value';
 const WRONG_SECRET = 'sweep-presented-wrong-value';
 
-// Which (header, env var) pair a route's gate enforces: restart-countdown carries
-// the deploy pair, every discord route the bot pair.
-function gatePairFor(route: RouteDef): { header: string; envVar: string } {
-  return route.path === '/internal/restart-countdown'
-    ? { header: DEPLOY_SECRET_HEADER, envVar: DEPLOY_SECRET_ENV }
-    : { header: DISCORD_SECRET_HEADER, envVar: DISCORD_SECRET_ENV };
+// Which (header, env var) pair a route's gate enforces, plus the body the gate
+// answers when its env secret is UNSET: restart-countdown carries the deploy
+// pair, the /internal/daily-rewards/* ops family the fail-closed daily-reward
+// pair (401 on unset, never 404), every discord route the bot pair.
+function gatePairFor(route: RouteDef): {
+  header: string;
+  envVar: string;
+  unsetStatus: number;
+  unsetBody: Record<string, unknown>;
+} {
+  if (route.path === '/internal/restart-countdown') {
+    return {
+      header: DEPLOY_SECRET_HEADER,
+      envVar: DEPLOY_SECRET_ENV,
+      unsetStatus: 404,
+      unsetBody: INTERNAL_FEATURE_OFF,
+    };
+  }
+  if (route.path.startsWith('/internal/daily-rewards/')) {
+    return {
+      header: DAILY_REWARD_SECRET_HEADER,
+      envVar: DAILY_REWARD_SECRET_ENV,
+      unsetStatus: 401,
+      unsetBody: INTERNAL_NOT_AUTHENTICATED,
+    };
+  }
+  return {
+    header: DISCORD_SECRET_HEADER,
+    envVar: DISCORD_SECRET_ENV,
+    unsetStatus: 404,
+    unsetBody: INTERNAL_FEATURE_OFF,
+  };
 }
 
-describe('internal secret-gate mounting sweep: every /internal route is gated (Phase 18)', () => {
-  let savedDeploySecret: string | undefined;
-  let savedDiscordSecret: string | undefined;
+const SWEPT_SECRET_ENVS = [DEPLOY_SECRET_ENV, DISCORD_SECRET_ENV, DAILY_REWARD_SECRET_ENV] as const;
+
+describe('internal secret-gate mounting sweep: every /internal route is gated (Phase 18 + 18b)', () => {
+  const savedSecrets = new Map<string, string | undefined>();
 
   beforeEach(() => {
-    savedDeploySecret = process.env[DEPLOY_SECRET_ENV];
-    savedDiscordSecret = process.env[DISCORD_SECRET_ENV];
-    delete process.env[DEPLOY_SECRET_ENV];
-    delete process.env[DISCORD_SECRET_ENV];
+    for (const envVar of SWEPT_SECRET_ENVS) {
+      savedSecrets.set(envVar, process.env[envVar]);
+      delete process.env[envVar];
+    }
     // A stubbed runtime so a handler that unexpectedly ran (a regression where the
     // gate is missing) fails on a clean assertion, not an unconfigured-runtime throw.
     configureInternalRuntime({
@@ -558,26 +591,28 @@ describe('internal secret-gate mounting sweep: every /internal route is gated (P
   });
 
   afterEach(() => {
-    if (savedDeploySecret === undefined) delete process.env[DEPLOY_SECRET_ENV];
-    else process.env[DEPLOY_SECRET_ENV] = savedDeploySecret;
-    if (savedDiscordSecret === undefined) delete process.env[DISCORD_SECRET_ENV];
-    else process.env[DISCORD_SECRET_ENV] = savedDiscordSecret;
+    for (const envVar of SWEPT_SECRET_ENVS) {
+      const saved = savedSecrets.get(envVar);
+      if (saved === undefined) delete process.env[envVar];
+      else process.env[envVar] = saved;
+    }
     resetInternalRuntimeForTests();
     vi.restoreAllMocks();
   });
 
-  it('selects the full 11-route internal surface', () => {
-    expect(internalSurfaceRoutes.length).toBe(11);
+  it('selects the full 14-route internal surface (11 Phase 18 + the 3 Phase 18b ops routes)', () => {
+    expect(internalSurfaceRoutes.length).toBe(14);
   });
 
   for (const route of internalSurfaceRoutes) {
-    it(`hides ${route.method} ${route.path} with the feature-off 404 when the env secret is unset`, async () => {
+    it(`refuses ${route.method} ${route.path} with the gate's unset-env body before the handler`, async () => {
+      const gate = gatePairFor(route);
       const ctx = fakeCtx({ method: route.method, url: route.path });
       const { res, handler } = await runRouteWithErrors(route, ctx);
 
-      expect(res.statusCode).toBe(404);
+      expect(res.statusCode).toBe(gate.unsetStatus);
       expect(handler).not.toHaveBeenCalled();
-      expect(JSON.parse(res.body)).toEqual(INTERNAL_FEATURE_OFF);
+      expect(JSON.parse(res.body)).toEqual(gate.unsetBody);
     });
 
     it(`refuses a wrong secret on ${route.method} ${route.path} with a 401 before the handler`, async () => {
@@ -597,9 +632,10 @@ describe('internal secret-gate mounting sweep: every /internal route is gated (P
   }
 
   it('negative control: an internal route MISSING the gate serves an ungated request (200), so the sweep is non-vacuous', async () => {
-    // A synthetic internal-surface route with NO gate at all: with both env secrets
-    // unset and no secret header, the request reaches its handler and writes 200,
-    // proving the sweep's 404/401 assertions actually detect the gate's presence.
+    // A synthetic internal-surface route with NO gate at all: with all three env
+    // secrets unset and no secret header, the request reaches its handler and
+    // writes 200, proving the sweep's 404/401 assertions actually detect the
+    // gate's presence.
     const ungatedRoute: RouteDef = {
       method: 'GET',
       path: '/internal/synthetic-ungated',
@@ -616,6 +652,88 @@ describe('internal secret-gate mounting sweep: every /internal route is gated (P
     expect(res.statusCode).toBe(200);
     expect(handler).toHaveBeenCalledTimes(1);
     expect(res.statusCode).not.toBe(404);
+    expect(res.statusCode).not.toBe(401);
+  });
+});
+
+// -------------------------------------------------------------------------
+// /api auth-mounting sweep (Phase 18b).
+//
+// The Phase 17 QA mandate applied to the /api surface: the authed routes the
+// 18b late-arrival migration registered must actually MOUNT their bearer guard
+// (createActiveGuard carries no meta marker, so only a functional sweep can
+// catch a forgotten gate; an ungated github/daily-rewards read would leak
+// account-linked data, and an ungated desktop-login create would mint session
+// handoff codes anonymously). Each route's real middleware chain is driven with
+// NO Authorization header at all and must answer the legacy 401 db-free (the
+// guard rejects a null bearer before consulting any resolver) without ever
+// reaching the handler. desktop-login create's fused rate guard runs BEFORE the
+// auth guard (the legacy order), so the limiter buckets are reset per test.
+// Future /api phases extend this list with their authed routes.
+// -------------------------------------------------------------------------
+
+// The legacy { error } body the shared active guard writes for a missing bearer.
+const API_NOT_AUTHENTICATED = { error: 'not authenticated' };
+
+// The (method, path) pairs of the Phase 18b authed /api routes.
+const AUTHED_18B_ROUTES: ReadonlyArray<{ method: string; path: string }> = [
+  { method: 'POST', path: '/api/auth/github/start' },
+  { method: 'GET', path: '/api/github' },
+  { method: 'DELETE', path: '/api/github' },
+  { method: 'POST', path: '/api/desktop-login/create' },
+  { method: 'GET', path: '/api/daily-rewards' },
+  { method: 'POST', path: '/api/daily-rewards/spin' },
+  { method: 'GET', path: '/api/daily-rewards/history' },
+];
+
+const authed18bRoutes: RouteDef[] = AUTHED_18B_ROUTES.map((spec) => {
+  const route = apiRoutes.find((r) => r.method === spec.method && r.path === spec.path);
+  if (!route)
+    throw new Error(`Phase 18b authed route missing from registry: ${spec.method} ${spec.path}`);
+  return route;
+});
+
+describe('/api auth-mounting sweep: every authed Phase 18b route 401s an unauthenticated request', () => {
+  beforeEach(() => {
+    // The desktop-login create chain consumes the fused register/login budget
+    // before auth; a clean bucket per test keeps the sweep order-independent.
+    resetRateLimits();
+  });
+
+  afterEach(() => {
+    resetRateLimits();
+  });
+
+  it('selects all seven authed Phase 18b routes from the registry', () => {
+    expect(authed18bRoutes.length).toBe(7);
+  });
+
+  for (const route of authed18bRoutes) {
+    it(`refuses an unauthenticated ${route.method} ${route.path} with the legacy 401 before the handler`, async () => {
+      const ctx = fakeCtx({ method: route.method, url: route.path });
+      const { res, handler } = await runRoute(route, ctx);
+
+      expect(res.statusCode).toBe(401);
+      expect(handler).not.toHaveBeenCalled();
+      expect(JSON.parse(res.body)).toEqual(API_NOT_AUTHENTICATED);
+    });
+  }
+
+  it('negative control: an /api route MISSING the guard serves an unauthenticated request (200), so the sweep is non-vacuous', async () => {
+    const ungatedRoute: RouteDef = {
+      method: 'GET',
+      path: '/api/synthetic-ungated',
+      surface: 'api',
+      middleware: [],
+      handler: async (ctx) => {
+        json(ctx.res, 200, { ok: true });
+      },
+    };
+    const ctx = fakeCtx({ method: 'GET', url: ungatedRoute.path });
+    const { res, handler } = await runRoute(ungatedRoute, ctx);
+
+    expect(res.statusCode).toBe(200);
+    expect(handler).toHaveBeenCalledTimes(1);
     expect(res.statusCode).not.toBe(401);
   });
 });

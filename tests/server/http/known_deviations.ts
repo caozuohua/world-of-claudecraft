@@ -50,6 +50,11 @@ export const DEVIATION_ID = {
   oauthBodyValidationRemap: 'oauth-body-validation-remap',
   internalBodyValidationRemap: 'internal-body-validation-remap',
   oauthInternalOffTable405: 'oauth-internal-off-table-405-handoff',
+  githubBodyValidationRemap: 'github-body-validation-remap',
+  desktopLoginBodyValidationRemap: 'desktop-login-body-validation-remap',
+  desktopLoginCreateFullScope: 'desktop-login-create-full-scope',
+  dailyRewardsBodyValidationRemap: 'daily-rewards-body-validation-remap',
+  dailyRewardsOpsBodyValidationRemap: 'daily-rewards-ops-body-validation-remap',
 } as const;
 export type DeviationId = (typeof DEVIATION_ID)[keyof typeof DEVIATION_ID];
 
@@ -997,6 +1002,161 @@ export const KNOWN_DEVIATIONS: readonly KnownDeviation[] = [
       'behavior of these off-table arms. Sibling to planned405BeforeAuth and ' +
       'companionTokenMethodFan (the systemic 405-at-the-flip framing); listed separately ' +
       'because two of the arms are whole HTML pages, not just a status-code change.',
+  },
+  // --- Phase 18b: the release-merge late-arrival families ---------------------
+  // introducedInPhase stays the integer 18 (the ledger bounds the value to the
+  // 25-phase plan; 18b is the inserted late-arrival sub-phase these entries
+  // name in prose).
+  {
+    id: DEVIATION_ID.githubBodyValidationRemap,
+    routes: ['/api/auth/github/start', '/api/auth/github/callback', '/api/github'],
+    currentBehavior:
+      'The four legacy github arms are bare `return handler(...)` calls inside ' +
+      "handleApi's try (no await), so an UNEXPECTED throw (a Postgres error in " +
+      'createGitHubOAuthState / consumeGitHubOAuthState / githubForAccount / ' +
+      'unlinkGitHub) never reaches the outer catch: it becomes an unhandled promise ' +
+      'rejection in the fire-and-forget /api arm, NO response is written, and the ' +
+      'request HANGS until the client times out. Expected error paths (unconfigured ' +
+      '503, rate-limit 429, the callback bounce pages incl. its own caught 500 ' +
+      'server_error bounce) are handler-owned and unaffected.',
+    intendedBehavior:
+      'Phase 18b routes the same throw to the Phase 8 withErrors boundary: ' +
+      'start/status/unlink serialize as the api-surface problem+json 500 plus an ' +
+      'X-Request-Id header; the callback carries meta.envelope "html", so its ' +
+      'escaping throw serializes as an HTML error page, never problem+json (the ' +
+      'window.opener.postMessage popup contract). A response is now always written ' +
+      'where legacy hung: strictly a flag-gated reliability improvement, leak-free ' +
+      '(generic text; the original error goes to the logger).',
+    introducedInPhase: 18,
+    reason:
+      'Phase 18b (the late-arrival migration) ports the github family onto the shared ' +
+      'spine; the handlers self-read nothing (no withBody), so the only divergence is ' +
+      'the unexpected-throw class. Sibling to internalBodyValidationRemap (the same ' +
+      'hang counterfactual: the bare-return arms postdate the wave that pinned the ' +
+      '`return await` arms). Not exercised by the db-free parity corpus (a real throw ' +
+      'needs a DB failure behind auth), documented here and pinned with fakes in ' +
+      'tests/server/github.test.ts.',
+  },
+  {
+    id: DEVIATION_ID.desktopLoginBodyValidationRemap,
+    routes: ['/api/desktop-login/create', '/api/desktop-login/exchange'],
+    currentBehavior:
+      'Both legacy desktop-login arms are bare `return handler(...)` calls inside ' +
+      "handleApi's try (no await), so exchange's self-read readBody rejection (a " +
+      'malformed JSON body or the 64 KiB over-cap destroy) and any unexpected DB throw ' +
+      'escape the outer catch as an unhandled rejection: NO response is written and ' +
+      'the request HANGS until the client times out.',
+    intendedBehavior:
+      'Phase 18b keeps exchange self-reading (NO withBody, so no 400/413/422 remap and ' +
+      'every handler-owned body stays byte-identical) and routes the rejection to the ' +
+      'Phase 8 withErrors boundary: the api-surface problem+json 500 plus an ' +
+      'X-Request-Id header. A response is now always written where legacy hung: ' +
+      'strictly a flag-gated reliability improvement.',
+    introducedInPhase: 18,
+    reason:
+      'Phase 18b ports the desktop-login handoff pair onto the shared spine; the ' +
+      'single-use IP-bound code flow and the fused register/login per-IP budget are ' +
+      'preserved byte-for-byte, so the unexpected-throw / bad-JSON class is the only ' +
+      'divergence. Sibling to internalBodyValidationRemap (the hang counterfactual). ' +
+      'Pinned with fakes in tests/server/desktop_login.test.ts.',
+  },
+  {
+    id: DEVIATION_ID.desktopLoginCreateFullScope,
+    routes: ['/api/desktop-login/create'],
+    currentBehavior:
+      'POST /api/desktop-login/create requires a FULL active session on BOTH serving ' +
+      'paths (legacy arm: bearerActiveAccount; RouteDef: the shared createActiveGuard): ' +
+      'a read-scope companion/OAuth token answers 403 { error: "this token is ' +
+      'read-only" } and a moderation-locked account 403s before any code is minted. ' +
+      'Before Phase 18b the handler resolved the bearer via the SCOPE-BLIND ' +
+      'accountForToken, so a read-scope token could mint a handoff code that ' +
+      '/api/desktop-login/exchange then traded for a full-scope session token: a ' +
+      'read-to-full scope escalation.',
+    intendedBehavior:
+      'Preserved on both paths (the maintainer-resolved Phase 18b fork, option FIX): ' +
+      'the escalation is closed identically under both dispatch modes, so old-vs-new ' +
+      'parity holds; the change is versus the pre-18b shipped baseline, not between ' +
+      'the dispatch arms. No legitimate caller regresses: the browser /desktop-login ' +
+      'page always holds a full-scope session token.',
+    introducedInPhase: 18,
+    reason:
+      'The scope-checked resolver (accountAndScopeForToken + the read-only 403) exists ' +
+      'precisely to stop a read token acting as full on mutating routes; exchange ' +
+      'mints scope "full", so create IS a session-minting mutation. Landed on both ' +
+      'serving paths in the same change (the dual-edit rule), pinned in ' +
+      'tests/server/desktop_login.test.ts and the security suite. The read-only 403 ' +
+      'prose is the existing shared guard string ("this token is read-only", no ' +
+      'client matcher arm today: a recorded Phase 22 adjudication).',
+  },
+  {
+    id: DEVIATION_ID.dailyRewardsBodyValidationRemap,
+    routes: ['/api/daily-rewards', '/api/daily-rewards/spin', '/api/daily-rewards/history'],
+    currentBehavior:
+      'The legacy player family is served by a bare `return handleDailyRewardApi(...)` ' +
+      "inside handleApi's try (no await), so an unexpected throw (a Postgres error, a " +
+      'dailyRewardService throw past the eligibility guards) escapes the outer catch ' +
+      'as an unhandled rejection: NO response is written and the request HANGS. ' +
+      'Handler-owned bodies (the 403 wallet-lock, the 409 already-claimed, the ' +
+      'in-family 404 "unknown endpoint", the lenient Number(...)||30 history limit) ' +
+      'are unaffected.',
+    intendedBehavior:
+      'Phase 18b registers the three player routes calling the SAME ' +
+      'handleDailyRewardApi core (no withBody: spin provably reads no body, history ' +
+      'keeps its lenient limit decode) behind the shared createActiveGuard, and routes ' +
+      'the unexpected throw to the withErrors boundary: the api-surface problem+json ' +
+      '500 plus an X-Request-Id header. Off-table shapes (wrong method, unknown ' +
+      'subpath, the no-slash /api/daily-rewardsX sibling, HEAD) stay delegate-served ' +
+      'until Phase 25.',
+    introducedInPhase: 18,
+    reason:
+      'Phase 18b ports the daily-rewards player family; parity is by construction ' +
+      '(the RouteDef handlers call the ladder core unchanged), so the ' +
+      'unexpected-throw class is the only divergence. Sibling to ' +
+      'internalBodyValidationRemap (the hang counterfactual). NO rate limiter is ' +
+      'added (legacy has none; the spin-throttle decision is handed to Phase 19). ' +
+      'Pinned with fakes in tests/server/daily_rewards_routes.test.ts.',
+  },
+  {
+    id: DEVIATION_ID.dailyRewardsOpsBodyValidationRemap,
+    routes: [
+      '/internal/daily-rewards/pending-payouts',
+      '/internal/daily-rewards/payout-history',
+      '/internal/daily-rewards/mark-payout',
+    ],
+    currentBehavior:
+      'The legacy ops family is the FIRST arm of the /internal composite delegate ' +
+      '(handleDailyRewardInternalApi, tried before handleInternalApi), fired ' +
+      'fire-and-forget with NO outer catch: mark-payout self-reads its body via an ' +
+      'UN-caught readBody (unlike internal.ts, which .catch(() => ({}))s every read), ' +
+      'so a malformed/over-cap body AND any DB throw in the three handlers become an ' +
+      'unhandled rejection: NO response is written and the payout service request ' +
+      'HANGS. The gate itself is FAIL-CLOSED: an unset ' +
+      'WOC_DAILY_REWARD_SERVICE_SECRET and a wrong x-woc-daily-reward-secret header ' +
+      'both answer 401 { success: false, data: null, error: "not authenticated" } ' +
+      "(never the other internal gates' feature-off 404, never a " +
+      'RESTART_COUNTDOWN_SECRET fallback).',
+    intendedBehavior:
+      'Phase 18b registers the three ops routes behind the new ' +
+      'requireInternalSecretFailClosed gate (same fail-closed 401 semantics, ' +
+      'per-request env read, length-guarded timingSafeEqual) with handlers calling ' +
+      'the SAME handleDailyRewardInternalApi core, and routes the rejection to the ' +
+      'withErrors boundary: the admin-shape 500 { success: false, data: null, error: ' +
+      '"internal.error" } plus an X-Request-Id header (meta.envelope "admin"). A ' +
+      'response is now always written where legacy hung. The legacy family gates the ' +
+      'WHOLE /internal/daily-rewards/ prefix BEFORE path/method resolution; on the ' +
+      'table each route gates after path match, which is invisible while the ' +
+      'composite delegate serves the unmatched remainder: at the Phase 25 ladder ' +
+      'deletion the family-wide pre-path 401 must be recreated or its loss ' +
+      'adjudicated deliberately (alongside oauthInternalOffTable405).',
+    introducedInPhase: 18,
+    reason:
+      'Phase 18b puts the ops family on the table (Phase 18 left it delegate-only). ' +
+      'Sibling to internalBodyValidationRemap with the same hang counterfactual, ' +
+      'SECRET-GATED: every divergence is only reachable behind the valid payout ' +
+      'secret except the 500 on a bad mark-payout body, whose legacy counterfactual ' +
+      'is also a hang. The composite delegate ordering (daily-rewards tried first) ' +
+      'is untouched and stays parity-pinned. Pinned with fakes in ' +
+      'tests/server/daily_rewards_routes.test.ts.',
   },
 ];
 

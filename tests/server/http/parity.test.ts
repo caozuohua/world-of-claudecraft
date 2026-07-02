@@ -307,6 +307,29 @@ async function captureBothModes(reqFactory: () => ReturnType<typeof makeReq>): P
   return { oldCap, newCap };
 }
 
+// Run one captureBothModes under a pinned env (set before both passes, restored
+// after), so per-request env reads (the internal secret gates, the github
+// feature config) are identical on the old and new pass.
+async function captureWithEnv(
+  env: Record<string, string | undefined>,
+  reqFactory: () => ReturnType<typeof makeReq>,
+): Promise<Awaited<ReturnType<typeof captureBothModes>>> {
+  const saved = new Map<string, string | undefined>();
+  for (const [key, value] of Object.entries(env)) {
+    saved.set(key, process.env[key]);
+    if (value === undefined) delete process.env[key];
+    else process.env[key] = value;
+  }
+  try {
+    return await captureBothModes(reqFactory);
+  } finally {
+    for (const [key, value] of saved) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+}
+
 beforeAll(async () => {
   // Force the /api/perf dev gate off so GET /api/perf is a deterministic 404.
   savedDevCommands = process.env[DEV_COMMANDS_ENV];
@@ -803,28 +826,6 @@ describe('/internal dispatch parity (legacy flag vs new flag)', () => {
   const DISCORD_HEADER = 'x-woc-discord-secret';
   const PARITY_SECRET = 'parity-internal-secret';
 
-  // Run one captureBothModes under a pinned env (set before both passes, restored
-  // after), so the per-request env reads are identical on the old and new pass.
-  async function captureWithEnv(
-    env: Record<string, string | undefined>,
-    reqFactory: () => ReturnType<typeof makeReq>,
-  ): Promise<Awaited<ReturnType<typeof captureBothModes>>> {
-    const saved = new Map<string, string | undefined>();
-    for (const [key, value] of Object.entries(env)) {
-      saved.set(key, process.env[key]);
-      if (value === undefined) delete process.env[key];
-      else process.env[key] = value;
-    }
-    try {
-      return await captureBothModes(reqFactory);
-    } finally {
-      for (const [key, value] of saved) {
-        if (value === undefined) delete process.env[key];
-        else process.env[key] = value;
-      }
-    }
-  }
-
   it('POST /internal/restart-countdown with the env secret unset is the feature-off 404, identical old-vs-new', async () => {
     const { oldCap, newCap } = await captureWithEnv(
       { [DEPLOY_ENV]: undefined, [DISCORD_ENV]: undefined },
@@ -958,8 +959,11 @@ describe('/internal dispatch parity (legacy flag vs new flag)', () => {
     // its own x-woc-daily-reward-secret gate fails CLOSED (401 'not authenticated'
     // when its env secret is unset), whereas the ladder would answer its terminal
     // 404 'unknown endpoint' for this path. If the composite ordering ever flipped,
-    // this pin catches it. Off the route table (notFound), so the new dispatcher
-    // delegates to the same composite; db-free (the gate rejects before any query).
+    // this pin catches it on the LEGACY pass. Since Phase 18b the route is ALSO on
+    // the table: under 'new' the matched RouteDef's fail-closed
+    // requireInternalSecretFailClosed gate answers the SAME 401 byte-for-byte, so
+    // the pin now proves gate-parity under 'new' AND composite ordering under
+    // 'legacy'; db-free (both gates reject before any query).
     const { oldCap, newCap } = await captureWithEnv(
       { WOC_DAILY_REWARD_SERVICE_SECRET: undefined },
       () => makeReq({ method: 'POST', url: '/internal/daily-rewards/pending-payouts', body: {} }),
@@ -980,6 +984,239 @@ describe('/internal dispatch parity (legacy flag vs new flag)', () => {
     const { oldCap, newCap } = await captureWithEnv(
       { [DEPLOY_ENV]: undefined, [DISCORD_ENV]: undefined },
       () => makeReq({ method: 'GET', url: '/internal/this-endpoint-does-not-exist' }),
+    );
+    expect(oldCap.status).toBe(404);
+    expect(newCap.status).toBe(oldCap.status);
+    expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+  });
+});
+
+// -----------------------------------------------------------------------------
+// Phase 18b: the release-merge late-arrival families (github, desktop-login,
+// daily-rewards), dual-path pins. Every route below carries a Phase 18b known
+// deviation (the *BodyValidationRemap hang-counterfactual class), which MASKS
+// its whole path in the corpus-wide known-deviations filter above, so these
+// dedicated captureBothModes assertions re-pin the db-free contract points
+// byte-identical old-vs-new (the Phase 15/16 re-pin rule; the head-parity
+// gotcha). All cases are db-free: the no-auth 401s reject a missing bearer
+// before any resolver, the github callback answers its unconfigured 503 before
+// any state read, the exchange 401 is an in-process Map miss, and the ops
+// mark-payout 400 validates before its first query.
+// -----------------------------------------------------------------------------
+
+describe('/api + /internal Phase 18b late-arrival dispatch parity (legacy flag vs new flag)', () => {
+  const GITHUB_ID_ENV = 'GITHUB_OAUTH_CLIENT_ID';
+  const GITHUB_SECRET_ENV = 'GITHUB_OAUTH_CLIENT_SECRET';
+  const DAILY_ENV = 'WOC_DAILY_REWARD_SERVICE_SECRET';
+  const DAILY_HEADER = 'x-woc-daily-reward-secret';
+  const PARITY_SECRET = 'parity-daily-reward-secret';
+
+  // The no-auth 401 pins: both paths reject a missing bearer db-free with the
+  // legacy { error: 'not authenticated' } body (legacy arm: bearerActiveAccount;
+  // new path: the shared createActiveGuard), including the desktop-login create
+  // arm's Phase 18b full-scope fix, which is identical on BOTH paths by design.
+  const NOAUTH_18B_REQUESTS: ReadonlyArray<{ method: string; url: string; body?: unknown }> = [
+    { method: 'POST', url: '/api/auth/github/start', body: {} },
+    { method: 'GET', url: '/api/github' },
+    { method: 'DELETE', url: '/api/github' },
+    { method: 'POST', url: '/api/desktop-login/create', body: {} },
+    { method: 'GET', url: '/api/daily-rewards' },
+    { method: 'POST', url: '/api/daily-rewards/spin', body: {} },
+    { method: 'GET', url: '/api/daily-rewards/history' },
+    // The prefix-arm oddities stay delegate-served: an unknown subpath and the
+    // no-slash sibling resolve unmatched, delegate to the ladder's startsWith
+    // arm, and 401 before the in-family 404, byte-identical.
+    { method: 'GET', url: '/api/daily-rewards/unknown-subpath' },
+    { method: 'GET', url: '/api/daily-rewardsx' },
+  ];
+
+  for (const { method, url, body } of NOAUTH_18B_REQUESTS) {
+    it(`${method} ${url} with no auth is identical old-vs-new and is a 401`, async () => {
+      const { oldCap, newCap } = await captureBothModes(() => makeReq({ method, url, body }));
+      expect(oldCap.status).toBe(401);
+      expect(JSON.parse(oldCap.body as string)).toEqual({ error: 'not authenticated' });
+      expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+    });
+  }
+
+  it('DELETE /api/daily-rewards (wrong method on a registered path) delegates to the prefix arm (auth 401, never a 405), identical old-vs-new', async () => {
+    // The registry resolves methodNotAllowed (only GET is registered) and the
+    // dispatcher DELEGATES to the legacy startsWith prefix arm, which is method-
+    // agnostic: auth first (401 db-free with no bearer), so the table router's
+    // 405 never surfaces while the ladder is retained.
+    const { oldCap, newCap } = await captureBothModes(() =>
+      makeReq({ method: 'DELETE', url: '/api/daily-rewards' }),
+    );
+    expect(oldCap.status).toBe(401);
+    expect(JSON.parse(oldCap.body as string)).toEqual({ error: 'not authenticated' });
+    expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+  });
+
+  it('HEAD /api/daily-rewards delegates to the legacy ladder (auth 401, no HEAD-as-GET), identical old-vs-new', async () => {
+    // The router synthesizes HEAD from the registered GET, and the dispatcher
+    // delegates a head match to the legacy ladder (the standing HEAD rule), where
+    // the prefix arm's bearerActiveAccount answers 401 with the body suppressed.
+    const { oldCap, newCap } = await captureBothModes(() =>
+      makeReq({ method: 'HEAD', url: '/api/daily-rewards' }),
+    );
+    expect(oldCap.status).toBe(401);
+    expect(newCap.status).toBe(oldCap.status);
+    expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+  });
+
+  it('GET /api/auth/github/callback with the feature unconfigured is the 503 HTML bounce, identical old-vs-new', async () => {
+    // No GITHUB_OAUTH_CLIENT_ID/SECRET, so handleGitHubCallback answers the
+    // not_configured bounce page before its rate limit or any state read. The
+    // RouteDef carries meta.envelope 'html'; the normal-path response here is the
+    // handler's own bouncePage on both passes, byte-identical HTML.
+    const { oldCap, newCap } = await captureWithEnv(
+      { [GITHUB_ID_ENV]: undefined, [GITHUB_SECRET_ENV]: undefined },
+      () => makeReq({ method: 'GET', url: '/api/auth/github/callback?code=x&state=y' }),
+    );
+    expect(oldCap.status).toBe(503);
+    expect(oldCap.headers['content-type']).toContain('text/html');
+    expect(newCap.headers['content-type']).toContain('text/html');
+    expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+  });
+
+  it('POST /api/desktop-login/exchange with an invalid code is a db-free 401, identical old-vs-new', async () => {
+    // consumeDesktopLoginCode rejects the malformed code shape against the
+    // in-process Map (no db); both paths answer the legacy 401 prose the client
+    // matcher keys on (errors.api.desktopCodeInvalid).
+    const { oldCap, newCap } = await captureBothModes(() =>
+      makeReq({ method: 'POST', url: '/api/desktop-login/exchange', body: { code: 'nope' } }),
+    );
+    expect(oldCap.status).toBe(401);
+    expect(JSON.parse(oldCap.body as string)).toEqual({
+      error: 'invalid or expired desktop login code',
+    });
+    expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+  });
+
+  it('the fused register/login/desktop-login per-IP budget is ONE bucket, limiter before auth, identical old-vs-new', async () => {
+    // Drain the shared default rateLimited(req) bucket with /api/login posts
+    // (db-free 401s: empty username never reaches findAccount), then hit
+    // desktop-login exchange: it must answer the fused 429 WITHOUT touching the
+    // code store, proving the three paths share one budget and the limiter runs
+    // before auth. 25 drains overshoot the 20/min default so the pin cannot go
+    // stale on an off-by-one.
+    const FUSED_DRAIN_REQUESTS = 25;
+    async function drainThenExchange(
+      dispatch: typeof oldDispatch,
+    ): Promise<ReturnType<typeof normalizeResponse>> {
+      isolate();
+      for (let i = 0; i < FUSED_DRAIN_REQUESTS; i++) {
+        await captureResponse(dispatch, makeReq({ method: 'POST', url: '/api/login', body: {} }));
+      }
+      return normalizeResponse(
+        await captureResponse(
+          dispatch,
+          makeReq({ method: 'POST', url: '/api/desktop-login/exchange', body: { code: 'x' } }),
+        ),
+      );
+    }
+    const oldCap = await drainThenExchange(oldDispatch);
+    const newCap = await drainThenExchange(newDispatch);
+    expect(oldCap.status).toBe(429);
+    expect(JSON.parse(oldCap.body as string)).toEqual({
+      error: 'too many attempts, wait a minute and try again',
+    });
+    expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+  });
+
+  it('POST /internal/daily-rewards/pending-payouts with a wrong secret is the fail-closed 401, identical old-vs-new', async () => {
+    const { oldCap, newCap } = await captureWithEnv({ [DAILY_ENV]: PARITY_SECRET }, () =>
+      makeReq({
+        method: 'POST',
+        url: '/internal/daily-rewards/pending-payouts',
+        headers: { [DAILY_HEADER]: 'wrong-secret' },
+        body: {},
+      }),
+    );
+    expect(oldCap.status).toBe(401);
+    expect(JSON.parse(oldCap.body as string)).toEqual({
+      success: false,
+      data: null,
+      error: 'not authenticated',
+    });
+    expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+  });
+
+  it('POST /internal/daily-rewards/payout-history with a wrong secret is the fail-closed 401, identical old-vs-new', async () => {
+    // Its own re-pin (the dailyRewardsOpsBodyValidationRemap deviation masks this
+    // path in the corpus filter too): the wrong-secret 401 is the route's only
+    // db-free branch, byte-identical through the RouteDef gate ('new') and the
+    // composite's in-handler gate ('legacy').
+    const { oldCap, newCap } = await captureWithEnv({ [DAILY_ENV]: PARITY_SECRET }, () =>
+      makeReq({
+        method: 'POST',
+        url: '/internal/daily-rewards/payout-history',
+        headers: { [DAILY_HEADER]: 'wrong-secret' },
+        body: {},
+      }),
+    );
+    expect(oldCap.status).toBe(401);
+    expect(JSON.parse(oldCap.body as string)).toEqual({
+      success: false,
+      data: null,
+      error: 'not authenticated',
+    });
+    expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+  });
+
+  it('GET /internal/daily-rewards/pending-payouts with the CORRECT secret stays the in-family 404 (never a 405), identical old-vs-new', async () => {
+    // Wrong method: the registry resolves methodNotAllowed (only POST is
+    // registered) and DELEGATES to the composite, whose first arm gates then
+    // answers the in-family 404 'unknown endpoint', exactly as legacy.
+    const { oldCap, newCap } = await captureWithEnv({ [DAILY_ENV]: PARITY_SECRET }, () =>
+      makeReq({
+        method: 'GET',
+        url: '/internal/daily-rewards/pending-payouts',
+        headers: { [DAILY_HEADER]: PARITY_SECRET },
+      }),
+    );
+    expect(oldCap.status).toBe(404);
+    expect(JSON.parse(oldCap.body as string)).toEqual({
+      success: false,
+      data: null,
+      error: 'unknown endpoint',
+    });
+    expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+  });
+
+  it('POST /internal/daily-rewards/mark-payout with the correct secret and an empty body is a db-free 400 through the migrated chain, identical old-vs-new', async () => {
+    // A REAL gate-pass + handler run on both flags: markPayout validates the
+    // payout target before its first query, so the 400 'invalid payout target'
+    // admin-envelope body is db-free and proves the registered route serves the
+    // same core as the composite arm.
+    const { oldCap, newCap } = await captureWithEnv({ [DAILY_ENV]: PARITY_SECRET }, () =>
+      makeReq({
+        method: 'POST',
+        url: '/internal/daily-rewards/mark-payout',
+        headers: { [DAILY_HEADER]: PARITY_SECRET },
+        body: {},
+      }),
+    );
+    expect(oldCap.status).toBe(400);
+    expect(JSON.parse(oldCap.body as string)).toEqual({
+      success: false,
+      data: null,
+      error: 'invalid payout target',
+    });
+    expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+  });
+
+  it('an unknown /internal/daily-rewards subpath with the correct secret delegates to the gate-then-404, identical old-vs-new', async () => {
+    // Off the route table: the dispatcher delegates, the composite's first arm
+    // gates (pass) and answers the in-family 404, byte-identical. The family-wide
+    // pre-path gate is a Phase 25 handoff (see dailyRewardsOpsBodyValidationRemap).
+    const { oldCap, newCap } = await captureWithEnv({ [DAILY_ENV]: PARITY_SECRET }, () =>
+      makeReq({
+        method: 'POST',
+        url: '/internal/daily-rewards/this-endpoint-does-not-exist',
+        headers: { [DAILY_HEADER]: PARITY_SECRET },
+        body: {},
+      }),
     );
     expect(oldCap.status).toBe(404);
     expect(newCap.status).toBe(oldCap.status);
@@ -1012,4 +1249,11 @@ describe('/internal dispatch parity (legacy flag vs new flag)', () => {
 //     (including two real gate-pass 200s: presence and members-meta); only the
 //     db-touching bodies are deferred, exactly as characterization defers them, and
 //     pinned with fakes in tests/server/oauth.test.ts + tests/server/internal.test.ts.
+//   - The Phase 18b authed success bodies (an authed github start/status/unlink, a
+//     desktop-login create 200 mint, the daily-rewards status/spin/history 200s, the
+//     ops pending-payouts/payout-history 200s): all resolve a bearer or read payouts
+//     against the pool-less db. The db-free contract points ARE replayed old-vs-new
+//     in the Phase 18b block above (incl. one real ops gate-pass through the
+//     migrated chain: the mark-payout 400); the success bodies are pinned with fakes
+//     in tests/server/{github,desktop_login,daily_rewards_routes}.test.ts.
 // -----------------------------------------------------------------------------

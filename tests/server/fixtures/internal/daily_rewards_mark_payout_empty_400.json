@@ -1,0 +1,8 @@
+{
+  "body": "{\"data\":null,\"error\":\"invalid payout target\",\"success\":false}",
+  "headers": {
+    "content-length": 61,
+    "content-type": "application/json"
+  },
+  "status": 400
+}

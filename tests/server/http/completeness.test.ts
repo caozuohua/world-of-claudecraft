@@ -255,6 +255,22 @@ describe('registry completeness: migrated baseline (Phase 10 public reads + Phas
     { method: 'GET', path: '/api/discord' },
     { method: 'DELETE', path: '/api/discord' },
     { method: 'POST', path: '/api/discord/swag/claim' },
+    // Phase 18b: the release-merge late-arrival families. The GitHub link family
+    // (server/github.ts), the desktop-login handoff pair
+    // (server/desktop_login_routes.ts, on the fused register/login budget), and
+    // the daily-rewards player trio (server/daily_rewards.ts, served under the
+    // ladder's startsWith prefix arm; the off-table subpath/method shapes stay
+    // delegate-served until Phase 25). The ops trio is asserted in the Phase 18
+    // internal block below (it flips from delegate-only to registered).
+    { method: 'POST', path: '/api/auth/github/start' },
+    { method: 'GET', path: '/api/auth/github/callback' },
+    { method: 'GET', path: '/api/github' },
+    { method: 'DELETE', path: '/api/github' },
+    { method: 'POST', path: '/api/desktop-login/create' },
+    { method: 'POST', path: '/api/desktop-login/exchange' },
+    { method: 'GET', path: '/api/daily-rewards' },
+    { method: 'POST', path: '/api/daily-rewards/spin' },
+    { method: 'GET', path: '/api/daily-rewards/history' },
   ];
   const MIGRATED_PATHS = MIGRATED_ROUTES.map((r) => r.path);
 
@@ -432,16 +448,17 @@ describe('registry completeness: Phase 17 admin surface (server/admin.ts)', () =
   });
 });
 
-describe('registry completeness: Phase 18 oauth + internal surfaces (server/oauth.ts, server/internal.ts)', () => {
+describe('registry completeness: Phase 18/18b oauth + internal surfaces (server/oauth.ts, server/internal.ts, server/daily_rewards.ts)', () => {
   // Both expected sets derive FROM the SURFACE_INVENTORY ladders (the admin-block
   // pattern), so a dropped or added branch reds the gate without a hand-maintained
   // parallel list. The oauth surface migrates ONLY its POST JSON rows: the two GET
   // consent/device HTML pages stay on the top-level ladder, off the route table,
-  // served through the dispatcher's delegate. The internal surface migrates EVERY
-  // handleInternalApi row (11: restart-countdown + the 10 Discord-bot routes); the
-  // separate /internal/daily-rewards/* ops family was never part of that ladder
-  // and stays delegate-only (its inventory rows are excluded below; Phase 18b
-  // owns putting the family on the table).
+  // served through the dispatcher's delegate. Phase 18 migrated EVERY
+  // handleInternalApi row (11: restart-countdown + the 10 Discord-bot routes) and
+  // left the separate /internal/daily-rewards/* ops family delegate-only; Phase
+  // 18b put that family on the table too (behind the fail-closed
+  // requireInternalSecretFailClosed gate), so the internal derivation now spans
+  // ALL 14 internal rows and the ops pins flip from delegate-only to registered.
   const oauthPostLadder = SURFACE_INVENTORY.filter(
     (r) => r.dispatcher === DISPATCH.oauth && r.method === 'POST',
   );
@@ -449,9 +466,7 @@ describe('registry completeness: Phase 18 oauth + internal surfaces (server/oaut
     (r) => r.dispatcher === DISPATCH.oauth && r.method === 'GET',
   );
   const OPS_FAMILY_PREFIX = '/internal/daily-rewards/';
-  const internalLadder = SURFACE_INVENTORY.filter(
-    (r) => r.dispatcher === DISPATCH.internal && !r.path.startsWith(OPS_FAMILY_PREFIX),
-  );
+  const internalLadder = SURFACE_INVENTORY.filter((r) => r.dispatcher === DISPATCH.internal);
   const opsFamilyRows = SURFACE_INVENTORY.filter(
     (r) => r.dispatcher === DISPATCH.internal && r.path.startsWith(OPS_FAMILY_PREFIX),
   );
@@ -459,7 +474,7 @@ describe('registry completeness: Phase 18 oauth + internal surfaces (server/oaut
   it('derives the expected non-empty ladders', () => {
     expect(oauthPostLadder.length).toBe(5);
     expect(oauthGetLadder.length).toBe(2);
-    expect(internalLadder.length).toBe(11);
+    expect(internalLadder.length).toBe(14);
     expect(opsFamilyRows.length).toBe(3);
   });
 
@@ -523,12 +538,14 @@ describe('registry completeness: Phase 18 oauth + internal surfaces (server/oaut
     }
   });
 
-  it('leaves the /internal/daily-rewards ops family delegate-only', () => {
-    // The three REAL ops routes (now SURFACE_INVENTORY rows) resolve notFound, so
-    // the dispatcher delegates them to the composite (handleDailyRewardInternalApi
-    // first); plus the original synthetic probes for never-existing subpaths.
+  it('registers the /internal/daily-rewards ops family (Phase 18b flips the delegate-only pin)', () => {
+    // Phase 18 pinned these three rows delegate-only (notFound); Phase 18b puts
+    // the family on the table, so each real ops route now resolves matched. The
+    // synthetic never-existing subpaths still resolve notFound and delegate to
+    // the composite (handleDailyRewardInternalApi first), which keeps serving
+    // every off-table shape (unknown subpath, wrong method, HEAD) until Phase 25.
     for (const r of opsFamilyRows) {
-      expect(apiRegistry.resolve(r.method, r.path).kind, r.path).toBe('notFound');
+      expect(apiRegistry.resolve(r.method, r.path).kind, r.path).toBe('matched');
     }
     expect(apiRegistry.resolve('POST', '/internal/daily-rewards/run').kind).toBe('notFound');
     expect(apiRegistry.resolve('GET', '/internal/daily-rewards/status').kind).toBe('notFound');
