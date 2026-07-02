@@ -679,7 +679,7 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
     completionText: "Ugh, still twitching. Perfect. Here, you've earned this.",
     objectives: [
       { type: 'kill', targetMobId: 'webwood_spider', count: 6, label: 'Webwood Lurker slain' },
-      { type: 'collect', itemId: 'webwood_silk', count: 4, label: 'Webwood Silk Gland' },
+      { type: 'collect', itemId: 'webwood_silk', count: 4, label: 'Sableweb Silk Gland' },
     ],
     xpReward: 420,
     copperReward: 140,

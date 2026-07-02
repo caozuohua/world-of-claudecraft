@@ -48,7 +48,7 @@ describe('/gear command', () => {
     sim.chat('/gear', a);
     const text = errorText(sim.tick());
     expect(text).toMatch(/^Equipped \(8\/8\):/);
-    expect(text).toContain('Worn Shortsword');
+    expect(text).toContain('Pitted Shortsword');
     expect(text).toContain('Quilted Trousers');
     expect(text).not.toContain('(empty)');
   });

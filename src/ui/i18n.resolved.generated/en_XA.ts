@@ -2486,7 +2486,7 @@ export const en_XA: EnTranslations = {
         "desc": "[Ýóúŕ þĥýšíçáļ šţŕíķéš ĥíţ 15% ĥáŕðéŕ.]"
       },
       "aug_spellfire": {
-        "name": "[Šþéļļƒíŕé]",
+        "name": "[Ĝŕíɱƒíŕé]",
         "desc": "[Ýóúŕ šþéļļš ðéáļ 15% ɱóŕé ðáɱáĝé.]"
       },
       "aug_toughness": {
@@ -2530,7 +2530,7 @@ export const en_XA: EnTranslations = {
         "desc": "[+18% ðáɱáĝé óƒ áļļ ķíñðš áñð +12% ɱóʋé šþééð.]"
       },
       "aug_lightwell": {
-        "name": "[Ļíĝĥţŵéļļ]",
+        "name": "[Ĝŕáʋéļíĝĥţ]",
         "desc": "[+30% ĥéáļíñĝ áñð +15% ɱáẋíɱúɱ ĥéáļţĥ. Áñçĥóŕ ýóúŕ ţéáɱ.]"
       },
       "aug_bounty_hunter": {
@@ -4303,10 +4303,10 @@ export const en_XA: EnTranslations = {
     },
     "items": {
       "worn_sword": {
-        "name": "[Ŵóŕñ Šĥóŕţšŵóŕð]"
+        "name": "[Þíţţéð Šĥóŕţšŵóŕð]"
       },
       "gnarled_staff": {
-        "name": "[Ĝñáŕļéð Šţáƒƒ]"
+        "name": "[Ɓóĝóáķ Šţáƒƒ]"
       },
       "rusty_dagger": {
         "name": "[Ŕúšţý Ðáĝĝéŕ]"
@@ -4318,13 +4318,13 @@ export const en_XA: EnTranslations = {
         "name": "[Ŕúšţý Ĥáţçĥéţ]"
       },
       "recruit_tunic": {
-        "name": "[Ŕéçŕúíţ'š Ţúñíç]"
+        "name": "[Ļéʋýɱáñ'š Ţúñíç]"
       },
       "apprentice_robe": {
-        "name": "[Áþþŕéñţíçé'š Ŕóƀé]"
+        "name": "[Ţĥŕéáðƀáŕé Ŕóƀé]"
       },
       "footpad_jerkin": {
-        "name": "[Ƒóóţþáð'š Ĵéŕķíñ]"
+        "name": "[Çúţþúŕšé Ĵéŕķíñ]"
       },
       "redbrook_blade": {
         "name": "[Ŕéðƀŕóóķ Ɱíļíţíá Ɓļáðé]"
@@ -4354,22 +4354,22 @@ export const en_XA: EnTranslations = {
         "name": "[Ĝŕéýĵáŵ'š Þéļţ Ļéĝĝíñĝš]"
       },
       "baked_bread": {
-        "name": "[Ƒŕéšĥļý Ɓáķéð Ɓŕéáð]"
+        "name": "[Çóţţáĝé Ļóáƒ]"
       },
       "spring_water": {
-        "name": "[Ŕéƒŕéšĥíñĝ Šþŕíñĝ Ŵáţéŕ]"
+        "name": "[Çóļð Ŵéļļ Ŵáţéŕ]"
       },
       "roasted_boar": {
-        "name": "[Ŕóášţéð Ɓóáŕ Ɱéáţ]"
+        "name": "[Šþíţţéð Ɓóáŕ Ĥáúñçĥ]"
       },
       "conjured_water": {
-        "name": "[Çóñĵúŕéð Šþŕíñĝ Ŵáţéŕ]"
+        "name": "[Çóñĵúŕéð Ŕáíñŵáţéŕ]"
       },
       "conjured_water2": {
-        "name": "[Çóñĵúŕéð Ɱíñéŕáļ Ŵáţéŕ]"
+        "name": "[Çóñĵúŕéð Ŵéļļŵáţéŕ]"
       },
       "conjured_water3": {
-        "name": "[Çóñĵúŕéð Šþáŕķļíñĝ Ŵáţéŕ]"
+        "name": "[Çóñĵúŕéð Çļéáŕŵáţéŕ]"
       },
       "eastbrook_arming_sword": {
         "name": "[Éášţƀŕóóķ Áŕɱíñĝ Šŵóŕð]"
@@ -4429,7 +4429,7 @@ export const en_XA: EnTranslations = {
         "name": "[Ĝĥóšţļý Éššéñçé]"
       },
       "webwood_silk": {
-        "name": "[Ŵéƀŵóóð Šíļķ Ĝļáñð]"
+        "name": "[Šáƀļéŵéƀ Šíļķ Ĝļáñð]"
       },
       "supply_crate": {
         "name": "[Šţóļéñ Šúþþļý Çŕáţé]"
@@ -4450,7 +4450,7 @@ export const en_XA: EnTranslations = {
         "name": "[Ŕéð Ɓáñðáñá]"
       },
       "tough_jerky": {
-        "name": "[Ţóúĝĥ Ĵéŕķý]"
+        "name": "[Šáļţéð Ĵéŕķý]"
       },
       "mudfin_scale": {
         "name": "[Šļíɱý Ɱúŕļóç Šçáļé]"
@@ -4666,7 +4666,7 @@ export const en_XA: EnTranslations = {
         "name": "[Šţáƒƒ óƒ Ʋéļķĥáŕ]"
       },
       "shadowmeld_tunic": {
-        "name": "[Šĥáðóŵɱéļð Ţúñíç]"
+        "name": "[Ñíĝĥţʋéíļ Ţúñíç]"
       },
       "gravewyrm_scale_hauberk": {
         "name": "[Ĝŕáʋéŵýŕɱ Šçáļé Ĥáúƀéŕķ]"
@@ -4735,13 +4735,13 @@ export const en_XA: EnTranslations = {
         "name": "[Çŕáçķéð Ŵýŕɱ Šçáļé]"
       },
       "conjured_bread": {
-        "name": "[Çóñĵúŕéð Ɓŕéáð]"
+        "name": "[Çóñĵúŕéð Óáţçáķé]"
       },
       "conjured_bread2": {
-        "name": "[Çóñĵúŕéð Þúɱþéŕñíçķéļ]"
+        "name": "[Çóñĵúŕéð Ɓļáçķ Ļóáƒ]"
       },
       "conjured_bread3": {
-        "name": "[Çóñĵúŕéð Šŵééţ Ŕóļļ]"
+        "name": "[Çóñĵúŕéð Ĥóñéýçáķé]"
       },
       "roadwardens_helm": {
         "name": "[Ŕóáðŵáŕðéñ'š Ĥéļɱ]"
@@ -4843,16 +4843,16 @@ export const en_XA: EnTranslations = {
         "name": "[Çŕýþţƀóñé Ĝŕéáʋéš]"
       },
       "cryptstalker_jerkin": {
-        "name": "[Çŕýþţšţáļķéŕ Ĵéŕķíñ]"
+        "name": "[Ĝŕáʋéšţáļķéŕ Ĵéŕķíñ]"
       },
       "deathlord_legguards": {
-        "name": "[Ðéáţĥļóŕð Ļéĝĝúáŕðš]"
+        "name": "[Ɓáŕŕóŵļóŕð Ļéĝĝúáŕðš]"
       },
       "deathlord_sabatons": {
-        "name": "[Ðéáţĥļóŕð Šáƀáţóñš]"
+        "name": "[Ɓáŕŕóŵļóŕð Šáƀáţóñš]"
       },
       "deathlord_warplate": {
-        "name": "[Ðéáţĥļóŕð Ŵáŕþļáţé]"
+        "name": "[Ɓáŕŕóŵļóŕð Ŵáŕþļáţé]"
       },
       "drogmar_warboots": {
         "name": "[Ðŕóĝɱáŕ'š Ŵáŕƀóóţš]"
@@ -4930,13 +4930,13 @@ export const en_XA: EnTranslations = {
         "name": "[Ɱóĝĝéŕ'š Šţóɱþéŕ Ɓóóţš]"
       },
       "necromancers_legwraps": {
-        "name": "[Ñéçŕóɱáñçéŕ'š Ļéĝŵŕáþš]"
+        "name": "[Ɱóúŕñŵéáʋé Ļéĝŵŕáþš]"
       },
       "necromancers_soulsteps": {
-        "name": "[Ñéçŕóɱáñçéŕ'š Šóúļšţéþš]"
+        "name": "[Ɱóúŕñŵéáʋé Šóúļšţéþš]"
       },
       "necromancers_starshroud": {
-        "name": "[Ñéçŕóɱáñçéŕ'š Šţáŕšĥŕóúð]"
+        "name": "[Ɱóúŕñŵéáʋé Šţáŕšĥŕóúð]"
       },
       "nhalias_dirgeblade": {
         "name": "[Ñĥáļíá'š Ðíŕĝéƀļáðé]"
@@ -4972,13 +4972,13 @@ export const en_XA: EnTranslations = {
         "name": "[Ŵýŕɱçúļţ Šóúļšţéþš]"
       },
       "wyrmshadow_harness": {
-        "name": "[Ŵýŕɱšĥáðóŵ Ĥáŕñéšš]"
+        "name": "[Ñíĝĥţƒáñĝ Ĥáŕñéšš]"
       },
       "wyrmshadow_legguards": {
-        "name": "[Ŵýŕɱšĥáðóŵ Ļéĝĝúáŕðš]"
+        "name": "[Ñíĝĥţƒáñĝ Ļéĝĝúáŕðš]"
       },
       "wyrmshadow_treads": {
-        "name": "[Ŵýŕɱšĥáðóŵ Ţŕéáðš]"
+        "name": "[Ñíĝĥţƒáñĝ Ţŕéáðš]"
       },
       "glimmerfin_koi": {
         "name": "[Ĝļíɱɱéŕƒíñ Ķóí]"
@@ -4996,7 +4996,7 @@ export const en_XA: EnTranslations = {
         "name": "[Ŕáŵ Ŕíʋéŕ Þéŕçĥ]"
       },
       "raw_stonescale_carp": {
-        "name": "[Ŕáŵ Šţóñéšçáļé Çáŕþ]"
+        "name": "[Ŕáŵ Šļáţéƒíñ Çáŕþ]"
       },
       "soggy_boot": {
         "name": "[Šóĝĝý Ɓóóţ]"
@@ -5107,13 +5107,13 @@ export const en_XA: EnTranslations = {
         "name": "[Ɱóóñšçáļé Šáƀéŕ]"
       },
       "moonshroud_breastplate": {
-        "name": "[Ɱóóñšĥŕóúð Ɓŕéášţþļáţé]"
+        "name": "[Ɱóóñŵŕáçķ Ɓŕéášţþļáţé]"
       },
       "moonshroud_robe": {
-        "name": "[Ɱóóñšĥŕóúð Ŕóƀé]"
+        "name": "[Ɱóóñŵŕáçķ Ŕóƀé]"
       },
       "moonshroud_tunic": {
-        "name": "[Ɱóóñšĥŕóúð Ţúñíç]"
+        "name": "[Ɱóóñŵŕáçķ Ţúñíç]"
       },
       "pale_pearl": {
         "name": "[Þáļé Þéáŕļ]"
@@ -5149,7 +5149,7 @@ export const en_XA: EnTranslations = {
         "name": "[Çŕýþţƀóñé Þáúļðŕóñš]"
       },
       "deathlords_dread_visage": {
-        "name": "[Ðéáţĥļóŕð'š Ðŕéáð Ʋíšáĝé]"
+        "name": "[Ɓáŕŕóŵļóŕð'š Ðŕéáð Ʋíšáĝé]"
       },
       "gravewyrm_gauntlets": {
         "name": "[Ĝŕáʋéŵýŕɱ Ĝáúñţļéţš]"
@@ -5164,10 +5164,10 @@ export const en_XA: EnTranslations = {
         "name": "[Ɱíšţʋéíļ Ĝŕíþš]"
       },
       "necromancers_soulspire_mantle": {
-        "name": "[Ñéçŕóɱáñçéŕ'š Šóúļšþíŕé Ɱáñţļé]"
+        "name": "[Ɱóúŕñŵéáʋé Šóúļšþíŕé Ɱáñţļé]"
       },
       "wyrmshadow_talongrips": {
-        "name": "[Ŵýŕɱšĥáðóŵ Ţáļóñĝŕíþš]"
+        "name": "[Ñíĝĥţƒáñĝ Ţáļóñĝŕíþš]"
       },
       "reliquary_plate_chest": {
         "name": "[Ŕéļíɋúáŕý Ĝúáŕð Ĥáúƀéŕķ]"
@@ -5239,31 +5239,31 @@ export const en_XA: EnTranslations = {
         "name": "[Ĥéáŕţŵóóð óƒ ţĥé Ðéáţĥļéšš Çŕóŵñ]"
       },
       "kingsbane_last_oath": {
-        "name": "[Ķíñĝšƀáñé, Ļášţ Óáţĥ óƒ Ţĥóŕñþéáķ]"
+        "name": "[Ţĥŕóñéƀáñé, Ļášţ Óáţĥ óƒ Ţĥóŕñþéáķ]"
       },
       "crownforged_dreadhelm": {
-        "name": "[Çŕóŵñƒóŕĝéð Ðŕéáðĥéļɱ]"
+        "name": "[Ɓóñéŵŕóúĝĥţ Ðŕéáðĥéļɱ]"
       },
       "crownforged_warspaulders": {
-        "name": "[Çŕóŵñƒóŕĝéð Ŵáŕšþáúļðéŕš]"
+        "name": "[Ɓóñéŵŕóúĝĥţ Ŵáŕšþáúļðéŕš]"
       },
       "nighttalon_crown": {
-        "name": "[Ñíĝĥţţáļóñ Çŕóŵñ]"
+        "name": "[Ðíŕéƒáñĝ Çŕóŵñ]"
       },
       "nighttalon_shoulderguards": {
-        "name": "[Ñíĝĥţţáļóñ Šĥóúļðéŕĝúáŕðš]"
+        "name": "[Ðíŕéƒáñĝ Šĥóúļðéŕĝúáŕðš]"
       },
       "soulflame_cowl": {
-        "name": "[Šóúļƒļáɱé Çóŵļ]"
+        "name": "[Ŵŕáíţĥƒíŕé Çóŵļ]"
       },
       "soulflame_mantle": {
-        "name": "[Šóúļƒļáɱé Ɱáñţļé]"
+        "name": "[Ŵŕáíţĥƒíŕé Ɱáñţļé]"
       },
       "stormcallers_crown": {
-        "name": "[Šţóŕɱçáļļéŕ'š Çŕóŵñ]"
+        "name": "[Ĝáļéçáļļ Çŕóŵñ]"
       },
       "stormcallers_spaulders": {
-        "name": "[Šţóŕɱçáļļéŕ'š Šþáúļðéŕš]"
+        "name": "[Ĝáļéçáļļ Šþáúļðéŕš]"
       },
       "unknown_alien_weaponry": {
         "name": "[Úñķñóŵñ Áļíéñ Ŵéáþóñŕý]"
@@ -5773,7 +5773,7 @@ export const en_XA: EnTranslations = {
             "label": "[Ŵéƀŵóóð Ļúŕķéŕ šļáíñ]"
           },
           "1": {
-            "label": "[Ŵéƀŵóóð Šíļķ Ĝļáñð]"
+            "label": "[Šáƀļéŵéƀ Šíļķ Ĝļáñð]"
           }
         }
       },
@@ -6695,37 +6695,37 @@ export const en_XA: EnTranslations = {
     },
     "itemSets": {
       "crownforged": {
-        "name": "[Çŕóŵñƒóŕĝéð Ŕéĝáļíá]",
+        "name": "[Ɓóñéŵŕóúĝĥţ Ŕéĝáļíá]",
         "bonus2": "[Íñçŕéášéš áţţáçķ þóŵéŕ ƀý 40.]",
         "bonus3": "[Íñçŕéášéš Šţŕéñĝţĥ ƀý 15 áñð Šţáɱíñá ƀý 15.]"
       },
       "deathlord": {
-        "name": "[Ðéáţĥļóŕð Ɓáţţļéĝéáŕ]",
+        "name": "[Ɓáŕŕóŵļóŕð Ɓáţţļéĝéáŕ]",
         "bonus2": "[Íñçŕéášéš áţţáçķ þóŵéŕ ƀý 40.]",
         "bonus3": "[Íñçŕéášéš Šţŕéñĝţĥ ƀý 15 áñð Šţáɱíñá ƀý 15.]"
       },
       "necromancers": {
-        "name": "[Ñéçŕóɱáñçéŕ'š Ŕáíɱéñţ]",
+        "name": "[Ɱóúŕñŵéáʋé Ŕáíɱéñţ]",
         "bonus2": "[Ŕéðúçéš çášţ þúšĥƀáçķ ƒŕóɱ ðáɱáĝé ƀý 50%.]",
         "bonus3": "[Ýóú çáññóţ ƀé þúšĥéð ƀáçķ ŵĥíļé çášţíñĝ (íɱɱúñé ţó çášţ þúšĥƀáçķ ƒŕóɱ ðáɱáĝé).]"
       },
       "nighttalon": {
-        "name": "[Ñíĝĥţţáļóñ Þéļţ]",
+        "name": "[Ðíŕéƒáñĝ Þéļţ]",
         "bonus2": "[Íñçŕéášéš áţţáçķ þóŵéŕ ƀý 40.]",
         "bonus3": "[Íñçŕéášéš Áĝíļíţý ƀý 15 áñð çŕíţíçáļ šţŕíķé çĥáñçé ƀý 2%.]"
       },
       "soulflame": {
-        "name": "[Šóúļƒļáɱé Ŕéĝáļíá]",
+        "name": "[Ŵŕáíţĥƒíŕé Ŕéĝáļíá]",
         "bonus2": "[Ŕéðúçéš çášţ þúšĥƀáçķ ƒŕóɱ ðáɱáĝé ƀý 50%.]",
         "bonus3": "[Ýóú çáññóţ ƀé þúšĥéð ƀáçķ ŵĥíļé çášţíñĝ (íɱɱúñé ţó çášţ þúšĥƀáçķ ƒŕóɱ ðáɱáĝé).]"
       },
       "stormcallers": {
-        "name": "[Šţóŕɱçáļļéŕ'š Ʋéšţɱéñţš]",
+        "name": "[Ĝáļéçáļļ Ʋéšţɱéñţš]",
         "bonus2": "[Ŕéðúçéš çášţ þúšĥƀáçķ ƒŕóɱ ðáɱáĝé ƀý 50%.]",
         "bonus3": "[Ýóú çáññóţ ƀé þúšĥéð ƀáçķ ŵĥíļé çášţíñĝ (íɱɱúñé ţó çášţ þúšĥƀáçķ ƒŕóɱ ðáɱáĝé).]"
       },
       "wyrmshadow": {
-        "name": "[Ŵýŕɱšĥáðóŵ Ʋéšţɱéñţš]",
+        "name": "[Ñíĝĥţƒáñĝ Ʋéšţɱéñţš]",
         "bonus2": "[Íñçŕéášéš áţţáçķ þóŵéŕ ƀý 40.]",
         "bonus3": "[Íñçŕéášéš Áĝíļíţý ƀý 15 áñð çŕíţíçáļ šţŕíķé çĥáñçé ƀý 2%.]"
       }

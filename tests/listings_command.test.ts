@@ -44,7 +44,7 @@ describe('/listings command', () => {
 
     sim.chat('/listings', a);
     expect(lastError(sim.tick())).toBe(
-      'Your market listings (2/12): Worn Shortsword — 1s 50c (1h 0m left), Rusty Dagger x3 — 20c (2m left).',
+      'Your market listings (2/12): Pitted Shortsword — 1s 50c (1h 0m left), Rusty Dagger x3 — 20c (2m left).',
     );
   });
 
