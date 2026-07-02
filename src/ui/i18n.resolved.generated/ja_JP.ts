@@ -177,6 +177,48 @@ export const ja_JP: EnTranslations = {
       "title": "エモート",
       "done": "完了"
     },
+    "dailyRewards": {
+      "title": "デイリー報酬",
+      "close": "デイリー報酬を閉じる",
+      "loading": "デイリー報酬を読み込み中...",
+      "error": "デイリー報酬を読み込めませんでした。",
+      "intro": "認証済みウォレットに十分なWOCを保有すると、デイリー報酬が解放されます。1日1回のスピンとローテーションするタスクでポイントを獲得し、デイリーランキングを駆け上がって賞金プールの分け前を狙いましょう。",
+      "prize": "賞金プール",
+      "reset": "リセット",
+      "endsIn": "Ends in {time}",
+      "remainingLessThanMinute": "<1m",
+      "remainingMinutes": "{minutes}m",
+      "remainingHoursMinutes": "{hours}h {minutes}m",
+      "score": "スコア",
+      "walletValue": "ウォレット価値 (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "不明",
+      "spinTitle": "デイリースピン",
+      "spinDialogTitle": "デイリー報酬スピン",
+      "spinClose": "デイリースピンを閉じる",
+      "spinReady": "スピンが1回可能です。",
+      "spinClaimed": "獲得: +{points} ポイント。",
+      "spinResult": "+{points} ポイント",
+      "spinButton": "スピン",
+      "tasks": "タスク",
+      "leaderboard": "デイリーランキング",
+      "history": "過去の当選者",
+      "noLeaders": "まだポイントがありません。",
+      "noHistory": "まだ支払いがありません。",
+      "walletConnectTitle": "ウォレットを認証",
+      "walletConnectBody": "WOCを保有するSolanaウォレットを認証して、デイリー報酬を解放しましょう。",
+      "walletConnectButton": "ウォレットを認証",
+      "walletHoldTitle": "WOCを保有",
+      "walletHoldBody": "デイリー報酬を解放するには、少なくとも {amount} USD 相当のWOCを保有してください。",
+      "walletPriceBody": "現在WOCの価格を取得できません。しばらくしてから再度ご確認ください。",
+      "reason": {
+        "eligible": "報酬が解放されました。",
+        "no_wallet": "$20 USD 相当以上のWOCを保有するウォレットを接続してください。",
+        "under_minimum": "ウォレットが最低額の $20 USD 相当のWOCを下回っています。",
+        "price_unavailable": "WOCの価格を取得できないため、報酬は一時的にロックされています。"
+      }
+    },
     "theme": {
       "preset": "UIテーマ",
       "customColors": "カスタムカラー",
@@ -264,6 +306,13 @@ export const ja_JP: EnTranslations = {
       "coordinates": "座標",
       "heading": "方角",
       "minimapZoom": "ミニマップのズーム"
+    },
+    "nativeUpdate": {
+      "title": "アップデートがあります",
+      "body": "World of ClaudeCraft の新しいバージョンが利用可能です。今すぐアップデートして最新の修正と改善を入手しましょう。",
+      "bodyWithVersion": "World of ClaudeCraft のバージョン {version} が利用可能です。今すぐアップデートして最新の修正と改善を入手しましょう。",
+      "notNow": "後で",
+      "update": "更新"
     },
     "castBar": {
       "playerAria": "あなたの詠唱バー",
@@ -2626,6 +2675,7 @@ export const ja_JP: EnTranslations = {
       "usernameTaken": "そのユーザー名は既に使われています。",
       "invalidCredentials": "ユーザー名またはパスワードが正しくありません。",
       "verificationFailed": "確認に失敗しました。もう一度お試しください。",
+      "desktopCodeInvalid": "デスクトップ版のログインコードが無効か期限切れです。もう一度お試しください。",
       "invalidCharacterName": "キャラクター名が無効です。2-16文字の英字を使用してください。",
       "characterNameNotAllowed": "そのキャラクター名は使用できません。",
       "invalidClass": "無効なクラスです。",
@@ -2642,6 +2692,21 @@ export const ja_JP: EnTranslations = {
       "takenOver": "あなたのキャラクターは別のセッションに引き継がれました。",
       "renameBeforeEntering": "このキャラクターは世界に入る前に名前変更が必要です。",
       "renameNotPermitted": "このキャラクターの名前変更は許可されていません。"
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "アップデート {version} をダウンロード中...",
+      "ready": "アップデート {version} の準備ができました。ゲーム終了時に自動でインストールされます。今すぐ再起動もできます。",
+      "restart": "今すぐ再起動",
+      "later": "後で"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "ゲーム画面が停止しました。再読み込みしますか？",
+      "reload": "再読み込み",
+      "quit": "終了",
+      "fatalBody": "World of ClaudeCraft で予期しないエラーが発生したため、終了します。"
     }
   },
   "realm": {

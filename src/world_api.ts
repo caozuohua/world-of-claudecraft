@@ -9,7 +9,7 @@
 // keep resolving to THIS file, never the sibling directory.
 //
 // ---------------------------------------------------------------------------
-// FACET MAP: the 21 domain facets (each IWorld member assigned exactly once; 148
+// FACET MAP: the 22 domain facets (each IWorld member assigned exactly once; 149
 // total). One interface per file under ./world_api/; aux types travel with their
 // facet. The authoritative member-per-facet split is the W0c parity test.
 //
@@ -32,6 +32,7 @@
 //   market.ts           IWorldMarket         World Market browse/list/buy
 //   dungeons.ts         IWorldDungeons       dungeon enter/leave + raid lockouts
 //   delves.ts           IWorldDelves         delve runs, lockpick, companion
+//   daily_rewards.ts    IWorldDailyRewards   daily WOC-holder rewards
 //   telemetry.ts        IWorldTelemetry      fire-and-forget metrics sink
 //   professions.ts      IWorldProfessions    skill/craft/recipe/node read surface (stub, #1164)
 //
@@ -40,7 +41,7 @@
 //                                          ALL_DELTA_KEYS (25) + TERSE_TO_IWORLD mapping.
 //   tests/command_schema.test.ts   (W0b)  COMMAND_NAMES universe; ClientWorld send-set
 //                                          subset-of dispatch-set; DISPATCH_ONLY (7).
-//   tests/world_api_parity.test.ts (W0c)  IWORLD_MEMBERS (148) present + same-kind on
+//   tests/world_api_parity.test.ts (W0c)  IWORLD_MEMBERS (149) present + same-kind on
 //                                          Sim + ClientWorld; aggregate == disjoint
 //                                          union of the 21 facets.
 // ---------------------------------------------------------------------------
@@ -48,6 +49,7 @@
 import type { IWorldChat } from './world_api/chat';
 import type { IWorldCombat } from './world_api/combat';
 import type { IWorldCosmetics } from './world_api/cosmetics';
+import type { IWorldDailyRewards } from './world_api/daily_rewards';
 import type { IWorldDelves } from './world_api/delves';
 import type { IWorldDuelArena } from './world_api/duel_arena';
 import type { IWorldDungeons } from './world_api/dungeons';
@@ -78,6 +80,16 @@ export type { ArenaCombatant, ArenaFormat, ArenaStanding, OverheadEmoteId } from
 // --- facet aux-type + value re-exports (each travels with its facet file) ---
 export { isOverheadEmoteId, OVERHEAD_EMOTES } from './world_api/chat';
 export type { AccountCosmetics } from './world_api/cosmetics';
+export type {
+  DailyRewardEligibilityView,
+  DailyRewardHistory,
+  DailyRewardLeaderboardEntry,
+  DailyRewardPayoutLogEntry,
+  DailyRewardSpinResult,
+  DailyRewardSpinView,
+  DailyRewardStatus,
+  DailyRewardTaskView,
+} from './world_api/daily_rewards';
 export type {
   DelveCompanionInfo,
   DelveDailyInfo,
@@ -137,6 +149,7 @@ export interface IWorld
     IWorldMarket,
     IWorldDungeons,
     IWorldDelves,
+    IWorldDailyRewards,
     IWorldTelemetry,
     IWorldProfessions {}
 
@@ -332,6 +345,7 @@ export type WorldFacet =
   | 'IWorldMarket'
   | 'IWorldDungeons'
   | 'IWorldDelves'
+  | 'IWorldDailyRewards'
   | 'IWorldTelemetry';
 
 export const COMMAND_FACETS = {

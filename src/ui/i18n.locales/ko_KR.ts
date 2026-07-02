@@ -14,6 +14,44 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ko_KR: Partial<Record<TranslationKey, string>> = {
+  // Daily rewards (M16 non-Latin fill)
+  'hudChrome.dailyRewards.title': '일일 보상',
+  'hudChrome.dailyRewards.close': '일일 보상 닫기',
+  'hudChrome.dailyRewards.loading': '일일 보상 불러오는 중...',
+  'hudChrome.dailyRewards.error': '일일 보상을 불러올 수 없습니다.',
+  'hudChrome.dailyRewards.intro':
+    '인증된 지갑에 충분한 WOC를 보유하여 일일 보상을 잠금 해제하세요. 하루 한 번의 스핀과 교체되는 과제로 포인트를 획득한 뒤, 일일 순위표를 올라 상금 풀의 일부를 차지하세요.',
+  'hudChrome.dailyRewards.prize': '상금 풀',
+  'hudChrome.dailyRewards.reset': '초기화',
+  'hudChrome.dailyRewards.score': '점수',
+  'hudChrome.dailyRewards.walletValue': '지갑 가치 (WOC)',
+  'hudChrome.dailyRewards.unknown': '알 수 없음',
+  'hudChrome.dailyRewards.spinTitle': '일일 스핀',
+  'hudChrome.dailyRewards.spinDialogTitle': '일일 보상 스핀',
+  'hudChrome.dailyRewards.spinClose': '일일 스핀 닫기',
+  'hudChrome.dailyRewards.spinReady': '스핀 한 번을 사용할 수 있습니다.',
+  'hudChrome.dailyRewards.spinClaimed': '획득: +{points} 포인트.',
+  'hudChrome.dailyRewards.spinResult': '+{points} 포인트',
+  'hudChrome.dailyRewards.spinButton': '돌리기',
+  'hudChrome.dailyRewards.tasks': '과제',
+  'hudChrome.dailyRewards.leaderboard': '일일 순위표',
+  'hudChrome.dailyRewards.history': '지난 당첨자',
+  'hudChrome.dailyRewards.noLeaders': '아직 포인트가 없습니다.',
+  'hudChrome.dailyRewards.noHistory': '아직 지급 내역이 없습니다.',
+  'hudChrome.dailyRewards.walletConnectTitle': '지갑 인증',
+  'hudChrome.dailyRewards.walletConnectBody':
+    'WOC를 보유한 Solana 지갑을 인증하여 일일 보상을 잠금 해제하세요.',
+  'hudChrome.dailyRewards.walletConnectButton': '지갑 인증',
+  'hudChrome.dailyRewards.walletHoldTitle': 'WOC 보유',
+  'hudChrome.dailyRewards.walletHoldBody':
+    '일일 보상을 잠금 해제하려면 최소 {amount} USD 상당의 WOC를 보유하세요.',
+  'hudChrome.dailyRewards.walletPriceBody':
+    '현재 WOC 가격을 확인할 수 없습니다. 잠시 후 다시 확인하세요.',
+  'hudChrome.dailyRewards.reason.eligible': '보상이 잠금 해제되었습니다.',
+  'hudChrome.dailyRewards.reason.no_wallet': '$20 USD 상당 이상의 WOC를 보유한 지갑을 연결하세요.',
+  'hudChrome.dailyRewards.reason.under_minimum': '지갑이 최소 $20 USD WOC 기준에 미치지 못합니다.',
+  'hudChrome.dailyRewards.reason.price_unavailable':
+    'WOC 가격을 확인할 수 없어 보상이 일시적으로 잠겨 있습니다.',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '{name} 관전 중',
   'hudChrome.loot.chestTitle': '상자',
@@ -711,6 +749,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'errors.api.usernameTaken': '이미 사용 중인 사용자 이름입니다.',
   'errors.api.invalidCredentials': '사용자 이름 또는 비밀번호가 올바르지 않습니다.',
   'errors.api.verificationFailed': '확인에 실패했습니다. 다시 시도해 주세요.',
+  'errors.api.desktopCodeInvalid':
+    '데스크톱 로그인 코드가 유효하지 않거나 만료되었습니다. 다시 시도해 주세요.',
   'errors.api.invalidCharacterName': '캐릭터 이름이 올바르지 않습니다. 2-16자의 글자를 사용하세요.',
   'errors.api.characterNameNotAllowed': '이 캐릭터 이름은 사용할 수 없습니다.',
   'errors.api.invalidClass': '유효하지 않은 직업입니다.',
@@ -4966,4 +5006,21 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.devBadge.link.error': 'GitHub를 연결할 수 없습니다. 다시 시도해 주세요.',
   'hudChrome.devBadge.linkedAs': '{login}(으)로 연결됨',
   'hudChrome.devBadge.unlink': 'GitHub 연결 해제',
+  'hudChrome.nativeUpdate.title': '업데이트 사용 가능',
+  'hudChrome.nativeUpdate.body':
+    'World of ClaudeCraft의 새 버전을 사용할 수 있습니다. 지금 업데이트하여 최신 수정 사항과 개선 사항을 받으세요.',
+  'hudChrome.nativeUpdate.bodyWithVersion':
+    'World of ClaudeCraft 버전 {version}을(를) 사용할 수 있습니다. 지금 업데이트하여 최신 수정 사항과 개선 사항을 받으세요.',
+  'hudChrome.nativeUpdate.notNow': '나중에',
+  'hudChrome.nativeUpdate.update': '업데이트',
+  'desktop.update.downloading': '업데이트 {version} 다운로드 중...',
+  'desktop.update.ready':
+    '업데이트 {version} 준비 완료. 게임을 종료하면 자동으로 설치되며, 지금 다시 시작할 수도 있습니다.',
+  'desktop.update.restart': '지금 다시 시작',
+  'desktop.update.later': '나중에',
+  'desktop.crash.title': 'World of ClaudeCraft',
+  'desktop.crash.body': '게임 화면이 응답하지 않습니다. 다시 불러올까요?',
+  'desktop.crash.reload': '다시 불러오기',
+  'desktop.crash.quit': '종료',
+  'desktop.crash.fatalBody': 'World of ClaudeCraft에 예기치 않은 오류가 발생하여 종료해야 합니다.',
 };

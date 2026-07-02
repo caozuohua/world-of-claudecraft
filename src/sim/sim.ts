@@ -1,5 +1,8 @@
 import type {
   AccountCosmetics,
+  DailyRewardHistory,
+  DailyRewardSpinResult,
+  DailyRewardStatus,
   DelveCompanionInfo,
   DelveRunInfo,
   LockpickView,
@@ -694,7 +697,7 @@ export interface PlayerMeta {
   // Session-only World Market browse query: the search string, the type / subtype /
   // rarity filters, and the page index. The server filters + paginates against this,
   // so the player can page through and filter the WHOLE market a window at a time.
-  // Never persisted — resets on login.
+  // Never persisted, resets on login.
   marketQuery: MarketQuery;
   // Delve meta progression (persisted in CharacterState).
   delveMarks: number;
@@ -1663,6 +1666,40 @@ export class Sim {
   devLeaderboard(page = 0, pageSize = LEADERBOARD_PAGE_SIZE): Promise<DevLeaderboardPage> {
     return Promise.resolve(paginateDevLeaderboard([], page, pageSize));
   }
+
+  dailyRewards(): Promise<DailyRewardStatus> {
+    const day = '1970-01-01';
+    return Promise.resolve({
+      day,
+      resetAt: '1970-01-02T00:00:00.000Z',
+      prizePoolUsd: 0,
+      prizePoolSol: null,
+      eligibility: {
+        eligible: false,
+        reason: 'no_wallet',
+        walletPubkey: null,
+        wocBalance: null,
+        wocUsdPrice: null,
+        usdValue: null,
+        minUsd: 20,
+      },
+      score: 0,
+      rank: null,
+      spin: { claimed: false, points: null, outcomeKey: null, claimedAt: null },
+      tasks: [],
+      leaderboard: [],
+    });
+  }
+
+  async spinDailyReward(): Promise<DailyRewardSpinResult> {
+    const status = await this.dailyRewards();
+    return { ...status, awardedPoints: 0, outcomeKey: '' };
+  }
+
+  dailyRewardHistory(): Promise<DailyRewardHistory> {
+    return Promise.resolve({ payouts: [] });
+  }
+
   get known(): ResolvedAbility[] {
     return this.primary.known;
   }

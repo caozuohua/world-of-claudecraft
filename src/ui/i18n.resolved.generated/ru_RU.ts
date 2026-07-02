@@ -177,6 +177,48 @@ export const ru_RU: EnTranslations = {
       "title": "Эмоции",
       "done": "Готово"
     },
+    "dailyRewards": {
+      "title": "Ежедневные награды",
+      "close": "Закрыть ежедневные награды",
+      "loading": "Загрузка ежедневных наград...",
+      "error": "Не удалось загрузить ежедневные награды.",
+      "intro": "Держите достаточно WOC в подтвержденном кошельке, чтобы открыть ежедневные награды. Зарабатывайте очки за один ежедневный спин и сменяющиеся задания, затем поднимайтесь в ежедневной таблице лидеров ради доли призового фонда.",
+      "prize": "Призовой фонд",
+      "reset": "Сброс",
+      "endsIn": "Ends in {time}",
+      "remainingLessThanMinute": "<1m",
+      "remainingMinutes": "{minutes}m",
+      "remainingHoursMinutes": "{hours}h {minutes}m",
+      "score": "Счёт",
+      "walletValue": "Стоимость кошелька (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "Неизвестно",
+      "spinTitle": "Ежедневный спин",
+      "spinDialogTitle": "Спин ежедневной награды",
+      "spinClose": "Закрыть ежедневный спин",
+      "spinReady": "Доступен один спин.",
+      "spinClaimed": "Получено: +{points} очков.",
+      "spinResult": "+{points} очков",
+      "spinButton": "Крутить",
+      "tasks": "Задания",
+      "leaderboard": "Ежедневная таблица лидеров",
+      "history": "Прошлые победители",
+      "noLeaders": "Пока нет очков.",
+      "noHistory": "Пока нет выплат.",
+      "walletConnectTitle": "Подтвердить кошелек",
+      "walletConnectBody": "Подтвердите кошелек Solana с WOC, чтобы открыть ежедневные награды.",
+      "walletConnectButton": "Подтвердить кошелек",
+      "walletHoldTitle": "Держите WOC",
+      "walletHoldBody": "Держите не менее {amount} USD в WOC, чтобы открыть ежедневные награды.",
+      "walletPriceBody": "Цена WOC сейчас недоступна. Загляните чуть позже.",
+      "reason": {
+        "eligible": "Награды открыты.",
+        "no_wallet": "Подключите кошелек с не менее чем $20 USD в WOC.",
+        "under_minimum": "Кошелек ниже минимума в $20 USD WOC.",
+        "price_unavailable": "Цена WOC недоступна, награды временно заблокированы."
+      }
+    },
     "theme": {
       "preset": "Тема интерфейса",
       "customColors": "Настраиваемые цвета",
@@ -264,6 +306,13 @@ export const ru_RU: EnTranslations = {
       "coordinates": "Координаты",
       "heading": "Направление",
       "minimapZoom": "Масштаб миникарты"
+    },
+    "nativeUpdate": {
+      "title": "Доступно обновление",
+      "body": "Доступна новая версия World of ClaudeCraft. Обновите сейчас, чтобы получить последние исправления и улучшения.",
+      "bodyWithVersion": "Доступна версия {version} World of ClaudeCraft. Обновите сейчас, чтобы получить последние исправления и улучшения.",
+      "notNow": "Не сейчас",
+      "update": "Обновить"
     },
     "castBar": {
       "playerAria": "Ваша полоса применения",
@@ -2626,6 +2675,7 @@ export const ru_RU: EnTranslations = {
       "usernameTaken": "Это имя пользователя уже занято.",
       "invalidCredentials": "Неверное имя пользователя или пароль.",
       "verificationFailed": "Проверка не пройдена. Повторите попытку.",
+      "desktopCodeInvalid": "Код входа для настольного приложения недействителен или истёк. Повторите попытку.",
       "invalidCharacterName": "Недопустимое имя персонажа. Используйте 2-16 букв.",
       "characterNameNotAllowed": "Это имя персонажа запрещено.",
       "invalidClass": "Недопустимый класс.",
@@ -2642,6 +2692,21 @@ export const ru_RU: EnTranslations = {
       "takenOver": "Вашего персонажа перехватила другая сессия.",
       "renameBeforeEntering": "Перед входом в мир этому персонажу нужно сменить имя.",
       "renameNotPermitted": "Переименование этого персонажа не разрешено."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Загрузка обновления {version}...",
+      "ready": "Обновление {version} готово. Оно установится при выходе из игры, либо перезапустите сейчас.",
+      "restart": "Перезапустить сейчас",
+      "later": "Позже"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "Игровой экран перестал отвечать. Перезагрузить его?",
+      "reload": "Перезагрузить",
+      "quit": "Выйти",
+      "fatalBody": "World of ClaudeCraft столкнулась с непредвиденной ошибкой и будет закрыта."
     }
   },
   "realm": {

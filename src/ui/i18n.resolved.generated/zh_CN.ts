@@ -177,6 +177,48 @@ export const zh_CN: EnTranslations = {
       "title": "表情",
       "done": "完成"
     },
+    "dailyRewards": {
+      "title": "每日奖励",
+      "close": "关闭每日奖励",
+      "loading": "正在加载每日奖励...",
+      "error": "无法加载每日奖励。",
+      "intro": "在已验证的钱包中持有足够的 WOC 即可解锁每日奖励。通过每日一次转盘和轮换任务赚取积分，然后攀登每日排行榜，赢取奖池分成。",
+      "prize": "奖池",
+      "reset": "重置",
+      "endsIn": "Ends in {time}",
+      "remainingLessThanMinute": "<1m",
+      "remainingMinutes": "{minutes}m",
+      "remainingHoursMinutes": "{hours}h {minutes}m",
+      "score": "得分",
+      "walletValue": "钱包价值 (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "未知",
+      "spinTitle": "每日转盘",
+      "spinDialogTitle": "每日奖励转盘",
+      "spinClose": "关闭每日转盘",
+      "spinReady": "有一次转盘可用。",
+      "spinClaimed": "已领取：+{points} 积分。",
+      "spinResult": "+{points} 积分",
+      "spinButton": "转动",
+      "tasks": "任务",
+      "leaderboard": "每日排行榜",
+      "history": "往期获奖者",
+      "noLeaders": "暂无积分。",
+      "noHistory": "暂无派奖记录。",
+      "walletConnectTitle": "验证钱包",
+      "walletConnectBody": "验证一个持有 WOC 的 Solana 钱包即可解锁每日奖励。",
+      "walletConnectButton": "验证钱包",
+      "walletHoldTitle": "持有 WOC",
+      "walletHoldBody": "至少持有价值 {amount} USD 的 WOC 即可解锁每日奖励。",
+      "walletPriceBody": "WOC 价格暂时不可用。请稍后再来查看。",
+      "reason": {
+        "eligible": "奖励已解锁。",
+        "no_wallet": "请连接一个持有至少价值 $20 USD 的 WOC 的钱包。",
+        "under_minimum": "钱包低于 $20 USD WOC 的最低要求。",
+        "price_unavailable": "WOC 价格不可用，奖励暂时锁定。"
+      }
+    },
     "theme": {
       "preset": "界面主题",
       "customColors": "自定义颜色",
@@ -264,6 +306,13 @@ export const zh_CN: EnTranslations = {
       "coordinates": "坐标",
       "heading": "朝向",
       "minimapZoom": "小地图缩放"
+    },
+    "nativeUpdate": {
+      "title": "有可用更新",
+      "body": "World of ClaudeCraft 有新版本可用。立即更新以获取最新修复和改进。",
+      "bodyWithVersion": "World of ClaudeCraft {version} 版本已可用。立即更新以获取最新修复和改进。",
+      "notNow": "暂不",
+      "update": "更新"
     },
     "castBar": {
       "playerAria": "你的施法条",
@@ -2626,6 +2675,7 @@ export const zh_CN: EnTranslations = {
       "usernameTaken": "该用户名已被占用。",
       "invalidCredentials": "用户名或密码无效。",
       "verificationFailed": "验证失败，请重试。",
+      "desktopCodeInvalid": "桌面版登录代码无效或已过期，请重试。",
       "invalidCharacterName": "角色名称无效。请使用 2-16 个字母。",
       "characterNameNotAllowed": "该角色名称不可使用。",
       "invalidClass": "职业无效。",
@@ -2642,6 +2692,21 @@ export const zh_CN: EnTranslations = {
       "takenOver": "你的角色已被另一个会话接管。",
       "renameBeforeEntering": "此角色必须先改名才能进入世界。",
       "renameNotPermitted": "不允许为此角色改名。"
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "正在下载更新 {version}...",
+      "ready": "更新 {version} 已就绪。退出游戏时将自动安装，也可立即重启。",
+      "restart": "立即重启",
+      "later": "稍后"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "游戏画面已停止响应。要重新加载吗？",
+      "reload": "重新加载",
+      "quit": "退出",
+      "fatalBody": "World of ClaudeCraft 遇到意外错误，需要关闭。"
     }
   },
   "realm": {

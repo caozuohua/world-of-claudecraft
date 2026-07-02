@@ -177,6 +177,48 @@ export const ko_KR: EnTranslations = {
       "title": "감정 표현",
       "done": "완료"
     },
+    "dailyRewards": {
+      "title": "일일 보상",
+      "close": "일일 보상 닫기",
+      "loading": "일일 보상 불러오는 중...",
+      "error": "일일 보상을 불러올 수 없습니다.",
+      "intro": "인증된 지갑에 충분한 WOC를 보유하여 일일 보상을 잠금 해제하세요. 하루 한 번의 스핀과 교체되는 과제로 포인트를 획득한 뒤, 일일 순위표를 올라 상금 풀의 일부를 차지하세요.",
+      "prize": "상금 풀",
+      "reset": "초기화",
+      "endsIn": "Ends in {time}",
+      "remainingLessThanMinute": "<1m",
+      "remainingMinutes": "{minutes}m",
+      "remainingHoursMinutes": "{hours}h {minutes}m",
+      "score": "점수",
+      "walletValue": "지갑 가치 (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "알 수 없음",
+      "spinTitle": "일일 스핀",
+      "spinDialogTitle": "일일 보상 스핀",
+      "spinClose": "일일 스핀 닫기",
+      "spinReady": "스핀 한 번을 사용할 수 있습니다.",
+      "spinClaimed": "획득: +{points} 포인트.",
+      "spinResult": "+{points} 포인트",
+      "spinButton": "돌리기",
+      "tasks": "과제",
+      "leaderboard": "일일 순위표",
+      "history": "지난 당첨자",
+      "noLeaders": "아직 포인트가 없습니다.",
+      "noHistory": "아직 지급 내역이 없습니다.",
+      "walletConnectTitle": "지갑 인증",
+      "walletConnectBody": "WOC를 보유한 Solana 지갑을 인증하여 일일 보상을 잠금 해제하세요.",
+      "walletConnectButton": "지갑 인증",
+      "walletHoldTitle": "WOC 보유",
+      "walletHoldBody": "일일 보상을 잠금 해제하려면 최소 {amount} USD 상당의 WOC를 보유하세요.",
+      "walletPriceBody": "현재 WOC 가격을 확인할 수 없습니다. 잠시 후 다시 확인하세요.",
+      "reason": {
+        "eligible": "보상이 잠금 해제되었습니다.",
+        "no_wallet": "$20 USD 상당 이상의 WOC를 보유한 지갑을 연결하세요.",
+        "under_minimum": "지갑이 최소 $20 USD WOC 기준에 미치지 못합니다.",
+        "price_unavailable": "WOC 가격을 확인할 수 없어 보상이 일시적으로 잠겨 있습니다."
+      }
+    },
     "theme": {
       "preset": "UI 테마",
       "customColors": "사용자 지정 색상",
@@ -264,6 +306,13 @@ export const ko_KR: EnTranslations = {
       "coordinates": "좌표",
       "heading": "방향",
       "minimapZoom": "미니맵 확대/축소"
+    },
+    "nativeUpdate": {
+      "title": "업데이트 사용 가능",
+      "body": "World of ClaudeCraft의 새 버전을 사용할 수 있습니다. 지금 업데이트하여 최신 수정 사항과 개선 사항을 받으세요.",
+      "bodyWithVersion": "World of ClaudeCraft 버전 {version}을(를) 사용할 수 있습니다. 지금 업데이트하여 최신 수정 사항과 개선 사항을 받으세요.",
+      "notNow": "나중에",
+      "update": "업데이트"
     },
     "castBar": {
       "playerAria": "내 시전 막대",
@@ -2626,6 +2675,7 @@ export const ko_KR: EnTranslations = {
       "usernameTaken": "이미 사용 중인 사용자 이름입니다.",
       "invalidCredentials": "사용자 이름 또는 비밀번호가 올바르지 않습니다.",
       "verificationFailed": "확인에 실패했습니다. 다시 시도해 주세요.",
+      "desktopCodeInvalid": "데스크톱 로그인 코드가 유효하지 않거나 만료되었습니다. 다시 시도해 주세요.",
       "invalidCharacterName": "캐릭터 이름이 올바르지 않습니다. 2-16자의 글자를 사용하세요.",
       "characterNameNotAllowed": "이 캐릭터 이름은 사용할 수 없습니다.",
       "invalidClass": "유효하지 않은 직업입니다.",
@@ -2642,6 +2692,21 @@ export const ko_KR: EnTranslations = {
       "takenOver": "다른 세션이 캐릭터를 넘겨받았습니다.",
       "renameBeforeEntering": "이 캐릭터는 세계에 들어가기 전에 이름을 변경해야 합니다.",
       "renameNotPermitted": "이 캐릭터의 이름을 변경할 수 없습니다."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "업데이트 {version} 다운로드 중...",
+      "ready": "업데이트 {version} 준비 완료. 게임을 종료하면 자동으로 설치되며, 지금 다시 시작할 수도 있습니다.",
+      "restart": "지금 다시 시작",
+      "later": "나중에"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "게임 화면이 응답하지 않습니다. 다시 불러올까요?",
+      "reload": "다시 불러오기",
+      "quit": "종료",
+      "fatalBody": "World of ClaudeCraft에 예기치 않은 오류가 발생하여 종료해야 합니다."
     }
   },
   "realm": {

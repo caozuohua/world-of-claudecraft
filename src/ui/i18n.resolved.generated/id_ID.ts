@@ -177,6 +177,48 @@ export const id_ID: EnTranslations = {
       "title": "Emote",
       "done": "Selesai"
     },
+    "dailyRewards": {
+      "title": "Daily Rewards",
+      "close": "Close daily rewards",
+      "loading": "Loading daily rewards...",
+      "error": "Could not load daily rewards.",
+      "intro": "Hold enough WOC in your verified wallet to unlock daily rewards. Earn points with one daily spin and rotating tasks, then climb the daily leaderboard for a share of the prize pool.",
+      "prize": "Prize Pool",
+      "reset": "Reset",
+      "endsIn": "Ends in {time}",
+      "remainingLessThanMinute": "<1m",
+      "remainingMinutes": "{minutes}m",
+      "remainingHoursMinutes": "{hours}h {minutes}m",
+      "score": "Score",
+      "walletValue": "Wallet Value (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "Unknown",
+      "spinTitle": "Daily Spin",
+      "spinDialogTitle": "Daily Reward Spin",
+      "spinClose": "Close daily spin",
+      "spinReady": "One spin is ready.",
+      "spinClaimed": "Claimed: +{points} points.",
+      "spinResult": "+{points} points",
+      "spinButton": "Spin",
+      "tasks": "Tasks",
+      "leaderboard": "Daily Leaderboard",
+      "history": "Past Winners",
+      "noLeaders": "No points yet.",
+      "noHistory": "No payouts yet.",
+      "walletConnectTitle": "Verify Wallet",
+      "walletConnectBody": "Verify a Solana wallet with WOC to unlock daily rewards.",
+      "walletConnectButton": "Verify Wallet",
+      "walletHoldTitle": "Hold WOC",
+      "walletHoldBody": "Hold at least {amount} USD in WOC to unlock daily rewards.",
+      "walletPriceBody": "WOC pricing is unavailable right now. Check back shortly.",
+      "reason": {
+        "eligible": "Rewards unlocked.",
+        "no_wallet": "Connect a wallet with at least $20 USD in WOC.",
+        "under_minimum": "Wallet is below the $20 USD WOC minimum.",
+        "price_unavailable": "WOC price is unavailable, rewards are temporarily locked."
+      }
+    },
     "theme": {
       "preset": "Tema UI",
       "customColors": "Warna Kustom",
@@ -264,6 +306,13 @@ export const id_ID: EnTranslations = {
       "coordinates": "Koordinat",
       "heading": "Arah",
       "minimapZoom": "Zoom peta mini"
+    },
+    "nativeUpdate": {
+      "title": "Update Available",
+      "body": "A new version of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "bodyWithVersion": "Version {version} of World of ClaudeCraft is available. Update now for the latest fixes and improvements.",
+      "notNow": "Not now",
+      "update": "Update"
     },
     "castBar": {
       "playerAria": "Bilah Rapal Anda",
@@ -2626,6 +2675,7 @@ export const id_ID: EnTranslations = {
       "usernameTaken": "Nama pengguna itu sudah dipakai.",
       "invalidCredentials": "Nama pengguna atau kata sandi salah.",
       "verificationFailed": "Verifikasi gagal. Silakan coba lagi.",
+      "desktopCodeInvalid": "Desktop login code is invalid or expired. Please try again.",
       "invalidCharacterName": "Nama karakter tidak valid. Gunakan 2-16 huruf.",
       "characterNameNotAllowed": "Nama karakter itu tidak diperbolehkan.",
       "invalidClass": "Kelas tidak valid.",
@@ -2642,6 +2692,21 @@ export const id_ID: EnTranslations = {
       "takenOver": "Karakter Anda telah diambil alih oleh sesi lain.",
       "renameBeforeEntering": "Karakter ini harus diganti namanya sebelum memasuki dunia.",
       "renameNotPermitted": "Mengganti nama karakter ini tidak diperbolehkan."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Downloading update {version}...",
+      "ready": "Update {version} is ready. It installs when you quit, or restart now.",
+      "restart": "Restart now",
+      "later": "Later"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "The game view stopped working. Reload it?",
+      "reload": "Reload",
+      "quit": "Quit",
+      "fatalBody": "World of ClaudeCraft hit an unexpected error and needs to close."
     }
   },
   "realm": {
