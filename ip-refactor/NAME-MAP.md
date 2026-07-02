@@ -11,6 +11,15 @@
 > ~35 names adopted from the SEO name-mining pass (Semrush-checked + adversarially screened,
 > notable: Dirt Nap, Silent Treatment, Grave Mistake, Pound of Flesh, Gravelight, Direhowl,
 > Cinderfall, Winterbite, Gallowglass Maul, Emberkin, Gloomshade, Duskborn, Wraithborn).
+>
+> POST-LOCK OPERATOR AMENDMENT (2026-07-02, from the operator's margin-note review of the
+> locked workbook; screened before applying): Quaking Slam, Bewitch, Icebind, Dirt Toss,
+> Holy Ground, Rattling Shot, Harrier's/Marten's/Courser's Guise (unified aspects), Long Draw
+> (+ Steady Draw), Litany of Resolve, Dirge of Decay, Mending Waters (operator caught the WoW
+> Healing-Tide adjacency), Thunder Ward, Blackrot, Consume, Wildbolt, Lunar Tempest, Menace
+> (operator caught the WoW 'Snarl' shield), Stalk, and specs Fieldcraft / Thundercall /
+> Warspirit. Operator counter-proposals declined for IP reasons: Guardian (WoW druid spec),
+> Ironeye (Elden Ring Nightreign), Thunderlord (WoW clan). All pairing rows cascaded.
 
 This file is the single source of truth for every old -> new string, the analog of the
 world-api `CommandName` table. Every rename slice applies it VERBATIM and never invents a name.
@@ -79,7 +88,7 @@ zero extra rows were needed (verified by G0, recorded in 02-WORKING-MEMORY.md).
 | `demoralizing_shout` | Demoralizing Shout | Direhowl | ability | rename |
 | `charge` | Charge | Onrush | ability | rename |
 | `rend` | Rend | Deep Gash | ability | rename |
-| `thunder_clap` | Thunder Clap | Quaking Roar | ability | rename |
+| `thunder_clap` | Thunder Clap | Quaking Slam | ability | rename |
 | `hamstring` | Hamstring | Hobbling Cut | ability | rename |
 | `bloodrage` | Bloodrage | Blood Toll | ability | rename |
 | `overpower` | Overpower | Redhand | ability | rename |
@@ -106,8 +115,8 @@ zero extra rows were needed (verified by G0, recorded in 02-WORKING-MEMORY.md).
 | `conjure_food` | Conjure Food | Breadbind | ability | rename |
 | `fire_blast` | Fire Blast | Cinderfall | ability | rename |
 | `arcane_missiles` | Arcane Missiles | Aether Darts | ability | rename |
-| `polymorph` | Polymorph | Ensorcel | ability | rename |
-| `frost_nova` | Frost Nova | Frozen Fetters | ability | rename |
+| `polymorph` | Polymorph | Bewitch | ability | rename |
+| `frost_nova` | Frost Nova | Icebind | ability | rename |
 | `arcane_explosion` | Arcane Explosion | Aetherburst | ability | rename |
 | `scorch` | Scorch | Scald | ability | rename |
 | `pyroblast` | Pyroblast | Pyrelance | ability | rename |
@@ -136,7 +145,7 @@ zero extra rows were needed (verified by G0, recorded in 02-WORKING-MEMORY.md).
 | `vanish` | Vanish | Smokestep | ability | rename |
 | `instant_poison` | Instant Poison | Adder's Bite | ability | rename |
 | `deadly_poison` | Deadly Poison | Festering Venom | ability | rename |
-| `blind` | Blind | Blinding Ash | ability | rename |
+| `blind` | Blind | Dirt Toss | ability | rename |
 
 ### Paladin
 | id (frozen) | old | new (PROPOSED) | kind | flag |
@@ -151,7 +160,7 @@ zero extra rows were needed (verified by G0, recorded in 02-WORKING-MEMORY.md).
 | `lay_on_hands` | Lay on Hands | Last Rite | ability | rename |
 | `flash_of_light` | Flash of Light | Lightmend | ability | rename |
 | `exorcism` | Exorcism | Rite of Expulsion | ability | rename |
-| `consecration` | Consecration | Blessed Ground | ability | rename |
+| `consecration` | Consecration | Holy Ground | ability | rename |
 | `righteous_fury` | Righteous Fury | Burning Oath | ability | rename |
 | `retribution_aura` | Retribution Aura | Requital Aura | ability | rename |
 
@@ -162,15 +171,15 @@ zero extra rows were needed (verified by G0, recorded in 02-WORKING-MEMORY.md).
 | `dismiss_pet` | Dismiss Pet | Release Companion | ability | rename |
 | `revive_pet` | Revive Pet | Rouse Companion | ability | rename |
 | `raptor_strike` | Raptor Strike | Gutting Strike | ability | rename |
-| `aspect_of_the_hawk` | Aspect of the Hawk | Harrier's Poise | ability | rename |
+| `aspect_of_the_hawk` | Aspect of the Hawk | Harrier's Guise | ability | rename |
 | `serpent_sting` | Serpent Sting | Venom Barb | ability | rename |
 | `arcane_shot` | Arcane Shot | Fell Shot | ability | rename |
-| `concussive_shot` | Concussive Shot | Staggering Shot | ability | rename |
+| `concussive_shot` | Concussive Shot | Rattling Shot | ability | rename |
 | `mongoose_bite` | Mongoose Bite | Counterfang | ability | rename |
 | `wing_clip` | Wing Clip | Fettering Slash | ability | rename |
-| `aspect_of_the_monkey` | Aspect of the Monkey | Marten's Guile | ability | rename |
-| `aspect_of_the_cheetah` | Aspect of the Cheetah | Courser's Stride | ability | rename |
-| `aimed_shot` | Aimed Shot | Measured Shot | ability | rename |
+| `aspect_of_the_monkey` | Aspect of the Monkey | Marten's Guise | ability | rename |
+| `aspect_of_the_cheetah` | Aspect of the Cheetah | Courser's Guise | ability | rename |
+| `aimed_shot` | Aimed Shot | Long Draw | ability | rename |
 | `rapid_fire` | Rapid Fire | Fevered Draw | ability | rename |
 
 ### Priest
@@ -178,8 +187,8 @@ zero extra rows were needed (verified by G0, recorded in 02-WORKING-MEMORY.md).
 |---|---|---|---|---|
 | `smite` | Smite | Chasten | ability | generic-keep? |
 | `lesser_heal` | Lesser Heal | Whispered Prayer | ability | rename |
-| `power_word_fortitude` | Power Word: Fortitude | Litany of Iron | ability | rename |
-| `shadow_word_pain` | Shadow Word: Pain | Dirge of Rot | ability | rename |
+| `power_word_fortitude` | Power Word: Fortitude | Litany of Resolve | ability | rename |
+| `shadow_word_pain` | Shadow Word: Pain | Dirge of Decay | ability | rename |
 | `power_word_shield` | Power Word: Shield | Psalm of Warding | ability | rename |
 | `renew` | Renew | Lingering Grace | ability | rename |
 | `mind_blast` | Mind Blast | Mindfracture | ability | rename |
@@ -192,9 +201,9 @@ zero extra rows were needed (verified by G0, recorded in 02-WORKING-MEMORY.md).
 |---|---|---|---|---|
 | `lightning_bolt` | Lightning Bolt | Arc Bolt | ability | rename |
 | `rockbiter_weapon` | Rockbiter Weapon | Stonebound Weapon | ability | rename |
-| `healing_wave` | Healing Wave | Mending Tide | ability | rename |
+| `healing_wave` | Healing Wave | Mending Waters | ability | rename |
 | `earth_shock` | Earth Shock | Earthen Jolt | ability | rename |
-| `lightning_shield` | Lightning Shield | Static Ward | ability | rename |
+| `lightning_shield` | Lightning Shield | Thunder Ward | ability | rename |
 | `flame_shock` | Flame Shock | Cinder Jolt | ability | rename |
 | `flametongue_weapon` | Flametongue Weapon | Pyrebrand Weapon | ability | rename |
 | `frost_shock` | Frost Shock | Rime Jolt | ability | rename |
@@ -208,10 +217,10 @@ zero extra rows were needed (verified by G0, recorded in 02-WORKING-MEMORY.md).
 | `shadow_bolt` | Shadow Bolt | Gloom Bolt | ability | rename |
 | `demon_skin` | Demon Skin | Fiendhide | ability | rename |
 | `immolate` | Immolate | Burning Pact | ability | rename |
-| `corruption` | Corruption | Canker | ability | rename |
+| `corruption` | Corruption | Blackrot | ability | rename |
 | `life_tap` | Life Tap | Hard Bargain | ability | rename |
 | `curse_of_agony` | Curse of Agony | Hex of Anguish | ability | rename |
-| `drain_life` | Drain Life | Pound of Flesh | ability | rename |
+| `drain_life` | Drain Life | Consume | ability | rename |
 | `fear` | Fear | Harrow | ability | rename |
 | `searing_pain` | Searing Pain | Sear | ability | rename |
 | `shadowburn` | Shadowburn | Duskfire | ability | rename |
@@ -231,20 +240,20 @@ zero extra rows were needed (verified by G0, recorded in 02-WORKING-MEMORY.md).
 ### Druid
 | id (frozen) | old | new (PROPOSED) | kind | flag |
 |---|---|---|---|---|
-| `wrath` | Wrath | Verdant Bolt | ability | rename |
+| `wrath` | Wrath | Wildbolt | ability | rename |
 | `healing_touch` | Healing Touch | Wildmend | ability | rename |
 | `mark_of_the_wild` | Mark of the Wild | Wildward | ability | rename |
-| `moonfire` | Moonfire | Gloamfire | ability | rename |
+| `moonfire` | Moonfire | Lunar Tempest | ability | rename |
 | `rejuvenation` | Rejuvenation | Wildbloom | ability | rename |
 | `thorns` | Thorns | Briarguard | ability | rename |
 | `entangling_roots` | Entangling Roots | Gripping Roots | ability | rename |
 | `bear_form` | Bear Form | Bruin Form | ability | rename |
 | `bear_charge` | Bear Charge | Bruin Rush | ability | rename |
 | `maul` | Maul | Bonecrush | ability | rename |
-| `growl` | Growl | Snarl | ability | rename |
+| `growl` | Growl | Menace | ability | rename |
 | `demoralizing_roar` | Demoralizing Roar | Craven Roar | ability | rename |
 | `cat_form` | Wolf Form | Wolf Form | ability | generic-keep? |
-| `prowl` | Prowl | Slink | ability | rename |
+| `prowl` | Prowl | Stalk | ability | rename |
 | `rake` | Rake | Flense | ability | rename |
 | `claw` | Claw | Rive | ability | generic-keep? |
 | `ferocious_bite` | Ferocious Bite | Gorebite | ability | rename |
@@ -291,7 +300,7 @@ Kept original: mastery `arms` Sharpened Blades.
 | `war_toughness` | Toughness | Grit | talent | rename |
 | `war_cruelty` | Cruelty | Barbarity | talent | rename |
 | `war_imp_heroic_strike` | Improved Heroic Strike | Improved Reaver Strike | talent | pairing |
-| `war_imp_thunder_clap` | Improved Thunder Clap | Improved Quaking Roar | talent | pairing |
+| `war_imp_thunder_clap` | Improved Thunder Clap | Improved Quaking Slam | talent | pairing |
 | `war_deflection` | Deflection | Blade Turn | talent | rename |
 | `war_tactical_choice` | Tactical Mastery | Battle Doctrine | choice | rename |
 | `tc_anticipation` | Anticipation | Fair Warning | choice | rename |
@@ -316,7 +325,7 @@ Kept original: mastery `arms` Sharpened Blades.
 | `fury_imp_bloodthirst` | Improved Bloodthirst | Improved Bloodletting | talent | pairing |
 | `prot_toughness` | Shield Mastery | Shieldwright | talent | rename |
 | `prot_anticipation` | Anticipation | Fair Warning | talent | rename |
-| `prot_imp_thunder_clap` | Improved Thunder Clap | Improved Quaking Roar | talent | pairing |
+| `prot_imp_thunder_clap` | Improved Thunder Clap | Improved Quaking Slam | talent | pairing |
 | `prot_imp_sunder` | Improved Sunder Armor | Improved Armor Rend | talent | pairing |
 | `pc_shield_spec` | Shield Specialization | Shieldbearer | choice | rename |
 | `pc_imp_taunt` | Improved Taunt | Improved Goad | choice | pairing |
@@ -351,7 +360,7 @@ Kept original: Savagery (`tc_cruelty`), Weapon Mastery (`arms_tactical_mastery`)
 | `mag_clearcasting` | Clearcasting | Effortless Art | talent | rename |
 | `arc_imp_missiles` | Improved Arcane Missiles | Improved Aether Darts | talent | pairing |
 | `arc_arcane_concentration` | Arcane Concentration | Aetheric Poise | talent | rename |
-| `arc_imp_polymorph` | Improved Polymorph | Improved Ensorcel | talent | pairing |
+| `arc_imp_polymorph` | Improved Polymorph | Improved Bewitch | talent | pairing |
 | `arc_arcane_power` | Arcane Power | Aether Surge | talent | rename |
 | `arc_choice` | Arcane Thesis | Aetheric Thesis | choice | rename |
 | `arc_choice_presence` | Presence of Mind | Racing Mind | choice | rename |
@@ -369,7 +378,7 @@ Kept original: Savagery (`tc_cruelty`), Weapon Mastery (`arms_tactical_mastery`)
 | `fire_pyromancer` | Pyromancer | Pyre Tender | talent | rename |
 | `frost_imp_frostbolt` | Improved Frostbolt | Improved Rimelance | talent | pairing |
 | `frost_permafrost` | Permafrost | Deep Rime | talent | rename |
-| `frost_imp_nova` | Improved Frost Nova | Improved Frozen Fetters | talent | pairing |
+| `frost_imp_nova` | Improved Frost Nova | Improved Icebind | talent | pairing |
 | `frost_shatter` | Shatter | Brittlebreak | talent | rename |
 | `frost_choice_barrier` | Ice Barrier | Frostveil | choice | pairing |
 | `frost_choice_snap` | Cold Snap | Second Winter | choice | rename |
@@ -489,7 +498,7 @@ Kept original: none (the paladin tree is wall-to-wall WoW-derived).
 |---|---|---|---|---|
 | spec `beast_mastery` | Beast Mastery | Packlord | tree | rename |
 | spec `marksmanship` | Marksmanship | Coldsight | tree | rename |
-| spec `survival` | Survival | Snarecraft | tree | rename |
+| spec `survival` | Survival | Fieldcraft | tree | rename |
 | mastery `beast_mastery` | Kindred Spirits | Packbond | mastery | rename |
 | mastery `marksmanship` | Trueshot Training | Iron Aim | mastery | rename |
 | mastery `survival` | Lightning Reflexes | Quickblood | mastery | rename |
@@ -499,7 +508,7 @@ Kept original: none (the paladin tree is wall-to-wall WoW-derived).
 |---|---|---|---|---|
 | `hun_endurance_training` | Endurance Training | Ironsinew | talent | rename |
 | `hun_lethal_shots` | Lethal Shots | Butcher's Aim | talent | rename |
-| `hun_imp_hawk` | Improved Aspect of the Hawk | Improved Harrier's Poise | talent | pairing |
+| `hun_imp_hawk` | Improved Aspect of the Hawk | Improved Harrier's Guise | talent | pairing |
 | `hun_efficiency` | Efficiency | Lean Quiver | talent | rename |
 | `hun_deflection` | Deflection | Turnaside | talent | rename |
 | `hun_pathfinder` | Pathfinder | Waywise | choice | rename |
@@ -519,7 +528,7 @@ Kept original: none (the paladin tree is wall-to-wall WoW-derived).
 | `bm_focused_fire` | Focused Fire | Shared Quarry | talent | rename |
 | `mm_imp_arcane_shot` | Improved Arcane Shot | Improved Fell Shot | talent | pairing |
 | `mm_lethal_shots` | Lethal Shots | Butcher's Aim | talent | rename |
-| `mm_aimed_focus` | Aimed Focus | Measured Focus | talent | pairing |
+| `mm_aimed_focus` | Aimed Focus | Steady Draw | talent | pairing |
 | `mm_barrage` | Barrage | Arrow Squall | talent | rename |
 | `mm_choice` | Trueshot | Sureflight | choice | rename |
 | `mm_choice_aura` | Trueshot Aura | Sureflight Aura | choice | rename |
@@ -553,7 +562,7 @@ Kept original: none.
 |---|---|---|---|---|
 | `pri_wand_specialization` | Wand Specialization | Baleful Rod | talent | rename |
 | `pri_spirit_tap` | Spirit Tap | Soulglean | talent | rename |
-| `pri_imp_fortitude` | Improved Fortitude | Improved Litany of Iron | talent | pairing |
+| `pri_imp_fortitude` | Improved Fortitude | Improved Litany of Resolve | talent | pairing |
 | `pri_meditation` | Meditation | Nocturns | talent | rename |
 | `pri_shadow_affinity` | Shadow Affinity | Duskbound | talent | rename |
 | `pri_inner_calling` | Inner Calling | Veiled Calling | choice | rename |
@@ -581,7 +590,7 @@ Kept original: none.
 | `holy_priest_choice_prayer` | Healing Prayers | Gathered Prayers | choice | rename |
 | `holy_spiritual_healing` | Spiritual Healing | Grave Mercy | talent | rename |
 | `shadow_blackout` | Blackout | Snuffed Light | talent | rename |
-| `shadow_word_pain` | Improved Shadow Word: Pain | Improved Dirge of Rot | talent | pairing |
+| `shadow_word_pain` | Improved Shadow Word: Pain | Improved Dirge of Decay | talent | pairing |
 | `shadow_mind_flay` | Improved Mind Flay | Improved Litany of Woe | talent | pairing |
 | `shadow_focus` | Shadow Focus | Umbral Intent | talent | rename |
 | `shadow_choice` | Dark Arts | Black Office | choice | rename |
@@ -595,8 +604,8 @@ Kept original: none.
 ### Shaman specs + masteries
 | id (frozen) | old | new (PROPOSED) | kind | flag |
 |---|---|---|---|---|
-| spec `elemental` | Elemental | Earthwrath | tree | rename |
-| spec `enhancement` | Enhancement | Spiritblade | tree | rename |
+| spec `elemental` | Elemental | Thundercall | tree | rename |
+| spec `enhancement` | Enhancement | Warspirit | tree | rename |
 | spec `restoration` | Restoration | Spiritmend | tree | rename |
 | mastery `elemental` | Elemental Fury | Earthen Fury | mastery | rename |
 | mastery `enhancement` | Stormcaller | Skyrend | mastery | rename |
@@ -607,7 +616,7 @@ Kept original: none.
 |---|---|---|---|---|
 | `sha_convection` | Convection | Latent Charge | talent | rename |
 | `sha_ancestral_knowledge` | Ancestral Knowledge | Ancient Lore | talent | rename |
-| `sha_shielding` | Improved Lightning Shield | Improved Static Ward | talent | pairing |
+| `sha_shielding` | Improved Lightning Shield | Improved Thunder Ward | talent | pairing |
 | `sha_thundering_strikes` | Thundering Strikes | Thunderous Blows | talent | rename |
 | `sha_tidal_focus` | Tidal Focus | Serene Waters | talent | rename |
 | `sha_elemental_calling` | Elemental Calling | Path of Spirits | choice | rename |
@@ -635,7 +644,7 @@ Kept original: none.
 | `enh_choice_weapon` | Weapon Mastery | Honed Edge | choice | rename |
 | `enh_spirit_weapons` | Spirit Weapons | Spiritforged Arms | talent | rename |
 | `rest_tidal_focus` | Tidal Focus | Serene Waters | talent | rename |
-| `rest_imp_healing_wave` | Improved Healing Wave | Improved Mending Tide | talent | pairing |
+| `rest_imp_healing_wave` | Improved Healing Wave | Improved Mending Waters | talent | pairing |
 | `rest_ancestral_healing` | Ancestral Healing | Ancestor's Mercy | talent | rename |
 | `rest_healing_grace` | Healing Grace | Soothing Grace | talent | rename |
 | `rest_choice` | Nature Blessing | Tidesworn Path | choice | rename |
@@ -661,7 +670,7 @@ Kept original: none.
 |---|---|---|---|---|
 | `wlk_suppression` | Suppression | Stifling Grasp | talent | rename |
 | `wlk_demonic_embrace` | Demonic Embrace | Fiendish Fortitude | talent | rename |
-| `wlk_imp_corruption` | Improved Corruption | Improved Canker | talent | pairing |
+| `wlk_imp_corruption` | Improved Corruption | Improved Blackrot | talent | pairing |
 | `wlk_demonic_skin` | Improved Demon Skin | Improved Fiendhide | talent | pairing |
 | `wlk_cataclysm` | Cataclysm | Calamity | talent | rename |
 | `wlk_dark_pact` | Dark Pact | Grim Bargain | choice | rename |
@@ -671,7 +680,7 @@ Kept original: none.
 | `wlk_shadowburn` | Shadowburn | Duskfire | talent | pairing |
 | `wlk_fel_intellect` | Fel Intellect | Vile Cunning | talent | rename |
 | `aff_imp_agony` | Improved Curse of Agony | Improved Hex of Anguish | talent | pairing |
-| `aff_imp_corruption` | Improved Corruption | Improved Canker | talent | pairing |
+| `aff_imp_corruption` | Improved Corruption | Improved Blackrot | talent | pairing |
 | `aff_fel_concentration` | Fel Concentration | Unbroken Focus | talent | rename |
 | `aff_amplify_curse` | Amplify Curse | Deepened Hex | talent | rename |
 | `aff_choice` | Soul Harvest | Reaping Path | choice | rename |
@@ -724,8 +733,8 @@ Kept original: none.
 | `dru_path_resto` | Gift of Nature | Grove's Gift | choice | rename |
 | `dru_barkskin` | Barkskin | Oakhide | talent | pairing |
 | `dru_furor` | Furor | Wildsurge | talent | rename |
-| `bal_imp_wrath` | Improved Wrath | Improved Verdant Bolt | talent | pairing |
-| `bal_imp_moonfire` | Improved Moonfire | Improved Gloamfire | talent | pairing |
+| `bal_imp_wrath` | Improved Wrath | Improved Wildbolt | talent | pairing |
+| `bal_imp_moonfire` | Improved Moonfire | Improved Lunar Tempest | talent | pairing |
 | `bal_natures_reach` | Nature Reach | Reaching Boughs | talent | rename |
 | `bal_vengeance` | Vengeance | Cold Reckoning | talent | rename |
 | `bal_choice` | Moonkin Path | Moonwing Path | choice | rename |

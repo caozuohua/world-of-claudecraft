@@ -37,6 +37,11 @@ Status values: `not-started` -> `in-progress (<who>)` -> `done-on-track (<branch
   (Barrowlord/Nightfang/Mournweave/Bonewrought/Direfang/Wraithfire/Galecall); realm word =
   "World"; ~35 SEO-mined names adopted (Semrush-verified + adversarially screened) incl.
   pairing cascades - see the map's lock header for the list.
+- [x] Post-lock operator amendment (2026-07-02, final): ~22 new-name refinements from the
+  operator's workbook margin notes (Quaking Slam, Bewitch, Icebind, Mending Waters, Menace,
+  Lunar Tempest, specs Fieldcraft/Thundercall/Warspirit, unified X's-Guise aspects, ...);
+  three operator suggestions declined for IP (Guardian, Ironeye, Thunderlord). Old/armed
+  columns untouched - scanner baseline stays 920. Map final and frozen from here.
 - Until both are checked, NO V/C/W/T slice may start. Append-only after LOCK; a slice needing a
   missing string STOPS and appends a request row here for the operator, never invents a name.
 
