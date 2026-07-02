@@ -3183,6 +3183,8 @@ export class Sim {
         ? PVP_POLYMORPH_DR_RESET
         : category === 'fear'
           ? PVP_FEAR_DR_RESET
+          : category === 'lockout'
+            ? PVP_STUN_DR_RESET
           : isStunDrCategory(category)
             ? PVP_STUN_DR_RESET
             : PVP_ROOT_DR_RESET;

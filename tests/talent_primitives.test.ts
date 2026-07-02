@@ -48,6 +48,15 @@ function metaOf(sim: TestSim, p: Entity): PlayerMeta {
   return meta;
 }
 
+function startDuel(sim: TestSim, aPid: number, bPid: number): void {
+  sim.duelRequest(bPid, aPid);
+  sim.duelAccept(bPid);
+  for (let i = 0; i < 20 * 5; i++) {
+    sim.tick();
+    if (sim.duelFor(aPid)?.state === 'active') break;
+  }
+}
+
 function entityOf(sim: TestSim, id: number): Entity {
   const entity = sim.entities.get(id);
   if (!entity) throw new Error(`missing entity ${id}`);
@@ -130,6 +139,7 @@ describe('talent primitive P1: interrupt', () => {
     const { sim, p: rogue } = makeSim('rogue');
     const mageId = sim.addPlayer('mage', 'Caster');
     sim.setPlayerLevel(20, mageId);
+    startDuel(sim, rogue.id, mageId);
     const mage = entityOf(sim, mageId);
     mage.castingAbility = 'fireball';
     mage.castRemaining = 1.25;
@@ -148,6 +158,7 @@ describe('talent primitive P1: interrupt', () => {
     const { sim, p: rogue } = makeSim('rogue');
     const mageId = sim.addPlayer('mage', 'Channeler');
     sim.setPlayerLevel(20, mageId);
+    startDuel(sim, rogue.id, mageId);
     const mage = entityOf(sim, mageId);
     mage.castingAbility = 'arcane_missiles';
     mage.channeling = true;
@@ -185,10 +196,69 @@ describe('talent primitive P1: interrupt', () => {
     expect(warrior.auras.some((a) => a.kind === 'lockout')).toBe(false);
   });
 
+  it('diminishes PvP lockouts to full, half, quarter, then immune', () => {
+    const { sim, p: rogue } = makeSim('rogue');
+    const mageId = sim.addPlayer('mage', 'Caster');
+    sim.setPlayerLevel(20, mageId);
+    startDuel(sim, rogue.id, mageId);
+    const mage = entityOf(sim, mageId);
+
+    const interruptCast = () => {
+      mage.auras = mage.auras.filter((a) => a.kind !== 'lockout');
+      mage.castingAbility = 'fireball';
+      mage.castRemaining = 1.25;
+      mage.castTotal = 1.5;
+      runEffects(sim.ctx, rogue, metaOf(sim, rogue), mage, interruptRes(8));
+      return mage.auras.find((a) => a.kind === 'lockout')?.duration ?? null;
+    };
+
+    expect(interruptCast()).toBe(8);
+    expect(interruptCast()).toBe(4);
+    expect(interruptCast()).toBe(2);
+    expect(interruptCast()).toBeNull();
+    expect(mage.castingAbility).toBeNull();
+  });
+
+  it('does not cancel an uninterruptible ability definition', () => {
+    const { sim, p: rogue } = makeSim('rogue');
+    const mob = spawnTarget(sim, rogue);
+    const abilityId = 'test_uninterruptible_cast';
+    ABILITIES[abilityId] = {
+      id: abilityId,
+      name: 'Test Uninterruptible Cast',
+      class: 'mage',
+      learnLevel: 1,
+      cost: 0,
+      castTime: 2,
+      cooldown: 0,
+      range: 30,
+      school: 'fire',
+      requiresTarget: true,
+      uninterruptible: true,
+      effects: [{ type: 'directDamage', min: 1, max: 1 }],
+      description: '',
+    };
+
+    try {
+      mob.castingAbility = abilityId;
+      mob.castRemaining = 1.25;
+      mob.castTotal = 2;
+
+      runEffects(sim.ctx, rogue, metaOf(sim, rogue), mob, interruptRes(4));
+
+      expect(mob.castingAbility).toBe(abilityId);
+      expect(mob.castRemaining).toBe(1.25);
+      expect(mob.auras.some((a) => a.kind === 'lockout')).toBe(false);
+    } finally {
+      delete ABILITIES[abilityId];
+    }
+  });
+
   it('prevents the locked school from being cast until the lockout expires', () => {
     const { sim, p: rogue } = makeSim('rogue');
     const mageId = sim.addPlayer('mage', 'Caster');
     sim.setPlayerLevel(20, mageId);
+    startDuel(sim, rogue.id, mageId);
     const mage = entityOf(sim, mageId);
     mage.resource = mage.maxResource;
     spawnTarget(sim, mage);

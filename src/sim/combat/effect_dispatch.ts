@@ -256,6 +256,7 @@ export function runEffects(
       case 'interrupt': {
         if (!target || target.castingAbility === null || target.castingAbility === FISHING_CAST_ID)
           break;
+        if (p.kind === 'player' && target.kind === 'player' && !ctx.isHostileTo(p, target)) break;
         // Resolve per-player when possible (rank/mods), but fall back to the
         // global ability table so a non-player caster (a mob whose cast is an
         // ability id) is interruptible too; scripted pseudo-casts resolve to
@@ -263,15 +264,18 @@ export function runEffects(
         const interruptedDef =
           ctx.resolvedAbility(target.castingAbility, target.id)?.def ??
           ABILITIES[target.castingAbility];
-        if (!interruptedDef || interruptedDef.school === 'physical') break;
+        if (!interruptedDef || interruptedDef.school === 'physical' || interruptedDef.uninterruptible)
+          break;
         const school = interruptedDef.school;
+        const remaining = ctx.diminishedCrowdControlDuration(p, target, 'lockout', eff.lockout);
         ctx.cancelCast(target);
+        if (remaining === null) break;
         ctx.applyAura(target, {
           id: `${ability.id}_lockout`,
           name: ability.name,
           kind: 'lockout',
-          remaining: eff.lockout,
-          duration: eff.lockout,
+          remaining,
+          duration: remaining,
           value: 0,
           sourceId: p.id,
           school,

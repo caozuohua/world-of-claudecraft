@@ -210,6 +210,7 @@ export type CrowdControlDrCategory =
   | 'root'
   | 'polymorph'
   | 'fear'
+  | 'lockout'
   | 'openerStun'
   | 'controlledStun'
   | 'randomStun';
@@ -1067,6 +1068,8 @@ export interface AbilityDef {
   // A cast/channel with this flag survives the player's own movement (the
   // move-input cancel skips it); talents can also grant it per-ability.
   castWhileMoving?: boolean;
+  // A cast/channel with this flag cannot be stopped by interrupt effects.
+  uninterruptible?: boolean;
   channel?: { duration: number; ticks: number }; // arcane missiles
   cooldown: number; // seconds, 0 = none (GCD only)
   range: number; // yards; 0 = melee range
