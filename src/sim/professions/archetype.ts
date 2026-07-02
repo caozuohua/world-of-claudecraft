@@ -97,6 +97,20 @@ export function archetypeStateFor(ctx: SimContext, pid: number): ArchetypeState 
   return meta ? { ...meta.archetype } : emptyArchetypeState();
 }
 
+// TODO(#1129/#1203): this module only tracks WHICH craft is the active archetype,
+// not the empowerment ceiling that makes it matter. Per #1129's revised acceptance
+// criteria, the reachable ceiling for a craft is
+// min(tierCapability from #1128/#1203, archetypeCapability derived from this state:
+// unlimited for the two active-archetype majors, capped at "rare" for the hobby
+// (the opposite craft on CRAFT_RING), capped at "common" for every other craft once
+// an archetype is set, uncapped-to-rare before any archetype is set at all). That
+// composition point does not exist yet: crafting.ts is still common-tier only
+// (#1127 scope) and wheel.ts's gainCraftSkill has no ceiling at all. Whichever of
+// #1203 (tier capability) or this module lands second should wire this in, so the
+// archetype gate does not silently slip. #1281's Battlefield Experience trickle
+// calls the same gainCraftSkill primitive and will compose automatically once the
+// ceiling lands there (see its own TODO(#1149/#1205)).
+
 /** The zone-1 acceptance quest's stubbed completion hook: on FIRST completion only,
  *  sets the chosen craft as the character's active archetype. A no-op (does not
  *  re-trigger, does not change the archetype) if one is already set, since the
