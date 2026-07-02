@@ -14,7 +14,7 @@
 | ID | Title | Track | Mode | Status | Branch @ commit |
 |----|-------|-------|------|--------|-----------------|
 | G0 | De-IP gate + verbatim-name scanner | Spine | plain | done-on-track (2026-07-02; scanner RED by design: 142 baseline violations; all behavior gates green) | feature/ip-pivot @ G0 commit |
-| G1 | Generate + lock the NAME-MAP | Spine | ULTRACODE | not-started (BLOCKS all tracks) | — |
+| G1 | Generate + lock the NAME-MAP | Spine | ULTRACODE | done-on-track (2026-07-02; 588 map rows, 603 names adversarially screened, 2 skeptic refutations fixed; scanner arms the full map: 812 RED baseline; old-column 100% hit-verified; AWAITING OPERATOR LOCK) | feature/ip-pivot @ G1 commit |
 | V1 | Ability / spell rename | Vocab | plain | not-started | — |
 | V2 | Talent + spec/tree rename | Vocab | plain | not-started | — |
 | C1 | Creatures + coined family-id sweep | Creatures | ULTRACODE | not-started | — |
