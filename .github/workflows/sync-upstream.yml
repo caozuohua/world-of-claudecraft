@@ -2,14 +2,16 @@ name: Sync Upstream
 
 on:
   schedule:
-    - cron: "0 4 * * 1"  # Every Monday at 04:00 UTC
-  workflow_dispatch:  # Allow manual trigger
+    - cron: "0 4 * * *"  # Every day at 04:00 UTC
+  workflow_dispatch:      # Allow manual trigger
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,24 +31,65 @@ jobs:
         run: |
           git fetch upstream --tags
 
+      - name: Check for upstream changes
+        id: check
+        run: |
+          LOCAL=$(git rev-parse main)
+          UPSTREAM=$(git rev-parse upstream/main)
+          if [ "$LOCAL" = "$UPSTREAM" ]; then
+            echo "up_to_date=true" >> "$GITHUB_OUTPUT"
+            echo "Already up to date with upstream."
+          else
+            echo "up_to_date=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Merge upstream/main
+        if: steps.check.outputs.up_to_date == 'false'
+        id: merge
         run: |
           git checkout main
-          git merge upstream/main --no-edit --allow-unrelated-histories || {
-            echo "::warning::Merge conflict detected. Creating a sync branch for manual resolution."
+          if git merge upstream/main --no-edit --allow-unrelated-histories; then
+            echo "merged=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "merged=false" >> "$GITHUB_OUTPUT"
             git merge --abort
-            BRANCH="sync/upstream-$(date +%Y%m%d-%H%M%S)"
-            git checkout -b "$BRANCH"
-            git merge upstream/main --no-edit --allow-unrelated-histories || true
-            git push origin "$BRANCH"
-            echo "::error::Merge conflict. Created branch $BRANCH for manual resolution."
-            exit 1
-          }
+          fi
 
-      - name: Push to origin
+      - name: Push merged changes to main
+        if: steps.check.outputs.up_to_date == 'false' && steps.merge.outputs.merged == 'true'
         run: |
           git push origin main --tags
+          echo "::notice::Synced with upstream successfully!"
 
-      - name: Notify on success
-        if: success()
-        run: echo "::notice::Synced with upstream successfully!"
+      - name: Create PR on merge conflict
+        if: steps.check.outputs.up_to_date == 'false' && steps.merge.outputs.merged == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="sync/upstream-$(date +%Y%m%d-%H%M%S)"
+          git checkout -b "$BRANCH"
+
+          # Apply upstream changes, keeping conflicts for manual resolution
+          git merge upstream/main --no-edit --allow-unrelated-histories || true
+
+          git push origin "$BRANCH"
+
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "chore: sync upstream $(date +%Y-%m-%d)" \
+            --body "## 上游同步冲突 — 需要手动处理
+
+上游仓库 \`levy-street/world-of-claudecraft\` 有新的更新，但自动合并时发生了冲突。
+
+**请按以下步骤手动解决：**
+
+1. 拉取本 PR 对应的分支到本地：
+   \`\`\`bash
+   git fetch origin $BRANCH
+   git checkout $BRANCH
+   \`\`\`
+2. 解决所有冲突文件（搜索 \`<<<<<<<\`），提交修改
+3. 将分支推送回远程后，合并本 PR
+
+/cc @caozuohua"
