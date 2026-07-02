@@ -31,6 +31,18 @@
   --ed-focus: var(--color-border-focus);
   --ed-radius: 6px;
   --ed-topbar-h: 52px;
+  /* Per-tool hues: one color follows the active tool through the rail button,
+     the inspector header chip, and the slider accents, so "what am I holding"
+     is always answered by color. Idle rail stays monochrome; hue appears on
+     hover/active only. */
+  --hue-select: var(--gold);
+  --hue-sculpt: #cf9040; /* raise / lower / smooth / flatten: earth */
+  --hue-paint: #5aa850; /* biome moss */
+  --hue-water: #55a7e0;
+  --hue-place: #a985e8; /* world content: place / camp / spawn */
+  --hue-blocker: #e0503c; /* matches the red walls it draws */
+  --hue-region: #8fa8c8;
+  --hue-erase: #ff8f85;
 }
 
 * {
@@ -245,8 +257,23 @@ input[type="range"] {
 
 .ed-actions {
   display: flex;
+  align-items: center;
   gap: 6px;
   flex-wrap: nowrap;
+}
+
+.ed-tb-sep {
+  width: 1px;
+  height: 20px;
+  margin: 0 3px;
+  background: var(--ed-line);
+  flex: 0 0 auto;
+}
+
+/* Unsaved edits: the Save button carries the same amber signal as the dot. */
+.ed-actions button.attn:not(:disabled) {
+  border-color: var(--gold-dim);
+  color: var(--gold);
 }
 
 .ed-view-toggle {
@@ -287,6 +314,59 @@ input[type="range"] {
   overflow-y: auto;
 }
 
+.ed-toolbar-sep {
+  width: 26px;
+  height: 1px;
+  margin: 3px 0;
+  background: var(--ed-line);
+  flex: 0 0 auto;
+}
+
+/* Each tool resolves its family hue; the rail, inspector chip, and slider
+   accents all read the same variable. */
+.ed-tool[data-tool="select"],
+.ed-inspector[data-tool="select"] {
+  --tool-hue: var(--hue-select);
+}
+.ed-tool[data-tool="raise"],
+.ed-tool[data-tool="lower"],
+.ed-tool[data-tool="smooth"],
+.ed-tool[data-tool="flatten"],
+.ed-inspector[data-tool="raise"],
+.ed-inspector[data-tool="lower"],
+.ed-inspector[data-tool="smooth"],
+.ed-inspector[data-tool="flatten"] {
+  --tool-hue: var(--hue-sculpt);
+}
+.ed-tool[data-tool="paint"],
+.ed-inspector[data-tool="paint"] {
+  --tool-hue: var(--hue-paint);
+}
+.ed-tool[data-tool="water"],
+.ed-inspector[data-tool="water"] {
+  --tool-hue: var(--hue-water);
+}
+.ed-tool[data-tool="place"],
+.ed-tool[data-tool="camp"],
+.ed-tool[data-tool="spawn"],
+.ed-inspector[data-tool="place"],
+.ed-inspector[data-tool="camp"],
+.ed-inspector[data-tool="spawn"] {
+  --tool-hue: var(--hue-place);
+}
+.ed-tool[data-tool="blocker"],
+.ed-inspector[data-tool="blocker"] {
+  --tool-hue: var(--hue-blocker);
+}
+.ed-tool[data-tool="region"],
+.ed-inspector[data-tool="region"] {
+  --tool-hue: var(--hue-region);
+}
+.ed-tool[data-tool="erase"],
+.ed-inspector[data-tool="erase"] {
+  --tool-hue: var(--hue-erase);
+}
+
 .ed-tool {
   position: relative;
   width: 40px;
@@ -296,24 +376,43 @@ input[type="range"] {
   justify-content: center;
   padding: 0;
   color: var(--ed-muted);
+  --tool-hue: var(--ed-accent);
 }
 
 .ed-tool:hover:not(:disabled) {
-  color: var(--ed-text);
+  color: var(--tool-hue);
+  border-color: color-mix(in srgb, var(--tool-hue) 45%, transparent);
+  background: color-mix(in srgb, var(--tool-hue) 9%, #1c2530);
 }
 
+/* Active tool: hue-tinted fill + a left edge bar, instead of the generic gold
+   block every button shared before. */
 .ed-tool.active {
-  color: var(--ed-accent-ink);
+  color: var(--tool-hue);
+  background: color-mix(in srgb, var(--tool-hue) 16%, var(--ed-panel));
+  border-color: color-mix(in srgb, var(--tool-hue) 55%, transparent);
+}
+
+.ed-tool.active::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--tool-hue);
 }
 
 .ed-tool-key {
   position: absolute;
-  right: 2px;
-  bottom: 1px;
-  font-size: 8px;
+  right: 3px;
+  bottom: 2px;
+  font-size: 9px;
+  font-weight: 600;
   line-height: 1;
   color: currentColor;
-  opacity: 0.65;
+  opacity: 0.75;
 }
 
 /* ---- stage ------------------------------------------------------------------- */
@@ -403,6 +502,9 @@ input[type="range"] {
 }
 
 .ed-section-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -412,9 +514,26 @@ input[type="range"] {
   padding-bottom: 4px;
 }
 
+/* The first (tool) section carries the active tool's hue as a small chip, the
+   other end of the color thread that starts on the rail button. */
+.ed-inspector > .ed-section:first-child > .ed-section-title::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--tool-hue, var(--ed-accent));
+  flex: 0 0 auto;
+}
+
+/* Sliders in the tool panel take the tool's hue too. */
+.ed-inspector input[type="range"] {
+  accent-color: var(--tool-hue, var(--ed-accent));
+}
+
 .ed-hint {
-  color: var(--ed-muted);
+  color: #75818f;
   font-size: 11px;
+  line-height: 1.5;
   margin: 4px 0 8px;
 }
 

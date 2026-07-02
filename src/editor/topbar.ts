@@ -106,13 +106,21 @@ export class Topbar {
     this.offlineBadge.append(offLabel, signIn);
     this.root.appendChild(this.offlineBadge);
 
+    // Actions grouped by intent (document | save | exchange | help) with thin
+    // decorative separators so the row reads as four families, not ten twins.
     const actions = el('div', 'ed-actions');
+    const sep = (): void => {
+      const s = el('span', 'ed-tb-sep');
+      s.setAttribute('aria-hidden', 'true');
+      actions.appendChild(s);
+    };
     actions.appendChild(
       button(t('editor.topbar.new'), deps.onNew, undefined, t('editor.topbar.newTitle')),
     );
     actions.appendChild(
       button(t('editor.topbar.open'), deps.onOpen, undefined, t('editor.topbar.openTitle')),
     );
+    sep();
     this.saveBtn = button(
       t('editor.topbar.save'),
       deps.onSave,
@@ -130,6 +138,7 @@ export class Topbar {
       t('editor.topbar.forkTitle'),
     );
     actions.appendChild(this.forkBtn);
+    sep();
     actions.appendChild(
       button(t('editor.topbar.import'), deps.onImport, undefined, t('editor.topbar.importTitle')),
     );
@@ -143,6 +152,7 @@ export class Topbar {
       t('editor.topbar.uploadAssetTitle'),
     );
     actions.appendChild(this.uploadBtn);
+    sep();
     // Help: the guide modal + tutorial entry (also the tour's last anchor).
     actions.appendChild(
       button(t('editor.topbar.help'), deps.onHelp, 'ed-help', t('editor.topbar.helpTitle')),
@@ -182,6 +192,8 @@ export class Topbar {
 
   setDirty(dirty: boolean): void {
     this.dirtyDot.style.display = dirty ? '' : 'none';
+    // The Save button quietly asks for attention while there are unsaved edits.
+    this.saveBtn.classList.toggle('attn', dirty);
   }
 
   setSaveState(text: string): void {

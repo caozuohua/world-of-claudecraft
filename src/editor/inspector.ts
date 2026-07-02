@@ -161,6 +161,9 @@ export class Inspector {
     const d = this.deps;
     this.root.innerHTML = '';
     const tool = d.getTool();
+    // Drives the per-tool hue (--tool-hue) shared with the tool rail, so the
+    // panel header chip and slider accents match the active tool's color.
+    this.root.dataset.tool = tool;
 
     switch (tool) {
       case 'select':

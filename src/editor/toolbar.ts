@@ -145,12 +145,21 @@ export class Toolbar {
   constructor(parent: HTMLElement, onPick: (tool: EditorTool) => void) {
     this.root = el('nav', 'ed-toolbar');
     this.root.setAttribute('aria-label', t('editor.tool.listLabel'));
+    // Visual grouping: a thin separator before the first tool of each family
+    // (sculpt, surface, world content, utility). Decoration only, no text.
+    const groupStarts = new Set<EditorTool>(['raise', 'paint', 'place', 'region']);
     for (const def of TOOL_DEFS) {
+      if (groupStarts.has(def.tool)) {
+        const sep = el('span', 'ed-toolbar-sep');
+        sep.setAttribute('aria-hidden', 'true');
+        this.root.appendChild(sep);
+      }
       const name = t(def.labelKey);
       const tip = t('editor.tool.keyHint', { name, key: def.key.toUpperCase() });
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'ed-tool';
+      b.dataset.tool = def.tool;
       b.title = tip;
       b.setAttribute('aria-label', tip);
       b.setAttribute('aria-pressed', 'false');
