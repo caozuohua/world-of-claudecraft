@@ -953,6 +953,26 @@ describe('/internal dispatch parity (legacy flag vs new flag)', () => {
     expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
   });
 
+  it('a daily-rewards ops path is answered by the FIRST composite arm (its own gate 401, never the ladder 404), identical old-vs-new', async () => {
+    // The /internal/daily-rewards/* ops family must be tried BEFORE handleInternalApi:
+    // its own x-woc-daily-reward-secret gate fails CLOSED (401 'not authenticated'
+    // when its env secret is unset), whereas the ladder would answer its terminal
+    // 404 'unknown endpoint' for this path. If the composite ordering ever flipped,
+    // this pin catches it. Off the route table (notFound), so the new dispatcher
+    // delegates to the same composite; db-free (the gate rejects before any query).
+    const { oldCap, newCap } = await captureWithEnv(
+      { WOC_DAILY_REWARD_SERVICE_SECRET: undefined },
+      () => makeReq({ method: 'POST', url: '/internal/daily-rewards/pending-payouts', body: {} }),
+    );
+    expect(oldCap.status).toBe(401);
+    expect(JSON.parse(oldCap.body as string)).toEqual({
+      success: false,
+      data: null,
+      error: 'not authenticated',
+    });
+    expect(stableStringify(newCap)).toBe(stableStringify(oldCap));
+  });
+
   it('an /internal path outside both families falls through the whole composite to 404, identical old-vs-new', async () => {
     // Not daily-rewards (the ops family returns false), not a registered route: the
     // new path delegates to the composite, which lands handleInternalApi's terminal
