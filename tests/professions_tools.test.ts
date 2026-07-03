@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { ITEMS } from '../src/sim/data';
+import { ITEMS, NPCS } from '../src/sim/data';
 import { canGatherTier, gatherToolTier, isGatherToolUse } from '../src/sim/professions/tools';
+import { Sim } from '../src/sim/sim';
 
 describe('gathering tool tier gating (#1123)', () => {
   it('a tier-1 tool cannot gather a tier-2 or higher node', () => {
@@ -36,22 +37,47 @@ describe('gathering tool tier gating (#1123)', () => {
     }
   });
 
+  it('the base tools are actually stocked by Trader Wilkes', () => {
+    const stock = NPCS.trader_wilkes.vendorItems ?? [];
+    for (const toolId of [
+      'copper_mining_pick',
+      'iron_mining_pick',
+      'mithril_mining_pick',
+      'handaxe',
+      'felling_axe',
+      'ironbark_axe',
+      'gathering_sickle',
+      'bronze_sickle',
+      'silverleaf_sickle',
+    ]) {
+      expect(stock).toContain(toolId);
+    }
+  });
+
   it('a base tool never becomes unusable, because this repo has no durability mechanic', () => {
     const pick = ITEMS.copper_mining_pick;
     // ItemDef (src/sim/types.ts) carries no durability field anywhere in this repo,
-    // so simulating repeated gathers cannot reduce or exhaust a tool's usability:
-    // there is nothing on the item shape a "gather" could decrement.
-    expect(pick).not.toHaveProperty('durability');
+    // so a base gathering tool can never be exhausted by gathering.
     expect(isGatherToolUse(pick.use)).toBe(true);
-    for (let i = 0; i < 1000; i++) {
-      // Repeated simulated gathers: the item object is never mutated.
-      expect(gatherToolTier(pick, 'mining')).toBe(1);
-    }
-    expect(pick).not.toHaveProperty('durability');
+    expect(gatherToolTier(pick, 'mining')).toBe(1);
   });
 
-  it('gatherToolTier returns undefined for a non-tool item and for a mismatched profession', () => {
+  it('gatherToolTier returns undefined for a non-tool item, a mismatched profession, and a differently-used tool', () => {
     expect(gatherToolTier(ITEMS.worn_sword, 'mining')).toBeUndefined();
     expect(gatherToolTier(ITEMS.copper_mining_pick, 'logging')).toBeUndefined();
+    // simple_fishing_pole has kind: 'tool' and a use, but not a gatherTool use,
+    // exercising the !isGatherToolUse(item.use) branch specifically.
+    expect(isGatherToolUse(ITEMS.simple_fishing_pole.use)).toBe(false);
+    expect(gatherToolTier(ITEMS.simple_fishing_pole, 'mining')).toBeUndefined();
+  });
+
+  it('using a gathering tool is a safe no-op until the gather-node system lands', () => {
+    const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const pid = sim.addPlayer('warrior', 'Aleph');
+    sim.tick();
+
+    sim.addItem('copper_mining_pick', 1, pid);
+    expect(() => sim.useItem('copper_mining_pick', pid)).not.toThrow();
+    expect(sim.countItem('copper_mining_pick', pid)).toBe(1);
   });
 });

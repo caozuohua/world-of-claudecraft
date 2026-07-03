@@ -217,7 +217,8 @@ describe('save-on-leave atomicity for a profession-item listing (#1146)', () => 
     expect(state).not.toBeNull();
     const market = sim.serializeMarket();
 
-    await saveCharacterAndMarketState(1, sim.entities.get(seller)!.level, state!, market);
+    const mail = sim.serializeMail();
+    await saveCharacterAndMarketState(1, sim.entities.get(seller)!.level, state!, market, mail);
 
     const sqls = client.query.mock.calls.map((c: unknown[]) => String(c[0]));
     expect(sqls[0]).toMatch(/^BEGIN/);
