@@ -1539,13 +1539,13 @@ export const ja_JP: EnTranslations = {
       "thorns": "味方を守り、近接で攻撃してきた相手に反射ダメージを与えます。"
     },
     "petHook": {
-      "imp": "安全な距離から敵を削る、ファイアボルトを放つ遠距離のデーモンです。",
-      "voidwalker": "挑発して攻撃を受け止める頑丈なデーモンで、安心して詠唱できるようにします。",
-      "succubus": "素早い近接のデーモンで、大きなダメージを与えますが打たれ弱いです。",
-      "felhunter": "敵のキャスターに食らいつくシャドウのスカーミッシャーです。",
-      "felguard": "頑丈な近接のブルーザーで、召喚できるようになればオールラウンドにこなせます。",
-      "infernal": "強力な近接を持つ巨大なジャガーノートで、純粋な力を求めて召喚します。",
-      "doomguard": "遠くから重いシャドウを降らせるエリートのキャスターです。"
+      "emberkin": "安全な距離から敵を削る、ファイアボルトを放つ遠距離のデーモンです。",
+      "gloomshade": "挑発して攻撃を受け止める頑丈なデーモンで、安心して詠唱できるようにします。",
+      "duskborn": "素早い近接のデーモンで、大きなダメージを与えますが打たれ弱いです。",
+      "spellhound": "敵のキャスターに食らいつくシャドウのスカーミッシャーです。",
+      "warfiend": "頑丈な近接のブルーザーで、召喚できるようになればオールラウンドにこなせます。",
+      "pyre_colossus": "強力な近接を持つ巨大なジャガーノートで、純粋な力を求めて召喚します。",
+      "wraithborn": "遠くから重いシャドウを降らせるエリートのキャスターです。"
     },
     "bestiary": {
       "heading": "モンスター図鑑",
@@ -1571,11 +1571,11 @@ export const ja_JP: EnTranslations = {
         "name": "クモ",
         "desc": "暗く入り組んだ場所に巣を張る、糸を操る毒持ちの待ち伏せ屋たち。ハンターは野獣と同じように手なずけることができます。"
       },
-      "murloc": {
+      "mudfin": {
         "name": "マーロック",
         "desc": "浅瀬に群がる水陸両生の沼地の住人。騒がしく、縄張り意識の強い群れをなします。"
       },
-      "kobold": {
+      "burrower": {
         "name": "コボルド",
         "desc": "頭にろうそくを掲げた採掘者たち。鉱山や巣穴にはびこり、自らの鉱石を必死に守ります。"
       },
@@ -6255,13 +6255,13 @@ export const ja_JP: EnTranslations = {
       "varkas_boneguard": {
         "name": "ヴァーカスの骨衛兵"
       },
-      "imp": {
+      "emberkin": {
         "name": "インプ"
       },
-      "voidwalker": {
+      "gloomshade": {
         "name": "ヴォイドウォーカー"
       },
-      "succubus": {
+      "duskborn": {
         "name": "サキュバス"
       },
       "grix_the_tunnelking": {
@@ -6285,16 +6285,16 @@ export const ja_JP: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "魂縛りマルドレク"
       },
-      "felhunter": {
+      "spellhound": {
         "name": "フェルハンター"
       },
-      "felguard": {
+      "warfiend": {
         "name": "フェルガード"
       },
-      "infernal": {
+      "pyre_colossus": {
         "name": "インファーナル"
       },
-      "doomguard": {
+      "wraithborn": {
         "name": "ドゥームガード"
       },
       "choirmother_selthe": {

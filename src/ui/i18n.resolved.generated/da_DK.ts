@@ -1539,13 +1539,13 @@ export const da_DK: EnTranslations = {
       "thorns": "Beskytter en allieret så nærkampsangribere skader sig selv når de slår."
     },
     "petHook": {
-      "imp": "En fjernkamps-ildboltdæmon der pikker på fjender fra sikker afstand.",
-      "voidwalker": "En robust dæmon der håner og opsuger slag, så du kan besværge i fred.",
-      "succubus": "En hurtig nærkampsdæmon der slår hårdt, men knækker under pres.",
-      "felhunter": "En skyggekriger der jager fjendtlige besværgere.",
-      "felguard": "En sejlivet nærkampskæmpe, altmuligmanden så snart du kan tilkalde den.",
-      "infernal": "En kæmpemæssig juggernaut med knusende nærkamp, tilkaldt for ren kraft.",
-      "doomguard": "En elite-besværger, der regner tung skygge ned fra det fjerne."
+      "emberkin": "En fjernkamps-ildboltdæmon der pikker på fjender fra sikker afstand.",
+      "gloomshade": "En robust dæmon der håner og opsuger slag, så du kan besværge i fred.",
+      "duskborn": "En hurtig nærkampsdæmon der slår hårdt, men knækker under pres.",
+      "spellhound": "En skyggekriger der jager fjendtlige besværgere.",
+      "warfiend": "En sejlivet nærkampskæmpe, altmuligmanden så snart du kan tilkalde den.",
+      "pyre_colossus": "En kæmpemæssig juggernaut med knusende nærkamp, tilkaldt for ren kraft.",
+      "wraithborn": "En elite-besværger, der regner tung skygge ned fra det fjerne."
     },
     "bestiary": {
       "heading": "Bestiarium",
@@ -1571,11 +1571,11 @@ export const da_DK: EnTranslations = {
         "name": "Edderkopper",
         "desc": "Spindlere og giftige lurere, der bygger rede på mørke, sammenfiltrede steder. Jægere kan tæmme dem, ligesom bæster."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murlocer",
         "desc": "Amfibiske sumpbeboere, der sværmer i det lave vand i larmende, territoriale flokke."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobolder",
         "desc": "Stearinhovedede gravere, der hærger miner og huler og voldsomt vogter deres malm."
       },
@@ -6255,13 +6255,13 @@ export const da_DK: EnTranslations = {
       "varkas_boneguard": {
         "name": "Varkas Benvogter"
       },
-      "imp": {
+      "emberkin": {
         "name": "Imp"
       },
-      "voidwalker": {
+      "gloomshade": {
         "name": "Tomvandrer"
       },
-      "succubus": {
+      "duskborn": {
         "name": "Succubus"
       },
       "grix_the_tunnelking": {
@@ -6285,16 +6285,16 @@ export const da_DK: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "Genfærdsbinder Maldrec"
       },
-      "felhunter": {
+      "spellhound": {
         "name": "Feljæger"
       },
-      "felguard": {
+      "warfiend": {
         "name": "Felvogter"
       },
-      "infernal": {
+      "pyre_colossus": {
         "name": "Infernal"
       },
-      "doomguard": {
+      "wraithborn": {
         "name": "Domsvogter"
       },
       "choirmother_selthe": {

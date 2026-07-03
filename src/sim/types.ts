@@ -32,10 +32,10 @@ export const DUNGEON_LEASH_DISTANCE = 70;
 export const NYTHRAXIS_ADD_ID = 'nythraxis_skeleton_warrior';
 export const GCD = 1.5; // seconds
 // Shared cooldown across ALL combat potions (classic-era potion sickness): one
-// potion locks every other potion for this long (#103). 2 minutes, vanilla value.
+// potion locks every other potion for this long (#103). 2 minutes, the classic-era value.
 export const POTION_COOLDOWN = 120; // seconds
-export const CAST_PUSHBACK_SEC = 0.5; // vanilla: each hit delays a cast by 0.5s
-export const CHANNEL_PUSHBACK_FRACTION = 0.25; // vanilla: each hit shaves 25% off a channel
+export const CAST_PUSHBACK_SEC = 0.5; // classic-era: each hit delays a cast by 0.5s
+export const CHANNEL_PUSHBACK_FRACTION = 0.25; // classic-era: each hit shaves 25% off a channel
 // Tolerance for "this per-tick timer is effectively complete" comparisons (casting,
 // channels, ground-AoE pulses). Shared across sim modules (sim.ts + entity_roster.ts).
 export const CAST_COMPLETE_EPS = 1e-9;
@@ -488,9 +488,9 @@ export interface LootEntry {
 export type MobFamily =
   | 'beast'
   | 'humanoid'
-  | 'murloc'
+  | 'mudfin'
   | 'spider'
-  | 'kobold'
+  | 'burrower'
   | 'undead'
   | 'troll'
   | 'ogre'
@@ -524,7 +524,7 @@ export interface MobTemplate {
   // who damaged it (gated to once per day per boss). The spawn schedule + location
   // live in src/sim/world_boss.ts; the loot roll runs through rollWorldBossLoot.
   worldBoss?: boolean;
-  // Elite scaling, vanilla-style: ~2.3x health, ~1.5x damage, double XP.
+  // Elite scaling, classic-style: ~2.3x health, ~1.5x damage, double XP.
   elite?: boolean;
   // Rare/miniboss controls.
   canSwim?: boolean;
@@ -673,7 +673,7 @@ export interface MobTemplate {
     school?: Aura['school'];
   };
   // Melee mechanic: each landed swing also splashes onto other players near the
-  // primary target for `mult` of the (pre-armor) hit. Classic-WoW Cleave.
+  // primary target for `mult` of the (pre-armor) hit. A classic-style cleave arc.
   cleave?: { radius: number; mult: number; name?: string };
   // On-hit debuff: a chance per landed melee swing to inflict a stacking-refresh
   // damage-over-time poison on the struck target (spiders, serpents, scorpions).
@@ -952,7 +952,7 @@ export interface MobTemplate {
     name: string;
     school?: Aura['school'];
   };
-  // Pet mechanic: this creature is a ranged caster (warlock Imp) — instead of
+  // Pet mechanic: this creature is a ranged caster (warlock Emberkin) — instead of
   // closing to melee, it stays at `range` and hurls bolts of `school` damage.
   // updatePet reads this; the bolt damage comes from the mob's weapon range.
   petRanged?: { range: number; school: Aura['school'] };
@@ -1119,7 +1119,7 @@ export type AbilityEffect =
   | { type: 'tamePet' } // hunter tame beast: the targeted mob becomes the caster's pet
   | { type: 'dismissPet' } // release the caster's pet back to the wild
   | { type: 'summonPet'; templateId: string } // warlock demon summon: creates/replaces a controlled pet
-  | { type: 'summonDemon'; mobId: string }; // warlock: summon a demon pet (imp/voidwalker)
+  | { type: 'summonDemon'; mobId: string }; // warlock: summon a demon pet (emberkin/gloomshade)
 
 export interface AbilityRank {
   rank: number;
@@ -2029,7 +2029,7 @@ export function normAngle(a: number): number {
 // Classic progression formulas
 // ---------------------------------------------------------------------------
 
-// XP required to go from level L to L+1 (real vanilla values, levels 1..20)
+// XP required to go from level L to L+1 (classic-era curve values, levels 1..20)
 export const XP_TABLE = [
   400, 900, 1400, 2100, 2800, 3600, 4500, 5400, 6500, 7600, 8800, 10100, 11400, 12900, 14400, 16000,
   17700, 19400, 21300, 23200,
@@ -2172,7 +2172,7 @@ export function xpUntilNextPrestige(lifetimeXp: number, prestigeRank: number): n
 }
 
 // Zero-difference band: how many levels below you a mob stops giving XP.
-// Vanilla: ZD = 5 for player level 1-7, 6 for 8-9, 7 for 10-11, ...
+// Classic-era rule: ZD = 5 for player level 1-7, 6 for 8-9, 7 for 10-11, ...
 export function zeroDiff(playerLevel: number): number {
   if (playerLevel <= 7) return 5;
   if (playerLevel <= 9) return 6;
@@ -2180,7 +2180,7 @@ export function zeroDiff(playerLevel: number): number {
   return 8;
 }
 
-// Real vanilla mob XP: base = 45 + 5 * mobLevel, scaled by level difference.
+// Classic-era mob XP: base = 45 + 5 * mobLevel, scaled by level difference.
 export function mobXpValue(mobLevel: number, playerLevel: number): number {
   const base = 45 + 5 * mobLevel;
   const diff = mobLevel - playerLevel;
@@ -2192,7 +2192,7 @@ export function mobXpValue(mobLevel: number, playerLevel: number): number {
   return Math.round(base * (1 - -diff / zd));
 }
 
-// Rage conversion constant (vanilla): c = 0.0091 L^2 + 3.23 L + 4.27
+// Rage conversion constant (classic-era): c = 0.0091 L^2 + 3.23 L + 4.27
 export function rageConversion(level: number): number {
   return 0.0091 * level * level + 3.23 * level + 4.27;
 }
@@ -2260,7 +2260,7 @@ export function armorReduction(armor: number, attackerLevel: number): number {
 }
 
 // ---------------------------------------------------------------------------
-// Spell Power: caster damage scaling (vanilla-style cast-time / DoT-duration
+// Spell Power: caster damage scaling (classic-style cast-time / DoT-duration
 // coefficient model). Casters convert Intellect into Spell Power; Spell Power
 // then adds to each spell's damage via a per-spell coefficient. Hunter "attack
 // spells" (Arcane Shot, Serpent Sting, Aimed Shot) instead scale off Ranged
@@ -2271,15 +2271,15 @@ export function armorReduction(armor: number, attackerLevel: number): number {
 // (see tests/spell_power.test.ts) so a fully-leveled caster gets a meaningful but
 // not dominant damage lift, scaling further as caster gear adds Int + Spell Power.
 export const SPELL_POWER_PER_INT = 0.5;
-// Direct nuke coefficient = clamp(castTime, MIN, MAX) / DIVISOR (vanilla 3.5). The
+// Direct nuke coefficient = clamp(castTime, MIN, MAX) / DIVISOR (classic-era 3.5). The
 // max equals the divisor so the direct coefficient caps at 1.0 (a 3.5s+ cast gets
 // full Spell Power; a 6s Pyroblast does not exceed it).
 export const SPELL_COEFF_DIVISOR = 3.5;
 export const SPELL_COEFF_MIN_CAST = 1.5; // instant / sub-1.5s casts use this floor
 export const SPELL_COEFF_MAX_CAST = 3.5; // longer casts cap at a 1.0 coefficient
-// Total DoT coefficient = duration / DURATION (vanilla 15), spread across ticks.
+// Total DoT coefficient = duration / DURATION (classic-era 15), spread across ticks.
 export const SPELL_DOT_COEFF_DURATION = 15;
-// AoE spells take a reduced coefficient (vanilla AoE penalty).
+// AoE spells take a reduced coefficient (the classic-era AoE penalty).
 export const SPELL_AOE_COEFF_MULT = 0.333;
 // Hunter ranged "attack spells" scale off Ranged Attack Power using the same
 // cast/duration shape, scaled down by this factor (RAP is far larger than SP).

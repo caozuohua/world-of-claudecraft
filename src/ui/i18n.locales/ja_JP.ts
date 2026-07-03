@@ -2456,14 +2456,14 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.nhalia_mourner.name': 'ナリアの嘆き手',
   'entities.mobs.sister_nhalia.name': 'シスター・ナリア',
   'entities.mobs.varkas_boneguard.name': 'ヴァーカスの骨衛兵',
-  'entities.mobs.imp.name': 'インプ',
-  'entities.mobs.voidwalker.name': 'ヴォイドウォーカー',
-  'entities.mobs.succubus.name': 'サキュバス',
+  'entities.mobs.emberkin.name': 'インプ',
+  'entities.mobs.gloomshade.name': 'ヴォイドウォーカー',
+  'entities.mobs.duskborn.name': 'サキュバス',
   'entities.mobs.grix_the_tunnelking.name': 'トンネルキングのグリックス',
-  'entities.mobs.felhunter.name': 'フェルハンター',
-  'entities.mobs.felguard.name': 'フェルガード',
-  'entities.mobs.infernal.name': 'インファーナル',
-  'entities.mobs.doomguard.name': 'ドゥームガード',
+  'entities.mobs.spellhound.name': 'フェルハンター',
+  'entities.mobs.warfiend.name': 'フェルガード',
+  'entities.mobs.pyre_colossus.name': 'インファーナル',
+  'entities.mobs.wraithborn.name': 'ドゥームガード',
   'entities.mobs.choirmother_selthe.name': '聖歌母セルセ',
   'entities.mobs.drowned_templeguard.name': '溺れし神殿守',
   'entities.mobs.drowned_votary.name': '溺れし信徒',
@@ -3949,11 +3949,11 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'guide.family.spider.name': 'クモ',
   'guide.family.spider.desc':
     '暗く入り組んだ場所に巣を張る、糸を操る毒持ちの待ち伏せ屋たち。ハンターは野獣と同じように手なずけることができます。',
-  'guide.family.murloc.name': 'マーロック',
-  'guide.family.murloc.desc':
+  'guide.family.mudfin.name': 'マーロック',
+  'guide.family.mudfin.desc':
     '浅瀬に群がる水陸両生の沼地の住人。騒がしく、縄張り意識の強い群れをなします。',
-  'guide.family.kobold.name': 'コボルド',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.name': 'コボルド',
+  'guide.family.burrower.desc':
     '頭にろうそくを掲げた採掘者たち。鉱山や巣穴にはびこり、自らの鉱石を必死に守ります。',
   'guide.family.humanoid.name': 'ヒューマノイド',
   'guide.family.humanoid.desc':
@@ -4175,14 +4175,15 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'guide.nav.arena': 'アリーナとPvP',
   'guide.nav.talents': 'タレント',
   'guide.nav.wishIKnew': '知っておきたかったこと',
-  'guide.petHook.doomguard': '遠くから重いシャドウを降らせるエリートのキャスターです。',
-  'guide.petHook.felguard':
+  'guide.petHook.wraithborn': '遠くから重いシャドウを降らせるエリートのキャスターです。',
+  'guide.petHook.warfiend':
     '頑丈な近接のブルーザーで、召喚できるようになればオールラウンドにこなせます。',
-  'guide.petHook.felhunter': '敵のキャスターに食らいつくシャドウのスカーミッシャーです。',
-  'guide.petHook.imp': '安全な距離から敵を削る、ファイアボルトを放つ遠距離のデーモンです。',
-  'guide.petHook.infernal': '強力な近接を持つ巨大なジャガーノートで、純粋な力を求めて召喚します。',
-  'guide.petHook.succubus': '素早い近接のデーモンで、大きなダメージを与えますが打たれ弱いです。',
-  'guide.petHook.voidwalker':
+  'guide.petHook.spellhound': '敵のキャスターに食らいつくシャドウのスカーミッシャーです。',
+  'guide.petHook.emberkin': '安全な距離から敵を削る、ファイアボルトを放つ遠距離のデーモンです。',
+  'guide.petHook.pyre_colossus':
+    '強力な近接を持つ巨大なジャガーノートで、純粋な力を求めて召喚します。',
+  'guide.petHook.duskborn': '素早い近接のデーモンで、大きなダメージを与えますが打たれ弱いです。',
+  'guide.petHook.gloomshade':
     '挑発して攻撃を受け止める頑丈なデーモンで、安心して詠唱できるようにします。',
   'guide.related': '関連項目',
   'guide.search.label': '検索',

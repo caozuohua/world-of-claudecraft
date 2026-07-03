@@ -1539,13 +1539,13 @@ export const it_IT: EnTranslations = {
       "thorns": "Protegge un alleato, così gli attaccanti in mischia si feriscono colpendolo."
     },
     "petHook": {
-      "imp": "Un demone che scaglia dardi di fuoco a distanza e fiacca i nemici da una distanza di sicurezza.",
-      "voidwalker": "Un demone robusto che provoca e assorbe i colpi, così puoi lanciare in tranquillità.",
-      "succubus": "Un demone veloce in mischia che colpisce forte ma cede sotto pressione.",
-      "felhunter": "Uno scaramucciatore d'ombra che dà la caccia agli incantatori nemici.",
-      "felguard": "Un picchiatore resistente in mischia, il tuttofare una volta che riesci a evocarlo.",
-      "infernal": "Un colosso massiccio dalla mischia devastante, evocato per pura potenza.",
-      "doomguard": "Un evocatore d'élite che fa piovere ombra pesante dalla distanza."
+      "emberkin": "Un demone che scaglia dardi di fuoco a distanza e fiacca i nemici da una distanza di sicurezza.",
+      "gloomshade": "Un demone robusto che provoca e assorbe i colpi, così puoi lanciare in tranquillità.",
+      "duskborn": "Un demone veloce in mischia che colpisce forte ma cede sotto pressione.",
+      "spellhound": "Uno scaramucciatore d'ombra che dà la caccia agli incantatori nemici.",
+      "warfiend": "Un picchiatore resistente in mischia, il tuttofare una volta che riesci a evocarlo.",
+      "pyre_colossus": "Un colosso massiccio dalla mischia devastante, evocato per pura potenza.",
+      "wraithborn": "Un evocatore d'élite che fa piovere ombra pesante dalla distanza."
     },
     "bestiary": {
       "heading": "Bestiario",
@@ -1571,11 +1571,11 @@ export const it_IT: EnTranslations = {
         "name": "Ragni",
         "desc": "Tessitori di ragnatele e agguatatori velenosi che fanno il nido in luoghi bui e intricati. I cacciatori possono domarli, proprio come le bestie."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murloc",
         "desc": "Abitanti anfibi della palude che brulicano nelle secche in branchi rumorosi e territoriali."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobold",
         "desc": "Scavatori con la candela in testa che infestano miniere e cunicoli, difendendo ferocemente il loro minerale."
       },
@@ -6255,13 +6255,13 @@ export const it_IT: EnTranslations = {
       "varkas_boneguard": {
         "name": "Guardia d'ossa di Varkas"
       },
-      "imp": {
+      "emberkin": {
         "name": "Folletto"
       },
-      "voidwalker": {
+      "gloomshade": {
         "name": "Camminatore del Vuoto"
       },
-      "succubus": {
+      "duskborn": {
         "name": "Succube"
       },
       "grix_the_tunnelking": {
@@ -6285,16 +6285,16 @@ export const it_IT: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "Maldrec il Legaspettri"
       },
-      "felhunter": {
+      "spellhound": {
         "name": "Segugio vile"
       },
-      "felguard": {
+      "warfiend": {
         "name": "Guardia vile"
       },
-      "infernal": {
+      "pyre_colossus": {
         "name": "Infernale"
       },
-      "doomguard": {
+      "wraithborn": {
         "name": "Guardia del Terrore"
       },
       "choirmother_selthe": {

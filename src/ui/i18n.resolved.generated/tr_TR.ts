@@ -1539,13 +1539,13 @@ export const tr_TR: EnTranslations = {
       "thorns": "Bir dostu korur, böylece yakın dövüş saldırganları vurdukları için kendilerine zarar verir."
     },
     "petHook": {
-      "imp": "Düşmanları güvenli bir mesafeden ateş oklarıyla hırpalayan menzilli bir iblis.",
-      "voidwalker": "Kışkırtıp darbeleri üzerine çeken sağlam bir iblis, böylece rahatça büyü yapabilirsin.",
-      "succubus": "Sert vuran ama baskı altında çabuk dağılan hızlı bir yakın dövüş iblisi.",
-      "felhunter": "Düşman büyücülerin peşine düşen bir gölge akıncısı.",
-      "felguard": "Dayanıklı bir yakın dövüş kabadayısı; onu çağırabildiğin andan itibaren her işe yarayan bir yoldaş.",
-      "infernal": "Ezici yakın dövüşüyle iri yarı bir devasa güç, çiğ kuvvet için çağrılır.",
-      "doomguard": "Uzaktan ağır gölge yağdıran seçkin bir büyücü."
+      "emberkin": "Düşmanları güvenli bir mesafeden ateş oklarıyla hırpalayan menzilli bir iblis.",
+      "gloomshade": "Kışkırtıp darbeleri üzerine çeken sağlam bir iblis, böylece rahatça büyü yapabilirsin.",
+      "duskborn": "Sert vuran ama baskı altında çabuk dağılan hızlı bir yakın dövüş iblisi.",
+      "spellhound": "Düşman büyücülerin peşine düşen bir gölge akıncısı.",
+      "warfiend": "Dayanıklı bir yakın dövüş kabadayısı; onu çağırabildiğin andan itibaren her işe yarayan bir yoldaş.",
+      "pyre_colossus": "Ezici yakın dövüşüyle iri yarı bir devasa güç, çiğ kuvvet için çağrılır.",
+      "wraithborn": "Uzaktan ağır gölge yağdıran seçkin bir büyücü."
     },
     "bestiary": {
       "heading": "Yaratıklar Kitabı",
@@ -1571,11 +1571,11 @@ export const tr_TR: EnTranslations = {
         "name": "Örümcekler",
         "desc": "Karanlık, çapraşık yerlerde yuvalanan ağ örücüler ve zehirli pusucular. Avcılar onları, tıpkı yabani hayvanlar gibi evcilleştirebilir."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murloclar",
         "desc": "Sığ suları gürültülü, bölgeci sürüler hâlinde saran amfibik bataklık sakinleri."
       },
-      "kobold": {
+      "burrower": {
         "name": "Koboldlar",
         "desc": "Madenleri ve oyukları istila eden, cevherlerini hırsla koruyan mum başlı kazıcılar."
       },
@@ -6255,13 +6255,13 @@ export const tr_TR: EnTranslations = {
       "varkas_boneguard": {
         "name": "Varkas Kemik Muhafızı"
       },
-      "imp": {
+      "emberkin": {
         "name": "İblisçik"
       },
-      "voidwalker": {
+      "gloomshade": {
         "name": "Boşlukgezer"
       },
-      "succubus": {
+      "duskborn": {
         "name": "Sukubus"
       },
       "grix_the_tunnelking": {
@@ -6285,16 +6285,16 @@ export const tr_TR: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "Hayaletbağlayan Maldrec"
       },
-      "felhunter": {
+      "spellhound": {
         "name": "İfrit Avcısı"
       },
-      "felguard": {
+      "warfiend": {
         "name": "İfrit Muhafızı"
       },
-      "infernal": {
+      "pyre_colossus": {
         "name": "Cehennem Zebanisi"
       },
-      "doomguard": {
+      "wraithborn": {
         "name": "Kıyamet Muhafızı"
       },
       "choirmother_selthe": {

@@ -74,7 +74,7 @@ export function resolvePublicOrigin(rawOrigin: string | undefined): string {
 export interface RealmEntry {
   name: string;
   // origin a client should connect to for this realm (e.g.
-  // "https://ironforge.example.com"); '' means "same origin as this page",
+  // "https://highwatch.example.com"); '' means "same origin as this page",
   // used for the single-realm default
   url: string;
   type: RealmType;
@@ -83,7 +83,7 @@ export interface RealmEntry {
 // The realm directory drives the client's classic-MMO-style realm-list screen.
 // Configure it with REALMS as a comma-separated list of `Name=https://host=Type`
 // entries (Type optional, defaults Normal), e.g.
-//   REALMS="Claudemoon=https://claudemoon.example.com=Normal,Ironforge=https://ironforge.example.com=PvP"
+//   REALMS="Claudemoon=https://claudemoon.example.com=Normal,Highwatch=https://highwatch.example.com=PvP"
 // Every realm process shares the same DATABASE_URL and serves the same
 // directory, so a client on any of them can discover and switch to the others.
 // Unset → a single same-origin realm (this process), i.e. no cross-realm UI.

@@ -313,7 +313,7 @@ describe('delve pet stow', () => {
     expect(sim.petOf(sim.playerId)).toBeNull();
     sim.leaveDelve();
     expect(sim.petOf(sim.playerId)).not.toBeNull();
-    expect(sim.petOf(sim.playerId)?.templateId).toBe('imp');
+    expect(sim.petOf(sim.playerId)?.templateId).toBe('emberkin');
   });
 });
 

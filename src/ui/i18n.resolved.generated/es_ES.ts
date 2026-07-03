@@ -1539,13 +1539,13 @@ export const es_ES: EnTranslations = {
       "thorns": "Protege a un aliado para que los atacantes cuerpo a cuerpo se hieran al golpearlo."
     },
     "petHook": {
-      "imp": "Un demonio de descargas de fuego a distancia que merma a los enemigos desde un lugar seguro.",
-      "voidwalker": "Un demonio robusto que provoca y absorbe golpes para que puedas lanzar en paz.",
-      "succubus": "Un demonio cuerpo a cuerpo veloz que golpea fuerte pero cede bajo presión.",
-      "felhunter": "Un hostigador de las sombras que acosa a los lanzadores enemigos.",
-      "felguard": "Un combatiente cuerpo a cuerpo resistente, el todoterreno una vez que puedes invocarlo.",
-      "infernal": "Un coloso descomunal con un cuerpo a cuerpo demoledor, invocado por puro poder.",
-      "doomguard": "Un lanzador de élite que descarga sombra pesada desde la distancia."
+      "emberkin": "Un demonio de descargas de fuego a distancia que merma a los enemigos desde un lugar seguro.",
+      "gloomshade": "Un demonio robusto que provoca y absorbe golpes para que puedas lanzar en paz.",
+      "duskborn": "Un demonio cuerpo a cuerpo veloz que golpea fuerte pero cede bajo presión.",
+      "spellhound": "Un hostigador de las sombras que acosa a los lanzadores enemigos.",
+      "warfiend": "Un combatiente cuerpo a cuerpo resistente, el todoterreno una vez que puedes invocarlo.",
+      "pyre_colossus": "Un coloso descomunal con un cuerpo a cuerpo demoledor, invocado por puro poder.",
+      "wraithborn": "Un lanzador de élite que descarga sombra pesada desde la distancia."
     },
     "bestiary": {
       "heading": "Bestiario",
@@ -1571,11 +1571,11 @@ export const es_ES: EnTranslations = {
         "name": "Arañas",
         "desc": "Tejedoras de telarañas y acechadoras venenosas que anidan en lugares oscuros y enmarañados. Los Cazadores pueden domarlas, igual que a las bestias."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Múrlocs",
         "desc": "Habitantes anfibios de la ciénaga que pululan por los bajíos en bandadas ruidosas y territoriales."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobolds",
         "desc": "Excavadores con velas en la cabeza que infestan minas y madrigueras, defendiendo con ferocidad su mineral."
       },
@@ -6255,13 +6255,13 @@ export const es_ES: EnTranslations = {
       "varkas_boneguard": {
         "name": "Guardahuesos de Varkas"
       },
-      "imp": {
+      "emberkin": {
         "name": "Diablillo"
       },
-      "voidwalker": {
+      "gloomshade": {
         "name": "Caminante del Vacío"
       },
-      "succubus": {
+      "duskborn": {
         "name": "Súcubo"
       },
       "grix_the_tunnelking": {
@@ -6285,16 +6285,16 @@ export const es_ES: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "Maldrec el Ataespectros"
       },
-      "felhunter": {
+      "spellhound": {
         "name": "Cazador vil"
       },
-      "felguard": {
+      "warfiend": {
         "name": "Guardia vil"
       },
-      "infernal": {
+      "pyre_colossus": {
         "name": "Infernal"
       },
-      "doomguard": {
+      "wraithborn": {
         "name": "Guardián del Terror"
       },
       "choirmother_selthe": {

@@ -1539,13 +1539,13 @@ export const zh_CN: EnTranslations = {
       "thorns": "守护盟友，让近战攻击者在打击时反伤自己。"
     },
     "petHook": {
-      "imp": "一只远程火焰箭恶魔，从安全距离外消磨敌人。",
-      "voidwalker": "一只结实的恶魔，能嘲讽并吸收伤害，让你安心施法。",
-      "succubus": "一只快速的近战恶魔，输出凶猛，但承压能力很差。",
-      "felhunter": "一名暗影游击手，专门纠缠敌方施法者。",
-      "felguard": "一名耐打的近战猛士，能召唤它之后就是全能的选择。",
-      "infernal": "一头近战极具破坏力的庞然巨兽，为追求纯粹的力量而召唤。",
-      "doomguard": "一只精英施法者，从远处倾泻沉重的暗影伤害。"
+      "emberkin": "一只远程火焰箭恶魔，从安全距离外消磨敌人。",
+      "gloomshade": "一只结实的恶魔，能嘲讽并吸收伤害，让你安心施法。",
+      "duskborn": "一只快速的近战恶魔，输出凶猛，但承压能力很差。",
+      "spellhound": "一名暗影游击手，专门纠缠敌方施法者。",
+      "warfiend": "一名耐打的近战猛士，能召唤它之后就是全能的选择。",
+      "pyre_colossus": "一头近战极具破坏力的庞然巨兽，为追求纯粹的力量而召唤。",
+      "wraithborn": "一只精英施法者，从远处倾泻沉重的暗影伤害。"
     },
     "bestiary": {
       "heading": "怪物图鉴",
@@ -1571,11 +1571,11 @@ export const zh_CN: EnTranslations = {
         "name": "蜘蛛",
         "desc": "结网的织丝者与剧毒的潜伏者，盘踞在阴暗错综之地。猎人可以像驯服野兽那样驯服它们。"
       },
-      "murloc": {
+      "mudfin": {
         "name": "鱼人",
         "desc": "两栖的沼泽居民，成群涌入浅滩，吵闹而极具地盘意识。"
       },
-      "kobold": {
+      "burrower": {
         "name": "狗头人",
         "desc": "头顶蜡烛的掘地者，在矿洞与地穴中繁衍，凶狠地守护着自己的矿石。"
       },
@@ -6255,13 +6255,13 @@ export const zh_CN: EnTranslations = {
       "varkas_boneguard": {
         "name": "瓦尔卡斯骨卫"
       },
-      "imp": {
+      "emberkin": {
         "name": "小鬼"
       },
-      "voidwalker": {
+      "gloomshade": {
         "name": "虚空行者"
       },
-      "succubus": {
+      "duskborn": {
         "name": "魅魔"
       },
       "grix_the_tunnelking": {
@@ -6285,16 +6285,16 @@ export const zh_CN: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "缚魂者玛尔德雷克"
       },
-      "felhunter": {
+      "spellhound": {
         "name": "地狱猎犬"
       },
-      "felguard": {
+      "warfiend": {
         "name": "恶魔卫士"
       },
-      "infernal": {
+      "pyre_colossus": {
         "name": "地狱火"
       },
-      "doomguard": {
+      "wraithborn": {
         "name": "末日守卫"
       },
       "choirmother_selthe": {

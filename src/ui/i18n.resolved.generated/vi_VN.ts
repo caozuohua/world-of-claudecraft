@@ -1539,13 +1539,13 @@ export const vi_VN: EnTranslations = {
       "thorns": "Bảo hộ đồng đội để kẻ tấn công cận chiến tự làm mình bị thương khi ra đòn."
     },
     "petHook": {
-      "imp": "Một con quỷ bắn cầu lửa từ xa, gặm dần kẻ địch từ khoảng cách an toàn.",
-      "voidwalker": "Một con quỷ vững chãi biết khiêu khích và hứng đòn để bạn có thể niệm phép yên ổn.",
-      "succubus": "Một con quỷ cận chiến nhanh nhẹn, đánh rất mạnh nhưng dễ gục khi bị áp lực.",
-      "felhunter": "Một kẻ tập kích bóng tối chuyên săn lùng các pháp sư của kẻ địch.",
-      "felguard": "Một chiến binh cận chiến bền bỉ, lựa chọn toàn diện một khi bạn có thể triệu hồi nó.",
-      "infernal": "Một cỗ máy hủy diệt đồ sộ với đòn cận chiến nghiền nát, được triệu hồi vì sức mạnh thuần túy.",
-      "doomguard": "Một pháp sư tinh nhuệ trút bóng tối nặng nề từ xa."
+      "emberkin": "Một con quỷ bắn cầu lửa từ xa, gặm dần kẻ địch từ khoảng cách an toàn.",
+      "gloomshade": "Một con quỷ vững chãi biết khiêu khích và hứng đòn để bạn có thể niệm phép yên ổn.",
+      "duskborn": "Một con quỷ cận chiến nhanh nhẹn, đánh rất mạnh nhưng dễ gục khi bị áp lực.",
+      "spellhound": "Một kẻ tập kích bóng tối chuyên săn lùng các pháp sư của kẻ địch.",
+      "warfiend": "Một chiến binh cận chiến bền bỉ, lựa chọn toàn diện một khi bạn có thể triệu hồi nó.",
+      "pyre_colossus": "Một cỗ máy hủy diệt đồ sộ với đòn cận chiến nghiền nát, được triệu hồi vì sức mạnh thuần túy.",
+      "wraithborn": "Một pháp sư tinh nhuệ trút bóng tối nặng nề từ xa."
     },
     "bestiary": {
       "heading": "Thú Lục",
@@ -1571,11 +1571,11 @@ export const vi_VN: EnTranslations = {
         "name": "Nhện",
         "desc": "Những kẻ giăng tơ và rình rập độc địa làm tổ ở những nơi tối tăm, rậm rạp. Thợ Săn có thể thuần hóa chúng, giống như dã thú."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murloc",
         "desc": "Cư dân đầm lầy lưỡng cư tràn ngập vùng nước nông trong những bầy ồn ào, giành lãnh thổ."
       },
-      "kobold": {
+      "burrower": {
         "name": "Kobold",
         "desc": "Những kẻ đào hang đầu mang nến tràn ngập các hầm mỏ và hang ổ, hung hãn bảo vệ quặng của chúng."
       },
@@ -6255,13 +6255,13 @@ export const vi_VN: EnTranslations = {
       "varkas_boneguard": {
         "name": "Vệ Xương Varkas"
       },
-      "imp": {
+      "emberkin": {
         "name": "Tiểu Quỷ"
       },
-      "voidwalker": {
+      "gloomshade": {
         "name": "Quỷ Hư Không"
       },
-      "succubus": {
+      "duskborn": {
         "name": "Mỹ Quỷ"
       },
       "grix_the_tunnelking": {
@@ -6285,16 +6285,16 @@ export const vi_VN: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "Kẻ Buộc Oan Hồn Maldrec"
       },
-      "felhunter": {
+      "spellhound": {
         "name": "Thợ Săn Quỷ"
       },
-      "felguard": {
+      "warfiend": {
         "name": "Vệ Binh Quỷ"
       },
-      "infernal": {
+      "pyre_colossus": {
         "name": "Quỷ Hỏa Ngục"
       },
-      "doomguard": {
+      "wraithborn": {
         "name": "Vệ Binh Diệt Vong"
       },
       "choirmother_selthe": {

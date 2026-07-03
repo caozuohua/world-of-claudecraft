@@ -43,7 +43,7 @@ export const en: EnTranslations = {
       "subtitle": "Lifetime XP",
       "rank": "Rank",
       "name": "Name",
-      "realmCol": "Realm",
+      "realmCol": "World",
       "level": "Lvl",
       "vlevel": "V.Lvl",
       "lifetimeXp": "Lifetime XP",
@@ -52,7 +52,7 @@ export const en: EnTranslations = {
       "loading": "Loading rankings…",
       "unranked": "Unranked",
       "you": "You",
-      "globalSubtitle": "Top champions across all realms",
+      "globalSubtitle": "Top champions across all worlds",
       "retry": "Could not load the leaderboard. Try again."
     },
     "milestone": {
@@ -543,7 +543,7 @@ export const en: EnTranslations = {
       "defaultBuildName": "Build {n}"
     },
     "tips": {
-      "joinChannels": "Tip: type /join world or /join lfg to chat with players across the realm."
+      "joinChannels": "Tip: type /join world or /join lfg to chat with players across the world."
     },
     "itemSet": {
       "header": "{name} ({have}/{total})",
@@ -598,7 +598,7 @@ export const en: EnTranslations = {
     },
     "bugReport": {
       "menuButton": "Report a Bug",
-      "realm": "Realm",
+      "realm": "World",
       "character": "Character",
       "position": "Position",
       "unknown": "Unknown",
@@ -811,13 +811,13 @@ export const en: EnTranslations = {
       "disarm": "Disarmed: cannot use weapon attacks",
       "lockout": "Spell school locked out",
       "imbue": "Weapon imbued with bonus effects",
-      "imbueRange": "Weapon imbued: {min} to {max} bonus damage on judgement",
+      "imbueRange": "Weapon imbued: {min} to {max} bonus damage on Verdict",
       "stealth": "Concealed; movement speed reduced by {pct}%",
-      "formBear": "Bear Form: increased health and armor",
+      "formBear": "Bruin Form: increased health and armor",
       "formCat": "Cat Form: melee damage and energy",
-      "formTravel": "Travel Form: movement speed increased by {pct}%",
-      "defensiveStance": "Defensive Stance: reduced damage taken, more threat",
-      "righteousFury": "Righteous Fury: greatly increased threat from Holy damage",
+      "formTravel": "Fleet Form: movement speed increased by {pct}%",
+      "defensiveStance": "Guarded Stance: reduced damage taken, more threat",
+      "righteousFury": "Burning Oath: greatly increased threat from Holy damage",
       "scale": "Size increased by {pct}%",
       "jump": "Jump height increased by {pct}%",
       "school": {
@@ -1251,7 +1251,7 @@ export const en: EnTranslations = {
         "valeName": "Eastbrook Vale",
         "valeBlurb": "Green hills and old woods where every adventure begins.",
         "marshName": "Mirefen Marsh",
-        "marshBlurb": "Sunken fens and tide-worn ruins, home to murlocs and worse.",
+        "marshBlurb": "Sunken fens and tide-worn ruins, home to mudfins and worse.",
         "peaksName": "Thornpeak Heights",
         "peaksBlurb": "Wind-scoured ridges climbing toward the realm's coldest dangers."
       },
@@ -1273,12 +1273,12 @@ export const en: EnTranslations = {
         "q2": "Do I need a crypto wallet?",
         "a2": "No. The game is fully playable without one. The optional community token only unlocks cosmetic flair and never affects power.",
         "q3": "Can I play offline?",
-        "a3": "Yes. There is an instant single-player mode in your browser, plus the shared online realm.",
+        "a3": "Yes. There is an instant single-player mode in your browser, plus the shared online world.",
         "q4": "How long to reach max level?",
         "a4": "The cap is level {cap}, reached across three zones of quests, dungeons, and exploration."
       },
       "community": {
-        "heading": "Join the realm",
+        "heading": "Join the world",
         "body": "Jump in now, or come say hello. The world is better with company.",
         "play": "Play Now",
         "discord": "Join the Discord",
@@ -1312,7 +1312,7 @@ export const en: EnTranslations = {
       "groupingTitle": "Playing together",
       "groupingBody": "Invite others to a party to share quest credit and take on dungeons. Most of the world is soloable, so grouping is a choice, not a chore.",
       "onlineTitle": "Online or offline",
-      "onlineBody": "Play the shared online realm with everyone else, or start an instant offline world in your browser to learn the ropes.",
+      "onlineBody": "Play the shared online world with everyone else, or start an instant offline world in your browser to learn the ropes.",
       "reassure": "Talents unlock at level 10 and can be reset at any time, so your early choices are never permanent. Experiment freely.",
       "controlsLink": "See the full controls reference"
     },
@@ -1348,7 +1348,7 @@ export const en: EnTranslations = {
       "growBody": "Each level makes you tougher and unlocks new abilities, all the way to the cap of level {cap}. Questing is the fastest way up; dungeons and exploration round it out.",
       "effectsTitle": "Buffs, debuffs, and crowd control",
       "effectsBody": "Many abilities apply an effect that lingers. Helpful ones (buffs) raise your stats, shield you, or heal you a little at a time; harmful ones (debuffs) drain your health with damage over time or weaken you. Watch the small icons near your action bar to see what is on you and how long it lasts.",
-      "ccBody": "Crowd control is a special kind of debuff that limits what a target can do: stuns, roots and slows, silences that stop spellcasting, disarms, fears, and polymorph that turns a foe harmless for a moment. Some of these, like roots, fears, and polymorph, lose their hold when they are reapplied too quickly, so they cannot be chained forever.",
+      "ccBody": "Crowd control is a special kind of debuff that limits what a target can do: stuns, roots and slows, silences that stop spellcasting, disarms, fears, and transformations that turn a foe harmless for a moment. Some of these, like roots, fears, and transforms, lose their hold when they are reapplied too quickly, so they cannot be chained forever.",
       "deathTitle": "When you fall",
       "deathBody": "If your health reaches zero you are downed. Release your spirit to revive at the nearest graveyard at full health, then make your way back, so a death costs you a little time, not your progress. Between fights, sit to eat and drink so you start the next one at full strength."
     },
@@ -1489,12 +1489,12 @@ export const en: EnTranslations = {
       "charge": "Rushes a distant enemy to open the fight with a brief stun.",
       "rend": "Opens a bleed that wears the target down over time.",
       "thunder_clap": "Hits everything around you and slows their attacks.",
-      "seal_of_righteousness": "Imbues your swings with Holy damage, then spend it with Judgement.",
+      "seal_of_righteousness": "Imbues your swings with Holy damage, then spend it with Verdict.",
       "holy_light": "A steady, sizable heal for topping off an ally or yourself.",
       "devotion_aura": "A lasting self-buff that raises armor so hits land softer.",
       "judgement": "Spends your active Seal to strike an enemy from short range.",
       "blessing_of_might": "Raises a friendly target's attack power, good to cast before a pull.",
-      "divine_protection": "A quick holy shield to soak damage when things get rough.",
+      "divine_protection": "A quick protective ward to soak damage when things get rough.",
       "raptor_strike": "A hard melee swing for when something closes the gap on you.",
       "aspect_of_the_hawk": "A stance you keep up to sharpen your ranged attack power.",
       "serpent_sting": "Lands a venom that bleeds nature damage over time.",
@@ -1526,7 +1526,7 @@ export const en: EnTranslations = {
       "conjure_water": "Conjures drinks that restore mana, so you can refill between pulls.",
       "conjure_food": "Conjures food that restores health when you sit down to eat.",
       "shadow_bolt": "A bolt of shadow you cast at a target, your go-to nuke.",
-      "summon_imp": "Calls up an imp that flings firebolts at enemies from range.",
+      "summon_imp": "Calls up an Emberkin that flings firebolts at enemies from range.",
       "demon_skin": "A lasting self-buff that toughens your skin and adds armor.",
       "immolate": "Sets a target alight for an opening hit and a burn that lingers.",
       "corruption": "Rots a target with shadow that ticks while you do other things.",
@@ -1539,13 +1539,13 @@ export const en: EnTranslations = {
       "thorns": "Wards an ally so melee attackers hurt themselves for striking."
     },
     "petHook": {
-      "imp": "A ranged firebolt demon that chips at enemies from a safe distance.",
-      "voidwalker": "A sturdy demon that taunts and soaks hits so you can cast in peace.",
-      "succubus": "A fast melee demon that hits hard but folds under pressure.",
-      "felhunter": "A shadow skirmisher that hounds enemy casters.",
-      "felguard": "A durable melee bruiser, the all-rounder once you can summon it.",
-      "infernal": "A hulking juggernaut with crushing melee, summoned for raw power.",
-      "doomguard": "An elite caster that rains heavy shadow from afar."
+      "emberkin": "A ranged firebolt demon that chips at enemies from a safe distance.",
+      "gloomshade": "A sturdy demon that taunts and soaks hits so you can cast in peace.",
+      "duskborn": "A fast melee demon that hits hard but folds under pressure.",
+      "spellhound": "A shadow skirmisher that hounds enemy casters.",
+      "warfiend": "A durable melee bruiser, the all-rounder once you can summon it.",
+      "pyre_colossus": "A hulking juggernaut with crushing melee, summoned for raw power.",
+      "wraithborn": "An elite caster that rains heavy shadow from afar."
     },
     "bestiary": {
       "heading": "Bestiary",
@@ -1558,7 +1558,7 @@ export const en: EnTranslations = {
         "old_greyjaw": "A scarred old wolf no trap has held, blamed for three hounds and a stable boy's arm. He hunts the deep woods alone, and turns savage the longer a fight wears on.",
         "grubjaw": "A fen troll so greedy the other trolls will not dig beside him, said to have eaten a trader's last two pack-mules, harness and all.",
         "shardlord_kazzix": "A storm elemental given shoulders, walking the far crags above Stormcrag with a heartshard worth braving the lightning for.",
-        "mirejaw_frenzy": "A marsh murloc that whips itself into a thrashing frenzy mid-fight, the loudest thing in a loud, territorial pack.",
+        "mirejaw_frenzy": "A marsh mudfin that whips itself into a thrashing frenzy mid-fight, the loudest thing in a loud, territorial pack.",
         "gravecaller_cultist": "Robed servants of the death-cult whose work fouls the graves from the Vale to the peaks. Where they gather, the dead do not rest."
       }
     },
@@ -1571,13 +1571,13 @@ export const en: EnTranslations = {
         "name": "Spiders",
         "desc": "Web-spinners and venomous lurkers that nest in dark, tangled places. Hunters can tame them, the same as beasts."
       },
-      "murloc": {
-        "name": "Murlocs",
+      "mudfin": {
+        "name": "Mudfins",
         "desc": "Amphibious marsh-dwellers that swarm the shallows in noisy, territorial packs."
       },
-      "kobold": {
-        "name": "Kobolds",
-        "desc": "Candle-headed diggers that infest mines and burrows, fiercely guarding their ore."
+      "burrower": {
+        "name": "Burrowers",
+        "desc": "Dirt-caked diggers that infest mines and burrows, fiercely guarding their ore."
       },
       "humanoid": {
         "name": "Humanoids",
@@ -1613,7 +1613,7 @@ export const en: EnTranslations = {
       "places": "Notable places",
       "residents": "Who you will meet",
       "valeBlurb": "The green starting valley, where new heroes cut their teeth on wolves and bandits around the town of Eastbrook.",
-      "marshBlurb": "A drowned country of fog and ruins. Murlocs swarm the shallows and something older stirs beneath the water, watched from the bridge-town of Fenbridge.",
+      "marshBlurb": "A drowned country of fog and ruins. Mudfins swarm the shallows and something older stirs beneath the water, watched from the bridge-town of Fenbridge.",
       "peaksBlurb": "Wind-scoured ridges and old mine-works climbing to the realm's coldest, highest dangers, held by the outpost of Highwatch.",
       "valeGreeting": "Keep your blade close. The Vale is not what it was.",
       "valeGreeter": "Marshal Redbrook, Eastbrook",
@@ -1621,9 +1621,9 @@ export const en: EnTranslations = {
       "marshGreeter": "Warden Fenwick, Fenbridge",
       "peaksGreeting": "Two hundred years this wall has held. It will not break on my watch, but it groans.",
       "peaksGreeter": "Captain Thessaly, Highwatch",
-      "valePlaceNotes": "Eastbrook is your first home base. Wolf Run and Boar Meadow are gentle hunting ground; Mirror Lake is quiet water to fish; the Webwood and the Copper Dig hide spiders and ore-greedy diggers; a Bandit Camp and the Fallen Chapel hold rougher work; Reliquary Hill drops into the Collapsed Reliquary, the realm's first delve; and Brightwood Glade is a quiet, sunlit grove to the north.",
-      "marshPlaceNotes": "Fenbridge guards the only dry road. The Prowler Reeds and Deepfen Shallows teem with marsh beasts and murlocs; the Widow Thicket is spun thick with web; the Drowned Chapel and the Troll Mounds keep older dangers; the Gravecaller Encampment is the cult dug in, and the Sunken Bastion is the marsh's instanced heart.",
-      "peaksPlaceNotes": "Highwatch holds the wall. Stalker Ridge and the Deeprock Burrows belong to ridge cats and kobolds; the Ogre Foothills and Drogmar's War-Camp to brutes for hire; Stormcrag crackles with elementals and the Glimmermere glows below it; the Wyrmcult Tents and Revenant Fields ring the cult's high ground, with Gravewyrm Sanctum at its peak.",
+      "valePlaceNotes": "Eastbrook is your first home base. Wolf Run and Boar Meadow are gentle hunting ground; Mirror Lake is quiet water to fish; the Sableweb and the Copper Dig hide spiders and ore-greedy diggers; a Bandit Camp and the Fallen Chapel hold rougher work; Reliquary Hill drops into the Collapsed Reliquary, the realm's first delve; and Brightwood Glade is a quiet, sunlit grove to the north.",
+      "marshPlaceNotes": "Fenbridge guards the only dry road. The Prowler Reeds and Deepfen Shallows teem with marsh beasts and mudfins; the Widow Thicket is spun thick with web; the Drowned Chapel and the Troll Mounds keep older dangers; the Gravecaller Encampment is the cult dug in, and the Sunken Bastion is the marsh's instanced heart.",
+      "peaksPlaceNotes": "Highwatch holds the wall. Stalker Ridge and the Deeprock Burrows belong to ridge cats and burrowers; the Ogre Foothills and Drogmar's War-Camp to brutes for hire; Stormcrag crackles with elementals and the Glimmermere glows below it; the Wyrmcult Tents and Revenant Fields ring the cult's high ground, with Gravewyrm Sanctum at its peak.",
       "gladeTitle": "A quiet corner: Brightwood Glade",
       "gladeBody": "Not every story in the Vale is about the dead. In the north, a sunlit grove called Brightwood Glade keeps its own gentler rhythm, all quiet paths and dappled light beneath the boughs. It is a soft counterpoint to the trail you are following, and worth seeing when the road gives you room to wander."
     },
@@ -1658,7 +1658,7 @@ export const en: EnTranslations = {
       "sagaValeTitle": "The Vale: a name on a sigil",
       "sagaValeBody": "In Eastbrook the dead will not rest, and the mark behind it belongs to a sect long thought gone. Trace it to a Gravecaller working the chapel crypt, and his own papers point you toward the fen in the north.",
       "sagaMarshTitle": "The marsh: a tithe of souls",
-      "sagaMarshBody": "In Mirefen the drownings are no accident. Someone is filling the fen like a tithing box, raising obedient dead from every traveler the water takes. Chase the orders up the chain to a Mistcaller in the drowned bastion, whose last words name something older still, stirring beneath the peaks.",
+      "sagaMarshBody": "In Mirefen the drownings are no accident. Someone is filling the fen like a tithing box, raising obedient dead from every traveler the water takes. Chase the orders up the chain to a Fogbinder in the drowned bastion, whose last words name something older still, stirring beneath the peaks.",
       "sagaPeaksTitle": "The peaks: what the tithe was for",
       "sagaPeaksBody": "On Thornpeak the whole scheme comes clear. Every soul stolen since the Vale was a tithe poured toward the cult's grim work in the mountain's heart. The trail that began in a chapel yard ends here, in a five-player descent to face the hand behind it all. We will let you find out who waits at the bottom.",
       "sideTitle": "Threads off the main road",
@@ -2440,10 +2440,10 @@ export const en: EnTranslations = {
     "donate": "Donate"
   },
   "stats": {
-    "title": "Realm Status",
+    "title": "World Status",
     "accountsCreated": "Players",
     "playersOnline": "Players Online",
-    "realmName": "Realm Name"
+    "realmName": "World Name"
   },
   "footer": {
     "copyright": "2026 World of ClaudeCraft",
@@ -2461,7 +2461,7 @@ export const en: EnTranslations = {
   },
   "highscores": {
     "title": "High Scores Leaderboard",
-    "desc": "Track the realm's greatest champions and compare your progress."
+    "desc": "Track the world's greatest champions and compare your progress."
   },
   "wiki": {
     "title": "Game Wiki & Guide",
@@ -2483,12 +2483,12 @@ export const en: EnTranslations = {
   },
   "comingSoon": {
     "placeholder": "Coming Soon...",
-    "featureComingSoon": "This feature is coming soon to the realm."
+    "featureComingSoon": "This feature is coming soon to the world."
   },
   "mode": {
     "onlineTitle": "Play Online",
-    "onlineDesc": "Log in to the realm. Your characters live on the server and you share the world with everyone else who's on.",
-    "onlineAria": "Play Online: log in to the persistent shared realm",
+    "onlineDesc": "Log in to the world. Your characters live on the server and you share the world with everyone else who's on.",
+    "onlineAria": "Play Online: log in to the persistent shared world",
     "offlineTitle": "Play Offline",
     "offlineDesc": "Instant single-player world in your browser. Nothing is saved: perfect for a quick brawl or testing.",
     "offlineAria": "Play Offline: start an instant local single-player session",
@@ -2498,15 +2498,15 @@ export const en: EnTranslations = {
     "serverOffline": "Offline",
     "play": "Play",
     "playAria": "Play World of ClaudeCraft",
-    "serverLabel": "Choose your realm",
-    "serverAria": "Select realm: Online or Offline",
+    "serverLabel": "Choose your world",
+    "serverAria": "Select world: Online or Offline",
     "serverOfflineSub": "Instant local world",
     "caLabel": "$WOC Contract Address",
     "caCopyAria": "Copy contract address",
     "caNote": "WOC is our community token. It is not needed to play. Join Discord to discuss the WOC utility and flywheel."
   },
   "auth": {
-    "enterRealm": "Enter the Realm",
+    "enterRealm": "Enter the World",
     "username": "Username",
     "usernameError": "Please enter your username.",
     "usernamePlaceholder": "Enter username",
@@ -2521,16 +2521,16 @@ export const en: EnTranslations = {
     "logIn": "Log In",
     "createAccount": "Create Account",
     "back": "Back",
-    "realmList": "Realm List",
-    "loadingRealms": "Loading realms...",
-    "changeRealm": "Change Realm",
-    "realm": "Realm",
+    "realmList": "World List",
+    "loadingRealms": "Loading worlds...",
+    "changeRealm": "Change World",
+    "realm": "World",
     "newCharacter": "New Character",
     "appearance": "Appearance",
     "class": "Class",
     "name": "Name",
     "chromaOption": "Chroma {n}",
-    "noAccountPrompt": "New to the realm?",
+    "noAccountPrompt": "New to the world?",
     "haveAccountPrompt": "Already have an account?",
     "characters": "Characters:",
     "createCharacter": "Create Character",
@@ -2702,7 +2702,7 @@ export const en: EnTranslations = {
     "renderFailedStatus": "Card render failed.",
     "levelClass": "Level {level} - {className}",
     "topPercent": "TOP {percent}%",
-    "realmSubtitle": "{realm} Realm",
+    "realmSubtitle": "{realm} World",
     "defaultRealm": "World of ClaudeCraft",
     "brandWordmark": "WORLD OF CLAUDECRAFT",
     "recruited": "{count} recruited",
@@ -2711,7 +2711,7 @@ export const en: EnTranslations = {
     "footerCta": "Forge your legend: {siteUrl}",
     "arenaStat": "Arena",
     "shareTierBit": ", {tier}-rank $WOC holder",
-    "shareText": "I'm forging my legend in World of ClaudeCraft: Level {level} {className}{tierBit}. Join my realm:",
+    "shareText": "I'm forging my legend in World of ClaudeCraft: Level {level} {className}{tierBit}. Join my world:",
     "nativeShareTitle": "World of ClaudeCraft",
     "fileNameFallback": "player",
     "actionShareX": "Share to X",
@@ -3108,7 +3108,7 @@ export const en: EnTranslations = {
         "desc": "Your physical strikes hit 15% harder."
       },
       "aug_spellfire": {
-        "name": "Spellfire",
+        "name": "Grimfire",
         "desc": "Your spells deal 15% more damage."
       },
       "aug_toughness": {
@@ -3152,7 +3152,7 @@ export const en: EnTranslations = {
         "desc": "+18% damage of all kinds and +12% move speed."
       },
       "aug_lightwell": {
-        "name": "Lightwell",
+        "name": "Gravelight",
         "desc": "+30% healing and +15% maximum health. Anchor your team."
       },
       "aug_bounty_hunter": {
@@ -3203,13 +3203,13 @@ export const en: EnTranslations = {
   },
   "seo": {
     "title": "World of ClaudeCraft: Classic-Style Web MMO",
-    "description": "Embark on an epic adventure in World of ClaudeCraft, a classic-style micro-MMO playable directly in your browser. Join a persistent shared realm, level up classes, and defeat enemies!",
+    "description": "Embark on an epic adventure in World of ClaudeCraft, a classic-style micro-MMO playable directly in your browser. Join a persistent shared world, level up classes, and defeat enemies!",
     "genre": "MMORPG",
     "playMode": "Multiplayer",
     "applicationCategory": "Game",
     "operatingSystem": "Web browser",
     "officialLabel": "Official World of ClaudeCraft website",
-    "officialBody": "worldofclaudecraft.com is the official free browser MMO for the Claudemoon realm. Play online with a persistent character, explore solo offline, read the wiki, and follow verified community links from this site."
+    "officialBody": "worldofclaudecraft.com is the official free browser MMO for the Claudemoon world. Play online with a persistent character, explore solo offline, read the wiki, and follow verified community links from this site."
   },
   "a11y": {
     "goHome": "Go to homepage",
@@ -3225,7 +3225,7 @@ export const en: EnTranslations = {
     "world": "Loading world...",
     "worldProgress": "Loading world... {done}/{total}",
     "enteringWorld": "Entering the world...",
-    "connectingRealm": "Connecting to realm...",
+    "connectingRealm": "Connecting to world...",
     "assetsFailed": "Asset loading failed: try reloading. {error}",
     "rendererFailed": "Could not start the renderer: try reloading. {error}",
     "enterTimeout": "Could not enter world. The connection timed out. Is the game server running?",
@@ -3283,25 +3283,25 @@ export const en: EnTranslations = {
     }
   },
   "realm": {
-    "noRealms": "No realms available.",
-    "loading": "Loading realms...",
+    "noRealms": "No worlds available.",
+    "loading": "Loading worlds...",
     "recommended": "Recommended",
     "checkingStatus": "Checking status...",
     "onlineNow": "{count} online now",
-    "down": "Realm is down",
+    "down": "World is down",
     "offline": "Offline",
     "full": "Full",
     "high": "High",
     "medium": "Medium",
     "low": "Low",
     "popTipLow": "Low population: fewer than 15 players online right now. Plenty of room; great for a fresh start.",
-    "popTipMedium": "Medium population: 15 to 39 players online right now. A healthy, active realm.",
+    "popTipMedium": "Medium population: 15 to 39 players online right now. A healthy, active world.",
     "popTipHigh": "High population: 40 to 79 players online right now. Busy, with lots of players around.",
     "popTipFull": "Full population: 80 or more players online right now. Very busy; you may wait in a login queue.",
-    "popTipOffline": "Offline: this realm is unreachable right now and cannot be joined.",
+    "popTipOffline": "Offline: this world is unreachable right now and cannot be joined.",
     "characterCountOne": "{count} character",
     "characterCountOther": "{count} characters",
-    "selectedRealm": "Realm: {name}",
+    "selectedRealm": "World: {name}",
     "statsOffline": "Offline",
     "statsRealmOffline": "{realm} (Offline)"
   },
@@ -3385,13 +3385,13 @@ export const en: EnTranslations = {
     },
     "lore": {
       "warrior": "Warriors are battle-hardened melee fighters who build Rage as they deal or take damage. They absorb heavy hits or crush foes with powerful weapons.",
-      "paladin": "Paladins are holy crusaders who support allies with blessings, heal wounds with Holy Light, and protect the weak in heavy armor.",
+      "paladin": "Paladins are holy crusaders who support allies with blessings, heal wounds with Mending Light, and protect the weak in heavy armor.",
       "hunter": "Hunters are ranged specialists who fight beside a tamed beast, peppering enemies with aimed and rapid shots, slowing them with stings and concussive fire, and shifting aspects to suit the moment.",
       "rogue": "Rogues are stealthy assassins who spend Energy and Combo Points on backstabs and finishing moves from the shadows.",
-      "priest": "Priests call on Holy Light to heal and shield allies, while Shadow magic lets them drain the life of their enemies.",
+      "priest": "Priests call on Mending Light to heal and shield allies, while Shadow magic lets them drain the life of their enemies.",
       "shaman": "Shaman command the elements, imbuing weapons with power, shocking enemies with lightning, and restoring allies.",
-      "mage": "Mages bend Fire, Frost, and Arcane power to destroy enemies, conjure water, and freeze threats in place.",
-      "warlock": "Warlocks summon demons, apply curses and damage-over-time magic, and drain life from enemies to endure.",
+      "mage": "Mages bend Fire, Frost, and arcane force to destroy enemies, summon water, and freeze threats in place.",
+      "warlock": "Warlocks summon demons, apply curses and damage-over-time magic, and leech life from enemies to endure.",
       "druid": "Druids channel nature, healing wounds, entangling foes, and shifting into animal forms for defense or damage."
     },
     "aria": "Class details for {className}: role {role}. Starting stats: Strength {str}, Agility {agi}, Stamina {sta}, Intellect {int}, Spirit {spi}.",
@@ -3416,10 +3416,10 @@ export const en: EnTranslations = {
     "otherInstallDetail": "Install or add this page to your Home screen for the best fullscreen mobile experience."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Realm Unavailable",
+    "title": "World of ClaudeCraft - World Unavailable",
     "logoAlt": "World of ClaudeCraft",
-    "eyebrow": "Realm maintenance",
-    "heading": "The realm is temporarily unavailable.",
+    "eyebrow": "World maintenance",
+    "heading": "The world is temporarily unavailable.",
     "body": "We are restarting the game service and expect Claudemoon to return shortly. This page will keep checking automatically.",
     "status": "Back soon"
   },
@@ -3739,9 +3739,9 @@ export const en: EnTranslations = {
       "requiresCombo": "That ability requires combo points.",
       "requiresForm": "You must be in {form} Form.",
       "cantInForm": "You can't do that in {form} Form.",
-      "bear": "Bear",
+      "bear": "Bruin",
       "cat": "Wolf",
-      "travel": "Travel",
+      "travel": "Fleet",
       "shapeshifted": "You cannot do that while shapeshifted.",
       "stealthed": "You must be stealthed.",
       "inCombat": "You cannot do that while in combat.",
@@ -4354,175 +4354,175 @@ export const en: EnTranslations = {
         "description": "Shakes the target area, battering enemies for {damage} Nature damage."
       },
       "heroic_strike": {
-        "name": "Heroic Strike",
+        "name": "Reaver Strike",
         "description": "A strong attack that increases melee damage by {damage}. Activates on your next swing."
       },
       "battle_shout": {
-        "name": "Battle Shout",
+        "name": "Iron Bellow",
         "description": "Increases your attack power by 20 for 2 min."
       },
       "commanding_shout": {
-        "name": "Commanding Shout",
+        "name": "Bolstering Cry",
         "description": "Increases your Stamina by 6 for 2 min."
       },
       "demoralizing_shout": {
-        "name": "Demoralizing Shout",
+        "name": "Direhowl",
         "description": "Lets out a fearsome shout, reducing the attack power of all nearby enemies by 30 for 30 sec."
       },
       "charge": {
-        "name": "Charge",
+        "name": "Onrush",
         "description": "Charges an enemy, generating 9 rage and stunning it for 1 sec. 8-25 yd range."
       },
       "rend": {
-        "name": "Rend",
+        "name": "Deep Gash",
         "description": "Wounds the target, causing them to bleed for {damage} damage over 9 sec."
       },
       "thunder_clap": {
-        "name": "Thunder Clap",
+        "name": "Quaking Blow",
         "description": "Blasts nearby enemies for {damage} damage and slows their attacks by 10% for 10 sec."
       },
       "hamstring": {
-        "name": "Hamstring",
+        "name": "Hobbling Cut",
         "description": "Maims the enemy for 5 damage, slowing its movement by 50% for 15 sec."
       },
       "bloodrage": {
-        "name": "Bloodrage",
+        "name": "Blood Toll",
         "description": "Generates 10 rage at the cost of health."
       },
       "overpower": {
-        "name": "Overpower",
+        "name": "Redhand",
         "description": "Instant attack for weapon damage +5. Only usable after the target dodges. Cannot be dodged."
       },
       "execute": {
-        "name": "Execute",
+        "name": "Early Grave",
         "description": "Attempt to finish off a wounded foe, causing {damage} damage. Only usable on enemies below 20% health."
       },
       "slam": {
-        "name": "Slam",
+        "name": "Brute Swing",
         "description": "Slams the opponent for weapon damage plus {damage}."
       },
       "cleave": {
-        "name": "Cleave",
+        "name": "Reaping Arc",
         "description": "A sweeping strike that hits all enemies in front of you for {damage} damage."
       },
       "defensive_stance": {
-        "name": "Defensive Stance",
+        "name": "Guarded Stance",
         "description": "A defensive combat stance: you generate 30% more threat but deal and take 10% less damage. Cast again to leave the stance."
       },
       "sunder_armor": {
-        "name": "Sunder Armor",
+        "name": "Armor Shear",
         "description": "Sunders the target's armor, reducing it by {damage} per application. Stacks up to 5 times. Generates a high amount of threat."
       },
       "taunt": {
-        "name": "Taunt",
+        "name": "Goad",
         "description": "Taunts the target: your threat rises to match its most hated enemy and it is compelled to attack you for 3 sec."
       },
       "fireball": {
-        "name": "Fireball",
+        "name": "Cinderbolt",
         "description": "Hurls a fiery ball that causes {damage} Fire damage plus additional damage over time."
       },
       "frost_armor": {
-        "name": "Frost Armor",
+        "name": "Hoarfrost Mantle",
         "description": "Encases you in frost, increasing armor by 30 for 30 min."
       },
       "arcane_intellect": {
-        "name": "Arcane Intellect",
+        "name": "Aether Insight",
         "description": "Increases Intellect by 2 for 30 min."
       },
       "frostbolt": {
-        "name": "Frostbolt",
+        "name": "Rimelance",
         "description": "Launches a bolt of frost, causing {damage} Frost damage and slowing movement by 40%."
       },
       "conjure_water": {
-        "name": "Conjure Water",
+        "name": "Waterbind",
         "description": "Conjures 2 bottles of water, restoring mana when drunk. Higher ranks conjure purer water."
       },
       "conjure_food": {
-        "name": "Conjure Food",
+        "name": "Breadbind",
         "description": "Conjures 2 servings of bread, restoring health when eaten. Higher ranks conjure heartier fare."
       },
       "fire_blast": {
-        "name": "Fire Blast",
+        "name": "Cinderfall",
         "description": "Blasts the enemy for {damage} Fire damage. Instant."
       },
       "arcane_missiles": {
-        "name": "Arcane Missiles",
-        "description": "Launches Arcane Missiles at the enemy, causing {damage} Arcane damage each second for 3 sec."
+        "name": "Aether Darts",
+        "description": "Launches Aether Darts at the enemy, causing {damage} Arcane damage each second for 3 sec."
       },
       "polymorph": {
-        "name": "Polymorph",
-        "description": "Transforms the enemy into a sheep for up to 15 sec. The sheep wanders and heals rapidly. Any damage breaks the effect. Beasts and humanoids only."
+        "name": "Bewitch",
+        "description": "Transforms the enemy into a toad for up to 15 sec. The toad wanders and heals rapidly. Any damage breaks the effect. Beasts and humanoids only."
       },
       "frost_nova": {
-        "name": "Frost Nova",
+        "name": "Icebind",
         "description": "Freezes all nearby enemies in place for up to 8 sec, dealing {damage} Frost damage."
       },
       "arcane_explosion": {
-        "name": "Arcane Explosion",
+        "name": "Aetherburst",
         "description": "A burst of Arcane energy hits all nearby enemies for {damage} Arcane damage."
       },
       "scorch": {
-        "name": "Scorch",
+        "name": "Scald",
         "description": "Scorches the enemy for {damage} Fire damage. Quick to cast."
       },
       "pyroblast": {
-        "name": "Pyroblast",
+        "name": "Pyrelance",
         "description": "Hurls an immense fiery boulder that causes {damage} Fire damage plus additional damage over time."
       },
       "ice_barrier": {
-        "name": "Ice Barrier",
+        "name": "Frostveil",
         "description": "Shields you in ice, absorbing 130 damage for 60 sec."
       },
       "sinister_strike": {
-        "name": "Sinister Strike",
+        "name": "Wicked Slash",
         "description": "An instant strike for weapon damage plus {damage}. Awards 1 combo point."
       },
       "eviscerate": {
-        "name": "Eviscerate",
+        "name": "Dirt Nap",
         "description": "Finishing move that causes damage per combo point."
       },
       "backstab": {
-        "name": "Backstab",
+        "name": "Craven Thrust",
         "description": "Backstab the target for 150% weapon damage plus {damage}. Must be behind the target. Requires a dagger. Awards 1 combo point."
       },
       "gouge": {
-        "name": "Gouge",
+        "name": "Eye Jab",
         "description": "Strikes the target, incapacitating it for 4 sec. Any damage breaks the effect. Awards 1 combo point."
       },
       "evasion": {
-        "name": "Evasion",
+        "name": "Ghostfoot",
         "description": "Increases your dodge chance by 50% for 15 sec."
       },
       "slice_and_dice": {
-        "name": "Slice and Dice",
+        "name": "Cutthroat Tempo",
         "description": "Finishing move that increases melee attack speed by 30%. Lasts longer per combo point."
       },
       "sprint": {
-        "name": "Sprint",
+        "name": "Swift Heels",
         "description": "Increases your movement speed by 70% for 15 sec."
       },
       "kidney_shot": {
-        "name": "Kidney Shot",
+        "name": "Low Blow",
         "description": "Finishing move that stuns the target. Lasts 1 sec longer per combo point."
       },
       "ambush": {
-        "name": "Ambush",
+        "name": "Lurker's Strike",
         "description": "Ambush the target for 250% weapon damage plus {damage}. Must be stealthed and behind the target. Requires a dagger. Awards 1 combo point."
       },
       "stealth": {
-        "name": "Stealth",
-        "description": "Conceals you in the shadows: enemies barely notice you, but you move 50% slower. Attacking or taking damage breaks Stealth. Cast again to step out."
+        "name": "Duskveil",
+        "description": "Conceals you in the shadows: enemies barely notice you, but you move 50% slower. Attacking or taking damage breaks Duskveil. Cast again to step out."
       },
       "adrenaline_rush": {
-        "name": "Adrenaline Rush",
+        "name": "Quickened Blood",
         "description": "Your blood runs hot, instantly restoring 60 energy."
       },
       "garrote": {
-        "name": "Garrote",
+        "name": "Throat Wire",
         "description": "Garrote the enemy, causing damage now and bleeding it for {damage} over 18 sec. Must be stealthed. Awards 1 combo point."
       },
       "cheap_shot": {
-        "name": "Cheap Shot",
+        "name": "Gut Punch",
         "description": "Strike the target, stunning it for 4 sec. Must be stealthed. Awards 2 combo points."
       },
       "sap": {
@@ -4530,135 +4530,135 @@ export const en: EnTranslations = {
         "description": "Incapacitates the target for 8 sec. Must be stealthed and out of combat. Any damage breaks the effect."
       },
       "crippling_poison": {
-        "name": "Crippling Poison",
-        "description": "Strikes the target with a crippling poison, dealing {damage} Nature damage and slowing its movement speed by 50% for 12 sec."
+        "name": "Leaden Venom",
+        "description": "Strikes the target with a leaden venom, dealing {damage} Nature damage and slowing its movement speed by 50% for 12 sec."
       },
       "expose_armor": {
-        "name": "Expose Armor",
+        "name": "Armor Breach",
         "description": "Finishing move that exposes the target, reducing its armor. More combo points spent build into a deeper cut."
       },
       "rupture": {
-        "name": "Rupture",
+        "name": "Bleed Out",
         "description": "Finishing move that wounds the target, causing it to bleed for {damage} over 16 sec."
       },
       "vanish": {
-        "name": "Vanish",
-        "description": "Vanish from sight, entering Stealth even in combat. You move 50% slower while hidden. Lasts up to 10 sec."
+        "name": "Smokestep",
+        "description": "Vanish from sight, entering Duskveil even in combat. You move 50% slower while hidden. Lasts up to 10 sec."
       },
       "instant_poison": {
-        "name": "Instant Poison",
+        "name": "Adder's Bite",
         "description": "Coats your weapon for 30 min, causing each of your melee swings to deal 8 additional Nature damage."
       },
       "deadly_poison": {
-        "name": "Deadly Poison",
+        "name": "Festering Venom",
         "description": "Coats your weapon for 30 min, causing each of your melee swings to deal 14 additional Nature damage."
       },
       "blind": {
-        "name": "Blind",
+        "name": "Dirt Toss",
         "description": "Blinds the target, causing it to wander disoriented for 8 sec. Any damage breaks the effect."
       },
       "seal_of_righteousness": {
-        "name": "Seal of Righteousness",
-        "description": "Fills you with Holy power for 30 sec, causing each of your melee swings to deal 4 additional Holy damage. Unleash with Judgement."
+        "name": "Oathbrand",
+        "description": "Fills you with Holy power for 30 sec, causing each of your melee swings to deal 4 additional Holy damage. Unleash with Verdict."
       },
       "holy_light": {
-        "name": "Holy Light",
+        "name": "Mending Light",
         "description": "Heals a friendly target for {damage}."
       },
       "devotion_aura": {
-        "name": "Devotion Aura",
+        "name": "Steadfast Aura",
         "description": "Increases your armor by 40 for 30 min."
       },
       "judgement": {
-        "name": "Judgement",
-        "description": "Unleashes your active Seal upon the enemy, consuming it to deal its judgement damage."
+        "name": "Verdict",
+        "description": "Unleashes your active Seal upon the enemy, consuming it to deal its stored Holy damage."
       },
       "blessing_of_might": {
-        "name": "Blessing of Might",
+        "name": "Oath of Iron",
         "description": "Places a Blessing on a friendly target, increasing attack power by 15 for 5 min."
       },
       "divine_protection": {
-        "name": "Divine Protection",
-        "description": "A holy shield absorbs 50 damage for 10 sec."
+        "name": "Ward of Faith",
+        "description": "A protective ward absorbs 50 damage for 10 sec."
       },
       "hammer_of_justice": {
-        "name": "Hammer of Justice",
+        "name": "Sundering Gavel",
         "description": "Stuns the target for 3 sec."
       },
       "lay_on_hands": {
-        "name": "Lay on Hands",
+        "name": "Last Rite",
         "description": "A massive surge of healing: restores 250 health. 10 min cooldown."
       },
       "flash_of_light": {
-        "name": "Flash of Light",
-        "description": "A quick, efficient flash of Light that heals a friendly target for {damage}."
+        "name": "Lightmend",
+        "description": "A quick, efficient burst of Light that heals a friendly target for {damage}."
       },
       "exorcism": {
-        "name": "Exorcism",
+        "name": "Rite of Expulsion",
         "description": "Banishes the wicked with Holy wrath, causing {damage} Holy damage."
       },
       "consecration": {
-        "name": "Consecration",
+        "name": "Holy Ground",
         "description": "Consecrates the ground beneath you, searing nearby enemies for {damage} Holy damage."
       },
       "righteous_fury": {
-        "name": "Righteous Fury",
+        "name": "Burning Oath",
         "description": "Increases the threat generated by your Holy damage by 60% for 30 min. The tanking paladin's cornerstone."
       },
       "retribution_aura": {
-        "name": "Retribution Aura",
+        "name": "Requital Aura",
         "description": "Surrounds you with holy energy for 30 min, dealing 5 Holy damage to any enemy that strikes you in melee."
       },
       "tame_beast": {
-        "name": "Tame Beast",
+        "name": "Wildbond",
         "description": "Begins taming a beast to be your companion. It must be your level or lower and not an elite. Your pet follows you, attacks your enemies, and holds threat of its own. You may have one pet at a time."
       },
       "dismiss_pet": {
-        "name": "Dismiss Pet",
+        "name": "Release Companion",
         "description": "Releases your pet back to the wild."
       },
       "raptor_strike": {
-        "name": "Raptor Strike",
+        "name": "Gutting Strike",
         "description": "A strong melee attack that increases damage by 5. Activates on your next swing."
       },
       "aspect_of_the_hawk": {
-        "name": "Aspect of the Hawk",
-        "description": "Take on the aspect of the hawk, increasing attack power by 20 for 30 min."
+        "name": "Harrier's Guise",
+        "description": "Take on the harrier's guise, increasing attack power by 20 for 30 min."
       },
       "serpent_sting": {
-        "name": "Serpent Sting",
+        "name": "Venom Barb",
         "description": "Stings the target, dealing {damage} Nature damage over 15 sec."
       },
       "arcane_shot": {
-        "name": "Arcane Shot",
+        "name": "Fell Shot",
         "description": "An instant shot that deals {damage} Arcane damage."
       },
       "concussive_shot": {
-        "name": "Concussive Shot",
+        "name": "Rattling Shot",
         "description": "Dazes the target, slowing movement by 50% for 4 sec."
       },
       "mongoose_bite": {
-        "name": "Mongoose Bite",
+        "name": "Counterfang",
         "description": "Counterattack after the target dodges for weapon damage plus 12. Cannot be dodged."
       },
       "wing_clip": {
-        "name": "Wing Clip",
+        "name": "Fettering Slash",
         "description": "Inflicts a wound that slows the enemy by 40% for 10 sec."
       },
       "aspect_of_the_monkey": {
-        "name": "Aspect of the Monkey",
-        "description": "Take on the aspect of the monkey, increasing your dodge chance by 8% for 30 min."
+        "name": "Marten's Guise",
+        "description": "Take on the marten's guise, increasing your dodge chance by 8% for 30 min."
       },
       "aspect_of_the_cheetah": {
-        "name": "Aspect of the Cheetah",
-        "description": "Take on the aspect of the cheetah, increasing movement speed by 30% for 30 min."
+        "name": "Courser's Guise",
+        "description": "Take on the courser's guise, increasing movement speed by 30% for 30 min."
       },
       "aimed_shot": {
-        "name": "Aimed Shot",
-        "description": "A carefully aimed shot that deals {damage} damage."
+        "name": "Long Draw",
+        "description": "A carefully drawn shot that deals {damage} damage."
       },
       "rapid_fire": {
-        "name": "Rapid Fire",
+        "name": "Fevered Draw",
         "description": "Increases your attack speed by 40% for 15 sec."
       },
       "smite": {
@@ -4666,164 +4666,164 @@ export const en: EnTranslations = {
         "description": "Smites the enemy for {damage} Holy damage."
       },
       "lesser_heal": {
-        "name": "Lesser Heal",
+        "name": "Whispered Prayer",
         "description": "Heals a friendly target for {damage}."
       },
       "power_word_fortitude": {
-        "name": "Power Word: Fortitude",
+        "name": "Litany of Resolve",
         "description": "Increases the target's Stamina by 3 for 30 min."
       },
       "shadow_word_pain": {
-        "name": "Shadow Word: Pain",
+        "name": "Dirge of Decay",
         "description": "A word of darkness causes {damage} Shadow damage over 18 sec."
       },
       "power_word_shield": {
-        "name": "Power Word: Shield",
+        "name": "Psalm of Warding",
         "description": "Shields the target, absorbing 48 damage for 30 sec."
       },
       "renew": {
-        "name": "Renew",
+        "name": "Lingering Grace",
         "description": "Heals the target for {damage} over 15 sec."
       },
       "mind_blast": {
-        "name": "Mind Blast",
+        "name": "Mindfracture",
         "description": "Blasts the target's mind for {damage} Shadow damage."
       },
       "heal": {
-        "name": "Heal",
+        "name": "Solemn Prayer",
         "description": "A slow but powerful prayer that heals a friendly target for {damage}."
       },
       "mind_flay": {
-        "name": "Mind Flay",
+        "name": "Litany of Woe",
         "description": "Assaults the target's mind with Shadow energy, causing {damage} damage each second for 3 sec."
       },
       "flash_heal": {
-        "name": "Flash Heal",
+        "name": "Urgent Prayer",
         "description": "A fast prayer that heals a friendly target for {damage}."
       },
       "lightning_bolt": {
-        "name": "Lightning Bolt",
+        "name": "Arc Bolt",
         "description": "Hurls a bolt of lightning for {damage} Nature damage."
       },
       "rockbiter_weapon": {
-        "name": "Rockbiter Weapon",
+        "name": "Stonebound Weapon",
         "description": "Imbues your weapon with the fury of stone: each swing deals 5 additional damage for 5 min."
       },
       "healing_wave": {
-        "name": "Healing Wave",
+        "name": "Mending Waters",
         "description": "Heals a friendly target for {damage}."
       },
       "earth_shock": {
-        "name": "Earth Shock",
+        "name": "Earthen Jolt",
         "description": "Instantly shocks the target with concussive force for {damage} Nature damage."
       },
       "lightning_shield": {
-        "name": "Lightning Shield",
+        "name": "Thunder Ward",
         "description": "Surrounds you with crackling lightning: melee attackers take 13 Nature damage, up to 3 charges and at most once every 5 seconds."
       },
       "flame_shock": {
-        "name": "Flame Shock",
+        "name": "Cinder Jolt",
         "description": "Sears the target with fire for 25 damage plus {damage} over 12 sec."
       },
       "flametongue_weapon": {
-        "name": "Flametongue Weapon",
+        "name": "Pyrebrand Weapon",
         "description": "Imbues your weapon with elemental fire: each swing deals 8 additional Fire damage for 5 min."
       },
       "frost_shock": {
-        "name": "Frost Shock",
+        "name": "Rime Jolt",
         "description": "Instantly shocks the target with frost for {damage} Frost damage and slows its movement by 50% for 8 sec."
       },
       "frostbrand_weapon": {
-        "name": "Frostbrand Weapon",
+        "name": "Rimebound Weapon",
         "description": "Imbues your weapon with biting frost: each swing deals 8 additional damage for 5 min."
       },
       "ghost_wolf": {
-        "name": "Ghost Wolf",
-        "description": "Turns you into a Ghost Wolf, increasing movement speed by 40% for 10 min."
+        "name": "Shadewolf",
+        "description": "Turns you into a Shadewolf, increasing movement speed by 40% for 10 min."
       },
       "stormstrike": {
-        "name": "Stormstrike",
+        "name": "Ancestral Strike",
         "description": "Channels the storm through your weapon, instantly striking for weapon damage plus {damage}."
       },
       "shadow_bolt": {
-        "name": "Shadow Bolt",
+        "name": "Gloom Bolt",
         "description": "Sends a shadowy bolt at the enemy for {damage} Shadow damage."
       },
       "demon_skin": {
-        "name": "Demon Skin",
+        "name": "Fiendhide",
         "description": "Demonic skin increases your armor by 30 for 30 min."
       },
       "immolate": {
-        "name": "Immolate",
+        "name": "Burning Pact",
         "description": "Burns the enemy for 11 Fire damage and an additional {damage} over 15 sec."
       },
       "corruption": {
-        "name": "Corruption",
+        "name": "Blackrot",
         "description": "Corrupts the target, causing {damage} Shadow damage over 18 sec."
       },
       "life_tap": {
-        "name": "Life Tap",
+        "name": "Hard Bargain",
         "description": "Converts 30 health into 30 mana."
       },
       "curse_of_agony": {
-        "name": "Curse of Agony",
+        "name": "Hex of Anguish",
         "description": "Curses the target with agony: {damage} Shadow damage over 24 sec."
       },
       "drain_life": {
-        "name": "Drain Life",
+        "name": "Consume",
         "description": "Drains the target's life, transferring {damage} health to you each second for 5 sec."
       },
       "fear": {
-        "name": "Fear",
+        "name": "Harrow",
         "description": "Strikes terror into the enemy, leaving it cowering for up to 8 sec. Any damage breaks the effect."
       },
       "searing_pain": {
-        "name": "Searing Pain",
+        "name": "Sear",
         "description": "Sears the enemy with agonizing fire for {damage} Fire damage. Quick to cast."
       },
       "shadowburn": {
-        "name": "Shadowburn",
-        "description": "Instantly blasts the target with Shadow Flame for {damage} Shadow damage."
+        "name": "Duskfire",
+        "description": "Instantly blasts the target with searing shadow for {damage} Shadow damage."
       },
       "wrath": {
-        "name": "Wrath",
+        "name": "Wildbolt",
         "description": "Hurls a bolt of nature energy for {damage} Nature damage."
       },
       "healing_touch": {
-        "name": "Healing Touch",
+        "name": "Wildmend",
         "description": "Heals a friendly target for {damage}."
       },
       "mark_of_the_wild": {
-        "name": "Mark of the Wild",
-        "description": "Places the Mark of the Wild on a friendly target, increasing armor by 25 for 30 min."
+        "name": "Wildward",
+        "description": "Places the Wildward on a friendly target, increasing armor by 25 for 30 min."
       },
       "moonfire": {
-        "name": "Moonfire",
+        "name": "Lunar Tempest",
         "description": "Burns the enemy with moonfire for {damage} Arcane damage plus damage over time."
       },
       "rejuvenation": {
-        "name": "Rejuvenation",
+        "name": "Wildbloom",
         "description": "Heals the target for {damage} over 12 sec."
       },
       "thorns": {
-        "name": "Thorns",
+        "name": "Briarguard",
         "description": "Thorns sprout from the target: melee attackers take 3 Nature damage."
       },
       "entangling_roots": {
-        "name": "Entangling Roots",
+        "name": "Gripping Roots",
         "description": "Roots the target in place for up to 12 sec."
       },
       "bear_form": {
-        "name": "Bear Form",
+        "name": "Bruin Form",
         "description": "Shapeshift into a bear: armor +65%, attack power +15, your attacks build rage and generate 30% more threat. Cast again to return to caster form."
       },
       "maul": {
-        "name": "Maul",
-        "description": "A mauling attack that increases melee damage by {damage} and causes a high amount of threat. Activates on your next swing. Bear Form only."
+        "name": "Bonecrush",
+        "description": "A mauling attack that increases melee damage by {damage} and causes a high amount of threat. Activates on your next swing. Bruin Form only."
       },
       "growl": {
-        "name": "Growl",
-        "description": "Growls at the target: your threat rises to match its most hated enemy and it is compelled to attack you for 3 sec. Bear Form only."
+        "name": "Menace",
+        "description": "Growls at the target: your threat rises to match its most hated enemy and it is compelled to attack you for 3 sec. Bruin Form only."
       },
       "cat_form": {
         "name": "Wolf Form",
@@ -4834,43 +4834,43 @@ export const en: EnTranslations = {
         "description": "Claw the enemy for weapon damage plus {damage}. Awards 1 combo point. Wolf Form only."
       },
       "ferocious_bite": {
-        "name": "Ferocious Bite",
+        "name": "Gorebite",
         "description": "Finishing move that causes damage per combo point. Wolf Form only."
       },
       "swipe": {
-        "name": "Swipe",
-        "description": "Swipe nearby enemies for {damage} damage. Causes extra threat. Bear Form only."
+        "name": "Sweeping Claws",
+        "description": "Swipe nearby enemies for {damage} damage. Causes extra threat. Bruin Form only."
       },
       "regrowth": {
-        "name": "Regrowth",
+        "name": "Second Bloom",
         "description": "Heals a friendly target for {damage} and an additional amount over 21 sec."
       },
       "barkskin": {
-        "name": "Barkskin",
+        "name": "Oakhide",
         "description": "Your skin hardens like bark, increasing armor by 150 for 15 sec."
       },
       "starfire": {
-        "name": "Starfire",
+        "name": "Skyfall",
         "description": "Calls down a bolt of stellar fire, causing {damage} Arcane damage."
       },
       "travel_form": {
-        "name": "Travel Form",
-        "description": "Instantly shift into a swift travel form, increasing movement speed by 40%. You cannot use other abilities while shifted, but can shift in or out of combat, ideal for escaping."
+        "name": "Fleet Form",
+        "description": "Instantly shift into a swift fleet form, increasing movement speed by 40%. You cannot use other abilities while shifted, but can shift in or out of combat, ideal for escaping."
       },
       "enrage": {
-        "name": "Enrage",
-        "description": "Generates 20 rage instantly. Bear Form only."
+        "name": "Stoke",
+        "description": "Generates 20 rage instantly. Bruin Form only."
       },
       "bash": {
-        "name": "Bash",
-        "description": "Stuns the target for 2 sec. Bear Form only."
+        "name": "Concuss",
+        "description": "Stuns the target for 2 sec. Bruin Form only."
       },
       "faerie_fire": {
-        "name": "Faerie Fire",
+        "name": "Witchlight",
         "description": "Decreases the target's armor by 35 for 40 sec."
       },
       "hibernate": {
-        "name": "Hibernate",
+        "name": "Slumber",
         "description": "Forces the target into a deep sleep for up to 8 sec. Any damage will awaken it."
       },
       "dash": {
@@ -4878,15 +4878,15 @@ export const en: EnTranslations = {
         "description": "Sprint forward, increasing movement speed by 50% for 15 sec. Wolf Form only."
       },
       "pounce": {
-        "name": "Pounce",
+        "name": "Slinkstrike",
         "description": "A stealth opener that stuns the target for 2 sec. Awards 1 combo point. Wolf Form only."
       },
       "insect_swarm": {
-        "name": "Insect Swarm",
+        "name": "Stinging Swarm",
         "description": "The enemy is swarmed by insects, taking {damage} Nature damage over 12 sec."
       },
       "tigers_fury": {
-        "name": "Tiger's Fury",
+        "name": "Wolfsblood",
         "description": "Increases attack power by 40 for 6 sec. Wolf Form only."
       },
       "rip": {
@@ -4894,67 +4894,67 @@ export const en: EnTranslations = {
         "description": "Finishing move that causes Bleed damage over 12 sec. Consumes combo points. Wolf Form only."
       },
       "mortal_strike": {
-        "name": "Mortal Strike",
+        "name": "Maiming Strike",
         "description": "A vicious strike dealing weapon damage plus {damage}. (Arms signature)"
       },
       "bloodthirst": {
-        "name": "Bloodthirst",
+        "name": "Bloodletting",
         "description": "Instantly attack in a blood frenzy for {damage}. (Fury signature)"
       },
       "shield_slam": {
-        "name": "Shield Slam",
+        "name": "Shieldcrack",
         "description": "Slam the target with your shield for {damage} and massive threat. (Protection signature)"
       },
       "whirlwind": {
-        "name": "Whirlwind",
+        "name": "Bladed Gyre",
         "description": "Spin in a deadly arc, striking all nearby enemies for {damage}. (Fury talent)"
       },
       "berserker_rage": {
-        "name": "Berserker Rage",
-        "description": "Enter a berserker rage, generating 20 rage. (Warrior talent)"
+        "name": "Seething Fury",
+        "description": "Enter a seething fury, generating 20 rage. (Warrior talent)"
       },
       "summon_imp": {
-        "name": "Summon Imp",
-        "description": "Summons an Imp under the command of the Warlock. The Imp hurls Firebolts at your enemies from afar. Summoning a new demon dismisses your current one. You may have one demon at a time."
+        "name": "Summon Emberkin",
+        "description": "Summons an Emberkin under the command of the Warlock. The Emberkin hurls Ashbolts at your enemies from afar. Summoning a new demon dismisses your current one. You may have one demon at a time."
       },
       "summon_voidwalker": {
-        "name": "Summon Voidwalker",
-        "description": "Summons a Voidwalker under the command of the Warlock. The Voidwalker is a sturdy demon that taunts your enemies and soaks up punishment. Summoning a new demon dismisses your current one. You may have one demon at a time."
+        "name": "Summon Gloomshade",
+        "description": "Summons a Gloomshade under the command of the Warlock. The Gloomshade is a sturdy demon that taunts your enemies and soaks up punishment. Summoning a new demon dismisses your current one. You may have one demon at a time."
       },
       "summon_succubus": {
-        "name": "Summon Succubus",
-        "description": "Summons a Succubus under the command of the Warlock. The Succubus is a fragile demon that strikes quickly and hits hard in melee. Summoning a new demon dismisses your current one. You may have one demon at a time."
+        "name": "Summon Duskborn",
+        "description": "Summons a Duskborn under the command of the Warlock. The Duskborn is a fragile demon that strikes quickly and hits hard in melee. Summoning a new demon dismisses your current one. You may have one demon at a time."
       },
       "summon_felhunter": {
-        "name": "Summon Felhunter",
-        "description": "Summons a Felhunter under the command of the Warlock. The Felhunter harries enemies from range with Shadow Bite and excels at hunting spellcasters. Summoning a new demon dismisses your current one. You may have one demon at a time."
+        "name": "Summon Spellhound",
+        "description": "Summons a Spellhound under the command of the Warlock. The Spellhound harries enemies from range with Gloombite and excels at hunting spellcasters. Summoning a new demon dismisses your current one. You may have one demon at a time."
       },
       "summon_felguard": {
-        "name": "Summon Felguard",
-        "description": "Summons a Felguard under the command of the Warlock. The Felguard is a durable melee demon that wades into battle and holds its own. Summoning a new demon dismisses your current one. You may have one demon at a time."
+        "name": "Summon Warfiend",
+        "description": "Summons a Warfiend under the command of the Warlock. The Warfiend is a durable melee demon that wades into battle and holds its own. Summoning a new demon dismisses your current one. You may have one demon at a time."
       },
       "summon_infernal": {
-        "name": "Summon Infernal",
-        "description": "Binds an Infernal to your will — a hulking juggernaut with crushing melee and the deepest health and armor of any demon. A long cooldown gates its raw power. Summoning a new demon dismisses your current one. You may have one demon at a time."
+        "name": "Summon Pyre Colossus",
+        "description": "Binds a Pyre Colossus to your will — a hulking juggernaut with crushing melee and the deepest health and armor of any demon. A long cooldown gates its raw power. Summoning a new demon dismisses your current one. You may have one demon at a time."
       },
       "summon_doomguard": {
-        "name": "Summon Doomguard",
-        "description": "Binds a Doomguard to your will — an elite demon that rains heavy Shadow damage from afar. A long cooldown gates its devastating power. Summoning a new demon dismisses your current one. You may have one demon at a time."
+        "name": "Summon Wraithborn",
+        "description": "Binds a Wraithborn to your will — an elite demon that rains heavy Shadow damage from afar. A long cooldown gates its devastating power. Summoning a new demon dismisses your current one. You may have one demon at a time."
       },
       "bear_charge": {
-        "name": "Bear Charge",
-        "description": "Charge an enemy, generating 9 rage and stunning it for 1 sec. 8-25 yd range. Bear Form only."
+        "name": "Bruin Rush",
+        "description": "Charge an enemy, generating 9 rage and stunning it for 1 sec. 8-25 yd range. Bruin Form only."
       },
       "demoralizing_roar": {
-        "name": "Demoralizing Roar",
-        "description": "Demoralizes nearby enemies, reducing their attack power by 20 for 20 sec. Bear Form only."
+        "name": "Craven Roar",
+        "description": "Demoralizes nearby enemies, reducing their attack power by 20 for 20 sec. Bruin Form only."
       },
       "prowl": {
-        "name": "Prowl",
+        "name": "Stalk",
         "description": "Enter stealth while in Wolf Form, moving 50% slower. Cannot be used in combat."
       },
       "rake": {
-        "name": "Rake",
+        "name": "Flense",
         "description": "A stealth opener that rakes the enemy for weapon damage plus {damage} and causes bleeding damage over 9 sec. Awards 1 combo point. Wolf Form only."
       },
       "revive_pet": {
@@ -4964,10 +4964,10 @@ export const en: EnTranslations = {
     },
     "items": {
       "worn_sword": {
-        "name": "Worn Shortsword"
+        "name": "Pitted Shortsword"
       },
       "gnarled_staff": {
-        "name": "Gnarled Staff"
+        "name": "Bogoak Staff"
       },
       "rusty_dagger": {
         "name": "Rusty Dagger"
@@ -4979,13 +4979,13 @@ export const en: EnTranslations = {
         "name": "Rusty Hatchet"
       },
       "recruit_tunic": {
-        "name": "Recruit's Tunic"
+        "name": "Levyman's Tunic"
       },
       "apprentice_robe": {
-        "name": "Apprentice's Robe"
+        "name": "Threadbare Robe"
       },
       "footpad_jerkin": {
-        "name": "Footpad's Jerkin"
+        "name": "Cutpurse Jerkin"
       },
       "redbrook_blade": {
         "name": "Redbrook Militia Blade"
@@ -5015,22 +5015,22 @@ export const en: EnTranslations = {
         "name": "Greyjaw's Pelt Leggings"
       },
       "baked_bread": {
-        "name": "Freshly Baked Bread"
+        "name": "Cottage Loaf"
       },
       "spring_water": {
-        "name": "Refreshing Spring Water"
+        "name": "Cold Well Water"
       },
       "roasted_boar": {
-        "name": "Roasted Boar Meat"
+        "name": "Spitted Boar Haunch"
       },
       "conjured_water": {
-        "name": "Conjured Spring Water"
+        "name": "Conjured Rainwater"
       },
       "conjured_water2": {
-        "name": "Conjured Mineral Water"
+        "name": "Conjured Wellwater"
       },
       "conjured_water3": {
-        "name": "Conjured Sparkling Water"
+        "name": "Conjured Clearwater"
       },
       "eastbrook_arming_sword": {
         "name": "Eastbrook Arming Sword"
@@ -5090,7 +5090,7 @@ export const en: EnTranslations = {
         "name": "Ghostly Essence"
       },
       "webwood_silk": {
-        "name": "Webwood Silk Gland"
+        "name": "Sableweb Silk Gland"
       },
       "supply_crate": {
         "name": "Stolen Supply Crate"
@@ -5111,13 +5111,13 @@ export const en: EnTranslations = {
         "name": "Red Bandana"
       },
       "tough_jerky": {
-        "name": "Tough Jerky"
+        "name": "Salted Jerky"
       },
       "mudfin_scale": {
-        "name": "Slimy Murloc Scale"
+        "name": "Slimy Mudfin Scale"
       },
       "tallow_candle": {
-        "name": "Tallow Candle"
+        "name": "Greasy Tallow Lump"
       },
       "spider_leg": {
         "name": "Twitching Spider Leg"
@@ -5183,7 +5183,7 @@ export const en: EnTranslations = {
         "name": "Marshstrider Boots"
       },
       "mistcallers_edge": {
-        "name": "Mistcaller's Edge"
+        "name": "Fogbinder's Edge"
       },
       "vaels_mist_staff": {
         "name": "Vael's Mist-Staff"
@@ -5327,7 +5327,7 @@ export const en: EnTranslations = {
         "name": "Staff of Velkhar"
       },
       "shadowmeld_tunic": {
-        "name": "Shadowmeld Tunic"
+        "name": "Nightveil Tunic"
       },
       "gravewyrm_scale_hauberk": {
         "name": "Gravewyrm Scale Hauberk"
@@ -5396,13 +5396,13 @@ export const en: EnTranslations = {
         "name": "Cracked Wyrm Scale"
       },
       "conjured_bread": {
-        "name": "Conjured Bread"
+        "name": "Conjured Oatcake"
       },
       "conjured_bread2": {
-        "name": "Conjured Pumpernickel"
+        "name": "Conjured Black Loaf"
       },
       "conjured_bread3": {
-        "name": "Conjured Sweet Roll"
+        "name": "Conjured Honeycake"
       },
       "roadwardens_helm": {
         "name": "Roadwarden's Helm"
@@ -5522,7 +5522,7 @@ export const en: EnTranslations = {
         "name": "Silverleaf Sickle"
       },
       "bristleback_maul": {
-        "name": "Bristleback Maul"
+        "name": "Gallowglass Hammer"
       },
       "broodmother_silk_robe": {
         "name": "Broodmother's Silk Robe"
@@ -5531,16 +5531,16 @@ export const en: EnTranslations = {
         "name": "Cryptbone Greaves"
       },
       "cryptstalker_jerkin": {
-        "name": "Cryptstalker Jerkin"
+        "name": "Gravestalker Jerkin"
       },
       "deathlord_legguards": {
-        "name": "Deathlord Legguards"
+        "name": "Barrowlord Legguards"
       },
       "deathlord_sabatons": {
-        "name": "Deathlord Sabatons"
+        "name": "Barrowlord Sabatons"
       },
       "deathlord_warplate": {
-        "name": "Deathlord Warplate"
+        "name": "Barrowlord Warplate"
       },
       "drogmar_warboots": {
         "name": "Drogmar's Warboots"
@@ -5618,13 +5618,13 @@ export const en: EnTranslations = {
         "name": "Mogger's Stomper Boots"
       },
       "necromancers_legwraps": {
-        "name": "Necromancer's Legwraps"
+        "name": "Mournweave Legwraps"
       },
       "necromancers_soulsteps": {
-        "name": "Necromancer's Soulsteps"
+        "name": "Mournweave Soulsteps"
       },
       "necromancers_starshroud": {
-        "name": "Necromancer's Starshroud"
+        "name": "Mournweave Starshroud"
       },
       "nhalias_dirgeblade": {
         "name": "Nhalia's Dirgeblade"
@@ -5660,13 +5660,13 @@ export const en: EnTranslations = {
         "name": "Wyrmcult Soulsteps"
       },
       "wyrmshadow_harness": {
-        "name": "Wyrmshadow Harness"
+        "name": "Nightfang Harness"
       },
       "wyrmshadow_legguards": {
-        "name": "Wyrmshadow Legguards"
+        "name": "Nightfang Legguards"
       },
       "wyrmshadow_treads": {
-        "name": "Wyrmshadow Treads"
+        "name": "Nightfang Treads"
       },
       "glimmerfin_koi": {
         "name": "Glimmerfin Koi"
@@ -5684,7 +5684,7 @@ export const en: EnTranslations = {
         "name": "Raw River Perch"
       },
       "raw_stonescale_carp": {
-        "name": "Raw Stonescale Carp"
+        "name": "Raw Slatefin Carp"
       },
       "soggy_boot": {
         "name": "Soggy Boot"
@@ -5795,13 +5795,13 @@ export const en: EnTranslations = {
         "name": "Moonscale Saber"
       },
       "moonshroud_breastplate": {
-        "name": "Moonshroud Breastplate"
+        "name": "Moonwrack Breastplate"
       },
       "moonshroud_robe": {
-        "name": "Moonshroud Robe"
+        "name": "Moonwrack Robe"
       },
       "moonshroud_tunic": {
-        "name": "Moonshroud Tunic"
+        "name": "Moonwrack Tunic"
       },
       "pale_pearl": {
         "name": "Pale Pearl"
@@ -5837,7 +5837,7 @@ export const en: EnTranslations = {
         "name": "Cryptbone Pauldrons"
       },
       "deathlords_dread_visage": {
-        "name": "Deathlord's Dread Visage"
+        "name": "Barrowlord's Dread Visage"
       },
       "gravewyrm_gauntlets": {
         "name": "Gravewyrm Gauntlets"
@@ -5852,10 +5852,10 @@ export const en: EnTranslations = {
         "name": "Mistveil Grips"
       },
       "necromancers_soulspire_mantle": {
-        "name": "Necromancer's Soulspire Mantle"
+        "name": "Mournweave Soulspire Mantle"
       },
       "wyrmshadow_talongrips": {
-        "name": "Wyrmshadow Talongrips"
+        "name": "Nightfang Talongrips"
       },
       "reliquary_plate_chest": {
         "name": "Reliquary Guard Hauberk"
@@ -5927,31 +5927,31 @@ export const en: EnTranslations = {
         "name": "Heartwood of the Deathless Crown"
       },
       "kingsbane_last_oath": {
-        "name": "Kingsbane, Last Oath of Thornpeak"
+        "name": "Thronebane, Last Oath of Thornpeak"
       },
       "crownforged_dreadhelm": {
-        "name": "Crownforged Dreadhelm"
+        "name": "Bonewrought Dreadhelm"
       },
       "crownforged_warspaulders": {
-        "name": "Crownforged Warspaulders"
+        "name": "Bonewrought Warspaulders"
       },
       "nighttalon_crown": {
-        "name": "Nighttalon Crown"
+        "name": "Direfang Crown"
       },
       "nighttalon_shoulderguards": {
-        "name": "Nighttalon Shoulderguards"
+        "name": "Direfang Shoulderguards"
       },
       "soulflame_cowl": {
-        "name": "Soulflame Cowl"
+        "name": "Wraithfire Cowl"
       },
       "soulflame_mantle": {
-        "name": "Soulflame Mantle"
+        "name": "Wraithfire Mantle"
       },
       "stormcallers_crown": {
-        "name": "Stormcaller's Crown"
+        "name": "Galecall Crown"
       },
       "stormcallers_spaulders": {
-        "name": "Stormcaller's Spaulders"
+        "name": "Galecall Spaulders"
       },
       "unknown_alien_weaponry": {
         "name": "Unknown Alien Weaponry"
@@ -6040,13 +6040,13 @@ export const en: EnTranslations = {
         "name": "Wild Boar"
       },
       "webwood_spider": {
-        "name": "Webwood Lurker"
+        "name": "Sableweb Lurker"
       },
       "mudfin_murloc": {
         "name": "Mudfin Skulker"
       },
       "tunnel_rat": {
-        "name": "Tunnel Rat Digger"
+        "name": "Deeprock Digger"
       },
       "vale_bandit": {
         "name": "Vale Bandit"
@@ -6148,13 +6148,13 @@ export const en: EnTranslations = {
         "name": "Knight-Commander Olen"
       },
       "vael_the_mistcaller": {
-        "name": "Vael the Mistcaller"
+        "name": "Vael the Fogbinder"
       },
       "sanctum_boneguard": {
         "name": "Sanctum Boneguard"
       },
       "sanctum_drakonid": {
-        "name": "Sanctum Drakonid"
+        "name": "Sanctum Scaleguard"
       },
       "raised_bonewalker": {
         "name": "Raised Bonewalker"
@@ -6255,14 +6255,14 @@ export const en: EnTranslations = {
       "varkas_boneguard": {
         "name": "Varkas Boneguard"
       },
-      "imp": {
-        "name": "Imp"
+      "emberkin": {
+        "name": "Emberkin"
       },
-      "voidwalker": {
-        "name": "Voidwalker"
+      "gloomshade": {
+        "name": "Gloomshade"
       },
-      "succubus": {
-        "name": "Succubus"
+      "duskborn": {
+        "name": "Duskborn"
       },
       "grix_the_tunnelking": {
         "name": "Grix the Tunnelking"
@@ -6285,17 +6285,17 @@ export const en: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "Wraithbinder Maldrec"
       },
-      "felhunter": {
-        "name": "Felhunter"
+      "spellhound": {
+        "name": "Spellhound"
       },
-      "felguard": {
-        "name": "Felguard"
+      "warfiend": {
+        "name": "Warfiend"
       },
-      "infernal": {
-        "name": "Infernal"
+      "pyre_colossus": {
+        "name": "Pyre Colossus"
       },
-      "doomguard": {
-        "name": "Doomguard"
+      "wraithborn": {
+        "name": "Wraithborn"
       },
       "choirmother_selthe": {
         "name": "Choirmother Selthe"
@@ -6368,12 +6368,12 @@ export const en: EnTranslations = {
       "fisherman_brandt": {
         "name": "Fisherman Brandt",
         "title": "Old Salt",
-        "greeting": "Grlmurlgrl- sorry, been listening to those fish-men too long."
+        "greeting": "Blrb-glub- sorry, been listening to those fish-men too long."
       },
       "foreman_odell": {
         "name": "Foreman Odell",
         "title": "Mine Foreman",
-        "greeting": "Whole dig's crawling with those candle-headed vermin!"
+        "greeting": "Whole dig's crawling with those dirt-caked vermin!"
       },
       "warden_fenwick": {
         "name": "Warden Fenwick",
@@ -6473,7 +6473,7 @@ export const en: EnTranslations = {
         }
       },
       "q_boars": {
-        "title": "Bristleback Hides",
+        "title": "Bristly Boar Hides",
         "text": "Boar hide makes the finest travel packs, and the meadows west of town are crawling with the beasts. Bring me 5 Bristly Boar Hides and I will make it worth your time.",
         "completion": "Ah, fine bristly hides! These will fetch a good price.",
         "objectives": {
@@ -6483,21 +6483,21 @@ export const en: EnTranslations = {
         }
       },
       "q_spiders": {
-        "title": "Webwood Menace",
-        "text": "The lurkers in the eastern woods spin a silk I need for my poultices - and they have grown far too numerous besides. Cull 6 Webwood Lurkers and cut 4 silk glands from their bellies.",
+        "title": "Sableweb Menace",
+        "text": "The lurkers in the eastern woods spin a silk I need for my poultices - and they have grown far too numerous besides. Cull 6 Sableweb Lurkers and cut 4 silk glands from their bellies.",
         "completion": "Ugh, still twitching. Perfect. Here, you've earned this.",
         "objectives": {
           "0": {
-            "label": "Webwood Lurker slain"
+            "label": "Sableweb Lurker slain"
           },
           "1": {
-            "label": "Webwood Silk Gland"
+            "label": "Sableweb Silk Gland"
           }
         }
       },
       "q_murlocs": {
         "title": "Trouble at the Lake",
-        "text": "Twenty years I have fished Mirror Lake, and never lost a net until those gurgling fish-men crawled out of the shallows. Drive the Mudfin back - slay 8 of them. And watch yourself: where there is one murloc, there are five.",
+        "text": "Twenty years I have fished Mirror Lake, and never lost a net until those gurgling fish-men crawled out of the shallows. Drive the Mudfin back - slay 8 of them. And watch yourself: where there is one mudfin, there are five.",
         "completion": "Hah! That will teach them to mind their own mudholes.",
         "objectives": {
           "0": {
@@ -6507,11 +6507,11 @@ export const en: EnTranslations = {
       },
       "q_mine": {
         "title": "Rats in the Mine",
-        "text": "We struck a fine copper vein and then those kobold vermin came boiling out of the hillside. My crew will not set foot in the dig until it is cleared. Put down 10 Tunnel Rat Diggers.",
+        "text": "We struck a fine copper vein and then those burrowing vermin came boiling out of the hillside. My crew will not set foot in the dig until it is cleared. Put down 10 Deeprock Diggers.",
         "completion": "Ha! Back to work, lads! You have my thanks - and my coin.",
         "objectives": {
           "0": {
-            "label": "Tunnel Rat Digger slain"
+            "label": "Deeprock Digger slain"
           }
         }
       },
@@ -6567,7 +6567,7 @@ export const en: EnTranslations = {
       },
       "q_rite": {
         "title": "The Binding Rite",
-        "text": "The crypt beneath the chapel must be unsealed if we are to stop the Gravecaller - but only a binding rite will let the living pass. I need 4 lumps of Blessed Tallow - the kobold diggers hoard candles by the crate - and 6 Ghostly Essences from the restless dead.",
+        "text": "The crypt beneath the chapel must be unsealed if we are to stop the Gravecaller - but only a binding rite will let the living pass. I need 4 lumps of Blessed Tallow - the mine's burrowers hoard tallow by the crate - and 6 Ghostly Essences from the restless dead.",
         "completion": "It is done. The way below stands open... and may the Light forgive me for opening it. Gather your strongest companions before you descend, {playerName}. No one should face the Hollow alone.",
         "objectives": {
           "0": {
@@ -6601,7 +6601,7 @@ export const en: EnTranslations = {
       "q_gravecallers_trail": {
         "title": "The Gravecaller's Trail",
         "text": "Morthen is dead, yet a question gnaws at me: a sect that hid for a century does not spend itself on one village chapel. He kept a grimoire - his rites, his correspondence. If anything of it survives, it lies in the vestry of the ruined chapel above the crypt. Search the ruin and bring me whatever remains of his writings, {playerName}.",
-        "completion": "Morthen wrote to a 'Mistcaller' in the northern fen. The sect is not dead, {playerName} - it has merely been patient.",
+        "completion": "Morthen wrote to a 'Fogbinder' in the northern fen. The sect is not dead, {playerName} - it has merely been patient.",
         "objectives": {
           "0": {
             "label": "Morthen's Grimoire"
@@ -6630,7 +6630,7 @@ export const en: EnTranslations = {
       },
       "q_fenbridge_muster": {
         "title": "Muster at Fenbridge",
-        "text": "Morthen's writings named a master in the northern marsh - a 'Mistcaller.' Now Warden Fenwick has sounded the muster horn at Fenbridge, and I do not believe in coincidence, {playerName}. Take the causeway north, pull the muster order from the gatepost, and present it to the Warden.",
+        "text": "Morthen's writings named a master in the northern marsh - a 'Fogbinder.' Now Warden Fenwick has sounded the muster horn at Fenbridge, and I do not believe in coincidence, {playerName}. Take the causeway north, pull the muster order from the gatepost, and present it to the Warden.",
         "completion": "Aldric's seal, is it? Then you'll do. The fen has been swallowing my patrols whole, and I need every blade that floats.",
         "objectives": {
           "0": {
@@ -6670,7 +6670,7 @@ export const en: EnTranslations = {
       },
       "q_deepfen": {
         "title": "The Deepfen Stirs",
-        "text": "The Deepfen murlocs kept to their shallows for twenty years. Now they swarm the east bank like flies on a carcass - and my wardens say they are dragging things up from the lake bed. Whatever has them stirred, I want it stopped. Cull 12 of the snappers.",
+        "text": "The Deepfen mudfins kept to their shallows for twenty years. Now they swarm the east bank like flies on a carcass - and my wardens say they are dragging things up from the lake bed. Whatever has them stirred, I want it stopped. Cull 12 of the snappers.",
         "completion": "That will push them back to the mud for a while. But something set them digging, and I mean to learn what.",
         "objectives": {
           "0": {
@@ -6700,7 +6700,7 @@ export const en: EnTranslations = {
       },
       "q_deepfen_purge": {
         "title": "Back to the Shallows",
-        "text": "Aldric says those idols are cult-make - which means the murlocs are hauling the marsh's old evil up one armful at a time. I will not have it washing onto my causeway. Go back to the shallows and break the dredging for good: 14 more snappers.",
+        "text": "Aldric says those idols are cult-make - which means the mudfins are hauling the marsh's old evil up one armful at a time. I will not have it washing onto my causeway. Go back to the shallows and break the dredging for good: 14 more snappers.",
         "completion": "Ruthless and thorough. If this marsh ever dries out, there's warden's work waiting for you.",
         "objectives": {
           "0": {
@@ -6807,7 +6807,7 @@ export const en: EnTranslations = {
       "q_summoners": {
         "title": "Stopping the Summoning",
         "text": "Maren's reports name summoners among the cultists - voices that call the drowned up out of the water like hounds to a whistle. Their ciphers will spell out the chain of command. Silence 8 summoners and bring me 4 of their ciphers.",
-        "completion": "Every cipher is countersigned 'Deacon Voss' - and addressed onward to a 'Mistcaller' in the Bastion. Morthen's master, {playerName}. We have found him.",
+        "completion": "Every cipher is countersigned 'Deacon Voss' - and addressed onward to a 'Fogbinder' in the Bastion. Morthen's master, {playerName}. We have found him.",
         "objectives": {
           "0": {
             "label": "Gravecaller Summoner slain"
@@ -6829,7 +6829,7 @@ export const en: EnTranslations = {
       },
       "q_bastion_door": {
         "title": "The Sunken Bastion",
-        "text": "The Sunken Bastion - a knight's hold that drowned in the fen a century ago - is where Voss's letters point, and where this Mistcaller sings his drowning hymns. The cult has warded its door with grave-stones. Bring me one of the ward stones, {playerName}, and I will unweave the seal.",
+        "text": "The Sunken Bastion - a knight's hold that drowned in the fen a century ago - is where Voss's letters point, and where this Fogbinder sings his drowning hymns. The cult has warded its door with grave-stones. Bring me one of the ward stones, {playerName}, and I will unweave the seal.",
         "completion": "The ward parts like rotten rope. The door stands open... and the dark below it is listening.",
         "objectives": {
           "0": {
@@ -6839,7 +6839,7 @@ export const en: EnTranslations = {
       },
       "q_olen": {
         "title": "The Knight-Commander's Shame",
-        "text": "Knight-Commander Olen held the Bastion when it sank - drowned at his post rather than abandon it. Every warden learns his name with pride. Now the Mistcaller has raised him as a puppet to guard the very door he died defending. That shame ends, {playerName}. Take four companions below and grant Olen the rest he earned.",
+        "text": "Knight-Commander Olen held the Bastion when it sank - drowned at his post rather than abandon it. Every warden learns his name with pride. Now the Fogbinder has raised him as a puppet to guard the very door he died defending. That shame ends, {playerName}. Take four companions below and grant Olen the rest he earned.",
         "completion": "Then his watch is finally over. I'll see his name cut into the gate myself. Thank you, {playerName}.",
         "objectives": {
           "0": {
@@ -6848,12 +6848,12 @@ export const en: EnTranslations = {
         }
       },
       "q_mistcaller": {
-        "title": "The Mistcaller",
-        "text": "At the bottom of the Bastion waits Vael the Mistcaller - Morthen's master, Voss's master, the voice that has drowned a hundred travelers to raise itself an army. He is far beyond any one hero: take four companions, no fewer. End him, {playerName}, and the fen's dead may finally lie still.",
+        "title": "The Fogbinder",
+        "text": "At the bottom of the Bastion waits Vael the Fogbinder - Morthen's master, Voss's master, the voice that has drowned a hundred travelers to raise itself an army. He is far beyond any one hero: take four companions, no fewer. End him, {playerName}, and the fen's dead may finally lie still.",
         "completion": "Vael is dead, and the mist is lifting for the first time in years. But Maren heard his last words, and they freeze my blood: 'The Wyrm stirs beneath the peaks.' The sect serves something older than we ever guessed, {playerName}. Rest while you can - the mountains are next.",
         "objectives": {
           "0": {
-            "label": "Vael the Mistcaller slain"
+            "label": "Vael the Fogbinder slain"
           }
         }
       },
@@ -6919,8 +6919,8 @@ export const en: EnTranslations = {
       },
       "q_kobold_tunnels": {
         "title": "Deeprock Trouble",
-        "text": "The kobolds at Deeprock Burrows are digging deeper than any candle-rat has business digging - straight down, as if something were calling them. Their tunnels run beneath our wall, {playerName}. Collapse the matter: kill twelve Deeprock Tunnelers.",
-        "completion": "Straight down, every shaft of it - kobolds do not dig like that on their own. I must consult my books.",
+        "text": "The tunnelers at Deeprock Burrows are digging deeper than any pit-rat has business digging - straight down, as if something were calling them. Their tunnels run beneath our wall, {playerName}. Collapse the matter: kill twelve Deeprock Tunnelers.",
+        "completion": "Straight down, every shaft of it - burrowers do not dig like that on their own. I must consult my books.",
         "objectives": {
           "0": {
             "label": "Deeprock Tunneler slain"
@@ -6929,7 +6929,7 @@ export const en: EnTranslations = {
       },
       "q_glowing_wax": {
         "title": "Strange Wax",
-        "text": "Caddis showed me a candle taken off one of those tunnelers - the wax glows, {playerName}, and it is warm as a heartbeat. He wants more for study, and I want it off my requisition list. Bring back six lumps of the glowing wax.",
+        "text": "Caddis showed me a lump of wax taken off one of those tunnelers - it glows, {playerName}, and it is warm as a heartbeat. He wants more for study, and I want it off my requisition list. Bring back six lumps of the glowing wax.",
         "completion": "Still warm. The Loremaster says the glow matches no flame he knows of. I say it is mountain trouble, and I say it kindly.",
         "objectives": {
           "0": {
@@ -7316,7 +7316,7 @@ export const en: EnTranslations = {
             "label": "Mirror Lake"
           },
           "4": {
-            "label": "Webwood"
+            "label": "Sableweb"
           },
           "5": {
             "label": "Copper Dig"
@@ -7465,37 +7465,37 @@ export const en: EnTranslations = {
     },
     "itemSets": {
       "crownforged": {
-        "name": "Crownforged Regalia",
+        "name": "Bonewrought Regalia",
         "bonus2": "Increases attack power by 40.",
         "bonus3": "Increases Strength by 15 and Stamina by 15."
       },
       "deathlord": {
-        "name": "Deathlord Battlegear",
+        "name": "Barrowlord Battlegear",
         "bonus2": "Increases attack power by 40.",
         "bonus3": "Increases Strength by 15 and Stamina by 15."
       },
       "necromancers": {
-        "name": "Necromancer's Raiment",
+        "name": "Mournweave Raiment",
         "bonus2": "You cannot be knocked back (100% knockback resistance).",
         "bonus3": "Increases Intellect by 10 and Stamina by 10."
       },
       "nighttalon": {
-        "name": "Nighttalon Pelt",
+        "name": "Direfang Pelt",
         "bonus2": "Increases attack power by 40.",
         "bonus3": "Increases Agility by 15 and critical strike chance by 2%."
       },
       "soulflame": {
-        "name": "Soulflame Regalia",
+        "name": "Wraithfire Regalia",
         "bonus2": "You cannot be knocked back (100% knockback resistance).",
         "bonus3": "Increases Intellect by 15 and Spirit by 15."
       },
       "stormcallers": {
-        "name": "Stormcaller's Vestments",
+        "name": "Galecall Vestments",
         "bonus2": "You cannot be knocked back (100% knockback resistance).",
         "bonus3": "Increases Intellect by 15 and Spirit by 15."
       },
       "wyrmshadow": {
-        "name": "Wyrmshadow Vestments",
+        "name": "Nightfang Vestments",
         "bonus2": "Increases attack power by 40.",
         "bonus3": "Increases Agility by 15 and critical strike chance by 2%."
       }

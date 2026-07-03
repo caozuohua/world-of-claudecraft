@@ -151,7 +151,7 @@
       "time": 5,
       "nextId": 394,
       "state": "f61b06c2",
-      "events": "e7feca11",
+      "events": "0930f192",
       "rng": {
         "draws": 271,
         "digest": "40832601"
@@ -161,7 +161,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 395,
-      "state": "de9fccd5",
+      "state": "8c630600",
       "events": "1425ba5d",
       "rng": {
         "draws": 366,
@@ -172,7 +172,7 @@
       "tick": 140,
       "time": 7,
       "nextId": 395,
-      "state": "56c572ba",
+      "state": "9e161293",
       "events": "eed2b3c0",
       "rng": {
         "draws": 495,
@@ -183,7 +183,7 @@
       "tick": 160,
       "time": 8,
       "nextId": 395,
-      "state": "ebc67cd4",
+      "state": "ec3dad55",
       "events": "068dce0a",
       "rng": {
         "draws": 636,
@@ -194,7 +194,7 @@
       "tick": 180,
       "time": 9,
       "nextId": 395,
-      "state": "074c7bf7",
+      "state": "76e33846",
       "events": "8e376f96",
       "rng": {
         "draws": 774,
@@ -205,7 +205,7 @@
       "tick": 200,
       "time": 10,
       "nextId": 395,
-      "state": "ca09d710",
+      "state": "2ed5fdbb",
       "events": "31b2c92e",
       "rng": {
         "draws": 943,
@@ -216,7 +216,7 @@
       "tick": 220,
       "time": 11,
       "nextId": 395,
-      "state": "5db57c7d",
+      "state": "cd60ca18",
       "events": "8e376f96",
       "rng": {
         "draws": 1021,
@@ -227,7 +227,7 @@
       "tick": 220,
       "time": 11,
       "nextId": 395,
-      "state": "8e573ceb",
+      "state": "2a8a28a4",
       "events": "741638a5",
       "rng": {
         "draws": 1021,
@@ -358,7 +358,7 @@
             "armor": 495
           },
           "swingTimer": 0.05,
-          "templateId": "voidwalker",
+          "templateId": "gloomshade",
           "weapon": {
             "max": 15,
             "min": 10,
@@ -434,7 +434,7 @@
       "tick": 224,
       "time": 11.2,
       "nextId": 395,
-      "state": "852c4bb4",
+      "state": "eb4f155d",
       "events": "58a1da19",
       "rng": {
         "draws": 1050,
@@ -566,7 +566,7 @@
             "armor": 495
           },
           "swingTimer": 1.85,
-          "templateId": "voidwalker",
+          "templateId": "gloomshade",
           "weapon": {
             "max": 15,
             "min": 10,

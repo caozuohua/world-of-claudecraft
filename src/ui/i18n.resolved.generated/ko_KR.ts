@@ -1539,13 +1539,13 @@ export const ko_KR: EnTranslations = {
       "thorns": "아군을 보호해, 근접 공격자가 칠 때마다 스스로 피해를 입게 합니다."
     },
     "petHook": {
-      "imp": "안전한 거리에서 적을 조금씩 깎는 원거리 화염 화살 악마입니다.",
-      "voidwalker": "도발하고 타격을 흡수해 주는 단단한 악마로, 안심하고 시전할 수 있게 합니다.",
-      "succubus": "강하게 때리지만 압박에는 쉽게 무너지는 빠른 근접 악마입니다.",
-      "felhunter": "적 시전자를 집요하게 쫓는 어둠의 척후형 악마입니다.",
-      "felguard": "단단한 근접 강타형 악마로, 소환할 수 있게 되면 다재다능한 만능 일꾼입니다.",
-      "infernal": "강력한 근접 공격을 지닌 거대한 돌격형 악마로, 순수한 힘을 위해 소환합니다.",
-      "doomguard": "멀리서 강력한 어둠 마법을 퍼붓는 정예 시전형 악마입니다."
+      "emberkin": "안전한 거리에서 적을 조금씩 깎는 원거리 화염 화살 악마입니다.",
+      "gloomshade": "도발하고 타격을 흡수해 주는 단단한 악마로, 안심하고 시전할 수 있게 합니다.",
+      "duskborn": "강하게 때리지만 압박에는 쉽게 무너지는 빠른 근접 악마입니다.",
+      "spellhound": "적 시전자를 집요하게 쫓는 어둠의 척후형 악마입니다.",
+      "warfiend": "단단한 근접 강타형 악마로, 소환할 수 있게 되면 다재다능한 만능 일꾼입니다.",
+      "pyre_colossus": "강력한 근접 공격을 지닌 거대한 돌격형 악마로, 순수한 힘을 위해 소환합니다.",
+      "wraithborn": "멀리서 강력한 어둠 마법을 퍼붓는 정예 시전형 악마입니다."
     },
     "bestiary": {
       "heading": "몬스터 도감",
@@ -1571,11 +1571,11 @@ export const ko_KR: EnTranslations = {
         "name": "거미",
         "desc": "어둡고 뒤엉킨 곳에 둥지를 트는 거미줄 짜는 자들과 독을 품은 잠복자들. 사냥꾼은 야수와 마찬가지로 이들을 길들일 수 있습니다."
       },
-      "murloc": {
+      "mudfin": {
         "name": "멀록",
         "desc": "시끄럽고 영역 의식이 강한 무리를 이루어 얕은 물가에 떼지어 모이는 양서류 늪지 거주자들."
       },
-      "kobold": {
+      "burrower": {
         "name": "코볼트",
         "desc": "광산과 굴을 들끓게 하며 자기네 광석을 사납게 지키는, 머리에 양초를 단 굴착꾼들."
       },
@@ -6255,13 +6255,13 @@ export const ko_KR: EnTranslations = {
       "varkas_boneguard": {
         "name": "바르카스 뼈수호병"
       },
-      "imp": {
+      "emberkin": {
         "name": "임프"
       },
-      "voidwalker": {
+      "gloomshade": {
         "name": "공허추적자"
       },
-      "succubus": {
+      "duskborn": {
         "name": "서큐버스"
       },
       "grix_the_tunnelking": {
@@ -6285,16 +6285,16 @@ export const ko_KR: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "영혼결속자 말드렉"
       },
-      "felhunter": {
+      "spellhound": {
         "name": "지옥사냥개"
       },
-      "felguard": {
+      "warfiend": {
         "name": "지옥수호병"
       },
-      "infernal": {
+      "pyre_colossus": {
         "name": "지옥불정령"
       },
-      "doomguard": {
+      "wraithborn": {
         "name": "파멸의 수호병"
       },
       "choirmother_selthe": {

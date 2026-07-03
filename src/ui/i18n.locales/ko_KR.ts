@@ -2449,14 +2449,14 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.nhalia_mourner.name': '날리아 애도자',
   'entities.mobs.sister_nhalia.name': '자매 날리아',
   'entities.mobs.varkas_boneguard.name': '바르카스 뼈수호병',
-  'entities.mobs.imp.name': '임프',
-  'entities.mobs.voidwalker.name': '공허추적자',
-  'entities.mobs.succubus.name': '서큐버스',
+  'entities.mobs.emberkin.name': '임프',
+  'entities.mobs.gloomshade.name': '공허추적자',
+  'entities.mobs.duskborn.name': '서큐버스',
   'entities.mobs.grix_the_tunnelking.name': '땅굴왕 그릭스',
-  'entities.mobs.felhunter.name': '지옥사냥개',
-  'entities.mobs.felguard.name': '지옥수호병',
-  'entities.mobs.infernal.name': '지옥불정령',
-  'entities.mobs.doomguard.name': '파멸의 수호병',
+  'entities.mobs.spellhound.name': '지옥사냥개',
+  'entities.mobs.warfiend.name': '지옥수호병',
+  'entities.mobs.pyre_colossus.name': '지옥불정령',
+  'entities.mobs.wraithborn.name': '파멸의 수호병',
   'entities.mobs.choirmother_selthe.name': '성가대모 셀세',
   'entities.mobs.drowned_templeguard.name': '익사한 신전 수호병',
   'entities.mobs.drowned_votary.name': '익사한 신도',
@@ -3951,11 +3951,11 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.family.spider.name': '거미',
   'guide.family.spider.desc':
     '어둡고 뒤엉킨 곳에 둥지를 트는 거미줄 짜는 자들과 독을 품은 잠복자들. 사냥꾼은 야수와 마찬가지로 이들을 길들일 수 있습니다.',
-  'guide.family.murloc.name': '멀록',
-  'guide.family.murloc.desc':
+  'guide.family.mudfin.name': '멀록',
+  'guide.family.mudfin.desc':
     '시끄럽고 영역 의식이 강한 무리를 이루어 얕은 물가에 떼지어 모이는 양서류 늪지 거주자들.',
-  'guide.family.kobold.name': '코볼트',
-  'guide.family.kobold.desc':
+  'guide.family.burrower.name': '코볼트',
+  'guide.family.burrower.desc':
     '광산과 굴을 들끓게 하며 자기네 광석을 사납게 지키는, 머리에 양초를 단 굴착꾼들.',
   'guide.family.humanoid.name': '인간형',
   'guide.family.humanoid.desc':
@@ -4181,15 +4181,15 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.nav.arena': '투기장과 PvP',
   'guide.nav.talents': '특성',
   'guide.nav.wishIKnew': '미리 알았으면 좋았을 것들',
-  'guide.petHook.doomguard': '멀리서 강력한 어둠 마법을 퍼붓는 정예 시전형 악마입니다.',
-  'guide.petHook.felguard':
+  'guide.petHook.wraithborn': '멀리서 강력한 어둠 마법을 퍼붓는 정예 시전형 악마입니다.',
+  'guide.petHook.warfiend':
     '단단한 근접 강타형 악마로, 소환할 수 있게 되면 다재다능한 만능 일꾼입니다.',
-  'guide.petHook.felhunter': '적 시전자를 집요하게 쫓는 어둠의 척후형 악마입니다.',
-  'guide.petHook.imp': '안전한 거리에서 적을 조금씩 깎는 원거리 화염 화살 악마입니다.',
-  'guide.petHook.infernal':
+  'guide.petHook.spellhound': '적 시전자를 집요하게 쫓는 어둠의 척후형 악마입니다.',
+  'guide.petHook.emberkin': '안전한 거리에서 적을 조금씩 깎는 원거리 화염 화살 악마입니다.',
+  'guide.petHook.pyre_colossus':
     '강력한 근접 공격을 지닌 거대한 돌격형 악마로, 순수한 힘을 위해 소환합니다.',
-  'guide.petHook.succubus': '강하게 때리지만 압박에는 쉽게 무너지는 빠른 근접 악마입니다.',
-  'guide.petHook.voidwalker':
+  'guide.petHook.duskborn': '강하게 때리지만 압박에는 쉽게 무너지는 빠른 근접 악마입니다.',
+  'guide.petHook.gloomshade':
     '도발하고 타격을 흡수해 주는 단단한 악마로, 안심하고 시전할 수 있게 합니다.',
   'guide.related': '관련 항목',
   'guide.search.label': '검색',

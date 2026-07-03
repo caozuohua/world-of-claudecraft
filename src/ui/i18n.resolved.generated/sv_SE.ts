@@ -1539,13 +1539,13 @@ export const sv_SE: EnTranslations = {
       "thorns": "Skyddar en allierad så att närstridsangripare skadar sig själva när de slår."
     },
     "petHook": {
-      "imp": "En eldpilskastande demon på avstånd som naggar fiender från säkert håll.",
-      "voidwalker": "En robust demon som hånar och absorberar slag så att du kan besvärja i lugn och ro.",
-      "succubus": "En snabb närstridsdemon som slår hårt men viker sig under press.",
-      "felhunter": "En skuggstrejfare som jagar fiendens besvärjare.",
-      "felguard": "En tålig närstridskämpe, allroundern när du väl kan frammana den.",
-      "infernal": "En massiv anfallsvagn med krossande närstrid, frammanad för ren styrka.",
-      "doomguard": "En elitbesvärjare som regnar tunga skuggor på avstånd."
+      "emberkin": "En eldpilskastande demon på avstånd som naggar fiender från säkert håll.",
+      "gloomshade": "En robust demon som hånar och absorberar slag så att du kan besvärja i lugn och ro.",
+      "duskborn": "En snabb närstridsdemon som slår hårt men viker sig under press.",
+      "spellhound": "En skuggstrejfare som jagar fiendens besvärjare.",
+      "warfiend": "En tålig närstridskämpe, allroundern när du väl kan frammana den.",
+      "pyre_colossus": "En massiv anfallsvagn med krossande närstrid, frammanad för ren styrka.",
+      "wraithborn": "En elitbesvärjare som regnar tunga skuggor på avstånd."
     },
     "bestiary": {
       "heading": "Bestiarium",
@@ -1571,11 +1571,11 @@ export const sv_SE: EnTranslations = {
         "name": "Spindlar",
         "desc": "Nätspinnare och giftiga lurande varelser som bygger bo på mörka, snåriga platser. Jägare kan tämja dem, precis som bestar."
       },
-      "murloc": {
+      "mudfin": {
         "name": "Murlocer",
         "desc": "Amfibiska träskbor som svärmar i grunden i högljudda, revirhävdande flockar."
       },
-      "kobold": {
+      "burrower": {
         "name": "Koboldar",
         "desc": "Ljushuvade grävare som plågar gruvor och hålor och hetsigt vaktar sin malm."
       },
@@ -6255,13 +6255,13 @@ export const sv_SE: EnTranslations = {
       "varkas_boneguard": {
         "name": "Varkas benvakt"
       },
-      "imp": {
+      "emberkin": {
         "name": "Imp"
       },
-      "voidwalker": {
+      "gloomshade": {
         "name": "Tomhetsvandrare"
       },
-      "succubus": {
+      "duskborn": {
         "name": "Succubus"
       },
       "grix_the_tunnelking": {
@@ -6285,16 +6285,16 @@ export const sv_SE: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "Vålnadsbindare Maldrec"
       },
-      "felhunter": {
+      "spellhound": {
         "name": "Feljägare"
       },
-      "felguard": {
+      "warfiend": {
         "name": "Felvakt"
       },
-      "infernal": {
+      "pyre_colossus": {
         "name": "Inferno"
       },
-      "doomguard": {
+      "wraithborn": {
         "name": "Domsväktare"
       },
       "choirmother_selthe": {
