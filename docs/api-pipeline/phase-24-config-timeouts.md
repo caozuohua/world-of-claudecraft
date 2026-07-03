@@ -114,3 +114,17 @@ STOPPING RULES (stop and surface to the user before proceeding)
 - Stop if determinism or src/sim/ purity would be violated (e.g. measuring tick p95 would require editing a sim file).
 - Stop if the diff would touch DDL, JSONB shape, ensureSchema, or any persistence module.
 ````
+
+## Maintainer to-do carried on this packet (v0.20.0 merge, 2026-07-03; do BEFORE or WITH Phase 24)
+
+- **Commit the private bot_detector overlay changes in the PRIVATE repo.** The v0.20.0
+  release widened the BotDetector contract with `listCalibrationHistograms()`
+  (server/bot_detector/contract.ts); the overlay implementation for it was written during
+  the merge but `private/bot_detector/` is gitignored here, so it is NOT in any main-repo
+  commit and exists only in this working tree. Files: `private/bot_detector/src/calibration.ts`
+  (new: the bounded histogram recorder, gate_score / behavioral_families /
+  evidence_weight:&lt;kind&gt;), `private/bot_detector/src/detector.ts` (calibration wiring:
+  recorder + the two handleTick taps + the writer tap + listCalibrationHistograms), and
+  `private/bot_detector/tests/calibration.test.ts` (new, 4 tests, passing). Until these are
+  committed to the private repo, any OTHER checkout that carries the overlay fails
+  `tsc`/`npm run gate` on this branch (the public stub alone stays green).

@@ -598,6 +598,11 @@ the X-ms constant; X is TBD, see open items.)
   UNCODED by decision, matching the Phase 22 adjudication of the sibling 410
   handleAccountSetEmail (flow-control refusals the client handles by flow; a code, e.g.
   email.already_set, can be appended later without breaking the prose fallback).
+  MAINTAINER TO-DO (open until done): commit the private bot_detector overlay's
+  listCalibrationHistograms implementation to the PRIVATE repo; it exists only in this
+  working tree (private/ is gitignored, so no main-repo commit carries it, and any other
+  checkout with the overlay fails tsc/gate on this branch until then). Details at the end
+  of phase-24-config-timeouts.md.
 
 ## New DB tables / columns per phase
 - **P16:** WIRE `DISCORD_SCHEMA` (5 tables: `discord_links`, `discord_oauth_states`,
