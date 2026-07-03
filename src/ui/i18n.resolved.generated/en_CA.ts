@@ -2486,7 +2486,7 @@ export const en_CA: EnTranslations = {
         "desc": "Your physical strikes hit 15% harder."
       },
       "aug_spellfire": {
-        "name": "Spellfire",
+        "name": "Grimfire",
         "desc": "Your spells deal 15% more damage."
       },
       "aug_toughness": {
@@ -2530,7 +2530,7 @@ export const en_CA: EnTranslations = {
         "desc": "+18% damage of all kinds and +12% move speed."
       },
       "aug_lightwell": {
-        "name": "Lightwell",
+        "name": "Gravelight",
         "desc": "+30% healing and +15% maximum health. Anchor your team."
       },
       "aug_bounty_hunter": {
@@ -4303,10 +4303,10 @@ export const en_CA: EnTranslations = {
     },
     "items": {
       "worn_sword": {
-        "name": "Worn Shortsword"
+        "name": "Pitted Shortsword"
       },
       "gnarled_staff": {
-        "name": "Gnarled Staff"
+        "name": "Bogoak Staff"
       },
       "rusty_dagger": {
         "name": "Rusty Dagger"
@@ -4318,13 +4318,13 @@ export const en_CA: EnTranslations = {
         "name": "Rusty Hatchet"
       },
       "recruit_tunic": {
-        "name": "Recruit's Tunic"
+        "name": "Levyman's Tunic"
       },
       "apprentice_robe": {
-        "name": "Apprentice's Robe"
+        "name": "Threadbare Robe"
       },
       "footpad_jerkin": {
-        "name": "Footpad's Jerkin"
+        "name": "Cutpurse Jerkin"
       },
       "redbrook_blade": {
         "name": "Redbrook Militia Blade"
@@ -4354,22 +4354,22 @@ export const en_CA: EnTranslations = {
         "name": "Greyjaw's Pelt Leggings"
       },
       "baked_bread": {
-        "name": "Freshly Baked Bread"
+        "name": "Cottage Loaf"
       },
       "spring_water": {
-        "name": "Refreshing Spring Water"
+        "name": "Cold Well Water"
       },
       "roasted_boar": {
-        "name": "Roasted Boar Meat"
+        "name": "Spitted Boar Haunch"
       },
       "conjured_water": {
-        "name": "Conjured Spring Water"
+        "name": "Conjured Rainwater"
       },
       "conjured_water2": {
-        "name": "Conjured Mineral Water"
+        "name": "Conjured Wellwater"
       },
       "conjured_water3": {
-        "name": "Conjured Sparkling Water"
+        "name": "Conjured Clearwater"
       },
       "eastbrook_arming_sword": {
         "name": "Eastbrook Arming Sword"
@@ -4429,7 +4429,7 @@ export const en_CA: EnTranslations = {
         "name": "Ghostly Essence"
       },
       "webwood_silk": {
-        "name": "Webwood Silk Gland"
+        "name": "Sableweb Silk Gland"
       },
       "supply_crate": {
         "name": "Stolen Supply Crate"
@@ -4450,7 +4450,7 @@ export const en_CA: EnTranslations = {
         "name": "Red Bandana"
       },
       "tough_jerky": {
-        "name": "Tough Jerky"
+        "name": "Salted Jerky"
       },
       "mudfin_scale": {
         "name": "Slimy Mudfin Scale"
@@ -4666,7 +4666,7 @@ export const en_CA: EnTranslations = {
         "name": "Staff of Velkhar"
       },
       "shadowmeld_tunic": {
-        "name": "Shadowmeld Tunic"
+        "name": "Nightveil Tunic"
       },
       "gravewyrm_scale_hauberk": {
         "name": "Gravewyrm Scale Hauberk"
@@ -4735,13 +4735,13 @@ export const en_CA: EnTranslations = {
         "name": "Cracked Wyrm Scale"
       },
       "conjured_bread": {
-        "name": "Conjured Bread"
+        "name": "Conjured Oatcake"
       },
       "conjured_bread2": {
-        "name": "Conjured Pumpernickel"
+        "name": "Conjured Black Loaf"
       },
       "conjured_bread3": {
-        "name": "Conjured Sweet Roll"
+        "name": "Conjured Honeycake"
       },
       "roadwardens_helm": {
         "name": "Roadwarden's Helm"
@@ -4843,16 +4843,16 @@ export const en_CA: EnTranslations = {
         "name": "Cryptbone Greaves"
       },
       "cryptstalker_jerkin": {
-        "name": "Cryptstalker Jerkin"
+        "name": "Gravestalker Jerkin"
       },
       "deathlord_legguards": {
-        "name": "Deathlord Legguards"
+        "name": "Barrowlord Legguards"
       },
       "deathlord_sabatons": {
-        "name": "Deathlord Sabatons"
+        "name": "Barrowlord Sabatons"
       },
       "deathlord_warplate": {
-        "name": "Deathlord Warplate"
+        "name": "Barrowlord Warplate"
       },
       "drogmar_warboots": {
         "name": "Drogmar's Warboots"
@@ -4930,13 +4930,13 @@ export const en_CA: EnTranslations = {
         "name": "Mogger's Stomper Boots"
       },
       "necromancers_legwraps": {
-        "name": "Necromancer's Legwraps"
+        "name": "Mournweave Legwraps"
       },
       "necromancers_soulsteps": {
-        "name": "Necromancer's Soulsteps"
+        "name": "Mournweave Soulsteps"
       },
       "necromancers_starshroud": {
-        "name": "Necromancer's Starshroud"
+        "name": "Mournweave Starshroud"
       },
       "nhalias_dirgeblade": {
         "name": "Nhalia's Dirgeblade"
@@ -4972,13 +4972,13 @@ export const en_CA: EnTranslations = {
         "name": "Wyrmcult Soulsteps"
       },
       "wyrmshadow_harness": {
-        "name": "Wyrmshadow Harness"
+        "name": "Nightfang Harness"
       },
       "wyrmshadow_legguards": {
-        "name": "Wyrmshadow Legguards"
+        "name": "Nightfang Legguards"
       },
       "wyrmshadow_treads": {
-        "name": "Wyrmshadow Treads"
+        "name": "Nightfang Treads"
       },
       "glimmerfin_koi": {
         "name": "Glimmerfin Koi"
@@ -4996,7 +4996,7 @@ export const en_CA: EnTranslations = {
         "name": "Raw River Perch"
       },
       "raw_stonescale_carp": {
-        "name": "Raw Stonescale Carp"
+        "name": "Raw Slatefin Carp"
       },
       "soggy_boot": {
         "name": "Soggy Boot"
@@ -5107,13 +5107,13 @@ export const en_CA: EnTranslations = {
         "name": "Moonscale Saber"
       },
       "moonshroud_breastplate": {
-        "name": "Moonshroud Breastplate"
+        "name": "Moonwrack Breastplate"
       },
       "moonshroud_robe": {
-        "name": "Moonshroud Robe"
+        "name": "Moonwrack Robe"
       },
       "moonshroud_tunic": {
-        "name": "Moonshroud Tunic"
+        "name": "Moonwrack Tunic"
       },
       "pale_pearl": {
         "name": "Pale Pearl"
@@ -5149,7 +5149,7 @@ export const en_CA: EnTranslations = {
         "name": "Cryptbone Pauldrons"
       },
       "deathlords_dread_visage": {
-        "name": "Deathlord's Dread Visage"
+        "name": "Barrowlord's Dread Visage"
       },
       "gravewyrm_gauntlets": {
         "name": "Gravewyrm Gauntlets"
@@ -5164,10 +5164,10 @@ export const en_CA: EnTranslations = {
         "name": "Mistveil Grips"
       },
       "necromancers_soulspire_mantle": {
-        "name": "Necromancer's Soulspire Mantle"
+        "name": "Mournweave Soulspire Mantle"
       },
       "wyrmshadow_talongrips": {
-        "name": "Wyrmshadow Talongrips"
+        "name": "Nightfang Talongrips"
       },
       "reliquary_plate_chest": {
         "name": "Reliquary Guard Hauberk"
@@ -5239,31 +5239,31 @@ export const en_CA: EnTranslations = {
         "name": "Heartwood of the Deathless Crown"
       },
       "kingsbane_last_oath": {
-        "name": "Kingsbane, Last Oath of Thornpeak"
+        "name": "Thronebane, Last Oath of Thornpeak"
       },
       "crownforged_dreadhelm": {
-        "name": "Crownforged Dreadhelm"
+        "name": "Bonewrought Dreadhelm"
       },
       "crownforged_warspaulders": {
-        "name": "Crownforged Warspaulders"
+        "name": "Bonewrought Warspaulders"
       },
       "nighttalon_crown": {
-        "name": "Nighttalon Crown"
+        "name": "Direfang Crown"
       },
       "nighttalon_shoulderguards": {
-        "name": "Nighttalon Shoulderguards"
+        "name": "Direfang Shoulderguards"
       },
       "soulflame_cowl": {
-        "name": "Soulflame Cowl"
+        "name": "Wraithfire Cowl"
       },
       "soulflame_mantle": {
-        "name": "Soulflame Mantle"
+        "name": "Wraithfire Mantle"
       },
       "stormcallers_crown": {
-        "name": "Stormcaller's Crown"
+        "name": "Galecall Crown"
       },
       "stormcallers_spaulders": {
-        "name": "Stormcaller's Spaulders"
+        "name": "Galecall Spaulders"
       },
       "unknown_alien_weaponry": {
         "name": "Unknown Alien Weaponry"
@@ -5773,7 +5773,7 @@ export const en_CA: EnTranslations = {
             "label": "Webwood Lurker slain"
           },
           "1": {
-            "label": "Webwood Silk Gland"
+            "label": "Sableweb Silk Gland"
           }
         }
       },
@@ -6695,37 +6695,37 @@ export const en_CA: EnTranslations = {
     },
     "itemSets": {
       "crownforged": {
-        "name": "Crownforged Regalia",
+        "name": "Bonewrought Regalia",
         "bonus2": "Increases attack power by 40.",
         "bonus3": "Increases Strength by 15 and Stamina by 15."
       },
       "deathlord": {
-        "name": "Deathlord Battlegear",
+        "name": "Barrowlord Battlegear",
         "bonus2": "Increases attack power by 40.",
         "bonus3": "Increases Strength by 15 and Stamina by 15."
       },
       "necromancers": {
-        "name": "Necromancer's Raiment",
+        "name": "Mournweave Raiment",
         "bonus2": "Reduces cast pushback from damage by 50%.",
         "bonus3": "You cannot be pushed back while casting (immune to cast pushback from damage)."
       },
       "nighttalon": {
-        "name": "Nighttalon Pelt",
+        "name": "Direfang Pelt",
         "bonus2": "Increases attack power by 40.",
         "bonus3": "Increases Agility by 15 and critical strike chance by 2%."
       },
       "soulflame": {
-        "name": "Soulflame Regalia",
+        "name": "Wraithfire Regalia",
         "bonus2": "Reduces cast pushback from damage by 50%.",
         "bonus3": "You cannot be pushed back while casting (immune to cast pushback from damage)."
       },
       "stormcallers": {
-        "name": "Stormcaller's Vestments",
+        "name": "Galecall Vestments",
         "bonus2": "Reduces cast pushback from damage by 50%.",
         "bonus3": "You cannot be pushed back while casting (immune to cast pushback from damage)."
       },
       "wyrmshadow": {
-        "name": "Wyrmshadow Vestments",
+        "name": "Nightfang Vestments",
         "bonus2": "Increases attack power by 40.",
         "bonus3": "Increases Agility by 15 and critical strike chance by 2%."
       }

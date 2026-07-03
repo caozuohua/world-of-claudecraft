@@ -17,10 +17,10 @@
 | G1 | Generate + lock the NAME-MAP | Spine | ULTRACODE | done-on-track (2026-07-02; 588 map rows, 603 names adversarially screened, 2 skeptic refutations fixed; scanner arms the full map: 812 RED baseline; old-column 100% hit-verified; AWAITING OPERATOR LOCK) | feature/ip-pivot @ G1 commit |
 | V1 | Ability / spell rename | Vocab | plain | not-started | — |
 | V2 | Talent + spec/tree rename | Vocab | plain | not-started | — |
-| C1 | Creatures + coined family-id sweep | Creatures | ULTRACODE | done-on-track (2026-07-02; family ids murloc->mudfin + kobold->burrower swept atomically; all locked C1 display renames + prose rewords applied; goldens re-minted per operator ruling, inspector green) | track/ip-creatures @ C1 commit |
-| C2 | Warlock demon-pet re-theme + pet-id sweep | Creatures | ULTRACODE | done-on-track (2026-07-02; all 7 pet ids + displays swept atomically per the locked roster; warlock_imp petSpell Firebolt->Ashbolt; goldens re-minted, inspector 0 violations, reverse-map state-hash proof committed + passing) | track/ip-creatures @ C2 commit |
-| W1 | Item / set / augment rename | World | plain | not-started | — |
-| W2 | Mob mechanic / aura name rename | World | plain | not-started | — |
+| C1 | Creatures + coined family-id sweep | Creatures | ULTRACODE | not-started | — |
+| C2 | Warlock demon-pet re-theme + pet-id sweep | Creatures | ULTRACODE | not-started | — |
+| W1 | Item / set / augment rename | World | plain | done-on-track (2026-07-02; all 73 W1-owned scanner hits cleared, ip_scrub 920 -> 847; 4 goldens re-minted per operator ruling, golden_token_inspector PASS: 6 events-digest deltas, 0 violations; parity + i18n SHA + guide + S3 + tsc green) | track/ip-world @ W1 commit |
+| W2 | Mob mechanic / aura name rename | World | plain | done-on-track (2026-07-02; all 8 locked W2 aura rows applied + 2 nythraxis literals sharing the 'War Stomp' string; S3 matcher (AURA_NAME_KEY + en/en_CA values) co-updated; ip_scrub 847 -> 839; 3 goldens re-minted, inspector --allow-state-hashes PASS: 6 events-digest + 15 state-hash deltas, 0 violations, state hashes sanctioned by a green RENAME_PROOF=1 tests/parity/rename_state_proof.test.ts (reverse-map re-digest reproduces every pre-slice state hash + events digest); parity + S3 + i18n SHA + guide + architecture + tsc green) | track/ip-world @ W2 commit |
 | T1 | De-brand comments / docs / realm copy | Text | plain | not-started | — |
 | Z1 | Integrate + regen + scanner-zero + release-fill handoff | Finale | plain | not-started | — |
 
@@ -55,14 +55,6 @@ hardcoded old names in tests/parity/coverage.test.ts update to their new names (
 gate-text edit). Integrator re-mints on the merged tree in Phase 5; Z1 inspector-verifies the
 final goldens. Map amendment #2 in the same ruling: Quaking Blow / Armor Shear / Oath of Iron
 / Seething Fury (+ pairings) and polymorph critter sheep -> toad.
-
-RULING ADDENDUM (2026-07-02, same principle): V1 proved Aura.name (the ability display name)
-also flows into per-frame STATE digests, and built the stronger machine proof: reverse-mapping
-every golden string leaf new->old via the locked map and re-digesting reproduces the baseline
-hashes exactly (49/49 frames). Sanction extended: state-hash deltas are allowed ONLY with a
-passing reverse-map re-digest proof, committed as the env-gated
-tests/parity/rename_state_proof.test.ts (RENAME_PROOF=1); the inspector accepts them only
-under --allow-state-hashes, and slice QA re-runs BOTH the proof and the inspector.
 
 ## Scanner worklist registry (owned by G0) — the verbatim names still present
 > G0 seeds this from the RED baseline (the names `tests/ip_scrub.test.ts` currently flags). Each
@@ -133,33 +125,37 @@ Overpower, Frost Nova, Arcane Intellect, Holy Light, Arcane Shot, Frost Shock, F
 | Eviscerate (talent-name fields) | V2 | 1 | [ ] |
 | Judgement (talent-name fields) | V2 | 2 | [ ] |
 | Lay on Hands (talent-name fields) | V2 | 1 | [ ] |
-| Murloc | C1 | 2 | [x] |
-| murloc (prose, word-boundary) | C1 | 6 | [x] |
-| Slimy Murloc Scale | C1 | 2 | [x] |
-| candle-headed (prose) | C1 | 2 | [x] |
-| Tallow Candle | C1 | 2 | [x] |
-| Tallow Candle (prose) | C1 | 0 (belt-and-braces) | [x] |
-| Bristleback | C1 | 4 | [x] |
-| Bristleback Maul | C1 | 2 | [x] |
-| Bristleback Hides | C1 | 2 | [x] |
-| bristleback (prose, word-boundary) | C1 | 0 (belt-and-braces) | [x] |
-| Drakonid | C1 | 2 | [x] |
-| Sanctum Drakonid | C1 | 2 | [x] |
+| Murloc | C1 | 2 | [ ] |
+| murloc (prose, word-boundary) | C1 | 6 | [ ] |
+| Slimy Murloc Scale | C1 | 2 | [ ] |
+| candle-headed (prose) | C1 | 2 | [ ] |
+| Tallow Candle | C1 | 2 | [ ] |
+| Tallow Candle (prose) | C1 | 0 (belt-and-braces) | [ ] |
+| Bristleback | C1 | 4 | [ ] |
+| Bristleback Maul | C1 | 2 | [ ] |
+| Bristleback Hides | C1 | 2 | [ ] |
+| bristleback (prose, word-boundary) | C1 | 0 (belt-and-braces) | [ ] |
+| Drakonid | C1 | 2 | [ ] |
+| Sanctum Drakonid | C1 | 2 | [ ] |
 | Mogger | C1 | 13 | n/a - operator KEEP (parody); scanner entry removed at lock |
-| Imp | C2 | 4 | [x] (C2 fields zero; residual 2 = `abilities.summon_imp.name` x2 layers, V1-owned) |
-| Voidwalker | C2 | 4 | [x] (C2 fields zero; residual 2 = `abilities.summon_voidwalker.name` x2 layers, V1-owned) |
-| Succubus | C2 | 4 | [x] (C2 fields zero; residual 2 = `abilities.summon_succubus.name` x2 layers, V1-owned) |
-| Felhunter | C2 | 4 | [x] (C2 fields zero; residual 2 = `abilities.summon_felhunter.name` x2 layers, V1-owned) |
-| Felguard | C2 | 4 | [x] (C2 fields zero; residual 2 = `abilities.summon_felguard.name` x2 layers, V1-owned) |
-| Infernal | C2 | 4 | [x] (C2 fields zero; residual 2 = `abilities.summon_infernal.name` x2 layers, V1-owned) |
-| Doomguard | C2 | 4 | [x] (C2 fields zero; residual 2 = `abilities.summon_doomguard.name` x2 layers, V1-owned) |
-| Shadowmeld | W1 | 2 | [ ] |
-| Shadowmeld Tunic | W1 | 2 | [ ] |
-| Lightwell | W1 | 2 | [ ] |
-| Mortal Strike (mob `mortalStrike.name` aura field) | W2 | 1 | [ ] |
-| War Stomp (mob `stomp.name` aura field) | W2 | 1 | [ ] |
-| Devour Magic (mob `purgeOnHit.name` aura field) | W2 | 1 | [ ] |
-| Mind Blast (mob `petSpell.name` aura field) | W2 | 1 | [ ] |
+| Imp | C2 | 4 | [ ] |
+| Voidwalker | C2 | 4 | [ ] |
+| Succubus | C2 | 4 | [ ] |
+| Felhunter | C2 | 4 | [ ] |
+| Felguard | C2 | 4 | [ ] |
+| Infernal | C2 | 4 | [ ] |
+| Doomguard | C2 | 4 | [ ] |
+| Shadowmeld | W1 | 2 | [x] W1 2026-07-02 |
+| Shadowmeld Tunic | W1 | 2 | [x] W1 2026-07-02 |
+| Lightwell | W1 | 2 | [x] W1 2026-07-02 |
+| Mortal Strike (mob `mortalStrike.name` aura field) | W2 | 1 | [x] W2 2026-07-02 |
+| War Stomp (mob `stomp.name` aura field) | W2 | 1 | [x] W2 2026-07-02 (incl. the 2 shared-string literals in `src/sim/encounters/nythraxis.ts` transition auras - same locked pair, S3 matcher forced co-rename) |
+| Devour Magic (mob `purgeOnHit.name` aura field) | W2 | 1 | [x] W2 2026-07-02 |
+| Mind Blast (mob `petSpell.name` aura field) | W2 | 1 | [x] W2 2026-07-02 |
+| Cleave (mob `cleave.name` aura field, armed at G1 lock) | W2 | 2 | [x] W2 2026-07-02 for `knight_commander_olen` ('Reaping Arc'); **1 RESIDUAL: `deathstalker_voss.cleave.name` = 'Deathstalker Cleave' has NO NAME-MAP row - REQUEST ROW for operator (W2 did not coin a name); the 'Cleave' scanner entry still hits that one aura field** |
+| Frostbite (mob `frostbite.name` aura field, armed at G1 lock) | W2 | 1 | [x] W2 2026-07-02 |
+| Battle Fury (mob `rampage.name` aura field, armed at G1 lock) | W2 | 1 | [x] W2 2026-07-02 |
+| Banshee's Wail (mob `terrify.name` aura field, armed at G1 lock) | W2 | 1 | [x] W2 2026-07-02 |
 
 ## Generated-artifact touch log (the ONLY parallel conflict surface)
 > Every rename slice regenerates these. The integrator resolves conflicts by RE-RUNNING the
@@ -168,86 +164,29 @@ Overpower, Frost Nova, Arcane Intellect, Holy Light, Arcane Shot, Frost Shock, F
 
 | artifact | last regenerated by |
 |---|---|
-| `src/ui/i18n.resolved.generated/*` | C2 (2026-07-02) |
-| `src/ui/i18n.resolved.sha256` | C2 (2026-07-02) |
-| `src/guide/content.generated.ts` | C2 (2026-07-02) |
-
-## C2 coined-id sweep log (done-on-track, 2026-07-02, track/ip-creatures)
-- Pet ids + displays swept atomically per the locked roster: `imp`->`emberkin` (Emberkin),
-  `voidwalker`->`gloomshade` (Gloomshade), `succubus`->`duskborn` (Duskborn),
-  `felhunter`->`spellhound` (Spellhound), `felguard`->`warfiend` (Warfiend),
-  `infernal`->`pyre_colossus` (Pyre Colossus), `doomguard`->`wraithborn` (Wraithborn); plus
-  `warlock_imp` NPC petSpell Firebolt -> Ashbolt (`zone1.ts`). The `warlock_imp`/
-  `warlock_voidwalker` NPC templates untouched (already-original displays, frozen ids).
-- Sweep sites: `warlock_pets.ts` keys/.id/.name; `classes.ts` all 7 `summonDemon` `mobId:`
-  literals + summon-description demon nouns (a/an fixed: "an Emberkin", "a Pyre Colossus");
-  catalog copies in `i18n.catalog/abilities.ts` kept BYTE-IDENTICAL (machine-verified);
-  summon ability `.name` fields ("Summon Imp", ...) untouched — V1's rows, other branch;
-  Firebolts/Shadow Bite nouns inside descriptions likewise left for V1. `types.ts` comments;
-  `render/characters/manifest.ts` MOB_KEYS imp/voidwalker/succubus keys (model VALUES frozen;
-  other four fall through FAMILY_KEYS.demon); `i18n.catalog/merge.ts` MERGE_MOB_IDS + English
-  names; `i18n.catalog/guide.ts` petHook keys + English hook text; `entities.mobs.<id>.name` +
-  `guide.petHook.<id>` KEY renames in all 20 locale files (VALUES untouched per the Z1
-  reconciliation rule — da_DK/id_ID/es/fr keep verbatim 'Imp'/'Infernal'/... as their
-  translations, Z1 note must cover pet rows); tests (warlock_pets/warlock_balance/threat name
-  asserts 'Emberkin'/'Gloomshade'/pet_commands_module/pet_command/pet_owner_death_despawn/
-  pet_combat_regen/delves/nythraxis_raid/guide_viewer_embed + parity scenarios.ts +
-  coverage.test.ts titles); `scripts/pet_combat_regen_shot.mjs` + `scripts/shot_succubus.mjs`
-  id literals. `summon_*` ability ids FROZEN. Post-sweep grep for quoted old ids across
-  src/ server/ tests/ headless/ scripts/: ZERO code hits (only the proof test's sanctioned
-  reverse-map pairs; lowercase prose remainders in pet_ai.ts/pet_commands.ts/sim_context.ts
-  comments, a nythraxis_raid dev-throw message, and parity `covers` label strings stay for T1).
-- Summon integrity machine-checked: each of the 7 `summonDemon` effects' `mobId` exists as a
-  MOBS key and equals the roster id (tsc cannot catch a mismatch; a bad id silently no-ops).
-- Golden re-mint per the operator ruling (UPDATE_PARITY=1): 5 goldens shifted —
-  c4b_effect_dispatch / hunter_pet / pet_ai / pet_commands / warlock_pet (8 events-digest
-  deltas + 23 state-hash deltas; RNG fingerprints / draw counts / tick / nextId all
-  byte-identical). `golden_token_inspector.mjs --allow-state-hashes` exit 0, violations 0.
-  State-hash deltas sanctioned per the RULING ADDENDUM by the reverse-map re-digest proof:
-  `tests/parity/rename_state_proof.test.ts` NEW on this track (env-gated RENAME_PROOF=1,
-  covers state AND events digests, includes the C1+C2 coined-id pairs) — 6/6 passing vs the
-  pre-slice ref; QA re-run post-commit with RENAME_PROOF_BASE=<pre-C2 sha>.
-- ip_scrub: all 7 C2 registry rows cleared (zero hits in C2-owned mob-name fields; residual
-  2 hits each live in V1-owned `abilities.summon_*.name` fields); zero new-name
-  (Emberkin/.../Ashbolt) hits anywhere in the scan.
-- Gates: parity green (isolated run; the two "records deterministically" fails under parallel
-  load are the KNOWN Windows machine flake, green solo), tsc clean, localization_fixes (S3) +
-  architecture + i18n completeness/coverage/overlay-membership green, pet/threat/delves/
-  nythraxis/guide-embed battery 216/216. guide.test.ts / i18n_resolved_equivalence /
-  i18n_status_registry freshness subtests (`git diff --exit-code` on generated artifacts) red
-  pre-commit BY CONSTRUCTION and re-verified green after the C2 commit.
-
-## C1 coined-id sweep log (done-on-track, 2026-07-02, track/ip-creatures)
-- Family ids swept atomically, `murloc` -> `mudfin` and `kobold` -> `burrower`: `types.ts`
-  union; `sim.ts` FLEEING_FAMILIES + SOCIAL_PULL_RADIUS + mobCanSpawnInWater; content
-  `family:` fields (zone1 x2, zone2 x4, zone3 x3, temple x2); `render/characters/manifest.ts`
-  FAMILY_KEYS keys only (`mob_murloc`/`mob_kobold` model VALUES frozen, same GLBs); `hud.ts`
-  SFX_MOB_FAMILIES + full SFX chain (`public/audio/sfx/mob_{mudfin,burrower}_*.mp3` git-mv'd,
-  `sfx_manifest.generated.ts` + `scripts/sfx/sfx_prompts.mjs` updated); `icons.ts` family
-  crest keys; `guide.family.<id>` i18n keys in catalog + all 17 locale overlays (keys only;
-  locale VALUES untouched per the Z1 reconciliation rule); `scripts/wiki/build_content.mjs`
-  FAMILY_ORDER; tests/fixes.test.ts + tests/sloomtooth_drowned.test.ts. Post-sweep grep for
-  `'murloc'`/`'kobold'` across src/ server/ tests/ headless/ scripts/: ZERO hits.
-- Display renames + prose rewords applied verbatim from the LOCKED map (Mudfins/Burrowers,
-  Slimy Mudfin Scale, Greasy Tallow Lump, Gallowglass Maul, Bristly Boar Hides, Sanctum
-  Scaleguard, Deeprock Digger, Blrb-glub greeting; q_murlocs/q_mine/q_rite/q_deepfen/
-  q_deepfen_purge/q_kobold_tunnels/q_glowing_wax/foreman_odell + guide catalog prose).
-  Blessed Tallow and the whole Mogger cluster untouched per operator decisions.
-- No `src/ui/sim_i18n.ts` matcher carries any edited literal (verified by grep; S3 guard
-  green) - quest text localizes via entity keys, so no matcher edit was needed this slice.
-- Golden re-mint per the operator ruling: only `tests/parity/golden/quest_collect_turnin.json`
-  changed (4 `events`-digest deltas; all state hashes / RNG fingerprints / draw counts /
-  nextId byte-identical); `golden_token_inspector.mjs` exit 0.
-- **OPERATOR ATTENTION (scanner self-collision #5, same class as amendment 2):** the locked
-  C1 new name "Gallowglass Maul" word-boundary-hits the armed V1 denylist word "Maul"
-  (`maul` ability -> Bonecrush arms it). `tests/ip_scrub.test.ts` will keep flagging
-  `items.bristleback_maul.name` even at Z1 unless the map amends the item name or the
-  scanner whitelists it. C1 applied the locked map verbatim and did NOT invent a substitute.
-- Voice-prompt residue (out of C1 scope, Z1/T1 sweep): `scripts/voices/npc_voice_prompts.mjs`
-  still carries the old Brandt "Grlmurlgrl" gurgle and Odell "candle-headed vermin" spoken
-  lines (generation prompts for already-minted audio; voice keys frozen).
+| `src/ui/i18n.resolved.generated/*` | W1 (2026-07-02, track/ip-world); W2 re-ran i18n:gen 2026-07-02, output byte-identical (mob mechanic names do not feed the resolved table) |
+| `src/ui/i18n.resolved.sha256` | W1 (2026-07-02, track/ip-world); W2 re-ran i18n:hash --write 2026-07-02, byte-identical |
+| `src/guide/content.generated.ts` | W1 re-ran wiki:content 2026-07-02; W2 re-ran 2026-07-02; both byte-identical (no commit needed) |
+| `src/ui/i18n.status.summary.json` | W2 (2026-07-02, track/ip-world; i18n:gen side artifact) |
+| `tests/parity/golden/{mob_locomotion,mob_swing_affixes,nythraxis_full_pull}.json` | W2 re-mint (2026-07-02, UPDATE_PARITY=1; inspector 0 violations; state-hash deltas proven by rename_state_proof) |
 
 ## Decisions & gotchas (honor across all sessions)
+- **State-hash golden deltas (W2, ruling addendum implemented 2026-07-02):** aura display
+  names land in sampled entity/player state, so a rename shifts per-frame golden `state`
+  digests (not just `events`). The inspector now takes `--allow-state-hashes` (counts
+  `frames.<i>.state` hex deltas separately; everything else stays strict) and those deltas
+  are sanctioned ONLY when `RENAME_PROOF=1 npx vitest run tests/parity/rename_state_proof.test.ts`
+  is green PRE-COMMIT (re-records changed scenarios, reverse-maps every string leaf new->old
+  via the LOCKED map, re-digests, asserts byte equality with the `git show HEAD:` hashes;
+  rng/draws/nextId/tick/time/label must be identical). Post-commit the proof passes vacuously
+  (no goldens differ from HEAD). C1/C2 and the Phase-5 integrator re-mint should reuse both.
+- **W2 shared-string scope note:** `src/sim/encounters/nythraxis.ts` carried two more inline
+  `name: 'War Stomp'` literals (transition stun auras). The `AURA_NAME_KEY` matcher keys off
+  the STRING, so they renamed with the same locked pair in W2 (S3 co-location); aura ids and
+  values untouched. QA should also drive the Nythraxis 70% transition.
+- **W2 REQUEST ROW (operator):** `deathstalker_voss.cleave.name` = 'Deathstalker Cleave'
+  (zone3.ts) has no NAME-MAP row; the armed 'Cleave' entry still substring-hits it in an aura
+  field. W2 did not coin a name. Needs a map row (or an operator keep/scope decision) before Z1.
 - **Reword-staleness trap (Z1 + release):** rewording an existing English key does NOT flip its
   20 locale rows to `pending`; CI stays green while every non-English overlay renders the OLD
   (WoW) name. Do NOT try to fix overlays in a track (contributor rule: English only). Z1 writes

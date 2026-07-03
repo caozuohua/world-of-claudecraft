@@ -1009,8 +1009,8 @@
       "tick": 43,
       "time": 2.15,
       "nextId": 402,
-      "state": "1b11dbf9",
-      "events": "8024e9a5",
+      "state": "6ff8e379",
+      "events": "4781df85",
       "rng": {
         "draws": 15,
         "digest": "6407bd16"
@@ -1132,7 +1132,7 @@
               "duration": 21.5,
               "id": "nythraxis_transition_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 21.5,
               "school": "physical",
               "sourceId": 394
@@ -1191,7 +1191,7 @@
               "duration": 21.5,
               "id": "nythraxis_transition_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 21.5,
               "school": "physical",
               "sourceId": 394
@@ -1249,7 +1249,7 @@
               "duration": 21.5,
               "id": "nythraxis_transition_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 21.5,
               "school": "physical",
               "sourceId": 394
@@ -1307,7 +1307,7 @@
               "duration": 21.5,
               "id": "nythraxis_transition_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 21.5,
               "school": "physical",
               "sourceId": 394
@@ -1365,7 +1365,7 @@
               "duration": 21.5,
               "id": "nythraxis_transition_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 21.5,
               "school": "physical",
               "sourceId": 394
@@ -1423,7 +1423,7 @@
               "duration": 21.5,
               "id": "nythraxis_transition_pause",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 21.45,
               "school": "physical",
               "sourceId": 394
@@ -1642,7 +1642,7 @@
               "duration": 21.5,
               "id": "nythraxis_transition_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 21.45,
               "school": "physical",
               "sourceId": 394
@@ -1703,7 +1703,7 @@
               "duration": 21.5,
               "id": "nythraxis_transition_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 21.45,
               "school": "physical",
               "sourceId": 394
@@ -1799,7 +1799,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 402,
-      "state": "0bebdac1",
+      "state": "56360a2b",
       "events": "741638a5",
       "rng": {
         "draws": 37,
@@ -1810,7 +1810,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 402,
-      "state": "af4e8580",
+      "state": "3203da7e",
       "events": "741638a5",
       "rng": {
         "draws": 76,

@@ -162,8 +162,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 392,
-      "state": "a7f3308b",
-      "events": "dd7c5476",
+      "state": "dd117668",
+      "events": "8949edf5",
       "rng": {
         "draws": 8,
         "digest": "284b8111"
@@ -201,7 +201,7 @@
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
               "sourceId": 391
@@ -346,8 +346,8 @@
       "tick": 0,
       "time": 0,
       "nextId": 393,
-      "state": "271402c4",
-      "events": "556479b4",
+      "state": "fd7321da",
+      "events": "28eb1554",
       "rng": {
         "draws": 13,
         "digest": "06ceb9a6"
@@ -385,7 +385,7 @@
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
               "sourceId": 391
@@ -395,7 +395,7 @@
               "duration": 3,
               "id": "fear_incap",
               "kind": "incapacitate",
-              "name": "Banshee's Wail",
+              "name": "Keening Wail",
               "remaining": 3,
               "school": "shadow",
               "sourceId": 392,
@@ -585,7 +585,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 394,
-      "state": "75fb820e",
+      "state": "dbea5f84",
       "events": "741638a5",
       "rng": {
         "draws": 15,
@@ -624,7 +624,7 @@
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
               "sourceId": 391
@@ -634,7 +634,7 @@
               "duration": 3,
               "id": "fear_incap",
               "kind": "incapacitate",
-              "name": "Banshee's Wail",
+              "name": "Keening Wail",
               "remaining": 3,
               "school": "shadow",
               "sourceId": 392,
@@ -871,7 +871,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 395,
-      "state": "d0537866",
+      "state": "9359fff4",
       "events": "741638a5",
       "rng": {
         "draws": 16,
@@ -910,7 +910,7 @@
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
               "sourceId": 391
@@ -920,7 +920,7 @@
               "duration": 3,
               "id": "fear_incap",
               "kind": "incapacitate",
-              "name": "Banshee's Wail",
+              "name": "Keening Wail",
               "remaining": 3,
               "school": "shadow",
               "sourceId": 392,
@@ -1198,7 +1198,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 396,
-      "state": "d5d2f3f9",
+      "state": "2a0f971b",
       "events": "514349f0",
       "rng": {
         "draws": 16,
@@ -1237,7 +1237,7 @@
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
               "sourceId": 391
@@ -1247,7 +1247,7 @@
               "duration": 3,
               "id": "fear_incap",
               "kind": "incapacitate",
-              "name": "Banshee's Wail",
+              "name": "Keening Wail",
               "remaining": 3,
               "school": "shadow",
               "sourceId": 392,
@@ -1569,7 +1569,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 396,
-      "state": "135c12a0",
+      "state": "1ce9060e",
       "events": "741638a5",
       "rng": {
         "draws": 16,
@@ -1608,7 +1608,7 @@
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
               "sourceId": 391
@@ -1618,7 +1618,7 @@
               "duration": 3,
               "id": "fear_incap",
               "kind": "incapacitate",
-              "name": "Banshee's Wail",
+              "name": "Keening Wail",
               "remaining": 3,
               "school": "shadow",
               "sourceId": 392,
@@ -1941,7 +1941,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 396,
-      "state": "135c12a0",
+      "state": "1ce9060e",
       "events": "741638a5",
       "rng": {
         "draws": 16,
@@ -1980,7 +1980,7 @@
               "duration": 1.5,
               "id": "stomp_stun",
               "kind": "stun",
-              "name": "War Stomp",
+              "name": "Shuddering Stomp",
               "remaining": 1.5,
               "school": "physical",
               "sourceId": 391
@@ -1990,7 +1990,7 @@
               "duration": 3,
               "id": "fear_incap",
               "kind": "incapacitate",
-              "name": "Banshee's Wail",
+              "name": "Keening Wail",
               "remaining": 3,
               "school": "shadow",
               "sourceId": 392,

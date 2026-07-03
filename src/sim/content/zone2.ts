@@ -360,7 +360,7 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
       { itemId: 'grubjaw_tusk', chance: 1, questId: 'q_grubjaw' },
       { itemId: 'chipped_tusk', chance: 1 },
     ],
-    purgeOnHit: { chance: 0.3, name: 'Devour Magic' },
+    purgeOnHit: { chance: 0.3, name: 'Spellgnaw' },
     scale: 1.3,
     color: 0x145a32,
   },
@@ -486,7 +486,7 @@ export const ZONE2_MOBS: Record<string, MobTemplate> = {
     siphonSpirit: { chance: 0.3, spi: 14, duration: 10, name: 'Spirit Siphon', school: 'shadow' },
     // A bone-chilling shriek that sends the living fleeing in terror — her dirge
     // is grief, her wail is dread. Telegraphed: first scream after one interval.
-    terrify: { radius: 12, every: 16, duration: 3, name: "Banshee's Wail", school: 'shadow' },
+    terrify: { radius: 12, every: 16, duration: 3, name: 'Keening Wail', school: 'shadow' },
     summonAdds: { mobId: 'nhalia_mourner', count: 2, atHpPct: [0.65, 0.35] },
     loot: [
       { copper: 350, chance: 1 },

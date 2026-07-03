@@ -832,8 +832,8 @@ describe('coverage: each scenario fires its subsystem', () => {
     // Phase 1 raise-fallen wave + the three wardstones the transition lit.
     expect(n.addIds.length).toBe(2);
     expect(n.wardIds.length).toBe(3);
-    // Transition: War Stomp room stun + Brother Aldric spawned and still present.
-    expect(auras.some((e) => e.name === 'War Stomp')).toBe(true);
+    // Transition: Shuddering Stomp room stun + Brother Aldric spawned and still present.
+    expect(auras.some((e) => e.name === 'Shuddering Stomp')).toBe(true);
     expect(entities(rec).some((e) => e.templateId === 'brother_aldric_raid')).toBe(true);
     // Soul Rend marks pick (the rng.int callout) + Deathless Rage interrupt self-stun.
     expect(chats.some((e) => e.text === 'Your spirit belongs to me')).toBe(true);

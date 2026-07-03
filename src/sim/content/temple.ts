@@ -634,7 +634,7 @@ export const TEMPLE_ITEMS: Record<string, ItemDef> = {
   },
   moonshroud_breastplate: {
     id: 'moonshroud_breastplate',
-    name: 'Moonshroud Breastplate',
+    name: 'Moonwrack Breastplate',
     kind: 'armor',
     armorType: 'mail',
     slot: 'chest',
@@ -645,7 +645,7 @@ export const TEMPLE_ITEMS: Record<string, ItemDef> = {
   },
   moonshroud_robe: {
     id: 'moonshroud_robe',
-    name: 'Moonshroud Robe',
+    name: 'Moonwrack Robe',
     kind: 'armor',
     armorType: 'cloth',
     slot: 'chest',
@@ -656,7 +656,7 @@ export const TEMPLE_ITEMS: Record<string, ItemDef> = {
   },
   moonshroud_tunic: {
     id: 'moonshroud_tunic',
-    name: 'Moonshroud Tunic',
+    name: 'Moonwrack Tunic',
     kind: 'armor',
     armorType: 'leather',
     slot: 'chest',
