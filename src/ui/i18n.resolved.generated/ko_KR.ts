@@ -390,9 +390,11 @@ export const ko_KR: EnTranslations = {
       "showWalletOnCharacterScreen": "캐릭터 화면에 지갑 표시",
       "showWalletOnPlayerCard": "플레이어 카드에 지갑 표시",
       "showDevBadges": "개발자 배지 표시",
+      "showOwnNameplate": "내 이름표 표시",
       "uiScale": "UI 배율",
       "highContrastBackground": "고대비 배경",
       "startAttackOnAbility": "스킬 사용 시 자동 공격",
+      "walkByAutoloot": "지나가며 자동 획득",
       "groundReticle": "지면 조준 표시기",
       "showItemLevel": "아이템 레벨 표시",
       "itemLevelLine": "아이템 레벨 {level}",
@@ -839,6 +841,16 @@ export const ko_KR: EnTranslations = {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
     },
+    "mobTooltip": {
+      "levelFamily": "{level}레벨 {family}",
+      "familyDemon": "악마",
+      "hostile": "적대",
+      "friendly": "아군"
+    },
+    "targetFrame": {
+      "unlock": "대상 프레임 이동",
+      "lock": "대상 프레임 고정"
+    },
     "itemTooltip": {
       "requiresLevel": "필요 레벨 {level}"
     },
@@ -920,6 +932,7 @@ export const ko_KR: EnTranslations = {
       "memberSinceDays": "Discord 가입 {days}일",
       "roleTag": {
         "levyst": "Levy St",
+        "admin": "관리자",
         "devs": "개발자",
         "mods": "운영자",
         "artists": "아티스트"
@@ -1960,6 +1973,9 @@ export const ko_KR: EnTranslations = {
     "password": "비밀번호",
     "passwordError": "비밀번호를 입력해 주세요.",
     "passwordPlaceholder": "비밀번호 입력",
+    "email": "이메일",
+    "emailPlaceholder": "you@example.com",
+    "emailError": "유효한 이메일 주소를 입력하세요.",
     "showPassword": "비밀번호 표시",
     "hidePassword": "비밀번호 숨기기",
     "logIn": "로그인",
@@ -1985,7 +2001,15 @@ export const ko_KR: EnTranslations = {
     "create": "생성",
     "twoFactorLabel": "인증 코드",
     "twoFactorPlaceholder": "6자리 또는 복구 코드",
-    "twoFactorHint": "인증 앱에 표시된 코드 또는 복구 코드 중 하나를 입력하세요."
+    "twoFactorHint": "인증 앱에 표시된 코드 또는 복구 코드 중 하나를 입력하세요.",
+    "recovery": {
+      "title": "복구 이메일 추가",
+      "body": "계정을 복구할 수 있도록 이메일 주소를 설정하세요. 비밀번호를 재설정해야 할 경우 이 계정의 소유자임을 확인하는 용도로만 사용됩니다.",
+      "save": "이메일 저장",
+      "logOut": "Log out",
+      "invalid": "유효한 이메일 주소를 입력하세요.",
+      "failed": "이메일을 저장하지 못했습니다. 다시 시도해 주세요."
+    }
   },
   "wallet": {
     "label": "$WOC 지갑",
@@ -3481,7 +3505,9 @@ export const ko_KR: EnTranslations = {
   "questUi": {
     "tracker": {
       "title": "퀘스트",
-      "complete": "완료"
+      "complete": "완료",
+      "showOnMap": "{name} 지도에 표시",
+      "hideFromMap": "{name} 지도에서 숨기기"
     },
     "log": {
       "title": "퀘스트 기록",
@@ -6291,6 +6317,36 @@ export const ko_KR: EnTranslations = {
         "objectives": {
           "0": {
             "label": "산등성이 추적자 가죽"
+          }
+        }
+      },
+      "q_stalkers_return": {
+        "title": "추적자들의 귀환",
+        "text": "열두 마리를 잡았는데도 산등성이는 처음보다 더 들끓습니다, {playerName}. 짐승이 굶주림만으로 성벽에 몸을 던질 리 없습니다. 높은 산마루의 무언가가 그들을 몰아내리고 있습니다. 정체를 알기 전까지 사냥은 계속됩니다. 열네 마리 더.",
+        "completion": "열네 마리를 더 잡았는데도 순찰대는 아침마다 새 발자국을 셉니다. 높은 산마루에서 돌아온 정찰병은 설선처럼 하얗게 질려 있었습니다. 방패만 한 발자국에, 추적자라면 절대 남기지 않을 사냥 흔적이 있었다고 합니다. 저 위를 걷는 것은 평범한 고양이가 아닙니다.",
+        "objectives": {
+          "0": {
+            "label": "산등성이 추적자 처치"
+          }
+        }
+      },
+      "q_stalker_cloaks": {
+        "title": "경비대의 망토",
+        "text": "가죽 여덟 장으로 장교들 망토를 덧댔더니, 이제 성벽의 병사 모두가 같은 것을 원합니다, {playerName}. 당연한 바람입니다. 겨울은 손가락부터 앗아 가고 사과는 듣지 않으니까요. 성문 남쪽 산등성이에서 열 장만 더 구해 오면 경비대 전원이 따뜻하게 잘 수 있습니다.",
+        "completion": "좋은 가죽 열 장, 더없이 두툼한... 아니, 이걸 보십시오, {playerName}. 절반이 찢겨 있는데 칼이나 창의 흔적이 아닙니다. 내 손바닥만 한 발톱 자국이 겨울 털가죽을 꿰뚫었습니다. 그 산등성이의 무언가가 제 동족을 물어뜯고 있습니다.",
+        "objectives": {
+          "0": {
+            "label": "산등성이 추적자 가죽"
+          }
+        }
+      },
+      "q_old_cragmaw": {
+        "title": "늙은 크래그모",
+        "text": "산사람들은 정찰병이 찾은 발자국의 주인을 알고 있었습니다. 늙은 크래그모, 제 무리의 세 세대를 먼저 보낸 흉터투성이 폭군 고양이입니다. 추적자들이 내 길로 쏟아지는 것도 그놈 때문입니다, {playerName}. 굴은 남쪽 길 위 서편 산등성이에 있습니다. 동료를 데리고 가서 그 늙은 악마를 처치하십시오.",
+        "completion": "마침내 쓰러졌군요. 산사람들은 그 고양이가 성벽보다 오래 살 거라 장담했었습니다. 이제 추적자들은 높은 설원에 머물 겁니다, {playerName}. 내 순찰대도 피 흘리지 않고 길을 걷겠지요. 당신 덕분에 산등성이 전체가 조용해졌습니다.",
+        "objectives": {
+          "0": {
+            "label": "늙은 크래그모 처치"
           }
         }
       },

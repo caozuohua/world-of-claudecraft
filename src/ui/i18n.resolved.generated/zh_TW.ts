@@ -390,9 +390,11 @@ export const zh_TW: EnTranslations = {
       "showWalletOnCharacterScreen": "在角色畫面顯示錢包",
       "showWalletOnPlayerCard": "在玩家卡片顯示錢包",
       "showDevBadges": "顯示開發者徽章",
+      "showOwnNameplate": "顯示我的姓名板",
       "uiScale": "介面縮放",
       "highContrastBackground": "高對比度背景",
       "startAttackOnAbility": "使用技能時自動攻擊",
+      "walkByAutoloot": "路過自動拾取",
       "groundReticle": "地面瞄準指示圈",
       "showItemLevel": "顯示物品等級",
       "itemLevelLine": "物品等級 {level}",
@@ -839,6 +841,16 @@ export const zh_TW: EnTranslations = {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
     },
+    "mobTooltip": {
+      "levelFamily": "等級 {level} {family}",
+      "familyDemon": "惡魔",
+      "hostile": "敵對",
+      "friendly": "友方"
+    },
+    "targetFrame": {
+      "unlock": "移動目標框",
+      "lock": "鎖定目標框"
+    },
     "itemTooltip": {
       "requiresLevel": "需要等級 {level}"
     },
@@ -920,6 +932,7 @@ export const zh_TW: EnTranslations = {
       "memberSinceDays": "已加入 Discord {days} 天",
       "roleTag": {
         "levyst": "Levy St",
+        "admin": "管理員",
         "devs": "開發者",
         "mods": "管理員",
         "artists": "美術"
@@ -1960,6 +1973,9 @@ export const zh_TW: EnTranslations = {
     "password": "密碼",
     "passwordError": "請輸入密碼。",
     "passwordPlaceholder": "請輸入密碼",
+    "email": "電子郵件",
+    "emailPlaceholder": "you@example.com",
+    "emailError": "請輸入有效的電子郵件地址。",
     "showPassword": "顯示密碼",
     "hidePassword": "隱藏密碼",
     "logIn": "登入",
@@ -1985,7 +2001,15 @@ export const zh_TW: EnTranslations = {
     "create": "建立",
     "twoFactorLabel": "驗證碼",
     "twoFactorPlaceholder": "6 位數驗證碼或復原碼",
-    "twoFactorHint": "請輸入驗證器應用程式顯示的驗證碼，或其中一組復原碼。"
+    "twoFactorHint": "請輸入驗證器應用程式顯示的驗證碼，或其中一組復原碼。",
+    "recovery": {
+      "title": "新增復原電子郵件",
+      "body": "設定一個電子郵件地址，以便您可以復原自己的帳號。我們僅在您需要重設密碼時，用它來確認您是本帳號的擁有者。",
+      "save": "儲存電子郵件",
+      "logOut": "Log out",
+      "invalid": "請輸入有效的電子郵件地址。",
+      "failed": "無法儲存您的電子郵件，請重試。"
+    }
   },
   "wallet": {
     "label": "$WOC 錢包",
@@ -3481,7 +3505,9 @@ export const zh_TW: EnTranslations = {
   "questUi": {
     "tracker": {
       "title": "任務",
-      "complete": "完成"
+      "complete": "完成",
+      "showOnMap": "在地圖上顯示{name}",
+      "hideFromMap": "在地圖上隱藏{name}"
     },
     "log": {
       "title": "任務日誌",
@@ -6291,6 +6317,36 @@ export const zh_TW: EnTranslations = {
         "objectives": {
           "0": {
             "label": "山脊潛獵者毛皮"
+          }
+        }
+      },
+      "q_stalkers_return": {
+        "title": "潛獵者去而復返",
+        "text": "死了十二隻，山脊上的潛獵者反而更多了，{playerName}。野獸不會因為飢餓就往城牆上撲，是高脊上有什麼東西把牠們趕下來。查清之前，獵殺不停。再殺十四隻。",
+        "completion": "又殺了十四隻，可巡邏隊每天清晨仍數得出新的足跡。我的斥候從高脊回來時臉白得像雪線：她說那些爪印有盾牌那麼大，還有潛獵者絕不會留下的獵殺痕跡。在上面遊蕩的絕不是普通的山貓。",
+        "objectives": {
+          "0": {
+            "label": "擊敗山脊潛獵者"
+          }
+        }
+      },
+      "q_stalker_cloaks": {
+        "title": "守望者的披風",
+        "text": "八張皮給軍官的披風加了襯，現在牆上每個士兵都想要一件，{playerName}。他們想得沒錯：寒冬先奪手指，從不聽道歉。再從大門以南的山脊取十張皮，整支守望隊都能睡個暖覺。",
+        "completion": "十張好皮，厚實得沒話說……不對，你看這些，{playerName}。一半都撕裂了，可不是刀槍的痕跡。爪痕有我手掌那麼寬，直接穿透了冬毛。山脊上有什麼東西在殘殺自己的同類。",
+        "objectives": {
+          "0": {
+            "label": "山脊潛獵者毛皮"
+          }
+        }
+      },
+      "q_old_cragmaw": {
+        "title": "老裂顎",
+        "text": "山民給我斥候找到的爪印起過名字：老裂顎，一隻滿身傷疤的暴君巨貓，熬死了自己族群的三代。潛獵者湧上我的道路，就是因為牠，{playerName}。牠的巢穴在南路上方的西側山脊。帶個幫手去，了結那老魔頭。",
+        "completion": "牠終於倒下了。山民曾發誓那隻貓會比城牆活得還久。如今潛獵者會守在高處的雪原了，{playerName}，我的巡邏隊走這條路也不必再流血。整條山脊都因你安靜了下來。",
+        "objectives": {
+          "0": {
+            "label": "擊敗老裂顎"
           }
         }
       },

@@ -390,9 +390,11 @@ export const fr_CA: EnTranslations = {
       "showWalletOnCharacterScreen": "Afficher le portefeuille sur l’écran des personnages",
       "showWalletOnPlayerCard": "Afficher le portefeuille sur la carte de joueur",
       "showDevBadges": "Afficher les badges de développeur",
+      "showOwnNameplate": "Show My Nameplate",
       "uiScale": "Échelle de l’interface",
       "highContrastBackground": "Arrière-plan à contraste élevé",
       "startAttackOnAbility": "Attaque auto à l'utilisation d'une compétence",
+      "walkByAutoloot": "Walk-by Autoloot",
       "groundReticle": "Réticule de ciblage au sol",
       "showItemLevel": "Afficher le niveau d'objet",
       "itemLevelLine": "Niveau d'objet {level}",
@@ -839,6 +841,16 @@ export const fr_CA: EnTranslations = {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
     },
+    "mobTooltip": {
+      "levelFamily": "Level {level} {family}",
+      "familyDemon": "Demon",
+      "hostile": "Hostile",
+      "friendly": "Friendly"
+    },
+    "targetFrame": {
+      "unlock": "Move target frame",
+      "lock": "Lock target frame"
+    },
     "itemTooltip": {
       "requiresLevel": "Niveau requis : {level}"
     },
@@ -920,6 +932,7 @@ export const fr_CA: EnTranslations = {
       "memberSinceDays": "{days} j sur le Discord",
       "roleTag": {
         "levyst": "Levy St",
+        "admin": "Admin",
         "devs": "Dév",
         "mods": "Modo",
         "artists": "Artiste"
@@ -1960,6 +1973,9 @@ export const fr_CA: EnTranslations = {
     "password": "Mot de passe",
     "passwordError": "Veuillez saisir votre mot de passe.",
     "passwordPlaceholder": "Saisir le mot de passe",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "emailError": "Please enter a valid email address.",
     "showPassword": "Afficher le mot de passe",
     "hidePassword": "Masquer le mot de passe",
     "logIn": "Se connecter",
@@ -1985,7 +2001,15 @@ export const fr_CA: EnTranslations = {
     "create": "Créer",
     "twoFactorLabel": "Code d'authentification",
     "twoFactorPlaceholder": "Code à 6 chiffres ou code de récupération",
-    "twoFactorHint": "Saisissez le code de votre application d'authentification, ou l'un de vos codes de récupération."
+    "twoFactorHint": "Saisissez le code de votre application d'authentification, ou l'un de vos codes de récupération.",
+    "recovery": {
+      "title": "Add a recovery email",
+      "body": "Set an email address so you can recover your account. We only use it to confirm you own this account if you ever need to reset your password.",
+      "save": "Save email",
+      "logOut": "Log out",
+      "invalid": "Please enter a valid email address.",
+      "failed": "Could not save your email. Please try again."
+    }
   },
   "wallet": {
     "label": "Portefeuille $WOC",
@@ -3481,7 +3505,9 @@ export const fr_CA: EnTranslations = {
   "questUi": {
     "tracker": {
       "title": "Quêtes",
-      "complete": "Terminée"
+      "complete": "Terminée",
+      "showOnMap": "Afficher {name} sur la carte",
+      "hideFromMap": "Masquer {name} sur la carte"
     },
     "log": {
       "title": "Journal de quêtes",
@@ -6291,6 +6317,36 @@ export const fr_CA: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Peau de traqueur de crête"
+          }
+        }
+      },
+      "q_stalkers_return": {
+        "title": "The Stalkers Return",
+        "text": "Twelve dead, and the ridge crawls thicker than the day you started, {playerName}. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.",
+        "completion": "Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker slain"
+          }
+        }
+      },
+      "q_stalker_cloaks": {
+        "title": "Cloaks for the Watch",
+        "text": "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, {playerName}. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
+        "completion": "Ten good pelts, thick as any I have... no, look at these, {playerName}. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.",
+        "objectives": {
+          "0": {
+            "label": "Ridge Stalker Pelt"
+          }
+        }
+      },
+      "q_old_cragmaw": {
+        "title": "Old Cragmaw",
+        "text": "The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, {playerName}. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.",
+        "completion": "Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, {playerName}, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.",
+        "objectives": {
+          "0": {
+            "label": "Old Cragmaw slain"
           }
         }
       },

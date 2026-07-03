@@ -34,7 +34,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 398,
-      "state": "5da5fc33",
+      "state": "dfc2169b",
       "events": "2fb262b7",
       "rng": {
         "draws": 6,
@@ -59,8 +59,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -79,8 +78,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -99,8 +97,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -119,8 +116,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -139,8 +135,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -634,7 +629,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 398,
-      "state": "6372dc77",
+      "state": "1ccbe17f",
       "events": "19aa9b1e",
       "rng": {
         "draws": 6,
@@ -659,8 +654,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -679,8 +673,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -701,8 +694,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -721,8 +713,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -741,8 +732,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -1254,7 +1244,7 @@
       "tick": 5,
       "time": 0.25,
       "nextId": 398,
-      "state": "493dccbe",
+      "state": "fce5c6e4",
       "events": "e7cecad5",
       "rng": {
         "draws": 10,
@@ -1265,7 +1255,7 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 398,
-      "state": "bc955ec7",
+      "state": "7090d4a8",
       "events": "e7cecad5",
       "rng": {
         "draws": 10,
@@ -1290,8 +1280,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -1310,8 +1299,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -1332,8 +1320,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -1352,8 +1339,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -1372,8 +1358,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -1663,6 +1648,7 @@
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
+          "facing": 1.394614,
           "fallStartY": -1.48336,
           "fiveSecondRule": 99,
           "hp": 84,
@@ -1676,7 +1662,7 @@
           "overpowerUntil": -1,
           "ownerId": 393,
           "petMode": "defensive",
-          "petPathCooldown": 0.15,
+          "petPathCooldown": 0.2,
           "pos": {
             "x": 30,
             "y": -1.48336,
@@ -1764,7 +1750,7 @@
             ],
             [
               391,
-              393.5
+              268.5
             ],
             [
               393,
@@ -1824,7 +1810,7 @@
             ],
             [
               391,
-              287.5
+              162.5
             ],
             [
               393,
@@ -1890,7 +1876,7 @@
             ],
             [
               391,
-              287.5
+              162.5
             ],
             [
               394,
