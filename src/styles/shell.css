@@ -2505,6 +2505,192 @@
     box-shadow: 0 0 10px var(--class-color);
   }
 
+  /* WoW-style full-screen character creation (the offline panel carries the
+     cs-wow class). Desktop only: below 900px the classic card layout above
+     stays. The wrappers collapse via display:contents so every piece anchors
+     against the FIXED full-viewport panel: the 3D turntable fills the center
+     over the landing backdrop, the class icons become the classic round
+     bottom rail (gold ring on the pick, name under each), the skin swatches
+     stand in as the left "race" column, the class summary docks right, the
+     name floats top-center, and the actions sit in the corners. All the ids /
+     buttons / rows stay untouched, so the main.ts wiring is unchanged. */
+  @media (min-width: 900px) {
+    #offline-select.cs-wow {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      /* The shared charselect sizing block below pins width/height with
+         !important (its card layout), so the full-screen takeover must
+         out-important it. */
+      width: auto !important;
+      max-width: none !important;
+      height: auto !important;
+      min-height: 0 !important;
+      margin: 0;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: linear-gradient(180deg, #0008 0%, #0002 18%, #0002 78%, #000c 100%);
+      box-shadow: none;
+      overflow: hidden;
+    }
+    #offline-select.cs-wow .charselect-layout,
+    #offline-select.cs-wow .charselect-col-left,
+    #offline-select.cs-wow .charselect-col-right,
+    #offline-select.cs-wow .char-create,
+    #offline-select.cs-wow .auth-actions {
+      display: contents;
+    }
+    #offline-select.cs-wow .auth-title {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 8px #000;
+      z-index: 3;
+    }
+    /* The 3D turntable IS the stage: full viewport, chrome-free, behind the UI. */
+    #offline-select.cs-wow .char-preview-container {
+      position: absolute;
+      inset: 0;
+      height: auto;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      z-index: 1;
+    }
+    /* Name entry floats just under the title. */
+    #offline-select.cs-wow .auth-label {
+      position: absolute;
+      top: 58px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      text-shadow: 0 1px 4px #000;
+    }
+    #offline-select.cs-wow .char-input-group {
+      position: absolute;
+      top: 82px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      z-index: 3;
+    }
+    #offline-select.cs-wow .char-input-group input {
+      text-align: center;
+      background: #10101acc;
+    }
+    /* The classic bottom class rail: round portrait medallions, gold ring on
+       the selection, the class name beneath in its class color. */
+    #offline-select.cs-wow .mini-class-row {
+      position: absolute;
+      left: 50%;
+      bottom: 26px;
+      transform: translateX(-50%);
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 14px;
+      z-index: 3;
+      /* The base row is width:100%/grid; the rail must shrink-wrap so the
+         translateX centering actually centers the nine medallions. */
+      width: max-content;
+      justify-content: center;
+    }
+    #offline-select.cs-wow .mini-class {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      width: 84px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+    }
+    #offline-select.cs-wow .mini-class .mini-class-portrait {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      border: 3px solid #2c2c3a;
+      outline: 1px solid #000;
+      background: radial-gradient(circle at 35% 30%, #23233a, #0d0d16);
+      box-shadow: 0 3px 10px #000c;
+      transition:
+        border-color var(--transition-speed),
+        box-shadow var(--transition-speed),
+        transform var(--transition-speed);
+    }
+    #offline-select.cs-wow .mini-class:hover .mini-class-portrait,
+    #offline-select.cs-wow .mini-class:focus-visible .mini-class-portrait {
+      border-color: var(--class-color);
+      box-shadow: 0 0 12px var(--class-color);
+    }
+    #offline-select.cs-wow .mini-class:focus-visible {
+      outline: 2px solid var(--color-border-focus);
+      outline-offset: 3px;
+      border-radius: 8px;
+    }
+    #offline-select.cs-wow .mini-class.sel .mini-class-portrait {
+      border-color: var(--gold, #d4af37);
+      box-shadow:
+        0 0 0 2px #000,
+        0 0 16px var(--gold, #d4af37);
+    }
+    #offline-select.cs-wow .mini-class .mini-class-label {
+      font-size: 12px;
+      color: var(--class-color);
+      text-shadow: 0 1px 3px #000;
+    }
+    #offline-select.cs-wow .mini-class.sel .mini-class-label {
+      color: #ffd100;
+    }
+    /* Appearance swatches as the left column (the "race" slot: one race, many looks). */
+    #offline-select.cs-wow .skin-row {
+      position: absolute;
+      left: 26px;
+      top: 50%;
+      transform: translateY(-50%);
+      flex-direction: column;
+      gap: 12px;
+      z-index: 3;
+    }
+    /* Class summary docks on the right, translucent so the stage shows through. */
+    #offline-select.cs-wow .class-details-panel {
+      position: absolute;
+      right: 26px;
+      top: 110px;
+      bottom: 140px;
+      width: 320px;
+      overflow-y: auto;
+      background: #0d0d16d9;
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      z-index: 2;
+    }
+    /* Corner actions, classic layout: Back bottom-left, Enter World bottom-right. */
+    #offline-select.cs-wow #btn-start-offline {
+      position: absolute;
+      right: 26px;
+      bottom: 30px;
+      z-index: 3;
+      min-width: 180px;
+    }
+    #offline-select.cs-wow #btn-offline-back {
+      position: absolute;
+      left: 26px;
+      bottom: 30px;
+      z-index: 3;
+      min-width: 140px;
+    }
+    #offline-select.cs-wow .auth-error {
+      text-align: center;
+    }
+  }
+
   /* ---------- Skin picker (alternate body textures) ---------- */
   .skin-row {
     display: flex;
