@@ -396,6 +396,22 @@ export interface InvSlot {
   instance?: ItemInstancePayload;
 }
 
+// A shallow `{ ...slot }` aliases `instance` (and its mutable `charges`/`rolled.stats`
+// maps) between the live slot and a serialized/loaded copy: decrementing a charge on
+// one would silently mutate the other. Deep-clone at every save/load boundary instead.
+export function cloneInvSlot<T extends InvSlot>(slot: T): T {
+  if (!slot.instance) return { ...slot };
+  const src = slot.instance;
+  const instance: ItemInstancePayload = { ...src };
+  if (src.charges) instance.charges = { ...src.charges };
+  if (src.rolled)
+    instance.rolled = {
+      ...src.rolled,
+      ...(src.rolled.stats && { stats: { ...src.rolled.stats } }),
+    };
+  return { ...slot, instance };
+}
+
 export interface LootSlot extends InvSlot {
   // Quest corpse loot can be personal: each listed player can take one copy.
   personalFor?: number[];

@@ -65,6 +65,32 @@ describe('item-instance payload (#1165)', () => {
     });
   });
 
+  it('mutating a serialized snapshot does not alias the live instance payload (charges/rolled.stats)', () => {
+    const sim = new Sim({ seed: 42, playerClass: 'warrior', autoEquip: false });
+    sim.addItemInstance(
+      'apprentice_staff',
+      { signer: 'Aldric', charges: { fireball: 3 }, rolled: { stats: { spellPower: 5 } } },
+      sim.playerId,
+    );
+
+    const state = sim.serializeCharacter(sim.playerId)!;
+    const saved = state.inventory.find((s) => s.itemId === 'apprentice_staff')!;
+    // decrementing the saved snapshot's charge/stat must not mutate the live slot
+    saved.instance!.charges!.fireball = 0;
+    saved.instance!.rolled!.stats!.spellPower = 0;
+
+    const live = sim.meta(sim.playerId)?.inventory.find((s) => s.itemId === 'apprentice_staff');
+    expect(live?.instance?.charges?.fireball).toBe(3);
+    expect(live?.instance?.rolled?.stats?.spellPower).toBe(5);
+
+    const sim2 = new Sim({ seed: 42, playerClass: 'warrior', autoEquip: false });
+    const pid2 = sim2.addPlayer('warrior', 'Reloaded', { state });
+    // mutating the loaded copy must not reach back into the (already-mutated) saved state
+    const loaded = sim2.meta(pid2)?.inventory.find((s) => s.itemId === 'apprentice_staff');
+    loaded!.instance!.charges!.fireball = 1;
+    expect(saved.instance?.charges?.fireball).toBe(0);
+  });
+
   it('an ordinary fungible stack round-trips unaffected (no instance field)', () => {
     const sim = new Sim({ seed: 42, playerClass: 'warrior', autoEquip: false });
     sim.addItem('wolf_fang', 3, sim.playerId);
