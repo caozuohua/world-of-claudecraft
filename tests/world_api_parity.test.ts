@@ -693,15 +693,15 @@ describe('membership, not equality: world extras do not fail the gate', () => {
 });
 
 // --- W1: aggregate == disjoint union of the 21 facet member sets --------------------
-// After the facet split (W1), `interface IWorld extends` 20 domain facet interfaces
-// (src/world_api/<facet>.ts; the 19 owner-backed facets plus IWorldTelemetry). This
+// After the facet split (W1), `interface IWorld extends` 21 domain facet interfaces
+// (src/world_api/<facet>.ts; the 20 owner-backed facets plus IWorldTelemetry). This
 // block proves the split dropped nothing and duplicated nothing:
 //   (1) each facet's runtime name array is pinned to its interface key-set via
 //       `satisfies readonly (keyof IWorldX)[]` (rejects a FOREIGN name at compile time);
 //   (2) a type-level AssertNever<Exclude<keyof IWorldX, array[number]>> per facet rejects
 //       a MISSING name (if the array omits a key, Exclude<> is a non-never union and tsc
 //       fails) -- (1)+(2) together make each array EXACTLY its facet key-set;
-//   (3) the 20 arrays are pairwise DISJOINT (a member filed in two facets reddens);
+//   (3) the 21 arrays are pairwise DISJOINT (a member filed in two facets reddens);
 //   (4) their union, sorted, equals the pinned 150-name IWORLD_MEMBERS set (a member
 //       dropped from the split reddens).
 // This is the rigorous form, NOT the tautological `keyof IWorld === keyof (A & B & ...)`
@@ -962,7 +962,7 @@ type _ExhaustProfessions = AssertNever<
   Exclude<keyof IWorldProfessions, (typeof FACET_PROFESSIONS)[number]>
 >;
 
-// The 20-facet partition, keyed by facet for legible failure messages.
+// The 21-facet partition, keyed by facet for legible failure messages.
 const FACET_MEMBER_ARRAYS: Readonly<Record<string, readonly string[]>> = {
   entityRoster: FACET_ENTITY_ROSTER,
   combat: FACET_COMBAT,
