@@ -79,8 +79,8 @@ async function main() {
   const pg = new PgClient({ connectionString: DATABASE_URL });
   await pg.connect();
 
-  const r1 = await api('/api/register', { username: `clog_${uniq}_a`, password: 'hunter22' });
-  const r2 = await api('/api/register', { username: `clog_${uniq}_b`, password: 'hunter22' });
+  const r1 = await api('/api/register', { username: `clog_${uniq}_a`, password: 'hunter22', email: `clog_${uniq}_a@example.com` });
+  const r2 = await api('/api/register', { username: `clog_${uniq}_b`, password: 'hunter22', email: `clog_${uniq}_b@example.com` });
   check('registered accounts', r1.status === 200 && r2.status === 200);
 
   const c1 = await api('/api/characters', { name: nameA, class: 'warrior' }, r1.body.token);

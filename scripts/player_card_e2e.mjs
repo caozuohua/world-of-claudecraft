@@ -24,7 +24,7 @@ async function api(path, { method = 'GET', token, body } = {}) {
 }
 
 const register = async (u, ref) =>
-  (await api('/api/register', { method: 'POST', body: { username: u, password: 'test1234', ref } })).data.token;
+  (await api('/api/register', { method: 'POST', body: { username: u, password: 'test1234', ref, email: `${u}@example.com` } })).data.token;
 
 // A unique letters-only character name (server rule: ^[A-Za-z][A-Za-z' -]{1,15}$).
 function randomName() {

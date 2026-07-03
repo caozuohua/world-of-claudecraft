@@ -27,6 +27,7 @@ import {
   handleAccountLogout,
   handleAccountMarketing,
   handleAccountSetEmail,
+  handleAccountSetInitialEmail,
   handleAccountWhoami,
   handleEmailUnsubscribe,
 } from '../server/account';
@@ -124,10 +125,58 @@ describe('handleAccountWhoami', () => {
     expect(status).toBe(200);
     expect(data).toMatchObject({ username: 'Aelwyn', email: '', characterCount: 2 });
   });
+  it('reports emailMissing:true for an account with no recovery email', async () => {
+    const res = makeRes();
+    await handleAccountWhoami(res, 1);
+    expect(parse(res).data.emailMissing).toBe(true);
+  });
+  it('reports emailMissing:false once a recovery email is set', async () => {
+    accountRow.email = 'aelwyn@example.com';
+    const res = makeRes();
+    await handleAccountWhoami(res, 1);
+    const { data } = parse(res);
+    expect(data.email).toBe('aelwyn@example.com');
+    expect(data.emailMissing).toBe(false);
+  });
   it('404s when the row is gone', async () => {
     accountRow = null;
     const res = makeRes();
     await handleAccountWhoami(res, 1);
+    expect(parse(res).status).toBe(404);
+  });
+});
+
+describe('handleAccountSetInitialEmail (mandatory recovery-email backfill)', () => {
+  it('sets the recovery email on an account that has none (200)', async () => {
+    const res = makeRes();
+    await handleAccountSetInitialEmail(makeReq({ email: '  New@Example.com ' }), res, 1);
+    const { status, data } = parse(res);
+    expect(status).toBe(200);
+    // Stored trimmed (as typed), and the write hit accounts.email with the account id.
+    expect(data.email).toBe('New@Example.com');
+    const write = writes.find((w) => w.sql.includes('UPDATE accounts SET email'));
+    expect(write).toBeTruthy();
+    expect(write!.params).toEqual([1, 'New@Example.com']);
+  });
+  it('rejects a malformed address without writing (400)', async () => {
+    const res = makeRes();
+    await handleAccountSetInitialEmail(makeReq({ email: 'not-an-email' }), res, 1);
+    expect(parse(res).status).toBe(400);
+    expect(writes.some((w) => w.sql.includes('UPDATE accounts SET email'))).toBe(false);
+  });
+  it('refuses when an address already exists, steering to the verified change flow (409)', async () => {
+    accountRow.email = 'existing@example.com';
+    const res = makeRes();
+    await handleAccountSetInitialEmail(makeReq({ email: 'new@example.com' }), res, 1);
+    const { status, data } = parse(res);
+    expect(status).toBe(409);
+    expect(data.error).toContain('verified email change');
+    expect(writes.some((w) => w.sql.includes('UPDATE accounts SET email'))).toBe(false);
+  });
+  it('404s when the account row is gone', async () => {
+    accountRow = null;
+    const res = makeRes();
+    await handleAccountSetInitialEmail(makeReq({ email: 'new@example.com' }), res, 1);
     expect(parse(res).status).toBe(404);
   });
 });

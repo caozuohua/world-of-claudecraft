@@ -65,7 +65,7 @@ class Bot {
   }
 
   async join() {
-    const reg = await api('/api/register', { username: `raid_${this.name}_${uniq}`, password: 'hunter22' });
+    const reg = await api('/api/register', { username: `raid_${this.name}_${uniq}`, password: 'hunter22', email: `raid_${this.name}_${uniq}@example.com` });
     this.token = reg.body.token;
     const char = await api('/api/characters', { name: this.name + alpha, class: this.cls }, this.token);
     this.charId = char.body.id;

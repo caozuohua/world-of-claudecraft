@@ -121,6 +121,27 @@ export function validPassword(p: unknown): p is string {
   return typeof p === 'string' && p.length >= MIN_PASSWORD_LENGTH && p.length <= MAX_PASSWORD_LENGTH;
 }
 
+// Canonical email validator, shared by the register handler, the account portal,
+// and the Discord capture path so all three agree on shape and bound. Deliberately
+// permissive (a single "x@y.z" check): we capture a recovery address, we do not
+// try to out-validate a real mailbox, and RFC 5321 caps the whole address at 254.
+export const MAX_EMAIL_LENGTH = 254;
+const EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Trim and validate an email address. Returns the cleaned address, or null when
+// it is missing, over-length, or the wrong shape. Callers store the returned
+// (trimmed) value so a padded address can never be persisted.
+export function normalizeEmail(e: unknown): string | null {
+  if (typeof e !== 'string') return null;
+  const trimmed = e.trim();
+  if (trimmed.length === 0 || trimmed.length > MAX_EMAIL_LENGTH) return null;
+  return EMAIL_SHAPE.test(trimmed) ? trimmed : null;
+}
+
+export function validEmail(e: unknown): e is string {
+  return normalizeEmail(e) !== null;
+}
+
 export function validCharName(n: unknown): n is string {
   return validCharNameShape(n) && !offensiveName(n);
 }

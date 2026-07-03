@@ -25,7 +25,7 @@ async function api(path, { method = 'GET', token, body } = {}) {
   });
   return { status: res.status, data: await res.json().catch(() => ({})) };
 }
-const register = async (u) => (await api('/api/register', { method: 'POST', body: { username: u, password: 'test1234' } })).data.token;
+const register = async (u) => (await api('/api/register', { method: 'POST', body: { username: u, password: 'test1234', email: `${u}@example.com` } })).data.token;
 function newWallet() {
   const priv = ed25519.utils.randomPrivateKey();
   return { priv, address: bs58.encode(ed25519.getPublicKey(priv)) };

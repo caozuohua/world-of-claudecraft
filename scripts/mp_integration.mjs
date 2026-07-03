@@ -116,12 +116,12 @@ async function main() {
 
   // --- register two accounts
   const u1 = `tester_${uniq}_a`, u2 = `tester_${uniq}_b`;
-  const r1 = await api('/api/register', { method: 'POST', body: JSON.stringify({ username: u1, password: 'hunter22' }) });
+  const r1 = await api('/api/register', { method: 'POST', body: JSON.stringify({ username: u1, password: 'hunter22', email: `${u1}@example.com` }) });
   check('register account 1', r1.status === 200 && r1.body.token);
-  const r2 = await api('/api/register', { method: 'POST', body: JSON.stringify({ username: u2, password: 'hunter22' }) });
+  const r2 = await api('/api/register', { method: 'POST', body: JSON.stringify({ username: u2, password: 'hunter22', email: `${u2}@example.com` }) });
   check('register account 2', r2.status === 200 && r2.body.token);
 
-  const dup = await api('/api/register', { method: 'POST', body: JSON.stringify({ username: u1, password: 'hunter22' }) });
+  const dup = await api('/api/register', { method: 'POST', body: JSON.stringify({ username: u1, password: 'hunter22', email: `${u1}@example.com` }) });
   check('duplicate username rejected', dup.status === 409);
 
   const badLogin = await api('/api/login', { method: 'POST', body: JSON.stringify({ username: u1, password: 'wrongpw' }) });

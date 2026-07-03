@@ -54,7 +54,7 @@ const api = async (path, opts = {}) => {
 };
 
 const register = async (username, password) => {
-  const r = await api('/api/register', { method: 'POST', body: { username, password } });
+  const r = await api('/api/register', { method: 'POST', body: { username, password, email: `${username}@example.com` } });
   if (!r.data.token) throw new Error(`register ${username} failed: ${JSON.stringify(r)}`);
   return r.data.token;
 };

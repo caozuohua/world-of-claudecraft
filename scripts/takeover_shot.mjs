@@ -58,7 +58,7 @@ try {
   const stamp = Date.now();
   const username = 'takeover' + stamp;
   const password = 'test1234';
-  const reg = await api('/api/register', { method: 'POST', body: { username, password } });
+  const reg = await api('/api/register', { method: 'POST', body: { username, password, email: `${username}@example.com` } });
   const token = reg.data.token;
   if (!token) throw new Error('register failed: ' + JSON.stringify(reg));
   const letters = 'abcdefghijklmnopqrstuvwxyz';

@@ -23,9 +23,10 @@ const after = await fetch(BASE + '/api/status').then((r) => r.ok).catch(() => fa
 console.log(after ? 'OK   server survived oversized pre-auth frame' : 'FAIL server crashed on oversized frame');
 
 // and a normal client can still connect afterwards
+const dosUser = 'dos_' + Date.now().toString(36);
 const r = await fetch(BASE + '/api/register', {
   method: 'POST', headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ username: 'dos_' + Date.now().toString(36), password: 'hunter22' }),
+  body: JSON.stringify({ username: dosUser, password: 'hunter22', email: `${dosUser}@example.com` }),
 }).then((x) => x.json()).catch(() => ({}));
 console.log(r.token ? 'OK   server still serving requests' : 'FAIL server unresponsive after attack');
 process.exit(after && r.token ? 0 : 1);

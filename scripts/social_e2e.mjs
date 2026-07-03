@@ -32,7 +32,7 @@ function mergeSelf(prev, next) {
 class Bot {
   constructor(name, cls) { this.name = name; this.cls = cls; this.self = null; this.events = []; }
   async join() {
-    const reg = await api('/api/register', { username: `soc_${this.name}_${uniq}`, password: 'hunter22' });
+    const reg = await api('/api/register', { username: `soc_${this.name}_${uniq}`, password: 'hunter22', email: `soc_${this.name}_${uniq}@example.com` });
     const char = await api('/api/characters', { name: this.name + alpha, class: this.cls }, reg.body.token);
     await new Promise((resolve, reject) => {
       this.ws = new WebSocket(`${WS_BASE}/ws`);
