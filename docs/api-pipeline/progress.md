@@ -57,8 +57,8 @@ Mark a row's Status as "In progress" or "Done" and fill Started / Completed
 | Phase 20 QA | Done | 2026-07-02 | 2026-07-02 |
 | Phase 21 | Done | 2026-07-02 | 2026-07-02 |
 | Phase 21 QA | Done | 2026-07-02 | 2026-07-02 |
-| Phase 22 | Not started |  |  |
-| Phase 22 QA | Not started |  |  |
+| Phase 22 | Done | 2026-07-02 | 2026-07-02 |
+| Phase 22 QA | Done | 2026-07-02 | 2026-07-02 |
 | Phase 23 | Not started |  |  |
 | Phase 23 QA | Not started |  |  |
 | Phase 24 | Not started |  |  |
@@ -1274,6 +1274,51 @@ Notes:
   diagnostic). tests/server/rate_limit_copy.test.ts re-pointed at the extracted module.
 - Validation: tsc green; new suites + S3 + architecture green; npm run gate PASS all 9
   steps; i18n regen idempotent (hash stable across re-runs).
+- QA GATE (phase-22-qa.md) DONE (2026-07-02): PASS, apply-all, zero BLOCKING. Seven
+  parallel auditors over the a363a25c..HEAD diff: correctness (all 6 acceptance items and
+  all 7 stopping rules PASS; the prose fallback verified byte-for-byte verbatim against the
+  pre-phase src/main.ts, every one of the ~45 arms accounted for), test-coverage (1
+  SHOULD-FIX + 3 NIT), dead-code/cleanup (CLEAN; mapped which prose arms are fully shadowed
+  for the P25 removal vs which MUST STAY: 'rate limited', the 8 'too many attempts, slow
+  down' account arms, the not-found triple, the not-authenticated arm incl. the /api/search
+  legacy divergent 401, the desktop 'invalid or expired' pair, and all WS-delivered prose),
+  server coded-emission (all 9 checks PASS: byte-identical prose, additive-only, every twin
+  pair matched, moderationErrorBody mirrors require_account, and the ENUMERATION posture:
+  unknown-username and wrong-password share auth.invalid_credentials, IP blocks ride the
+  generic auth.too_many_attempts, the Phase 16 opaque discord paths stay uncoded),
+  privacy-security-review (PASS, no new disclosure channel; the machine ISO date encodes
+  the same instant the prose already showed), cross-platform-sync (PASS; params traced end
+  to end on BOTH body shapes), qa-checklist (READY; *_i18n.ts confirmed exempt from
+  UI_PURE_CORES by the architecture sweep's _view/_core name filter).
+- QA fixes applied (apply-all): [SHOULD-FIX] the moderation.suspended_until date-ABSENT
+  defer-to-prose arm was untested (a mutation rendering "suspended until undefined" passed
+  the suite) -> pinned in tests/main_api_error.test.ts. The parity guard gained DIMENSION
+  6: the apiError.* catalog leaf set must EQUAL ERROR_CODES (seals the phantom-leaf
+  direction nothing covered) and no English value may carry a placeholder outside the
+  PARAMETRIC_TOKEN_PINS contract (resolveByCode calls a bare t(key) for every
+  non-parametric code, so a stray {token} would render literally).
+  moderationErrorBody <-> requireAccount are now MIRROR-GUARDED (the same status driven
+  through both emitters must derive the same code + date; each was previously only
+  literal-pinned alone). exportData (src/net/online.ts) routed through apiErrorFromBody
+  (it was the one client fetch error path still dropping the code). SWAG_REASON_CODE's
+  `as` cast replaced by an === 'ok' narrowing so a future canClaimSwag refusal reason
+  fails tsc instead of silently emitting no code. The discord emit sites are
+  literal-pinned in tests/discord_server.test.ts ({error, code} toEqual for expired x2,
+  the already_linked TOCTOU race, password_required, unknown_swag, link_required,
+  swag_tier, plus NEW swag_points, swag_claimed, unlink-404 account.not_found, and
+  login/link invalid-credentials pins). End-to-end {date} capture through mocked fetch
+  added alongside the existing {seconds} one.
+- QA adjudicated NO-CHANGE: the /api/search uncoded 401 (the documented legacy divergent
+  arm, deliberately prose-only); the dual not-authenticated codes (auth.token_missing on
+  problem+json vs auth.required on legacy bodies) are the intended dual-path design; the
+  stableStringify key-order canonicalization stands; the two parametric code literals in
+  resolveByCode stay raw (AIP-193 forbids renames and dimension 6 now guards the
+  placeholder side). Transitional divergences resolve at P25, do not fix early: apiError.*
+  rewording vs the legacy prose keys, and the REST locale-formatted date vs the WS raw UTC
+  kick.
+- QA re-validation: tsc 0; touched + guard suites green (259 tests incl. architecture, S3,
+  M16); i18n regen idempotent (tree clean after i18n:gen); ci:changed 0 errors; npm run
+  gate PASS all 9 steps.
 
 ## Phase 23: Structured logging + /metrics exporter + drain-aware health
 
