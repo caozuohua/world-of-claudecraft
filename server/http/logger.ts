@@ -19,7 +19,12 @@
 // hand-picked fields instead. The string-level redaction rules only cover
 // Bearer + 64-hex shapes, so a raw URL or header blob carrying a non-hex secret
 // (a PKCE code_verifier, a base32 TOTP secret, an OAuth state) relies on the
-// caller not logging it wholesale.
+// caller not logging it wholesale (guarded by
+// tests/server/http/logger_call_hygiene.test.ts). Pass an Error as a TOP-LEVEL
+// field ({ err }): serializeErrors flattens only top-level Error values to
+// { message, stack }; a NESTED Error serializes via its enumerable props
+// instead, and a driver error's enumerable extras (a pg DatabaseError's
+// `detail`) can carry row values the redactor's needles do not cover.
 
 import { currentReqId } from './context';
 import { redact } from './redact';
@@ -28,7 +33,7 @@ import { redact } from './redact';
 export type LogFields = Record<string, unknown>;
 
 /** The severities this logger emits; info to stdout, warn/error to stderr. */
-export type LogLevel = 'info' | 'warn' | 'error';
+type LogLevel = 'info' | 'warn' | 'error';
 
 /**
  * A pino-shaped structured logger. Each level method accepts pino's argument

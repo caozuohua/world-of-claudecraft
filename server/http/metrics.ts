@@ -29,10 +29,7 @@ export const HTTP_REQUEST_DURATION_SECONDS = 'http_request_duration_seconds';
  * template, `method` is uppercased, `status` is the numeric code as a string.
  * Nothing request-derived (ip, query, body) is ever added here.
  */
-export const HTTP_METRIC_LABELS = ['route', 'method', 'status'] as const;
-
-/** A single label name from the bounded set. */
-export type HttpMetricLabel = (typeof HTTP_METRIC_LABELS)[number];
+const HTTP_METRIC_LABELS = ['route', 'method', 'status'] as const;
 
 /**
  * RED latency buckets in SECONDS: 5 ms up to 10 s. Chosen for typical API request
