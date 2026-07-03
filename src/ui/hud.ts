@@ -2057,7 +2057,10 @@ export class Hud {
     grip.setAttribute('aria-hidden', 'true');
     frame.appendChild(grip);
 
-    tabs.style.touchAction = 'none';
+    // touch-action lives in CSS now: `none` on desktop so a touch-drag on the empty
+    // strip moves the chat box (the move gesture is desktop-only, see
+    // onChatBoxMoveStart), and `pan-x` on mobile so overflowed tabs can be swiped
+    // (hud.mobile.css). An inline style here would override those rules.
     tabs.setAttribute('aria-label', t('hudChrome.chatWindow.move'));
     tabs.addEventListener('pointerdown', (ev) => this.onChatBoxMoveStart(ev, wrap, tabs));
     grip.addEventListener('pointerdown', (ev) => this.onChatBoxResizeStart(ev, wrap, frame));

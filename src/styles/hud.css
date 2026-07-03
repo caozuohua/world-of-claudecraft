@@ -1530,6 +1530,10 @@
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: none;
+    /* Desktop: the empty strip is a chat-box move handle (a touch-drag moves the
+       box), so suppress the browser's own touch gesture here. Mobile has no move
+       gesture and overrides this to pan-x so overflowed tabs stay swipeable. */
+    touch-action: none;
     gap: 2px;
     margin-left: 6px;
     margin-bottom: -1px;
