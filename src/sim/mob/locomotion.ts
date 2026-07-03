@@ -40,7 +40,7 @@ import {
   NYTHRAXIS_BOSS_ID,
   type Vec3,
 } from '../types';
-import { groundHeight, WATER_LEVEL } from '../world';
+import { groundHeight, waterLevel } from '../world';
 import { rallyFleeingAllies } from './social_aggro';
 import { isTrivialTo, retargetMob, tickForcedTarget, updateMobTarget } from './targeting';
 import { emitMobYell } from './yells';
@@ -617,7 +617,7 @@ export function blockedTowardSpawn(ctx: SimContext, e: Entity, dest: Vec3): bool
   const nz = e.pos.z + Math.cos(facing) * step;
   if (
     !ctx.mobCanSwim(MOBS[e.templateId]) &&
-    groundHeight(nx, nz, ctx.cfg.seed) < WATER_LEVEL - SWIM_DEPTH
+    groundHeight(nx, nz, ctx.cfg.seed) < waterLevel() - SWIM_DEPTH
   )
     return true;
   const resolved = ctx.resolveMovePoint(nx, nz, BODY_RADIUS, e);

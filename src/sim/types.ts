@@ -1262,7 +1262,7 @@ export interface DungeonDef {
   leaveText: string;
 }
 
-export type BiomeId = 'vale' | 'marsh' | 'peaks';
+export type BiomeId = 'vale' | 'marsh' | 'peaks' | 'beach' | 'desert' | 'volcano' | 'cave';
 
 export interface ZoneDef {
   id: string;
@@ -1900,6 +1900,91 @@ export interface MoveInput {
   jump: boolean;
 }
 
+// A bounded height edit (the sculpt brush stamp), applied inside terrainHeight()
+// exactly like MIREFEN_IMPACT_CRATER. Pure data, no RNG: the sim and renderer both
+// sample it so collision and the ground mesh stay in agreement. Stamps apply in
+// array order: `add` (default) adds `delta`, weighted by the falloff; `level`
+// pulls the height toward the ABSOLUTE height `delta`, weighted by the falloff
+// (the flatten/plateau brush; full weight means h becomes exactly `delta`).
+export interface HeightStamp {
+  x: number;
+  z: number;
+  radius: number;
+  delta: number; // add: +raise / -lower at the centre; level: target height
+  falloff: 'smooth' | 'flat';
+  mode?: 'add' | 'level'; // absent = 'add' (v1 documents)
+}
+
+// A freely placed GLB model the editor drops onto the world. Rendered by the
+// placed-asset instancer (never a Sim entity); when `collideRadius` is set (> 0)
+// the sim additionally derives a static circle collider from this record, so
+// what-you-see-is-what-you-collide-with holds for editor placements too.
+// Carried on WorldContent so both sides read the SAME record.
+export interface PlacedAsset {
+  path: string; // public GLB url, e.g. "/models/props/well.glb"
+  x: number;
+  z: number;
+  rotY: number; // radians
+  scale: number;
+  // Circle collider radius in yards (already scaled), or absent/0 for walk-through.
+  collideRadius?: number;
+}
+
+// An invisible blocker wall (editor-authored, custom maps only): a world-space
+// XZ segment the sim turns into a fence-width OBB collider at playtest. Pure
+// collision data; there is NO render mesh for it in the shipped game, so map
+// makers can wall off areas without visible geometry.
+export interface BlockerDef {
+  x1: number;
+  z1: number;
+  x2: number;
+  z2: number;
+}
+
+// A coarse 2D biome paint grid (editor). Each cell holds a biome id (0=vale,
+// 1=marsh, 2=peaks) or 255 for unpainted. Where painted, it overrides both the
+// terrain SHAPE (sim, in shapeAt) and the ground COLOR (render). Absent for the
+// built-in world, so terrain stays byte-identical.
+export interface BiomePaint {
+  cell: number; // cell size in yards
+  cols: number;
+  rows: number;
+  originX: number; // world x of the grid's (col 0) edge
+  originZ: number; // world z of the grid's (row 0) edge
+  ids: number[]; // length cols*rows; 0/1/2 = biome, 255 = unpainted
+}
+
+// A swappable world definition: the spatial + content data the terrain function
+// and the Sim spawn loop derive a playable world from. The built-in 3-zone world
+// is one of these (data.ts BUILTIN_WORLD); the map editor produces custom ones for
+// offline play-testing. Injected via SimConfig.world plus the data.ts active-content
+// registry (both, because terrain reaches the data by module global and the Sim
+// reaches it by config). CAMPS order is a determinism contract: append, never
+// reorder, since the Sim draws the shared Rng in array order.
+export interface WorldContent {
+  zones: ZoneDef[];
+  camps: CampDef[];
+  npcs: Record<string, NpcDef>;
+  groundObjects: GroundObjectDef[];
+  roads: { x: number; z: number }[][];
+  props: ZonePropsDef;
+  playerStart: { x: number; z: number };
+  // Heightfield edits applied inside terrainHeight(). Absent/empty for the
+  // built-in world, so its heightfield stays byte-identical.
+  terrainEdits?: HeightStamp[];
+  // Freely placed GLB models (editor). Rendered by the placed-asset instancer;
+  // records with collideRadius also feed the sim's static colliders.
+  placements?: PlacedAsset[];
+  // Invisible blocker walls (editor). Collision-only OBBs in the sim's static
+  // colliders; never rendered. Absent for the built-in world.
+  blockers?: BlockerDef[];
+  // 2D biome paint overriding terrain shape (sim) and color (render).
+  biomePaint?: BiomePaint;
+  // Water surface height for this map; absent = the built-in WATER_LEVEL (-4.5).
+  // Read through waterLevel() in src/sim/world.ts, never directly.
+  waterLevel?: number;
+}
+
 export interface SimConfig {
   seed: number;
   playerClass: PlayerClass;
@@ -1913,6 +1998,11 @@ export interface SimConfig {
   // authoritative server uses its realm-local 3 AM daily reset; offline/headless omit
   // this and fall back to a flat 24h day. Keeps the time zone out of the sim core.
   raidResetMs?: (nowMs: number) => number;
+  // Offline play-test: a custom world to run instead of the built-in one. The Sim
+  // ctor reads spawns from here; render/terrain read it via the data.ts registry,
+  // so callers that set this MUST also call setActiveWorldContent() with content
+  // whose terrain-relevant fields are identical (see the sim.ts ctor invariant).
+  world?: WorldContent;
 }
 
 export function emptyMoveInput(): MoveInput {
