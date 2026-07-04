@@ -1287,7 +1287,7 @@ describe('client HTML shell', () => {
     const more = afterGrid.indexOf('id="mobile-more"');
 
     // The 4 core, frequently-pressed verbs live inside #mobile-combat-grid...
-    expect(primaryButtons).toHaveLength(7);
+    expect(primaryButtons).toHaveLength(8);
     expect(attack).toBeGreaterThanOrEqual(0);
     expect(jump).toBeGreaterThan(attack);
     expect(target).toBeGreaterThan(jump);
@@ -1301,27 +1301,27 @@ describe('client HTML shell', () => {
 
     // The cluster anchors to the corner above where the thumb rests, not the
     // old dead-center strip (left: 50%) -- across every responsive breakpoint.
-    // It's now an orbital layout (Attack the "sun", Jump/Target/Use orbiting
-    // it), not a row or a column, and there's no camera joystick to clear
-    // anymore (swipe-drag on canvas replaced it).
+    // It's now a flat row (Attack the "sun" plus Jump/Target/Use laid out flat
+    // beside it), not an orbit or a column, and there's no camera joystick to
+    // clear anymore (swipe-drag on canvas replaced it).
     expect(hudMobileCss).not.toContain('left: 50%;\n    bottom: calc(3px');
     expect(hudMobileCss).toContain(
       'body.mobile-touch #mobile-combat-controls {\n    position: absolute;\n    left: auto;\n    right: max(32px, calc(env(safe-area-inset-right) + 18px));\n    bottom: calc(22px + env(safe-area-inset-bottom));\n    z-index: 30;\n  }',
     );
     expect(hudMobileCss).toContain(
-      'body.mobile-touch #mobile-combat-grid {\n    position: relative;\n    width: 112px;\n    height: 112px;',
+      'body.mobile-touch #mobile-combat-grid {\n    position: relative;\n    width: 230px;\n    height: 62px;',
     );
     expect(hudMobileCss).toContain(
       'body.mobile-touch #mobile-attack-nearest {\n    width: 58px;\n    height: 58px;\n    right: 0;\n    bottom: 0;',
     );
     expect(hudMobileCss).toContain(
-      'body.mobile-touch #mobile-jump {\n    right: 4px;\n    bottom: 62px;\n  }',
+      'body.mobile-touch #mobile-interact {\n    width: 50px;\n    height: 50px;\n    right: 64px;\n    bottom: 4px;\n  }',
     );
     expect(hudMobileCss).toContain(
-      'body.mobile-touch #mobile-target {\n    right: 45px;\n    bottom: 45px;\n  }',
+      'body.mobile-touch #mobile-target {\n    width: 50px;\n    height: 50px;\n    right: 120px;\n    bottom: 4px;\n  }',
     );
     expect(hudMobileCss).toContain(
-      'body.mobile-touch #mobile-interact {\n    right: 62px;\n    bottom: 4px;\n  }',
+      'body.mobile-touch #mobile-jump {\n    width: 50px;\n    height: 50px;\n    right: 176px;\n    bottom: 4px;\n  }',
     );
     expect(hudMobileCss).toContain('body.mobile-touch.mobile-left-handed #mobile-attack-nearest {');
     // Autorun/Chat/More are fixed-positioned out of the grid into their own
@@ -1347,22 +1347,59 @@ describe('client HTML shell', () => {
     expect(mobileControlsTs).toContain('this.callbacks.onRecenterCamera();');
   });
 
-  it('keeps the mobile spell bar as a vertical, corner-anchored, scrollable column', () => {
+  it('pages the mobile spell bar as a ring around Attack instead of a long bar', () => {
     expect(hudMobileCss).toContain('width: min(30vw, 132px);');
     expect(hudMobileCss).toContain('min-width: 112px;');
     expect(hudMobileCss).toContain('height: min(36vh, 172px);');
     expect(hudMobileCss).toContain('body.mobile-touch #actionbar {\n    position: fixed;');
-    expect(hudMobileCss).toContain('flex-direction: column-reverse;');
-    expect(hudMobileCss).toContain('overflow-x: hidden;\n    overflow-y: auto;');
-    expect(hudMobileCss).toContain('touch-action: pan-y;');
     expect(hudMobileCss).toContain(
-      'body.mobile-touch .action-btn {\n    width: 42px;\n    height: 42px;\n    flex: 0 0 42px;\n    border-radius: 50%;\n  }',
+      'body.mobile-touch .action-btn {\n    position: absolute;\n    width: 32px;\n    height: 32px;\n    border-radius: 50%;',
+    );
+    expect(hudMobileCss).toContain(
+      '.action-btn.hotbar-ring-0:not(.mobile-hotbar-page-hidden):not(.empty)',
+    );
+    expect(hudMobileCss).toContain(
+      '.action-btn.hotbar-ring-1:not(.mobile-hotbar-page-hidden):not(.empty)',
+    );
+    expect(hudMobileCss).toContain(
+      '.action-btn.hotbar-ring-2:not(.mobile-hotbar-page-hidden):not(.empty)',
+    );
+    expect(hudMobileCss).toContain(
+      '.action-btn.hotbar-ring-3:not(.mobile-hotbar-page-hidden):not(.empty)',
+    );
+    // #mobile-combat-controls #mobile-hotbar-page (2 IDs), not a bare ID: a
+    // bare #mobile-hotbar-page loses its width/height to the icon-only
+    // #mobile-combat-controls .mobile-btn rule (1 ID + 1 class still outranks
+    // 1 bare ID) -- the same specificity trap the left-handed joystick swap
+    // hit earlier in this file.
+    expect(hudMobileCss).toContain(
+      'body.mobile-touch #mobile-combat-controls #mobile-hotbar-page {',
+    );
+    // #mobile-controls is click-through by default; every interactive child
+    // (including this one) must re-enable pointer-events individually.
+    expect(hudMobileCss).toMatch(
+      /#mobile-combat-controls #mobile-hotbar-page \{[^}]*pointer-events: auto;[^}]*\}/,
     );
     expect(hudMobileCss).toContain(
       'body.mobile-touch.mobile-hotbar-dragging #actionbar {\n    touch-action: none;\n  }',
     );
     expect(hudMobileCss).toContain('body.mobile-touch .action-btn.mobile-drag-source');
     expect(hudMobileCss).toContain('body.mobile-touch.mobile-left-handed #actionbar {');
+    expect(hudMobileCss).toContain(
+      'body.mobile-touch.mobile-left-handed #mobile-combat-controls #mobile-hotbar-page {',
+    );
+
+    // Hud.cycleMobileHotbarPage pages a fixed 4-slot ring across the 11 real
+    // ability slots; drag-to-reorder (bindMobileActionDrag) is untouched.
+    expect(hudTs).toContain('private static readonly MOBILE_HOTBAR_PAGE_SIZE = 4;');
+    expect(hudTs).toContain('cycleMobileHotbarPage(): void {');
+    expect(hudTs).toContain('private applyMobileHotbarPage(): void {');
+    expect(html).toContain('id="mobile-hotbar-page"');
+    expect(mobileControlsTs).toContain('onCycleHotbarPage(): void;');
+    expect(mobileControlsTs).toContain(
+      "this.bindButton('mobile-hotbar-page', () => this.callbacks.onCycleHotbarPage());",
+    );
+    expect(mainTs).toContain('onCycleHotbarPage: () => hud.cycleMobileHotbarPage(),');
   });
 
   it('seeds druid form bars with the form kit, and only clones normal for rogue stealth', () => {

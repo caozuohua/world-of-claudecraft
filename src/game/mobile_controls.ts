@@ -119,6 +119,8 @@ export interface MobileControlCallbacks {
   onMusic(): boolean;
   /** Double-tap the camera joystick: snap the camera back behind the character. */
   onRecenterCamera(): void;
+  /** Cycle which page of the mobile hotbar's orbit ring is showing. */
+  onCycleHotbarPage(): void;
 }
 
 /**
@@ -387,6 +389,7 @@ export class MobileControls {
     this.bindButton('mobile-jump', () => this.callbacks.onJump(), { pressFirst: true });
     this.bindButton('mobile-target', () => this.callbacks.onTarget());
     this.bindButton('mobile-interact', () => this.callbacks.onInteract());
+    this.bindButton('mobile-hotbar-page', () => this.callbacks.onCycleHotbarPage());
     this.bindChatButton('mobile-chat');
     this.bindButton('mobile-menu', () => this.callbacks.onMenu());
     this.bindButton('mobile-social', () => this.callbacks.onSocial());

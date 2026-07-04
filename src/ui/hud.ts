@@ -724,6 +724,8 @@ export class Hud {
   // keybind dispatch all work across both with no per-bar bookkeeping.
   private static readonly PRIMARY_BAR_ABILITY_SLOTS = 11;
   private static readonly BAR_ABILITY_SLOTS = 22;
+  private static readonly MOBILE_HOTBAR_PAGE_SIZE = 4;
+  private mobileHotbarPage = 0;
   private static readonly PET_AUTOCAST_TOUCH_HOLD_MS = 2000;
   private static ddSeq = 0; // monotonic id source for buildDropdown listbox/option ARIA wiring
   private static readonly FORM_TOGGLE_IDS = new Set(['bear_form', 'cat_form', 'travel_form']); // shift toggles, castable in any form
@@ -4691,6 +4693,35 @@ export class Hud {
       },
       (iconKey) => this.actionBarIconBg(iconKey),
     );
+    this.applyMobileHotbarPage();
+  }
+
+  /** Cycles which page of the mobile hotbar's orbit ring is showing (the
+   *  #mobile-hotbar-page toggle button). Event-driven, not per-frame, so it
+   *  writes the DOM directly rather than through the elided writer facet. */
+  cycleMobileHotbarPage(): void {
+    const pages = Math.ceil(Hud.PRIMARY_BAR_ABILITY_SLOTS / Hud.MOBILE_HOTBAR_PAGE_SIZE);
+    this.mobileHotbarPage = (this.mobileHotbarPage + 1) % pages;
+    this.applyMobileHotbarPage();
+  }
+
+  /** Shows only this.mobileHotbarPage's slice of ability slots (each assigned
+   *  a fixed ring position within the page via a hotbar-ring-N class), hiding
+   *  the rest -- the touch hotbar shows a handful of "hot" slots in an orbit
+   *  around Attack at a time instead of a long scrolling strip, matching how
+   *  mobile MOBAs/action games with more skills than fit on screen page a
+   *  fixed visible set rather than cramming them all in. */
+  private applyMobileHotbarPage(): void {
+    const size = Hud.MOBILE_HOTBAR_PAGE_SIZE;
+    for (let slot = 1; slot <= Hud.PRIMARY_BAR_ABILITY_SLOTS; slot++) {
+      const btn = this.abilityButtons[slot]?.btn;
+      if (!btn) continue;
+      const index = slot - 1;
+      const page = Math.floor(index / size);
+      const ringPos = index % size;
+      btn.classList.toggle('mobile-hotbar-page-hidden', page !== this.mobileHotbarPage);
+      for (let r = 0; r < size; r++) btn.classList.toggle(`hotbar-ring-${r}`, r === ringPos);
+    }
   }
 
   // Resolve a core icon key to the slot label's background-image value. Kept on the

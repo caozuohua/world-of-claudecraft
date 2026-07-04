@@ -9,24 +9,66 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ],
+  "es_ES": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ],
+  "fr_FR": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ],
+  "fr_CA": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ],
+  "de_DE": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ],
   "ru_RU": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "nl_NL": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ],
+  "pl_PL": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ],
+  "id_ID": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ],
+  "tr_TR": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ],
+  "sv_SE": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ],
+  "vi_VN": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ],
+  "da_DK": [
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria"
+  ]
 };

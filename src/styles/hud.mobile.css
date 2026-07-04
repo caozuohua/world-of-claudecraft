@@ -254,16 +254,14 @@
     bottom: calc(22px + env(safe-area-inset-bottom));
     z-index: 30;
   }
-  /* Orbital layout: Attack is the "sun" anchored at the corner, Jump/Target/Use
-     orbit it at a fixed radius across a 90deg arc (up, upper-left, left) --
-     the only directions open when the sun sits in a screen corner. Each
-     button is placed by its OWN right/bottom edge, computed from the orbit
-     centre (Attack's centre) minus half the orbiting button's size, not by
-     flex/grid flow, since CSS has no native polar-coordinate layout. */
+  /* Flat row, not an orbit: Attack (the "sun" the ability ring below orbits)
+     sits at the very corner, with Jump/Target/Use laid out flat to its left
+     along the same bottom row -- simpler and unambiguous to reach than
+     packing them into the ring geometry too. */
   body.mobile-touch #mobile-combat-grid {
     position: relative;
-    width: 112px;
-    height: 112px;
+    width: 230px;
+    height: 62px;
     transform: scale(var(--btn-scale, 1));
     transform-origin: right bottom;
     pointer-events: none;
@@ -325,33 +323,39 @@
     color: #ffdf9c;
     border-color: #8b4e2c;
   }
-  body.mobile-touch #mobile-jump {
-    right: 4px;
-    bottom: 62px;
+  body.mobile-touch #mobile-interact {
+    width: 50px;
+    height: 50px;
+    right: 64px;
+    bottom: 4px;
   }
   body.mobile-touch #mobile-target {
-    right: 45px;
-    bottom: 45px;
+    width: 50px;
+    height: 50px;
+    right: 120px;
+    bottom: 4px;
   }
-  body.mobile-touch #mobile-interact {
-    right: 62px;
+  body.mobile-touch #mobile-jump {
+    width: 50px;
+    height: 50px;
+    right: 176px;
     bottom: 4px;
   }
   body.mobile-touch.mobile-left-handed #mobile-attack-nearest {
     right: auto;
     left: 0;
   }
-  body.mobile-touch.mobile-left-handed #mobile-jump {
+  body.mobile-touch.mobile-left-handed #mobile-interact {
     right: auto;
-    left: 4px;
+    left: 64px;
   }
   body.mobile-touch.mobile-left-handed #mobile-target {
     right: auto;
-    left: 45px;
+    left: 120px;
   }
-  body.mobile-touch.mobile-left-handed #mobile-interact {
+  body.mobile-touch.mobile-left-handed #mobile-jump {
     right: auto;
-    left: 62px;
+    left: 176px;
   }
   /* Autorun/Chat/More are the low-frequency verbs (a travel toggle and two
      menu-openers, never a split-second combat tap), so they move out of the
@@ -671,56 +675,122 @@
       transition: none;
     }
   }
-  /* The hotbar is corner-anchored and VERTICAL, not a horizontal strip across
-     the bottom-middle: a scrollable column stacked ABOVE the orbital combat
-     cluster (same corner, same right edge), so a class with a full 12-slot
-     bar never needs a wide dead-center bar to hold them. bottom offset clears
-     the ~112px-tall/wide orbit ring plus a gap. Round buttons (not the old
-     7px-radius squares) match the circular, cooldown-ring visual language
-     these games use for ability buttons. Overflow beyond the visible height
-     scrolls vertically in place -- the corner never grows past its footprint
-     the way a games-industry "just add more buttons in a row" fix would. */
+  /* The hotbar is a paged RING around Attack, not a long bar or a scrolling
+     column: only Hud.MOBILE_HOTBAR_PAGE_SIZE (4) slots show at a time,
+     arranged like planets orbiting Attack's "sun", and the
+     #mobile-hotbar-page toggle button (Hud.cycleMobileHotbarPage) pages
+     through the rest -- the same "show a handful of hot slots, page/toggle
+     for overflow" pattern mobile MOBAs and action-RPGs use once they have
+     more abilities than fit in one glance. #actionbar shares the exact same
+     right/bottom anchor as #mobile-combat-controls (see above) so each
+     .hotbar-ring-N position (assigned by Hud.applyMobileHotbarPage, see
+     hud.ts) can be expressed in the SAME local coordinate space as Attack's
+     corner position, without duplicating the anchor math. Existing
+     drag-to-reorder (bindMobileActionDrag) is unaffected: it hit-tests via
+     elementFromPoint, which does not care how slots are laid out. */
   body.mobile-touch #actionbar {
     position: fixed;
     right: max(32px, calc(env(safe-area-inset-right) + 18px));
-    bottom: calc(22px + 112px + 14px + env(safe-area-inset-bottom));
+    bottom: calc(22px + env(safe-area-inset-bottom));
     left: auto;
-    display: flex;
-    flex-direction: column-reverse;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 6px;
-    padding: 4px;
-    width: auto;
-    max-width: none;
-    min-height: 0;
-    max-height: min(200px, calc(var(--app-vh) - 320px));
+    display: block;
+    width: 150px;
+    height: 160px;
+    padding: 0;
     box-sizing: border-box;
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior-y: contain;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    border-radius: 12px;
-    background: linear-gradient(170deg, #15151fc8, #08080dd8);
+    overflow: visible;
+    background: none;
+    pointer-events: none;
     z-index: 29;
   }
   body.mobile-touch.mobile-left-handed #actionbar {
     right: auto;
     left: max(32px, calc(env(safe-area-inset-left) + 18px));
   }
-  body.mobile-touch #actionbar.many-spells {
-    grid-template-columns: none;
-  }
-  /* The second action bar is desktop-only; the mobile hotbar stays one scrollable column. */
+  /* The second action bar is desktop-only; the mobile hotbar is the one ring. */
   body.mobile-touch #actionbar2 {
     display: none;
   }
   body.mobile-touch .action-btn {
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
+    position: absolute;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
+    pointer-events: auto;
+    /* Off-ring until Hud.applyMobileHotbarPage assigns a hotbar-ring-N class;
+       an unassigned slot (beyond the 11 real ability slots) never appears. */
+    display: none;
+  }
+  body.mobile-touch .action-btn.mobile-hotbar-page-hidden {
+    display: none;
+  }
+  body.mobile-touch .action-btn.hotbar-ring-0:not(.mobile-hotbar-page-hidden):not(.empty) {
+    display: flex;
+    right: 35px;
+    bottom: 136px;
+  }
+  body.mobile-touch .action-btn.hotbar-ring-1:not(.mobile-hotbar-page-hidden):not(.empty) {
+    display: flex;
+    right: 66px;
+    bottom: 126px;
+  }
+  body.mobile-touch .action-btn.hotbar-ring-2:not(.mobile-hotbar-page-hidden):not(.empty) {
+    display: flex;
+    right: 93px;
+    bottom: 109px;
+  }
+  body.mobile-touch .action-btn.hotbar-ring-3:not(.mobile-hotbar-page-hidden):not(.empty) {
+    display: flex;
+    right: 115px;
+    bottom: 85px;
+  }
+  body.mobile-touch.mobile-left-handed
+    .action-btn.hotbar-ring-0:not(.mobile-hotbar-page-hidden):not(.empty),
+  body.mobile-touch.mobile-left-handed
+    .action-btn.hotbar-ring-1:not(.mobile-hotbar-page-hidden):not(.empty),
+  body.mobile-touch.mobile-left-handed
+    .action-btn.hotbar-ring-2:not(.mobile-hotbar-page-hidden):not(.empty),
+  body.mobile-touch.mobile-left-handed
+    .action-btn.hotbar-ring-3:not(.mobile-hotbar-page-hidden):not(.empty) {
+    right: auto;
+  }
+  body.mobile-touch.mobile-left-handed
+    .action-btn.hotbar-ring-0:not(.mobile-hotbar-page-hidden):not(.empty) {
+    left: 35px;
+  }
+  body.mobile-touch.mobile-left-handed
+    .action-btn.hotbar-ring-1:not(.mobile-hotbar-page-hidden):not(.empty) {
+    left: 66px;
+  }
+  body.mobile-touch.mobile-left-handed
+    .action-btn.hotbar-ring-2:not(.mobile-hotbar-page-hidden):not(.empty) {
+    left: 93px;
+  }
+  body.mobile-touch.mobile-left-handed
+    .action-btn.hotbar-ring-3:not(.mobile-hotbar-page-hidden):not(.empty) {
+    left: 115px;
+  }
+  /* The page toggle sits at the ring's inner hub, between the flat row and
+     the ring, distinct from both. #mobile-combat-controls .mobile-btn (the
+     icon-only 50x50 rule) outranks a bare ID selector on specificity, so the
+     size here must be pinned via the same #mobile-combat-controls prefix or
+     it silently loses to 50x50 -- the same specificity trap the left-handed
+     joystick swap hit earlier in this file. */
+  body.mobile-touch #mobile-combat-controls #mobile-hotbar-page {
+    position: fixed;
+    right: calc(max(32px, env(safe-area-inset-right) + 18px) + 38px);
+    bottom: calc(22px + env(safe-area-inset-bottom) + 70px);
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    z-index: 29;
+    /* #mobile-controls is click-through by default (pointer-events: none);
+       every interactive child re-enables it individually. */
+    pointer-events: auto;
+  }
+  body.mobile-touch.mobile-left-handed #mobile-combat-controls #mobile-hotbar-page {
+    right: auto;
+    left: calc(max(32px, env(safe-area-inset-left) + 18px) + 38px);
   }
   body.mobile-touch.mobile-hotbar-dragging #actionbar {
     touch-action: none;
@@ -1998,18 +2068,10 @@
       font-size: 9px;
     }
     body.mobile-touch #actionbar {
-      bottom: calc(13px + 112px + 14px + env(safe-area-inset-bottom));
-      gap: 4px;
-      padding: 4px;
-      background: linear-gradient(170deg, #15151fa8, #08080db8);
+      bottom: calc(13px + env(safe-area-inset-bottom));
     }
     body.mobile-touch #actionbar.many-spells {
       grid-template-columns: none;
-    }
-    body.mobile-touch .action-btn {
-      width: 40px;
-      height: 40px;
-      flex-basis: 40px;
     }
     body.mobile-touch #xpbar {
       display: none;
