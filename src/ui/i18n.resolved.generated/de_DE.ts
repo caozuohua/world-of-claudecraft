@@ -7705,15 +7705,23 @@ export const de_DE: EnTranslations = {
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Gebundstein-Vorhut",
+        "bonus3": "Erhöht Angriffs- und Zaubertempo um 15%."
+      },
       "crownforged": {
         "name": "Kronengeschmiedete Kriegstracht",
         "bonus2": "Erhöht Angriffskraft um 40.",
-        "bonus3": "Erhöht Stärke um 15 und Ausdauer um 15."
+        "bonus3": "Erhöht Stärke um 15, Ausdauer um 15 sowie Angriffs- und Zaubertempo um 15%."
       },
       "deathlord": {
         "name": "Kriegstracht des Todesfürsten",
         "bonus2": "Erhöht Angriffskraft um 40.",
         "bonus3": "Erhöht Stärke um 15 und Ausdauer um 15."
+      },
+      "greyjaw_stalker": {
+        "name": "Ausrüstung des Greyjaw-Pirschers",
+        "bonus3": "Erhöht Angriffs- und Zaubertempo um 15%."
       },
       "necromancers": {
         "name": "Gewänder des Nekromanten",
@@ -7723,17 +7731,21 @@ export const de_DE: EnTranslations = {
       "nighttalon": {
         "name": "Nachtkrallen-Ledertracht",
         "bonus2": "Erhöht Angriffskraft um 40.",
-        "bonus3": "Erhöht Beweglichkeit um 15 und kritische Trefferchance um 2%."
+        "bonus3": "Erhöht Beweglichkeit um 15, kritische Trefferchance um 2% sowie Angriffs- und Zaubertempo um 15%."
       },
       "soulflame": {
         "name": "Seelenflammengewänder",
         "bonus2": "Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).",
-        "bonus3": "Erhöht Intelligenz um 15 und Willenskraft um 15."
+        "bonus3": "Erhöht Intelligenz um 15, Willenskraft um 15 sowie Angriffs- und Zaubertempo um 15%."
       },
       "stormcallers": {
         "name": "Gewänder des Sturmrufers",
         "bonus2": "Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).",
-        "bonus3": "Erhöht Intelligenz um 15 und Willenskraft um 15."
+        "bonus3": "Erhöht Intelligenz um 15, Willenskraft um 15 sowie Angriffs- und Zaubertempo um 15%."
+      },
+      "vale_arcanist": {
+        "name": "Ornat des Talarkanisten",
+        "bonus3": "Erhöht Angriffs- und Zaubertempo um 15%."
       },
       "wyrmshadow": {
         "name": "Wyrmschattentracht",

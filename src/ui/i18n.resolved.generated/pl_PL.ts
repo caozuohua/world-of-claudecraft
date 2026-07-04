@@ -7705,15 +7705,23 @@ export const pl_PL: EnTranslations = {
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Straż przednia spętanego kamienia",
+        "bonus3": "Zwiększa szybkość ataku i rzucania zaklęć o 15%."
+      },
       "crownforged": {
         "name": "Koronokuty rynsztunek bojowy",
         "bonus2": "Zwiększa siłę ataku o 40.",
-        "bonus3": "Zwiększa siłę o 15 i wytrzymałość o 15."
+        "bonus3": "Zwiększa siłę o 15, wytrzymałość o 15 oraz szybkość ataku i rzucania zaklęć o 15%."
       },
       "deathlord": {
         "name": "Rynsztunek bojowy Władcy Śmierci",
         "bonus2": "Zwiększa siłę ataku o 40.",
         "bonus3": "Zwiększa siłę o 15 i wytrzymałość o 15."
+      },
+      "greyjaw_stalker": {
+        "name": "Rynsztunek tropiciela Szaroszczękiego",
+        "bonus3": "Zwiększa szybkość ataku i rzucania zaklęć o 15%."
       },
       "necromancers": {
         "name": "Szaty nekromanty",
@@ -7723,17 +7731,21 @@ export const pl_PL: EnTranslations = {
       "nighttalon": {
         "name": "Skórzany rynsztunek Nocnego Szpona",
         "bonus2": "Zwiększa siłę ataku o 40.",
-        "bonus3": "Zwiększa zręczność o 15 i szansę na trafienie krytyczne o 2%."
+        "bonus3": "Zwiększa zręczność o 15, szansę na trafienie krytyczne o 2% oraz szybkość ataku i rzucania zaklęć o 15%."
       },
       "soulflame": {
         "name": "Szaty Płomienia Duszy",
         "bonus2": "Nie można cię odrzucić (100% odporności na odrzucenie).",
-        "bonus3": "Zwiększa intelekt o 15 i ducha o 15."
+        "bonus3": "Zwiększa intelekt o 15, ducha o 15 oraz szybkość ataku i rzucania zaklęć o 15%."
       },
       "stormcallers": {
         "name": "Szaty Przyzywacza Burz",
         "bonus2": "Nie można cię odrzucić (100% odporności na odrzucenie).",
-        "bonus3": "Zwiększa intelekt o 15 i ducha o 15."
+        "bonus3": "Zwiększa intelekt o 15, ducha o 15 oraz szybkość ataku i rzucania zaklęć o 15%."
+      },
+      "vale_arcanist": {
+        "name": "Szaty Arkanisty z Doliny",
+        "bonus3": "Zwiększa szybkość ataku i rzucania zaklęć o 15%."
       },
       "wyrmshadow": {
         "name": "Rynsztunek Cienia Żmija",

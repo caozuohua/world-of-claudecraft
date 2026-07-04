@@ -5012,12 +5012,17 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter} hat {item} an {target} zugewiesen.',
   'hudChrome.masterLoot.unassigned': '{item} wurde nicht zugewiesen und ist fuer alle frei.',
   'hudChrome.masterLoot.leaderOnly': 'Nur der Gruppenleiter kann die Beutemethode aendern.',
+  'entities.itemSets.boundstone_vanguard.name': 'Gebundstein-Vorhut',
+  'entities.itemSets.boundstone_vanguard.bonus3': 'Erhöht Angriffs- und Zaubertempo um 15%.',
   'entities.itemSets.crownforged.name': 'Kronengeschmiedete Kriegstracht',
   'entities.itemSets.crownforged.bonus2': 'Erhöht Angriffskraft um 40.',
-  'entities.itemSets.crownforged.bonus3': 'Erhöht Stärke um 15 und Ausdauer um 15.',
+  'entities.itemSets.crownforged.bonus3':
+    'Erhöht Stärke um 15, Ausdauer um 15 sowie Angriffs- und Zaubertempo um 15%.',
   'entities.itemSets.deathlord.name': 'Kriegstracht des Todesfürsten',
   'entities.itemSets.deathlord.bonus2': 'Erhöht Angriffskraft um 40.',
   'entities.itemSets.deathlord.bonus3': 'Erhöht Stärke um 15 und Ausdauer um 15.',
+  'entities.itemSets.greyjaw_stalker.name': 'Ausrüstung des Greyjaw-Pirschers',
+  'entities.itemSets.greyjaw_stalker.bonus3': 'Erhöht Angriffs- und Zaubertempo um 15%.',
   'entities.itemSets.necromancers.name': 'Gewänder des Nekromanten',
   'entities.itemSets.necromancers.bonus2':
     'Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).',
@@ -5025,15 +5030,19 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.nighttalon.name': 'Nachtkrallen-Ledertracht',
   'entities.itemSets.nighttalon.bonus2': 'Erhöht Angriffskraft um 40.',
   'entities.itemSets.nighttalon.bonus3':
-    'Erhöht Beweglichkeit um 15 und kritische Trefferchance um 2%.',
+    'Erhöht Beweglichkeit um 15, kritische Trefferchance um 2% sowie Angriffs- und Zaubertempo um 15%.',
   'entities.itemSets.soulflame.name': 'Seelenflammengewänder',
   'entities.itemSets.soulflame.bonus2':
     'Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).',
-  'entities.itemSets.soulflame.bonus3': 'Erhöht Intelligenz um 15 und Willenskraft um 15.',
+  'entities.itemSets.soulflame.bonus3':
+    'Erhöht Intelligenz um 15, Willenskraft um 15 sowie Angriffs- und Zaubertempo um 15%.',
   'entities.itemSets.stormcallers.name': 'Gewänder des Sturmrufers',
   'entities.itemSets.stormcallers.bonus2':
     'Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).',
-  'entities.itemSets.stormcallers.bonus3': 'Erhöht Intelligenz um 15 und Willenskraft um 15.',
+  'entities.itemSets.stormcallers.bonus3':
+    'Erhöht Intelligenz um 15, Willenskraft um 15 sowie Angriffs- und Zaubertempo um 15%.',
+  'entities.itemSets.vale_arcanist.name': 'Ornat des Talarkanisten',
+  'entities.itemSets.vale_arcanist.bonus3': 'Erhöht Angriffs- und Zaubertempo um 15%.',
   'entities.itemSets.wyrmshadow.name': 'Wyrmschattentracht',
   'entities.itemSets.wyrmshadow.bonus2': 'Erhöht Angriffskraft um 40.',
   'entities.itemSets.wyrmshadow.bonus3':

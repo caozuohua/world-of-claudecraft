@@ -7705,15 +7705,23 @@ export const tr_TR: EnTranslations = {
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Bağlıtaş Öncüsü",
+        "bonus3": "Saldırı ve büyü hızını %15 artırır."
+      },
       "crownforged": {
         "name": "Taçdövme savaş takımı",
         "bonus2": "Saldırı gücünü 40 artırır.",
-        "bonus3": "Gücü 15 ve dayanıklılığı 15 artırır."
+        "bonus3": "Gücü 15, dayanıklılığı 15, saldırı ve büyü hızını %15 artırır."
       },
       "deathlord": {
         "name": "Ölüm Lordu savaş takımı",
         "bonus2": "Saldırı gücünü 40 artırır.",
         "bonus3": "Gücü 15 ve dayanıklılığı 15 artırır."
+      },
+      "greyjaw_stalker": {
+        "name": "Greyjaw İzsürücü takımı",
+        "bonus3": "Saldırı ve büyü hızını %15 artırır."
       },
       "necromancers": {
         "name": "Nekromansır giysileri",
@@ -7723,17 +7731,21 @@ export const tr_TR: EnTranslations = {
       "nighttalon": {
         "name": "Gece Pençesi deri takımı",
         "bonus2": "Saldırı gücünü 40 artırır.",
-        "bonus3": "Çevikliği 15 ve kritik şansını %2 artırır."
+        "bonus3": "Çevikliği 15, kritik şansını %2, saldırı ve büyü hızını %15 artırır."
       },
       "soulflame": {
         "name": "Ruh Alevi giysileri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
-        "bonus3": "Zekayı 15 ve ruhu 15 artırır."
+        "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır."
       },
       "stormcallers": {
         "name": "Fırtına Çağıran giysileri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
-        "bonus3": "Zekayı 15 ve ruhu 15 artırır."
+        "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır."
+      },
+      "vale_arcanist": {
+        "name": "Vadi Arkanisti giysileri",
+        "bonus3": "Saldırı ve büyü hızını %15 artırır."
       },
       "wyrmshadow": {
         "name": "Wyrm Gölgesi takımı",

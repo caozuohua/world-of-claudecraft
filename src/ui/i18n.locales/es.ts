@@ -5007,12 +5007,19 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter} asigno {item} a {target}.',
   'hudChrome.masterLoot.unassigned': '{item} no fue asignado y queda libre para todos.',
   'hudChrome.masterLoot.leaderOnly': 'Solo el lider del grupo puede cambiar el metodo de botin.',
+  'entities.itemSets.boundstone_vanguard.name': 'Vanguardia Piedravínculo',
+  'entities.itemSets.boundstone_vanguard.bonus3':
+    'Aumenta la velocidad de ataque y de lanzamiento en 15%.',
   'entities.itemSets.crownforged.name': 'Equipo de batalla Forjacorona',
   'entities.itemSets.crownforged.bonus2': 'Aumenta el poder de ataque en 40.',
-  'entities.itemSets.crownforged.bonus3': 'Aumenta la fuerza en 15 y el aguante en 15.',
+  'entities.itemSets.crownforged.bonus3':
+    'Aumenta la fuerza en 15, el aguante en 15 y la velocidad de ataque y de lanzamiento en 15%.',
   'entities.itemSets.deathlord.name': 'Equipo de batalla del Señor de la Muerte',
   'entities.itemSets.deathlord.bonus2': 'Aumenta el poder de ataque en 40.',
   'entities.itemSets.deathlord.bonus3': 'Aumenta la fuerza en 15 y el aguante en 15.',
+  'entities.itemSets.greyjaw_stalker.name': 'Equipo del Acechador de Greyjaw',
+  'entities.itemSets.greyjaw_stalker.bonus3':
+    'Aumenta la velocidad de ataque y de lanzamiento en 15%.',
   'entities.itemSets.necromancers.name': 'Vestiduras del nigromante',
   'entities.itemSets.necromancers.bonus2':
     'No puedes ser empujado hacia atrás (100% de resistencia al empuje).',
@@ -5020,15 +5027,20 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.nighttalon.name': 'Atuendo de cuero Garra Nocturna',
   'entities.itemSets.nighttalon.bonus2': 'Aumenta el poder de ataque en 40.',
   'entities.itemSets.nighttalon.bonus3':
-    'Aumenta la agilidad en 15 y la probabilidad de crítico en 2%.',
+    'Aumenta la agilidad en 15, la probabilidad de crítico en 2% y la velocidad de ataque y de lanzamiento en 15%.',
   'entities.itemSets.soulflame.name': 'Vestiduras de Llama de Alma',
   'entities.itemSets.soulflame.bonus2':
     'No puedes ser empujado hacia atrás (100% de resistencia al empuje).',
-  'entities.itemSets.soulflame.bonus3': 'Aumenta el intelecto en 15 y el espíritu en 15.',
+  'entities.itemSets.soulflame.bonus3':
+    'Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%.',
   'entities.itemSets.stormcallers.name': 'Vestiduras del Invocatormentas',
   'entities.itemSets.stormcallers.bonus2':
     'No puedes ser empujado hacia atrás (100% de resistencia al empuje).',
-  'entities.itemSets.stormcallers.bonus3': 'Aumenta el intelecto en 15 y el espíritu en 15.',
+  'entities.itemSets.stormcallers.bonus3':
+    'Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%.',
+  'entities.itemSets.vale_arcanist.name': 'Vestiduras del Arcanista del Valle',
+  'entities.itemSets.vale_arcanist.bonus3':
+    'Aumenta la velocidad de ataque y de lanzamiento en 15%.',
   'entities.itemSets.wyrmshadow.name': 'Atuendo de Sombra de Vermis',
   'entities.itemSets.wyrmshadow.bonus2': 'Aumenta el poder de ataque en 40.',
   'entities.itemSets.wyrmshadow.bonus3':

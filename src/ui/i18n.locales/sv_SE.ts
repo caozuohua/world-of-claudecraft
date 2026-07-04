@@ -4900,27 +4900,37 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter} tilldelade {item} till {target}.',
   'hudChrome.masterLoot.unassigned': '{item} tilldelades inte och ar fritt for alla.',
   'hudChrome.masterLoot.leaderOnly': 'Endast gruppledaren kan andra lootmetoden.',
+  'entities.itemSets.boundstone_vanguard.name': 'Bundstens-förtrupp',
+  'entities.itemSets.boundstone_vanguard.bonus3': 'Ökar attack- och magihastighet med 15%.',
   'entities.itemSets.crownforged.name': 'Kronsmidd stridsutrustning',
   'entities.itemSets.crownforged.bonus2': 'Ökar attackkraft med 40.',
-  'entities.itemSets.crownforged.bonus3': 'Ökar styrka med 15 och uthållighet med 15.',
+  'entities.itemSets.crownforged.bonus3':
+    'Ökar styrka med 15, uthållighet med 15 samt attack- och magihastighet med 15%.',
   'entities.itemSets.deathlord.name': 'Dödsherrens stridsutrustning',
   'entities.itemSets.deathlord.bonus2': 'Ökar attackkraft med 40.',
   'entities.itemSets.deathlord.bonus3': 'Ökar styrka med 15 och uthållighet med 15.',
+  'entities.itemSets.greyjaw_stalker.name': 'Gråkäftssmygarens utrustning',
+  'entities.itemSets.greyjaw_stalker.bonus3': 'Ökar attack- och magihastighet med 15%.',
   'entities.itemSets.necromancers.name': 'Nekromantikerns skrud',
   'entities.itemSets.necromancers.bonus2':
     'Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).',
   'entities.itemSets.necromancers.bonus3': 'Ökar intellekt med 10 och uthållighet med 10.',
   'entities.itemSets.nighttalon.name': 'Nattklo läderutrustning',
   'entities.itemSets.nighttalon.bonus2': 'Ökar attackkraft med 40.',
-  'entities.itemSets.nighttalon.bonus3': 'Ökar smidighet med 15 och kritisk chans med 2%.',
+  'entities.itemSets.nighttalon.bonus3':
+    'Ökar smidighet med 15, kritisk chans med 2% samt attack- och magihastighet med 15%.',
   'entities.itemSets.soulflame.name': 'Själsflammans skrud',
   'entities.itemSets.soulflame.bonus2':
     'Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).',
-  'entities.itemSets.soulflame.bonus3': 'Ökar intellekt med 15 och ande med 15.',
+  'entities.itemSets.soulflame.bonus3':
+    'Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%.',
   'entities.itemSets.stormcallers.name': 'Stormkallarens skrud',
   'entities.itemSets.stormcallers.bonus2':
     'Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).',
-  'entities.itemSets.stormcallers.bonus3': 'Ökar intellekt med 15 och ande med 15.',
+  'entities.itemSets.stormcallers.bonus3':
+    'Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%.',
+  'entities.itemSets.vale_arcanist.name': 'Dalarkanistens skrud',
+  'entities.itemSets.vale_arcanist.bonus3': 'Ökar attack- och magihastighet med 15%.',
   'entities.itemSets.wyrmshadow.name': 'Wyrmskuggans utrustning',
   'entities.itemSets.wyrmshadow.bonus2': 'Ökar attackkraft med 40.',
   'entities.itemSets.wyrmshadow.bonus3': 'Ökar smidighet med 15 och kritisk chans med 2%.',

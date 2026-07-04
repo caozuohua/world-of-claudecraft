@@ -7705,15 +7705,23 @@ export const nl_NL: EnTranslations = {
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Bandsteen-voorhoede",
+        "bonus3": "Verhoogt aanvals- en spreuksnelheid met 15%."
+      },
       "crownforged": {
         "name": "Kroongesmede gevechtsuitrusting",
         "bonus2": "Verhoogt aanvalskracht met 40.",
-        "bonus3": "Verhoogt kracht met 15 en uithoudingsvermogen met 15."
+        "bonus3": "Verhoogt kracht met 15, uithoudingsvermogen met 15 en aanvals- en spreuksnelheid met 15%."
       },
       "deathlord": {
         "name": "Gevechtsuitrusting van de Dodenheer",
         "bonus2": "Verhoogt aanvalskracht met 40.",
         "bonus3": "Verhoogt kracht met 15 en uithoudingsvermogen met 15."
+      },
+      "greyjaw_stalker": {
+        "name": "Uitrusting van de Grijskaak-sluiper",
+        "bonus3": "Verhoogt aanvals- en spreuksnelheid met 15%."
       },
       "necromancers": {
         "name": "Gewaden van de necromant",
@@ -7723,17 +7731,21 @@ export const nl_NL: EnTranslations = {
       "nighttalon": {
         "name": "Nachtklauw leren uitrusting",
         "bonus2": "Verhoogt aanvalskracht met 40.",
-        "bonus3": "Verhoogt behendigheid met 15 en kritieke kans met 2%."
+        "bonus3": "Verhoogt behendigheid met 15, kritieke kans met 2% en aanvals- en spreuksnelheid met 15%."
       },
       "soulflame": {
         "name": "Zielenvlamgewaden",
         "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
-        "bonus3": "Verhoogt intellect met 15 en geest met 15."
+        "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%."
       },
       "stormcallers": {
         "name": "Gewaden van de Stormroeper",
         "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
-        "bonus3": "Verhoogt intellect met 15 en geest met 15."
+        "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%."
+      },
+      "vale_arcanist": {
+        "name": "Gewaden van de Dal-arcanist",
+        "bonus3": "Verhoogt aanvals- en spreuksnelheid met 15%."
       },
       "wyrmshadow": {
         "name": "Wurmschaduw-uitrusting",

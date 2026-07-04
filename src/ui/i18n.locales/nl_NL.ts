@@ -4953,12 +4953,17 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter} heeft {item} toegewezen aan {target}.',
   'hudChrome.masterLoot.unassigned': '{item} is niet toegewezen en is vrij voor iedereen.',
   'hudChrome.masterLoot.leaderOnly': 'Alleen de groepsleider kan de buitmethode wijzigen.',
+  'entities.itemSets.boundstone_vanguard.name': 'Bandsteen-voorhoede',
+  'entities.itemSets.boundstone_vanguard.bonus3': 'Verhoogt aanvals- en spreuksnelheid met 15%.',
   'entities.itemSets.crownforged.name': 'Kroongesmede gevechtsuitrusting',
   'entities.itemSets.crownforged.bonus2': 'Verhoogt aanvalskracht met 40.',
-  'entities.itemSets.crownforged.bonus3': 'Verhoogt kracht met 15 en uithoudingsvermogen met 15.',
+  'entities.itemSets.crownforged.bonus3':
+    'Verhoogt kracht met 15, uithoudingsvermogen met 15 en aanvals- en spreuksnelheid met 15%.',
   'entities.itemSets.deathlord.name': 'Gevechtsuitrusting van de Dodenheer',
   'entities.itemSets.deathlord.bonus2': 'Verhoogt aanvalskracht met 40.',
   'entities.itemSets.deathlord.bonus3': 'Verhoogt kracht met 15 en uithoudingsvermogen met 15.',
+  'entities.itemSets.greyjaw_stalker.name': 'Uitrusting van de Grijskaak-sluiper',
+  'entities.itemSets.greyjaw_stalker.bonus3': 'Verhoogt aanvals- en spreuksnelheid met 15%.',
   'entities.itemSets.necromancers.name': 'Gewaden van de necromant',
   'entities.itemSets.necromancers.bonus2':
     'Je kunt niet worden teruggeslagen (100% terugslagweerstand).',
@@ -4966,15 +4971,20 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
     'Verhoogt intellect met 10 en uithoudingsvermogen met 10.',
   'entities.itemSets.nighttalon.name': 'Nachtklauw leren uitrusting',
   'entities.itemSets.nighttalon.bonus2': 'Verhoogt aanvalskracht met 40.',
-  'entities.itemSets.nighttalon.bonus3': 'Verhoogt behendigheid met 15 en kritieke kans met 2%.',
+  'entities.itemSets.nighttalon.bonus3':
+    'Verhoogt behendigheid met 15, kritieke kans met 2% en aanvals- en spreuksnelheid met 15%.',
   'entities.itemSets.soulflame.name': 'Zielenvlamgewaden',
   'entities.itemSets.soulflame.bonus2':
     'Je kunt niet worden teruggeslagen (100% terugslagweerstand).',
-  'entities.itemSets.soulflame.bonus3': 'Verhoogt intellect met 15 en geest met 15.',
+  'entities.itemSets.soulflame.bonus3':
+    'Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%.',
   'entities.itemSets.stormcallers.name': 'Gewaden van de Stormroeper',
   'entities.itemSets.stormcallers.bonus2':
     'Je kunt niet worden teruggeslagen (100% terugslagweerstand).',
-  'entities.itemSets.stormcallers.bonus3': 'Verhoogt intellect met 15 en geest met 15.',
+  'entities.itemSets.stormcallers.bonus3':
+    'Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%.',
+  'entities.itemSets.vale_arcanist.name': 'Gewaden van de Dal-arcanist',
+  'entities.itemSets.vale_arcanist.bonus3': 'Verhoogt aanvals- en spreuksnelheid met 15%.',
   'entities.itemSets.wyrmshadow.name': 'Wurmschaduw-uitrusting',
   'entities.itemSets.wyrmshadow.bonus2': 'Verhoogt aanvalskracht met 40.',
   'entities.itemSets.wyrmshadow.bonus3': 'Verhoogt behendigheid met 15 en kritieke kans met 2%.',

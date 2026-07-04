@@ -7705,15 +7705,23 @@ export const vi_VN: EnTranslations = {
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Bộ Tiên Phong Đá Trói",
+        "bonus3": "Tăng tốc độ tấn công cùng thi triển thêm 15%."
+      },
       "crownforged": {
         "name": "Bộ chiến Crownforged",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
-        "bonus3": "Tăng sức mạnh thêm 15 và thể lực thêm 15."
+        "bonus3": "Tăng sức mạnh thêm 15, thể lực thêm 15 và tốc độ tấn công cùng thi triển thêm 15%."
       },
       "deathlord": {
         "name": "Bộ chiến Deathlord",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
         "bonus3": "Tăng sức mạnh thêm 15 và thể lực thêm 15."
+      },
+      "greyjaw_stalker": {
+        "name": "Bộ Kẻ Rình Rập Greyjaw",
+        "bonus3": "Tăng tốc độ tấn công cùng thi triển thêm 15%."
       },
       "necromancers": {
         "name": "Áo choàng pháp sư gọi hồn",
@@ -7723,17 +7731,21 @@ export const vi_VN: EnTranslations = {
       "nighttalon": {
         "name": "Bộ da Móng Đêm",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
-        "bonus3": "Tăng nhanh nhẹn thêm 15 và tỉ lệ chí mạng thêm 2%."
+        "bonus3": "Tăng nhanh nhẹn thêm 15, tỉ lệ chí mạng thêm 2% và tốc độ tấn công cùng thi triển thêm 15%."
       },
       "soulflame": {
         "name": "Áo choàng Lửa Linh Hồn",
         "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
-        "bonus3": "Tăng trí tuệ thêm 15 và tinh thần thêm 15."
+        "bonus3": "Tăng trí tuệ thêm 15, tinh thần thêm 15 và tốc độ tấn công cùng thi triển thêm 15%."
       },
       "stormcallers": {
         "name": "Áo choàng Gọi Bão",
         "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
-        "bonus3": "Tăng trí tuệ thêm 15 và tinh thần thêm 15."
+        "bonus3": "Tăng trí tuệ thêm 15, tinh thần thêm 15 và tốc độ tấn công cùng thi triển thêm 15%."
+      },
+      "vale_arcanist": {
+        "name": "Bộ Arcanist Thung Khê",
+        "bonus3": "Tăng tốc độ tấn công cùng thi triển thêm 15%."
       },
       "wyrmshadow": {
         "name": "Bộ Bóng Wyrm",

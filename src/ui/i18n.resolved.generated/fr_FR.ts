@@ -7705,15 +7705,23 @@ export const fr_FR: EnTranslations = {
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Avant-garde de pierre-liée",
+        "bonus3": "Augmente la vitesse d'attaque et d'incantation de 15%."
+      },
       "crownforged": {
         "name": "Tenue de guerre Couronneforge",
         "bonus2": "Augmente la puissance d'attaque de 40.",
-        "bonus3": "Augmente la force de 15 et l'endurance de 15."
+        "bonus3": "Augmente la force de 15, l'endurance de 15 et la vitesse d'attaque et d'incantation de 15%."
       },
       "deathlord": {
         "name": "Tenue de guerre du seigneur de la mort",
         "bonus2": "Augmente la puissance d'attaque de 40.",
         "bonus3": "Augmente la force de 15 et l'endurance de 15."
+      },
+      "greyjaw_stalker": {
+        "name": "Équipement du traqueur de Greyjaw",
+        "bonus3": "Augmente la vitesse d'attaque et d'incantation de 15%."
       },
       "necromancers": {
         "name": "Robe du nécromancien",
@@ -7723,17 +7731,21 @@ export const fr_FR: EnTranslations = {
       "nighttalon": {
         "name": "Tenue de cuir Serre-nuit",
         "bonus2": "Augmente la puissance d'attaque de 40.",
-        "bonus3": "Augmente l’agilité de 15 et les chances de critique de 2%."
+        "bonus3": "Augmente l'agilité de 15, les chances de critique de 2% et la vitesse d'attaque et d'incantation de 15%."
       },
       "soulflame": {
         "name": "Robe de Flamme d’âme",
         "bonus2": "Vous ne pouvez pas être projeté en arrière (100% de résistance à la projection).",
-        "bonus3": "Augmente l'intelligence de 15 et l'esprit de 15."
+        "bonus3": "Augmente l'intelligence de 15, l'esprit de 15 et la vitesse d'attaque et d'incantation de 15%."
       },
       "stormcallers": {
         "name": "Robe de l’Appel-tempête",
         "bonus2": "Vous ne pouvez pas être projeté en arrière (100% de résistance à la projection).",
-        "bonus3": "Augmente l'intelligence de 15 et l'esprit de 15."
+        "bonus3": "Augmente l'intelligence de 15, l'esprit de 15 et la vitesse d'attaque et d'incantation de 15%."
+      },
+      "vale_arcanist": {
+        "name": "Tenue de l'arcaniste du Val",
+        "bonus3": "Augmente la vitesse d'attaque et d'incantation de 15%."
       },
       "wyrmshadow": {
         "name": "Tenue d’Ombre-drake",

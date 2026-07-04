@@ -7705,15 +7705,23 @@ export const pt_BR: EnTranslations = {
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Vanguarda Pedra-vínculo",
+        "bonus3": "Aumenta a velocidade de ataque e de lançamento em 15%."
+      },
       "crownforged": {
         "name": "Traje de batalha Forjacoroa",
         "bonus2": "Aumenta o poder de ataque em 40.",
-        "bonus3": "Aumenta a força em 15 e o vigor em 15."
+        "bonus3": "Aumenta a força em 15, o vigor em 15 e a velocidade de ataque e de lançamento em 15%."
       },
       "deathlord": {
         "name": "Traje de batalha do Senhor da Morte",
         "bonus2": "Aumenta o poder de ataque em 40.",
         "bonus3": "Aumenta a força em 15 e o vigor em 15."
+      },
+      "greyjaw_stalker": {
+        "name": "Equipamento do Espreitador de Greyjaw",
+        "bonus3": "Aumenta a velocidade de ataque e de lançamento em 15%."
       },
       "necromancers": {
         "name": "Vestes do necromante",
@@ -7723,17 +7731,21 @@ export const pt_BR: EnTranslations = {
       "nighttalon": {
         "name": "Traje de couro Garranoite",
         "bonus2": "Aumenta o poder de ataque em 40.",
-        "bonus3": "Aumenta a agilidade em 15 e a chance de crítico em 2%."
+        "bonus3": "Aumenta a agilidade em 15, a chance de crítico em 2% e a velocidade de ataque e de lançamento em 15%."
       },
       "soulflame": {
         "name": "Vestes de Chama da Alma",
         "bonus2": "Você não pode ser repelido (100% de resistência a repulsão).",
-        "bonus3": "Aumenta o intelecto em 15 e o espírito em 15."
+        "bonus3": "Aumenta o intelecto em 15, o espírito em 15 e a velocidade de ataque e de lançamento em 15%."
       },
       "stormcallers": {
         "name": "Vestes do Chamatormentas",
         "bonus2": "Você não pode ser repelido (100% de resistência a repulsão).",
-        "bonus3": "Aumenta o intelecto em 15 e o espírito em 15."
+        "bonus3": "Aumenta o intelecto em 15, o espírito em 15 e a velocidade de ataque e de lançamento em 15%."
+      },
+      "vale_arcanist": {
+        "name": "Vestes do Arcanista do Vale",
+        "bonus3": "Aumenta a velocidade de ataque e de lançamento em 15%."
       },
       "wyrmshadow": {
         "name": "Traje Sombraverme",

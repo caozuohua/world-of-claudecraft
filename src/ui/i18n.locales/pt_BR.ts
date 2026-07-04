@@ -4972,27 +4972,40 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter} atribuiu {item} a {target}.',
   'hudChrome.masterLoot.unassigned': '{item} nao foi atribuido e esta livre para todos.',
   'hudChrome.masterLoot.leaderOnly': 'Somente o lider do grupo pode alterar o metodo de saque.',
+  'entities.itemSets.boundstone_vanguard.name': 'Vanguarda Pedra-vínculo',
+  'entities.itemSets.boundstone_vanguard.bonus3':
+    'Aumenta a velocidade de ataque e de lançamento em 15%.',
   'entities.itemSets.crownforged.name': 'Traje de batalha Forjacoroa',
   'entities.itemSets.crownforged.bonus2': 'Aumenta o poder de ataque em 40.',
-  'entities.itemSets.crownforged.bonus3': 'Aumenta a força em 15 e o vigor em 15.',
+  'entities.itemSets.crownforged.bonus3':
+    'Aumenta a força em 15, o vigor em 15 e a velocidade de ataque e de lançamento em 15%.',
   'entities.itemSets.deathlord.name': 'Traje de batalha do Senhor da Morte',
   'entities.itemSets.deathlord.bonus2': 'Aumenta o poder de ataque em 40.',
   'entities.itemSets.deathlord.bonus3': 'Aumenta a força em 15 e o vigor em 15.',
+  'entities.itemSets.greyjaw_stalker.name': 'Equipamento do Espreitador de Greyjaw',
+  'entities.itemSets.greyjaw_stalker.bonus3':
+    'Aumenta a velocidade de ataque e de lançamento em 15%.',
   'entities.itemSets.necromancers.name': 'Vestes do necromante',
   'entities.itemSets.necromancers.bonus2':
     'Você não pode ser repelido (100% de resistência a repulsão).',
   'entities.itemSets.necromancers.bonus3': 'Aumenta o intelecto em 10 e o vigor em 10.',
   'entities.itemSets.nighttalon.name': 'Traje de couro Garranoite',
   'entities.itemSets.nighttalon.bonus2': 'Aumenta o poder de ataque em 40.',
-  'entities.itemSets.nighttalon.bonus3': 'Aumenta a agilidade em 15 e a chance de crítico em 2%.',
+  'entities.itemSets.nighttalon.bonus3':
+    'Aumenta a agilidade em 15, a chance de crítico em 2% e a velocidade de ataque e de lançamento em 15%.',
   'entities.itemSets.soulflame.name': 'Vestes de Chama da Alma',
   'entities.itemSets.soulflame.bonus2':
     'Você não pode ser repelido (100% de resistência a repulsão).',
-  'entities.itemSets.soulflame.bonus3': 'Aumenta o intelecto em 15 e o espírito em 15.',
+  'entities.itemSets.soulflame.bonus3':
+    'Aumenta o intelecto em 15, o espírito em 15 e a velocidade de ataque e de lançamento em 15%.',
   'entities.itemSets.stormcallers.name': 'Vestes do Chamatormentas',
   'entities.itemSets.stormcallers.bonus2':
     'Você não pode ser repelido (100% de resistência a repulsão).',
-  'entities.itemSets.stormcallers.bonus3': 'Aumenta o intelecto em 15 e o espírito em 15.',
+  'entities.itemSets.stormcallers.bonus3':
+    'Aumenta o intelecto em 15, o espírito em 15 e a velocidade de ataque e de lançamento em 15%.',
+  'entities.itemSets.vale_arcanist.name': 'Vestes do Arcanista do Vale',
+  'entities.itemSets.vale_arcanist.bonus3':
+    'Aumenta a velocidade de ataque e de lançamento em 15%.',
   'entities.itemSets.wyrmshadow.name': 'Traje Sombraverme',
   'entities.itemSets.wyrmshadow.bonus2': 'Aumenta o poder de ataque em 40.',
   'entities.itemSets.wyrmshadow.bonus3': 'Aumenta a agilidade em 15 e a chance de crítico em 2%.',

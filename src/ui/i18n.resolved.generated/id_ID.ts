@@ -7705,15 +7705,23 @@ export const id_ID: EnTranslations = {
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Garda Depan Batu Terikat",
+        "bonus3": "Meningkatkan kecepatan serangan dan rapal sebesar 15%."
+      },
       "crownforged": {
         "name": "Perlengkapan tempur Tempa Mahkota",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
-        "bonus3": "Meningkatkan kekuatan sebesar 15 dan stamina sebesar 15."
+        "bonus3": "Meningkatkan kekuatan sebesar 15, stamina sebesar 15, serta kecepatan serangan dan rapal sebesar 15%."
       },
       "deathlord": {
         "name": "Perlengkapan tempur Penguasa Maut",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
         "bonus3": "Meningkatkan kekuatan sebesar 15 dan stamina sebesar 15."
+      },
+      "greyjaw_stalker": {
+        "name": "Perlengkapan Penguntit Greyjaw",
+        "bonus3": "Meningkatkan kecepatan serangan dan rapal sebesar 15%."
       },
       "necromancers": {
         "name": "Jubah ahli nujum",
@@ -7723,17 +7731,21 @@ export const id_ID: EnTranslations = {
       "nighttalon": {
         "name": "Perlengkapan kulit Cakar Malam",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
-        "bonus3": "Meningkatkan kelincahan sebesar 15 dan peluang kritis sebesar 2%."
+        "bonus3": "Meningkatkan kelincahan sebesar 15, peluang kritis sebesar 2%, serta kecepatan serangan dan rapal sebesar 15%."
       },
       "soulflame": {
         "name": "Jubah Api Jiwa",
         "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
-        "bonus3": "Meningkatkan kecerdasan sebesar 15 dan roh sebesar 15."
+        "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%."
       },
       "stormcallers": {
         "name": "Jubah Pemanggil Badai",
         "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
-        "bonus3": "Meningkatkan kecerdasan sebesar 15 dan roh sebesar 15."
+        "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%."
+      },
+      "vale_arcanist": {
+        "name": "Perlengkapan Arkanis Lembah",
+        "bonus3": "Meningkatkan kecepatan serangan dan rapal sebesar 15%."
       },
       "wyrmshadow": {
         "name": "Perlengkapan Bayangan Wyrm",

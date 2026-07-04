@@ -4981,12 +4981,18 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter} ha assegnato {item} a {target}.',
   'hudChrome.masterLoot.unassigned': '{item} non e stato assegnato ed e libero per tutti.',
   'hudChrome.masterLoot.leaderOnly': 'Solo il capogruppo puo cambiare il metodo bottino.',
+  'entities.itemSets.boundstone_vanguard.name': 'Avanguardia Pietrvincolo',
+  'entities.itemSets.boundstone_vanguard.bonus3':
+    "Aumenta la velocità d'attacco e di lancio del 15%.",
   'entities.itemSets.crownforged.name': 'Tenuta da battaglia Forgiacorona',
   'entities.itemSets.crownforged.bonus2': "Aumenta la potenza d'attacco di 40.",
-  'entities.itemSets.crownforged.bonus3': 'Aumenta la forza di 15 e la vigoria di 15.',
+  'entities.itemSets.crownforged.bonus3':
+    "Aumenta la forza di 15, la vigoria di 15 e la velocità d'attacco e di lancio del 15%.",
   'entities.itemSets.deathlord.name': 'Tenuta da battaglia del Signore della Morte',
   'entities.itemSets.deathlord.bonus2': "Aumenta la potenza d'attacco di 40.",
   'entities.itemSets.deathlord.bonus3': 'Aumenta la forza di 15 e la vigoria di 15.',
+  'entities.itemSets.greyjaw_stalker.name': 'Equipaggiamento del Braccatore di Greyjaw',
+  'entities.itemSets.greyjaw_stalker.bonus3': "Aumenta la velocità d'attacco e di lancio del 15%.",
   'entities.itemSets.necromancers.name': 'Vesti del negromante',
   'entities.itemSets.necromancers.bonus2':
     'Non puoi essere respinto (100% di resistenza alla respinta).',
@@ -4994,15 +5000,19 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.nighttalon.name': 'Tenuta di cuoio Artiglio Notturno',
   'entities.itemSets.nighttalon.bonus2': "Aumenta la potenza d'attacco di 40.",
   'entities.itemSets.nighttalon.bonus3':
-    'Aumenta l’agilità di 15 e la probabilità di critico del 2%.',
+    "Aumenta l'agilità di 15, la probabilità di critico del 2% e la velocità d'attacco e di lancio del 15%.",
   'entities.itemSets.soulflame.name': 'Vesti Fiamma dell’Anima',
   'entities.itemSets.soulflame.bonus2':
     'Non puoi essere respinto (100% di resistenza alla respinta).',
-  'entities.itemSets.soulflame.bonus3': "Aumenta l'intelletto di 15 e lo spirito di 15.",
+  'entities.itemSets.soulflame.bonus3':
+    "Aumenta l'intelletto di 15, lo spirito di 15 e la velocità d'attacco e di lancio del 15%.",
   'entities.itemSets.stormcallers.name': 'Vesti del Chiamatempeste',
   'entities.itemSets.stormcallers.bonus2':
     'Non puoi essere respinto (100% di resistenza alla respinta).',
-  'entities.itemSets.stormcallers.bonus3': "Aumenta l'intelletto di 15 e lo spirito di 15.",
+  'entities.itemSets.stormcallers.bonus3':
+    "Aumenta l'intelletto di 15, lo spirito di 15 e la velocità d'attacco e di lancio del 15%.",
+  'entities.itemSets.vale_arcanist.name': "Tenuta dell'Arcanista della Valle",
+  'entities.itemSets.vale_arcanist.bonus3': "Aumenta la velocità d'attacco e di lancio del 15%.",
   'entities.itemSets.wyrmshadow.name': 'Tenuta Ombra del Dragone',
   'entities.itemSets.wyrmshadow.bonus2': "Aumenta la potenza d'attacco di 40.",
   'entities.itemSets.wyrmshadow.bonus3':

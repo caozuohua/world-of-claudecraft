@@ -7705,15 +7705,23 @@ export const da_DK: EnTranslations = {
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Bundstens-fortrop",
+        "bonus3": "Øger angrebs- og magihastighed med 15%."
+      },
       "crownforged": {
         "name": "Kronesmedet kampudstyr",
         "bonus2": "Øger angrebskraft med 40.",
-        "bonus3": "Øger styrke med 15 og udholdenhed med 15."
+        "bonus3": "Øger styrke med 15, udholdenhed med 15 og angrebs- og magihastighed med 15%."
       },
       "deathlord": {
         "name": "Dødsherrens kampudstyr",
         "bonus2": "Øger angrebskraft med 40.",
         "bonus3": "Øger styrke med 15 og udholdenhed med 15."
+      },
+      "greyjaw_stalker": {
+        "name": "Gråkæbe-jægerens udstyr",
+        "bonus3": "Øger angrebs- og magihastighed med 15%."
       },
       "necromancers": {
         "name": "Nekromantikerens klæder",
@@ -7723,17 +7731,21 @@ export const da_DK: EnTranslations = {
       "nighttalon": {
         "name": "Natteklos læderudstyr",
         "bonus2": "Øger angrebskraft med 40.",
-        "bonus3": "Øger smidighed med 15 og kritisk chance med 2%."
+        "bonus3": "Øger smidighed med 15, kritisk chance med 2% og angrebs- og magihastighed med 15%."
       },
       "soulflame": {
         "name": "Sjæleflamme-klæder",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
-        "bonus3": "Øger intellekt med 15 og ånd med 15."
+        "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%."
       },
       "stormcallers": {
         "name": "Stormkalderens klæder",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
-        "bonus3": "Øger intellekt med 15 og ånd med 15."
+        "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%."
+      },
+      "vale_arcanist": {
+        "name": "Dalarkanistens klæder",
+        "bonus3": "Øger angrebs- og magihastighed med 15%."
       },
       "wyrmshadow": {
         "name": "Wyrmskygge-udstyr",

@@ -7705,15 +7705,23 @@ export const sv_SE: EnTranslations = {
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Bundstens-förtrupp",
+        "bonus3": "Ökar attack- och magihastighet med 15%."
+      },
       "crownforged": {
         "name": "Kronsmidd stridsutrustning",
         "bonus2": "Ökar attackkraft med 40.",
-        "bonus3": "Ökar styrka med 15 och uthållighet med 15."
+        "bonus3": "Ökar styrka med 15, uthållighet med 15 samt attack- och magihastighet med 15%."
       },
       "deathlord": {
         "name": "Dödsherrens stridsutrustning",
         "bonus2": "Ökar attackkraft med 40.",
         "bonus3": "Ökar styrka med 15 och uthållighet med 15."
+      },
+      "greyjaw_stalker": {
+        "name": "Gråkäftssmygarens utrustning",
+        "bonus3": "Ökar attack- och magihastighet med 15%."
       },
       "necromancers": {
         "name": "Nekromantikerns skrud",
@@ -7723,17 +7731,21 @@ export const sv_SE: EnTranslations = {
       "nighttalon": {
         "name": "Nattklo läderutrustning",
         "bonus2": "Ökar attackkraft med 40.",
-        "bonus3": "Ökar smidighet med 15 och kritisk chans med 2%."
+        "bonus3": "Ökar smidighet med 15, kritisk chans med 2% samt attack- och magihastighet med 15%."
       },
       "soulflame": {
         "name": "Själsflammans skrud",
         "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
-        "bonus3": "Ökar intellekt med 15 och ande med 15."
+        "bonus3": "Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%."
       },
       "stormcallers": {
         "name": "Stormkallarens skrud",
         "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
-        "bonus3": "Ökar intellekt med 15 och ande med 15."
+        "bonus3": "Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%."
+      },
+      "vale_arcanist": {
+        "name": "Dalarkanistens skrud",
+        "bonus3": "Ökar attack- och magihastighet med 15%."
       },
       "wyrmshadow": {
         "name": "Wyrmskuggans utrustning",

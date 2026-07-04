@@ -4886,27 +4886,37 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter} tildelte {item} til {target}.',
   'hudChrome.masterLoot.unassigned': '{item} blev ikke tildelt og er frit for alle.',
   'hudChrome.masterLoot.leaderOnly': 'Kun gruppelederen kan aendre lootmetoden.',
+  'entities.itemSets.boundstone_vanguard.name': 'Bundstens-fortrop',
+  'entities.itemSets.boundstone_vanguard.bonus3': 'Øger angrebs- og magihastighed med 15%.',
   'entities.itemSets.crownforged.name': 'Kronesmedet kampudstyr',
   'entities.itemSets.crownforged.bonus2': 'Øger angrebskraft med 40.',
-  'entities.itemSets.crownforged.bonus3': 'Øger styrke med 15 og udholdenhed med 15.',
+  'entities.itemSets.crownforged.bonus3':
+    'Øger styrke med 15, udholdenhed med 15 og angrebs- og magihastighed med 15%.',
   'entities.itemSets.deathlord.name': 'Dødsherrens kampudstyr',
   'entities.itemSets.deathlord.bonus2': 'Øger angrebskraft med 40.',
   'entities.itemSets.deathlord.bonus3': 'Øger styrke med 15 og udholdenhed med 15.',
+  'entities.itemSets.greyjaw_stalker.name': 'Gråkæbe-jægerens udstyr',
+  'entities.itemSets.greyjaw_stalker.bonus3': 'Øger angrebs- og magihastighed med 15%.',
   'entities.itemSets.necromancers.name': 'Nekromantikerens klæder',
   'entities.itemSets.necromancers.bonus2':
     'Du kan ikke stødes tilbage (100% modstand mod tilbagestød).',
   'entities.itemSets.necromancers.bonus3': 'Øger intellekt med 10 og udholdenhed med 10.',
   'entities.itemSets.nighttalon.name': 'Natteklos læderudstyr',
   'entities.itemSets.nighttalon.bonus2': 'Øger angrebskraft med 40.',
-  'entities.itemSets.nighttalon.bonus3': 'Øger smidighed med 15 og kritisk chance med 2%.',
+  'entities.itemSets.nighttalon.bonus3':
+    'Øger smidighed med 15, kritisk chance med 2% og angrebs- og magihastighed med 15%.',
   'entities.itemSets.soulflame.name': 'Sjæleflamme-klæder',
   'entities.itemSets.soulflame.bonus2':
     'Du kan ikke stødes tilbage (100% modstand mod tilbagestød).',
-  'entities.itemSets.soulflame.bonus3': 'Øger intellekt med 15 og ånd med 15.',
+  'entities.itemSets.soulflame.bonus3':
+    'Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%.',
   'entities.itemSets.stormcallers.name': 'Stormkalderens klæder',
   'entities.itemSets.stormcallers.bonus2':
     'Du kan ikke stødes tilbage (100% modstand mod tilbagestød).',
-  'entities.itemSets.stormcallers.bonus3': 'Øger intellekt med 15 og ånd med 15.',
+  'entities.itemSets.stormcallers.bonus3':
+    'Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%.',
+  'entities.itemSets.vale_arcanist.name': 'Dalarkanistens klæder',
+  'entities.itemSets.vale_arcanist.bonus3': 'Øger angrebs- og magihastighed med 15%.',
   'entities.itemSets.wyrmshadow.name': 'Wyrmskygge-udstyr',
   'entities.itemSets.wyrmshadow.bonus2': 'Øger angrebskraft med 40.',
   'entities.itemSets.wyrmshadow.bonus3': 'Øger smidighed med 15 og kritisk chance med 2%.',

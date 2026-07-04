@@ -7705,15 +7705,23 @@ export const es: EnTranslations = {
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Vanguardia Piedravínculo",
+        "bonus3": "Aumenta la velocidad de ataque y de lanzamiento en 15%."
+      },
       "crownforged": {
         "name": "Equipo de batalla Forjacorona",
         "bonus2": "Aumenta el poder de ataque en 40.",
-        "bonus3": "Aumenta la fuerza en 15 y el aguante en 15."
+        "bonus3": "Aumenta la fuerza en 15, el aguante en 15 y la velocidad de ataque y de lanzamiento en 15%."
       },
       "deathlord": {
         "name": "Equipo de batalla del Señor de la Muerte",
         "bonus2": "Aumenta el poder de ataque en 40.",
         "bonus3": "Aumenta la fuerza en 15 y el aguante en 15."
+      },
+      "greyjaw_stalker": {
+        "name": "Equipo del Acechador de Greyjaw",
+        "bonus3": "Aumenta la velocidad de ataque y de lanzamiento en 15%."
       },
       "necromancers": {
         "name": "Vestiduras del nigromante",
@@ -7723,17 +7731,21 @@ export const es: EnTranslations = {
       "nighttalon": {
         "name": "Atuendo de cuero Garra Nocturna",
         "bonus2": "Aumenta el poder de ataque en 40.",
-        "bonus3": "Aumenta la agilidad en 15 y la probabilidad de crítico en 2%."
+        "bonus3": "Aumenta la agilidad en 15, la probabilidad de crítico en 2% y la velocidad de ataque y de lanzamiento en 15%."
       },
       "soulflame": {
         "name": "Vestiduras de Llama de Alma",
         "bonus2": "No puedes ser empujado hacia atrás (100% de resistencia al empuje).",
-        "bonus3": "Aumenta el intelecto en 15 y el espíritu en 15."
+        "bonus3": "Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%."
       },
       "stormcallers": {
         "name": "Vestiduras del Invocatormentas",
         "bonus2": "No puedes ser empujado hacia atrás (100% de resistencia al empuje).",
-        "bonus3": "Aumenta el intelecto en 15 y el espíritu en 15."
+        "bonus3": "Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%."
+      },
+      "vale_arcanist": {
+        "name": "Vestiduras del Arcanista del Valle",
+        "bonus3": "Aumenta la velocidad de ataque y de lanzamiento en 15%."
       },
       "wyrmshadow": {
         "name": "Atuendo de Sombra de Vermis",

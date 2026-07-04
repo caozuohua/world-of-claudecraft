@@ -4923,12 +4923,18 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.masterLoot.assigned': '{looter} przydzielil {item} graczowi {target}.',
   'hudChrome.masterLoot.unassigned': '{item} nie zostal przydzielony i jest wolny dla wszystkich.',
   'hudChrome.masterLoot.leaderOnly': 'Tylko przywodca grupy moze zmienic metode lupow.',
+  'entities.itemSets.boundstone_vanguard.name': 'Straż przednia spętanego kamienia',
+  'entities.itemSets.boundstone_vanguard.bonus3':
+    'Zwiększa szybkość ataku i rzucania zaklęć o 15%.',
   'entities.itemSets.crownforged.name': 'Koronokuty rynsztunek bojowy',
   'entities.itemSets.crownforged.bonus2': 'Zwiększa siłę ataku o 40.',
-  'entities.itemSets.crownforged.bonus3': 'Zwiększa siłę o 15 i wytrzymałość o 15.',
+  'entities.itemSets.crownforged.bonus3':
+    'Zwiększa siłę o 15, wytrzymałość o 15 oraz szybkość ataku i rzucania zaklęć o 15%.',
   'entities.itemSets.deathlord.name': 'Rynsztunek bojowy Władcy Śmierci',
   'entities.itemSets.deathlord.bonus2': 'Zwiększa siłę ataku o 40.',
   'entities.itemSets.deathlord.bonus3': 'Zwiększa siłę o 15 i wytrzymałość o 15.',
+  'entities.itemSets.greyjaw_stalker.name': 'Rynsztunek tropiciela Szaroszczękiego',
+  'entities.itemSets.greyjaw_stalker.bonus3': 'Zwiększa szybkość ataku i rzucania zaklęć o 15%.',
   'entities.itemSets.necromancers.name': 'Szaty nekromanty',
   'entities.itemSets.necromancers.bonus2':
     'Nie można cię odrzucić (100% odporności na odrzucenie).',
@@ -4936,14 +4942,18 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.nighttalon.name': 'Skórzany rynsztunek Nocnego Szpona',
   'entities.itemSets.nighttalon.bonus2': 'Zwiększa siłę ataku o 40.',
   'entities.itemSets.nighttalon.bonus3':
-    'Zwiększa zręczność o 15 i szansę na trafienie krytyczne o 2%.',
+    'Zwiększa zręczność o 15, szansę na trafienie krytyczne o 2% oraz szybkość ataku i rzucania zaklęć o 15%.',
   'entities.itemSets.soulflame.name': 'Szaty Płomienia Duszy',
   'entities.itemSets.soulflame.bonus2': 'Nie można cię odrzucić (100% odporności na odrzucenie).',
-  'entities.itemSets.soulflame.bonus3': 'Zwiększa intelekt o 15 i ducha o 15.',
+  'entities.itemSets.soulflame.bonus3':
+    'Zwiększa intelekt o 15, ducha o 15 oraz szybkość ataku i rzucania zaklęć o 15%.',
   'entities.itemSets.stormcallers.name': 'Szaty Przyzywacza Burz',
   'entities.itemSets.stormcallers.bonus2':
     'Nie można cię odrzucić (100% odporności na odrzucenie).',
-  'entities.itemSets.stormcallers.bonus3': 'Zwiększa intelekt o 15 i ducha o 15.',
+  'entities.itemSets.stormcallers.bonus3':
+    'Zwiększa intelekt o 15, ducha o 15 oraz szybkość ataku i rzucania zaklęć o 15%.',
+  'entities.itemSets.vale_arcanist.name': 'Szaty Arkanisty z Doliny',
+  'entities.itemSets.vale_arcanist.bonus3': 'Zwiększa szybkość ataku i rzucania zaklęć o 15%.',
   'entities.itemSets.wyrmshadow.name': 'Rynsztunek Cienia Żmija',
   'entities.itemSets.wyrmshadow.bonus2': 'Zwiększa siłę ataku o 40.',
   'entities.itemSets.wyrmshadow.bonus3':

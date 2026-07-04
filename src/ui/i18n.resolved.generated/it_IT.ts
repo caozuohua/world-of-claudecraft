@@ -7705,15 +7705,23 @@ export const it_IT: EnTranslations = {
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Avanguardia Pietrvincolo",
+        "bonus3": "Aumenta la velocità d'attacco e di lancio del 15%."
+      },
       "crownforged": {
         "name": "Tenuta da battaglia Forgiacorona",
         "bonus2": "Aumenta la potenza d'attacco di 40.",
-        "bonus3": "Aumenta la forza di 15 e la vigoria di 15."
+        "bonus3": "Aumenta la forza di 15, la vigoria di 15 e la velocità d'attacco e di lancio del 15%."
       },
       "deathlord": {
         "name": "Tenuta da battaglia del Signore della Morte",
         "bonus2": "Aumenta la potenza d'attacco di 40.",
         "bonus3": "Aumenta la forza di 15 e la vigoria di 15."
+      },
+      "greyjaw_stalker": {
+        "name": "Equipaggiamento del Braccatore di Greyjaw",
+        "bonus3": "Aumenta la velocità d'attacco e di lancio del 15%."
       },
       "necromancers": {
         "name": "Vesti del negromante",
@@ -7723,17 +7731,21 @@ export const it_IT: EnTranslations = {
       "nighttalon": {
         "name": "Tenuta di cuoio Artiglio Notturno",
         "bonus2": "Aumenta la potenza d'attacco di 40.",
-        "bonus3": "Aumenta l’agilità di 15 e la probabilità di critico del 2%."
+        "bonus3": "Aumenta l'agilità di 15, la probabilità di critico del 2% e la velocità d'attacco e di lancio del 15%."
       },
       "soulflame": {
         "name": "Vesti Fiamma dell’Anima",
         "bonus2": "Non puoi essere respinto (100% di resistenza alla respinta).",
-        "bonus3": "Aumenta l'intelletto di 15 e lo spirito di 15."
+        "bonus3": "Aumenta l'intelletto di 15, lo spirito di 15 e la velocità d'attacco e di lancio del 15%."
       },
       "stormcallers": {
         "name": "Vesti del Chiamatempeste",
         "bonus2": "Non puoi essere respinto (100% di resistenza alla respinta).",
-        "bonus3": "Aumenta l'intelletto di 15 e lo spirito di 15."
+        "bonus3": "Aumenta l'intelletto di 15, lo spirito di 15 e la velocità d'attacco e di lancio del 15%."
+      },
+      "vale_arcanist": {
+        "name": "Tenuta dell'Arcanista della Valle",
+        "bonus3": "Aumenta la velocità d'attacco e di lancio del 15%."
       },
       "wyrmshadow": {
         "name": "Tenuta Ombra del Dragone",

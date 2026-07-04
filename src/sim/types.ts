@@ -362,6 +362,10 @@ export interface SetBonusEffect {
   spi?: number;
   ap?: number; // flat attack power
   crit?: number; // flat crit chance, 0..1
+  // Haste fraction (0.15 = 15% faster). ONE stat: it speeds melee and ranged
+  // auto-attack swings AND shortens spell cast/channel time, all together
+  // (folded into Entity.meleeHaste/rangedHaste/spellHaste in recalcPlayerStats).
+  haste?: number;
   castPushbackReduction?: number; // 0..1: fraction of damage cast-pushback removed (1 = immune)
   knockbackResistance?: number; // 0..1: fraction of on-hit knockback distance resisted (1 = immune)
 }
@@ -1452,6 +1456,11 @@ export interface Entity {
   attackPower: number;
   rangedPower: number; // hunters: ranged attack power
   spellPower: number; // casters: added to spell damage via per-spell coefficients
+  // Haste fractions from item-set bonuses (0 = none). Melee/ranged haste speed up
+  // the respective auto-attack swing; spell haste shortens cast and channel time.
+  meleeHaste: number;
+  rangedHaste: number;
+  spellHaste: number;
   critChance: number; // 0..1
   dodgeChance: number;
   castPushbackReduction: number; // 0..1: damage cast-pushback removed by item-set bonuses (1 = immune)

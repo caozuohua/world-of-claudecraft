@@ -7705,15 +7705,23 @@ export const zh_TW: EnTranslations = {
       }
     },
     "itemSets": {
+      "boundstone_vanguard": {
+        "name": "縛石先鋒",
+        "bonus3": "攻擊速度和施法速度提高 15%。"
+      },
       "crownforged": {
         "name": "鑄冠戰裝",
         "bonus2": "攻擊強度提高 40 點。",
-        "bonus3": "力量提高 15 點，耐力提高 15 點。"
+        "bonus3": "力量提高 15 點，耐力提高 15 點，攻擊速度和施法速度提高 15%。"
       },
       "deathlord": {
         "name": "死王戰甲",
         "bonus2": "攻擊強度提高 40 點。",
         "bonus3": "力量提高 15 點，耐力提高 15 點。"
+      },
+      "greyjaw_stalker": {
+        "name": "灰顎追獵者裝備",
+        "bonus3": "攻擊速度和施法速度提高 15%。"
       },
       "necromancers": {
         "name": "死靈法師法衣",
@@ -7723,17 +7731,21 @@ export const zh_TW: EnTranslations = {
       "nighttalon": {
         "name": "夜爪皮甲",
         "bonus2": "攻擊強度提高 40 點。",
-        "bonus3": "敏捷提高 15 點，致命一擊機率提高 2%。"
+        "bonus3": "敏捷提高 15 點，致命一擊機率提高 2%，攻擊速度和施法速度提高 15%。"
       },
       "soulflame": {
         "name": "魂焰法衣",
         "bonus2": "你不會被擊退（擊退抗性 100%）。",
-        "bonus3": "智力提高 15 點，精神提高 15 點。"
+        "bonus3": "智力提高 15 點，精神提高 15 點，攻擊速度和施法速度提高 15%。"
       },
       "stormcallers": {
         "name": "喚雷者法衣",
         "bonus2": "你不會被擊退（擊退抗性 100%）。",
-        "bonus3": "智力提高 15 點，精神提高 15 點。"
+        "bonus3": "智力提高 15 點，精神提高 15 點，攻擊速度和施法速度提高 15%。"
+      },
+      "vale_arcanist": {
+        "name": "谷地秘法師法衣",
+        "bonus3": "攻擊速度和施法速度提高 15%。"
       },
       "wyrmshadow": {
         "name": "龍影外衣",
