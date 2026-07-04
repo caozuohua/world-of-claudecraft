@@ -365,3 +365,157 @@ describe('world boss personal loot', () => {
     expect(run()).toBe(run());
   });
 });
+
+describe('world boss anti-kite snare (Howling Gale)', () => {
+  // Place a park-able player at a fixed offset from the boss.
+  function place(sim: Sim, boss: Entity, pid: number, offset: number): Entity {
+    const p = (sim as any).entities.get(pid) as Entity;
+    p.maxHp = p.hp = 1_000_000;
+    p.pos = { x: boss.pos.x + offset, z: boss.pos.z, y: boss.pos.y };
+    return p;
+  }
+
+  // Drop the boss into an engaged state with the snare pulse due THIS tick, then tick
+  // once. This isolates the mechanic from the leash/evade AI (a real multi-second kite
+  // ends in a leash reset, which would fight the assertion). `state` is 'chase' (the
+  // kite case) or 'attack' (in melee); the snare must fire in both. Reaching into
+  // internals is the tests/ convention for driving a specific sim path.
+  function firePulse(sim: Sim, boss: Entity, pid: number, state: 'chase' | 'attack'): void {
+    const p = (sim as any).entities.get(pid) as Entity;
+    (sim as any).dealDamage(p, boss, 100, false, 'physical', 'Chip', 'hit', true); // real threat
+    boss.aiState = state;
+    boss.aggroTargetId = pid;
+    boss.inCombat = true;
+    boss.leashAnchor = { ...boss.pos }; // anchor here so nothing trips a leash reset
+    boss.aoeSlowTimer = 1 / 20; // due on this engaged tick
+    sim.tick();
+  }
+
+  it('snares a ranged kiter it is chasing, cutting move speed to 20% (not kiteable)', () => {
+    const sim = makeSim();
+    const kiter = sim.addPlayer('hunter', 'Kiter');
+    const { boss } = spawnBossNow(sim);
+    // 16yd: beyond the boss's ~12yd melee reach (so it is in the CHASE state, the kite
+    // case none of the other pulses fire in), inside the 40yd snare radius.
+    const p = place(sim, boss, kiter, 16);
+    firePulse(sim, boss, kiter, 'chase');
+    expect(boss.aiState).toBe('chase'); // the snare fired from the chase path
+    const slow = p.auras.find((a) => a.kind === 'slow' && a.name === 'Howling Gale');
+    expect(slow).toBeTruthy();
+    expect(slow?.value).toBe(0.2);
+    // Run speed (7) beats the boss's 5.8, but 20% speed (1.4yd/s) lets the boss close.
+    expect((sim as any).moveSpeedMult(p)).toBeCloseTo(0.2, 5);
+  });
+
+  it('also fires from the attack state and only snares players inside the radius', () => {
+    const sim = makeSim();
+    const near = sim.addPlayer('hunter', 'Near');
+    const far = sim.addPlayer('hunter', 'Runner');
+    const { boss } = spawnBossNow(sim);
+    const pNear = place(sim, boss, near, 16); // inside the 40yd snare
+    const pFar = place(sim, boss, far, 200); // well beyond the 40yd radius
+    firePulse(sim, boss, near, 'attack'); // the attack-state call fires before range resolves
+    // Positive control: the in-range player IS snared (so the pulse really fired)...
+    expect(pNear.auras.some((a) => a.kind === 'slow' && a.name === 'Howling Gale')).toBe(true);
+    // ...while a player well outside the radius is never touched.
+    expect(pFar.auras.some((a) => a.name === 'Howling Gale')).toBe(false);
+  });
+});
+
+describe('world boss participant HP scaling', () => {
+  // Put a player on the boss's hate table (a participant) at melee range.
+  function engage(sim: Sim, boss: Entity, pid: number): Entity {
+    const p = (sim as any).entities.get(pid) as Entity;
+    p.maxHp = p.hp = 1_000_000;
+    p.pos = { x: boss.pos.x + 8, z: boss.pos.z, y: boss.pos.y };
+    (sim as any).dealDamage(p, boss, 10, false, 'physical', 'Chip', 'hit', true);
+    return p;
+  }
+
+  it('spawns at 40k HP and grows the pool per participant, capped at 100k', () => {
+    const sim = makeSim();
+    const { boss } = spawnBossNow(sim);
+    expect(boss.maxHp).toBe(40_000);
+    expect(boss.hp).toBe(40_000);
+
+    // Five participants: 40k + 2k * (5 - 1) = 48k.
+    for (let i = 0; i < 5; i++) engage(sim, boss, sim.addPlayer('warrior', `P${i}`));
+    sim.tick();
+    expect(boss.maxHp).toBe(48_000);
+
+    // A big raid tops out at the 100k cap (reached around 31 participants).
+    for (let i = 5; i < 40; i++) engage(sim, boss, sim.addPlayer('warrior', `Q${i}`));
+    sim.tick();
+    expect(boss.maxHp).toBe(100_000);
+  });
+
+  it('never shrinks the grown pool when participants leave', () => {
+    const sim = makeSim();
+    const { boss } = spawnBossNow(sim);
+    for (let i = 0; i < 5; i++) engage(sim, boss, sim.addPlayer('warrior', `P${i}`));
+    sim.tick();
+    expect(boss.maxHp).toBe(48_000);
+    // The whole raid drops off the hate table: the boss keeps its enlarged pool.
+    boss.threat.clear();
+    sim.tick();
+    expect(boss.maxHp).toBe(48_000);
+  });
+});
+
+describe('world boss is oversized and loud', () => {
+  it('is twice the normal boss size', () => {
+    const sim = makeSim();
+    const { boss } = spawnBossNow(sim);
+    expect(boss.scale).toBe(3.4);
+  });
+
+  it('bellows its engage yell far past the default yell range', () => {
+    const sim = makeSim();
+    const near = sim.addPlayer('warrior', 'Tank');
+    const far = sim.addPlayer('warrior', 'Watcher');
+    const { boss } = spawnBossNow(sim);
+    const pn = (sim as any).entities.get(near) as Entity;
+    pn.maxHp = pn.hp = 1_000_000;
+    pn.pos = { x: boss.pos.x + 8, z: boss.pos.z, y: boss.pos.y }; // inside aggroRadius: pulls the boss
+    // 200yd: past the 100yd default YELL_RANGE, within the 350yd loud range.
+    (sim as any).entities.get(far).pos = { x: boss.pos.x + 200, z: boss.pos.z, y: boss.pos.y };
+    let engageToFar = 0;
+    for (let t = 0; t < 5; t++) {
+      const evs = sim.tick();
+      for (const e of evs)
+        if (e.type === 'chat' && (e as any).channel === 'yell' && (e as any).pid === far)
+          if (/wake the mountain/.test((e as any).text)) engageToFar++;
+    }
+    expect(engageToFar).toBeGreaterThanOrEqual(1);
+  });
+
+  it('bellows periodic battle cries across the zone, but not past the loud range', () => {
+    const sim = makeSim();
+    const tank = sim.addPlayer('warrior', 'Tank');
+    const far = sim.addPlayer('warrior', 'Watcher');
+    const tooFar = sim.addPlayer('warrior', 'TooFar');
+    const { boss } = spawnBossNow(sim);
+    const pt = (sim as any).entities.get(tank) as Entity;
+    pt.maxHp = pt.hp = 1_000_000;
+    pt.pos = { x: boss.pos.x + 8, z: boss.pos.z, y: boss.pos.y };
+    (sim as any).entities.get(far).pos = { x: boss.pos.x + 200, z: boss.pos.z, y: boss.pos.y }; // within 350
+    (sim as any).entities.get(tooFar).pos = { x: boss.pos.x + 400, z: boss.pos.z, y: boss.pos.y }; // past 350
+    // Hold the boss engaged with the battle cry due this tick (isolate it from the
+    // leash AI, exactly like the snare tests).
+    (sim as any).dealDamage(pt, boss, 100, false, 'physical', 'Chip', 'hit', true);
+    boss.aiState = 'attack';
+    boss.aggroTargetId = tank;
+    boss.inCombat = true;
+    boss.leashAnchor = { ...boss.pos };
+    boss.loudYellTimer = 1 / 20;
+    const evs = sim.tick();
+    const yellTextTo = (pid: number) =>
+      evs
+        .filter((e) => e.type === 'chat' && (e as any).channel === 'yell' && (e as any).pid === pid)
+        .map((e) => (e as any).text as string);
+    // The first battle cry reaches a player 200yd away (past the default, within 350)...
+    expect(yellTextTo(far).some((t) => /THUNDER ANSWERS/.test(t))).toBe(true);
+    // ...but nothing reaches a player 400yd away, past the loud range.
+    expect(yellTextTo(tooFar)).toHaveLength(0);
+  });
+});

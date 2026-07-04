@@ -22,8 +22,8 @@ import type { Entity, LootSlot } from './types';
 
 // Sim-time cadence: a fresh boss rises this many seconds after the previous one
 // was scheduled. On the live server the sim runs at wall-clock speed (20 Hz), so
-// this is "every 3 hours". Lives here with the system that uses it.
-export const WORLD_BOSS_INTERVAL_SECONDS = 3 * 3600;
+// this is "every hour". Lives here with the system that uses it.
+export const WORLD_BOSS_INTERVAL_SECONDS = 1 * 3600;
 
 // How long a slain world boss's lootable corpse lingers before it is removed. Much
 // longer than a normal corpse so every contributor has time to walk over and loot
@@ -37,6 +37,11 @@ export interface WorldBossDef {
   pos: { x: number; z: number };
   // Seconds of sim time between scheduled spawns.
   intervalSeconds: number;
+  // Retail-style HP scaling. The boss spawns at `base` HP and gains `perPlayer` more
+  // for each participant beyond the first (counted from its hate table), capped at
+  // `max`. It only ever scales UP within a spawn, so a raid that grows keeps the
+  // bigger pool even as members die; a fresh spawn resets to `base`.
+  hpScale: { base: number; perPlayer: number; max: number };
 }
 
 // The world bosses of the live world. One per entry; the scheduler tracks each
@@ -46,6 +51,8 @@ export const WORLD_BOSSES: readonly WorldBossDef[] = [
     templateId: 'thunzharr_waking_peak',
     pos: { x: 110, z: 760 },
     intervalSeconds: WORLD_BOSS_INTERVAL_SECONDS,
+    // 40k solo, +2k per extra participant, up to 100k (a ~31-player raid).
+    hpScale: { base: 40_000, perPlayer: 2_000, max: 100_000 },
   },
 ];
 
@@ -107,6 +114,26 @@ export function worldBossContributors(ctx: SimContext, mob: Entity): PlayerMeta[
     if (meta) out.push(meta);
   }
   return out.sort((a, b) => a.entityId - b.entityId);
+}
+
+// Retail-style participant HP scaling, driven each tick by the scheduler while the
+// boss is alive. The target pool is `base + perPlayer * (participants - 1)` clamped
+// to `max`, where participants is the deduped player count on the hate table. It only
+// grows the pool (never shrinks it within a spawn, so members dying does not make the
+// boss easier), and adds the same delta to current HP so the extra health is real,
+// not a heal. Draws no rng (pure arithmetic over a sorted set), so it never perturbs
+// the shared draw stream.
+export function scaleWorldBossHp(ctx: SimContext, boss: Entity, def: WorldBossDef): void {
+  const participants = worldBossContributors(ctx, boss).length;
+  const target = Math.min(
+    def.hpScale.max,
+    def.hpScale.base + def.hpScale.perPlayer * Math.max(0, participants - 1),
+  );
+  if (target > boss.maxHp) {
+    const delta = target - boss.maxHp;
+    boss.maxHp = target;
+    boss.hp = Math.min(boss.maxHp, boss.hp + delta);
+  }
 }
 
 // Drop PERSONAL loot for a slain world boss: every contributor who has not already

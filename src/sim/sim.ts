@@ -229,6 +229,7 @@ import {
 import {
   emptyWorldBossDaily,
   rollWorldBossLoot as rollWorldBossLootImpl,
+  scaleWorldBossHp,
   WORLD_BOSSES,
   type WorldBossDaily,
   type WorldBossDef,
@@ -1312,7 +1313,11 @@ export class Sim {
         const boss = this.entities.get(liveId);
         if (!boss) {
           this.worldBossEntityIds[i] = null;
-        } else if (boss.dead) {
+        } else if (!boss.dead) {
+          // Grow the HP pool with the raid size (retail-style, up to the cap).
+          scaleWorldBossHp(this.ctx, boss, def);
+        }
+        if (boss?.dead) {
           // Lootable corpse lingers WORLD_BOSS_CORPSE_SECONDS for contributors to
           // loot, then is removed; respawnTimer is Infinity (handleDeath) so the
           // normal in-place respawn never fires; only this scheduler respawns it.
@@ -1342,6 +1347,10 @@ export class Sim {
     const mob = createMob(this.nextId++, template, template.maxLevel, pos);
     mob.facing = 0;
     mob.prevFacing = 0;
+    // World bosses use participant HP scaling (see scaleWorldBossHp), so their pool
+    // starts at the def base rather than the template's level-formula HP.
+    mob.maxHp = def.hpScale.base;
+    mob.hp = def.hpScale.base;
     this.addEntity(mob);
     // Anchorless log (no pid, no entityId) => routeEvents broadcasts to every
     // connected player as a system notice. Localized by sim_i18n's worldBossSpawn
@@ -4183,7 +4192,7 @@ export class Sim {
     const playerPull = target.kind === 'player' || target.ownerId !== null;
     if (engageYell && playerPull && !mob.yelledEngage) {
       mob.yelledEngage = true;
-      emitMobYell(this.ctx, mob, engageYell);
+      emitMobYell(this.ctx, mob, engageYell, MOBS[mob.templateId]?.battleYells?.range);
     }
     if (social) {
       const family = MOBS[mob.templateId]?.family;
@@ -4482,7 +4491,8 @@ export class Sim {
       const thresholds = tmpl.summonAdds.atHpPct;
       while (mob.firedSummons < thresholds.length && hpFrac <= thresholds[mob.firedSummons]) {
         mob.firedSummons++;
-        if (tmpl.yells?.summon) emitMobYell(this.ctx, mob, tmpl.yells.summon);
+        if (tmpl.yells?.summon)
+          emitMobYell(this.ctx, mob, tmpl.yells.summon, tmpl.battleYells?.range);
         const run = this.delveRunForMob(mob.id);
         if (
           run &&
@@ -4500,7 +4510,8 @@ export class Sim {
     const enrageAllowed = !enrageRun || enrageRun.tierId === 'heroic';
     if (tmpl.enrage && enrageAllowed && !mob.enraged && hpFrac <= tmpl.enrage.belowHpPct) {
       mob.enraged = true;
-      if (tmpl.yells?.enrage) emitMobYell(this.ctx, mob, tmpl.yells.enrage);
+      if (tmpl.yells?.enrage)
+        emitMobYell(this.ctx, mob, tmpl.yells.enrage, tmpl.battleYells?.range);
       this.emit({ type: 'aura', targetId: mob.id, name: 'Enrage', gained: true });
       this.emit({
         type: 'log',
