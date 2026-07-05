@@ -186,6 +186,17 @@ import {
 import * as petAi from './pet/pet_ai';
 import * as petCommands from './pet/pet_commands';
 import {
+  type ArchetypeState,
+  acceptArchetypeQuest as acceptArchetypeQuestImpl,
+  advanceAmendsProgress as advanceAmendsProgressImpl,
+  archetypeStateFor,
+  emptyArchetypeState,
+  normalizeArchetypeState,
+  requiredAmendsProgress,
+  switchArchetype as switchArchetypeImpl,
+} from './professions/archetype';
+import { type CraftResult, craftItem as craftItemImpl } from './professions/crafting';
+import {
   drainGatheringGrants,
   emptyGatheringProficiency,
   gatherNodeById,
@@ -194,7 +205,6 @@ import {
   isNodeHarvestableBy,
   normalizeGatheringProficiency,
 } from './professions/gathering';
-import { type CraftResult, craftItem as craftItemImpl } from './professions/crafting';
 import type { ProfessionRecipeRecord as RecipeDef } from './professions/types';
 import {
   craftSkillsFor,
@@ -810,6 +820,9 @@ export interface PlayerMeta {
   // One-time Ravenpost welcome letter sent (persisted in CharacterState, so
   // existing characters get the service announcement exactly once).
   mailWelcomed: boolean;
+  // Active-archetype state and quest-gated switching (#1129, superseded scope: see
+  // professions/archetype.ts). Never touches craftSkills. Persisted in CharacterState.
+  archetype: ArchetypeState;
   // Delve meta progression (persisted in CharacterState).
   delveMarks: number;
   delveClears: Record<string, number>;
@@ -929,6 +942,9 @@ export interface CharacterState {
   // Flat per-craft skill tracking (#1126; JSONB, additive back-compat: absent or
   // partial on older saves loads the missing crafts as 0, see normalizeCraftSkills).
   craftSkills?: Record<string, number>;
+  // Active-archetype state (#1129, superseded scope; JSONB, back-compat: absent on
+  // older saves loads as emptyArchetypeState, see normalizeArchetypeState).
+  archetype?: Partial<ArchetypeState>;
 }
 
 export interface PetState {
@@ -1475,6 +1491,7 @@ export class Sim {
       craftSkills: emptyCraftSkills(),
       mailWelcomed: false,
       marketFilter: '',
+      archetype: emptyArchetypeState(),
       delveMarks: 0,
       delveClears: {},
       companionUpgrades: {},
@@ -1569,6 +1586,7 @@ export class Sim {
       }
       meta.craftSkills = normalizeCraftSkills(s.craftSkills);
       meta.mailWelcomed = s.mailWelcomed === true;
+      meta.archetype = normalizeArchetypeState(s.archetype);
       meta.delveMarks = s.delveMarks ?? 0;
       meta.delveClears = { ...(s.delveClears ?? {}) };
       meta.companionUpgrades = { ...(s.companionUpgrades ?? {}) };
@@ -1824,6 +1842,7 @@ export class Sim {
       pendingSkinCatalog: meta.pendingSkinCatalog,
       pendingSkinItemId: meta.pendingSkinItemId,
       craftSkills: { ...meta.craftSkills },
+      archetype: { ...meta.archetype },
       delveMarks: meta.delveMarks,
       delveClears: { ...meta.delveClears },
       companionUpgrades: { ...meta.companionUpgrades },
@@ -6610,6 +6629,70 @@ export class Sim {
 
   get craftSkills(): Record<string, number> {
     return this.craftSkillsFor(this.primaryId);
+  }
+
+  /** The active-archetype craft id, or null before the zone-1 acceptance quest has
+   *  ever been completed (see professions/archetype.ts). */
+  activeArchetypeFor(pid: number): string | null {
+    return archetypeStateFor(this.ctx, pid).activeArchetype;
+  }
+
+  get activeArchetype(): string | null {
+    return this.activeArchetypeFor(this.primaryId);
+  }
+
+  /** Total successful archetype switches this character has ever made. */
+  archetypeSwitchCountFor(pid: number): number {
+    return archetypeStateFor(this.ctx, pid).switchCount;
+  }
+
+  get archetypeSwitchCount(): number {
+    return this.archetypeSwitchCountFor(this.primaryId);
+  }
+
+  /** Amends progress accrued toward the CURRENT switch's threshold, and the
+   *  threshold itself (see requiredAmendsProgress: it scales with switchCount). */
+  archetypeAmendsProgressFor(pid: number): number {
+    return archetypeStateFor(this.ctx, pid).amendsProgress;
+  }
+
+  get archetypeAmendsProgress(): number {
+    return this.archetypeAmendsProgressFor(this.primaryId);
+  }
+
+  archetypeAmendsRequiredFor(pid: number): number {
+    return requiredAmendsProgress(archetypeStateFor(this.ctx, pid).switchCount);
+  }
+
+  get archetypeAmendsRequired(): number {
+    return this.archetypeAmendsRequiredFor(this.primaryId);
+  }
+
+  /** Stub entry point for the zone-1 acceptance quest's completion (see
+   *  professions/archetype.ts for what is stubbed and why). No-op (returns false)
+   *  if an archetype is already set. */
+  acceptArchetypeQuest(craftId: string, pid?: number): boolean {
+    const r = this.resolve(pid);
+    if (!r) return false;
+    return acceptArchetypeQuestImpl(this.ctx, r.meta.entityId, craftId);
+  }
+
+  /** Stub entry point for one completion of the repeatable "make amends" quest
+   *  (see professions/archetype.ts). No-op before an archetype has ever been
+   *  chosen. */
+  advanceAmendsProgress(pid?: number): void {
+    const r = this.resolve(pid);
+    if (!r) return;
+    advanceAmendsProgressImpl(this.ctx, r.meta.entityId);
+  }
+
+  /** Attempt to switch the active archetype to a different craft; blocked (a
+   *  complete no-op) unless enough amends progress has accrued. See
+   *  professions/archetype.ts switchArchetype for the full gating rule. */
+  switchArchetype(craftId: string, pid?: number): boolean {
+    const r = this.resolve(pid);
+    if (!r) return false;
+    return switchArchetypeImpl(this.ctx, r.meta.entityId, craftId);
   }
 
   // Read-only gathering-profession proficiency surface for IWorld. Stubbed
