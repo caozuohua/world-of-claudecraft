@@ -4019,10 +4019,18 @@ export class Renderer {
       }
       // online, entities beyond nameplate range stream below snapshot rate;
       // each interpolates on its own clock so they move smoothly instead of
-      // freezing and dashing once per update (self keeps the global alpha
-      // the camera follow uses)
+      // freezing and dashing once per update. The self position comes from
+      // selfPos below, so the self `ea` drives only the model FACING: cap it
+      // at 1 like the camera follow does (extrapolating angles past the
+      // snapshot oscillates, and around a keyboard-turn release latch the
+      // server facing steps by whole ticks, so a lead-extrapolated yaw target
+      // overshoots and yanks the held model a few degrees and back). Facing
+      // needs no latency lead anyway: every self-driven heading change is
+      // covered at zero latency by the local layers (keyboard turn, mouselook,
+      // click-move via the sent facing). Remote entities interpolate on their
+      // own measured cadence via remoteEntityAlpha (unknown-cadence fallback).
       const ea = isSelf
-        ? selfSnapshotAlpha(alpha, selfAlphaLead)
+        ? Math.min(1, alpha)
         : remoteEntityAlpha(now, e.netUpdatedAt, e.netInterval, alpha);
       const x = isSelf ? selfPos.x : e.prevPos.x + (e.pos.x - e.prevPos.x) * ea;
       const y = isSelf ? selfPos.y : e.prevPos.y + (e.pos.y - e.prevPos.y) * ea;
