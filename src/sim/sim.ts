@@ -198,6 +198,9 @@ import {
   gainCraftSkill,
   normalizeCraftSkills,
 } from './professions/wheel';
+  gatherNodeById,
+  harvestNode as harvestNodeImpl,
+  isNodeHarvestableBy,
   normalizeGatheringProficiency,
 } from './professions/gathering';
 import {
