@@ -352,3 +352,35 @@ describe('MobileActionRingPainter: no raw DOM writes', () => {
     expect(px, `px: ${px.join(', ')}`).toEqual([]);
   });
 });
+
+describe('Hud.buildMobileActionRing wiring (source scan)', () => {
+  // Pins the hud.ts call sites that build and wire the mobile action ring, so a
+  // refactor cannot silently disconnect the ring from the action-bar build path,
+  // the attack/slot/page-toggle click handlers, or the per-frame paint gate.
+  const hud = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8');
+
+  it('builds the mobile action ring from buildActionBar', () => {
+    expect(hud).toContain('this.buildMobileActionRing();');
+  });
+
+  it('wires the attack button to castSlot(0)', () => {
+    expect(hud).toContain('this.castSlot(0);');
+  });
+
+  it('resolves the source slot for a mobile button INSIDE the click handler, not captured at bind time', () => {
+    // The slot click handler must call sourceSlotForMobileButton at click time
+    // (reading this.mobileActionPage fresh) so a page cycle after bind still
+    // routes taps to the correct source slot.
+    expect(hud).toContain('this.castSlot(sourceSlotForMobileButton(this.mobileActionPage, i));');
+  });
+
+  it('wires the page toggle button to cycleMobileActionPage', () => {
+    expect(hud).toContain('this.cycleMobileActionPage();');
+  });
+
+  it('gates the per-frame ring paint on isMobileLayout()', () => {
+    expect(hud).toContain(
+      'if (this.isMobileLayout() && this.mobileActionRingView && this.mobileActionRingPainter) {',
+    );
+  });
+});
