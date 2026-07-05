@@ -124,6 +124,10 @@ export function worldBossContributors(ctx: SimContext, mob: Entity): PlayerMeta[
 // not a heal. Draws no rng (pure arithmetic over a sorted set), so it never perturbs
 // the shared draw stream.
 export function scaleWorldBossHp(ctx: SimContext, boss: Entity, def: WorldBossDef): void {
+  // Once the pool is at the cap it can never grow again, so skip the per-tick
+  // contributors recompute (a dedupe + sort over the hate table) for the rest of the
+  // fight, which is thousands of ticks.
+  if (boss.maxHp >= def.hpScale.max) return;
   const participants = worldBossContributors(ctx, boss).length;
   const target = Math.min(
     def.hpScale.max,
@@ -132,6 +136,11 @@ export function scaleWorldBossHp(ctx: SimContext, boss: Entity, def: WorldBossDe
   if (target > boss.maxHp) {
     const delta = target - boss.maxHp;
     boss.maxHp = target;
+    // Adding delta to current HP too nudges the HP FRACTION up (a boss at 50% of 40k
+    // becomes ~58% of 48k). That is intentional ("real health, not a heal"), but note
+    // the side effect: a participant joining right as the boss crosses an hp-fraction
+    // threshold (the 20% enrage, a summonAdds gate) can push it back above and delay
+    // that trigger. Acceptable: it only ever happens while the raid is still growing.
     boss.hp = Math.min(boss.maxHp, boss.hp + delta);
   }
 }

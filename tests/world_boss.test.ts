@@ -420,6 +420,32 @@ describe('world boss anti-kite snare (Howling Gale)', () => {
     // ...while a player well outside the radius is never touched.
     expect(pFar.auras.some((a) => a.name === 'Howling Gale')).toBe(false);
   });
+
+  it('does not re-apply the snare on the next engaged tick (once-per-cadence guard)', () => {
+    const sim = makeSim();
+    const kiter = sim.addPlayer('hunter', 'Kiter');
+    const { boss } = spawnBossNow(sim);
+    const p = place(sim, boss, kiter, 16);
+    // First pulse fires now; the cadence timer resets to `every` (5s), far past a tick.
+    firePulse(sim, boss, kiter, 'chase');
+    const slow = p.auras.find((a) => a.kind === 'slow' && a.name === 'Howling Gale');
+    expect(slow).toBeTruthy();
+    expect(boss.aoeSlowTimer).toBeGreaterThan(1); // reset, not left at 0
+    const remainingAfterPulse = slow!.remaining; // full duration, not yet decayed
+    // Keep the boss engaged for one more tick WITHOUT re-arming the cadence timer.
+    place(sim, boss, kiter, 16);
+    (sim as any).dealDamage(p, boss, 10, false, 'physical', 'Chip', 'hit', true);
+    boss.aiState = 'chase';
+    boss.aggroTargetId = kiter;
+    boss.inCombat = true;
+    boss.leashAnchor = { ...boss.pos };
+    sim.tick();
+    const slow2 = p.auras.find((a) => a.kind === 'slow' && a.name === 'Howling Gale');
+    expect(slow2).toBeTruthy();
+    // The guard held: the aura only DECAYED by one tick. A cadence bug that fired every
+    // tick would refresh `remaining` back to the full duration instead.
+    expect(slow2!.remaining).toBeCloseTo(remainingAfterPulse - 1 / 20, 5);
+  });
 });
 
 describe('world boss participant HP scaling', () => {
