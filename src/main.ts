@@ -38,6 +38,7 @@ import {
   isAttackableEntity,
 } from './game/interactions';
 import { Keybinds } from './game/keybinds';
+import { newKeyboardTurnState, stepKeyboardTurnFacing } from './game/keyboard_turn_facing';
 import { shouldUseStaticBackdrop } from './game/landing_backdrop';
 import {
   interfaceModeFromSetting,
@@ -100,6 +101,7 @@ import { Renderer } from './render/renderer';
 import { navigatorSaveData } from './render/sky';
 import { desktopBridge } from './runtime';
 import { pathCrossesFence } from './sim/colliders';
+import { isStunned } from './sim/combat/cc';
 import { ABILITIES, CLASSES } from './sim/content/classes';
 import { ITEMS, setActiveWorldContent } from './sim/data';
 import { canEquipItem } from './sim/equipment_rules';
@@ -2019,6 +2021,8 @@ async function startGame(
   // the release frame would drop the one-shot when release lands on a zero-tick
   // frame. Held here until consumed, then cleared.
   let pendingReleaseFacing: number | null = null;
+  // Local display-only integration of keyboard turns online (see the module docs).
+  const kbTurn = newKeyboardTurnState();
   function updateCamera(frameDt: number, interpFacing: number): void {
     const mi = input.readMoveInput();
     const clickMoving = !!input.clickMoveTarget && !input.suspendMovement && !movementFrozen();
@@ -2414,20 +2418,24 @@ async function startGame(
     });
     const pe = world.player;
     // facing interp capped at 1 - extrapolating angles past the snapshot oscillates
-    perf.trace(
-      'camera.follow',
-      () =>
-        updateCamera(
-          frameDt,
-          pe.prevFacing + wrapAngle(pe.facing - pe.prevFacing) * Math.min(1, alpha),
-        ),
-      {
-        mode: 'online',
-        alpha,
-        frameDtMs: frameDt * 1000,
-        lastSnapAge: net.lastSnapAt > 0 ? performance.now() - net.lastSnapAt : -1,
-      },
-    );
+    const interpServerFacing =
+      pe.prevFacing + wrapAngle(pe.facing - pe.prevFacing) * Math.min(1, alpha);
+    // Keyboard turns are integrated server-side; mirror the same TURN_SPEED locally
+    // (display only) so the model and camera respond the same frame online.
+    const kbFacing = stepKeyboardTurnFacing(kbTurn, {
+      turnLeft: resolved.mi.turnLeft,
+      turnRight: resolved.mi.turnRight,
+      turnAllowed: net.spectating === null && !movementFrozen() && !isStunned(pe),
+      sentFacing: netFacing,
+      serverFacing: interpServerFacing,
+      frameDt,
+    });
+    perf.trace('camera.follow', () => updateCamera(frameDt, kbFacing ?? interpServerFacing), {
+      mode: 'online',
+      alpha,
+      frameDtMs: frameDt * 1000,
+      lastSnapAge: net.lastSnapAt > 0 ? performance.now() - net.lastSnapAt : -1,
+    });
     introCameraTick(now);
     renderer.camYaw = input.camYaw;
     renderer.camPitch = input.camPitch;
@@ -2440,7 +2448,7 @@ async function startGame(
           renderer.sync(
             alpha,
             frameDt,
-            net.spectating === null ? movementFacing : null,
+            net.spectating === null ? (movementFacing ?? kbFacing) : null,
             ONLINE_SELF_RENDER_ALPHA_LEAD,
           ),
         {
