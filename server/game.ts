@@ -38,6 +38,8 @@ import { offensiveName } from './auth';
 import type {
   BotDetector,
   BotTrackingContext,
+  ConfigApplyResult,
+  ConfigField,
   SessionRuntimeSnapshot,
   SuspiciousPlayer,
 } from './bot_detector/contract';
@@ -150,7 +152,6 @@ const RESTART_COUNTDOWN_STEPS = [
   { atSeconds: 590, text: 'Server restart in 10 seconds.' },
   { atSeconds: 600, text: 'Server restarting now.' },
 ] as const;
-const ANTIBOT_ENFORCE = process.env.ANTIBOT_ENFORCE === '1';
 // Clients stream movement intent every 50ms. If that stream goes silent while
 // the last packet held a key down, stop applying it instead of turning/running
 // forever. 750ms leaves room for normal jitter and short browser stalls.
@@ -1305,10 +1306,13 @@ export class GameServer {
   private runAntibotTick(): void {
     const now = Date.now();
     for (const session of this.clients.values()) {
+      // Enforcement gating lives in the detector's own runtime config (which
+      // defaults to the ANTIBOT_ENFORCE env var and is operator-tunable live),
+      // so the host-side kill-switch parameter is always granted here.
       const action = this.botDetector.handleTick(
         session.botTrackingContext,
         now,
-        ANTIBOT_ENFORCE,
+        true,
         this.captureBotDetectionSnapshot(session, now),
       );
       if (action === 'kick') {
@@ -1892,6 +1896,16 @@ export class GameServer {
 
   suspiciousPlayers(): SuspiciousPlayer[] {
     return this.botDetector.listSuspiciousPlayers();
+  }
+
+  antibotConfigFields(): ConfigField[] {
+    return this.botDetector.describeConfig();
+  }
+
+  // Validates and applies live (invalid entries are skipped and reported; the
+  // admin save path rejects on any error and re-applies its previous document).
+  applyAntibotConfig(overrides: Record<string, unknown>): ConfigApplyResult {
+    return this.botDetector.applyConfig(overrides);
   }
 
   detectionCalibration(): DetectionCalibrationSnapshot {

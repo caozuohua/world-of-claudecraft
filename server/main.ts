@@ -32,6 +32,7 @@ import {
 } from './account';
 import { handleAdminApi, parsePageParams } from './admin';
 import { currentSitePresenceUsers, recordSitePresenceSample } from './admin_db';
+import { loadAntibotConfig } from './antibot_config_db';
 import {
   hashPassword,
   newToken,
@@ -1741,6 +1742,17 @@ async function main(): Promise<void> {
   }
   await ensureSchema();
   await seedOAuthClients();
+  // Bot detector: replay this realm's saved config overrides onto the fresh
+  // detector. Boot applies what it can; a stale entry (schema drift after a
+  // deploy) is skipped and logged, never allowed to drop the whole document.
+  const storedAntibotConfig = await loadAntibotConfig();
+  const antibotOverrides =
+    typeof storedAntibotConfig.data === 'object' && storedAntibotConfig.data !== null
+      ? (storedAntibotConfig.data as Record<string, unknown>)
+      : {};
+  for (const error of game.applyAntibotConfig(antibotOverrides).errors) {
+    console.warn(`bot-detector config override skipped: ${error}`);
+  }
   const orphans = await closeOrphanSessions();
   if (orphans > 0) console.log(`closed ${orphans} orphaned play session(s) from a previous run`);
   const pruned = await pruneChatLogs(CHAT_LOG_RETENTION_DAYS);

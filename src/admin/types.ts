@@ -432,3 +432,42 @@ export interface LinePoint {
   secondaryValue?: number;
   title?: string;
 }
+
+// Bot Detector > Configuration. Field ids, groups, labels, and help arrive as
+// server data (the detector decides them at runtime; the evidence-detail
+// precedent), so they render as-is rather than through t().
+export type AntibotConfigValue = string | number | boolean | string[];
+
+export interface AntibotConfigField {
+  id: string;
+  group: string;
+  label: string;
+  type: 'string' | 'number' | 'boolean' | 'select' | 'multi_select';
+  defaultValue: AntibotConfigValue;
+  value: AntibotConfigValue;
+  min?: number;
+  max?: number;
+  step?: number;
+  unit?: string;
+  options?: { value: string; label: string }[];
+  help?: string;
+}
+
+export interface AntibotConfigCatalog {
+  fields: AntibotConfigField[];
+  updatedAt: string | null;
+}
+
+export interface AntibotConfigHistoryEntry {
+  id: number;
+  beforeData: Record<string, AntibotConfigValue>;
+  afterData: Record<string, AntibotConfigValue>;
+  note: string;
+  createdAt: string;
+  adminAccountId: number | null;
+  adminUsername: string | null;
+}
+
+export interface AntibotConfigHistory {
+  entries: AntibotConfigHistoryEntry[];
+}

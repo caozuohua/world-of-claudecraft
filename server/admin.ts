@@ -14,6 +14,11 @@ import {
   registrationsByDay,
   sessionsByDay,
 } from './admin_db';
+import {
+  listAntibotConfigHistory,
+  loadAntibotConfig,
+  saveAntibotConfigChange,
+} from './antibot_config_db';
 import { newToken, verifyPassword } from './auth';
 import { getBugReportScreenshot, listBugReports } from './bug_report_db';
 import {
@@ -63,6 +68,7 @@ const ADMIN_LOGIN_MAX_PER_MINUTE = 10;
 const MAX_PAGE_LIMIT = 200;
 const DEFAULT_PAGE_LIMIT = 25;
 const ACTIVITY_WINDOW_DAYS = 30;
+const ANTIBOT_CONFIG_NOTE_MAX = 500;
 
 const IP_BLOCK_KICK_MESSAGE = 'Connection to the server was lost.';
 
@@ -70,6 +76,7 @@ const IP_BLOCK_KICK_MESSAGE = 'Connection to the server was lost.';
 // other *_db imports here); the player-facing rules stay in maps.ts.
 const adminMapsDb = new PgMapsDb(pool);
 const adminUserAssetsDb = new PgUserAssetsDb(pool);
+let antibotConfigSaveTail: Promise<void> = Promise.resolve();
 
 function ok(res: http.ServerResponse, data: unknown): void {
   json(res, 200, { success: true, data, error: null });
@@ -164,6 +171,65 @@ async function handleLogin(req: http.IncomingMessage, res: http.ServerResponse):
   const token = newToken();
   await saveToken(token, account.id);
   ok(res, { token, username: account.username });
+}
+
+// Bot-detector config: the body's override document is validated and applied
+// LIVE by the detector; validation or persistence failure re-applies the previous
+// effective document. The current override set and its before/after audit row are
+// committed atomically, then the saved overrides are replayed at the next boot.
+async function handleAntibotConfigSave(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  game: GameServer,
+  adminId: number,
+): Promise<void> {
+  const body = await readBody(req);
+  const overrides = body.overrides;
+  if (typeof overrides !== 'object' || overrides === null || Array.isArray(overrides)) {
+    return fail(res, 400, 'an overrides object is required');
+  }
+  const note =
+    typeof body.note === 'string' ? body.note.trim().slice(0, ANTIBOT_CONFIG_NOTE_MAX) : '';
+  return serializeAntibotConfigSave(async () => {
+    const previousEffective = effectiveAntibotOverrides(game);
+    const result = game.applyAntibotConfig(overrides as Record<string, unknown>);
+    if (result.errors.length > 0) {
+      game.applyAntibotConfig(previousEffective);
+      return fail(res, 400, result.errors.join('; '));
+    }
+    const effective = effectiveAntibotOverrides(game);
+    try {
+      const saved = await saveAntibotConfigChange(effective, adminId, note);
+      ok(res, { fields: game.antibotConfigFields(), updatedAt: saved.updatedAt });
+    } catch (err) {
+      game.applyAntibotConfig(previousEffective);
+      throw err;
+    }
+  });
+}
+
+function serializeAntibotConfigSave(run: () => Promise<void>): Promise<void> {
+  const pending = antibotConfigSaveTail.then(run, run);
+  antibotConfigSaveTail = pending.then(
+    () => undefined,
+    () => undefined,
+  );
+  return pending;
+}
+
+function effectiveAntibotOverrides(game: GameServer): Record<string, unknown> {
+  const effective: Record<string, unknown> = {};
+  for (const field of game.antibotConfigFields()) {
+    if (!configValueEquals(field.value, field.defaultValue)) effective[field.id] = field.value;
+  }
+  return effective;
+}
+
+function configValueEquals(a: unknown, b: unknown): boolean {
+  if (Array.isArray(a) && Array.isArray(b)) {
+    return a.length === b.length && a.every((entry) => b.includes(entry));
+  }
+  return a === b;
 }
 
 export async function handleAdminApi(
@@ -396,6 +462,10 @@ export async function handleAdminApi(
       return done ? ok(res, { ok: true }) : fail(res, 404, 'asset_not_found');
     }
 
+    if (req.method === 'POST' && path === '/admin/api/antibot-config') {
+      return await handleAntibotConfigSave(req, res, game, accountId);
+    }
+
     if (req.method !== 'GET') return fail(res, 405, 'method not allowed');
 
     if (path === '/admin/api/blocked-ips') {
@@ -432,6 +502,13 @@ export async function handleAdminApi(
     }
     if (path === '/admin/api/online') {
       return ok(res, { players: game.liveSessions() });
+    }
+    if (path === '/admin/api/antibot-config') {
+      const stored = await loadAntibotConfig();
+      return ok(res, { fields: game.antibotConfigFields(), updatedAt: stored.updatedAt });
+    }
+    if (path === '/admin/api/antibot-config/history') {
+      return ok(res, { entries: await listAntibotConfigHistory() });
     }
     if (path === '/admin/api/suspicious-players') {
       return ok(res, { players: game.suspiciousPlayers() });

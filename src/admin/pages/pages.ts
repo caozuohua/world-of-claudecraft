@@ -8,6 +8,7 @@ export type AdminPage =
   | 'moderation'
   | 'suspicious-players'
   | 'detection-calibration'
+  | 'antibot-config'
   | 'shared-ips'
   | 'chat-filter'
   | 'blocked-ips'
@@ -64,6 +65,7 @@ export const NAV_SECTIONS: readonly AdminNavSection[] = [
     items: [
       { id: 'suspicious-players', labelKey: 'nav.liveEvidence' },
       { id: 'detection-calibration', labelKey: 'nav.calibration' },
+      { id: 'antibot-config', labelKey: 'nav.antibotConfig' },
     ],
   },
   {
