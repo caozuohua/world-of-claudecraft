@@ -725,6 +725,21 @@ describe('/admin/api dispatch parity (legacy flag vs new flag)', () => {
       url: '/admin/api/accounts/abc',
       label: 'a :id route with a non-numeric id (auth-gated so no 422 leaks)',
     },
+    // Release v0.22.0 arrivals: the staff-identity reads/writes and the
+    // bot-detector runtime-config family, all bearer-gated like every other
+    // authed admin route (auth precedes the permission gate on both arms).
+    { method: 'GET', url: '/admin/api/me', label: 'the staff self-identity read' },
+    { method: 'GET', url: '/admin/api/staff', label: 'the staff list read' },
+    { method: 'GET', url: '/admin/api/staff/history', label: 'the role-change audit read' },
+    { method: 'POST', url: '/admin/api/staff/roles', label: 'the staff role write' },
+    { method: 'GET', url: '/admin/api/provider-usage', label: 'the provider-usage read' },
+    { method: 'GET', url: '/admin/api/antibot-config', label: 'the antibot-config read' },
+    {
+      method: 'GET',
+      url: '/admin/api/antibot-config/history',
+      label: 'the antibot-config audit read',
+    },
+    { method: 'POST', url: '/admin/api/antibot-config', label: 'the antibot-config write' },
     { method: 'PUT', url: '/admin/api/overview', label: 'a wrong method (delegates to legacy)' },
     {
       method: 'HEAD',

@@ -80,11 +80,15 @@ const allowedRateLimit = (): ReturnType<NonNullable<AdminDbBundle['rateLimited']
 });
 
 // Install the admin db seam so requireAdmin resolves the bearer to the admin caller.
-// isAdminAccount is caller-aware: true for the caller, false for any other id (so a
-// moderation target reads as a normal account). Extra reads are layered per test.
+// The caller gate reads adminRolesForAccount (staff roles, superadmin here so every
+// route's declared permission is held); isAdminAccount stays caller-aware for the
+// TARGET checks (true for the caller, false for any other id, so a moderation
+// target reads as a normal account). Extra reads are layered per test.
 function authedAdminDb(overrides: DbOverrides = {}): void {
   setDb({
     accountForToken: async () => ADMIN_ACCOUNT_ID,
+    adminRolesForAccount: async (id: number) =>
+      id === ADMIN_ACCOUNT_ID ? { username: 'op', roles: ['superadmin'] } : null,
     isAdminAccount: async (id: number) => id === ADMIN_ACCOUNT_ID,
     ...overrides,
   });
@@ -152,6 +156,16 @@ function routeFor(method: Method, path: string) {
   return route;
 }
 
+/**
+ * The concrete request path for a route template: every :param segment replaced by
+ * its supplied value. Production ctx.url.pathname is always concrete (the router
+ * matched a real URL), and the requireAdmin central permission gate resolves the
+ * route's permission from that concrete path, so the harness must hand it one too.
+ */
+function concretePath(path: string, params: Record<string, string> = {}): string {
+  return path.replace(/:([A-Za-z_]+)/g, (whole, name) => params[name] ?? whole);
+}
+
 /** Drive a full route chain (its real middleware + handler) under withErrors. */
 async function runRoute(
   method: Method,
@@ -171,7 +185,7 @@ async function runRoute(
   };
   const ctx = fakeCtx({
     method,
-    url: opts.url ?? path,
+    url: opts.url ?? concretePath(path, opts.params),
     headers: opts.headers,
     body: opts.body,
     params: opts.params,
@@ -258,8 +272,8 @@ describe('admin envelope contract (frozen)', () => {
 describe('requireAdmin gate', () => {
   it('401s a missing bearer DB-free with the legacy admin body', async () => {
     const accountForToken = vi.fn(async () => ADMIN_ACCOUNT_ID);
-    const isAdminAccount = vi.fn(async () => true);
-    setDb({ accountForToken, isAdminAccount });
+    const adminRolesForAccount = vi.fn(async () => ({ username: 'op', roles: ['superadmin'] }));
+    setDb({ accountForToken, adminRolesForAccount });
     installAdminRuntime();
     const r = await runRoute('GET', '/admin/api/overview');
     expect(r.status).toBe(401);
@@ -268,8 +282,8 @@ describe('requireAdmin gate', () => {
     expect(accountForToken).not.toHaveBeenCalled();
   });
 
-  it('401s a valid bearer whose account is NOT an admin', async () => {
-    setDb({ accountForToken: async () => 42, isAdminAccount: async () => false });
+  it('401s a valid bearer whose account is NOT staff (no roles)', async () => {
+    setDb({ accountForToken: async () => 42, adminRolesForAccount: async () => null });
     installAdminRuntime();
     const r = await runRoute('GET', '/admin/api/overview', { headers: { authorization: BEARER } });
     expect(r.status).toBe(401);
@@ -277,7 +291,10 @@ describe('requireAdmin gate', () => {
   });
 
   it('401s a bearer that resolves to no account', async () => {
-    setDb({ accountForToken: async () => null, isAdminAccount: async () => true });
+    setDb({
+      accountForToken: async () => null,
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['superadmin'] }),
+    });
     installAdminRuntime();
     const r = await runRoute('GET', '/admin/api/overview', { headers: { authorization: BEARER } });
     expect(r.status).toBe(401);
@@ -287,12 +304,49 @@ describe('requireAdmin gate', () => {
   it('lets a valid admin through to the handler', async () => {
     authedAdminDb({
       overviewCounts: async () => ({ peakOnlineToday: 0, peakOnlineAllTime: 0 }),
-      providerUsageSnapshot: () => ({ generatedAt: 0, windows: [], metrics: [], caches: [] }),
     });
     installAdminRuntime();
     const r = await runRoute('GET', '/admin/api/overview', { headers: { authorization: BEARER } });
     expect(r.status).toBe(200);
     expect((r.body as { success: boolean }).success).toBe(true);
+  });
+
+  it('403s a staff account whose roles lack the route permission (central gate)', async () => {
+    // viewer deliberately excludes botdetector.read (admin_permissions.ts), so the
+    // suspicious-players read is denied by the PERMISSION gate, not the auth gate.
+    authedAdminDb({
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['viewer'] }),
+    });
+    installAdminRuntime();
+    const r = await runRoute('GET', '/admin/api/suspicious-players', {
+      headers: { authorization: BEARER },
+    });
+    expect(r.status).toBe(403);
+    expect(r.body).toEqual({
+      success: false,
+      data: null,
+      error: 'you do not have permission to do this',
+    });
+  });
+
+  it('the permission gate consults the CONCRETE path for a :id route', async () => {
+    // A moderator holds moderation.act, so the enum action route passes the gate for
+    // the synthesized concrete path /moderation/accounts/42/suspend; a viewer is 403d.
+    authedAdminDb({
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['viewer'] }),
+    });
+    installAdminRuntime();
+    const r = await runRoute('POST', '/admin/api/moderation/accounts/:id/:action', {
+      headers: { authorization: BEARER },
+      params: { id: '42', action: 'suspend' },
+      body: {},
+    });
+    expect(r.status).toBe(403);
+    expect(r.body).toEqual({
+      success: false,
+      data: null,
+      error: 'you do not have permission to do this',
+    });
   });
 });
 
@@ -331,12 +385,12 @@ describe('POST /admin/api/login', () => {
     expect(findAccount).not.toHaveBeenCalled();
   });
 
-  it('403s a valid non-admin account (no admin access)', async () => {
+  it('403s a valid non-staff account (no admin access)', async () => {
     setDb({
       rateLimited: allowedRateLimit,
       findAccount: async () => ({ id: 9, username: 'bob', password_hash: 'h' }) as never,
       verifyPassword: async () => true,
-      isAdminAccount: async () => false,
+      adminRolesForAccount: async () => null,
     });
     const r = await runRoute('POST', '/admin/api/login', {
       body: { username: 'bob', password: 'pw' },
@@ -349,12 +403,12 @@ describe('POST /admin/api/login', () => {
     });
   });
 
-  it('200s a valid admin login with the token + username', async () => {
+  it('200s a valid staff login with the token + username + roles + expanded permissions', async () => {
     setDb({
       rateLimited: allowedRateLimit,
       findAccount: async () => ({ id: 9, username: 'bob', password_hash: 'h' }) as never,
       verifyPassword: async () => true,
-      isAdminAccount: async () => true,
+      adminRolesForAccount: async () => ({ username: 'bob', roles: ['viewer'] }),
       touchLogin: async () => {},
       newToken: () => 'tok123',
       saveToken: async () => {},
@@ -363,9 +417,16 @@ describe('POST /admin/api/login', () => {
       body: { username: 'bob', password: 'pw' },
     });
     expect(r.status).toBe(200);
+    // The viewer role's literal permission bundle (admin_permissions.ts), pinned so a
+    // silent widening of the read-only brick reddens here.
     expect(r.body).toEqual({
       success: true,
-      data: { token: 'tok123', username: 'bob' },
+      data: {
+        token: 'tok123',
+        username: 'bob',
+        roles: ['viewer'],
+        permissions: ['analytics.read', 'accounts.read', 'support.read', 'moderation.read'],
+      },
       error: null,
     });
   });
@@ -388,7 +449,11 @@ describe('operator :id loader + enum :action', () => {
     expect(r.reached).toBe(true);
   });
 
-  it('422s a non-numeric :id before any handler runs', async () => {
+  it('404s a non-numeric :id fail-closed before any handler runs (central permission gate)', async () => {
+    // The permission table keys :id routes on (\d+), so a non-numeric id resolves no
+    // permission and the central gate 404s it, byte-identical to the legacy arm's
+    // fail-closed preamble. This supersedes the old adminIdParamDecode 422 for the
+    // non-NUMERIC case; a numeric-but-invalid id (0, below) still reaches the decode.
     const setAccountDeactivated = vi.fn(async () => {});
     authedAdminDb({ setAccountDeactivated });
     installAdminRuntime();
@@ -397,8 +462,8 @@ describe('operator :id loader + enum :action', () => {
       params: { id: 'abc' },
       body: {},
     });
-    expect(r.status).toBe(422);
-    expect(r.body).toEqual({ success: false, data: null, error: 'validation.failed' });
+    expect(r.status).toBe(404);
+    expect(r.body).toEqual({ success: false, data: null, error: 'unknown admin endpoint' });
     expect(r.reached).toBe(false);
     expect(setAccountDeactivated).not.toHaveBeenCalled();
   });
@@ -433,7 +498,10 @@ describe('operator :id loader + enum :action', () => {
     });
   }
 
-  it('422s a fifth action outside the enum (never calls moderateAccount)', async () => {
+  it('404s a fifth action outside the enum fail-closed (never calls moderateAccount)', async () => {
+    // The permission table's alternation covers exactly the four actions, so a fifth
+    // resolves no permission and the central gate 404s it, byte-identical to the
+    // legacy arm's fail-closed preamble (superseding the adminEnumInvalid422 deviation).
     const moderateAccount = vi.fn(async () => {});
     authedAdminDb({ moderateAccount });
     installAdminRuntime();
@@ -442,8 +510,8 @@ describe('operator :id loader + enum :action', () => {
       params: { id: '5', action: 'frobnicate' },
       body: {},
     });
-    expect(r.status).toBe(422);
-    expect(r.body).toEqual({ success: false, data: null, error: 'validation.failed' });
+    expect(r.status).toBe(404);
+    expect(r.body).toEqual({ success: false, data: null, error: 'unknown admin endpoint' });
     expect(moderateAccount).not.toHaveBeenCalled();
   });
 });
@@ -1329,15 +1397,17 @@ describe('migrated write handlers + side effects (QA gate parity coverage)', () 
 // ---------------------------------------------------------------------------
 
 describe('overview merge math (the one non-trivial read computation)', () => {
-  it('pins the full merged body: both peak Math.max merges, server.peakOnline, and the usage passthrough', async () => {
+  it('pins the full merged body: both peak Math.max merges and server.peakOnline (usage moved to provider-usage)', async () => {
     // Values chosen so each non-trivial Math.max argument WINS somewhere: live online
     // (3) beats peakOnlineToday (1); db peakOnlineAllTime (100) beats live online AND
     // is the winning middle argument of server.peakOnline (over live peakOnline 5).
-    // Dropping any merge argument changes the asserted body.
-    const usage = { generatedAt: 9, windows: ['w'], metrics: ['m'], caches: ['c'] };
+    // Dropping any merge argument changes the asserted body. The provider-usage
+    // snapshot deliberately does NOT ride here anymore: it moved to its own
+    // ops_usage.read route (release v0.22.0), pinned by the provider-usage test.
+    const providerUsageSnapshot = vi.fn(() => ({ generatedAt: 9 }));
     authedAdminDb({
       overviewCounts: async () => ({ accounts: 4, peakOnlineToday: 1, peakOnlineAllTime: 100 }),
-      providerUsageSnapshot: () => usage,
+      providerUsageSnapshot,
     });
     installAdminRuntime();
     const r = await runRoute('GET', '/admin/api/overview', { headers: { authorization: BEARER } });
@@ -1358,10 +1428,291 @@ describe('overview merge math (the one non-trivial read computation)', () => {
           rssBytes: 1,
           heapUsedBytes: 1,
         },
-        usage,
       },
       error: null,
     });
+    expect(providerUsageSnapshot).not.toHaveBeenCalled();
+  });
+
+  it('GET /admin/api/provider-usage serves the usage snapshot on its own route', async () => {
+    const usage = { generatedAt: 9, windows: ['w'], metrics: ['m'], caches: ['c'] };
+    authedAdminDb({ providerUsageSnapshot: () => usage });
+    installAdminRuntime();
+    const r = await runRoute('GET', '/admin/api/provider-usage', {
+      headers: { authorization: BEARER },
+    });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({ success: true, data: { usage }, error: null });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Release v0.22.0 arrivals: staff identity/roles + the antibot-config family.
+// Each pins the migrated handler byte-identical to its legacy twin.
+// ---------------------------------------------------------------------------
+
+describe('staff identity + role management (release v0.22.0)', () => {
+  it('GET /admin/api/me returns the caller identity with expanded permissions', async () => {
+    authedAdminDb({
+      adminRolesForAccount: async () => ({ username: 'op', roles: ['viewer'] }),
+    });
+    installAdminRuntime();
+    const r = await runRoute('GET', '/admin/api/me', { headers: { authorization: BEARER } });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({
+      success: true,
+      data: {
+        username: 'op',
+        roles: ['viewer'],
+        permissions: ['analytics.read', 'accounts.read', 'support.read', 'moderation.read'],
+      },
+      error: null,
+    });
+  });
+
+  it('GET /admin/api/staff lists rows plus the dashboard-assignable roles (no superadmin)', async () => {
+    authedAdminDb({
+      listStaff: async () => [{ accountId: 1, username: 'op', roles: ['admin'] }],
+    });
+    installAdminRuntime();
+    const r = await runRoute('GET', '/admin/api/staff', { headers: { authorization: BEARER } });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({
+      success: true,
+      data: {
+        rows: [{ accountId: 1, username: 'op', roles: ['admin'] }],
+        assignableRoles: ['admin', 'moderator', 'viewer'],
+      },
+      error: null,
+    });
+  });
+
+  it('GET /admin/api/staff/history reads the 50 most recent audit rows', async () => {
+    const roleChangeHistory = vi.fn(async () => [{ id: 1 }]);
+    authedAdminDb({ roleChangeHistory });
+    installAdminRuntime();
+    const r = await runRoute('GET', '/admin/api/staff/history', {
+      headers: { authorization: BEARER },
+    });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({ success: true, data: { rows: [{ id: 1 }] }, error: null });
+    expect(roleChangeHistory).toHaveBeenCalledWith(50);
+  });
+
+  it('POST /admin/api/staff/roles applies a change and kicks the target live sessions', async () => {
+    const setAccountAdminRoles = vi.fn(async () => ({ before: ['viewer'], after: ['moderator'] }));
+    authedAdminDb({
+      findAccount: async () => ({ id: 42, username: 'mika' }) as never,
+      adminRolesForAccount: async (id: number) =>
+        id === ADMIN_ACCOUNT_ID
+          ? { username: 'op', roles: ['superadmin'] }
+          : { username: 'mika', roles: ['viewer'] },
+      setAccountAdminRoles,
+    });
+    const rt = installAdminRuntime();
+    const r = await runRoute('POST', '/admin/api/staff/roles', {
+      headers: { authorization: BEARER },
+      body: { username: 'mika', roles: ['moderator'] },
+    });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({
+      success: true,
+      data: { ok: true, username: 'mika', roles: ['moderator'] },
+      error: null,
+    });
+    expect(setAccountAdminRoles).toHaveBeenCalledWith({
+      accountId: 42,
+      roles: ['moderator'],
+      actorAccountId: ADMIN_ACCOUNT_ID,
+    });
+    // The roles changed, so the target's live sessions are force-disconnected
+    // (in-game permissions are snapshotted at WS join).
+    expect(rt.disconnectAccount).toHaveBeenCalledWith(42, 'Connection to the server was lost.');
+  });
+
+  it('does NOT kick when the role set is unchanged', async () => {
+    authedAdminDb({
+      findAccount: async () => ({ id: 42, username: 'mika' }) as never,
+      adminRolesForAccount: async (id: number) =>
+        id === ADMIN_ACCOUNT_ID
+          ? { username: 'op', roles: ['superadmin'] }
+          : { username: 'mika', roles: ['viewer'] },
+      setAccountAdminRoles: async () => ({ before: ['viewer'], after: ['viewer'] }),
+    });
+    const rt = installAdminRuntime();
+    const r = await runRoute('POST', '/admin/api/staff/roles', {
+      headers: { authorization: BEARER },
+      body: { username: 'mika', roles: ['viewer'] },
+    });
+    expect(r.status).toBe(200);
+    expect(rt.disconnectAccount).not.toHaveBeenCalled();
+  });
+
+  it('400s an unknown role, a superadmin grant, and an own-account edit; 404s a missing target', async () => {
+    const cases: Array<{ body: Record<string, unknown>; status: number; error: string }> = [
+      { body: { username: 'mika', roles: ['owner'] }, status: 400, error: 'unknown role' },
+      {
+        body: { username: 'mika', roles: ['superadmin'] },
+        status: 400,
+        error: 'superadmin roles are managed via the grant script',
+      },
+      { body: { username: 'ghost', roles: ['viewer'] }, status: 404, error: 'account not found' },
+      {
+        body: { username: 'op', roles: ['viewer'] },
+        status: 400,
+        error: 'you cannot change your own roles',
+      },
+    ];
+    for (const c of cases) {
+      const setAccountAdminRoles = vi.fn();
+      authedAdminDb({
+        findAccount: async (username: string) =>
+          username === 'ghost'
+            ? null
+            : ({ id: username === 'op' ? ADMIN_ACCOUNT_ID : 42, username } as never),
+        setAccountAdminRoles,
+      });
+      installAdminRuntime();
+      const r = await runRoute('POST', '/admin/api/staff/roles', {
+        headers: { authorization: BEARER },
+        body: c.body,
+      });
+      expect(r.status, JSON.stringify(c.body)).toBe(c.status);
+      expect(r.body).toEqual({ success: false, data: null, error: c.error });
+      expect(setAccountAdminRoles).not.toHaveBeenCalled();
+    }
+  });
+
+  it('refuses to edit a target that currently holds superadmin', async () => {
+    const setAccountAdminRoles = vi.fn();
+    authedAdminDb({
+      findAccount: async () => ({ id: 42, username: 'root' }) as never,
+      adminRolesForAccount: async (id: number) =>
+        id === ADMIN_ACCOUNT_ID
+          ? { username: 'op', roles: ['superadmin'] }
+          : { username: 'root', roles: ['superadmin'] },
+      setAccountAdminRoles,
+    });
+    installAdminRuntime();
+    const r = await runRoute('POST', '/admin/api/staff/roles', {
+      headers: { authorization: BEARER },
+      body: { username: 'root', roles: ['viewer'] },
+    });
+    expect(r.status).toBe(400);
+    expect(r.body).toEqual({
+      success: false,
+      data: null,
+      error: 'superadmin roles are managed via the grant script',
+    });
+    expect(setAccountAdminRoles).not.toHaveBeenCalled();
+  });
+});
+
+describe('antibot-config family (release v0.22.0 #1433)', () => {
+  const FIELDS = [
+    { id: 'enforce', value: true, defaultValue: false },
+    { id: 'kick_score', value: 1.0, defaultValue: 1.0 },
+  ];
+
+  it('GET /admin/api/antibot-config returns the live fields + last-saved stamp', async () => {
+    authedAdminDb({
+      loadAntibotConfig: async () => ({
+        data: { enforce: true },
+        updatedAt: '2026-07-05T00:00:00Z',
+      }),
+    });
+    installAdminRuntime({ antibotConfigFields: vi.fn(() => FIELDS) });
+    const r = await runRoute('GET', '/admin/api/antibot-config', {
+      headers: { authorization: BEARER },
+    });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({
+      success: true,
+      data: { fields: FIELDS, updatedAt: '2026-07-05T00:00:00Z' },
+      error: null,
+    });
+  });
+
+  it('GET /admin/api/antibot-config/history returns the audit entries', async () => {
+    authedAdminDb({ listAntibotConfigHistory: async () => [{ id: 3 }] });
+    installAdminRuntime();
+    const r = await runRoute('GET', '/admin/api/antibot-config/history', {
+      headers: { authorization: BEARER },
+    });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({ success: true, data: { entries: [{ id: 3 }] }, error: null });
+  });
+
+  it('POST /admin/api/antibot-config validates, applies live, persists the EFFECTIVE overrides, and answers the fresh fields', async () => {
+    const saveAntibotConfigChange = vi.fn(async () => ({ updatedAt: '2026-07-05T00:00:01Z' }));
+    authedAdminDb({ saveAntibotConfigChange });
+    const applyAntibotConfig = vi.fn(() => ({ errors: [] as string[] }));
+    // enforce differs from its default, kick_score does not: only enforce persists.
+    installAdminRuntime({
+      antibotConfigFields: vi.fn(() => FIELDS),
+      applyAntibotConfig,
+    });
+    const r = await runRoute('POST', '/admin/api/antibot-config', {
+      headers: { authorization: BEARER },
+      body: { overrides: { enforce: true }, note: 'turn it on' },
+    });
+    expect(r.status).toBe(200);
+    expect(r.body).toEqual({
+      success: true,
+      data: { fields: FIELDS, updatedAt: '2026-07-05T00:00:01Z' },
+      error: null,
+    });
+    expect(applyAntibotConfig).toHaveBeenCalledWith({ enforce: true });
+    expect(saveAntibotConfigChange).toHaveBeenCalledWith(
+      { enforce: true },
+      ADMIN_ACCOUNT_ID,
+      'turn it on',
+    );
+  });
+
+  it('400s a missing overrides object without touching the detector', async () => {
+    const applyAntibotConfig = vi.fn(() => ({ errors: [] as string[] }));
+    authedAdminDb({});
+    installAdminRuntime({ applyAntibotConfig });
+    const r = await runRoute('POST', '/admin/api/antibot-config', {
+      headers: { authorization: BEARER },
+      body: { overrides: [1, 2] },
+    });
+    expect(r.status).toBe(400);
+    expect(r.body).toEqual({
+      success: false,
+      data: null,
+      error: 'an overrides object is required',
+    });
+    expect(applyAntibotConfig).not.toHaveBeenCalled();
+  });
+
+  it('400s a rejected document, re-applies the previous effective overrides, persists nothing', async () => {
+    const saveAntibotConfigChange = vi.fn();
+    authedAdminDb({ saveAntibotConfigChange });
+    // First call (the attempted apply) fails validation; the rollback re-apply follows.
+    const applyAntibotConfig = vi
+      .fn(() => ({ errors: [] as string[] }))
+      .mockImplementationOnce(() => ({ errors: ['enforce: expected a boolean'] }));
+    installAdminRuntime({
+      antibotConfigFields: vi.fn(() => FIELDS),
+      applyAntibotConfig,
+    });
+    const r = await runRoute('POST', '/admin/api/antibot-config', {
+      headers: { authorization: BEARER },
+      body: { overrides: { enforce: 'yes' } },
+    });
+    expect(r.status).toBe(400);
+    expect(r.body).toEqual({
+      success: false,
+      data: null,
+      error: 'enforce: expected a boolean',
+    });
+    // Call 1: the rejected document. Call 2: the rollback to the previous effective
+    // set (enforce was the one non-default field before the attempt).
+    expect(applyAntibotConfig).toHaveBeenNthCalledWith(1, { enforce: 'yes' });
+    expect(applyAntibotConfig).toHaveBeenNthCalledWith(2, { enforce: true });
+    expect(saveAntibotConfigChange).not.toHaveBeenCalled();
   });
 });
 
@@ -1458,7 +1809,7 @@ describe('remaining legacy guard negatives (re-verification audit)', () => {
       rateLimited: allowedRateLimit,
       findAccount: async () => ({ id: 9, username: 'bob', password_hash: 'h' }) as never,
       verifyPassword,
-      isAdminAccount: async () => true,
+      adminRolesForAccount: async () => ({ username: 'bob', roles: ['admin'] }),
     });
     const r = await runRoute('POST', '/admin/api/login', {
       body: { username: 'bob', password: 'wrong' },

@@ -166,7 +166,9 @@ OUT OF SCOPE (do not do these here)
   migrated set is 45 (12 18b + 4 + 10 + 19); a provenance sweep should attribute the
   thirty-three to their merge commits, they have no owning phase). [FIFTH-SLICE UPDATE
   2026-07-04: the housekeeping revert removes the 10-route family and the calendar 11th
-  member, so the release-merge migrated set is 34 (12 18b + 4 + 18 map editor/admin).] The
+  member, so the release-merge migrated set is 34 (12 18b + 4 + 18 map editor/admin).]
+  [v0.22.0 SLICE UPDATE 2026-07-05: the staff/antibot/CAPI admin family adds 8, so the
+  release-merge migrated set is 42 (12 18b + 4 + 18 + 8 v0.22.0 admin).] The
   scaffold emits a STUB only.
   PRECONDITION: Phase 18b MUST have landed before this phase runs; if any route family in server
   source still lacks either a RouteDef or a recorded permanent-delegate decision, STOP (see the

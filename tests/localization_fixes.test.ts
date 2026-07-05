@@ -901,8 +901,8 @@ describe('S3: every sim.ts emit is recognized (drift guard)', () => {
     // literals in already-scanned files, so only a rewording of THIS file's sites was
     // invisible to the guard before this entry.
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/interaction.ts'), 'utf8'),
-    // H1: the gathering profession module: no emits today, scanned so future
-    // profession-harvest emits land under the drift guard automatically.
+    // #1121: per-player node harvest command denials (dead gate, unknown node,
+    // range, respawn timer, bag-full pre-check).
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/professions/gathering.ts'), 'utf8'),
     socialSrc,
   ].join('\n');

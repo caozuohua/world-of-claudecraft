@@ -53,9 +53,11 @@ describe('scalars', () => {
     expect(num().decode('7')).toEqual({ ok: true, value: 7 });
     expect(num().decode(7)).toEqual({ ok: true, value: 7 });
     expect(num().decode('  7  ')).toEqual({ ok: true, value: 7 });
-    // Pins the adminIdParamDecode / characterIdParamDecode ledger claim: the decoder
-    // is WIDER than a legacy \d+ route regex, so these spellings of a positive integer
-    // decode (and reach the handler) where the legacy ladder 404-fell-through.
+    // Pins the characterIdParamDecode ledger claim: the decoder is WIDER than a
+    // legacy \d+ route regex, so these spellings of a positive integer decode (and
+    // reach the handler) where the legacy ladder 404-fell-through. (On the ADMIN
+    // surface the v0.22.0 central permission gate rejects these spellings pre-decode
+    // on both arms, so the narrowed adminIdParamDecode entry no longer cites them.)
     expect(num({ int: true, min: 1 }).decode('+5')).toEqual({ ok: true, value: 5 });
     expect(num({ int: true, min: 1 }).decode('5.0')).toEqual({ ok: true, value: 5 });
   });

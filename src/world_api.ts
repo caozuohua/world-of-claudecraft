@@ -36,7 +36,8 @@
 //   delves.ts           IWorldDelves         delve runs, lockpick, companion
 //   daily_rewards.ts    IWorldDailyRewards   daily WOC-holder rewards
 //   telemetry.ts        IWorldTelemetry      fire-and-forget metrics sink
-//   professions.ts      IWorldProfessions    skill/craft/recipe/node read surface (stub, #1164)
+//   professions.ts      IWorldProfessions    skill/craft/recipe/node read surface (#1164; node
+//                                            harvest read + action landed in #1121)
 //
 // THREE GATES pin this seam (run before any facet edit; the literal counts are
 // pinned THERE and re-stale here, so this prose stays count-free):
@@ -208,6 +209,7 @@ export const COMMAND_NAMES = [
   'sell',
   'buyback',
   'sell_all_junk',
+  'harvest_node',
   'change_skin',
   'unequip_mech_chroma',
   'claim_event_skin',

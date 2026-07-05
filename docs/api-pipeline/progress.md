@@ -2193,3 +2193,63 @@ carries an inline proxy-retired pointer, and server/http/CLAUDE.md's observabili
 names attack_signals with the label discipline. The packet (25 phases + closeouts 26/27/28)
 is now fully closed; the only remaining follow-up is the next-release ladder-deletion PR
 (exit criteria in state.md, owner Fernando).
+
+## v0.22.0 release merge (2026-07-05): admin permissions + antibot config + Meta CAPI, both-arm mirror
+
+Merge 05395258b brings release/v0.22.0 (61 commits): fine-grained admin role permissions
+(#1455), bot-detector runtime config (#1433), server-side Meta CAPI (#1460), per-player
+node harvest + proficiency-scaled rarity roll (#1121/#1122), and the world-boss
+anti-kite/raid-lockout work. Fourteen conflicts resolved (sim corpse-harvest cluster,
+server seams, sim_i18n key-union with branch translations winning, count-pin re-derives:
+command schema 118 sends / 127 dispatch, IWorld 170 members / 42 data / 128 methods).
+
+HTTP surface: EIGHT new admin routes, migrated inside the merge commit per the
+no-half-migrated-family rule (GET /admin/api/me, GET /admin/api/staff, GET
+/admin/api/staff/history, POST /admin/api/staff/roles, GET /admin/api/provider-usage,
+GET+POST /admin/api/antibot-config, GET /admin/api/antibot-config/history), each
+router-owned AND legacy-served, with surface-corpus rows and no-auth parity 401 pins.
+The release-merge migrated set grows 34 to 42; the admin surface counts 46 RouteDefs.
+
+Auth model, mirrored onto both arms: createRequireAdmin resolves staff identity
+fail-closed (staff_db.adminRolesForAccount; no roles means 401) and runs the central
+ADMIN_ROUTE_PERMISSIONS gate from the concrete request path (unmapped 404 'unknown admin
+endpoint' / 405; missing permission 403) before any :id/:action decode, byte-identical
+to the release's legacy handleAdminApi preamble; the identity (username, roles, expanded
+permissions) is stashed on ctx.state for /me and the staff-roles write. Login answers
+roles + expanded permissions; overview no longer carries the usage snapshot
+(provider-usage owns it under ops_usage.read). DEVIATION SUPERSESSION recorded in the
+ledger: adminEnumInvalid422 fully superseded (both arms fail-closed 404 an out-of-enum
+action pre-decode); adminIdParamDecode narrowed to the degenerate digit-string class
+('0'/'00'/past-2^53 still 422 on the migrated arm where legacy runs the handler); the
+non-numeric class now answers the same 404 on both arms, superseding the old 422 and the
+wider-spelling num() note. tests/server/admin.test.ts pins both supersessions plus the
+403 permission-denial arm, the staff family (role change + live kick + the four
+refusals), and the antibot family (GET fields, history, validate-apply-persist,
+missing-overrides 400, rollback-on-reject with persist-nothing).
+
+Register twins (server/auth_routes.ts + the legacy main.ts arm): accountId in the 200
+body, the Meta CAPI AccountCreated event (email + cookie attribution, fire-and-forget,
+injectable via the auth db bundle), and the requestMetadata hoist. WS join: ws_auth.ts
+deps bag re-bound (adminRolesForAccount + permissionsForRoles + metaRequestUserData +
+metaEventSourceUrl); the session snapshots isAdmin + the expanded adminPermissions (fail
+closed, no is_admin fallback) and the CAPI attribution (fbp/fbc/sourceUrl) for
+trackReachedLevel5. Boot replays the persisted antibot overrides through
+game.applyAntibotConfig right after the liveGame() first touch.
+
+Private bot detector (synced to ~/Documents/wocc-bot-protection, its own commit):
+describeConfig/applyConfig implemented; an enforce kill-switch field defaults to the
+ANTIBOT_ENFORCE env var (the host now always grants its enforce parameter; the config
+gates active responses live) plus the six gate knobs (report/throttle/kick score
+thresholds and sustain windows) threaded through evaluateGate as an optional tuning bag
+with the old literals as defaults; REPLACE + skip-invalid apply semantics with a
+tests/config.test.ts pinning both.
+
+Release-merge audit (six parallel auditors: server overlaps, sim overlaps, i18n
+overlaps, endpoints+deviations, injected bindings, doc premises): server/sim/i18n
+overlaps and every injection seam CLEAN; findings applied: the eight surface-corpus
+rows (the freshness gates redden without them), the two ledger rewrites, the stale
+admin.ts banner prose (auth model + superseded deviations), the world_boss.ts header
+(utcDay to raid-lockout), the server/CLAUDE.md antibot boot-replay row (startServer +
+liveGame, not main() + new GameServer()), and the count updates here, in state.md
+(closeout counts, Phase 17 + 18b brackets, the new slice record), and in
+phase-25-docs-flag-flip.md.

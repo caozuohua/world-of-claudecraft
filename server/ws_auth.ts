@@ -66,7 +66,21 @@ export interface WsAuthDeps {
   moderationStatusForAccount: (accountId: number) => Promise<AccountModerationStatus>;
   getCharacter: (accountId: number, characterId: number) => Promise<CharacterRow | null>;
   chatMuteStatusForAccount: (accountId: number) => Promise<AccountChatMuteStatus>;
-  isAdminAccount: (accountId: number) => Promise<boolean>;
+  // Staff identity (accounts.admin_roles): null means not staff. The expanded
+  // permission set is snapshotted into the session at join (server/game.ts) and
+  // gates the in-game moderation commands; a role change applies at next login.
+  adminRolesForAccount: (
+    accountId: number,
+  ) => Promise<{ username: string; roles: string[] } | null>;
+  permissionsForRoles: (roles: readonly string[]) => ReadonlySet<string>;
+  // Meta CAPI attribution (server/meta_capi.ts): the browser-cookie user data and
+  // the event source URL ride the join metadata into the session for the
+  // server-side conversion events (e.g. trackReachedLevel5 in game.ts).
+  metaRequestUserData: (
+    req: http.IncomingMessage,
+    meta: { ip: string; userAgent: string },
+  ) => { fbp?: string | null; fbc?: string | null };
+  metaEventSourceUrl: (req: http.IncomingMessage) => string | undefined;
   loadAccountCosmetics: (accountId: number) => Promise<AccountCosmetics>;
   isConnectionRefused: (input: {
     blocked: boolean;
@@ -92,7 +106,10 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
     moderationStatusForAccount,
     getCharacter,
     chatMuteStatusForAccount,
-    isAdminAccount,
+    adminRolesForAccount,
+    permissionsForRoles,
+    metaRequestUserData,
+    metaEventSourceUrl,
     loadAccountCosmetics,
     isConnectionRefused,
     bufferHandshakeMessages,
@@ -144,8 +161,11 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
     // Hard per-IP WS connection limit. The soft threshold (composite score evidence)
     // is handled inside game.join(); this guard blocks egregious bot farms before
     // they consume a session slot.
-    const ip = requestMetadata(req).ip;
-    const isAdmin = await isAdminAccount(accountId);
+    const meta = requestMetadata(req);
+    const ip = meta.ip;
+    const staff = await adminRolesForAccount(accountId);
+    const isAdmin = staff !== null;
+    const adminPermissions = staff ? [...permissionsForRoles(staff.roles)] : [];
     if (
       isConnectionRefused({
         blocked: game.isIpBlocked(ip),
@@ -167,12 +187,15 @@ export function createWsAuth(deps: WsAuthDeps): WsAuthHandlers {
       character.state,
       character.is_gm,
       {
-        ...requestMetadata(req),
+        ...meta,
+        ...metaRequestUserData(req, meta),
+        sourceUrl: metaEventSourceUrl(req),
         mutedUntil: status.chatMutedUntil ?? chatMute.mutedUntil,
         reason: chatMute.reason,
         chatStrikes: status.chatStrikes,
         accountCosmetics,
         isAdmin,
+        adminPermissions,
         clientSeed,
       },
     );

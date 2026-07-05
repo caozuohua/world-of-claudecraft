@@ -796,26 +796,29 @@ export const KNOWN_DEVIATIONS: readonly KnownDeviation[] = [
     id: DEVIATION_ID.adminEnumInvalid422,
     routes: ['/admin/api/moderation/accounts/:id/(suspend|unsuspend|ban|unban)'],
     currentBehavior:
-      'The legacy handleAdminApi matches the sanction route with the regex ' +
-      '/moderation/accounts/(\\d+)/(suspend|unsuspend|ban|unban); an action outside the ' +
-      'four does not match, falls through every POST branch, and (for an authenticated ' +
-      'admin) answers 405 { success: false, data: null, error: "method not allowed" } ' +
-      'from the `if (req.method !== "GET")` guard.',
+      'SUPERSEDED by the v0.22.0 release merge (the fine-grained admin permission ' +
+      'model). BOTH arms now run the central ADMIN_ROUTE_PERMISSIONS gate before any ' +
+      'route/action decode (legacy: the handleAdminApi preamble; migrated: inside ' +
+      'createRequireAdmin), and the table keys the sanction route on the literal ' +
+      'four-action alternation, so an action outside the four resolves NO permission ' +
+      'and answers a fail-closed 404 { success: false, data: null, error: "unknown ' +
+      'admin endpoint" } identically on both arms (pinned by tests/server/admin.test.ts ' +
+      '"404s a fifth action outside the enum fail-closed"). Before v0.22.0 the legacy ' +
+      'arm answered a POST-fallthrough 405 and the migrated arm a 422 enum decode.',
     intendedBehavior:
-      'The migration restructures the enum-alternation route to :id/:action (the ' +
-      "table router's no-regex-routing guard rejects the alternation) and validates the " +
-      'action with a ' +
-      'schema enum { suspend, unsuspend, ban, unban }. An action outside the four decodes ' +
-      'to a 422 { success: false, data: null, error: "validation.failed" } (the admin ' +
-      'envelope) instead of the legacy 405. The change is AUTH-GATED: an unauthenticated ' +
-      'request 401s on both paths (requireAdmin precedes the action decode), so the ' +
-      '422-vs-405 divergence is only reachable behind a valid admin bearer, and becomes ' +
-      'the real behavior when the legacy arm is removed.',
+      'No live divergence remains: the fail-closed 404 is byte-identical on both arms. ' +
+      'The migrated :id/:action restructure (the no-regex-routing guard rejects the ' +
+      'alternation) and its schema enum { suspend, unsuspend, ban, unban } are still in ' +
+      'place, but the 422 arm is an unreachable defensive backstop behind the gate ' +
+      '(only the four table-matched actions ever reach the decode). Retained in the ' +
+      'ledger for the ladder-deletion PR: deleting the legacy arm must NOT resurrect ' +
+      'the 422 by removing the central gate from the migrated path.',
     introducedInPhase: 17,
     reason:
       'Restructuring the only enum-alternation route to a schema-validated :action ' +
-      'param is required by the no-regex-routing guard; an invalid action becomes a ' +
-      'validation error (422) rather than a method-fallthrough 405. Not exercised by the ' +
+      'param is required by the no-regex-routing guard. The original 422-vs-405 ' +
+      'divergence was closed from the LEGACY side by the v0.22.0 central permission ' +
+      'gate, mirrored onto the migrated arm in the same merge. Not exercised by the ' +
       'db-free parity corpus (admin authed reads need Postgres), documented here.',
   },
   {
@@ -840,44 +843,41 @@ export const KNOWN_DEVIATIONS: readonly KnownDeviation[] = [
       '/admin/api/user-assets/:id/unblock',
     ],
     currentBehavior:
-      'The legacy handleAdminApi matches every admin :id route with a `(\\d+)` regex. ' +
-      'A NON-NUMERIC :id (or a "+5" / "5.0" / " 5 " spelling) never matches: it ' +
-      '404-falls-through to "unknown admin endpoint" (a GET :id route) or the 405 method ' +
-      'guard (a POST :id route), for an authenticated admin. A DIGIT-STRING id the ' +
-      'handlers never store DOES match `\\d+` and runs the handler: "0" / "00" reach the ' +
-      'DB-miss path (the handler-owned 404 "account not found" / "word not found" / ' +
-      '"open report not found", a 200 { screenshot: null } on bug-reports/:id/screenshot, ' +
-      "a 200 { ok: true } on reactivate's zero-row UPDATE), and a digit string past 2^53 " +
-      'passes a non-safe Number to the *_db layer (a DB miss answers the handler-owned ' +
-      "404; a pg bigint-range error surfaces as the catch's 400 err.message on the " +
-      'moderation writes or the outer 500 "internal error" on the reads).',
+      'NARROWED by the v0.22.0 release merge: BOTH arms now run the central ' +
+      'ADMIN_ROUTE_PERMISSIONS gate before any decode, and its `(\\d+)`-keyed patterns ' +
+      'reject every NON-NUMERIC :id spelling ("abc", "+5", "5.0", " 5 ") with the same ' +
+      'fail-closed 404 { success: false, data: null, error: "unknown admin endpoint" } ' +
+      'on both arms (pinned by tests/server/admin.test.ts "404s a non-numeric :id ' +
+      'fail-closed"), so that whole class no longer diverges (and the pre-v0.22.0 ' +
+      'wider-than-legacy num() spellings can no longer reach the migrated handler). ' +
+      'What REMAINS divergent is the DEGENERATE DIGIT-STRING class, which passes the ' +
+      'gate on both arms: the legacy `(\\d+)` regex matches "0" / "00" and runs the ' +
+      'handler to its DB-miss path (the handler-owned 404 "account not found" / "word ' +
+      'not found" / "open report not found", a 200 { screenshot: null } on ' +
+      "bug-reports/:id/screenshot, a 200 { ok: true } on reactivate's zero-row " +
+      'UPDATE), and a digit string past 2^53 passes a non-safe Number to the *_db ' +
+      'layer (a DB miss answers the handler-owned 404; a pg bigint-range error ' +
+      "surfaces as the catch's 400 err.message on the moderation writes or the outer " +
+      '500 "internal error" on the reads).',
     intendedBehavior:
-      'The migrated admin surface matches :id generically (path_pattern cannot constrain a ' +
-      'param to ' +
-      'digits) and decodes it with requireAdminTarget num({ int, min: 1 }) BEFORE any DB ' +
-      'call. A non-numeric, non-positive, or non-safe-integer id throws the decode ' +
-      'failure, which withErrors maps to 422 { success: false, data: null, error: ' +
-      '"validation.failed" } on the known route family (NaN-safe: a query never receives ' +
-      'NaN or a non-safe Number). That one 422 replaces the WHOLE legacy spread above ' +
-      '(the fallthrough 404/405 for a non-numeric id, and the handler-owned 404 / 200 / ' +
-      '400 / 500 shapes for a degenerate numeric one). The decoder is also slightly ' +
-      'WIDER than the legacy regex: a trimmed decimal spelling of a positive ' +
-      'integer ("+5", "5.0", a whitespace-padded " 5 ") decodes to the same id and reaches ' +
-      'the handler where legacy 404-fell-through; harmless (an operator holds universal ' +
-      'authority and plain "5" reaches the same row) and shared with the num() decoders ' +
-      'on every migrated :id surface. AUTH-GATED: requireAdmin ' +
-      'precedes the decode, so an unauthenticated bad-id request 401s on both paths; ' +
-      'every divergence above is only reachable behind a valid admin bearer. Sibling to ' +
+      'The migrated admin surface decodes :id with requireAdminTarget num({ int, min: 1 }) ' +
+      'BEFORE any DB call, so the degenerate digit-string class ("0", "00", past-2^53) ' +
+      'answers 422 { success: false, data: null, error: "validation.failed" } where the ' +
+      'legacy arm runs the handler (NaN-safe: a query never receives a non-positive or ' +
+      'non-safe Number). AUTH-GATED: requireAdmin precedes the decode, so an ' +
+      'unauthenticated bad-id request 401s on both paths; the divergence is only ' +
+      'reachable behind a valid admin bearer holding the route permission. Sibling to ' +
       'characterIdParamDecode (whose legacy arm answered the account-scoped miss 404 for ' +
-      'a matched "0"). No golden pins a non-numeric or degenerate-numeric admin id and no ' +
-      'client sends one, so it is not a parity divergence the harness can observe.',
+      'a matched "0"). No golden pins a degenerate-numeric admin id and no client sends ' +
+      'one, so it is not a parity divergence the harness can observe.',
     introducedInPhase: 17,
     reason:
-      'The new router matches :id generically where the legacy `\\d+` regex 404-fell-' +
-      'through a malformed id (and ran the handler on a degenerate numeric one), so the ' +
-      'operator loader rejects both classes with a 422 rather than letting NaN or a ' +
-      'non-safe Number reach a query. Not observable by the numeric-only, db-free parity ' +
-      'corpus (and auth-gated), documented here.',
+      'The operator loader rejects a degenerate numeric id with a 422 rather than ' +
+      'letting a non-positive or non-safe Number reach a query; the legacy `(\\d+)` arm ' +
+      'runs the handler instead. The non-numeric class this entry originally covered ' +
+      'was closed from the LEGACY side by the v0.22.0 central permission gate (both ' +
+      'arms fail-closed 404 pre-decode). Not observable by the numeric-only, db-free ' +
+      'parity corpus (and auth-gated), documented here.',
   },
   {
     id: DEVIATION_ID.adminBodyValidationRemap,

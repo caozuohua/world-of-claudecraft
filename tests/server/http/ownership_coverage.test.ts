@@ -100,13 +100,18 @@ const accountOwnedRoutes: RouteDef[] = apiRoutes.filter(
   (route) => route.meta?.requireOwned?.ownerScope === 'account',
 );
 
-// Substitute each :param segment with the concrete REQUESTED_ID so ctx.path/url
-// read as a real request path (cosmetic here: the sweep invokes the middleware
-// chain directly, so params are set explicitly rather than by the router).
+// Substitute each :param segment with a concrete sample so ctx.path/url read as a
+// real request path. Load-bearing for the admin sweep: requireAdmin's central
+// permission gate resolves the route permission from the CONCRETE url pathname
+// (admin_routes.ts patterns), so :id must be numeric and :action a real enum
+// member, or the gate fail-closed-404s before the middleware under test runs.
 function concretePath(path: string): string {
   return path
     .split('/')
-    .map((segment) => (segment.startsWith(':') ? REQUESTED_ID : segment))
+    .map((segment) => {
+      if (!segment.startsWith(':')) return segment;
+      return segment === ':action' ? 'suspend' : REQUESTED_ID;
+    })
     .join('/');
 }
 
@@ -309,22 +314,23 @@ const NON_ADMIN_ACCOUNT_ID = 999;
 // The admin envelope validation.failed body serializeAdmin writes for a 422.
 const ADMIN_VALIDATION_FAILED = { success: false, data: null, error: 'validation.failed' };
 
-// Install the admin db seam so requireAdmin resolves the bearer to a NON-admin
-// account: the token is valid, the account exists, but is_admin is false, so the
-// gate's is_admin check is the one that must refuse it.
+// Install the admin db seam so requireAdmin resolves the bearer to a NON-staff
+// account: the token is valid, the account exists, but it carries no staff roles,
+// so the gate's fail-closed staff check is the one that must refuse it.
 function installNonAdminDb(): void {
   setAdminDbForTests({
     accountForToken: async () => NON_ADMIN_ACCOUNT_ID,
-    isAdminAccount: async () => false,
+    adminRolesForAccount: async () => null,
   });
 }
 
-// Install the admin db seam so requireAdmin PASSES (a real admin), so the sweep can
-// reach requireAdminTarget's :id decode with a valid operator identity.
+// Install the admin db seam so requireAdmin PASSES (superadmin holds every route
+// permission), so the sweep can reach requireAdminTarget's :id decode with a valid
+// operator identity.
 function installAdminDb(): void {
   setAdminDbForTests({
     accountForToken: async () => CALLER_ACCOUNT_ID,
-    isAdminAccount: async () => true,
+    adminRolesForAccount: async () => ({ username: 'op', roles: ['superadmin'] }),
   });
 }
 

@@ -1169,6 +1169,12 @@ export const nl_NL: EnTranslations = {
     "social": {
       "lastSeen": "Laatst gezien: {when}",
       "lastSeenNever": "nooit"
+    },
+    "gathering": {
+      "title": "Verzamelen",
+      "mining": "Mijnbouw",
+      "logging": "Houtkap",
+      "herbalism": "Kruidenkunde"
     }
   },
   "apiError": {
@@ -2596,7 +2602,9 @@ export const nl_NL: EnTranslations = {
   },
   "download": {
     "title": "Desktop-launcher downloaden",
-    "desc": "Download de losse launcher voor optimale prestaties en schermvullend spelen."
+    "desc": "Download de losse launcher voor optimale prestaties en schermvullend spelen.",
+    "macCta": "Download voor macOS",
+    "windowsPending": "Windows-build volgt later."
   },
   "comingSoon": {
     "placeholder": "Binnenkort beschikbaar...",
@@ -5746,6 +5754,24 @@ export const nl_NL: EnTranslations = {
       },
       "silverleaf_sickle": {
         "name": "Zilverbladsikkel"
+      },
+      "thorium_mining_pick": {
+        "name": "Thorium Mijnpik"
+      },
+      "arcanite_mining_pick": {
+        "name": "Arcaniet Mijnpik"
+      },
+      "ashwood_axe": {
+        "name": "Essenhouten Bijl"
+      },
+      "elderwood_axe": {
+        "name": "Oudhouten Bijl"
+      },
+      "goldleaf_sickle": {
+        "name": "Goudbladsikkel"
+      },
+      "sunpetal_sickle": {
+        "name": "Zonneblaadjessikkel"
       },
       "bristleback_maul": {
         "name": "Gallowglass-Hamer"

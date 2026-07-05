@@ -80,6 +80,7 @@ function installDb(overrides: Parameters<typeof setAuthDbForTests>[0] = {}): voi
     emailAccountCreated: () => {},
     createSuspiciousRegistrationReport: async () => ({ created: false, signals: [] }),
     captureReferral: async () => {},
+    trackAccountCreated: async () => {},
     ...overrides,
   });
 }
@@ -224,17 +225,38 @@ describe('register handler', () => {
     });
     const out = await runHandler({ username: 'newhero', password: 'secret123', email: 'a@b.co' });
     expect(out.status).toBe(200);
-    const body = out.body as { token: string; username: string; emailMissing: boolean };
+    const body = out.body as {
+      token: string;
+      username: string;
+      accountId: number;
+      emailMissing: boolean;
+    };
     expect(body.username).toBe('newhero');
     // The uniform post-auth check: register always answers emailMissing false
     // (the address was required above).
     expect(body.emailMissing).toBe(false);
+    // The new account id rides the response (release v0.22.0, client-side analytics).
+    expect(body.accountId).toBe(7);
     expect(body.token).toMatch(HEX64);
     expect(body.token.length).toBe(64);
     expect(saved).not.toBeNull();
     const savedCall = saved as unknown as { token: string; id: number };
     expect(savedCall.id).toBe(7);
     expect(savedCall.token).toBe(body.token);
+  });
+
+  it('fires the Meta CAPI AccountCreated event with the signup email (fire-and-forget)', async () => {
+    const capiCalls: Array<{ id: unknown; userData: Record<string, unknown> }> = [];
+    installDb({
+      trackAccountCreated: async (id, userData) => {
+        capiCalls.push({ id, userData: userData as Record<string, unknown> });
+      },
+    });
+    const out = await runHandler({ username: 'newhero', password: 'secret123', email: 'a@b.co' });
+    expect(out.status).toBe(200);
+    expect(capiCalls).toHaveLength(1);
+    expect(capiCalls[0].id).toBe(7);
+    expect(capiCalls[0].userData.email).toBe('a@b.co');
   });
 
   it('stores the signup email and sends the welcome mail for a valid address', async () => {

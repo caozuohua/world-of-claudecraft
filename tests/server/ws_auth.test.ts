@@ -74,7 +74,12 @@ function setup() {
       mutedUntil: null as string | null,
       reason: '',
     })),
-    isAdminAccount: vi.fn(async () => false),
+    // Default: not staff (null), mirroring staff_db.adminRolesForAccount's fail-closed
+    // contract. permissionsForRoles echoes the roles so a test can pin the expansion.
+    adminRolesForAccount: vi.fn(async () => null as { username: string; roles: string[] } | null),
+    permissionsForRoles: vi.fn((roles: readonly string[]) => new Set<string>(roles)),
+    metaRequestUserData: vi.fn(() => ({ fbp: null, fbc: null })),
+    metaEventSourceUrl: vi.fn(() => undefined as string | undefined),
     loadAccountCosmetics: vi.fn(async () => ({ completedQuestIds: [], mechChromaIds: [] })),
     isConnectionRefused: vi.fn(() => false),
     bufferHandshakeMessages,
@@ -206,7 +211,7 @@ describe('createWsAuth: authenticateWebSocket reject paths', () => {
   it('8c. the REAL gate predicate exempts an admin even past the hard limit', async () => {
     const { ws, game, deps, req } = setup();
     deps.isConnectionRefused = realIsConnectionRefused;
-    deps.isAdminAccount = vi.fn(async () => true);
+    deps.adminRolesForAccount = vi.fn(async () => ({ username: 'Op', roles: ['admin'] }));
     game.countIpSessions = vi.fn((_ip: string) => 999); // far past the limit
     const { authenticateWebSocket } = createWsAuth(deps);
     await authenticateWebSocket(asWs(ws), authRaw(), req);
@@ -264,6 +269,9 @@ describe('createWsAuth: authenticateWebSocket accept path', () => {
         chatStrikes: 0,
         accountCosmetics: { completedQuestIds: [], mechChromaIds: [] },
         isAdmin: false,
+        // Not staff: the snapshotted permission set is EMPTY (fail closed), never
+        // an is_admin-derived fallback.
+        adminPermissions: [],
         clientSeed: '',
       }),
     );
@@ -280,6 +288,37 @@ describe('createWsAuth: authenticateWebSocket accept path', () => {
     // Disconnect routes through game.leave with the disconnect reason.
     ws.emit('close');
     expect(game.leave).toHaveBeenCalledWith(session, 'disconnected');
+  });
+
+  it('snapshots the staff roles into isAdmin + expanded adminPermissions, and rides the CAPI attribution', async () => {
+    const { ws, game, deps, req } = setup();
+    deps.adminRolesForAccount = vi.fn(async () => ({ username: 'Op', roles: ['moderator'] }));
+    deps.permissionsForRoles = vi.fn(() => new Set(['moderation.read', 'moderation.act']));
+    deps.metaRequestUserData = vi.fn(() => ({ fbp: 'fb.1.a', fbc: 'fb.1.b' }));
+    deps.metaEventSourceUrl = vi.fn(() => 'https://example.test/');
+    const { authenticateWebSocket } = createWsAuth(deps);
+    await authenticateWebSocket(asWs(ws), authRaw(), req);
+    // The identity is resolved from the ROLES table (accountId 1) and expanded via
+    // permissionsForRoles; the join meta snapshots the expansion, so the in-game
+    // moderation gate never re-reads the db mid-session.
+    expect(deps.adminRolesForAccount).toHaveBeenCalledWith(1);
+    expect(deps.permissionsForRoles).toHaveBeenCalledWith(['moderator']);
+    expect(game.join).toHaveBeenCalledWith(
+      ws,
+      1,
+      7,
+      'Aldric',
+      'warrior',
+      null,
+      false,
+      expect.objectContaining({
+        isAdmin: true,
+        adminPermissions: ['moderation.read', 'moderation.act'],
+        fbp: 'fb.1.a',
+        fbc: 'fb.1.b',
+        sourceUrl: 'https://example.test/',
+      }),
+    );
   });
 
   it('forwards the client-supplied seed into the join meta', async () => {

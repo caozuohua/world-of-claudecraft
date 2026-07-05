@@ -1225,6 +1225,93 @@ export const SURFACE_INVENTORY: readonly SurfaceRoute[] = [
     limiter: null,
     requireOwnedExpected: null,
   },
+  // v0.22.0 release merge: staff identity + fine-grained role management
+  // (accounts.admin_roles; the central ADMIN_ROUTE_PERMISSIONS gate authorizes
+  // every authed admin route, so authScope stays the shared admin gate).
+  {
+    dispatcher: DISPATCH.admin,
+    method: 'GET',
+    path: '/admin/api/me',
+    handler: 'handleAdminApi arm: /admin/api/me',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.admin,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
+  {
+    dispatcher: DISPATCH.admin,
+    method: 'GET',
+    path: '/admin/api/staff',
+    handler: 'handleAdminApi arm: /admin/api/staff',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.admin,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
+  {
+    dispatcher: DISPATCH.admin,
+    method: 'GET',
+    path: '/admin/api/staff/history',
+    handler: 'handleAdminApi arm: /admin/api/staff/history',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.admin,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
+  {
+    dispatcher: DISPATCH.admin,
+    method: 'POST',
+    path: '/admin/api/staff/roles',
+    handler: 'handleAdminApi arm: /admin/api/staff/roles',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.admin,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
+  // v0.22.0 release merge: provider usage split out of the overview onto its own
+  // ops_usage.read route.
+  {
+    dispatcher: DISPATCH.admin,
+    method: 'GET',
+    path: '/admin/api/provider-usage',
+    handler: 'handleAdminApi arm: /admin/api/provider-usage',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.admin,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
+  // v0.22.0 release merge: bot-detector runtime config (read + validate-apply-
+  // persist write + append-only audit history).
+  {
+    dispatcher: DISPATCH.admin,
+    method: 'GET',
+    path: '/admin/api/antibot-config',
+    handler: 'handleAdminApi arm: /admin/api/antibot-config',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.admin,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
+  {
+    dispatcher: DISPATCH.admin,
+    method: 'POST',
+    path: '/admin/api/antibot-config',
+    handler: 'handleAdminApi arm: POST /admin/api/antibot-config',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.admin,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
+  {
+    dispatcher: DISPATCH.admin,
+    method: 'GET',
+    path: '/admin/api/antibot-config/history',
+    handler: 'handleAdminApi arm: /admin/api/antibot-config/history',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.admin,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
   // v0.20.0 release merge: map editor moderation (lists + forced unpublish +
   // upload block/unblock). The (block|unblock) regex arm registers as two
   // literal-suffix RouteDefs, so it carries two rows sharing one match source.

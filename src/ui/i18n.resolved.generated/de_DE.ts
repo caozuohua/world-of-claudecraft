@@ -1169,6 +1169,12 @@ export const de_DE: EnTranslations = {
     "social": {
       "lastSeen": "Zuletzt gesehen: {when}",
       "lastSeenNever": "nie"
+    },
+    "gathering": {
+      "title": "Sammeln",
+      "mining": "Bergbau",
+      "logging": "Holzfällen",
+      "herbalism": "Kräuterkunde"
     }
   },
   "apiError": {
@@ -2596,7 +2602,9 @@ export const de_DE: EnTranslations = {
   },
   "download": {
     "title": "Desktop-Launcher herunterladen",
-    "desc": "Hol dir den eigenständigen Launcher für optimierte Leistung und Vollbildspiel."
+    "desc": "Hol dir den eigenständigen Launcher für optimierte Leistung und Vollbildspiel.",
+    "macCta": "Download fuer macOS",
+    "windowsPending": "Windows-Build ausstehend."
   },
   "comingSoon": {
     "placeholder": "Demnächst...",
@@ -5746,6 +5754,24 @@ export const de_DE: EnTranslations = {
       },
       "silverleaf_sickle": {
         "name": "Silberblatt-Sichel"
+      },
+      "thorium_mining_pick": {
+        "name": "Thorium-Grabpickel"
+      },
+      "arcanite_mining_pick": {
+        "name": "Arkanit-Grabpickel"
+      },
+      "ashwood_axe": {
+        "name": "Eschenholzaxt"
+      },
+      "elderwood_axe": {
+        "name": "Altholzaxt"
+      },
+      "goldleaf_sickle": {
+        "name": "Goldblatt-Sichel"
+      },
+      "sunpetal_sickle": {
+        "name": "Sonnenblütensichel"
       },
       "bristleback_maul": {
         "name": "Gallowglass-Hammer"

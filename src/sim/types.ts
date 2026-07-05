@@ -700,6 +700,28 @@ export interface MobTemplate {
     name: string;
     school?: Aura['school'];
   };
+  // Boss mechanic ("Howling Gale"): the ANTI-KITE snare. A periodic, room-wide AoE
+  // that slows every player within `radius` to `mult` of run speed (moveSpeedMult
+  // already honors `slow` auras, so 0.2 = 20% speed) for `duration`s. Unlike the
+  // aoePulse/stomp/bigCast pulses, which gate on the boss being in melee range, this
+  // one ALSO fires while the boss is chasing a fleeing target: that is the whole
+  // point, a ranged kiter can otherwise hold a sub-run-speed boss out of melee
+  // forever and none of the other pulses ever land. Deals no damage and draws no
+  // rng (fixed radius/mult/duration). Telegraphed like the sibling pulses (the first
+  // gust lands one full `every` after engage).
+  aoeSlow?: {
+    radius: number;
+    mult: number;
+    duration: number;
+    every: number;
+    name: string;
+    school?: Aura['school'];
+  };
+  // Boss flavor ("loud"): a booming voice. `range` widens how far EVERY yell this mob
+  // barks (engage/summon/enrage too) carries, past the default YELL_RANGE, and `lines`
+  // are extra battle cries it bellows every `every`s while in combat (cycled in order,
+  // no rng). Chat-channel text, so it ships English under the boss-yell precedent.
+  battleYells?: { lines: string[]; every: number; range: number };
   // Melee mechanic: each landed swing also splashes onto other players near the
   // primary target for `mult` of the (pre-armor) hit. A classic-style cleave arc.
   cleave?: { radius: number; mult: number; name?: string };
@@ -1186,6 +1208,10 @@ export interface AbilityDef {
   // set this explicitly, or it would deal its damage instantly while the arrow is
   // still visibly in flight. Melee physical attacks leave it unset.
   projectile?: boolean;
+  // Overrides the flying-projectile VISUAL for this spell (the mechanic is
+  // unchanged): 'lightning' draws a jagged electric bolt from caster to target
+  // instead of the default glowing bolt. Renderer-only; the sim just forwards it.
+  projectileFx?: 'lightning';
   school: 'physical' | 'fire' | 'frost' | 'arcane' | 'shadow' | 'holy' | 'nature';
   // Damage scaling source for the flat directDamage / DoT / AoE riders. Default:
   // non-physical damage scales with Spell Power; physical damage scales with melee
@@ -1259,6 +1285,17 @@ export interface GroundObjectDef {
   itemId: string;
   name: string;
   positions: { x: number; z: number }[];
+}
+
+// Gatherable world nodes (ore/wood/herb). Permanent, unowned fixtures: this
+// issue is content plus visibility only, no harvest logic (see G3).
+export type GatherNodeType = 'ore' | 'wood' | 'herb';
+
+export interface GatherNodeDef {
+  id: string;
+  zoneId: string;
+  type: GatherNodeType;
+  pos: { x: number; z: number };
 }
 
 export interface DungeonSpawn {
@@ -1549,6 +1586,9 @@ export interface Entity {
   yelledEngage: boolean; // engage bark fired this pull (reset on evade/respawn)
   stoneskinTimer: number; // periodic self-absorb barrier countdown
   terrifyTimer: number; // Banshee's Wail fear-pulse countdown
+  aoeSlowTimer: number; // Howling Gale anti-kite snare-pulse countdown
+  loudYellTimer: number; // battle-cry (loud boss) bark countdown
+  loudYellIndex: number; // next battle-cry line to bark (cycles through battleYells.lines)
   detonateTimer: number; // Death Throes fuse on a volatile corpse; Infinity = no pending detonation
   mendTimer: number; // mendAlly support-heal cast countdown
   wardTimer: number; // wardAllies support-shield cast countdown
@@ -1882,7 +1922,7 @@ export type SimEvent = { pid?: number } & (
       sourceId: number;
       targetId: number;
       school: string;
-      fx: 'projectile' | 'beam' | 'tick' | 'nova' | 'windup';
+      fx: 'projectile' | 'beam' | 'tick' | 'nova' | 'windup' | 'lightning';
     }
   // visual-only cue anchored to a WORLD POINT rather than an entity: a
   // ground-targeted spell's impact (the burst/nova lands where it was aimed, not
