@@ -7512,6 +7512,26 @@ export const pt_BR: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "A Craft to Call Your Own",
+        "text": "Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, {playerName}, and declare your path.",
+        "completion": "Your path is chosen; walk it well.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Making Amends",
+        "text": "To set aside one craft for another, an artisan must first make amends for the path not walked, {playerName}.",
+        "completion": "Amends made; a new path is open to you.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "O Coro Afogado",
         "text": "Os vadeadores não agem sozinhos. Entre eles caminham os Devotos Afogados — o culto que afundou com o templo, ainda em suas vestes apodrecidas, ainda cantando a prece desde as rochas da costa. Silencie oito deles e traga-me seis das oferendas que carregam. Eu gostaria de saber o que pretendem dar à sua deusa.",

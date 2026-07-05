@@ -7512,6 +7512,26 @@ export const da_DK: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "A Craft to Call Your Own",
+        "text": "Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, {playerName}, and declare your path.",
+        "completion": "Your path is chosen; walk it well.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Making Amends",
+        "text": "To set aside one craft for another, an artisan must first make amends for the path not walked, {playerName}.",
+        "completion": "Amends made; a new path is open to you.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Det Druknede Kor",
         "text": "Vaderne handler ikke alene. Blandt dem vandrer de Druknede Tilbedere - kulten, der sank med templet, stadig i deres rådne ornater, stadig syngende bønnen fra strandklipperne. Bring otte af dem til tavshed, og bring mig seks af de offergaver, de bærer. Jeg vil vide, hvad de agter at give deres gudinde.",

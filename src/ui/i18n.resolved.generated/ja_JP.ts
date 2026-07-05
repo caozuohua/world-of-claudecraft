@@ -7512,6 +7512,26 @@ export const ja_JP: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "A Craft to Call Your Own",
+        "text": "Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, {playerName}, and declare your path.",
+        "completion": "Your path is chosen; walk it well.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Making Amends",
+        "text": "To set aside one craft for another, an artisan must first make amends for the path not walked, {playerName}.",
+        "completion": "Amends made; a new path is open to you.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "溺れし聖歌隊",
         "text": "渡り手どもは独りで動いているのではない。その中に溺れし信徒たちが歩いている——神殿とともに沈んだ教団だ。腐った祭服をまとったまま、岸の岩場から祈りを歌い続けている。八体を沈黙させ、奴らが携える供物を六つ持ち帰れ。奴らが女神に何を捧げようとしているのか、私は知りたいのだ。",

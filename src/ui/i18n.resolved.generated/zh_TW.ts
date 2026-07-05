@@ -7512,6 +7512,26 @@ export const zh_TW: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "A Craft to Call Your Own",
+        "text": "Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, {playerName}, and declare your path.",
+        "completion": "Your path is chosen; walk it well.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Making Amends",
+        "text": "To set aside one craft for another, an artisan must first make amends for the path not walked, {playerName}.",
+        "completion": "Amends made; a new path is open to you.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "溺亡唱詩班",
         "text": "那些涉者並非單獨行動。在牠們之間行走的，是溺亡信徒——隨神殿一同沉沒的邪教徒，仍披著腐朽的法衣，仍從岸岩之間唱著那篇禱文。讓其中八人歸於沉寂，並為我帶回他們所攜的六件供品。我想知道他們要獻給女神的究竟是什麼。",

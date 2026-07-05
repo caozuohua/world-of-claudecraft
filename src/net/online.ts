@@ -970,6 +970,19 @@ export class ClientWorld implements IWorld {
   // client bundle like every other content table, so this needs no wire
   // round-trip. See src/world_api/professions.ts.
   recipeList: readonly RecipeDef[] = COMMON_RECIPES;
+  // Active-archetype identity (#1129, superseded scope). Same not-yet-wired-on-the-
+  // wire status as craftSkills/gatheringProficiency above: this change lands the
+  // sim-side state machine + persistence only, so online play sees the all-unset
+  // default (no archetype, switchCount 0) until a follow-up wires a self-snap field
+  // and the corresponding `cmd` dispatch cases in server/game.ts the way
+  // craft_item/harvest_node do for recipeList/nodeHarvestableByMe.
+  activeArchetype: string | null = null;
+  archetypeSwitchCount = 0;
+  archetypeAmendsProgress = 0;
+  archetypeAmendsRequired = 0;
+  acceptArchetypeQuest(_craftId: string): void {}
+  advanceAmendsProgress(): void {}
+  switchArchetype(_craftId: string): void {}
   // Craft-result surface (#1127), mirrored from the server's `craftResult`
   // event (applyEvent below). Null until this session's first craft attempt.
   lastCraftResult: CraftResultView | null = null;

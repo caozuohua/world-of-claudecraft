@@ -7512,6 +7512,26 @@ export const ru_RU: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "A Craft to Call Your Own",
+        "text": "Every artisan of Eastbrook eventually settles on one craft to call their own. Prove yourself with a single deed, {playerName}, and declare your path.",
+        "completion": "Your path is chosen; walk it well.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Making Amends",
+        "text": "To set aside one craft for another, an artisan must first make amends for the path not walked, {playerName}.",
+        "completion": "Amends made; a new path is open to you.",
+        "objectives": {
+          "0": {
+            "label": "Forest Wolf slain"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Утонувший хор",
         "text": "Бродяги действуют не одни. Среди них ходят Утонувшие служители — культ, что затонул вместе с храмом, всё ещё в истлевших облачениях, всё ещё поющий молитву с прибрежных скал. Заставь умолкнуть восьмерых из них и принеси мне шесть подношений, что они несут. Хочу знать, что они задумали поднести своей богине.",
