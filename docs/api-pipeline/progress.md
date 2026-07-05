@@ -74,6 +74,7 @@ Mark a row's Status as "In progress" or "Done" and fill Started / Completed
 | Phase 28 (attack-signal RED metrics) | Done | 2026-07-05 | 2026-07-05 |
 | v0.21.0 release merge + audit | Done | 2026-07-04 | 2026-07-04 |
 | v0.22.0 release merge + audit (both passes) | Done | 2026-07-05 | 2026-07-05 |
+| v0.22.0 release merge, third pass (abb89e725: terracing, tool effects, charselect CTA; audit clean, no server delta) | Done | 2026-07-05 | 2026-07-05 |
 
 ## Phase 01: Importable spine + WS-auth extraction (the gate, zero behavior change)
 
