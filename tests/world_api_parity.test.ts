@@ -1,6 +1,6 @@
 // W0c: the IWorld structural-parity gate.
 //
-// `IWorld` (src/world_api.ts, 170 members) is the ONE seam render/ui depend
+// `IWorld` (src/world_api.ts, 174 members) is the ONE seam render/ui depend
 // on. `tsc` already proves both the offline `Sim` and the online `ClientWorld` satisfy
 // it structurally, but the interface is erased at build: there is NO runtime member
 // list, so nothing catches a present-but-throws stub or a kind flip (method vs read).
@@ -9,7 +9,7 @@
 // IWORLD_MEMBERS below is the hand-maintained member list, the W0c analog of the
 // append-only CALLBACK_KEYS in tests/sim_context.test.ts. It is APPEND-ONLY WITH THE
 // INTERFACE: whenever a future slice adds (or removes/renames) a member on `IWorld`,
-// it lands the matching edit here in the SAME commit. The count pins (170 / 42 / 128)
+// it lands the matching edit here in the SAME commit. The count pins (174 / 45 / 129)
 // plus the sorted-name `toEqual` snapshots (modeled on the anti-loosening exclude-set
 // pin in tests/parity/harness.test.ts:131-162) are what force that: a dropped or
 // renamed member reddens deliberately, never silently.
@@ -71,8 +71,8 @@ interface IWorldMember {
   readonly kind: IWorldMemberKind;
 }
 
-// The 170 members of `interface IWorld`, in interface order (world_api.ts).
-// Partition: 42 `data` + 128 `method` (read-returning + command-void + async).
+// The 174 members of `interface IWorld`, in interface order (world_api.ts).
+// Partition: 45 `data` + 129 `method` (read-returning + command-void + async).
 // biome-ignore lint/suspicious/noExportsInTest: IWORLD_MEMBERS is the W0c pinned structural-parity contract (the authoritative IWorld member list)
 export const IWORLD_MEMBERS = [
   // --- core world / player roster + economy reads (data) ---
@@ -237,6 +237,9 @@ export const IWORLD_MEMBERS = [
   { name: 'professionsState', kind: 'data' },
   { name: 'nodeHarvestableByMe', kind: 'method' }, // read-returning
   { name: 'harvestNode', kind: 'method' },
+  { name: 'recipeList', kind: 'data' },
+  { name: 'lastCraftResult', kind: 'data' },
+  { name: 'craftItem', kind: 'method' },
   { name: 'raidLockouts', kind: 'method' }, // read-returning (5/6)
   { name: 'leaderboard', kind: 'method' }, // async
   { name: 'guildLeaderboard', kind: 'method' }, // async
@@ -356,9 +359,9 @@ beforeAll(() => {
 
 describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => {
   it('pins total / data / method counts', () => {
-    expect(IWORLD_MEMBERS.length).toBe(170);
-    expect(DATA_MEMBERS.length).toBe(42);
-    expect(METHOD_MEMBERS.length).toBe(128);
+    expect(IWORLD_MEMBERS.length).toBe(174);
+    expect(DATA_MEMBERS.length).toBe(45);
+    expect(METHOD_MEMBERS.length).toBe(129);
   });
 
   it('has no duplicate member names', () => {
@@ -368,7 +371,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
 
   // Sorted-name `toEqual` snapshots: a dropped, renamed, or kind-flipped member reddens
   // these deliberately, forcing a reviewed edit. NOT length-only.
-  it('the full sorted member set is exactly the pinned 170', () => {
+  it('the full sorted member set is exactly the pinned 174', () => {
     expect(IWORLD_MEMBERS.map((m) => m.name).sort()).toEqual([
       'abandonPet',
       'abandonQuest',
@@ -406,6 +409,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'convertPartyToRaid',
       'convertRaidToParty',
       'copper',
+      'craftItem',
       'craftSkills',
       'deleteLoadout',
       'delveBuyShopItem',
@@ -451,6 +455,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'interact',
       'inventory',
       'known',
+      'lastCraftResult',
       'leaderboard',
       'leaveDelve',
       'leaveDungeon',
@@ -498,6 +503,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'questsDone',
       'raidLockouts',
       'realm',
+      'recipeList',
       'releaseSpirit',
       'renamePet',
       'reportTelemetry',
@@ -544,7 +550,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
     ]);
   });
 
-  it('the sorted data-kind set is exactly the pinned 42', () => {
+  it('the sorted data-kind set is exactly the pinned 45', () => {
     expect(DATA_MEMBERS.map((m) => m.name).sort()).toEqual([
       'accountCosmetics',
       'activeLoadout',
@@ -565,6 +571,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'gatheringProficiency',
       'inventory',
       'known',
+      'lastCraftResult',
       'lifetimeXp',
       'loadouts',
       'lockpickState',
@@ -580,6 +587,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'questLog',
       'questsDone',
       'realm',
+      'recipeList',
       'restedXp',
       'socialInfo',
       'talentRole',
@@ -592,7 +600,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
     ]);
   });
 
-  it('the sorted method-kind set is exactly the pinned 128', () => {
+  it('the sorted method-kind set is exactly the pinned 129', () => {
     expect(METHOD_MEMBERS.map((m) => m.name).sort()).toEqual([
       'abandonPet',
       'abandonQuest',
@@ -621,6 +629,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'companionUpgrade',
       'convertPartyToRaid',
       'convertRaidToParty',
+      'craftItem',
       'deleteLoadout',
       'delveBuyShopItem',
       'delveInteract',
@@ -767,7 +776,7 @@ describe('membership, not equality: world extras do not fail the gate', () => {
 //       a MISSING name (if the array omits a key, Exclude<> is a non-never union and tsc
 //       fails) -- (1)+(2) together make each array EXACTLY its facet key-set;
 //   (3) the 22 arrays are pairwise DISJOINT (a member filed in two facets reddens);
-//   (4) their union, sorted, equals the pinned 170-name IWORLD_MEMBERS set (a member
+//   (4) their union, sorted, equals the pinned 174-name IWORLD_MEMBERS set (a member
 //       dropped from the split reddens).
 // This is the rigorous form, NOT the tautological `keyof IWorld === keyof (A & B & ...)`
 // (IWorld extends them, so that self-equality proves nothing): it asserts against the
@@ -1047,6 +1056,9 @@ const FACET_PROFESSIONS = [
   'professionsState',
   'nodeHarvestableByMe',
   'harvestNode',
+  'recipeList',
+  'lastCraftResult',
+  'craftItem',
 ] as const satisfies readonly (keyof IWorldProfessions)[];
 type _ExhaustProfessions = AssertNever<
   Exclude<keyof IWorldProfessions, (typeof FACET_PROFESSIONS)[number]>
@@ -1106,10 +1118,10 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the 22 fa
     expect(overlaps, `members filed in more than one facet:\n${overlaps.join('\n')}`).toEqual([]);
   });
 
-  it('the union of the 22 facets equals the pinned 170-member IWORLD_MEMBERS set', () => {
+  it('the union of the 22 facets equals the pinned 174-member IWORLD_MEMBERS set', () => {
     const union = Object.values(FACET_MEMBER_ARRAYS).flatMap((arr) => [...arr]);
-    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(170);
-    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(170);
+    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(174);
+    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(174);
     const sortedUnion = [...union].sort();
     const pinned = IWORLD_MEMBERS.map((m) => m.name).sort();
     expect(sortedUnion).toEqual(pinned);

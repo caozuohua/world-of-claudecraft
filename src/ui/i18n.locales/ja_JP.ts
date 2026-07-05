@@ -5806,4 +5806,13 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': '採掘',
   'hudChrome.gathering.logging': '伐採',
   'hudChrome.gathering.herbalism': '薬草学',
+  'hudChrome.crafting.title': '製作',
+  'hudChrome.crafting.close': '製作を閉じる',
+  'hudChrome.crafting.craft': '製作',
+  'hudChrome.crafting.reagentsNeeded': '必要素材:',
+  'hudChrome.crafting.empty': '既知のレシピはありません。',
+  'hudChrome.crafting.resultAria': '{name}を製作',
+  'hudChrome.crafting.craftedToast': '製作しました:{name}',
+  'hudChrome.crafting.insufficientMaterials': '材料が不足しています。',
+  'hudChrome.crafting.unknownRecipe': 'そのレシピは存在しません。',
 };

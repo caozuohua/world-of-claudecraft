@@ -5494,4 +5494,13 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': '採礦',
   'hudChrome.gathering.logging': '伐木',
   'hudChrome.gathering.herbalism': '藥草學',
+  'hudChrome.crafting.title': '製作',
+  'hudChrome.crafting.close': '關閉製作',
+  'hudChrome.crafting.craft': '製作',
+  'hudChrome.crafting.reagentsNeeded': '需要:',
+  'hudChrome.crafting.empty': '尚無已知配方。',
+  'hudChrome.crafting.resultAria': '製作{name}',
+  'hudChrome.crafting.craftedToast': '已製作:{name}',
+  'hudChrome.crafting.insufficientMaterials': '你沒有足夠的材料。',
+  'hudChrome.crafting.unknownRecipe': '該配方不存在。',
 };

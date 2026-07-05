@@ -9,24 +9,188 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ],
+  "es_ES": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ],
+  "fr_FR": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ],
+  "fr_CA": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
-  "pt_BR": [],
-  "ru_RU": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "it_IT": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ],
+  "de_DE": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ],
+  "zh_CN": [
+    "hudChrome.crafting.reagentLine"
+  ],
+  "zh_TW": [
+    "hudChrome.crafting.reagentLine"
+  ],
+  "ko_KR": [
+    "hudChrome.crafting.reagentLine"
+  ],
+  "ja_JP": [
+    "hudChrome.crafting.reagentLine"
+  ],
+  "pt_BR": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ],
+  "ru_RU": [
+    "hudChrome.crafting.reagentLine"
+  ],
+  "nl_NL": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ],
+  "pl_PL": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ],
+  "id_ID": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ],
+  "tr_TR": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ],
+  "sv_SE": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ],
+  "vi_VN": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ],
+  "da_DK": [
+    "hudChrome.crafting.close",
+    "hudChrome.crafting.craft",
+    "hudChrome.crafting.craftedToast",
+    "hudChrome.crafting.empty",
+    "hudChrome.crafting.insufficientMaterials",
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.crafting.reagentsNeeded",
+    "hudChrome.crafting.resultAria",
+    "hudChrome.crafting.title",
+    "hudChrome.crafting.unknownRecipe"
+  ]
 };
