@@ -785,6 +785,9 @@ export class MobileControls {
 
   private onPinchDown(e: PointerEvent): void {
     if (!this.active || e.pointerType !== 'touch') return;
+    // Router priority: an open modal/menu claims every touch, so a fresh
+    // two-finger press while a window is up must not start tracking a pinch.
+    if (document.body.classList.contains('mobile-window-open')) return;
     this.pinchPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (this.pinchPointers.size === 2) {
       this.releaseSwipeLook();
@@ -794,6 +797,12 @@ export class MobileControls {
 
   private onPinchMove(e: PointerEvent): void {
     if (!this.active || !this.pinchPointers.has(e.pointerId)) return;
+    // A window opening mid-gesture ends the pinch immediately: menuOpen means
+    // every touch is now the modal's, so the gesture must stop zooming.
+    if (document.body.classList.contains('mobile-window-open')) {
+      this.releasePinch();
+      return;
+    }
     this.pinchPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (this.pinchPointers.size === 2 && this.pinchPrevDist !== null) {
       e.preventDefault();

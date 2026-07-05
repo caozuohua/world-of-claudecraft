@@ -390,6 +390,7 @@ class FakeMediaQueryList extends EventTarget {
 const previousGlobals = {
   document: globalThis.document,
   window: globalThis.window,
+  navigator: globalThis.navigator,
 };
 
 afterEach(() => {
@@ -399,6 +400,10 @@ afterEach(() => {
   });
   Object.defineProperty(globalThis, 'window', {
     value: previousGlobals.window,
+    configurable: true,
+  });
+  Object.defineProperty(globalThis, 'navigator', {
+    value: previousGlobals.navigator,
     configurable: true,
   });
 });
@@ -566,6 +571,40 @@ describe('MobileControls pointer lifecycle', () => {
     expect(lastMove).toEqual({ forward: false, back: false, strafeLeft: false, strafeRight: true });
   });
 
+  it('never starts a movement-joystick drag while a mobile window/menu is open', () => {
+    const { moveZone } = installMobileControlDom();
+    let lastMove: TouchMoveInput | null = null;
+    let hapticCalls = 0;
+    const input = {
+      setTouchMove: (move: TouchMoveInput) => {
+        lastMove = move;
+      },
+      clearTouchMove: () => {},
+      setTouchLook: () => {},
+      setTouchLookVector: () => {},
+    } as unknown as Input;
+    const nav = {
+      vibrate: () => {
+        hapticCalls += 1;
+        return true;
+      },
+    };
+    Object.defineProperty(globalThis, 'navigator', { value: nav, configurable: true });
+
+    new MobileControls(input, mobileCallbacks()).start();
+    document.body.classList.add('mobile-window-open');
+
+    moveZone.dispatchEvent(
+      pointerEvent('pointerdown', { pointerId: 6, clientX: 100, clientY: 50 }),
+    );
+    moveZone.dispatchEvent(
+      pointerEvent('pointermove', { pointerId: 6, clientX: 160, clientY: 50 }),
+    );
+
+    expect(lastMove).toBeNull();
+    expect(hapticCalls).toBe(0);
+  });
+
   it('keeps updating camera look when the active pointer moves outside the joystick element', () => {
     const { cameraJoystick, windowTarget } = installMobileControlDom();
     let touchLookActive = false;
@@ -618,6 +657,31 @@ describe('MobileControls pointer lifecycle', () => {
 
     cameraJoystick.dispatchEvent(
       pointerEvent('pointerdown', { pointerId: 9, clientX: 50, clientY: 50 }),
+    );
+
+    expect(touchLookActive).toBe(false);
+    expect(cameraJoystick.classList.contains('active')).toBe(false);
+  });
+
+  it('a fresh camera-joystick press while a mobile window/menu is already open no-ops', () => {
+    const { cameraJoystick } = installMobileControlDom();
+    let touchLookActive = false;
+    const input = {
+      setTouchMove: () => {},
+      clearTouchMove: () => {},
+      setTouchLook: (active: boolean) => {
+        touchLookActive = active;
+      },
+      setTouchLookVector: () => {},
+    } as unknown as Input;
+
+    const controls = new MobileControls(input, mobileCallbacks());
+    controls.start();
+    controls.setCameraJoystickEnabled(true);
+    document.body.classList.add('mobile-window-open');
+
+    cameraJoystick.dispatchEvent(
+      pointerEvent('pointerdown', { pointerId: 46, clientX: 50, clientY: 50 }),
     );
 
     expect(touchLookActive).toBe(false);
@@ -1019,6 +1083,120 @@ describe('MobileControls pointer lifecycle', () => {
     );
 
     expect(lookActive).toEqual([true, false]);
+  });
+
+  it('ends an active pinch-zoom gesture when a window opens mid-gesture', () => {
+    const { canvas } = installMobileControlDom();
+    const zooms: number[] = [];
+    const input = {
+      setTouchMove: () => {},
+      clearTouchMove: () => {},
+      setTouchLook: () => {},
+      setTouchLookVector: () => {},
+      applyTouchLookDelta: () => {},
+      zoomBy: (delta: number) => {
+        zooms.push(delta);
+      },
+    } as unknown as Input;
+
+    new MobileControls(input, mobileCallbacks()).start();
+
+    canvas.dispatchEvent(
+      pointerEvent('pointerdown', {
+        pointerId: 50,
+        pointerType: 'touch',
+        clientX: 100,
+        clientY: 100,
+      }),
+    );
+    canvas.dispatchEvent(
+      pointerEvent('pointerdown', {
+        pointerId: 51,
+        pointerType: 'touch',
+        clientX: 200,
+        clientY: 100,
+      }),
+    );
+    canvas.dispatchEvent(
+      pointerEvent('pointermove', {
+        pointerId: 50,
+        pointerType: 'touch',
+        clientX: 90,
+        clientY: 100,
+      }),
+    );
+    expect(zooms.length).toBe(1);
+
+    // A window opens mid-gesture: the next move must stop zooming.
+    document.body.classList.add('mobile-window-open');
+    canvas.dispatchEvent(
+      pointerEvent('pointermove', {
+        pointerId: 51,
+        pointerType: 'touch',
+        clientX: 220,
+        clientY: 100,
+      }),
+    );
+
+    expect(zooms.length).toBe(1);
+
+    // The pinch state was released, so even a further move from the surviving
+    // pointer (post window-close) must not resume zooming on its own.
+    document.body.classList.remove('mobile-window-open');
+    canvas.dispatchEvent(
+      pointerEvent('pointermove', {
+        pointerId: 51,
+        pointerType: 'touch',
+        clientX: 240,
+        clientY: 100,
+      }),
+    );
+    expect(zooms.length).toBe(1);
+  });
+
+  it('never starts tracking a fresh pinch while a mobile window/menu is open', () => {
+    const { canvas } = installMobileControlDom();
+    const zooms: number[] = [];
+    const input = {
+      setTouchMove: () => {},
+      clearTouchMove: () => {},
+      setTouchLook: () => {},
+      setTouchLookVector: () => {},
+      applyTouchLookDelta: () => {},
+      zoomBy: (delta: number) => {
+        zooms.push(delta);
+      },
+    } as unknown as Input;
+
+    new MobileControls(input, mobileCallbacks()).start();
+    document.body.classList.add('mobile-window-open');
+
+    canvas.dispatchEvent(
+      pointerEvent('pointerdown', {
+        pointerId: 52,
+        pointerType: 'touch',
+        clientX: 100,
+        clientY: 100,
+      }),
+    );
+    canvas.dispatchEvent(
+      pointerEvent('pointerdown', {
+        pointerId: 53,
+        pointerType: 'touch',
+        clientX: 200,
+        clientY: 100,
+      }),
+    );
+    canvas.dispatchEvent(
+      pointerEvent('pointermove', {
+        pointerId: 52,
+        pointerType: 'touch',
+        clientX: 90,
+        clientY: 100,
+      }),
+    );
+
+    expect(zooms).toEqual([]);
   });
 
   it('never lets a button-owned pointer become a camera drag even if it drifts onto the canvas', () => {
