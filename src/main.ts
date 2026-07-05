@@ -4023,11 +4023,12 @@ async function refreshCharacters(): Promise<void> {
       // muscle memory). It routes through the shared desktop Enter World button
       // so entry owns its loading state; the button only exists in the docked
       // desktop layout, so this is a no-op on mobile (where the per-row button
-      // is a single tap away). A double-click that lands on a per-row control is
-      // safe because every such control either opens a full-screen modal on the
-      // first click (Delete: the two clicks then have different targets, so the
-      // browser synthesises no dblclick) or is itself disabled; keep that true
-      // for any per-row action added later.
+      // is a single tap away). Entry is gated on that shared button being visible
+      // AND enabled: for a forced-rename selection it is disabled (so the rename
+      // input/button on such a row cannot trigger entry), and Delete opens a
+      // full-screen modal on the first click, so the second click retargets and
+      // the browser synthesises no dblclick. Keep entry gated on the shared
+      // button's enabled state for any per-row action added later.
       row.addEventListener('dblclick', () => {
         selectRow();
         const enterBtn = document.getElementById(
@@ -4111,9 +4112,19 @@ function syncCharselectEnterButton(): void {
   if (!btn) return;
   const action = charselectPrimaryAction(charselectSelected);
   btn.disabled = action.kind === 'disabled';
+  // Drive BOTH the i18n key and the rendered text/title, so a later language
+  // switch (translatePage re-applies every [data-i18n]/[data-i18n-title]) rerenders
+  // the current dynamic state instead of clobbering it back to the static "Enter
+  // World". Same approach as applyServerMode.
+  btn.setAttribute('data-i18n', action.labelKey);
   btn.textContent = t(action.labelKey);
-  if (action.titleKey) btn.title = t(action.titleKey);
-  else btn.removeAttribute('title');
+  if (action.titleKey) {
+    btn.setAttribute('data-i18n-title', action.titleKey);
+    btn.title = t(action.titleKey);
+  } else {
+    btn.removeAttribute('data-i18n-title');
+    btn.removeAttribute('title');
+  }
 }
 
 async function enterWorld(c: CharacterSummary, button?: HTMLButtonElement): Promise<void> {
