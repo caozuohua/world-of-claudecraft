@@ -24,6 +24,7 @@
 // touches not-yet-extracted Sim state routes through the seam.
 
 import { DUNGEON_X_THRESHOLD, MOBS } from '../data';
+import { resetDrownedLitanyBossEncounter } from '../delves/drowned_litany_boss';
 import { PLAYER_BODY_RADIUS, PLAYER_SWIM_DEPTH } from '../pathfind';
 import type { SimContext } from '../sim_context';
 import { clearThreat, stealthDetectionRadius } from '../threat';
@@ -38,9 +39,11 @@ import {
   MELEE_RANGE,
   NYTHRAXIS_ADD_ID,
   NYTHRAXIS_BOSS_ID,
+  SISTER_NHALIA_BOSS_ID,
+  TOLLING_BELL_TEMPLATE_ID,
   type Vec3,
 } from '../types';
-import { groundHeight, WATER_LEVEL } from '../world';
+import { groundHeight, waterLevel } from '../world';
 import { rallyFleeingAllies } from './social_aggro';
 import { isTrivialTo, retargetMob, tickForcedTarget, updateMobTarget } from './targeting';
 import { emitMobYell } from './yells';
@@ -86,6 +89,18 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
   mob.combatTimer += DT;
 
   if (mob.templateId.startsWith('vision_')) {
+    mob.hostile = false;
+    mob.aiState = 'idle';
+    mob.inCombat = false;
+    mob.aggroTargetId = null;
+    clearThreat(mob);
+    return;
+  }
+
+  // Tolling Bell projectiles (The Drowned Litany finale) are moved exclusively
+  // by the boss driver: no aggro, no wander, no evade-home, and the hostility
+  // safety net below must not re-hostile them.
+  if (mob.templateId === TOLLING_BELL_TEMPLATE_ID) {
     mob.hostile = false;
     mob.aiState = 'idle';
     mob.inCombat = false;
@@ -385,6 +400,7 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
             mob.castingAbility = null;
             mob.castTotal = 0;
             mob.castRemaining = 0;
+            mob.castTargetId = null;
             const school = (bigCast.school ?? 'nature') as Aura['school'];
             ctx.emit({ type: 'spellfx', sourceId: mob.id, targetId: mob.id, school, fx: 'nova' });
             ctx.emit({
@@ -408,6 +424,7 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
             mob.castingAbility = bigCast.castId;
             mob.castTotal = bigCast.castTime;
             mob.castRemaining = bigCast.castTime;
+            mob.castTargetId = null;
             mob.channeling = false;
             if (bigCast.yell) emitMobYell(ctx, mob, bigCast.yell);
           }
@@ -585,10 +602,12 @@ export function resetEvadingMob(ctx: SimContext, mob: Entity): void {
     mob.castingAbility = null;
     mob.castTotal = 0;
     mob.castRemaining = 0;
+    mob.castTargetId = null;
   }
   mob.yelledEngage = false;
   mob.wanderTimer = ctx.rng.range(2, 8);
   if (mob.templateId === NYTHRAXIS_BOSS_ID) ctx.resetNythraxisEncounter(mob);
+  if (mob.templateId === SISTER_NHALIA_BOSS_ID) resetDrownedLitanyBossEncounter(ctx, mob);
 }
 
 // Cowardly mobs panic once per pull at low HP, then recover their nerve and turn to
@@ -617,7 +636,7 @@ export function blockedTowardSpawn(ctx: SimContext, e: Entity, dest: Vec3): bool
   const nz = e.pos.z + Math.cos(facing) * step;
   if (
     !ctx.mobCanSwim(MOBS[e.templateId]) &&
-    groundHeight(nx, nz, ctx.cfg.seed) < WATER_LEVEL - SWIM_DEPTH
+    groundHeight(nx, nz, ctx.cfg.seed) < waterLevel() - SWIM_DEPTH
   )
     return true;
   const resolved = ctx.resolveMovePoint(nx, nz, BODY_RADIUS, e);

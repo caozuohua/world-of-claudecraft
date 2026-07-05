@@ -29,7 +29,7 @@ import {
 import type { DelveModuleId } from '../sim/delve_layout';
 import type { BiomeId } from '../sim/types';
 import { ALL_CLASSES, type Entity, type SimEvent } from '../sim/types';
-import { groundHeight, WATER_LEVEL, zoneBiomeAt } from '../sim/world';
+import { groundHeight, waterLevel, zoneBiomeAt } from '../sim/world';
 import { attachAvatarFallback } from '../ui/avatar_fallback';
 import { tEntity } from '../ui/entity_i18n';
 import type { IWorld } from '../world_api';
@@ -71,6 +71,7 @@ import {
 import { buildImpactSite, type ImpactSiteView } from './impact_site';
 import { ensureDelveInteriorKit } from './interior_kit';
 import { type LocoTrack, newLocoTrack, updateLocomotion } from './locomotion';
+import { buildMailboxPillar } from './mailbox';
 import { buildMotes, type MotesView } from './motes';
 import { COMBO_PIP_MAX } from './nameplate_combo';
 import { NameplatePainter } from './nameplate_painter';
@@ -78,6 +79,7 @@ import {
   isProjectedNameplateAnchorVisible,
   nameplateScreenTransform,
 } from './nameplate_projection';
+import { PlacedAssetsView } from './placed_assets';
 import { buildComposer, type PostPipeline } from './post';
 import { buildPropMaterialPrewarmGroup, buildProps } from './props';
 import { buildGroundQuestObject } from './quest_objects';
@@ -514,6 +516,10 @@ export interface EntityView {
   sparkle?: THREE.Sprite; // ground objects
   objectMesh?: THREE.Object3D;
   objectPoolKey: string | null;
+  /** templateId the object mesh was built from. The sim swaps delve interactable
+   *  templates in place (plate -> triggered, rope -> pulled); diffing this each
+   *  frame drops the stale view so it rebuilds with the new mesh. */
+  builtTemplateId?: string;
   portal?: THREE.Mesh; // dungeon door swirl
   objectCasters: THREE.Object3D[]; // object-view shadow meshes, distance-gated
   viewLights: THREE.PointLight[]; // point lights this view contributes to the budget
@@ -691,6 +697,9 @@ function sleep(ms: number): Promise<void> {
 
 export class Renderer {
   scene = new THREE.Scene();
+  // A soft light pillar marking the local player's corpse during the ghost run.
+  // Built lazily on first death, then just repositioned/toggled (no per-frame alloc).
+  private corpseBeacon: THREE.Mesh | null = null;
   camera: THREE.PerspectiveCamera;
   webgl: THREE.WebGLRenderer;
   views = new Map<number, EntityView>();
@@ -751,6 +760,10 @@ export class Renderer {
   camYaw = Math.PI;
   camPitch = 0.32;
   camDist = 12;
+  // Map-editor 3D mode: when set, the camera uses this free-cam pose instead of
+  // chasing the player (updateCamera honors it and returns early). Editor-only;
+  // always null in the shipped game.
+  editorCam: { pos: THREE.Vector3; target: THREE.Vector3 } | null = null;
   // Smoothed chase-cam occlusion (1 = no pull-in); see updateCamera.
   private camOcclusion: CameraOcclusionState = { pullT: 1, lensT: 1, fov: CAMERA_BASE_FOV };
   showNameplates = true;
@@ -829,6 +842,9 @@ export class Renderer {
   private clouds: THREE.Sprite[] = [];
   private waterView: WaterView;
   private terrainView: TerrainView;
+  // Map-editor placed GLB assets; null when the world has none and the editor
+  // never asked for the view (the shipped game with the built-in world).
+  private placedAssetsView: PlacedAssetsView | null = null;
   private foliage: FoliageView;
   private fish: FishView;
   private critters: CritterField;
@@ -1231,9 +1247,22 @@ export class Renderer {
     this.fireLights.push(this.impactSite.light);
     this.propsView = props;
 
+    // Map-editor play-test: freely placed GLB models (cosmetic, render-only). Loads
+    // async and pops in; absent for the built-in world. The view supports live
+    // editing (add/move/remove/reSeat), reached through the editor-only
+    // `placedAssets` getter below; the shipped game only ever builds it here.
+    const placements = this.sim.cfg.world?.placements;
+    if (placements && placements.length > 0) {
+      this.placedAssetsView = new PlacedAssetsView(placements, this.sim.cfg.seed);
+      setRenderCategory(this.placedAssetsView.group, 'props');
+      this.scene.add(this.placedAssetsView.group);
+    }
+
     const gatherNodes = buildGatherNodes(this.sim.cfg.seed);
     setRenderCategory(gatherNodes.group, 'props');
     this.scene.add(gatherNodes.group);
+    // Baked into world space at build with no per-frame update(), same as props.
+    freezeStaticMatrices(gatherNodes.group);
 
     // selection ring — a classic target reticle: a base ring plus four
     // inward-pointing ticks. The base ring is draped over the terrain each
@@ -1482,8 +1511,8 @@ export class Renderer {
   // Surface under (x,z) for footstep timbre. Sampled only at a footfall (cheap).
   private surfaceAt(x: number, z: number, y: number): Surface {
     if (x > DUNGEON_X_THRESHOLD) return 'stone'; // dungeon interiors are stone halls
-    if (groundHeight(x, z, this.sim.cfg.seed) < WATER_LEVEL && y <= WATER_LEVEL + 0.3)
-      return 'water';
+    const wl = waterLevel();
+    if (groundHeight(x, z, this.sim.cfg.seed) < wl && y <= wl + 0.3) return 'water';
     const biome = zoneBiomeAt(z);
     if (biome === 'vale') return 'grass';
     if (biome === 'marsh') return 'dirt';
@@ -2786,10 +2815,35 @@ export class Renderer {
   handleEvent(ev: SimEvent): void {
     switch (ev.type) {
       case 'spellfx':
+        if (ev.fx === 'windup') {
+          // A petSpell windup telegraph: start the throw animation NOW; the
+          // projectile for this throw follows petSpell.windup later, timed to
+          // the clip's release pose (the acolyte def's attackTimeScale is
+          // tuned so both meet).
+          this.triggerAttack(ev.sourceId);
+          break;
+        }
         if (ev.fx === 'projectile') this.vfx.projectile(ev.sourceId, ev.targetId, ev.school);
         else if (ev.fx === 'beam') this.vfx.beam(ev.sourceId, ev.targetId, ev.school);
+        else if (ev.fx === 'lightning') this.vfx.lightningProjectile(ev.sourceId, ev.targetId);
         else if (ev.fx === 'tick') this.vfx.tick(ev.targetId, ev.school);
         else this.vfx.nova(ev.targetId, ev.school);
+        // A mob that hurls an instant bolt with NO windup (the warlock
+        // demon's bolt) has no cast state for the looping cast channel, and
+        // the damage event that animates melee fires on ARRIVAL and only for
+        // the physical school: play the shooter's attack one-shot at launch
+        // so the throw reads. A windup-telegraphed throw already started its
+        // one-shot above (still mid-flight at the release: skip the
+        // retrigger). Real casts (castingAbility set) animate via the cast
+        // channel; players animate through their own cast/swing paths.
+        if (ev.fx === 'projectile' || ev.fx === 'beam') {
+          const src = this.sim.entities.get(ev.sourceId);
+          if (src && src.kind === 'mob' && !src.castingAbility) {
+            const view = this.views.get(ev.sourceId);
+            const vis = view ? this.activeVisual(view) : null;
+            if (!vis?.isMidOneShot) this.triggerAttack(ev.sourceId);
+          }
+        }
         break;
       case 'spellfxAt': {
         // Ground-targeted impact: burst draped onto the terrain where the spell
@@ -2825,6 +2879,27 @@ export class Renderer {
         break;
       case 'delveEntered':
         this.prebuildDelveInteriors(ev.delveId);
+        break;
+      case 'delveRitePulse': {
+        // The Drowned Reliquary Rite plays its sequence by pulsing each shrine
+        // in turn; a school-coloured nova on the shrine entity shows which one
+        // (colour matches the shrine's accent so the sequence is readable).
+        const school =
+          ev.shrineKind === 'rite_shrine_candle'
+            ? 'fire'
+            : ev.shrineKind === 'rite_shrine_reed'
+              ? 'nature'
+              : ev.shrineKind === 'rite_shrine_skull'
+                ? 'shadow'
+                : 'holy';
+        this.vfx.nova(ev.entityId, school);
+        break;
+      }
+      case 'delveRiteFeedback':
+        // A correct touch answers with a green up-glow; a wrong one with a dark
+        // shadow burst on the shrine the player pressed.
+        if (ev.correct) this.vfx.healGlow(ev.shrineId);
+        else this.vfx.nova(ev.shrineId, 'shadow');
         break;
       case 'fiestaPowerup':
         // Big celebratory pop on grab, plus a lingering coloured glow.
@@ -3125,6 +3200,13 @@ export class Renderer {
       portal = built.portal;
       height = 4.6;
       objectMesh = body!;
+    } else if (e.kind === 'object' && e.templateId === 'mailbox') {
+      // Ravenpost pillar: bespoke procedural prop (no sparkle; the unread-mail
+      // votive in the group is the per-viewer beacon, toggled in sync()).
+      const built = buildMailboxPillar(e.id);
+      body = built.group;
+      height = built.height;
+      objectMesh = body!;
     } else if (e.kind === 'object' && e.templateId?.startsWith('delve_')) {
       // Delve interactables: skip the object pool (each is unique/stateful) and
       // build a dedicated procedural mesh that matches the crypt aesthetic.
@@ -3137,6 +3219,12 @@ export class Renderer {
       if (
         e.templateId !== 'delve_pressure_plate' &&
         e.templateId !== 'delve_pressure_plate_triggered' &&
+        !e.templateId.startsWith('delve_sluice_valve') &&
+        !e.templateId.startsWith('delve_grave_tablet') &&
+        !e.templateId.startsWith('delve_corpse_candle') &&
+        // A pullable rope IS an F-interactable, so it keeps the sparkle until
+        // pulled (unlike the flush walk-on plates above).
+        e.templateId !== 'delve_bell_rope_pulled' &&
         e.templateId !== 'delve_locked_door' &&
         e.templateId !== 'delve_destructible_wall'
       ) {
@@ -3366,6 +3454,7 @@ export class Renderer {
       sparkle,
       objectMesh,
       objectPoolKey,
+      builtTemplateId: e.kind === 'object' ? e.templateId : undefined,
       portal,
       nameplateDisplay: 'none',
       nameplateTransform: '',
@@ -3524,6 +3613,10 @@ export class Renderer {
     vale: { color: 0xa6c6e0, near: 130, far: 470 },
     marsh: { color: 0xa3b294, near: 80, far: 330 },
     peaks: { color: 0xbdd3ec, near: 160, far: 560 },
+    beach: { color: 0xbcd6e6, near: 150, far: 520 },
+    desert: { color: 0xd8c9a8, near: 140, far: 500 },
+    volcano: { color: 0x8a7468, near: 70, far: 300 },
+    cave: { color: 0x76807c, near: 60, far: 260 },
   };
   private static LOW_FOG = { color: 0xa6c6e0, near: 70, far: 260 };
 
@@ -3641,7 +3734,7 @@ export class Renderer {
           ? 'nythraxis'
           : inside
             ? 'dungeon'
-            : camY < WATER_LEVEL - 0.05
+            : camY < waterLevel() - 0.05
               ? 'underwater'
               : 'outdoor';
     const fog = this.scene.fog as THREE.Fog;
@@ -3975,6 +4068,14 @@ export class Renderer {
         // hidden until its shaders finish linking off-thread (async-compile gate);
         // the object branch below may still re-hide loot
         v.group.visible = !v.compilePending;
+        // The graveyard resurrection angel is present only to a released spirit: hide
+        // it from the living local player. It stays in the sim for the ghost and for
+        // server-side resurrect-range checks, and other ghosts still see it. The
+        // continue also skips its holy shimmer and ghost pass below.
+        if (e.templateId === 'spirit_healer' && !p.ghost) {
+          v.group.visible = false;
+          continue;
+        }
         // mid-distance rigs keep rendering but leave the shadow pass
         const wantShadow = d2 < shadowRangeSq;
         const inProxyBand = d2 < ENTITY_PROXY_SHADOW_RANGE_SQ;
@@ -4033,6 +4134,17 @@ export class Renderer {
       v.group.rotation.y = facing;
 
       if (e.kind === 'object') {
+        // The sim swaps delve interactable templates in place (pressure plate ->
+        // triggered, bell rope -> pulled). Rebuild the view from the new template
+        // right here rather than leaving it to the budgeted create pass: that
+        // pass never collects past the create radius, so a bare remove could
+        // strand the object invisible through the whole 80-96yd hysteresis band
+        // if the viewer retreats before the rebuild lands.
+        if (v.builtTemplateId !== undefined && v.builtTemplateId !== e.templateId) {
+          this.removeView(id);
+          this.createView(e);
+          continue;
+        }
         const isPortalObject = isPersistentPortalObject(e);
         const vis = e.lootable && (!isPortalObject || d2 <= ENTITY_VIEW_CREATE_RANGE_SQ);
         v.group.visible = vis;
@@ -4055,6 +4167,16 @@ export class Renderer {
           v.portal.rotation.z = this.time * 1.4;
           (v.portal.material as THREE.MeshBasicMaterial).opacity =
             0.45 + Math.sin(this.time * 2.2 + e.id) * 0.15;
+        }
+        if (vis && e.templateId === 'mailbox') {
+          // The unread-mail votive: per-viewer beacon driven by the IWorld
+          // mirror (a cheap field online, a small filter offline; <=4 pillars).
+          const glow = v.group.userData.mailGlow as THREE.Object3D | undefined;
+          if (glow) {
+            const lit = this.sim.mailUnread > 0;
+            glow.visible = lit;
+            if (lit) glow.position.y = 1.56 + Math.sin(this.time * 2.4 + e.id) * 0.06;
+          }
         }
         continue;
       }
@@ -4099,8 +4221,8 @@ export class Renderer {
       // majority (everyone on land) skip groundHeight() entirely each frame.
       const swimming =
         !e.dead &&
-        e.pos.y <= WATER_LEVEL - 0.5 &&
-        groundHeight(e.pos.x, e.pos.z, this.sim.cfg.seed) < WATER_LEVEL - 0.8;
+        e.pos.y <= waterLevel() - 0.5 &&
+        groundHeight(e.pos.x, e.pos.z, this.sim.cfg.seed) < waterLevel() - 0.8;
 
       // lazy form visuals, swapped by visibility like the old sheep/bear rigs
       if (polyed && !v.sheepVisual) {
@@ -4136,7 +4258,9 @@ export class Renderer {
       const ghost =
         ghostWolf ||
         shouldRenderStealthGhost(this.sim.playerId, e) ||
-        e.templateId.startsWith('vision_');
+        e.templateId.startsWith('vision_') ||
+        e.ghost || // a released player spirit renders translucent (the ghost run)
+        e.templateId === 'spirit_healer'; // the graveyard angel is an ethereal figure
       active.setGhost(ghost);
       active.setSoulRend(characterSoulRendActive(e));
       v.visual.root.visible = active === v.visual;
@@ -4160,7 +4284,9 @@ export class Renderer {
       v.lastZ = az;
       const loco = updateLocomotion(v.loco, vx, vz, facing, dt);
       const moving = loco.moving;
-      const visuallyDead = isVisuallyDead(e);
+      // A released spirit is `dead` but should stand and run, not lie prone, so it
+      // animates as a living figure (only its translucent ghost material marks it).
+      const visuallyDead = isVisuallyDead(e) && !e.ghost;
       // `onGround` is authoritative offline but is never sent in online snapshots
       // (ClientWorld defaults it to true), so for players fall back to deriving the
       // airborne state from foot height vs terrain — keeps the jump pose working in
@@ -4257,6 +4383,8 @@ export class Renderer {
       if (e.auras.some((a) => a.id === 'nythraxis_soul_rend')) {
         this.vfx.castSparkle(e.id, 'shadow', dt * 3.2);
       }
+      // The graveyard angel: a soft, constant golden shimmer rising off the Spirit Healer.
+      if (e.templateId === 'spirit_healer') this.vfx.castSparkle(e.id, 'holy', dt * 0.6);
       if (swimming) this.vfx.swimRipple(v.group.position, moving ? dt * 3 : dt);
 
       // skip the draw for off-screen rigs (pose/audio above already ran)
@@ -4364,6 +4492,33 @@ export class Renderer {
       }
     }
     markPhase('entities');
+
+    // Corpse beacon: a soft light pillar over the local player's body while their
+    // spirit runs back to it (the ghost run). Built once, then just repositioned.
+    {
+      const self = this.sim.player;
+      const corpse = self?.dead && self.ghost ? self.corpsePos : null;
+      if (corpse) {
+        if (!this.corpseBeacon) {
+          const geo = new THREE.CylinderGeometry(0.25, 0.25, 14, 8, 1, true);
+          const mat = new THREE.MeshBasicMaterial({
+            color: 0xbfe6ff,
+            transparent: true,
+            opacity: 0.3,
+            depthWrite: false,
+            side: THREE.DoubleSide,
+            blending: THREE.AdditiveBlending,
+          });
+          this.corpseBeacon = new THREE.Mesh(geo, mat);
+          this.corpseBeacon.renderOrder = 2;
+          this.scene.add(this.corpseBeacon);
+        }
+        this.corpseBeacon.visible = true;
+        this.corpseBeacon.position.set(corpse.x, corpse.y + 7, corpse.z);
+      } else if (this.corpseBeacon) {
+        this.corpseBeacon.visible = false;
+      }
+    }
 
     let worldStart = performance.now();
 
@@ -4748,7 +4903,126 @@ export class Renderer {
     return this.selfRenderPosition;
   }
 
+  // ---- Map-editor 3D seams (editor-only) --------------------------------
+
+  /** The terrain chunk group, for the editor to raycast/rebuild. */
+  get terrainGroup(): THREE.Group {
+    return this.terrainView.group;
+  }
+
+  /**
+   * Raycast a screen point onto the actual terrain surface (follows sculpted
+   * height), returning the world hit point, or null. Falls back to the y=0 plane
+   * past the built terrain footprint. Editor-only (3D in-world editing).
+   */
+  surfacePoint(clientX: number, clientY: number): THREE.Vector3 | null {
+    const ndc = new THREE.Vector2(
+      (clientX / this.viewport.width) * 2 - 1,
+      -(clientY / this.viewport.height) * 2 + 1,
+    );
+    this.raycaster.setFromCamera(ndc, this.camera);
+    const hits = this.raycaster.intersectObjects(this.terrainView.group.children, false);
+    if (hits.length > 0 && hits[0].point) return hits[0].point.clone();
+    const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+    const pt = new THREE.Vector3();
+    return this.raycaster.ray.intersectPlane(plane, pt) ? pt : null;
+  }
+
+  /**
+   * Re-mesh the terrain from the current active world content (after a sculpt or
+   * biome-paint edit). With a `region` (world-space bounds of the edit), only the
+   * chunks intersecting it re-mesh in place (cheap enough for a live brush drag);
+   * the macro normal map is left stale until rebakeTerrainNormals at stroke end.
+   * Without one it is the full rebuild (map load): dispose the old chunk
+   * geometries and the one shared material (and its build-specific normal map)
+   * exactly once, but never the shared splat/detail textures. Editor-only.
+   */
+  rebuildTerrain(region?: { minX: number; minZ: number; maxX: number; maxZ: number }): void {
+    if (region) {
+      this.terrainView.rebuildRegion(region.minX, region.minZ, region.maxX, region.maxZ);
+      return;
+    }
+    const old = this.terrainView.group;
+    this.scene.remove(old);
+    const firstMesh = old.children.find((c) => (c as THREE.Mesh).isMesh) as THREE.Mesh | undefined;
+    const sharedMat = firstMesh?.material as THREE.Material | THREE.Material[] | undefined;
+    old.traverse((o) => {
+      const m = o as THREE.Mesh;
+      if (m.isMesh) m.geometry.dispose();
+    });
+    const disposeMat = (mat: THREE.Material): void => {
+      const withMap = mat as THREE.Material & { normalMap?: THREE.Texture | null };
+      withMap.normalMap?.dispose();
+      mat.dispose();
+    };
+    if (Array.isArray(sharedMat)) sharedMat.forEach(disposeMat);
+    else if (sharedMat) disposeMat(sharedMat);
+    this.terrainView = buildTerrain(this.sim.cfg.seed);
+    setRenderCategory(this.terrainView.group, 'terrain');
+    this.scene.add(this.terrainView.group);
+  }
+
+  /**
+   * Rebake the macro normal DataTexture over the edited region (the per-pixel
+   * relief that goes stale after a sculpt). Debounce to stroke END in the
+   * editor: it re-uploads the texture, so never call it per drag sample.
+   * Editor-only.
+   */
+  rebakeTerrainNormals(region: { minX: number; minZ: number; maxX: number; maxZ: number }): void {
+    this.terrainView.rebakeNormalRegion(region.minX, region.minZ, region.maxX, region.maxZ);
+  }
+
+  /**
+   * Re-seat the water surface at the ACTIVE waterLevel() and recompute the
+   * shoreline depth attribute from the current terrain (after a water-level
+   * edit or a shoreline sculpt). Editor-only.
+   */
+  rebuildWater(): void {
+    this.waterView.setLevel();
+  }
+
+  /**
+   * Project the editor brush ring onto the terrain at world (x, z). Uniform
+   * writes only; call per pointer-move. Editor-only.
+   */
+  setEditorBrush(x: number, z: number, radius: number, color?: THREE.ColorRepresentation): void {
+    this.terrainView.setBrush(x, z, radius, color);
+  }
+
+  /** Hide the editor brush ring. Editor-only. */
+  clearEditorBrush(): void {
+    this.terrainView.clearBrush();
+  }
+
+  /**
+   * The placed-GLB-asset view for live editing (add/move/remove/select/reSeat/
+   * footprints). Created lazily so a map that starts with zero placements still
+   * gets a live view; the shipped game never calls this. Editor-only.
+   */
+  get placedAssets(): PlacedAssetsView {
+    if (!this.placedAssetsView) {
+      this.placedAssetsView = new PlacedAssetsView([], this.sim.cfg.seed);
+      setRenderCategory(this.placedAssetsView.group, 'props');
+      this.scene.add(this.placedAssetsView.group);
+    }
+    return this.placedAssetsView;
+  }
+
   private updateCamera(selfPos: THREE.Vector3, dt: number): void {
+    // Map-editor free camera: use the editor pose verbatim and skip the entire
+    // player-chase + occlusion path. Every camera-relative cull in sync() then
+    // runs off this free camera with no other change.
+    if (this.editorCam) {
+      this.camera.position.copy(this.editorCam.pos);
+      this.cameraLookAt.copy(this.editorCam.target);
+      if (Math.abs(this.camera.fov - CAMERA_BASE_FOV) > 0.01) {
+        this.camera.fov = CAMERA_BASE_FOV;
+        this.camera.updateProjectionMatrix();
+      }
+      this.camera.lookAt(this.cameraLookAt);
+      this.camera.updateMatrixWorld();
+      return;
+    }
     const p = this.sim.player;
     const seed = this.sim.cfg.seed;
     const px = selfPos.x;
@@ -4837,7 +5111,7 @@ export class Renderer {
               : null;
       // Only at the water's edge / in it — sampled at the player, so a loose
       // threshold made the loop bleed across the low marsh from far off.
-      const nearWater = !inDungeon && groundHeight(px, pz, seed) < WATER_LEVEL + 0.4;
+      const nearWater = !inDungeon && groundHeight(px, pz, seed) < waterLevel() + 0.4;
       sink.ambience(biome, inDungeon, precip, nearWater);
     }
   }
@@ -4927,6 +5201,10 @@ export class Renderer {
           if (hitView && !hitView.group.visible) break;
           const e = this.sim.entities.get(id);
           if (e?.kind === 'object' && !e.lootable) return null;
+          // The graveyard angel is hidden from the living, so it must not be
+          // click-pickable either (the capsule proxy ignores `visible`): skip it
+          // unless the local player is a released spirit.
+          if (e?.templateId === 'spirit_healer' && !this.sim.player?.ghost) break;
           return id;
         }
         o = o.parent;

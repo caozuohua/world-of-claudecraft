@@ -110,6 +110,9 @@ export interface SuspiciousPlayer {
     name: string;
     ip: string;
   };
+  snapshot: {
+    capturedAt: number;
+  } | null;
   score: number;
   evidence: SuspiciousEvidence[];
 }

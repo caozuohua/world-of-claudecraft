@@ -14,8 +14,8 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 390,
-      "state": "61631e5b",
+      "nextId": 401,
+      "state": "5115f4e0",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -29,18 +29,35 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 389,
+          "entityId": 400,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            },
+            {
+              "count": 5,
+              "itemId": "spring_water"
+            }
+          ],
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -54,13 +71,14 @@
           "aiState": "idle",
           "attackPower": 10,
           "combatTimer": 99,
+          "comboUntil": -1,
           "critChance": 0.056,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.056,
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 54,
-          "id": 389,
+          "id": 400,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -104,9 +122,9 @@
     {
       "tick": 20,
       "time": 1,
-      "nextId": 391,
-      "state": "243aaa59",
-      "events": "97cb4b90",
+      "nextId": 402,
+      "state": "f2213f3a",
+      "events": "9bba49b4",
       "rng": {
         "draws": 3,
         "digest": "73521d70"
@@ -115,9 +133,9 @@
     {
       "tick": 40,
       "time": 2,
-      "nextId": 391,
-      "state": "afbeaf96",
-      "events": "083f7181",
+      "nextId": 402,
+      "state": "56b9c8b1",
+      "events": "fbffbbed",
       "rng": {
         "draws": 3,
         "digest": "73521d70"
@@ -126,9 +144,9 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 391,
-      "state": "031fca82",
-      "events": "a7c7771b",
+      "nextId": 402,
+      "state": "90e9a5c1",
+      "events": "e7371025",
       "rng": {
         "draws": 73,
         "digest": "7ef074c8"
@@ -137,9 +155,9 @@
     {
       "tick": 80,
       "time": 4,
-      "nextId": 391,
-      "state": "97fca2c2",
-      "events": "a7c7771b",
+      "nextId": 402,
+      "state": "b27fa7cd",
+      "events": "e7371025",
       "rng": {
         "draws": 162,
         "digest": "a72d4df2"
@@ -148,9 +166,9 @@
     {
       "tick": 100,
       "time": 5,
-      "nextId": 391,
-      "state": "903011c6",
-      "events": "68be82c9",
+      "nextId": 402,
+      "state": "7fdf92fd",
+      "events": "91956d6d",
       "rng": {
         "draws": 254,
         "digest": "8a8c6a7c"
@@ -159,9 +177,9 @@
     {
       "tick": 120,
       "time": 6,
-      "nextId": 391,
-      "state": "b40b16ef",
-      "events": "a7c7771b",
+      "nextId": 402,
+      "state": "c4a21828",
+      "events": "e7371025",
       "rng": {
         "draws": 367,
         "digest": "6d00992d"
@@ -170,8 +188,8 @@
     {
       "tick": 128,
       "time": 6.4,
-      "nextId": 391,
-      "state": "37af1b73",
+      "nextId": 402,
+      "state": "da4fd778",
       "events": "741638a5",
       "rng": {
         "draws": 411,
@@ -185,19 +203,36 @@
           "arena2v2Rating": 1500,
           "arenaRating": 1500,
           "autoEquip": true,
+          "bags": [
+            null,
+            null,
+            null,
+            null
+          ],
           "cls": "mage",
           "companionUpgrades": {},
           "counters": {},
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 389,
+          "entityId": 400,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "inventory": [
+            {
+              "count": 5,
+              "itemId": "baked_bread"
+            },
+            {
+              "count": 5,
+              "itemId": "spring_water"
+            }
+          ],
           "lifetimeXp": 27600,
+          "mailWelcomed": true,
           "nodeHarvestReadyAt": {},
           "talents": {
             "choices": {},
@@ -212,6 +247,7 @@
           "attackPower": 10,
           "castTotal": 2,
           "combatTimer": 105.4,
+          "comboUntil": -1,
           "critChance": 0.056,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.056,
@@ -219,7 +255,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 105.4,
           "hp": 50000,
-          "id": 389,
+          "id": 400,
           "kind": "player",
           "level": 10,
           "lootFfaTimer": "Infinity",
@@ -251,7 +287,7 @@
             "sta": 23,
             "str": 10
           },
-          "targetId": 390,
+          "targetId": 401,
           "templateId": "mage",
           "weapon": {
             "max": 6,
@@ -262,6 +298,7 @@
         {
           "aiState": "idle",
           "combatTimer": 105.4,
+          "comboUntil": -1,
           "critChance": 0.05,
           "detonateTimer": "Infinity",
           "dodgeChance": 0.05,
@@ -270,7 +307,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 9000,
-          "id": 390,
+          "id": 401,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",

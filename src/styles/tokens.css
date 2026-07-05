@@ -48,6 +48,14 @@
     --color-friendly: #9fdc7f;
     --color-buff: #3a6ea8;
     --color-debuff: #c0392b;
+    /* Per-school debuff border tints (WoW-style poison/magic/curse reads); physical
+       keeps the base --color-debuff red. Driven by the aura node's data-school. */
+    --color-debuff-fire: #e8722a;
+    --color-debuff-frost: #4aa3df;
+    --color-debuff-arcane: #3f8cff;
+    --color-debuff-shadow: #9b59d0;
+    --color-debuff-nature: #35a835;
+    --color-debuff-holy: #d8b56b;
 
     --color-bg-dark: #08080d;
     --color-bg-input: #0a0a0f;
@@ -132,6 +140,7 @@
     --color-minimap-mob-aggro: #ff8800;
     --color-minimap-mob: #e74c3c;
     --color-minimap-mob-loot: #ffd100;
+    --color-minimap-corpse: #bfe6ff;
     --color-minimap-party-dead: #9a9a9a;
     --color-minimap-party-pip: #ffffffcc;
     --color-minimap-player: #fff;

@@ -428,11 +428,12 @@ describe('client HTML shell', () => {
   it('routes the target elite class + name color + combo pips + hostile cue through the elided writers', () => {
     // The two raw writes the four original writers cannot express (the elite class and
     // the hostile/friendly name color) go through the toggleClass / setStyleProp,
-    // and the combo pip `on` toggle through toggleClass. No raw classList/style write
-    // on the target frame survives (those silently collapse the hot-DOM skip rate).
+    // and the combo pip `on` toggle (now on the PLAYER frame: combo points are
+    // character-bound) through toggleClass. No raw classList/style write on either
+    // frame survives (those silently collapse the hot-DOM skip rate).
     expect(hudTs).toContain("this.toggleClass(this.targetFrameEl, 'elite'");
     expect(hudTs).toMatch(/this\.setStyleProp\(\s*this\.targetNameEl,\s*'color',/);
-    expect(hudTs).toContain("this.toggleClass(pips[i] as HTMLElement, 'on', i < points);");
+    expect(hudTs).toContain("this.toggleClass(pips[i] as HTMLElement, 'on', i < p.comboPoints);");
     // The forced-colors hostile cue is a non-color redundant marker on the target
     // name, routed through the same elided toggleClass writer (no raw class write on the
     // per-frame hot path) so it stays write-elided.
@@ -617,11 +618,15 @@ describe('client HTML shell', () => {
     expect(html).toContain(
       "if (!['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) {",
     );
-    expect(hudTs).toContain("fbq('trackCustom', eventName, data ?? {});");
-    expect(hudTs).toContain(
-      "if (ev.level === 5) trackMetaPixel('ReachedLevel5', { level: ev.level });",
+    expect(hudTs).toContain("if (options) fbq('trackCustom', eventName, data ?? {}, options);");
+    expect(hudTs).toContain("else fbq('trackCustom', eventName, data ?? {});");
+    expect(hudTs).toContain('if (ev.level === 5) {');
+    expect(hudTs).toContain('characterId ? { eventID: `lvl5_$' + '{characterId}` } : undefined');
+    expect(mainTs).toContain("if (options) fbq('trackCustom', eventName, data ?? {}, options);");
+    expect(mainTs).toContain("else fbq('trackCustom', eventName, data ?? {});");
+    expect(mainTs).toContain(
+      'registered.accountId ? { eventID: `acct_$' + '{registered.accountId}` } : undefined',
     );
-    expect(mainTs).toContain("trackMetaPixel('AccountCreated');");
     expect(mainTs).toContain("'GitHubClick'");
     expect(mainTs).toContain("'DiscordClick'");
   });
