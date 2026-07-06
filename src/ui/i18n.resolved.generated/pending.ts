@@ -27,7 +27,15 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "es_ES": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -47,7 +55,15 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "fr_FR": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -67,7 +83,15 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "fr_CA": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -87,7 +111,15 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "en_CA": [],
   "it_IT": [
@@ -108,7 +140,15 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "de_DE": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -128,19 +168,35 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "zh_CN": [
-    "hudChrome.crafting.reagentLine"
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.spellbookPageLabel"
   ],
   "zh_TW": [
-    "hudChrome.crafting.reagentLine"
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.spellbookPageLabel"
   ],
   "ko_KR": [
-    "hudChrome.crafting.reagentLine"
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.spellbookPageLabel"
   ],
   "ja_JP": [
-    "hudChrome.crafting.reagentLine"
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.spellbookPageLabel"
   ],
   "pt_BR": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -160,10 +216,20 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "ru_RU": [
-    "hudChrome.crafting.reagentLine"
+    "hudChrome.crafting.reagentLine",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.spellbookPageLabel"
   ],
   "nl_NL": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -183,7 +249,15 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "pl_PL": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -203,7 +277,15 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "id_ID": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -223,7 +305,15 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "tr_TR": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -243,7 +333,15 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "sv_SE": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -263,7 +361,15 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "vi_VN": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -283,7 +389,15 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ],
   "da_DK": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -303,6 +417,14 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.crafting.reagentsNeeded",
     "hudChrome.crafting.resultAria",
     "hudChrome.crafting.title",
-    "hudChrome.crafting.unknownRecipe"
+    "hudChrome.crafting.unknownRecipe",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
   ]
 };

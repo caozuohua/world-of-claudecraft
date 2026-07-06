@@ -1458,6 +1458,19 @@ export class GameServer {
       .catch((err) => console.error('failed to save account mech chroma:', err));
   }
 
+  /**
+   * Grant a mech-chroma cosmetic to an account by id (a Discord swag claim, whose
+   * points/claim are already resolved durably server-side). Best-effort live update:
+   * persist the grant, then push the refreshed cosmetics to any online session on the
+   * account. The live push is a no-op when the account is offline. Injected into the
+   * ported Discord swag route via configureDiscordRuntime (server/discord.ts).
+   */
+  grantMechChromaToAccount(accountId: number, chromaId: string): void {
+    void grantAccountMechChroma(accountId, chromaId)
+      .then((cosmetics) => this.updateLiveAccountCosmetics(accountId, cosmetics))
+      .catch((err) => console.error('failed to grant swag mech chroma:', err));
+  }
+
   private unequipAccountMechChroma(session: ClientSession, chromaId: string): void {
     const skin = mechChromaSkinIndex(chromaId);
     const itemId = mechChromaItemId(chromaId);
@@ -2394,7 +2407,12 @@ export class GameServer {
         if (typeof msg.id === 'number') sim.autoLoot(msg.id, pid);
         break;
       case 'harvestCorpse':
-        if (typeof msg.id === 'number') sim.harvestCorpse(msg.id, pid);
+        if (typeof msg.id === 'number') {
+          const components = Array.isArray(msg.components)
+            ? msg.components.filter((c): c is string => typeof c === 'string')
+            : undefined;
+          sim.harvestCorpse(msg.id, components, pid);
+        }
         break;
       case 'lootRoll':
         if (
