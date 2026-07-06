@@ -5,7 +5,7 @@
 | Phase | Status | Started | Completed |
 |---|---|---|---|
 | Phase 1: sim bank core | complete | 2026-07-05 | 2026-07-05 |
-| Phase 1 QA | not started | | |
+| Phase 1 QA | complete | 2026-07-06 | 2026-07-06 |
 | Phase 2: banker NPCs | not started | | |
 | Phase 2 QA | not started | | |
 | Phase 3: IWorld + wire | not started | | |
@@ -34,7 +34,7 @@
 - [x] sim_i18n matcher entries for every new emit (5 EXACT keys + zh_CN/zh_TW/ja_JP/ko_KR/ru_RU fills, M16) + S3 simSrc list append (same change)
 
 ### Phase 1 QA
-- [ ] Deliverables and acceptance criteria verified; coverage/dead-code/cleanup agents run; findings fixed
+- [x] Deliverables and acceptance criteria verified; coverage/dead-code/cleanup agents run; findings fixed
 
 ### Phase 2: banker NPCs
 - [ ] Three banker NpcDefs (Eastbrook, Fenbridge, Highwatch hubs) with `banker: true`, greetings, placement
@@ -113,3 +113,10 @@
 - Surprise: every content collect-objective item is quest-kind today, so the deposit-side quest un-credit path is unreachable through real content; it is pinned with a synthetic quest injection in the test and stays as defensive wiring for future content.
 - Rollout: forward-only (a pre-bank binary drops the field and banked items are unrecoverable); drain or upgrade realms, never mixed binaries. Full outcome record in state.md "Phase 1 outcomes".
 - Next: run docs/bank-system/phase-01-qa.md in a fresh session.
+
+### Phase 1 QA (2026-07-06)
+- Verdict: PASS after fixes. 1 blocking + 7 should-fix + 5 nice-to-have found; all applied except 3 refuted with evidence. `src/sim/bank.ts` survived QA byte-unchanged; every applied fix was test decisiveness, i18n accuracy, or merge damage. Full record in state.md "Phase 1 QA outcomes".
+- The blocking was merge damage, not Phase 1: `17f311ca4` (release/v0.22.0 merge) committed unresolved conflict markers into the generated `src/ui/i18n.status.summary.json`; regenerated via `npm run i18n:gen` and committed.
+- Planted-bug pass (acceptance criterion 1): 5/5 conservation mutations caught by the sweep itself, including the vacuity guard.
+- `tests/bank.test.ts` grew 41 -> 42 tests and every refusal path now pins copper + both containers; the two generic persistence suites now cover the bank field.
+- Next: run docs/bank-system/phase-02-banker-npcs.md in a fresh session.

@@ -1,6 +1,6 @@
 # Bank System: Cross-Phase State (read this first every session)
 
-Current phase: Phase 1 implementation complete (2026-07-05); run phase-01-qa.md next, then Phase 2. Update this line as phases complete.
+Current phase: Phase 1 + Phase 1 QA complete (2026-07-06, verdict PASS); run phase-02-banker-npcs.md next. Update this line as phases complete.
 
 ## Locked design decisions (record once, reference forever)
 
@@ -23,7 +23,7 @@ Current phase: Phase 1 implementation complete (2026-07-05); run phase-01-qa.md 
 14. Out of v1 scope (do not build, keep seams friendly): loadout presets, account-wide shared vault, guild bank, bank tabs, copper storage, a bank keybind.
 15. UI: `src/ui/bank_view.ts` pure core (registered in `UI_PURE_CORES`) + `src/ui/bank_window.ts` painter composing `PainterHostPresentation`; cold event-driven window (innerHTML rebuild on events), vendor-open style companion docking with bags; deposit mode inserted into `BagMode` + `bagItemAction` + `bagTooltipHintKey` together; search/category/sort mirroring `bag_filter` (generalized or a sibling `bank_filter`); "deposit all materials" button; confirm prompts in `#prompt-stack`.
 
-16. Guild-bank readiness (approved 2026-07-05: ships AFTER the player bank, designed for NOW). Full intended shape and research in `guild-bank-readiness.md`. The v1 seams that make it cheap, locked: (a) Phase 1 move helpers are container-agnostic pure functions over lists + budgets; (b) the bank_* wire tokens stay personal-only forever, the guild bank gets its own guild_bank_* tokens and permission-validating dispatch path; (c) bank_ledger carries container TEXT NOT NULL DEFAULT 'personal' + container_id BIGINT NULL from day one and the audit script groups by container; (d) do NOT extract a generic container framework in v1: the guild bank will be the fourth off-inventory container (market, mail, personal bank), which is when the rule of three justifies extracting a shared escrow helper.
+16. Guild-bank readiness (approved 2026-07-05: ships AFTER the player bank, designed for NOW). Full intended shape and research in `guild-bank-readiness.md`. The v1 seams that make it cheap, locked: (a) Phase 1 move helpers are container-agnostic pure functions over lists + budgets; (b) the bank_* wire tokens stay personal-only forever, the guild bank gets its own guild_bank_* tokens and permission-validating dispatch path; (c) bank_ledger carries container TEXT NOT NULL DEFAULT 'personal' + container_id BIGINT NULL from day one and the audit script groups by container; (d) do NOT extract a generic container framework in v1: the guild bank will be the fourth off-inventory container (market, mail, personal bank), which is when the rule of three justifies extracting a shared escrow helper. (e) `moveBetweenContainers` is deliberately policy-free (quest-deny lives in the CALLER, `bankDeposit`); correct for self-storage, but the guild-bank caller moves items BETWEEN players, so it MUST add `noMarketList` and `instance.boundTo` (soulbound) checks at its own boundary, the mail precedent (`src/sim/mail/post_office.ts` denies both). Recorded 2026-07-06 at Phase 1 QA; this is a guild-bank acceptance item.
 
 ## Non-negotiable constraints
 
@@ -80,6 +80,17 @@ Created by this feature (record actual paths as phases land):
 - Phase 6: BagMode deposit integration, bank search/filter/sort, buy-slots prompt.
 - Phase 7: mobile/a11y polish.
 - Phase 8: entitlement calculator + portal surface + referral qualification.
+
+## Phase 1 QA outcomes (recorded 2026-07-06)
+
+- Verdict: PASS after fixes. Zero defects in `src/sim/bank.ts` or the sim.ts wiring (the module survived QA byte-unchanged); every finding was test decisiveness, i18n accuracy, docs, or merge damage.
+- Planted-bug decisiveness (acceptance criterion 1): 5/5 conservation mutations caught by the sweep itself (duplication, partial duplication, copper leak, destruction-on-refusal, and vacuity via the non-vacuity flags).
+- BLOCKING (not a Phase 1 defect): the release/v0.22.0 merge commit `17f311ca4` committed unresolved conflict markers into the GENERATED `src/ui/i18n.status.summary.json` (invalid JSON; would fail the CI freshness gate). Fixed the documented way (`npm run i18n:gen`, commit the result). LESSON for every future merge on this branch: generated-artifact conflicts are never hand-resolved AND the merged result must be verified to parse; the Phase 1 commits themselves verified fresh.
+- Test decisiveness fixes in `tests/bank.test.ts` (41 -> 42 tests): the bonusSlots test was VACUOUS on the admit path (a deposit path ignoring bonusSlots passed all 41 tests, proven by live mutation; now fills to 27 and asserts the bonus-region deposit succeeds); the "deposit -> withdraw" payload test never withdrew (now round-trips the full charges/rolled/boundTo payload); tamper sanitization now also drives the REAL addPlayer load path (pins the `meta.bank = sanitizeBankState(s.bank)` wiring); every refusal site now asserts copper-unchanged AND both containers; the round-trip carries nonzero bonusSlots; the sweep now provably reaches bags-full and cannot-afford refusals (7 non-vacuity flags: every 5th seed starts bags-full, every 7th seed copper-poor); the determinism run pins its own non-vacuity (purchasedSlots 18 + the purchase log line).
+- Generic suites extended for the bank field: `tests/persistence_round_trip.test.ts` (fully-populated fixture now banks; `bank` added to the legacy strip list) and `tests/character_state_backcompat.test.ts` (bank populated, stripped, defaulted, re-serialized).
+- i18n accuracy: the ja fill for `error.bankCannotAfford` wrongly said gold for a copper-priced purchase (now currency-neutral) and `log.bankSlotsPurchased` now matches the surrounding polite register.
+- Findings REFUTED with evidence (no change made, do not re-raise): `moved: slot.count` on the instanced branch is truthful (the WHOLE slot moves, payload and count); `sanitizeBankState` adds no upper count clamp and accepts array-shaped instance payloads BY DESIGN, matching the bags load path (which does not sanitize at all; the bank must never be stricter than bags) and the never-destroy-items philosophy.
+- Environment gotchas recorded for future QA sessions: workflow worktrees spawn at the MAIN branch commit (detach-checkout the branch tip first), and `vite.config.ts` test.exclude `**/.claude/**` hides ALL test files from a `.claude/worktrees/` checkout (run vitest there via a minimal config without that glob).
 
 ## New surface added per phase (fill in as phases complete)
 
