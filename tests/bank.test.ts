@@ -20,7 +20,7 @@ import {
 } from '../src/sim/bank';
 import { ITEMS, QUESTS } from '../src/sim/data';
 import { Sim } from '../src/sim/sim';
-import type { InvSlot, ItemInstancePayload } from '../src/sim/types';
+import type { Entity, InvSlot, ItemInstancePayload, SimEvent } from '../src/sim/types';
 
 // The full 12-tier ladder, pinned as literals (never compared to the exported
 // constant, which would be a zero-protection self-comparison).
@@ -28,8 +28,56 @@ const PRICES = [500, 1000, 2500, 5000, 10000, 20000, 40000, 80000, 150000, 30000
 const LADDER_TOTAL = 2409000; // 500 + 1000 + ... + 1200000
 const CAPS = [30, 36, 42, 48, 54, 60, 66, 72, 78, 84, 90, 96]; // 24 + 6*(tier+1)
 
-const makeSim = (seed = 42) => new Sim({ seed, playerClass: 'warrior', autoEquip: false });
+// The three Gilded Strongbox bursars (banker NPCs), one per town hub.
+const BANKERS = ['bursar_fernando', 'bursar_petra_vell', 'bursar_aldous_crane'] as const;
+
+// Resolve a banker's LIVE entity by templateId: content coords run through
+// findSafePos/groundPos at spawn, so the runtime position can differ from the
+// authored one. Every proximity move reads the live pos, never the content coord.
+function bankerEntity(sim: Sim, templateId: string = BANKERS[0]): Entity {
+  for (const e of sim.entities.values()) {
+    if (e.kind === 'npc' && e.templateId === templateId) return e;
+  }
+  throw new Error(`banker ${templateId} is not spawned in the world`);
+}
+
+// Stand a player on top of a banker (well within BANKER_RANGE = INTERACT_RANGE + 2)
+// and rebucket so the interact proximity scan sees them. Returns the banker entity.
+function moveToBanker(sim: Sim, pid = sim.playerId, templateId: string = BANKERS[0]): Entity {
+  const banker = bankerEntity(sim, templateId);
+  const p = sim.entities.get(pid);
+  if (!p) throw new Error(`missing player ${pid}`);
+  p.pos = { ...banker.pos };
+  p.prevPos = { ...p.pos };
+  sim.rebucket(p);
+  return banker;
+}
+
+// Place a player far from every banker (2D distance only; nearBanker ignores y).
+// {500, 500} is hundreds of yards from all three town hubs.
+function moveFarFromBankers(sim: Sim, pid = sim.playerId): void {
+  const p = sim.entities.get(pid);
+  if (!p) throw new Error(`missing player ${pid}`);
+  p.pos = { x: 500, y: p.pos.y, z: 500 };
+  p.prevPos = { ...p.pos };
+  sim.rebucket(p);
+}
+
+// A fresh world whose default player already stands at a banker. The Phase 1 suite
+// drives the bank commands without placing the player, and the Phase 2 proximity
+// gate refuses them unless a banker is in reach, so the shared setup moves to one.
+// Phase 1 assertions never read position, so the move is invisible to them; the
+// far-refusal cases below move away explicitly.
+const makeSim = (seed = 42) => {
+  const sim = new Sim({ seed, playerClass: 'warrior', autoEquip: false });
+  moveToBanker(sim);
+  return sim;
+};
 const meta = (sim: Sim, pid = sim.playerId) => sim.meta(pid)!;
+
+// A multiplayer world (no default player) for the Phase 2 banker interaction
+// tests, mirroring the tests/mail.test.ts makeWorld idiom.
+const makeBankWorld = (seed = 42) => new Sim({ seed, playerClass: 'warrior', noPlayer: true });
 
 // Distinct gear ids (stackSize 1) for filling containers with non-mergeable entries.
 const GEAR_IDS = Object.values(ITEMS)
@@ -587,6 +635,7 @@ describe('determinism', () => {
   it('the same fixed bank-op script over 300 ticks yields identical state + events', () => {
     function run() {
       const sim = new Sim({ seed: 123, playerClass: 'warrior', autoEquip: false });
+      moveToBanker(sim); // Phase 2 gate: the scripted bank ops need a banker in reach
       const m = sim.meta(sim.playerId)!;
       m.copper = LADDER_TOTAL;
       const texts: string[] = [];
@@ -725,6 +774,7 @@ describe('persistence and back-compat', () => {
     const sim2 = new Sim({ seed: 1, playerClass: 'warrior', noPlayer: true });
     const pid = sim2.addPlayer('warrior', 'Hoarder', { state: state as never });
     const m2 = meta(sim2, pid);
+    moveToBanker(sim2, pid); // Phase 2 gate: the deposit/withdraw below need a banker in reach
     expect(m2.bank.inventory).toHaveLength(30); // nothing dropped
     expect(bankCapacity(m2.bank)).toBe(24);
     // a new deposit is refused (over capacity) and moves/charges nothing
@@ -844,4 +894,186 @@ describe('sanitizeBankState', () => {
     expect(bs(-4)).toBe(0);
     expect(bs(5)).toBe(5);
   });
+});
+
+// ---------------------------------------------------------------------------
+// Phase 2: the three Gilded Strongbox bursars (banker NPCs), the interact ->
+// bank-window cue they emit, and the proximity gate every bank command now
+// enforces. Standing in reach of any bursar is what unlocks the bank.
+describe('banker NPCs in the world (Phase 2)', () => {
+  it('registers exactly the three Gilded Strongbox bursars as bankers', () => {
+    const sim = makeBankWorld();
+    expect(sim.bankerIds).toHaveLength(3);
+    const templateIds = sim.bankerIds.map((id) => sim.entities.get(id)?.templateId).sort();
+    expect(templateIds).toEqual(['bursar_aldous_crane', 'bursar_fernando', 'bursar_petra_vell']);
+    for (const id of sim.bankerIds) {
+      expect(sim.entities.get(id)?.kind).toBe('npc');
+    }
+  });
+});
+
+describe('interacting with a banker opens the bank (Phase 2)', () => {
+  const bankEvents = (evs: SimEvent[]) => evs.filter((e) => e.type === 'bank');
+
+  for (const templateId of BANKERS) {
+    it(`a targeted interact at ${templateId} emits exactly one bank event for the caller`, () => {
+      const sim = makeBankWorld();
+      const pid = sim.addPlayer('warrior', 'Vaulter');
+      const banker = moveToBanker(sim, pid, templateId);
+      const p = sim.entities.get(pid)!;
+      p.targetId = banker.id;
+      sim.drainEvents();
+      sim.interact(pid);
+      const evs = bankEvents(sim.drainEvents());
+      expect(evs).toHaveLength(1);
+      expect(evs[0]).toMatchObject({ type: 'bank', pid });
+    });
+
+    it(`an untargeted proximity interact at ${templateId} emits exactly one bank event`, () => {
+      const sim = makeBankWorld();
+      const pid = sim.addPlayer('warrior', 'Vaulter');
+      moveToBanker(sim, pid, templateId);
+      const p = sim.entities.get(pid)!;
+      p.targetId = null; // force the proximity-scan arm, not the targeted arm
+      sim.drainEvents();
+      sim.interact(pid);
+      const evs = bankEvents(sim.drainEvents());
+      expect(evs).toHaveLength(1);
+      expect(evs[0]).toMatchObject({ type: 'bank', pid });
+    });
+  }
+
+  it('carries the interacting player, not a bystander standing at the same banker', () => {
+    const sim = makeBankWorld();
+    const first = sim.addPlayer('warrior', 'First');
+    const second = sim.addPlayer('warrior', 'Second');
+    const banker = moveToBanker(sim, second, 'bursar_fernando');
+    moveToBanker(sim, first, 'bursar_fernando'); // the bystander also stands at the banker
+    const p = sim.entities.get(second)!;
+    p.targetId = banker.id;
+    sim.drainEvents();
+    sim.interact(second); // interact as the second-added player
+    const evs = bankEvents(sim.drainEvents());
+    expect(evs).toHaveLength(1);
+    expect(evs[0]).toMatchObject({ type: 'bank', pid: second });
+  });
+
+  it('interacting away from every banker emits no bank event', () => {
+    const sim = makeBankWorld();
+    const pid = sim.addPlayer('warrior', 'Wanderer');
+    moveFarFromBankers(sim, pid);
+    const p = sim.entities.get(pid)!;
+    p.targetId = null;
+    sim.drainEvents();
+    sim.interact(pid);
+    expect(bankEvents(sim.drainEvents())).toHaveLength(0);
+  });
+
+  it('a targeted interact at a banker from out of range emits no bank event', () => {
+    const sim = makeBankWorld();
+    const pid = sim.addPlayer('warrior', 'Wanderer');
+    const banker = bankerEntity(sim);
+    moveFarFromBankers(sim, pid);
+    const p = sim.entities.get(pid)!;
+    p.targetId = banker.id; // target held from afar: the range check must block the emit
+    sim.drainEvents();
+    sim.interact(pid);
+    expect(bankEvents(sim.drainEvents())).toHaveLength(0);
+  });
+});
+
+describe('bank commands require a nearby banker (Phase 2)', () => {
+  const TOO_FAR = 'You are too far from the banker.';
+
+  it('deposit is refused far from a banker (moves/charges nothing), then succeeds in reach', () => {
+    const sim = makeBankWorld();
+    const pid = sim.addPlayer('warrior', 'Depositor');
+    const m = sim.meta(pid)!;
+    sim.addItem('wolf_fang', 5, pid);
+    const idx = () => m.inventory.findIndex((s) => s.itemId === 'wolf_fang');
+
+    moveFarFromBankers(sim, pid);
+    const bagBefore = clone(m.inventory);
+    const bankBefore = clone(m.bank.inventory);
+    const copperBefore = m.copper;
+    sim.drainEvents();
+    sim.bankDeposit(idx(), undefined, pid);
+    expect(hasErr(sim.drainEvents(), TOO_FAR)).toBe(true);
+    expect(m.inventory).toEqual(bagBefore); // nothing left the bags
+    expect(m.bank.inventory).toEqual(bankBefore); // nothing entered the bank
+    expect(m.copper).toBe(copperBefore);
+
+    moveToBanker(sim, pid, 'bursar_fernando');
+    sim.bankDeposit(idx(), undefined, pid);
+    expect(m.inventory.some((s) => s.itemId === 'wolf_fang')).toBe(false);
+    expect(m.bank.inventory).toEqual([{ itemId: 'wolf_fang', count: 5 }]);
+  });
+
+  it('withdraw is refused far from a banker (moves/charges nothing), then succeeds in reach', () => {
+    const sim = makeBankWorld();
+    const pid = sim.addPlayer('warrior', 'Withdrawer');
+    const m = sim.meta(pid)!;
+    m.bank.inventory = [{ itemId: 'wolf_fang', count: 7 }];
+
+    moveFarFromBankers(sim, pid);
+    const bankBefore = clone(m.bank.inventory);
+    const bagBefore = clone(m.inventory);
+    const copperBefore = m.copper;
+    sim.drainEvents();
+    sim.bankWithdraw(0, undefined, pid);
+    expect(hasErr(sim.drainEvents(), TOO_FAR)).toBe(true);
+    expect(m.bank.inventory).toEqual(bankBefore); // nothing left the bank
+    expect(m.inventory).toEqual(bagBefore); // nothing entered the bags
+    expect(m.copper).toBe(copperBefore);
+
+    moveToBanker(sim, pid, 'bursar_fernando');
+    sim.bankWithdraw(0, undefined, pid);
+    expect(m.bank.inventory).toEqual([]);
+    expect(sim.countItem('wolf_fang', pid)).toBe(7);
+  });
+
+  it('buying slots is refused far from a banker (charges nothing), then succeeds in reach', () => {
+    const sim = makeBankWorld();
+    const pid = sim.addPlayer('warrior', 'Buyer');
+    const m = sim.meta(pid)!;
+    m.copper = 500; // exactly the first tier price
+
+    moveFarFromBankers(sim, pid);
+    sim.drainEvents();
+    sim.bankBuySlots(pid);
+    expect(hasErr(sim.drainEvents(), TOO_FAR)).toBe(true);
+    expect(m.copper).toBe(500); // not charged
+    expect(m.bank.purchasedSlots).toBe(0); // no slots granted
+
+    moveToBanker(sim, pid, 'bursar_fernando');
+    sim.drainEvents();
+    sim.bankBuySlots(pid);
+    expect(hasLog(sim.drainEvents(), 'You purchase additional bank slots.')).toBe(true);
+    expect(m.copper).toBe(0);
+    expect(m.bank.purchasedSlots).toBe(6);
+  });
+
+  // Near/far for at least one command (deposit) at ALL THREE hubs.
+  for (const templateId of BANKERS) {
+    it(`deposit is gated by proximity at ${templateId}`, () => {
+      const sim = makeBankWorld();
+      const pid = sim.addPlayer('warrior', 'Traveler');
+      const m = sim.meta(pid)!;
+      sim.addItem('wolf_fang', 3, pid);
+      const idx = () => m.inventory.findIndex((s) => s.itemId === 'wolf_fang');
+
+      moveFarFromBankers(sim, pid);
+      const copperBefore = m.copper;
+      sim.drainEvents();
+      sim.bankDeposit(idx(), undefined, pid);
+      expect(hasErr(sim.drainEvents(), TOO_FAR)).toBe(true);
+      expect(m.bank.inventory).toEqual([]);
+      expect(sim.countItem('wolf_fang', pid)).toBe(3);
+      expect(m.copper).toBe(copperBefore);
+
+      moveToBanker(sim, pid, templateId);
+      sim.bankDeposit(idx(), undefined, pid);
+      expect(m.bank.inventory).toEqual([{ itemId: 'wolf_fang', count: 3 }]);
+    });
+  }
 });
