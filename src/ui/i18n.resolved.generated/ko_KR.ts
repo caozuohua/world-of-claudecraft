@@ -311,15 +311,7 @@ export const ko_KR: EnTranslations = {
       "nameplates": "이름표",
       "haptics": "진동",
       "hapticsOff": "진동 꺼짐",
-      "toggleHaptics": "진동 전환",
-      "hotbarPage": "스킬",
-      "hotbarPageAria": "다음 스킬 세트 표시",
-      "actionRing": "전투 행동",
-      "actionPageToggle": "행동 페이지 전환",
-      "actionPageIndicator": "{page}",
-      "targetCycle": "대상 전환",
-      "targetCycleShort": "대상",
-      "spellbookPageLabel": "Page {page}"
+      "toggleHaptics": "진동 전환"
     },
     "tutorial": {
       "moveBodyTouch": "이동 스틱으로 이동하고 화면을 끌어 주위를 둘러보세요. 몇 걸음 움직여 시작하세요.",
@@ -426,9 +418,7 @@ export const ko_KR: EnTranslations = {
       "itemLevelLine": "아이템 레벨 {level}",
       "itemScoreLine": "점수 {score}",
       "showSecondaryActionBar": "보조 액션 바 표시",
-      "showDailyRewardsChest": "일일 보상 보물상자 표시",
-      "mobileCameraJoystick": "카메라 조이스틱",
-      "mobileLeftHanded": "왼손잡이 레이아웃"
+      "showDailyRewardsChest": "일일 보상 보물상자 표시"
     },
     "controller": {
       "title": "컨트롤러",
@@ -1064,7 +1054,7 @@ export const ko_KR: EnTranslations = {
       "close": "제작 닫기",
       "craft": "제작",
       "reagentsNeeded": "필요 재료:",
-      "reagentLine": "{name} x{have}/{required}",
+      "reagentLine": "{name}: {have}/{required}",
       "empty": "알려진 제작법이 없습니다.",
       "resultAria": "{name} 제작",
       "craftedToast": "제작 완료:{name}",

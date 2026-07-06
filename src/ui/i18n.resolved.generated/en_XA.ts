@@ -311,15 +311,7 @@ export const en_XA: EnTranslations = {
       "nameplates": "[Ñáɱéš]",
       "haptics": "[Ĥáþţíçš]",
       "hapticsOff": "[Ĥáþţíçš Óƒƒ]",
-      "toggleHaptics": "[Ţóĝĝļé ĥáþţíçš]",
-      "hotbarPage": "[Šķíļļš]",
-      "hotbarPageAria": "[Šĥóŵ ñéẋţ šéţ óƒ šķíļļš]",
-      "actionRing": "[Çóɱƀáţ áçţíóñš]",
-      "actionPageToggle": "[Šŵíţçĥ áçţíóñ þáĝé]",
-      "actionPageIndicator": "[{page}]",
-      "targetCycle": "[Šŵáþ ţáŕĝéţ]",
-      "targetCycleShort": "[Ţáŕĝéţ]",
-      "spellbookPageLabel": "[Þáĝé {page}]"
+      "toggleHaptics": "[Ţóĝĝļé ĥáþţíçš]"
     },
     "tutorial": {
       "moveBodyTouch": "[Úšé ţĥé ɱóʋéɱéñţ šţíçķ ţó ɱóʋé áñð ðŕáĝ ţĥé šçŕééñ ţó ļóóķ áŕóúñð. Ţáķé á ƒéŵ šţéþš ţó ƀéĝíñ.]",
@@ -426,9 +418,7 @@ export const en_XA: EnTranslations = {
       "itemLevelLine": "[Íţéɱ Ļéʋéļ {level}]",
       "itemScoreLine": "[Šçóŕé {score}]",
       "showSecondaryActionBar": "[Šĥóŵ Šéçóñðáŕý Áçţíóñ Ɓáŕ]",
-      "showDailyRewardsChest": "[Šĥóŵ Ðáíļý Ŕéŵáŕðš Çĥéšţ]",
-      "mobileCameraJoystick": "[Çáɱéŕá ĵóýšţíçķ]",
-      "mobileLeftHanded": "[Ļéƒţ-ĥáñðéð ļáýóúţ]"
+      "showDailyRewardsChest": "[Šĥóŵ Ðáíļý Ŕéŵáŕðš Çĥéšţ]"
     },
     "controller": {
       "title": "[Çóñţŕóļļéŕ]",

@@ -311,15 +311,7 @@ export const zh_CN: EnTranslations = {
       "nameplates": "姓名板",
       "haptics": "震动反馈",
       "hapticsOff": "震动反馈：关",
-      "toggleHaptics": "切换震动反馈",
-      "hotbarPage": "技能",
-      "hotbarPageAria": "显示下一组技能",
-      "actionRing": "战斗动作",
-      "actionPageToggle": "切换动作页",
-      "actionPageIndicator": "{page}",
-      "targetCycle": "切换目标",
-      "targetCycleShort": "目标",
-      "spellbookPageLabel": "Page {page}"
+      "toggleHaptics": "切换震动反馈"
     },
     "tutorial": {
       "moveBodyTouch": "使用摇杆移动，拖动屏幕环顾四周。先走几步开始吧。",
@@ -426,9 +418,7 @@ export const zh_CN: EnTranslations = {
       "itemLevelLine": "物品等级 {level}",
       "itemScoreLine": "评分 {score}",
       "showSecondaryActionBar": "显示副动作条",
-      "showDailyRewardsChest": "显示每日奖励宝箱",
-      "mobileCameraJoystick": "摄像机摇杆",
-      "mobileLeftHanded": "左手布局"
+      "showDailyRewardsChest": "显示每日奖励宝箱"
     },
     "controller": {
       "title": "手柄",
@@ -1064,7 +1054,7 @@ export const zh_CN: EnTranslations = {
       "close": "关闭制作",
       "craft": "制作",
       "reagentsNeeded": "需要:",
-      "reagentLine": "{name} x{have}/{required}",
+      "reagentLine": "{name}: {have}/{required}",
       "empty": "尚无已知配方。",
       "resultAria": "制作{name}",
       "craftedToast": "已制作:{name}",
