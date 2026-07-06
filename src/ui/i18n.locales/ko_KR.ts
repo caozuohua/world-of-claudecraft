@@ -551,6 +551,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'news.desc': '최신 패치 노트, 이벤트 소식, 커뮤니티 업데이트를 확인해 보세요.',
   'download.title': '데스크톱 런처 다운로드',
   'download.macCta': 'macOS용 다운로드',
+  'download.linuxCta': 'Linux용 다운로드',
+  'download.linuxHint':
+    'AppImage 형식입니다. 실행 권한만 부여하면 바로 실행되며, 설치는 필요 없습니다.',
   'download.windowsPending': 'Windows 빌드는 준비 중입니다.',
   'download.desc': '최적화된 성능과 전체 화면 플레이를 위해 독립형 런처를 다운로드하세요.',
   'comingSoon.placeholder': '준비 중...',
@@ -818,6 +821,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'loading.enterTimeout':
     '세계에 입장할 수 없습니다. 연결 시간이 초과되었습니다. 게임 서버가 실행 중인가요?',
   'loading.connectionLost': '서버와의 연결이 끊어졌습니다.',
+  'loading.reconnecting': '연결이 끊어졌습니다. 다시 연결하는 중...',
   'loading.connectionRejected': '서버가 연결을 종료했습니다.',
   'errors.nothingInteract': '상호작용할 대상이 없습니다.',
   'errors.noEnemyNearby': '근처에 적이 없습니다.',
@@ -3785,6 +3789,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.nav.dungeons': '던전과 공격대',
   'guide.nav.reference': '참고 자료',
   'guide.nav.controls': '조작법',
+  'guide.nav.settings': '설정 및 성능',
   'guide.nav.combat': '전투',
   'guide.nav.glossary': '용어집',
   'guide.nav.faq': '자주 묻는 질문',
@@ -3930,6 +3935,92 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'guide.controls.mobileHeading': '모바일에서',
   'guide.controls.mobileBody':
     '휴대전화와 태블릿에서는 터치 조작이 자동으로 나타납니다. 왼쪽에는 이동 스틱, 오른쪽 아무 곳이나 끌면 시점 전환, 그리고 능력과 메뉴를 위한 화면 버튼이 표시됩니다.',
+  'guide.settingsPage.heading': '설정 및 성능',
+  'guide.settingsPage.intro':
+    '화면을 가장 아름답게, 혹은 게임을 가장 빠르게. 바로 쓸 수 있는 세 가지 추천 설정과 함께, 모든 그래픽 옵션이 실제로 하는 일을 정리했습니다.',
+  'guide.settingsPage.wherePath':
+    '이 페이지의 모든 항목은 게임 안에 있습니다. Esc 키를 누르고 그래픽, 인터페이스, 성능 오버레이에서 확인하세요.',
+  'guide.settingsPage.fairnessTitle': '설계부터 공정하게',
+  'guide.settingsPage.fairnessBody':
+    '이곳의 어떤 옵션도 화면과 유불리를 맞바꾸지 않습니다. 설정을 낮추면 겉모습의 화려함만 줄어들 뿐, 전투에 쓰는 정보는 그대로 남습니다. 약화 효과, 시전 막대, 파티원 체력, 피해량 숫자는 낮음부터 울트라까지 완전히 동일합니다. 사양이 낮은 기기로 플레이해도 결코 불리하지 않습니다.',
+  'guide.settingsPage.loadoutsHeading': '바로 쓸 수 있는 세 가지 추천 설정',
+  'guide.settingsPage.loadoutsIntro':
+    '내 기기와 가장 비슷한 추천 설정에서 시작한 뒤, 마음에 들 때까지 옵션을 하나씩 조정해 보세요.',
+  'guide.settingsPage.recommended': '추천',
+  'guide.settingsPage.whyLabel': '추천 이유:',
+  'guide.settingsPage.tagReload': '새로고침 후 적용',
+  'guide.settingsPage.fpsTitle': 'FPS 우선',
+  'guide.settingsPage.fpsTagline':
+    '오래된 노트북, 내장 그래픽, 배터리 사용 환경을 위한 설정입니다.',
+  'guide.settingsPage.fpsWhy':
+    '그래픽 품질은 전체를 좌우하는 메인 스위치이고, 렌더 품질은 효과가 가장 큰 슬라이더입니다. 70%로 두면 인터페이스는 완벽하게 선명한 채로, 세계는 픽셀을 약 절반만 그립니다.',
+  'guide.settingsPage.balancedTitle': '균형',
+  'guide.settingsPage.balancedTagline':
+    '대부분의 기기에 딱 맞는 최적점이자, 기본으로 권하는 설정입니다.',
+  'guide.settingsPage.balancedWhy':
+    '중간에서는 실제 그림자와 온전한 재질이 표현되고, 높음에서는 앰비언트 오클루전과 블룸이 더해집니다. 울트라 아래 등급에서는 내장 안전장치가 격렬한 전투 중의 순간적인 프레임 저하를 흡수해 주므로, 균형 설정은 따로 신경 쓰지 않아도 계속 부드럽게 유지됩니다.',
+  'guide.settingsPage.visualsTitle': '최고 화질',
+  'guide.settingsPage.visualsTagline': '고성능 데스크톱을 위한 스크린샷 모드입니다.',
+  'guide.settingsPage.visualsWhy':
+    '울트라는 디스플레이가 지원하는 가장 높은 해상도와 가장 풍부한 조명으로 세계를 그립니다. 내장 안전장치도 함께 꺼지며, 데스크톱 전용입니다. 휴대폰과 앱에서는 높음이 최고 단계입니다.',
+  'guide.settingsPage.value50to70': '50%에서 70%',
+  'guide.settingsPage.value90to100': '90%에서 100%',
+  'guide.settingsPage.value100': '100%',
+  'guide.settingsPage.valueHighOrMedium': '게이밍 PC에서는 높음, 노트북에서는 중간',
+  'guide.settingsPage.valueOnOptional': '켜짐(선택 사항)',
+  'guide.settingsPage.howHeading': '옵션은 이렇게 동작합니다',
+  'guide.settingsPage.factDetectTitle': '게임이 먼저 스스로 조율합니다',
+  'guide.settingsPage.factDetectBody':
+    '게임을 처음 실행하면 기기 사양을 읽어 알맞은 등급을 자동으로 골라 줍니다. 보급형 휴대폰이라면 낮음, 고성능 데스크톱이라면 울트라까지 선택됩니다. 직접 바꾼 설정이 있다면 언제나 그 선택이 우선합니다.',
+  'guide.settingsPage.factReloadTitle': '두 종류의 옵션',
+  'guide.settingsPage.factReloadBody':
+    '그래픽 품질과 고급 옵션은 새로고침 후에 적용되며, 필요할 때는 패널에 지금 새로고침 버튼이 표시됩니다. 그 밖의 모든 옵션은 바꾸는 즉시 적용됩니다.',
+  'guide.settingsPage.factGovernorTitle': '내장 안전장치',
+  'guide.settingsPage.factGovernorBody':
+    '울트라 아래의 모든 등급에서는 큰 전투로 부하가 치솟는 순간 풀과 효과, 조명을 잠시 줄였다가 곧바로 되돌립니다. 울트라를 선택하면 어떤 순간에도 모든 세부 표현을 그대로 유지하겠다는 뜻이 됩니다.',
+  'guide.settingsPage.advancedHeading': '고급 프리셋: 나만의 조합 만들기',
+  'guide.settingsPage.advancedBody':
+    '고급은 높음 등급에서 시작해 지형 세부 묘사, 초목 밀도, 효과 및 조명, 그림자 품질까지 네 가지 옵션을 추가로 열어 줍니다. 차이가 실제로 느껴지는 곳에만 프레임을 골라 쓸 수 있습니다. 그래픽 품질과 마찬가지로 새로고침 후에 적용됩니다.',
+  'guide.settingsPage.advancedMixes':
+    '즐겨 쓰는 조합 두 가지를 소개합니다. 그림자 품질을 높음으로 두고 효과 및 조명을 낮음으로 내리면 글로우 없이 또렷하고 가벼운 화면이 되고, 반대로 하면 블룸을 살린 채 그림자를 부드럽게 만들 수 있습니다.',
+  'guide.settingsPage.tableHeading': '모든 옵션 자세히 보기',
+  'guide.settingsPage.colSetting': '설정',
+  'guide.settingsPage.colDoes': '기능',
+  'guide.settingsPage.colImpact': 'FPS 영향',
+  'guide.settingsPage.impactNone': '없음',
+  'guide.settingsPage.impactLight': '적음',
+  'guide.settingsPage.impactModerate': '보통',
+  'guide.settingsPage.impactHeavy': '큼',
+  'guide.settingsPage.rowGraphicsQuality':
+    '전체를 좌우하는 메인 스위치입니다. 단계마다 해상도, 그림자, 재질, 초목, 조명 효과가 함께 바뀝니다. 단일 옵션으로는 가장 큰 차이를 만듭니다.',
+  'guide.settingsPage.rowRenderQuality':
+    '3D 세계를 더 낮은 내부 해상도로 그린 뒤 화면에 맞게 키웁니다. 인터페이스는 계속 선명합니다. 저사양 기기와 고해상도 화면에서 즉시 체감되는 가장 강력한 슬라이더입니다.',
+  'guide.settingsPage.rowFieldOfView':
+    '화면에 담기는 세계의 범위를 정합니다. 가깝게 당긴 55도부터 넓게 펼쳐진 100도까지 고를 수 있습니다. 편안함을 위한 선택이며, 시야가 넓을수록 그려야 할 양이 조금 늘어납니다.',
+  'guide.settingsPage.rowBrightness':
+    '장면의 노출을 어둡게 또는 밝게 조절합니다. 순전히 취향의 영역입니다.',
+  'guide.settingsPage.rowWeather':
+    '은은하게 내리는 비와 눈입니다. 분위기 연출일 뿐이며, 꺼 두면 폭풍이 칠 때 성능을 조금 아낄 수 있습니다.',
+  'guide.settingsPage.rowBrowserEffects':
+    '인터페이스 자체를 얼마나 화려하게 꾸밀지 정합니다. 유리 흐림, 글로우, 메뉴 애니메이션이 여기에 해당합니다. 자동은 사용 중인 브라우저에 맞춰 조절하며, 어느 쪽을 골라도 3D 세계에는 영향이 없습니다.',
+  'guide.settingsPage.rowTerrainDetail':
+    '여러 질감이 어우러진 풍부한 지면 표현과 더 단순하고 빠른 지형 표현 사이에서 선택합니다.',
+  'guide.settingsPage.rowFoliageDensity': '캐릭터 주변에 풀이 자라는 거리와 밀도를 정합니다.',
+  'guide.settingsPage.rowEffectsQuality':
+    '블룸과 앰비언트 오클루전, 그리고 실제 빛을 드리우는 횃불과 주문의 수를 결정합니다. 고급 옵션 가운데 성능을 가장 크게 아낄 수 있는 항목입니다.',
+  'guide.settingsPage.rowShadowQuality':
+    '그림자의 또렷함을 정합니다. 낮음에서도 그림자는 사라지지 않고 가장자리만 부드러워집니다.',
+  'guide.settingsPage.rowFrostedPanels':
+    '창 뒤로 젖빛 유리 같은 흐림을 더합니다. 아름답지만 성능이 낮은 브라우저에는 부담이 되기 쉬운 효과이기도 하니, 클래식한 또렷함을 원한다면 꺼 두세요.',
+  'guide.settingsPage.rowReduceMotion':
+    '인터페이스 애니메이션을 없애 창이 즉시 나타나게 합니다. 접근성을 위한 옵션이 우선이지만, 성능에도 약간의 보너스가 있습니다.',
+  'guide.settingsPage.rowPerfOverlay':
+    'FPS, 프레임 시간 등을 화면 위에 실시간으로 보여 줍니다. 이 페이지를 참고해 설정을 조정하는 동안 켜 두었다가 다시 숨기면 됩니다.',
+  'guide.settingsPage.tableFoot':
+    '시야 거리 슬라이더나 FPS 제한을 찾고 계신가요? 따로 찾을 필요가 없습니다. 시야 거리는 각 품질 등급에 포함되어 있고, 프레임은 사용 중인 디스플레이에 맞춰 조절됩니다.',
+  'guide.settingsPage.mobileTitle': '휴대폰과 태블릿에서',
+  'guide.settingsPage.mobileBody':
+    '모바일에서는 게임이 더 많은 것을 대신 관리해 줍니다. 등급을 자동으로 고르고, 배터리와 발열 부담을 줄이기 위해 해상도를 살짝 낮게 유지하며, 최상위 등급은 데스크톱 전용으로 남겨 둡니다. 위의 추천 설정은 그대로 유효하며, 휴대폰에서는 높음이 최고 단계입니다.',
   'guide.combat.intro':
     '전투는 익숙한 클래식 MMO 규칙을 따릅니다. 잘 플레이하기 위해 이를 공부할 필요는 전혀 없으며, 그저 전투가 어떻게 돌아가는지에 대한 개요일 뿐입니다.',
   'guide.combat.hitTitle': '모든 일격이 맞는 것은 아닙니다',
@@ -5722,6 +5813,15 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.remainingMinutes': '{minutes}분',
   'hudChrome.dailyRewards.sol': '{amount} SOL',
   'hudChrome.dailyRewards.usd': '{amount} USD',
+  'hudChrome.crafting.title': '제작',
+  'hudChrome.crafting.close': '제작 닫기',
+  'hudChrome.crafting.craft': '제작',
+  'hudChrome.crafting.reagentsNeeded': '필요 재료:',
+  'hudChrome.crafting.empty': '알려진 제작법이 없습니다.',
+  'hudChrome.crafting.resultAria': '{name} 제작',
+  'hudChrome.crafting.craftedToast': '제작 완료:{name}',
+  'hudChrome.crafting.insufficientMaterials': '재료가 부족합니다.',
+  'hudChrome.crafting.unknownRecipe': '해당 제작법이 존재하지 않습니다.',
   // apiError.* server error-code catalog (M16 non-Latin fill, Phase 22)
   'apiError.validation.failed': '일부 항목이 올바르지 않습니다. 양식을 확인하고 다시 시도하세요.',
   'apiError.json.malformed': '요청을 읽을 수 없습니다. 다시 시도해 주세요.',

@@ -529,6 +529,8 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'news.desc': '閱讀最新修補程式說明、遊戲內事件和社群動態。',
   'download.title': '下載電腦版啟動器',
   'download.macCta': '下載 macOS 版',
+  'download.linuxCta': '下載 Linux 版',
+  'download.linuxHint': 'AppImage 格式：賦予可執行權限後直接執行，無需安裝。',
   'download.windowsPending': 'Windows 版本即將推出。',
   'download.desc': '獲取獨立啟動器，以獲得更優化的效能和全螢幕遊戲體驗。',
   'comingSoon.placeholder': '敬請期待...',
@@ -782,6 +784,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'loading.rendererFailed': '無法啟動渲染器：請嘗試重新整理。{error}',
   'loading.enterTimeout': '無法進入世界。連線已逾時。遊戲伺服器是否正在執行？',
   'loading.connectionLost': '與伺服器的連線已中斷。',
+  'loading.reconnecting': '連線已中斷。正在重新連線...',
   'loading.connectionRejected': '伺服器已關閉連線。',
   'errors.nothingInteract': '附近沒有可互動目標。',
   'errors.noEnemyNearby': '附近沒有敵人。',
@@ -3625,6 +3628,7 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'guide.nav.dungeons': '地城與團隊副本',
   'guide.nav.reference': '參考資料',
   'guide.nav.controls': '操作按鍵',
+  'guide.nav.settings': '設定與效能',
   'guide.nav.combat': '戰鬥',
   'guide.nav.glossary': '詞彙表',
   'guide.nav.faq': '常見問題',
@@ -3756,6 +3760,86 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'guide.controls.mobileHeading': '行動裝置上',
   'guide.controls.mobileBody':
     '在手機與平板上會自動顯示觸控操作：左側為移動搖桿，在右側任意處拖曳即可環顧，並有螢幕上的按鈕供你使用技能與選單。',
+  'guide.settingsPage.heading': '設定與效能',
+  'guide.settingsPage.intro':
+    '讓遊戲畫面美到極致，或跑得飛快。三套現成配置，加上每個圖形選項的真正作用。',
+  'guide.settingsPage.wherePath':
+    '本頁介紹的一切都在遊戲裡：按下 Esc，就能在「圖形」、「介面」與「效能監視器」中找到。',
+  'guide.settingsPage.fairnessTitle': '天生公平',
+  'guide.settingsPage.fairnessBody':
+    '這裡沒有任何選項會用畫面換取優勢。調低設定只會捨去外觀上的修飾，絕不會犧牲作戰所需的資訊：你的減益效果、施法條、隊伍血量與傷害數字，從「低」到「超高」完全相同。用入門機器遊玩絕不吃虧。',
+  'guide.settingsPage.loadoutsHeading': '三套現成配置',
+  'guide.settingsPage.loadoutsIntro':
+    '先從聽起來最像你機器的配置開始，再一次調整一個選項，直到感覺對了為止。',
+  'guide.settingsPage.recommended': '推薦',
+  'guide.settingsPage.whyLabel': '為什麼有效：',
+  'guide.settingsPage.tagReload': '需重新載入',
+  'guide.settingsPage.fpsTitle': '效能優先',
+  'guide.settingsPage.fpsTagline': '適合較舊的筆電、內顯，以及使用電池遊玩的時候。',
+  'guide.settingsPage.fpsWhy':
+    '圖形品質是總開關，渲染品質則是效果最強的滑桿：調到 70% 時，世界只需繪製約一半的像素，介面卻依然完全清晰。',
+  'guide.settingsPage.balancedTitle': '平衡',
+  'guide.settingsPage.balancedTagline': '大多數機器的甜蜜點，也是我們的預設建議。',
+  'guide.settingsPage.balancedWhy':
+    '「中」就有真實陰影與完整材質，「高」再加上環境光遮蔽與光暈。只要低於「超高」，內建安全網就會在激烈戰鬥中吸收突然的效能下滑，因此「平衡」不必費心照顧也能保持順暢。',
+  'guide.settingsPage.visualsTitle': '極致畫質',
+  'guide.settingsPage.visualsTagline': '給高階桌機的截圖模式。',
+  'guide.settingsPage.visualsWhy':
+    '「超高」會以你螢幕支援的最高解析度繪製，並呈現最豐富的光照。它同時會關閉安全網，而且僅限桌機：手機與 App 版最高到「高」為止。',
+  'guide.settingsPage.value50to70': '50% 到 70%',
+  'guide.settingsPage.value90to100': '90% 到 100%',
+  'guide.settingsPage.value100': '100%',
+  'guide.settingsPage.valueHighOrMedium': '電競電腦用「高」，筆電用「中」',
+  'guide.settingsPage.valueOnOptional': '開啟（可選）',
+  'guide.settingsPage.howHeading': '選項的運作方式',
+  'guide.settingsPage.factDetectTitle': '遊戲會先自我調校',
+  'guide.settingsPage.factDetectBody':
+    '首次啟動時，遊戲會偵測你的裝置並挑選合適的檔位：入門手機用「低」，高效能桌機用「超高」。而你親自做的選擇永遠優先。',
+  'guide.settingsPage.factReloadTitle': '兩種類型的選項',
+  'guide.settingsPage.factReloadBody':
+    '圖形品質與進階選項需要重新載入後才會生效，必要時面板會出現「立即重新載入」按鈕。其他所有選項則是一改就生效。',
+  'guide.settingsPage.factGovernorTitle': '內建安全網',
+  'guide.settingsPage.factGovernorBody':
+    '在「超高」以下的所有檔位，當大型戰鬥造成瞬間負載時，遊戲會悄悄暫時減少草叢、特效與光照，狀況過去後再恢復原狀。選擇「超高」則代表你寧可保留每一分細節。',
+  'guide.settingsPage.advancedHeading': '「進階」預設：自由調配',
+  'guide.settingsPage.advancedBody':
+    '「進階」以「高」這一檔為起點，並解鎖四個額外選項，讓你把效能花在真正看得出差別的地方：地形細節、植被密度、特效與光照，以及陰影品質。它們和圖形品質一樣，需要重新載入後才會生效。',
+  'guide.settingsPage.advancedMixes':
+    '兩種人氣搭配：把陰影品質維持在「高」、特效與光照調成「低」，畫面清爽俐落、沒有光暈，跑起來也輕鬆；或者反過來，保留光暈，讓陰影柔和一些。',
+  'guide.settingsPage.tableHeading': '每個選項，逐一解說',
+  'guide.settingsPage.colSetting': '選項',
+  'guide.settingsPage.colDoes': '作用',
+  'guide.settingsPage.colImpact': 'FPS 影響',
+  'guide.settingsPage.impactNone': '無',
+  'guide.settingsPage.impactLight': '輕微',
+  'guide.settingsPage.impactModerate': '中等',
+  'guide.settingsPage.impactHeavy': '顯著',
+  'guide.settingsPage.rowGraphicsQuality':
+    '總開關。每調一檔，解析度、陰影、材質、植被與光照特效都會一起改變。這是影響最大的單一選項。',
+  'guide.settingsPage.rowRenderQuality':
+    '以較低的內部解析度繪製 3D 世界再放大，介面維持清晰。在較弱的機器與高解析度螢幕上，是立即見效、威力最強的滑桿。',
+  'guide.settingsPage.rowFieldOfView':
+    '決定畫面能容納多少世界：從拉近的 55 度到開闊的 100 度。屬於舒適度選擇；視野越廣，繪製量會略微增加。',
+  'guide.settingsPage.rowBrightness': '調整場景曝光的明暗，純屬個人喜好。',
+  'guide.settingsPage.rowWeather': '環境雨雪效果。純屬氣氛營造，關閉後在暴風雨中還能省下一點效能。',
+  'guide.settingsPage.rowBrowserEffects':
+    '決定介面本身可以多華麗：玻璃模糊、光暈、選單動畫。「自動」會配合你的瀏覽器；無論怎麼選，3D 世界都不受影響。',
+  'guide.settingsPage.rowTerrainDetail': '豐富細膩的混合地面材質，或是較簡單、跑得較快的地形外觀。',
+  'guide.settingsPage.rowFoliageDensity': '角色周圍草叢生長的範圍與密度。',
+  'guide.settingsPage.rowEffectsQuality':
+    '光暈、環境光遮蔽，以及有多少火把和法術會投射真實光源。是進階選項中省效能最多的一項。',
+  'guide.settingsPage.rowShadowQuality': '陰影的銳利程度。「低」仍保留陰影，只是邊緣較柔和。',
+  'guide.settingsPage.rowFrostedPanels':
+    '視窗背後的霧面玻璃模糊。很漂亮，但也正是較弱的瀏覽器最有感的那種效果；關閉它，就是經典的俐落外觀。',
+  'guide.settingsPage.rowReduceMotion':
+    '移除介面動畫，讓視窗立即出現。首先是無障礙選項，順帶帶來少許效能提升。',
+  'guide.settingsPage.rowPerfOverlay':
+    '在畫面上即時顯示 FPS、影格時間等數據。調整本頁設定時先開著，調完再關掉。',
+  'guide.settingsPage.tableFoot':
+    '想找繪製距離滑桿或 FPS 上限嗎？其實不必找：可視距離已內建在各品質檔位中，影格節奏則交由你的顯示器決定。',
+  'guide.settingsPage.mobileTitle': '在手機與平板上',
+  'guide.settingsPage.mobileBody':
+    '行動裝置上，遊戲會替你打理更多：自動挑選檔位、將解析度稍微壓低以節省電力並抑制發熱，最高的幾個檔位則僅限桌機。上面的配置依然適用，只是手機最高到「高」為止。',
   'guide.combat.intro':
     '戰鬥遵循熟悉的經典MMO規則。你完全不需要研究這些就能玩得很好，這只是讓你了解戰鬥運作的大致樣貌。',
   'guide.combat.hitTitle': '並非每一擊都會命中',
@@ -5423,6 +5507,15 @@ export const zh_TW: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.remainingMinutes': '{minutes}分',
   'hudChrome.dailyRewards.sol': '{amount} SOL',
   'hudChrome.dailyRewards.usd': '{amount} USD',
+  'hudChrome.crafting.title': '製作',
+  'hudChrome.crafting.close': '關閉製作',
+  'hudChrome.crafting.craft': '製作',
+  'hudChrome.crafting.reagentsNeeded': '需要:',
+  'hudChrome.crafting.empty': '尚無已知配方。',
+  'hudChrome.crafting.resultAria': '製作{name}',
+  'hudChrome.crafting.craftedToast': '已製作:{name}',
+  'hudChrome.crafting.insufficientMaterials': '你沒有足夠的材料。',
+  'hudChrome.crafting.unknownRecipe': '該配方不存在。',
   // apiError.* server error-code catalog (M16 non-Latin fill, Phase 22)
   'apiError.validation.failed': '部分欄位無效。請檢查表單後再試一次。',
   'apiError.json.malformed': '無法讀取該請求。請再試一次。',

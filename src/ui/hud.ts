@@ -167,6 +167,8 @@ import { type CardinalId, compassView } from './compass';
 import { formatMinimapCoords } from './coords';
 import { corpseHarvestView } from './corpse_harvest_view';
 import { renderCorpseHarvestPicker } from './corpse_harvest_window';
+import { buildCraftingView } from './crafting_view';
+import { renderCraftingWindow } from './crafting_window';
 import { DailyRewardsWindow } from './daily_rewards_window';
 import { DelveMapPainter } from './delve_map_painter';
 import { devTierBadgeDataUrl, devTierByIndex, devTierDisplayName } from './dev_tier';
@@ -1986,6 +1988,9 @@ export class Hud {
         break;
       case 'town-focus-window':
         this.closeTownFocus();
+        break;
+      case 'crafting-window':
+        this.closeCrafting();
         break;
       case 'loot-window':
         this.closeLoot();
@@ -7553,6 +7558,25 @@ export class Hud {
           if ($('#bags').style.display !== 'none') this.renderBags();
           break;
         }
+        case 'craftResult': {
+          if (ev.ok && ev.itemId) {
+            const item = ITEMS[ev.itemId];
+            const name = item ? itemDisplayName(item) : ev.itemId;
+            this.log(t('hudChrome.crafting.craftedToast', { name }), '#7fdc4f');
+            audio.lootItem();
+          } else if (!ev.ok) {
+            this.log(
+              t(
+                ev.reason === 'unknown_recipe'
+                  ? 'hudChrome.crafting.unknownRecipe'
+                  : 'hudChrome.crafting.insufficientMaterials',
+              ),
+              '#ff6b6b',
+            );
+          }
+          if ($('#crafting-window').style.display === 'block') this.renderCrafting();
+          break;
+        }
         case 'lootRoll': {
           this.showLootRoll(ev);
           break;
@@ -9896,6 +9920,46 @@ export class Hud {
     return $('#town-focus-window').style.display === 'block';
   }
 
+  // -------------------------------------------------------------------------
+  // Crafting (#1127): a minimal common-tier crafting window. Anywhere,
+  // anytime (no vendor/NPC gate): lists every known recipe with a Craft
+  // button enabled only when the player holds every required reagent.
+  // -------------------------------------------------------------------------
+
+  toggleCrafting(): void {
+    if ($('#crafting-window').style.display === 'block') {
+      this.closeCrafting();
+      return;
+    }
+    this.openCrafting();
+  }
+
+  openCrafting(): void {
+    this.closeOtherWindows('#crafting-window');
+    this.renderCrafting();
+  }
+
+  private renderCrafting(): void {
+    renderCraftingWindow(
+      $('#crafting-window'),
+      buildCraftingView(this.sim.recipeList, this.sim.inventory, ITEMS),
+      {
+        ...this.presentationBag,
+        hideTooltip: () => this.hideTooltip(),
+        onCraft: (recipeId) => {
+          this.sim.craftItem(recipeId);
+          this.renderCrafting();
+          if ($('#bags').style.display !== 'none') this.renderBags();
+        },
+        onClose: () => this.closeCrafting(),
+      },
+    );
+  }
+
+  closeCrafting(): void {
+    $('#crafting-window').style.display = 'none';
+    this.hideTooltip();
+  }
   // -------------------------------------------------------------------------
   // The World Market — the Merchant's auction house
   // -------------------------------------------------------------------------
