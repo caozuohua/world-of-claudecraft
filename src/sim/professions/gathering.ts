@@ -14,6 +14,7 @@ import {
   GATHERING_PROFESSION_IDS,
   GATHERING_PROFESSIONS,
   type GatheringProfessionId,
+  HARVEST_COMPONENT_ITEMS,
 } from '../content/professions';
 import type { Rng } from '../rng';
 import type { PlayerMeta } from '../sim';
@@ -278,8 +279,10 @@ export function gatheringSkillsView(proficiency: GatheringProficiency): PlayerPr
 // harvest it claims the yield, and every later attempt (same tick or any later tick)
 // against that same corpse is denied.
 //
-// Pure leaf: no Sim/Entity import, no rng, no clock, mirroring the loot/loot_ffa.ts
-// pattern (reference: format_money.ts, threat.ts, loot/loot_ffa.ts). The owning
+// Pure leaf: no Sim/Entity import, no clock, mirroring the loot/loot_ffa.ts
+// pattern (reference: format_money.ts, threat.ts, loot/loot_ffa.ts). The single-use
+// claim below draws no rng; the #1142 focus-harvest tier roll further down takes an
+// explicit `Rng` argument, same pattern as loot/loot_roll.ts. The owning
 // caller (src/sim/interaction.ts) holds the corpse's `harvestClaimedBy` state on the
 // Entity and passes it in; resolveCorpseHarvest performs the whole check-and-set in
 // one synchronous call, so there is nothing left to race.
@@ -293,17 +296,16 @@ export function gatheringSkillsView(proficiency: GatheringProficiency): PlayerPr
 // (deterministic command-batch order) sees `currentClaimedBy === null` and wins;
 // the second sees the just-written claim and is denied. No lock is needed because
 // there is no interleaving to guard against.
+//
+// #1142 adds a per-corpse FOCUS PICKER on top of the single-use claim above:
+// which of the corpse's tagged component(s) the claiming player extracts, and
+// the concentrate-vs-spread tier tradeoff for that choice (see
+// resolveCorpseFocusHarvest below). Draws rng, unlike the rest of this file.
 
-// Component tag -> the existing item this harvest yields. Only tags with a concrete
-// profession-material item wired up so far are listed here; a mob whose
-// `componentTags` don't map to any of these still becomes single-use claimed, it
-// just yields no item yet (future profession-harvest issues wire up the rest).
-export const HARVEST_COMPONENT_ITEMS: Readonly<Record<string, string>> = {
-  hide: 'boar_hide',
-  fang: 'wolf_fang',
-  silk: 'webwood_silk',
-  venomSac: 'widow_venom_sac',
-};
+// The tag-to-item yield map is game data, so it lives in src/sim/content/professions.ts
+// (this directory holds shapes and logic, no game data; see the local CLAUDE.md).
+// Re-exported here so existing importers keep resolving.
+export { HARVEST_COMPONENT_ITEMS };
 
 export interface HarvestClaim {
   readonly success: boolean;
@@ -323,16 +325,6 @@ export function isHarvestableCorpse(componentTags: readonly string[] | undefined
 export function resolveCorpseHarvest(currentClaimedBy: number | null, pid: number): HarvestClaim {
   if (currentClaimedBy !== null) return { success: false, claimedBy: currentClaimedBy };
   return { success: true, claimedBy: pid };
-}
-
-/** The item id this harvest yields, or null if no component tag maps to one yet. */
-export function harvestItemFor(componentTags: readonly string[] | undefined): string | null {
-  if (!componentTags) return null;
-  for (const tag of componentTags) {
-    const itemId = HARVEST_COMPONENT_ITEMS[tag];
-    if (itemId) return itemId;
-  }
-  return null;
 }
 
 // Per-corpse focus picker (#1142): concentrate vs spread tradeoff.
@@ -369,6 +361,24 @@ export interface FocusHarvestYield {
 }
 
 /**
+ * The component set a focus pick actually extracts: an empty `chosen` or one
+ * covering every tagged component both spread across all of `taggedComponents`
+ * (the #1141 behavior); a strict subset concentrates on its valid members.
+ * Shared by resolveCorpseFocusHarvest and the command boundary's pre-claim
+ * capacity gate (src/sim/interaction.ts), which must see exactly the set the
+ * roll will yield WITHOUT drawing rng (a refused command must not shift the
+ * world's draw order).
+ */
+export function effectiveFocusComponents(
+  taggedComponents: readonly string[],
+  chosen: readonly string[],
+): readonly string[] {
+  return chosen.length === 0 || chosen.length >= taggedComponents.length
+    ? taggedComponents
+    : chosen.filter((c) => taggedComponents.includes(c));
+}
+
+/**
  * Resolve a per-corpse focus harvest: one independent tier roll per chosen
  * component, each roll's weight table shifted upward by a concentration bonus.
  *
@@ -394,10 +404,7 @@ export function resolveCorpseFocusHarvest(
   chosen: readonly string[],
   rng: Rng,
 ): FocusHarvestYield[] {
-  const effectiveChosen =
-    chosen.length === 0 || chosen.length >= taggedComponents.length
-      ? taggedComponents
-      : chosen.filter((c) => taggedComponents.includes(c));
+  const effectiveChosen = effectiveFocusComponents(taggedComponents, chosen);
   const bonus = Math.max(
     0,
     Math.min(HARVEST_TIERS.length - 1, taggedComponents.length - effectiveChosen.length),

@@ -28,7 +28,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 405,
-      "state": "4e03ccbe",
+      "state": "d635cafe",
       "events": "714d87c5",
       "rng": {
         "draws": 0,
@@ -78,9 +78,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -119,9 +117,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -160,9 +156,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -201,9 +195,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -242,9 +234,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -503,7 +493,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 405,
-      "state": "4e03ccbe",
+      "state": "d635cafe",
       "events": "c2f748b2",
       "rng": {
         "draws": 0,
@@ -553,9 +543,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -594,9 +582,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -635,9 +621,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -676,9 +660,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -717,9 +699,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -978,7 +958,7 @@
       "tick": 1,
       "time": 0.05,
       "nextId": 405,
-      "state": "2239135e",
+      "state": "feebc65e",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -1028,9 +1008,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -1069,9 +1047,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -1110,9 +1086,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -1151,9 +1125,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         },
         {
           "activeLoadout": -1,
@@ -1192,9 +1164,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [

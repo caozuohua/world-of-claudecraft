@@ -23,6 +23,7 @@
 // `src/sim`-pure: no DOM/Three/render-ui-game-net imports, no Math.random/Date.now
 // (enforced by tests/architecture.test.ts).
 
+import { bagCapacity, fitsAll } from './bags';
 import { ITEMS, MOBS, QUESTS, SPIRIT_HEALER_NPC_ID } from './data';
 import {
   activateNythraxisRelic,
@@ -39,6 +40,7 @@ import {
 } from './loot/loot_roll';
 import { applyFocusTierBonus } from './professions/focus';
 import {
+  effectiveFocusComponents,
   HARVEST_COMPONENT_ITEMS,
   harvestTierQuantity,
   isHarvestableCorpse,
@@ -46,7 +48,7 @@ import {
   resolveCorpseHarvest,
 } from './professions/gathering';
 import type { SimContext } from './sim_context';
-import { dist2d, type Entity, INTERACT_RANGE, OBJECT_RESPAWN } from './types';
+import { dist2d, type Entity, INTERACT_RANGE, type InvSlot, OBJECT_RESPAWN } from './types';
 import { markWorldBossLooted } from './world_boss';
 
 // Shared corpse loot-rights snapshot for both the manual `lootCorpse` and the passive
@@ -139,12 +141,15 @@ export function lootCorpse(
     if (s.count > 0) bagsFull = true;
   }
   if (bagsFull && !quiet) ctx.error(meta.entityId, 'Your bags are full.');
-  // World-boss daily lockout is consumed by LOOTING, not by the kill: taking any
-  // personal slot from the boss's corpse burns today's roll (rollWorldBossLoot
-  // checks eligibility when the next boss dies). A contributor who never reaches
-  // the corpse keeps their daily and can try again at the next spawn.
+  // The world-boss loot lockout is consumed by LOOTING, not by the kill: taking any
+  // personal slot from the boss's corpse starts the lockout (rollWorldBossLoot checks
+  // eligibility when the next boss dies). A contributor who never reaches the corpse
+  // holds no lockout and can loot again at the next spawn.
   if (tookPersonal && MOBS[mob.templateId]?.worldBoss) {
-    markWorldBossLooted(meta, mob.templateId, ctx.utcDay);
+    // The world-boss loot lockout IS a raid lockout: this one write both gates re-loot
+    // (isWorldBossLootEligible) and renders the countdown in the raid-lockout timer, and
+    // it resets on the same boundary as the dungeon raids (ctx.raidResetMs).
+    markWorldBossLooted(meta, mob.templateId, ctx.raidResetMs(ctx.lockoutNowMs()));
   }
   pruneCorpseLoot(ctx, mob);
   if (p.targetId === mobId) p.targetId = null;
@@ -205,6 +210,12 @@ export function harvestCorpse(
   const r = ctx.resolve(pid);
   if (!r) return;
   const { meta, e: p } = r;
+  // Dead players (released ghosts included) cannot harvest; the same rejection
+  // the loot/pickup commands above use.
+  if (p.dead) {
+    ctx.error(meta.entityId, "You can't do that while dead.");
+    return;
+  }
   const mob = ctx.entities.get(mobId);
   if (!mob || mob.kind !== 'mob' || !mob.dead) return;
   const componentTags = MOBS[mob.templateId]?.componentTags;
@@ -219,6 +230,28 @@ export function harvestCorpse(
   const claim = resolveCorpseHarvest(mob.harvestClaimedBy, meta.entityId);
   if (!claim.success) {
     ctx.error(meta.entityId, 'This corpse has already been harvested.');
+    return;
+  }
+  // Capacity gate BEFORE consuming the single-use claim: addItem is never
+  // capacity-capped (the command boundary owns the pre-check, like
+  // lootCorpse/pickUpObject in this file), and a full-bags refusal must leave
+  // the corpse unclaimed for the next harvester. The gate runs on the
+  // deterministic pre-roll focus set so a refused command draws NO rng, and it
+  // reserves the MAXIMUM the tier roll can add per component
+  // (harvestTierQuantity of the top tier, fit cumulatively): a gate on less
+  // could pass on a nearly-full stack and let the uncapped addItem spill past
+  // capacity.
+  const maxTierQty = harvestTierQuantity('legendary');
+  const wanted: InvSlot[] = [];
+  for (const component of effectiveFocusComponents(componentTags ?? [], components ?? [])) {
+    const wantedItemId = HARVEST_COMPONENT_ITEMS[component];
+    if (!wantedItemId) continue;
+    const existing = wanted.find((w) => w.itemId === wantedItemId);
+    if (existing) existing.count += maxTierQty;
+    else wanted.push({ itemId: wantedItemId, count: maxTierQty });
+  }
+  if (wanted.length > 0 && !fitsAll(meta.inventory, bagCapacity(meta.bags), wanted)) {
+    ctx.error(meta.entityId, 'Your bags are full.');
     return;
   }
   mob.harvestClaimedBy = claim.claimedBy;

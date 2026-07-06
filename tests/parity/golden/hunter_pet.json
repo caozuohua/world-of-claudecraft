@@ -15,7 +15,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "bcd47ebe",
+      "state": "87710a96",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -61,9 +61,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -124,7 +122,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 404,
-      "state": "c417bf96",
+      "state": "f772018e",
       "events": "d01fe473",
       "rng": {
         "draws": 6,
@@ -135,7 +133,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 404,
-      "state": "e4a00b22",
+      "state": "b31c5852",
       "events": "741638a5",
       "rng": {
         "draws": 6,
@@ -146,7 +144,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 404,
-      "state": "740ab634",
+      "state": "188e50d8",
       "events": "e02f37be",
       "rng": {
         "draws": 96,
@@ -157,7 +155,7 @@
       "tick": 80,
       "time": 4,
       "nextId": 404,
-      "state": "183ad6d8",
+      "state": "c4706344",
       "events": "741638a5",
       "rng": {
         "draws": 195,
@@ -168,7 +166,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 404,
-      "state": "baef365e",
+      "state": "c3dd12f6",
       "events": "4468bb01",
       "rng": {
         "draws": 294,
@@ -179,7 +177,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 404,
-      "state": "6f7c64c6",
+      "state": "bcbfb8be",
       "events": "741638a5",
       "rng": {
         "draws": 398,
@@ -190,7 +188,7 @@
       "tick": 120,
       "time": 6,
       "nextId": 404,
-      "state": "6f7c64c6",
+      "state": "bcbfb8be",
       "events": "741638a5",
       "rng": {
         "draws": 398,
@@ -237,9 +235,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [

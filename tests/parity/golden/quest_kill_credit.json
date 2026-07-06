@@ -16,7 +16,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "93e6559e",
+      "state": "74bced36",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -58,9 +58,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -119,7 +117,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "84689037",
+      "state": "19959b59",
       "events": "00bafcff",
       "rng": {
         "draws": 0,
@@ -174,9 +172,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -235,7 +231,7 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 409,
-      "state": "d9cc44d4",
+      "state": "a031b238",
       "events": "d894ee18",
       "rng": {
         "draws": 40,
@@ -294,9 +290,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -356,7 +350,7 @@
       "tick": 8,
       "time": 0.4,
       "nextId": 409,
-      "state": "15b99849",
+      "state": "4448f63d",
       "events": "272aafab",
       "rng": {
         "draws": 40,
@@ -410,8 +404,6 @@
             "choices": {},
             "ranks": {}
           },
-          "townFocus": {},
-          "worldBossDaily": {},
           "xp": 250
         }
       ],
@@ -472,7 +464,7 @@
       "tick": 10,
       "time": 0.5,
       "nextId": 409,
-      "state": "d3c68361",
+      "state": "e2c8f9f5",
       "events": "741638a5",
       "rng": {
         "draws": 40,
@@ -526,8 +518,6 @@
             "choices": {},
             "ranks": {}
           },
-          "townFocus": {},
-          "worldBossDaily": {},
           "xp": 250
         }
       ],

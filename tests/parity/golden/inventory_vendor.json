@@ -35,7 +35,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "af326759",
+      "state": "0625c49f",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -77,9 +77,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -138,7 +136,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "0227eb4f",
+      "state": "38cd0d51",
       "events": "531aebc5",
       "rng": {
         "draws": 0,
@@ -188,9 +186,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -249,7 +245,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "cef48d25",
+      "state": "b8524133",
       "events": "a6017c57",
       "rng": {
         "draws": 0,
@@ -304,9 +300,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -365,7 +359,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "9c4fbb09",
+      "state": "bb750fcf",
       "events": "6eca1d53",
       "rng": {
         "draws": 0,
@@ -420,9 +414,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -481,7 +473,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "9e585d59",
+      "state": "492ee69f",
       "events": "695c81aa",
       "rng": {
         "draws": 0,
@@ -539,9 +531,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -600,7 +590,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "1c8c120b",
+      "state": "9d88f565",
       "events": "1df0a44d",
       "rng": {
         "draws": 0,
@@ -658,9 +648,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -732,7 +720,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "d96bb460",
+      "state": "0b9d058c",
       "events": "fdae55a8",
       "rng": {
         "draws": 0,
@@ -786,9 +774,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -860,7 +846,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "284183f9",
+      "state": "d6cd3fff",
       "events": "4b948de8",
       "rng": {
         "draws": 0,
@@ -914,9 +900,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -1000,7 +984,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "b4d2d96d",
+      "state": "de213cfb",
       "events": "3efe81a4",
       "rng": {
         "draws": 0,
@@ -1058,9 +1042,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {},
-          "worldBossDaily": {}
+          }
         }
       ],
       "entities": [
@@ -1144,7 +1126,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "f26a0c0e",
+      "state": "3bf1f9de",
       "events": "fc57ebc8",
       "rng": {
         "draws": 0,
@@ -1203,14 +1185,12 @@
             "choices": {},
             "ranks": {}
           },
-          "townFocus": {},
           "vendorBuyback": [
             {
               "count": 1,
               "itemId": "wolf_fang"
             }
-          ],
-          "worldBossDaily": {}
+          ]
         }
       ],
       "entities": [
@@ -1294,7 +1274,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "11762dff",
+      "state": "0701011b",
       "events": "7c2d5847",
       "rng": {
         "draws": 0,
@@ -1349,7 +1329,6 @@
             "choices": {},
             "ranks": {}
           },
-          "townFocus": {},
           "vendorBuyback": [
             {
               "count": 1,
@@ -1359,8 +1338,7 @@
               "count": 2,
               "itemId": "wolf_fang"
             }
-          ],
-          "worldBossDaily": {}
+          ]
         }
       ],
       "entities": [
@@ -1444,7 +1422,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "9fa69ce9",
+      "state": "384c2ebf",
       "events": "daa824d5",
       "rng": {
         "draws": 0,
@@ -1503,7 +1481,6 @@
             "choices": {},
             "ranks": {}
           },
-          "townFocus": {},
           "vendorBuyback": [
             {
               "count": 1,
@@ -1513,8 +1490,7 @@
               "count": 1,
               "itemId": "wolf_fang"
             }
-          ],
-          "worldBossDaily": {}
+          ]
         }
       ],
       "entities": [
@@ -1598,7 +1574,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 401,
-      "state": "9fa69ce9",
+      "state": "384c2ebf",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -1657,7 +1633,6 @@
             "choices": {},
             "ranks": {}
           },
-          "townFocus": {},
           "vendorBuyback": [
             {
               "count": 1,
@@ -1667,8 +1642,7 @@
               "count": 1,
               "itemId": "wolf_fang"
             }
-          ],
-          "worldBossDaily": {}
+          ]
         }
       ],
       "entities": [
