@@ -828,6 +828,7 @@ export class Renderer {
   private readonly animScratch: AnimState = {
     speed: 0,
     moving: false,
+    running: false,
     airborne: false,
     backwards: false,
     reverseBackpedal: false,
@@ -4249,6 +4250,7 @@ export class Renderer {
       const st = this.animScratch;
       st.speed = loco.speed;
       st.moving = moving;
+      st.running = loco.running;
       st.airborne = airborne;
       st.backwards = loco.backwards;
       st.reverseBackpedal = ghostWolf;
