@@ -1,10 +1,37 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { preloadMechAssets } from '../src/render/characters/assets';
 import { mechHeldWeaponOverride } from '../src/render/characters/manifest';
+import { CharacterPreview } from '../src/render/characters/preview';
 import {
   appearanceSignature,
   type PreviewAppearance,
   previewAppearanceVisual,
 } from '../src/render/characters/preview_appearance';
+
+const mechAssets = vi.hoisted(() => ({
+  ready: false,
+  promise: null as Promise<void> | null,
+  resolve: null as (() => void) | null,
+}));
+
+vi.mock('../src/render/characters/assets', () => ({
+  mechAssetsReady: () => mechAssets.ready,
+  preloadMechAssets: vi.fn(() => {
+    if (!mechAssets.promise) {
+      mechAssets.promise = new Promise<void>((resolve) => {
+        mechAssets.resolve = () => {
+          mechAssets.ready = true;
+          resolve();
+        };
+      });
+    }
+    return mechAssets.promise;
+  }),
+}));
+
+vi.mock('../src/render/characters/visual', () => ({
+  CharacterVisual: class {},
+}));
 
 const appearance = (over: Partial<PreviewAppearance>): PreviewAppearance => ({
   cls: 'warrior',
@@ -12,6 +39,33 @@ const appearance = (over: Partial<PreviewAppearance>): PreviewAppearance => ({
   skinCatalog: 'class',
   mainhandItemId: null,
   ...over,
+});
+
+function barePreview(): {
+  preview: CharacterPreview;
+  setVisualKey: ReturnType<typeof vi.fn>;
+} {
+  const preview = Object.create(CharacterPreview.prototype) as CharacterPreview;
+  const state = preview as unknown as Record<string, unknown>;
+  const setVisualKey = vi.fn();
+  state.destroyed = false;
+  state.appearanceSig = null;
+  state.currentSkin = 0;
+  preview.setVisualKey = setVisualKey;
+  return { preview, setVisualKey };
+}
+
+async function finishMechLoad(): Promise<void> {
+  mechAssets.resolve?.();
+  await Promise.resolve();
+  await Promise.resolve();
+}
+
+beforeEach(() => {
+  mechAssets.ready = false;
+  mechAssets.promise = null;
+  mechAssets.resolve = null;
+  vi.mocked(preloadMechAssets).mockClear();
 });
 
 describe('previewAppearanceVisual', () => {
@@ -59,5 +113,47 @@ describe('appearanceSignature', () => {
     expect(appearanceSignature({ ...base, skin: 3 })).not.toBe(sig);
     expect(appearanceSignature({ ...base, skinCatalog: 'mech' })).not.toBe(sig);
     expect(appearanceSignature({ ...base, mainhandItemId: 'b' })).not.toBe(sig);
+  });
+});
+
+describe('CharacterPreview.setAppearance', () => {
+  it('re-applies the current mech appearance once its lazy assets are ready', async () => {
+    const { preview, setVisualKey } = barePreview();
+    const mech = appearance({
+      cls: 'rogue',
+      skin: 2,
+      skinCatalog: 'mech',
+      mainhandItemId: 'dagger_x',
+    });
+
+    preview.setAppearance(mech);
+    expect(setVisualKey).toHaveBeenCalledOnce();
+    expect(setVisualKey).toHaveBeenLastCalledWith('player_rogue', 'dagger_x');
+
+    await finishMechLoad();
+
+    expect(preloadMechAssets).toHaveBeenCalledOnce();
+    expect(setVisualKey).toHaveBeenCalledTimes(2);
+    expect(setVisualKey).toHaveBeenLastCalledWith(
+      'player_mech',
+      'dagger_x',
+      mechHeldWeaponOverride('rogue'),
+    );
+  });
+
+  it('does not let a stale mech re-apply overwrite a newer selection', async () => {
+    const { preview, setVisualKey } = barePreview();
+    preview.setAppearance(appearance({ cls: 'rogue', skinCatalog: 'mech' }));
+    preview.setAppearance(
+      appearance({ cls: 'mage', skin: 1, skinCatalog: 'class', mainhandItemId: 'staff_x' }),
+    );
+
+    expect(setVisualKey).toHaveBeenCalledTimes(2);
+    expect(setVisualKey).toHaveBeenLastCalledWith('player_mage', 'staff_x', null);
+
+    await finishMechLoad();
+
+    expect(setVisualKey).toHaveBeenCalledTimes(2);
+    expect(setVisualKey).toHaveBeenLastCalledWith('player_mage', 'staff_x', null);
   });
 });
