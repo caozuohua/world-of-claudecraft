@@ -570,6 +570,8 @@ export interface EntityView {
   stepAccum: number;
   wasAirborne: boolean;
   wasSwimming: boolean;
+  // consecutive frames the foot-height heuristic read airborne (debounce)
+  airborneHeurFrames: number;
 }
 
 function collectCasters(root: THREE.Object3D, into: THREE.Object3D[]): void {
@@ -3383,6 +3385,7 @@ export class Renderer {
       stepAccum: 0,
       wasAirborne: false,
       wasSwimming: false,
+      airborneHeurFrames: 0,
     });
     const view = this.views.get(e.id);
     // Never gate the player's OWN view: it must be on screen immediately, its
@@ -4221,11 +4224,28 @@ export class Renderer {
       // airborne state from foot height vs terrain — keeps the jump pose working in
       // both worlds without a wire change. Gated to players (only they jump) to keep
       // the extra groundHeight sample off the hot path for mobs/NPCs.
+      // The local player uses the predictor's kernel onGround when it is active:
+      // exact physics state, coherent with the displayed pose by construction.
+      // The heuristic is debounced over 2 frames: snapshot bursts during load
+      // hitches transiently lift the sampled pose off the terrain, and a
+      // single-frame false positive flips the base state to `jump` and back,
+      // replaying the jump clip's crouch (the world-entry anim glitch).
+      if (
+        e.kind === 'player' &&
+        e.onGround &&
+        !swimming &&
+        ay - groundHeight(ax, az, this.sim.cfg.seed) > AIRBORNE_EPS
+      ) {
+        v.airborneHeurFrames++;
+      } else {
+        v.airborneHeurFrames = 0;
+      }
       const airborne =
         !visuallyDead &&
         !swimming &&
-        (!e.onGround ||
-          (e.kind === 'player' && ay - groundHeight(ax, az, this.sim.cfg.seed) > AIRBORNE_EPS));
+        (animFromDisplay && this.selfMotionPredictor
+          ? !this.selfMotionPredictor.onGround
+          : !e.onGround || v.airborneHeurFrames >= 2);
       const st = this.animScratch;
       st.speed = loco.speed;
       st.moving = moving;

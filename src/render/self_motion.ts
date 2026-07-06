@@ -84,6 +84,13 @@ export class SelfMotionPredictor {
    */
   leadMs = 0;
 
+  /** The kernel's exact physics ground state for the displayed pose; true when
+   *  inactive. Replaces the renderer's foot-height airborne heuristic for the
+   *  local player while the predictor drives the display. */
+  get onGround(): boolean {
+    return this.actor?.onGround ?? true;
+  }
+
   private readonly deps: PlayerMotionDeps;
   private actor: Entity | null = null;
   private lastSelfId = -1;
