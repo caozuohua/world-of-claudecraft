@@ -143,6 +143,7 @@ const UI_PURE_CORES = [
   'src/ui/vendor_view.ts',
   'src/ui/crafting_view.ts',
   'src/ui/loot_settings_view.ts',
+  'src/ui/crafting_view.ts',
   'src/ui/market_view.ts',
   'src/ui/mailbox_view.ts',
   'src/ui/calendar_view.ts',

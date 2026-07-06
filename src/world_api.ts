@@ -37,7 +37,8 @@
 //   daily_rewards.ts    IWorldDailyRewards   daily WOC-holder rewards
 //   telemetry.ts        IWorldTelemetry      fire-and-forget metrics sink
 //   professions.ts      IWorldProfessions    skill/craft/recipe/node read surface (#1164; node
-//                                            harvest read + action landed in #1121)
+//                                            harvest read + action landed in #1121; recipe
+//                                            content + basic crafting action landed in #1127)
 //
 // THREE GATES pin this seam (run before any facet edit; the literal counts are
 // pinned THERE and re-stale here, so this prose stays count-free):
