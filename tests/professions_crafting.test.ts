@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { COMMON_RECIPES, recipeById } from '../src/sim/content/recipes';
 import { hasRecipeMaterials, resolveCraft } from '../src/sim/professions/crafting';
+import type { Rng } from '../src/sim/rng';
 import { Sim } from '../src/sim/sim';
 
 function makeSim(seed = 42) {
@@ -76,6 +77,22 @@ describe('resolveCraft (#1127)', () => {
     expect(sim.countItem('eastbrook_arming_sword', pid)).toBe(0);
   });
 
+  it('denies and consumes NOTHING when a LATER reagent is short (mirror of the first-reagent-short case)', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const recipe = recipeById('recipe_eastbrook_arming_sword')!;
+    // Held bone_fragments (reagents[0]) in full, short on linen_scrap (reagents[1]).
+    grantItem(sim, 'bone_fragments', 2, pid);
+
+    const result = resolveCraft((sim as any).ctx, pid, recipe.id);
+
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe('insufficient_materials');
+    expect(sim.countItem('bone_fragments', pid)).toBe(2);
+    expect(sim.countItem('linen_scrap', pid)).toBe(0);
+    expect(sim.countItem('eastbrook_arming_sword', pid)).toBe(0);
+  });
+
   it('denies an unknown recipe id with no side effects', () => {
     const sim = makeSim();
     const pid = sim.playerId;
@@ -124,6 +141,43 @@ describe('resolveCraft (#1127)', () => {
     const b = runOnce();
     expect(a.result.quality).toBe(b.result.quality);
     expect(typeof a.result.quality).toBe('string');
+  });
+
+  it('grants no craft skill on a denied craft', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const recipe = recipeById('recipe_tough_jerky')!;
+    const meta = (sim as any).players.get(pid);
+
+    const result = resolveCraft((sim as any).ctx, pid, recipe.id);
+
+    expect(result.ok).toBe(false);
+    expect(meta.craftSkills.cooking).toBe(0);
+  });
+
+  it('the quality roll is pinned for a fixed seed and consumes exactly one rng draw on success, zero on denial', () => {
+    const sim = makeSim(7);
+    const pid = sim.playerId;
+    const recipe = recipeById('recipe_tough_jerky')!;
+
+    let draws = 0;
+    const rng: Rng = (sim as any).ctx.rng;
+    rng.setObserver(() => {
+      draws++;
+    });
+
+    const denied = resolveCraft((sim as any).ctx, pid, recipe.id);
+    expect(denied.ok).toBe(false);
+    expect(draws).toBe(0);
+
+    grantItem(sim, 'spider_leg', 1, pid);
+    const result = resolveCraft((sim as any).ctx, pid, recipe.id);
+    rng.setObserver(null);
+
+    expect(result.ok).toBe(true);
+    // Fresh cooking skill (0) at seed 7: the roll is pinned to this rarity.
+    expect(result.quality).toBe('common');
+    expect(draws).toBe(1);
   });
 });
 

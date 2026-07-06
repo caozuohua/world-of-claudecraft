@@ -80,20 +80,14 @@ export function resolveCraft(ctx: SimContext, pid: number, recipeId: string): Cr
 
 // Command entry point (behind the SimContext seam): resolves one player's
 // craft attempt, resolving the caller's own player entity the same way every
-// other immediate-interaction command does (ctx.resolve), and surfaces a
-// denial as a player-facing error toast. Runs on the deterministic tick the
-// wire command arrives on, never off-tick.
+// other immediate-interaction command does (ctx.resolve). A denial is
+// surfaced solely through the returned CraftResult's `reason`, which the
+// caller mirrors as a `craftResult` event and renders via the localized
+// hudChrome.crafting.* catalog keys; this must not also emit a ctx.error
+// toast, or a denied craft prints twice and the second copy is unlocalized.
+// Runs on the deterministic tick the wire command arrives on, never off-tick.
 export function craftItem(ctx: SimContext, recipeId: string, pid?: number): CraftResult {
   const r = ctx.resolve(pid);
   if (!r) return { ok: false, recipeId, reason: 'unknown_recipe' };
-  const result = resolveCraft(ctx, r.meta.entityId, recipeId);
-  if (!result.ok) {
-    ctx.error(
-      r.meta.entityId,
-      result.reason === 'unknown_recipe'
-        ? 'That recipe does not exist.'
-        : 'You do not have the materials for that.',
-    );
-  }
-  return result;
+  return resolveCraft(ctx, r.meta.entityId, recipeId);
 }

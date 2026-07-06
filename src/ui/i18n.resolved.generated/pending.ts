@@ -35,7 +35,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ],
   "es_ES": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -63,7 +64,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ],
   "fr_FR": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -91,7 +93,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ],
   "fr_CA": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -119,7 +122,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ],
   "en_CA": [],
   "it_IT": [
@@ -148,7 +152,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ],
   "de_DE": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -176,7 +181,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ],
   "zh_CN": [
     "hudChrome.crafting.reagentLine",
@@ -224,7 +230,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ],
   "ru_RU": [
     "hudChrome.crafting.reagentLine",
@@ -257,7 +264,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ],
   "pl_PL": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -285,7 +293,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ],
   "id_ID": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -313,7 +322,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ],
   "tr_TR": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -341,7 +351,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ],
   "sv_SE": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -369,7 +380,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ],
   "vi_VN": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -397,7 +409,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ],
   "da_DK": [
     "entities.quests.q_archetype_acceptance.completion",
@@ -425,6 +438,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "loading.reconnecting"
   ]
 };
