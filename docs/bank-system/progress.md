@@ -9,7 +9,7 @@
 | Phase 2: banker NPCs | complete | 2026-07-06 | 2026-07-06 |
 | Phase 2 QA | complete | 2026-07-06 | 2026-07-06 |
 | Phase 3: IWorld + wire | complete | 2026-07-06 | 2026-07-06 |
-| Phase 3 QA | not started | | |
+| Phase 3 QA | complete | 2026-07-06 | 2026-07-06 |
 | Phase 4: lease + ledger | not started | | |
 | Phase 4 QA | not started | | |
 | Phase 5: bank window | not started | | |
@@ -53,7 +53,7 @@
 - [x] Wire round-trip tests (fakeWs server + bare ClientWorld) + offline/online behavior parity test; plus the Phase 1 parity debt closed (META_EXCLUDE bank removed, goldens regenerated with rng byte-identity, bank_round_trip scenario added)
 
 ### Phase 3 QA
-- [ ] As Phase 1 QA
+- [x] Deliverables and acceptance criteria re-verified independently (pins re-derived from source, delta-guard and dispatch validation traced, wire tokens grepped repo-wide); findings fixed; both should-fix tests mutation-proven
 
 ### Phase 4: lease + ledger
 - [ ] Per-character load lease at join (mechanism decided and recorded in state.md); release on leave; takeover path safe
@@ -149,3 +149,11 @@
 - Decisiveness: 8-mutation planted-bug pass, all killed (per-command gates, both interact intercepts, ctor push, pid on the emit, radius widening, boundary inclusivity, dead gate).
 - Phase 5 handoffs recorded in state.md: banker discoverability (no minimap marker or role hint yet) and whether to surface the greeting on bank-open; keep passing pid on the bank event.
 - Next: run docs/bank-system/phase-03-iworld-wire.md in a fresh session.
+
+### Phase 3 QA (2026-07-06)
+- Verdict: PASS after fixes. 0 blocking + 2 should-fix + 1 nit + 6 INFO across seven audit streams (correctness, test-coverage, dead-code, architecture-reviewer, cross-platform-sync, privacy-security-review, qa-checklist); everything actionable applied same-session as 9e6cc30e1. Full record in state.md "Phase 3 QA outcomes".
+- Preceded by the origin/main merge a210b96d4 (mobile reverts + desktop fixes; conflicts only the generated i18n pair, regenerated and verified to parse).
+- Every pinned count re-derived from SOURCE matched (185 = 50 + 135, facets 23, send 122, dispatch 131 with dispatch-only 9, delta keys 32 on both encoder and decoder); no pinned list loosened or reordered.
+- Fixes: explicit-null bank snapshot now applied to a ClientWorld and the mirror proven to CLEAR (mutation-proven; a truthy decode guard previously survived the suite), nextExpansionCost null arm at the 12-expansion cap exercised (mutation-proven), merged stack asserted on the wire, the non-number count coercion pinned as contract, src/CLAUDE.md type-only edge wording widened to sim/bank.ts.
+- INFO adjudications recorded in state.md (NaN-at-dispatch idiom, outbound-size precedent, spec-mandated HEAVY_SELF_CMDS redundancy for buy): do not re-raise.
+- Next: run docs/bank-system/phase-04-lease-ledger.md in a fresh session.
