@@ -54,8 +54,15 @@ export function renderCraftingWindow(
     craftBtn.type = 'button';
     craftBtn.className = 'vendor-item';
     craftBtn.disabled = !row.craftable;
-    craftBtn.setAttribute('aria-label', t('hudChrome.crafting.resultAria', { name: resultName }));
-    craftBtn.innerHTML = `${icon}<span class="vi-name">${esc(resultName)}${row.resultCount > 1 ? ` x${row.resultCount}` : ''}</span><span class="vi-price">${esc(t('hudChrome.crafting.craft'))}</span>`;
+    // Folds the reagent requirements into the accessible name (not just the hover
+    // tooltip, which keyboard, screen-reader, and mobile no-hover users never reach).
+    craftBtn.setAttribute(
+      'aria-label',
+      `${t('hudChrome.crafting.resultAria', { name: resultName })}. ${t('hudChrome.crafting.reagentsNeeded')} ${reagentLines}`,
+    );
+    const resultCountSuffix =
+      row.resultCount > 1 ? ` x${formatNumber(row.resultCount, { maximumFractionDigits: 0 })}` : '';
+    craftBtn.innerHTML = `${icon}<span class="vi-name">${esc(resultName)}${esc(resultCountSuffix)}</span><span class="vi-price">${esc(t('hudChrome.crafting.craft'))}</span>`;
     craftBtn.addEventListener('click', () => {
       if (row.craftable) deps.onCraft(row.recipeId);
     });
