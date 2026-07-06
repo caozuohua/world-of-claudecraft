@@ -1,0 +1,87 @@
+import { afterEach, describe, expect, it } from 'vitest';
+import { isBlocked } from '../src/sim/colliders';
+import { BUILTIN_WORLD, setActiveWorldContent } from '../src/sim/data';
+import { findPlayerPath, PLAYER_SWIM_DEPTH, resolvePlayerDestination } from '../src/sim/pathfind';
+import type { WorldContent } from '../src/sim/types';
+import {
+  isInWaterBody,
+  terrainHeight,
+  WATER_LEVEL,
+  waterBodies,
+  waterLevelAt,
+} from '../src/sim/world';
+
+// #1518: water height must be terrain/feature-aware (declared lakes only), not
+// a single flat height applied to a whole zone. A content author's sunken
+// feature outside every declared lake must stay dry and walkable no matter how
+// deep it goes.
+
+const SEED = 20061; // matches the deep-lake-cell seed used in pathfind.test.ts
+// Open ground in zone 1, well clear of the built-in lake (-92, 88, r30) and
+// clear of static colliders.
+const DRY_SPOT = { x: 30, z: 40 };
+const DEEP_DELTA = -25; // well past WATER_LEVEL - PLAYER_SWIM_DEPTH
+
+function withSunkenFeature(): WorldContent {
+  return {
+    ...BUILTIN_WORLD,
+    terrainEdits: [
+      { x: DRY_SPOT.x, z: DRY_SPOT.z, radius: 6, delta: DEEP_DELTA, falloff: 'flat', mode: 'add' },
+    ],
+  };
+}
+
+afterEach(() => setActiveWorldContent(null));
+
+describe('terrain/feature-aware water (#1518)', () => {
+  it('the built-in lake is a declared water body; open ground is not', () => {
+    const [lakeX, lakeZ] = [-92, 88];
+    expect(isInWaterBody(lakeX, lakeZ)).toBe(true);
+    expect(isInWaterBody(DRY_SPOT.x, DRY_SPOT.z)).toBe(false);
+    expect(waterLevelAt(lakeX, lakeZ)).toBe(WATER_LEVEL);
+    expect(waterLevelAt(DRY_SPOT.x, DRY_SPOT.z)).toBe(-Infinity);
+  });
+
+  it('waterBodies() reflects only declared lakes, not incidental low terrain', () => {
+    const bodies = waterBodies();
+    expect(bodies.length).toBeGreaterThan(0);
+    expect(bodies.some((b) => Math.hypot(b.x - DRY_SPOT.x, b.z - DRY_SPOT.z) < b.radius)).toBe(
+      false,
+    );
+  });
+
+  it('a sunken feature outside any declared lake goes well below the old global floor', () => {
+    setActiveWorldContent(withSunkenFeature());
+    const h = terrainHeight(DRY_SPOT.x, DRY_SPOT.z, SEED);
+    expect(h).toBeLessThan(WATER_LEVEL - PLAYER_SWIM_DEPTH - 5);
+    expect(isInWaterBody(DRY_SPOT.x, DRY_SPOT.z)).toBe(false);
+  });
+
+  it('a dry sunken feature does not block normal (non-swim) walking', () => {
+    setActiveWorldContent(withSunkenFeature());
+    expect(isBlocked(SEED, DRY_SPOT.x, DRY_SPOT.z)).toBe(false);
+
+    // resolvePlayerDestination (walker) lands exactly on the deep-but-dry spot,
+    // instead of being shoved away as if it were flooded.
+    const dest = resolvePlayerDestination(SEED, DRY_SPOT, false);
+    expect(dest).toEqual(DRY_SPOT);
+
+    // A player path can end inside the sunken feature without detouring around
+    // it as deep water.
+    const from = { x: DRY_SPOT.x - 10, z: DRY_SPOT.z };
+    const path = findPlayerPath(SEED, from, DRY_SPOT, 64, false, false);
+    expect(path[path.length - 1]).toEqual(DRY_SPOT);
+  });
+
+  it('a real declared lake still blocks walkers and still requires swim to enter', () => {
+    const water = { x: -108, z: 84 }; // deep lake cell (see pathfind.test.ts)
+    expect(terrainHeight(water.x, water.z, SEED)).toBeLessThan(WATER_LEVEL - PLAYER_SWIM_DEPTH);
+    expect(isInWaterBody(water.x, water.z)).toBe(true);
+
+    const walked = resolvePlayerDestination(SEED, water, false);
+    expect(Math.hypot(walked.x - water.x, walked.z - water.z)).toBeGreaterThan(0.5);
+
+    const swum = resolvePlayerDestination(SEED, water, true);
+    expect(Math.hypot(swum.x - water.x, swum.z - water.z)).toBeLessThan(0.5);
+  });
+});
