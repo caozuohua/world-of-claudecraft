@@ -2276,19 +2276,6 @@ export class ClientWorld implements IWorld {
   delveRiteChoose(intensity: RiteIntensity): void {
     this.cmd({ cmd: 'delve_rite_choose', intensity });
   }
-  // Mirror the authoritative craftResult event into lastCraftResult (#1127).
-  // The event still flows to the HUD (drainEvents) for a toast/log line.
-  private applyCraftResultEvent(ev: SimEvent): void {
-    if (ev.type !== 'craftResult') return;
-    this.lastCraftResult = {
-      ok: ev.ok,
-      recipeId: ev.recipeId,
-      itemId: ev.itemId,
-      count: ev.count,
-      quality: ev.quality as MaterialRarity | undefined,
-      reason: ev.reason,
-    };
-  }
   // Mirror the authoritative lockpick lifecycle into lockpickState. The events
   // still flow to the HUD (drainEvents) for transient feedback (juice/sounds).
   private applyLockpickEvent(ev: SimEvent): void {
