@@ -6005,4 +6005,8 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': '채광',
   'hudChrome.gathering.logging': '벌목',
   'hudChrome.gathering.herbalism': '약초학',
+  // Release v0.22.0 locale fill.
+  'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
+  'hudChrome.mobile.actionPageIndicator': '{page}페이지',
+  'hudChrome.mobile.spellbookPageLabel': '페이지 {page}',
 };

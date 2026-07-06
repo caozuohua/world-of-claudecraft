@@ -167,6 +167,8 @@ describe('World Market integration: profession items (#1146)', () => {
     // house stock reseeded exactly once, never duplicated from the save
     expect(sim2.marketListings.filter((l) => l.house).length).toBe(houseBefore);
     // the material sale proceeds carried across (100 - 5% = 95)
+    // reach into the private collection map: sim2 has no live player for the seller pid,
+    // so the public marketInfoFor cannot resolve the key here.
     const col = (
       sim2.market as unknown as { marketCollections: Map<string, { copper: number }> }
     ).marketCollections.get(marketSellerKey(seller));
@@ -194,48 +196,52 @@ vi.mock('pg', () => ({
 }));
 
 describe('save-on-leave atomicity for a profession-item listing (#1146)', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
     dbMock.query.mockReset();
     dbMock.connect.mockReset();
-    const { openMarketWriteGate } = await import('../server/db');
-    openMarketWriteGate();
   });
 
   it('writes the escrowed character bags and the market listing in one transaction', async () => {
-    const { saveCharacterAndMarketState } = await import('../server/db');
-    const client = {
-      query: vi.fn().mockResolvedValue({ rows: [], rowCount: 0 }),
-      release: vi.fn(),
-    };
-    dbMock.connect.mockResolvedValueOnce(client as any);
+    const { saveCharacterAndMarketState, openMarketWriteGate, closeMarketWriteGateForTests } =
+      await import('../server/db');
+    openMarketWriteGate();
+    try {
+      const client = {
+        query: vi.fn().mockResolvedValue({ rows: [], rowCount: 0 }),
+        release: vi.fn(),
+      };
+      dbMock.connect.mockResolvedValueOnce(client as any);
 
-    const sim = makeWorld();
-    const seller = sim.addPlayer('warrior', 'Gatherer');
-    standAtMerchant(sim, seller);
-    sim.addItem('bone_fragments', 3, seller);
-    sim.marketList('bone_fragments', 3, 150, seller); // escrows the whole stack right before "disconnect"
+      const sim = makeWorld();
+      const seller = sim.addPlayer('warrior', 'Gatherer');
+      standAtMerchant(sim, seller);
+      sim.addItem('bone_fragments', 3, seller);
+      sim.marketList('bone_fragments', 3, 150, seller); // escrows the whole stack right before "disconnect"
 
-    const state = sim.serializeCharacter(seller);
-    expect(state).not.toBeNull();
-    const market = sim.serializeMarket();
-    const mail = sim.serializeMail();
+      const state = sim.serializeCharacter(seller);
+      expect(state).not.toBeNull();
+      const market = sim.serializeMarket();
 
-    await saveCharacterAndMarketState(1, sim.entities.get(seller)!.level, state!, market, mail);
+      const mail = sim.serializeMail();
+      await saveCharacterAndMarketState(1, sim.entities.get(seller)!.level, state!, market, mail);
 
-    const sqls = client.query.mock.calls.map((c: unknown[]) => String(c[0]));
-    expect(sqls[0]).toMatch(/^BEGIN/);
-    expect(sqls[sqls.length - 1]).toMatch(/^COMMIT/);
-    expect(sqls.some((s: string) => /ROLLBACK/.test(s))).toBe(false);
-    expect(sqls.some((s: string) => /UPDATE characters/i.test(s))).toBe(true);
-    expect(sqls.some((s: string) => /world_state/i.test(s))).toBe(true);
-    // both writes rode the SAME client, so a crash mid-write cannot leave one
-    // half applied without the other (the escrow can never be torn).
-    expect(dbMock.query).not.toHaveBeenCalled();
-    expect(client.release).toHaveBeenCalled();
-    // the escrowed material is out of bags and only present as a market listing
-    expect((state as unknown as { inventory: { itemId: string }[] }).inventory ?? []).not.toEqual(
-      expect.arrayContaining([expect.objectContaining({ itemId: 'bone_fragments' })]),
-    );
-    expect(market.listings.some((l) => l.itemId === 'bone_fragments')).toBe(true);
+      const sqls = client.query.mock.calls.map((c: unknown[]) => String(c[0]));
+      expect(sqls[0]).toMatch(/^BEGIN/);
+      expect(sqls[sqls.length - 1]).toMatch(/^COMMIT/);
+      expect(sqls.some((s: string) => /ROLLBACK/.test(s))).toBe(false);
+      expect(sqls.some((s: string) => /UPDATE characters/i.test(s))).toBe(true);
+      expect(sqls.some((s: string) => /world_state/i.test(s))).toBe(true);
+      // both writes rode the SAME client, so a crash mid-write cannot leave one
+      // half applied without the other (the escrow can never be torn).
+      expect(dbMock.query).not.toHaveBeenCalled();
+      expect(client.release).toHaveBeenCalled();
+      // the escrowed material is out of bags and only present as a market listing
+      expect((state as unknown as { inventory: { itemId: string }[] }).inventory ?? []).not.toEqual(
+        expect.arrayContaining([expect.objectContaining({ itemId: 'bone_fragments' })]),
+      );
+      expect(market.listings.some((l) => l.itemId === 'bone_fragments')).toBe(true);
+    } finally {
+      closeMarketWriteGateForTests();
+    }
   });
 });

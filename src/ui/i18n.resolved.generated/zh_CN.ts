@@ -316,10 +316,10 @@ export const zh_CN: EnTranslations = {
       "hotbarPageAria": "显示下一组技能",
       "actionRing": "战斗动作",
       "actionPageToggle": "切换动作页",
-      "actionPageIndicator": "{page}",
+      "actionPageIndicator": "第{page}页",
       "targetCycle": "切换目标",
       "targetCycleShort": "目标",
-      "spellbookPageLabel": "Page {page}"
+      "spellbookPageLabel": "页{page}"
     },
     "tutorial": {
       "moveBodyTouch": "使用摇杆移动，拖动屏幕环顾四周。先走几步开始吧。",
@@ -1064,7 +1064,7 @@ export const zh_CN: EnTranslations = {
       "close": "关闭制作",
       "craft": "制作",
       "reagentsNeeded": "需要:",
-      "reagentLine": "{name} x{have}/{required}",
+      "reagentLine": "{name}: {have}/{required}",
       "empty": "尚无已知配方。",
       "resultAria": "制作{name}",
       "craftedToast": "已制作:{name}",

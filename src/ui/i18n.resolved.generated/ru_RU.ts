@@ -316,10 +316,10 @@ export const ru_RU: EnTranslations = {
       "hotbarPageAria": "Показать следующий набор навыков",
       "actionRing": "Боевые действия",
       "actionPageToggle": "Переключить страницу действий",
-      "actionPageIndicator": "{page}",
+      "actionPageIndicator": "Стр. {page}",
       "targetCycle": "Сменить цель",
       "targetCycleShort": "Цель",
-      "spellbookPageLabel": "Page {page}"
+      "spellbookPageLabel": "Страница {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Используйте джойстик передвижения, чтобы двигаться, и проведите по экрану, чтобы осмотреться. Сделайте несколько шагов, чтобы начать.",
@@ -1064,7 +1064,7 @@ export const ru_RU: EnTranslations = {
       "close": "Закрыть крафт",
       "craft": "Создать",
       "reagentsNeeded": "Требуется:",
-      "reagentLine": "{name} x{have}/{required}",
+      "reagentLine": "{name}: {have}/{required}",
       "empty": "Известных рецептов пока нет.",
       "resultAria": "Создать {name}",
       "craftedToast": "Создано: {name}",

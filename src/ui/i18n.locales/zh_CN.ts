@@ -5686,4 +5686,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': '采矿',
   'hudChrome.gathering.logging': '伐木',
   'hudChrome.gathering.herbalism': '草药学',
+  // Release v0.22.0 locale fill.
+  'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
+  'hudChrome.mobile.actionPageIndicator': '第{page}页',
+  'hudChrome.mobile.spellbookPageLabel': '页{page}',
 };

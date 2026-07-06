@@ -316,10 +316,10 @@ export const ko_KR: EnTranslations = {
       "hotbarPageAria": "다음 스킬 세트 표시",
       "actionRing": "전투 행동",
       "actionPageToggle": "행동 페이지 전환",
-      "actionPageIndicator": "{page}",
+      "actionPageIndicator": "{page}페이지",
       "targetCycle": "대상 전환",
       "targetCycleShort": "대상",
-      "spellbookPageLabel": "Page {page}"
+      "spellbookPageLabel": "페이지 {page}"
     },
     "tutorial": {
       "moveBodyTouch": "이동 스틱으로 이동하고 화면을 끌어 주위를 둘러보세요. 몇 걸음 움직여 시작하세요.",
@@ -1064,7 +1064,7 @@ export const ko_KR: EnTranslations = {
       "close": "제작 닫기",
       "craft": "제작",
       "reagentsNeeded": "필요 재료:",
-      "reagentLine": "{name} x{have}/{required}",
+      "reagentLine": "{name}: {have}/{required}",
       "empty": "알려진 제작법이 없습니다.",
       "resultAria": "{name} 제작",
       "craftedToast": "제작 완료:{name}",

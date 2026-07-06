@@ -316,10 +316,10 @@ export const ja_JP: EnTranslations = {
       "hotbarPageAria": "次のスキルセットを表示",
       "actionRing": "戦闘アクション",
       "actionPageToggle": "行動ページ切替",
-      "actionPageIndicator": "{page}",
+      "actionPageIndicator": "{page}ページ",
       "targetCycle": "ターゲット切替",
       "targetCycleShort": "標的",
-      "spellbookPageLabel": "Page {page}"
+      "spellbookPageLabel": "ページ{page}"
     },
     "tutorial": {
       "moveBodyTouch": "移動スティックで移動し、画面をドラッグして周囲を見回します。数歩進んで始めましょう。",
@@ -1064,7 +1064,7 @@ export const ja_JP: EnTranslations = {
       "close": "製作を閉じる",
       "craft": "製作",
       "reagentsNeeded": "必要素材:",
-      "reagentLine": "{name} x{have}/{required}",
+      "reagentLine": "{name}: {have}/{required}",
       "empty": "既知のレシピはありません。",
       "resultAria": "{name}を製作",
       "craftedToast": "製作しました:{name}",
