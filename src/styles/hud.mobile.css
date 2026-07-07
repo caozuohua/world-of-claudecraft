@@ -2003,29 +2003,24 @@
   }
   /* Issue 1577 round 2 (10): the full-screen character window used to stack the
      paperdoll above the stat grid, wasting the wide landscape viewport and
-     forcing a scroll. Flow the body as a wrapping row so on a wide landscape
-     screen the paperdoll and the stat grid sit side by side (two content
-     columns), and it still falls back to a single stacked column on a narrow
-     portrait width. The header and share row stay full width; every other child
-     (e.g. gathering progression) also spans full width by default. */
+     forcing a scroll. Flow the body into 2 columns so the paperdoll and the stat
+     grid sit side by side. CSS multi-column (not flex) because the window is
+     shown with an inline display:block that would override a display change; the
+     header and share row span all columns, every card stays whole across the
+     column break. */
   body.mobile-touch #char-window {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    align-items: flex-start;
-    gap: 6px 16px;
+    column-count: 2;
+    column-gap: 16px;
   }
   body.mobile-touch #char-window > * {
-    flex: 1 1 100%;
-    min-width: 0;
+    break-inside: avoid;
   }
-  body.mobile-touch #char-window > .paperdoll {
-    flex: 1 1 360px;
+  body.mobile-touch #char-window > .panel-title,
+  body.mobile-touch #char-window > .pc-share-row {
+    column-span: all;
   }
   body.mobile-touch #char-window > .char-stats {
-    flex: 1 1 300px;
-    align-self: flex-start;
-    margin-top: 0;
+    margin-top: 6px;
   }
   /* Narrow the flanking equip columns so both fit beside the model on a phone. */
   body.mobile-touch .equip-col {
@@ -2835,7 +2830,9 @@
       );
     }
     body.mobile-touch #mobile-extra-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      /* 4 columns in landscape too (issue 1577 round 2 (4)), matching the base
+         tier so each More-tray pill stays narrow on a wide landscape phone. */
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       grid-auto-rows: 34px;
       gap: 5px;
     }
@@ -3028,23 +3025,20 @@
        #tal-body live, so it adapts to the narrower-but-taller column
        automatically. */
     body.mobile-touch #talents-window {
-      display: flex;
-      flex-wrap: wrap;
-      align-content: flex-start;
-      align-items: flex-start;
-      gap: 4px 14px;
+      column-count: 2;
+      column-gap: 14px;
       box-sizing: border-box;
     }
     body.mobile-touch #talents-window > * {
-      flex: 1 1 100%;
-      min-width: 0;
+      break-inside: avoid;
     }
-    body.mobile-touch #talents-window > #tal-body {
-      flex: 2 1 58%;
+    body.mobile-touch #talents-window > .panel-title,
+    body.mobile-touch #talents-window > .tal-head,
+    body.mobile-touch #talents-window > .tal-help,
+    body.mobile-touch #talents-window > .tal-tabs {
+      column-span: all;
     }
     body.mobile-touch #talents-window > .tal-foot {
-      flex: 1 1 260px;
-      align-self: flex-start;
       margin-top: 0;
       border-top: 0;
       padding-top: 0;
