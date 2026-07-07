@@ -18,7 +18,7 @@ const TEAM_RED = 0xd8342c;
 // A downward-pointing cone above the head, under the DOM nameplate.
 const ARROW_RADIUS = 0.2;
 const ARROW_HEIGHT = 0.38;
-const ARROW_BASE_Y = 2.45;
+const ARROW_BASE_Y = 3.2; // well clear of the tallest hats/helmets
 const ARROW_BOB = 0.07;
 const ARROW_BOB_HZ = 1.6; // slow float
 const ARROW_SPIN_HZ = 0.35; // slow turn, reads 3D from every angle
