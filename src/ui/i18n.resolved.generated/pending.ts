@@ -37,7 +37,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "es_ES": [
     "guide.nav.professions",
@@ -67,7 +68,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "fr_FR": [
     "guide.nav.professions",
@@ -97,7 +99,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "fr_CA": [
     "guide.nav.professions",
@@ -127,7 +130,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "en_CA": [],
   "it_IT": [
@@ -158,7 +162,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "de_DE": [
     "guide.nav.professions",
@@ -188,12 +193,21 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
+  "zh_CN": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "zh_TW": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "ko_KR": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "ja_JP": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
   "pt_BR": [
     "guide.nav.professions",
     "guide.professions.archetypeChooseBody",
@@ -222,9 +236,43 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ],
-  "ru_RU": [],
+  "ru_RU": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "cs_CZ": [
+    "guide.nav.professions",
+    "guide.professions.archetypeChooseBody",
+    "guide.professions.archetypeChooseTitle",
+    "guide.professions.archetypeIdentityBody",
+    "guide.professions.archetypeIdentityTitle",
+    "guide.professions.archetypeIntro",
+    "guide.professions.archetypeSwitchBody",
+    "guide.professions.archetypeSwitchTitle",
+    "guide.professions.archetypeTitle",
+    "guide.professions.craftComboBody",
+    "guide.professions.craftComboTitle",
+    "guide.professions.craftIntro",
+    "guide.professions.craftMasteryBody",
+    "guide.professions.craftMasteryTitle",
+    "guide.professions.craftRecipesBody",
+    "guide.professions.craftRecipesTitle",
+    "guide.professions.craftRingBody",
+    "guide.professions.craftRingTitle",
+    "guide.professions.craftTitle",
+    "guide.professions.gatherIntro",
+    "guide.professions.gatherProficiencyBody",
+    "guide.professions.gatherProficiencyTitle",
+    "guide.professions.gatherTitle",
+    "guide.professions.gatherToolsBody",
+    "guide.professions.gatherToolsTitle",
+    "guide.professions.gatherWhatBody",
+    "guide.professions.gatherWhatTitle",
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
+  ],
   "nl_NL": [
     "guide.nav.professions",
     "guide.professions.archetypeChooseBody",
@@ -253,7 +301,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "pl_PL": [
     "guide.nav.professions",
@@ -283,7 +332,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "id_ID": [
     "guide.nav.professions",
@@ -313,7 +363,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "tr_TR": [
     "guide.nav.professions",
@@ -343,7 +394,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "sv_SE": [
     "guide.nav.professions",
@@ -373,7 +425,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "vi_VN": [
     "guide.nav.professions",
@@ -403,7 +456,8 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "da_DK": [
     "guide.nav.professions",
@@ -433,6 +487,7 @@ export const pending: Record<string, readonly string[]> = {
     "guide.professions.gatherToolsTitle",
     "guide.professions.gatherWhatBody",
     "guide.professions.gatherWhatTitle",
-    "guide.professions.intro"
+    "guide.professions.intro",
+    "hudChrome.discord.roleTag.coredevs"
   ]
 };
