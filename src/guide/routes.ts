@@ -113,6 +113,13 @@ export const GUIDE_ROUTES: GuideRoute[] = [
     descKey: 'guide.gear.intro',
   },
   {
+    id: 'professions',
+    sub: 'professions',
+    navKey: 'guide.nav.professions',
+    group: 'compendium',
+    descKey: 'guide.professions.intro',
+  },
+  {
     id: 'economy',
     sub: 'economy',
     navKey: 'guide.nav.economy',

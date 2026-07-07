@@ -368,7 +368,9 @@ export const id_ID: EnTranslations = {
       "hoursMinutes": "{h}j {m}mnt",
       "minutes": "{m}mnt",
       "lessThanMinute": "<1mnt",
-      "lockedToast": "Anda terkunci pada {raid}. Terbuka dalam {time}."
+      "lockedToast": "Anda terkunci pada {raid}. Terbuka dalam {time}.",
+      "heroicName": "{name} Heroik",
+      "heroicLocked": "Anda terkunci pada {name} Heroik."
     },
     "compass": {
       "N": "U",
@@ -661,8 +663,8 @@ export const id_ID: EnTranslations = {
       "fromYour": "Dari {value} {stat} Anda:",
       "names": {
         "spellPower": "Kekuatan Mantra",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Rating Kritis",
+        "hasteRating": "Rating Kecepatan"
       },
       "desc": {
         "str": "Meningkatkan daya serang Anda, sehingga serangan senjata Anda menghantam lebih keras.",
@@ -676,8 +678,8 @@ export const id_ID: EnTranslations = {
         "dps": "Perkiraan kerusakan senjata Anda per detik, menggabungkan kerusakan dan kecepatan senjata dengan daya serang Anda.",
         "critChance": "Peluang serangan Anda menghantam secara kritis, memberikan kerusakan ganda.",
         "dodge": "Peluang Anda untuk sepenuhnya menghindari serangan jarak dekat, tanpa menerima kerusakan.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Rating kritis dari perlengkapan dan bonus set Anda, menaikkan peluang serangan kritis Anda. Sekitar 10 rating memberi 1% kritis.",
+        "hasteRating": "Rating kecepatan dari perlengkapan dan bonus set Anda, mempercepat serangan dan rapalan mantra Anda. Sekitar 10 rating memberi 1% kecepatan."
       },
       "effects": {
         "attackPower": "+{value} Daya Serang",
@@ -719,13 +721,13 @@ export const id_ID: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Peluang saat memukul ({chance}%): {effect}",
+      "onSpellDamage": "Peluang saat mantra kerusakanmu ({chance}%): {effect}",
+      "onHeal": "Peluang saat penyembuhanmu ({chance}%): {effect}",
+      "chainArc": "menghantam target dengan {name} {school} ({damage}) yang melompat ke {jumps} musuh terdekat dengan kerusakan yang kian melemah",
+      "attackSlow": "dan memperlambat kecepatan serangan target sebesar {pct}% selama {duration} dtk",
+      "dot": "menjangkitkan {name}, kerusakan berkala {school} yang memberikan {total} selama {duration} dtk",
+      "hot": "memekarkan {name}, penyembuhan berkala yang memulihkan {total} selama {duration} dtk"
     },
     "questShare": {
       "notShareable": "Misi ini tidak dapat dibagikan.",
@@ -929,9 +931,13 @@ export const id_ID: EnTranslations = {
       "leaderOption": "Penjarah Utama: Pemimpin (Anda)",
       "masterOption": "Penjarah Utama: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Atur Kesulitan Dungeon: Heroik",
+      "setNormal": "Atur Kesulitan Dungeon: Normal"
+    },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Item ini tidak dapat dihancurkan.",
+      "rightClickDestroy": "Klik kanan untuk menghancurkan",
       "filterGroupAria": "Saring tas menurut kategori",
       "filterAll": "Semua",
       "filterWeapon": "Senjata",
@@ -1147,7 +1153,7 @@ export const id_ID: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
-        "coredevs": "Core Dev",
+        "coredevs": "Dev Inti",
         "devs": "Pengembang",
         "mods": "Moderator",
         "artists": "Seniman"
@@ -1357,6 +1363,20 @@ export const id_ID: EnTranslations = {
       "logging": "Penebangan",
       "herbalism": "Herbalisme"
     },
+    "archetypeTitle": {
+      "label": "Gelar",
+      "none": "Tidak Ada",
+      "armorcrafting": "Pandai Zirah",
+      "weaponcrafting": "Pandai Senjata",
+      "jewelcrafting": "Perajin Permata",
+      "alchemy": "Alkemis",
+      "engineering": "Insinyur",
+      "cooking": "Koki",
+      "inscription": "Juru Tulis",
+      "enchanting": "Pemantra",
+      "tailoring": "Penjahit",
+      "leatherworking": "Perajin Kulit"
+    },
     "crafting": {
       "title": "kerajinan",
       "close": "Tutup kerajinan",
@@ -1368,7 +1388,7 @@ export const id_ID: EnTranslations = {
       "craftedToast": "Dibuat: {name}",
       "insufficientMaterials": "Anda tidak memiliki bahan untuk itu.",
       "unknownRecipe": "Resep itu tidak ada.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "Kamu tidak memiliki kedua keahlian yang diperlukan pada tingkat yang disyaratkan untuk resep itu."
     }
   },
   "apiError": {
@@ -1475,6 +1495,7 @@ export const id_ID: EnTranslations = {
       "bestiary": "Bestiari",
       "models": "Model 3D",
       "gear": "Perlengkapan & Barang",
+      "professions": "Professions",
       "economy": "Ekonomi & Perdagangan",
       "social": "Sosial & Kelompok",
       "stats": "Karakter & Statistik",
@@ -2254,6 +2275,35 @@ export const id_ID: EnTranslations = {
       "cosmeticsSkins": "Ada dua lini kosmetik untuk dikoleksi. Sebagian besar kelas memiliki beberapa penampilan alternatif, sentuhan baru atas wujud kelas yang hanya milikmu untuk dikenakan. Di samping itu ada chroma: skema warna dwiwarna bernama yang mengecat ulang sebuah penampilan sepenuhnya, dari logam bersahaja hingga warna kekaisaran yang cerah.",
       "cosmeticsCache": "Beberapa di antaranya berasal dari peti kosmetik misterius, sebuah hadiah tersegel yang mengundi satu dari tiga tingkat kualitas saat kamu membukanya dan menganugerahkan penampilan yang sesuai. Ini murni untuk penampilan: tak ada di dalamnya yang membuatmu lebih kuat, hanya lebih elok dipandang.",
       "cosmeticsApply": "Atur penampilan aktifmu dari baris penampilan di layar karaktermu, dan berganti dengan bebas di antara semua yang telah kamu buka."
+    },
+    "professions": {
+      "intro": "Beyond combat and quests, the world rewards you for working the land and the forge: gathering raw materials, turning them into gear at the crafting stations of ten different trades, and settling into an identity as one of the ten archetypes those trades represent.",
+      "gatherTitle": "Gathering: Mining, Logging, and Herbalism",
+      "gatherIntro": "Three gathering trades let you pull raw materials straight out of the world: Mining strikes ore and stone from veins, Logging fells timber from stands of trees, and Herbalism collects herbs and plants growing wild. Each is tracked separately, so working one never slows your progress in another.",
+      "gatherWhatTitle": "Resource nodes",
+      "gatherWhatBody": "Ore veins, wood stands, and herb patches are placed out in the zones as visible, unowned fixtures. Walk up to one and interact with it to harvest whatever it holds. Once you have harvested a node, it needs time to recover before you personally can harvest it again, though it never blocks anyone else: another player can harvest the very same node in the meantime.",
+      "gatherProficiencyTitle": "Proficiency and material quality",
+      "gatherProficiencyBody": "Every successful harvest builds your proficiency in that gathering trade. A higher proficiency shifts what you pull out of a node toward rarer grades of material, from common on up, though the rarest grades stay rare even at high proficiency. More practice never hurts your odds, it only ever improves them.",
+      "gatherToolsTitle": "Tools of the trade",
+      "gatherToolsBody": "Vendors sell basic tools for each gathering trade, and better ones can be crafted, so working a resource node is meant to feel more capable as you gear up for it rather than staying static. Higher-tier tools are the intended way to unlock access to richer nodes and to work them more efficiently over a long session.",
+      "craftTitle": "The ten crafts",
+      "craftIntro": "Ten crafting trades turn gathered materials into finished gear and goods: Armorcrafting, Weaponcrafting, and Jewelcrafting shape raw matter into wearable gear; Alchemy and Engineering are driven by trial and error; Cooking, Inscription, and Enchanting each touch other crafts' output; Tailoring and Leatherworking work from exact patterns. Together they form a wheel, with each craft sitting next to two neighbors and opposite one other.",
+      "craftRingTitle": "A wheel of specialties",
+      "craftRingBody": "The ten crafts are arranged in a fixed ring, and where a craft sits on that ring matters: crafts next to each other on the wheel share more in common with each other than crafts on opposite sides do. Committing to one craft is meant to feel like joining a family of related trades, not picking an isolated skill.",
+      "craftRecipesTitle": "Recipes and reagents",
+      "craftRecipesBody": "Every craft has its own recipes, each calling for specific reagents you gather or buy. The most basic recipes in each craft ask for nothing but common materials and are craftable from the very start, so you can begin working a trade the moment you pick it up rather than waiting to unlock it.",
+      "craftMasteryTitle": "Skill and mastery",
+      "craftMasteryBody": "Crafting successfully builds skill in that trade, and richer recipes are gated behind higher skill: the basic recipes are open to everyone, while progressively more advanced ones ask for progressively more mastery to attempt. Growing your skill in a craft is the path from simple starter goods to its more ambitious recipes.",
+      "craftComboTitle": "Combination recipes",
+      "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character (or a pair of trading partners) who has invested in adjacent trades on the ring rather than one in isolation.",
+      "archetypeTitle": "The ten archetypes",
+      "archetypeIntro": "Each of the ten crafts also stands for an archetype, a broader identity you can adopt beyond just working that trade. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
+      "archetypeChooseTitle": "Choosing your archetype",
+      "archetypeChooseBody": "You declare your first archetype through an early, zone one story quest that formally accepts you into that identity. Until you complete that quest, you have not yet chosen an archetype at all.",
+      "archetypeSwitchTitle": "Changing your mind",
+      "archetypeSwitchBody": "Having declared an archetype once does not lock you into it forever. Changing to a different archetype means first completing a repeatable \"make amends\" quest for your old one, and each time you switch, the amends expected of you the next time grow a little steeper, so switching stays meaningful rather than costless.",
+      "archetypeIdentityTitle": "What your archetype means",
+      "archetypeIdentityBody": "Your active archetype is a statement about who your character is in the world, recognized in how others and the world address you. The exact rewards and recognition that come with it are still being finalized; check back as the system fills in."
     },
     "economy": {
       "intro": "Koin melumasi seluruh dunia: ia membeli perlengkapanmu, persediaan, dan perlengkapan perjalanan, serta berpindah tangan antarpemain. Kamu mengumpulkan semua ini hanya dengan bermain, jadi anggaplah halaman ini sebagai peta dari mana uangmu datang dan ke mana ia pergi.",
@@ -3335,6 +3385,10 @@ export const id_ID: EnTranslations = {
       "hard": "Jarahan terbaik"
     },
     "closeAria": "Tutup"
+  },
+  "heroicShop": {
+    "balance": "Tanda Heroik: {count}",
+    "buyAria": "Beli {item} seharga {marks} Tanda Heroik"
   },
   "delveUi": {
     "board": {
@@ -4628,12 +4682,14 @@ export const id_ID: EnTranslations = {
     "slots": {
       "mainhand": "Tangan Utama",
       "helmet": "Helm",
+      "neck": "Leher",
       "shoulder": "Bahu",
       "chest": "Dada",
       "waist": "Pinggang",
       "legs": "Tungkai",
       "gloves": "Sarung Tangan",
-      "feet": "Kaki"
+      "feet": "Kaki",
+      "ring": "Jari"
     },
     "quality": {
       "poor": "Buruk",
@@ -6563,6 +6619,132 @@ export const id_ID: EnTranslations = {
       "event_skin_token": {
         "name": "Peti Kosmetik Misterius"
       },
+      "heroic_mark": {
+        "name": "Tanda Heroik"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Baju Zirah Tempaan Kripta Morthen"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Pembalut Tangan Denyut Bayangan"
+      },
+      "bonechill_striders": {
+        "name": "Bot Langkah Dingin Tulang"
+      },
+      "mistcallers_fang": {
+        "name": "Taring Pemanggil Kabut"
+      },
+      "tidebound_spaulders": {
+        "name": "Pelindung Bahu Ikatan Pasang"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Selempang Istana Karam"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Tongkat Agung Pasang Rembulan"
+      },
+      "tidewoven_trousers": {
+        "name": "Celana Tenunan Pasang"
+      },
+      "choirmothers_casque": {
+        "name": "Ketopong Ibu Paduan Suara"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Kapak Pembelah Wyrm Kubur"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Kafan Sang Wyrm Kubur"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Sarung Tangan Pengendap Sanktum"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Tongkat Kebesaran Istana Nirmaut"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Zirah Kaki Garda Perang Nirmaut"
+      },
+      "soulrend_diadem": {
+        "name": "Diadem Pengoyak Jiwa"
+      },
+      "scourgehide_carapace": {
+        "name": "Karapas Kulit Sampar"
+      },
+      "cryptplate_helm": {
+        "name": "Helm Lempeng Kripta"
+      },
+      "shadowpulse_slippers": {
+        "name": "Selop Denyut Bayangan"
+      },
+      "bonechill_cord": {
+        "name": "Tali Pinggang Dingin Tulang"
+      },
+      "mistforged_pauldrons": {
+        "name": "Bahu Tempaan Kabut"
+      },
+      "tideguard_faceguard": {
+        "name": "Pelindung Wajah Penjaga Pasang"
+      },
+      "sunken_court_mantle": {
+        "name": "Mantel Istana Karam"
+      },
+      "lunar_choir_leggings": {
+        "name": "Celana Paduan Suara Rembulan"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Pelindung Bahu Berkah Paduan Suara"
+      },
+      "tideworn_warboots": {
+        "name": "Bot Perang Kikisan Pasang"
+      },
+      "gravewyrm_claws": {
+        "name": "Cakar Wyrm Kubur"
+      },
+      "gravescale_girdle": {
+        "name": "Sabuk Sisik Kubur"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Pembalut Tangan Paduan Suara Wyrm"
+      },
+      "deathless_greatblade": {
+        "name": "Bilah Agung Nirmaut"
+      },
+      "soulforged_warplate": {
+        "name": "Zirah Perang Tempaan Jiwa"
+      },
+      "stormcallers_focus": {
+        "name": "Fokus Pemanggil Badai"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Segel Sembilan Sumpah"
+      },
+      "nielas_coldlight_band": {
+        "name": "Cincin Cahaya Dingin Niela"
+      },
+      "sutils_gambit": {
+        "name": "Gambit Sutil"
+      },
+      "oath_of_the_round_table": {
+        "name": "Sumpah Meja Bundar"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Cincin Stempel Nirmaut Zyzz"
+      },
+      "architects_cornerstone": {
+        "name": "Batu Penjuru Sang Arsitek"
+      },
+      "swiftfang_talisman": {
+        "name": "Talisman Taring Gesit"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Liontin Kenangan Yumi"
+      },
+      "zense_meridian": {
+        "name": "Meridian Zense"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Medali Laba Tanpa Akhir"
+      },
       "deathless_heartwood": {
         "name": "Inti Kayu Mahkota Baka"
       },
@@ -7100,6 +7282,11 @@ export const id_ID: EnTranslations = {
         "name": "Penempa Zirah Hode",
         "title": "Ahli Penempa Zirah",
         "greeting": "Tungku menyala dan batu asah berputar. Kalau bisa menebas, aku menjualnya."
+      },
+      "heroic_quartermaster": {
+        "name": "Kepala Perbekalan Vex",
+        "title": "Kepala Perbekalan Heroik",
+        "greeting": "Bukti dari kedalaman heroik dapat membeli cincin dan liontin terbaik di Highwatch. Tunjukkan tanda-tandamu."
       },
       "loremaster_caddis": {
         "name": "Ahli Sejarah Caddis",
@@ -8190,12 +8377,14 @@ export const id_ID: EnTranslations = {
       "crownforged": {
         "name": "Regalia Bonewrought",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
-        "bonus3": "Meningkatkan kekuatan sebesar 15, stamina sebesar 15, serta kecepatan serangan dan rapal sebesar 15%."
+        "bonus3": "Meningkatkan kekuatan sebesar 15, stamina sebesar 15, serta kecepatan serangan dan rapal sebesar 15%.",
+        "bonus4": "Serangan kritis senjatamu menyerpihkan target dengan Serpih Tulang, membuatnya berdarah sebesar 8 kerusakan setiap 2 detik selama 12 detik. Menumpuk hingga 3 kali."
       },
       "deathlord": {
         "name": "Perlengkapan Tempur Barrowlord",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
-        "bonus3": "Meningkatkan kekuatan sebesar 15 dan stamina sebesar 15."
+        "bonus3": "Meningkatkan kekuatan sebesar 15 dan stamina sebesar 15.",
+        "bonus4": "Serangan kritis senjatamu memiliki peluang 50% memberikan Kuasa Kubur, meningkatkan daya serang sebesar 60 selama 10 detik."
       },
       "greyjaw_stalker": {
         "name": "Perlengkapan Penguntit Greyjaw",
@@ -8205,22 +8394,25 @@ export const id_ID: EnTranslations = {
         "name": "Jubah Mournweave",
         "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
         "bonus3": "Meningkatkan kecerdasan sebesar 10 dan stamina sebesar 10.",
-        "bonus4": "Your spells have a chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Mantramu memiliki peluang 10% memberikan Rapal Jernih, menjadikan mantra berikutmu tanpa biaya."
       },
       "nighttalon": {
         "name": "Perlengkapan Kulit Direfang",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
-        "bonus3": "Meningkatkan kelincahan sebesar 15, peluang kritis sebesar 2%, serta kecepatan serangan dan rapal sebesar 15%."
+        "bonus3": "Meningkatkan kelincahan sebesar 15, peluang kritis sebesar 2%, serta kecepatan serangan dan rapal sebesar 15%.",
+        "bonus4": "Serangan kritis senjatamu mengoyakkan Cabikan Kasar, membuat target berdarah sebesar 6 kerusakan setiap 2 detik selama 12 detik. Menumpuk hingga 3 kali."
       },
       "soulflame": {
         "name": "Regalia Wraithfire",
         "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
-        "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%."
+        "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%.",
+        "bonus4": "Mantramu memiliki peluang 10% memberikan Nyala Jiwa, meningkatkan kekuatan mantra sebesar 40 selama 10 detik."
       },
       "stormcallers": {
         "name": "Jubah Galecall",
         "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
-        "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%."
+        "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%.",
+        "bonus4": "Mantramu memiliki peluang 10% memberikan Nyala Jiwa, meningkatkan kekuatan mantra sebesar 40 selama 10 detik."
       },
       "vale_arcanist": {
         "name": "Perlengkapan Arkanis Lembah",
@@ -8229,7 +8421,8 @@ export const id_ID: EnTranslations = {
       "wyrmshadow": {
         "name": "Jubah Nightfang",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
-        "bonus3": "Meningkatkan kelincahan sebesar 15 dan peluang kritis sebesar 2%."
+        "bonus3": "Meningkatkan kelincahan sebesar 15 dan peluang kritis sebesar 2%.",
+        "bonus4": "Serangan kritis senjatamu memiliki peluang 50% memberikan Sergap Taring, meningkatkan kecepatan serangan sebesar 25% selama 8 detik."
       }
     }
   },

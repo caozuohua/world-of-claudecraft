@@ -142,6 +142,7 @@ const UI_PURE_CORES = [
   'src/ui/weapon_proc_view.ts',
   'src/ui/options_view.ts',
   'src/ui/vendor_view.ts',
+  'src/ui/heroic_vendor_view.ts',
   'src/ui/loot_settings_view.ts',
   'src/ui/crafting_view.ts',
   'src/ui/market_view.ts',
@@ -195,6 +196,7 @@ const UI_PURE_CORES = [
 const RENDER_PURE_CORES = [
   'src/render/cast_bar.ts',
   'src/render/nameplate_view.ts',
+  'src/render/net_interp_core.ts',
   'src/render/terrain_region_core.ts',
   'src/render/water_core.ts',
 ].map((rel) => join(repoRoot, rel));

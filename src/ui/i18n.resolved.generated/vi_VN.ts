@@ -368,7 +368,9 @@ export const vi_VN: EnTranslations = {
       "hoursMinutes": "{h}g {m}p",
       "minutes": "{m}p",
       "lessThanMinute": "<1p",
-      "lockedToast": "Bạn đang bị khóa với {raid}. Mở khóa sau {time}."
+      "lockedToast": "Bạn đang bị khóa với {raid}. Mở khóa sau {time}.",
+      "heroicName": "{name} Anh Hùng",
+      "heroicLocked": "Bạn đang bị khóa với {name} Anh Hùng."
     },
     "compass": {
       "N": "B",
@@ -532,7 +534,7 @@ export const vi_VN: EnTranslations = {
     "options": {
       "clickMoveLeft": "Nhấp Trái",
       "clickMoveRight": "Nhấp Phải",
-      "version": "v{version} ({build})",
+      "version": "phiên bản {version} ({build})",
       "browserEffects": "Hiệu Ứng Trình Duyệt",
       "browserEffectsAuto": "Tự Động",
       "browserEffectsFull": "Đầy Đủ",
@@ -661,8 +663,8 @@ export const vi_VN: EnTranslations = {
       "fromYour": "Từ {value} {stat} của bạn:",
       "names": {
         "spellPower": "Sức Mạnh Phép Thuật",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Chỉ Số Chí Mạng",
+        "hasteRating": "Chỉ Số Thần Tốc"
       },
       "desc": {
         "str": "Tăng sức công kích, giúp đòn vũ khí của bạn đánh mạnh hơn.",
@@ -676,8 +678,8 @@ export const vi_VN: EnTranslations = {
         "dps": "Sát thương vũ khí ước tính mỗi giây của bạn, kết hợp sát thương và tốc độ vũ khí với sức công kích.",
         "critChance": "Tỉ lệ một đòn tấn công đánh chí mạng, gây sát thương gấp đôi.",
         "dodge": "Tỉ lệ bạn né hoàn toàn một đòn cận chiến, không nhận sát thương.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Chỉ số chí mạng từ trang bị và phần thưởng bộ trang bị của bạn, nâng tỉ lệ chí mạng của bạn. Khoảng 10 điểm chỉ số ban 1% chí mạng.",
+        "hasteRating": "Chỉ số thần tốc từ trang bị và phần thưởng bộ trang bị của bạn, đẩy nhanh các đòn tấn công và việc thi triển phép của bạn. Khoảng 10 điểm chỉ số ban 1% thần tốc."
       },
       "effects": {
         "attackPower": "+{value} Công Kích",
@@ -719,13 +721,13 @@ export const vi_VN: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Cơ hội khi đánh trúng ({chance}%): {effect}",
+      "onSpellDamage": "Cơ hội khi phép của bạn gây sát thương ({chance}%): {effect}",
+      "onHeal": "Cơ hội khi bạn hồi máu ({chance}%): {effect}",
+      "chainArc": "oanh kích mục tiêu bằng một {name} hệ {school} ({damage}) nảy sang {jumps} kẻ địch gần đó với sát thương giảm dần",
+      "attackSlow": "và làm chậm tốc độ tấn công của mục tiêu thêm {pct}% trong {duration} giây",
+      "dot": "gieo rắc {name}, một hiệu ứng sát thương theo thời gian hệ {school} gây {total} trong {duration} giây",
+      "hot": "làm nở rộ {name}, một hiệu ứng hồi máu theo thời gian phục hồi {total} trong {duration} giây"
     },
     "questShare": {
       "notShareable": "Nhiệm vụ này không thể chia sẻ.",
@@ -929,9 +931,13 @@ export const vi_VN: EnTranslations = {
       "leaderOption": "Người Chia Chiến Lợi Phẩm: Đội Trưởng (Bạn)",
       "masterOption": "Người Chia Chiến Lợi Phẩm: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Đặt Độ Khó Hầm Ngục: Anh Hùng",
+      "setNormal": "Đặt Độ Khó Hầm Ngục: Thường"
+    },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Không thể phá hủy vật phẩm này.",
+      "rightClickDestroy": "Nhấp phải để phá hủy",
       "filterGroupAria": "Lọc túi đồ theo danh mục",
       "filterAll": "Tất cả",
       "filterWeapon": "Vũ khí",
@@ -1147,7 +1153,7 @@ export const vi_VN: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Quản Trị Viên",
-        "coredevs": "Core Dev",
+        "coredevs": "Nhà Phát Triển Chính",
         "devs": "Lập Trình Viên",
         "mods": "Điều Hành Viên",
         "artists": "Họa Sĩ"
@@ -1357,6 +1363,20 @@ export const vi_VN: EnTranslations = {
       "logging": "Đốn gỗ",
       "herbalism": "Thảo dược học"
     },
+    "archetypeTitle": {
+      "label": "Danh hiệu",
+      "none": "Không có",
+      "armorcrafting": "Thợ Giáp",
+      "weaponcrafting": "Thợ Rèn Vũ Khí",
+      "jewelcrafting": "Thợ Kim Hoàn",
+      "alchemy": "Nhà Giả Kim",
+      "engineering": "Kỹ Sư",
+      "cooking": "Đầu Bếp",
+      "inscription": "Thợ Khắc Chữ",
+      "enchanting": "Thợ Phù Phép",
+      "tailoring": "Thợ May",
+      "leatherworking": "Thợ Da"
+    },
     "crafting": {
       "title": "Chế tạo",
       "close": "Đóng chế tạo",
@@ -1368,7 +1388,7 @@ export const vi_VN: EnTranslations = {
       "craftedToast": "Đã chế tác: {name}",
       "insufficientMaterials": "Bạn không có tài liệu cho việc đó.",
       "unknownRecipe": "Công thức đó không tồn tại.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "Bạn chưa có cả hai nghề chế tạo cần thiết ở bậc yêu cầu cho công thức đó."
     }
   },
   "apiError": {
@@ -1475,6 +1495,7 @@ export const vi_VN: EnTranslations = {
       "bestiary": "Bách Thú",
       "models": "Mô Hình 3D",
       "gear": "Trang Bị & Vật Phẩm",
+      "professions": "Professions",
       "economy": "Kinh Tế & Giao Thương",
       "social": "Giao Tiếp & Tổ Đội",
       "stats": "Nhân Vật & Chỉ Số",
@@ -2254,6 +2275,35 @@ export const vi_VN: EnTranslations = {
       "cosmeticsSkins": "Có hai dòng trang trí để sưu tầm. Hầu hết các lớp đều có một vài diện mạo thay thế, một cách thể hiện mới mẻ cho hình tượng của lớp mà chỉ riêng bạn được mặc. Bên cạnh chúng là các chroma: những bảng màu hai tông được đặt tên, sơn lại hoàn toàn một diện mạo, từ kim loại trầm mặc đến những màu hoàng gia rực rỡ.",
       "cosmeticsCache": "Một vài trong số này đến từ một rương trang trí bí ẩn, một phần thưởng niêm phong sẽ ngẫu nhiên ra một trong ba hạng chất lượng khi bạn mở nó và ban diện mạo tương ứng. Nó hoàn toàn chỉ để làm đẹp: không thứ gì bên trong khiến bạn mạnh hơn, chỉ đẹp hơn để ngắm.",
       "cosmeticsApply": "Đặt diện mạo đang dùng từ hàng ngoại hình trên màn hình nhân vật, và đổi thoải mái giữa mọi thứ bạn đã mở khóa."
+    },
+    "professions": {
+      "intro": "Beyond combat and quests, the world rewards you for working the land and the forge: gathering raw materials, turning them into gear at the crafting stations of ten different trades, and settling into an identity as one of the ten archetypes those trades represent.",
+      "gatherTitle": "Gathering: Mining, Logging, and Herbalism",
+      "gatherIntro": "Three gathering trades let you pull raw materials straight out of the world: Mining strikes ore and stone from veins, Logging fells timber from stands of trees, and Herbalism collects herbs and plants growing wild. Each is tracked separately, so working one never slows your progress in another.",
+      "gatherWhatTitle": "Resource nodes",
+      "gatherWhatBody": "Ore veins, wood stands, and herb patches are placed out in the zones as visible, unowned fixtures. Walk up to one and interact with it to harvest whatever it holds. Once you have harvested a node, it needs time to recover before you personally can harvest it again, though it never blocks anyone else: another player can harvest the very same node in the meantime.",
+      "gatherProficiencyTitle": "Proficiency and material quality",
+      "gatherProficiencyBody": "Every successful harvest builds your proficiency in that gathering trade. A higher proficiency shifts what you pull out of a node toward rarer grades of material, from common on up, though the rarest grades stay rare even at high proficiency. More practice never hurts your odds, it only ever improves them.",
+      "gatherToolsTitle": "Tools of the trade",
+      "gatherToolsBody": "Vendors sell basic tools for each gathering trade, and better ones can be crafted, so working a resource node is meant to feel more capable as you gear up for it rather than staying static. Higher-tier tools are the intended way to unlock access to richer nodes and to work them more efficiently over a long session.",
+      "craftTitle": "The ten crafts",
+      "craftIntro": "Ten crafting trades turn gathered materials into finished gear and goods: Armorcrafting, Weaponcrafting, and Jewelcrafting shape raw matter into wearable gear; Alchemy and Engineering are driven by trial and error; Cooking, Inscription, and Enchanting each touch other crafts' output; Tailoring and Leatherworking work from exact patterns. Together they form a wheel, with each craft sitting next to two neighbors and opposite one other.",
+      "craftRingTitle": "A wheel of specialties",
+      "craftRingBody": "The ten crafts are arranged in a fixed ring, and where a craft sits on that ring matters: crafts next to each other on the wheel share more in common with each other than crafts on opposite sides do. Committing to one craft is meant to feel like joining a family of related trades, not picking an isolated skill.",
+      "craftRecipesTitle": "Recipes and reagents",
+      "craftRecipesBody": "Every craft has its own recipes, each calling for specific reagents you gather or buy. The most basic recipes in each craft ask for nothing but common materials and are craftable from the very start, so you can begin working a trade the moment you pick it up rather than waiting to unlock it.",
+      "craftMasteryTitle": "Skill and mastery",
+      "craftMasteryBody": "Crafting successfully builds skill in that trade, and richer recipes are gated behind higher skill: the basic recipes are open to everyone, while progressively more advanced ones ask for progressively more mastery to attempt. Growing your skill in a craft is the path from simple starter goods to its more ambitious recipes.",
+      "craftComboTitle": "Combination recipes",
+      "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character (or a pair of trading partners) who has invested in adjacent trades on the ring rather than one in isolation.",
+      "archetypeTitle": "The ten archetypes",
+      "archetypeIntro": "Each of the ten crafts also stands for an archetype, a broader identity you can adopt beyond just working that trade. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
+      "archetypeChooseTitle": "Choosing your archetype",
+      "archetypeChooseBody": "You declare your first archetype through an early, zone one story quest that formally accepts you into that identity. Until you complete that quest, you have not yet chosen an archetype at all.",
+      "archetypeSwitchTitle": "Changing your mind",
+      "archetypeSwitchBody": "Having declared an archetype once does not lock you into it forever. Changing to a different archetype means first completing a repeatable \"make amends\" quest for your old one, and each time you switch, the amends expected of you the next time grow a little steeper, so switching stays meaningful rather than costless.",
+      "archetypeIdentityTitle": "What your archetype means",
+      "archetypeIdentityBody": "Your active archetype is a statement about who your character is in the world, recognized in how others and the world address you. The exact rewards and recognition that come with it are still being finalized; check back as the system fills in."
     },
     "economy": {
       "intro": "Tiền bạc bôi trơn cả thế giới: nó mua trang bị, vật phẩm tiếp tế và đồ đi đường của bạn, và đổi tay giữa những người chơi. Bạn nhặt được tất cả những thứ này chỉ bằng cách chơi, nên hãy xem trang này như một bản đồ về nơi tiền của bạn đến từ đâu và đi về đâu.",
@@ -3335,6 +3385,10 @@ export const vi_VN: EnTranslations = {
       "hard": "Chiến lợi phẩm thượng hạng"
     },
     "closeAria": "Đóng"
+  },
+  "heroicShop": {
+    "balance": "Dấu Ấn Anh Hùng: {count}",
+    "buyAria": "Mua {item} với giá {marks} Dấu Ấn Anh Hùng"
   },
   "delveUi": {
     "board": {
@@ -4628,12 +4682,14 @@ export const vi_VN: EnTranslations = {
     "slots": {
       "mainhand": "Tay Chính",
       "helmet": "Mũ Giáp",
+      "neck": "Cổ",
       "shoulder": "Giáp Vai",
       "chest": "Áo Giáp",
       "waist": "Thắt Lưng",
       "legs": "Quần Giáp",
       "gloves": "Găng Tay",
-      "feet": "Giày"
+      "feet": "Giày",
+      "ring": "Ngón Tay"
     },
     "quality": {
       "poor": "Kém",
@@ -6563,6 +6619,132 @@ export const vi_VN: EnTranslations = {
       "event_skin_token": {
         "name": "Rương Trang Phục Bí Ẩn"
       },
+      "heroic_mark": {
+        "name": "Dấu Ấn Anh Hùng"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Áo Giáp Lưới Rèn Hầm Mộ của Morthen"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Quấn Tay Mạch Bóng Tối"
+      },
+      "bonechill_striders": {
+        "name": "Giày Bước Hàn Cốt"
+      },
+      "mistcallers_fang": {
+        "name": "Nanh của Kẻ Gọi Sương"
+      },
+      "tidebound_spaulders": {
+        "name": "Giáp Vai Ràng Buộc Thủy Triều"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Đai Lưng Triều Đình Chìm"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Đại Trượng Triều Nguyệt"
+      },
+      "tidewoven_trousers": {
+        "name": "Quần Dệt Thủy Triều"
+      },
+      "choirmothers_casque": {
+        "name": "Mũ Trụ của Mẹ Hợp Ca"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Đao Phanh Mộ Long"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Vải Liệm Mộ Long"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Găng Kẻ Rình Thánh Đường"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Vương Trượng Triều Đình Bất Tử"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Giáp Chân Lưới Vệ Chiến Bất Tử"
+      },
+      "soulrend_diadem": {
+        "name": "Vương Miện Xé Hồn"
+      },
+      "scourgehide_carapace": {
+        "name": "Giáp Mai Da Tai Ương"
+      },
+      "cryptplate_helm": {
+        "name": "Mũ Giáp Tấm Hầm Mộ"
+      },
+      "shadowpulse_slippers": {
+        "name": "Hài Mạch Bóng Tối"
+      },
+      "bonechill_cord": {
+        "name": "Dây Lưng Hàn Cốt"
+      },
+      "mistforged_pauldrons": {
+        "name": "Giáp Vai Rèn Sương"
+      },
+      "tideguard_faceguard": {
+        "name": "Mũ Che Mặt Vệ Triều"
+      },
+      "sunken_court_mantle": {
+        "name": "Áo Choàng Triều Đình Chìm"
+      },
+      "lunar_choir_leggings": {
+        "name": "Quần Giáp Hợp Ca Nguyệt Quang"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Giáp Vai Hợp Ca Ban Phước"
+      },
+      "tideworn_warboots": {
+        "name": "Chiến Ủng Mòn Sóng"
+      },
+      "gravewyrm_claws": {
+        "name": "Vuốt Mộ Long"
+      },
+      "gravescale_girdle": {
+        "name": "Đai Lưng Vảy Mộ"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Quấn Tay Hợp Ca Long"
+      },
+      "deathless_greatblade": {
+        "name": "Đại Kiếm Bất Tử"
+      },
+      "soulforged_warplate": {
+        "name": "Chiến Giáp Rèn Hồn"
+      },
+      "stormcallers_focus": {
+        "name": "Pháp Khí của Kẻ Gọi Bão"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Ấn Chín Lời Thề"
+      },
+      "nielas_coldlight_band": {
+        "name": "Nhẫn Hàn Quang của Niela"
+      },
+      "sutils_gambit": {
+        "name": "Nước Cờ của Sutil"
+      },
+      "oath_of_the_round_table": {
+        "name": "Lời Thề Bàn Tròn"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Nhẫn Ấn Bất Tử của Zyzz"
+      },
+      "architects_cornerstone": {
+        "name": "Viên Đá Nền của Kiến Trúc Sư"
+      },
+      "swiftfang_talisman": {
+        "name": "Bùa Nanh Thần Tốc"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Mề Đay Kỷ Vật của Yumi"
+      },
+      "zense_meridian": {
+        "name": "Kinh Mạch Zense"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Huy Chương Lợi Nhuận Bất Tận"
+      },
       "deathless_heartwood": {
         "name": "Lõi Gỗ Của Vương Miện Bất Tử"
       },
@@ -7100,6 +7282,11 @@ export const vi_VN: EnTranslations = {
         "name": "Thợ Giáp Hode",
         "title": "Thợ Giáp Bậc Thầy",
         "greeting": "Lò rèn đang nóng và đá mài đang quay. Cái gì chém được, ta bán."
+      },
+      "heroic_quartermaster": {
+        "name": "Quân Nhu Trưởng Vex",
+        "title": "Quân Nhu Trưởng Anh Hùng",
+        "greeting": "Bằng chứng chinh phục những vực sâu Anh Hùng mua được những chiếc nhẫn và mặt dây chuyền tinh xảo nhất Highwatch. Cho ta xem dấu ấn của ngươi."
       },
       "loremaster_caddis": {
         "name": "Sử Gia Caddis",
@@ -8190,12 +8377,14 @@ export const vi_VN: EnTranslations = {
       "crownforged": {
         "name": "Bộ Lễ Phục Bonewrought",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
-        "bonus3": "Tăng sức mạnh thêm 15, thể lực thêm 15 và tốc độ tấn công cùng thi triển thêm 15%."
+        "bonus3": "Tăng sức mạnh thêm 15, thể lực thêm 15 và tốc độ tấn công cùng thi triển thêm 15%.",
+        "bonus4": "Các đòn chí mạng bằng vũ khí của bạn găm Dằm Xương vào mục tiêu, khiến nó chảy máu nhận 8 sát thương mỗi 2 giây trong 12 giây. Cộng dồn tối đa 3 lần."
       },
       "deathlord": {
         "name": "Bộ Chiến Barrowlord",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
-        "bonus3": "Tăng sức mạnh thêm 15 và thể lực thêm 15."
+        "bonus3": "Tăng sức mạnh thêm 15 và thể lực thêm 15.",
+        "bonus4": "Các đòn chí mạng bằng vũ khí của bạn có 50% cơ hội ban Uy Lực Mộ Phần, tăng sức mạnh tấn công thêm 60 trong 10 giây."
       },
       "greyjaw_stalker": {
         "name": "Bộ Kẻ Rình Rập Greyjaw",
@@ -8205,22 +8394,25 @@ export const vi_VN: EnTranslations = {
         "name": "Y Phục Mournweave",
         "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
         "bonus3": "Tăng trí tuệ thêm 10 và thể lực thêm 10.",
-        "bonus4": "Your spells have a chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Các phép của bạn có 10% cơ hội ban Tâm Trí Thông Suốt, khiến phép kế tiếp của bạn được thi triển miễn phí."
       },
       "nighttalon": {
         "name": "Bộ Da Direfang",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
-        "bonus3": "Tăng nhanh nhẹn thêm 15, tỉ lệ chí mạng thêm 2% và tốc độ tấn công cùng thi triển thêm 15%."
+        "bonus3": "Tăng nhanh nhẹn thêm 15, tỉ lệ chí mạng thêm 2% và tốc độ tấn công cùng thi triển thêm 15%.",
+        "bonus4": "Các đòn chí mạng bằng vũ khí của bạn xé ra một Vết Rách Toạc, khiến mục tiêu chảy máu nhận 6 sát thương mỗi 2 giây trong 12 giây. Cộng dồn tối đa 3 lần."
       },
       "soulflame": {
         "name": "Lễ Phục Wraithfire",
         "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
-        "bonus3": "Tăng trí tuệ thêm 15, tinh thần thêm 15 và tốc độ tấn công cùng thi triển thêm 15%."
+        "bonus3": "Tăng trí tuệ thêm 15, tinh thần thêm 15 và tốc độ tấn công cùng thi triển thêm 15%.",
+        "bonus4": "Các phép của bạn có 10% cơ hội ban Hồn Hỏa, tăng sức mạnh phép thuật thêm 40 trong 10 giây."
       },
       "stormcallers": {
         "name": "Áo Lễ Galecall",
         "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
-        "bonus3": "Tăng trí tuệ thêm 15, tinh thần thêm 15 và tốc độ tấn công cùng thi triển thêm 15%."
+        "bonus3": "Tăng trí tuệ thêm 15, tinh thần thêm 15 và tốc độ tấn công cùng thi triển thêm 15%.",
+        "bonus4": "Các phép của bạn có 10% cơ hội ban Hồn Hỏa, tăng sức mạnh phép thuật thêm 40 trong 10 giây."
       },
       "vale_arcanist": {
         "name": "Bộ Arcanist Thung Khê",
@@ -8229,7 +8421,8 @@ export const vi_VN: EnTranslations = {
       "wyrmshadow": {
         "name": "Áo Lễ Nightfang",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
-        "bonus3": "Tăng nhanh nhẹn thêm 15 và tỉ lệ chí mạng thêm 2%."
+        "bonus3": "Tăng nhanh nhẹn thêm 15 và tỉ lệ chí mạng thêm 2%.",
+        "bonus4": "Các đòn chí mạng bằng vũ khí của bạn có 50% cơ hội ban Cuồng Nanh, tăng tốc độ tấn công thêm 25% trong 8 giây."
       }
     }
   },

@@ -368,7 +368,9 @@ export const de_DE: EnTranslations = {
       "hoursMinutes": "{h}Std {m}Min",
       "minutes": "{m}Min",
       "lessThanMinute": "<1Min",
-      "lockedToast": "Du bist für {raid} gesperrt. Freischaltung in {time}."
+      "lockedToast": "Du bist für {raid} gesperrt. Freischaltung in {time}.",
+      "heroicName": "Heroisch {name}",
+      "heroicLocked": "Du bist für Heroisch {name} gesperrt."
     },
     "compass": {
       "N": "N",
@@ -661,8 +663,8 @@ export const de_DE: EnTranslations = {
       "fromYour": "Von deinen {value} Punkten {stat}:",
       "names": {
         "spellPower": "Zaubermacht",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Kritische Trefferwertung",
+        "hasteRating": "Tempowertung"
       },
       "desc": {
         "str": "Erhöht deine Angriffskraft, sodass deine Waffenschläge härter treffen.",
@@ -676,8 +678,8 @@ export const de_DE: EnTranslations = {
         "dps": "Dein geschätzter Waffenschaden pro Sekunde, der Schaden und Geschwindigkeit deiner Waffe mit deiner Angriffskraft verbindet.",
         "critChance": "Deine Chance, dass ein Angriff kritisch trifft und doppelten Schaden verursacht.",
         "dodge": "Deine Chance, einem eingehenden Nahkampfangriff vollständig auszuweichen und keinen Schaden zu erleiden.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Kritische Trefferwertung aus deiner Ausrüstung und deinen Setboni, die deine kritische Trefferchance erhöht. Etwa 10 Wertung gewähren 1% kritische Trefferchance.",
+        "hasteRating": "Tempowertung aus deiner Ausrüstung und deinen Setboni, die deine Angriffe und dein Zaubern beschleunigt. Etwa 10 Wertung gewähren 1% Tempo."
       },
       "effects": {
         "attackPower": "+{value} Angriffskraft",
@@ -719,13 +721,13 @@ export const de_DE: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Chance bei Treffer ({chance}%): {effect}",
+      "onSpellDamage": "Chance bei euren schädigenden Zaubern ({chance}%): {effect}",
+      "onHeal": "Chance bei euren Heilungen ({chance}%): {effect}",
+      "chainArc": "trifft das Ziel mit einem {school} {name} ({damage}), der auf {jumps} nahe Gegner mit abnehmendem Schaden überspringt",
+      "attackSlow": "und verlangsamt das Angriffstempo des Ziels {duration} Sek. lang um {pct}%",
+      "dot": "lässt {name} schwären, einen {school} Schaden über Zeit, der {total} über {duration} Sek. verursacht",
+      "hot": "entfaltet {name}, eine Heilung über Zeit, die {total} über {duration} Sek. wiederherstellt"
     },
     "questShare": {
       "notShareable": "Diese Quest kann nicht geteilt werden.",
@@ -929,9 +931,13 @@ export const de_DE: EnTranslations = {
       "leaderOption": "Plündermeister: Anführer (Du)",
       "masterOption": "Plündermeister: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Dungeon-Schwierigkeit festlegen: Heroisch",
+      "setNormal": "Dungeon-Schwierigkeit festlegen: Normal"
+    },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Dieser Gegenstand kann nicht zerstört werden.",
+      "rightClickDestroy": "Rechtsklick zum Zerstören",
       "filterGroupAria": "Taschen nach Kategorie filtern",
       "filterAll": "Alle",
       "filterWeapon": "Waffen",
@@ -1147,7 +1153,7 @@ export const de_DE: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
-        "coredevs": "Core Dev",
+        "coredevs": "Kernentwickler",
         "devs": "Entwickler",
         "mods": "Mod",
         "artists": "Künstler"
@@ -1357,6 +1363,20 @@ export const de_DE: EnTranslations = {
       "logging": "Holzfällen",
       "herbalism": "Kräuterkunde"
     },
+    "archetypeTitle": {
+      "label": "Titel",
+      "none": "Keiner",
+      "armorcrafting": "Rüstungsschmied",
+      "weaponcrafting": "Waffenschmied",
+      "jewelcrafting": "Juwelier",
+      "alchemy": "Alchemist",
+      "engineering": "Ingenieur",
+      "cooking": "Koch",
+      "inscription": "Schreiber",
+      "enchanting": "Verzauberer",
+      "tailoring": "Schneider",
+      "leatherworking": "Gerber"
+    },
     "crafting": {
       "title": "Basteln",
       "close": "Enges Basteln",
@@ -1368,7 +1388,7 @@ export const de_DE: EnTranslations = {
       "craftedToast": "Hergestellt: {name}",
       "insufficientMaterials": "Dafür fehlen Ihnen die Materialien.",
       "unknownRecipe": "Dieses Rezept existiert nicht.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "Ihr besitzt nicht beide erforderlichen Berufe auf der nötigen Stufe für dieses Rezept."
     }
   },
   "apiError": {
@@ -1475,6 +1495,7 @@ export const de_DE: EnTranslations = {
       "bestiary": "Bestiarium",
       "models": "3D-Modelle",
       "gear": "Ausrüstung und Gegenstände",
+      "professions": "Professions",
       "economy": "Wirtschaft und Handel",
       "social": "Soziales und Gruppen",
       "stats": "Charakter und Werte",
@@ -2254,6 +2275,35 @@ export const de_DE: EnTranslations = {
       "cosmeticsSkins": "Es gibt zwei kosmetische Linien zum Sammeln. Die meisten Klassen haben mehrere alternative Aussehen, eine frische Auslegung des Klassen-Looks, die allein dir zum Tragen gehört. Daneben stehen Chromas: benannte Zweiton-Farbschemata, die ein Aussehen vollständig neu einfärben, von schlichten Metallen bis zu leuchtenden imperialen Farben.",
       "cosmeticsCache": "Einige davon stammen aus einer geheimnisvollen kosmetischen Truhe, einem versiegelten Preis, der beim Öffnen eine von drei Qualitätsstufen auswürfelt und dir das passende Aussehen verleiht. Es geht rein um die Optik: Nichts darin macht dich stärker, nur schöner anzusehen.",
       "cosmeticsApply": "Lege dein aktives Aussehen in der Aussehen-Zeile auf deinem Charakterbildschirm fest und wechsle frei zwischen allem, was du freigeschaltet hast."
+    },
+    "professions": {
+      "intro": "Beyond combat and quests, the world rewards you for working the land and the forge: gathering raw materials, turning them into gear at the crafting stations of ten different trades, and settling into an identity as one of the ten archetypes those trades represent.",
+      "gatherTitle": "Gathering: Mining, Logging, and Herbalism",
+      "gatherIntro": "Three gathering trades let you pull raw materials straight out of the world: Mining strikes ore and stone from veins, Logging fells timber from stands of trees, and Herbalism collects herbs and plants growing wild. Each is tracked separately, so working one never slows your progress in another.",
+      "gatherWhatTitle": "Resource nodes",
+      "gatherWhatBody": "Ore veins, wood stands, and herb patches are placed out in the zones as visible, unowned fixtures. Walk up to one and interact with it to harvest whatever it holds. Once you have harvested a node, it needs time to recover before you personally can harvest it again, though it never blocks anyone else: another player can harvest the very same node in the meantime.",
+      "gatherProficiencyTitle": "Proficiency and material quality",
+      "gatherProficiencyBody": "Every successful harvest builds your proficiency in that gathering trade. A higher proficiency shifts what you pull out of a node toward rarer grades of material, from common on up, though the rarest grades stay rare even at high proficiency. More practice never hurts your odds, it only ever improves them.",
+      "gatherToolsTitle": "Tools of the trade",
+      "gatherToolsBody": "Vendors sell basic tools for each gathering trade, and better ones can be crafted, so working a resource node is meant to feel more capable as you gear up for it rather than staying static. Higher-tier tools are the intended way to unlock access to richer nodes and to work them more efficiently over a long session.",
+      "craftTitle": "The ten crafts",
+      "craftIntro": "Ten crafting trades turn gathered materials into finished gear and goods: Armorcrafting, Weaponcrafting, and Jewelcrafting shape raw matter into wearable gear; Alchemy and Engineering are driven by trial and error; Cooking, Inscription, and Enchanting each touch other crafts' output; Tailoring and Leatherworking work from exact patterns. Together they form a wheel, with each craft sitting next to two neighbors and opposite one other.",
+      "craftRingTitle": "A wheel of specialties",
+      "craftRingBody": "The ten crafts are arranged in a fixed ring, and where a craft sits on that ring matters: crafts next to each other on the wheel share more in common with each other than crafts on opposite sides do. Committing to one craft is meant to feel like joining a family of related trades, not picking an isolated skill.",
+      "craftRecipesTitle": "Recipes and reagents",
+      "craftRecipesBody": "Every craft has its own recipes, each calling for specific reagents you gather or buy. The most basic recipes in each craft ask for nothing but common materials and are craftable from the very start, so you can begin working a trade the moment you pick it up rather than waiting to unlock it.",
+      "craftMasteryTitle": "Skill and mastery",
+      "craftMasteryBody": "Crafting successfully builds skill in that trade, and richer recipes are gated behind higher skill: the basic recipes are open to everyone, while progressively more advanced ones ask for progressively more mastery to attempt. Growing your skill in a craft is the path from simple starter goods to its more ambitious recipes.",
+      "craftComboTitle": "Combination recipes",
+      "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character (or a pair of trading partners) who has invested in adjacent trades on the ring rather than one in isolation.",
+      "archetypeTitle": "The ten archetypes",
+      "archetypeIntro": "Each of the ten crafts also stands for an archetype, a broader identity you can adopt beyond just working that trade. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
+      "archetypeChooseTitle": "Choosing your archetype",
+      "archetypeChooseBody": "You declare your first archetype through an early, zone one story quest that formally accepts you into that identity. Until you complete that quest, you have not yet chosen an archetype at all.",
+      "archetypeSwitchTitle": "Changing your mind",
+      "archetypeSwitchBody": "Having declared an archetype once does not lock you into it forever. Changing to a different archetype means first completing a repeatable \"make amends\" quest for your old one, and each time you switch, the amends expected of you the next time grow a little steeper, so switching stays meaningful rather than costless.",
+      "archetypeIdentityTitle": "What your archetype means",
+      "archetypeIdentityBody": "Your active archetype is a statement about who your character is in the world, recognized in how others and the world address you. The exact rewards and recognition that come with it are still being finalized; check back as the system fills in."
     },
     "economy": {
       "intro": "Münzen halten die ganze Welt in Schwung: Sie kaufen deine Ausrüstung, Vorräte und dein Reisegerät und wechseln zwischen Spielern den Besitzer. All das sammelst du ganz nebenbei beim Spielen ein, sieh diese Seite also als eine Karte, woher dein Geld kommt und wohin es geht.",
@@ -3335,6 +3385,10 @@ export const de_DE: EnTranslations = {
       "hard": "Erlesene Beute"
     },
     "closeAria": "Schließen"
+  },
+  "heroicShop": {
+    "balance": "Heroische Marken: {count}",
+    "buyAria": "{item} für {marks} Heroische Marken kaufen"
   },
   "delveUi": {
     "board": {
@@ -4628,12 +4682,14 @@ export const de_DE: EnTranslations = {
     "slots": {
       "mainhand": "Waffenhand",
       "helmet": "Kopf",
+      "neck": "Hals",
       "shoulder": "Schultern",
       "chest": "Brust",
       "waist": "Taille",
       "legs": "Beine",
       "gloves": "Hände",
-      "feet": "Füße"
+      "feet": "Füße",
+      "ring": "Finger"
     },
     "quality": {
       "poor": "Schlecht",
@@ -6563,6 +6619,132 @@ export const de_DE: EnTranslations = {
       "event_skin_token": {
         "name": "Geheimnisvolle Kosmetiktruhe"
       },
+      "heroic_mark": {
+        "name": "Heroische Marke"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Morthens gruftgeschmiedetes Kettenhemd"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Schattenpuls-Handwickel"
+      },
+      "bonechill_striders": {
+        "name": "Knochenfrost-Schreiter"
+      },
+      "mistcallers_fang": {
+        "name": "Fangzahn des Nebelrufers"
+      },
+      "tidebound_spaulders": {
+        "name": "Flutgebundene Schulterstücke"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Schärpe des Versunkenen Hofes"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Großstab der Mondflut"
+      },
+      "tidewoven_trousers": {
+        "name": "Flutgewebte Beinkleider"
+      },
+      "choirmothers_casque": {
+        "name": "Helm der Chormutter"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Grabwyrm-Spalter"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Leichentuch des Grabwyrms"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Griffe des Sanktum-Pirschers"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Zepter des Todlosen Hofes"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Todlose Beinkette der Kriegswache"
+      },
+      "soulrend_diadem": {
+        "name": "Seelenriss-Diadem"
+      },
+      "scourgehide_carapace": {
+        "name": "Geißelhaut-Panzer"
+      },
+      "cryptplate_helm": {
+        "name": "Gruftplatten-Helm"
+      },
+      "shadowpulse_slippers": {
+        "name": "Schattenpuls-Schuhe"
+      },
+      "bonechill_cord": {
+        "name": "Knochenfrost-Kordel"
+      },
+      "mistforged_pauldrons": {
+        "name": "Nebelgeschmiedete Schulterstücke"
+      },
+      "tideguard_faceguard": {
+        "name": "Gesichtsschutz der Flutwache"
+      },
+      "sunken_court_mantle": {
+        "name": "Umhang des Versunkenen Hofes"
+      },
+      "lunar_choir_leggings": {
+        "name": "Mondchor-Beinschienen"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Chorgesegnete Schulterstücke"
+      },
+      "tideworn_warboots": {
+        "name": "Flutzerschlissene Kriegsstiefel"
+      },
+      "gravewyrm_claws": {
+        "name": "Grabwyrm-Klauen"
+      },
+      "gravescale_girdle": {
+        "name": "Grabschuppen-Gürtel"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Wyrmchor-Handwickel"
+      },
+      "deathless_greatblade": {
+        "name": "Todlose Großklinge"
+      },
+      "soulforged_warplate": {
+        "name": "Seelengeschmiedete Kriegsplatte"
+      },
+      "stormcallers_focus": {
+        "name": "Fokus des Sturmrufers"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Siegel der Neun Eide"
+      },
+      "nielas_coldlight_band": {
+        "name": "Nielas Kaltlicht-Reif"
+      },
+      "sutils_gambit": {
+        "name": "Sutils Gambit"
+      },
+      "oath_of_the_round_table": {
+        "name": "Eid der Tafelrunde"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Zyzz' Todloser Siegelring"
+      },
+      "architects_cornerstone": {
+        "name": "Der Grundstein des Architekten"
+      },
+      "swiftfang_talisman": {
+        "name": "Schnellzahn-Talisman"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Yumis Andenken-Medaillon"
+      },
+      "zense_meridian": {
+        "name": "Zense-Meridian"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Medaillon des endlosen Profits"
+      },
       "deathless_heartwood": {
         "name": "Herzholz der todlosen Krone"
       },
@@ -7100,6 +7282,11 @@ export const de_DE: EnTranslations = {
         "name": "Rüstungsschmied Hode",
         "title": "Meisterrüster",
         "greeting": "Die Esse ist heiß und der Schleifstein dreht sich. Wenn es schneidet, verkaufe ich es."
+      },
+      "heroic_quartermaster": {
+        "name": "Quartiermeister Vex",
+        "title": "Heroischer Quartiermeister",
+        "greeting": "Ein Beweis aus den heroischen Tiefen kauft die feinsten Ringe und Anhänger in Highwatch. Zeig mir deine Marken."
       },
       "loremaster_caddis": {
         "name": "Lehrmeister Caddis",
@@ -8190,12 +8377,14 @@ export const de_DE: EnTranslations = {
       "crownforged": {
         "name": "Bonewrought-Kriegstracht",
         "bonus2": "Erhöht Angriffskraft um 40.",
-        "bonus3": "Erhöht Stärke um 15, Ausdauer um 15 sowie Angriffs- und Zaubertempo um 15%."
+        "bonus3": "Erhöht Stärke um 15, Ausdauer um 15 sowie Angriffs- und Zaubertempo um 15%.",
+        "bonus4": "Eure kritischen Waffentreffer zersplittern das Ziel mit Knochensplitter und lassen es 12 Sek. lang alle 2 Sek. 8 Schaden bluten. Stapelt sich bis zu 3-mal."
       },
       "deathlord": {
         "name": "Barrowlord-Kriegstracht",
         "bonus2": "Erhöht Angriffskraft um 40.",
-        "bonus3": "Erhöht Stärke um 15 und Ausdauer um 15."
+        "bonus3": "Erhöht Stärke um 15 und Ausdauer um 15.",
+        "bonus4": "Eure kritischen Waffentreffer haben eine Chance von 50%, Grabesmacht zu gewähren, was die Angriffskraft 10 Sek. lang um 60 erhöht."
       },
       "greyjaw_stalker": {
         "name": "Ausrüstung des Greyjaw-Pirschers",
@@ -8205,22 +8394,25 @@ export const de_DE: EnTranslations = {
         "name": "Mournweave-Gewänder",
         "bonus2": "Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).",
         "bonus3": "Erhöht Intelligenz um 10 und Ausdauer um 10.",
-        "bonus4": "Your spells have a chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Eure Zauber haben eine Chance von 10%, Klarsicht zu gewähren, wodurch euer nächster Zauber kostenlos wird."
       },
       "nighttalon": {
         "name": "Direfang-Pelz",
         "bonus2": "Erhöht Angriffskraft um 40.",
-        "bonus3": "Erhöht Beweglichkeit um 15, kritische Trefferchance um 2% sowie Angriffs- und Zaubertempo um 15%."
+        "bonus3": "Erhöht Beweglichkeit um 15, kritische Trefferchance um 2% sowie Angriffs- und Zaubertempo um 15%.",
+        "bonus4": "Eure kritischen Waffentreffer reißen eine Zerfetzte Wunde und lassen das Ziel 12 Sek. lang alle 2 Sek. 6 Schaden bluten. Stapelt sich bis zu 3-mal."
       },
       "soulflame": {
         "name": "Wraithfire-Gewänder",
         "bonus2": "Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).",
-        "bonus3": "Erhöht Intelligenz um 15, Willenskraft um 15 sowie Angriffs- und Zaubertempo um 15%."
+        "bonus3": "Erhöht Intelligenz um 15, Willenskraft um 15 sowie Angriffs- und Zaubertempo um 15%.",
+        "bonus4": "Eure Zauber haben eine Chance von 10%, Seelenbrand zu gewähren, was die Zaubermacht 10 Sek. lang um 40 erhöht."
       },
       "stormcallers": {
         "name": "Galecall-Gewänder",
         "bonus2": "Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).",
-        "bonus3": "Erhöht Intelligenz um 15, Willenskraft um 15 sowie Angriffs- und Zaubertempo um 15%."
+        "bonus3": "Erhöht Intelligenz um 15, Willenskraft um 15 sowie Angriffs- und Zaubertempo um 15%.",
+        "bonus4": "Eure Zauber haben eine Chance von 10%, Seelenbrand zu gewähren, was die Zaubermacht 10 Sek. lang um 40 erhöht."
       },
       "vale_arcanist": {
         "name": "Ornat des Talarkanisten",
@@ -8229,7 +8421,8 @@ export const de_DE: EnTranslations = {
       "wyrmshadow": {
         "name": "Nightfang-Gewänder",
         "bonus2": "Erhöht Angriffskraft um 40.",
-        "bonus3": "Erhöht Beweglichkeit um 15 und kritische Trefferchance um 2%."
+        "bonus3": "Erhöht Beweglichkeit um 15 und kritische Trefferchance um 2%.",
+        "bonus4": "Eure kritischen Waffentreffer haben eine Chance von 50%, Fangrausch zu gewähren, was das Angriffstempo 8 Sek. lang um 25% erhöht."
       }
     }
   },

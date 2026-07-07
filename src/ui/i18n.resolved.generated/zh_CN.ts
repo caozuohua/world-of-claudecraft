@@ -368,7 +368,9 @@ export const zh_CN: EnTranslations = {
       "hoursMinutes": "{h}小时{m}分",
       "minutes": "{m}分",
       "lessThanMinute": "<1分",
-      "lockedToast": "你已锁定到{raid}。{time}后解锁。"
+      "lockedToast": "你已锁定到{raid}。{time}后解锁。",
+      "heroicName": "英雄难度：{name}",
+      "heroicLocked": "你已被锁定至英雄难度的{name}。"
     },
     "compass": {
       "N": "北",
@@ -532,7 +534,7 @@ export const zh_CN: EnTranslations = {
     "options": {
       "clickMoveLeft": "左键",
       "clickMoveRight": "右键",
-      "version": "v{version} ({build})",
+      "version": "v{version}（{build}）",
       "browserEffects": "浏览器特效",
       "browserEffectsAuto": "自动",
       "browserEffectsFull": "完整",
@@ -929,6 +931,10 @@ export const zh_CN: EnTranslations = {
       "leaderOption": "分配者：队长（你）",
       "masterOption": "分配者：{name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "设置地下城难度：英雄",
+      "setNormal": "设置地下城难度：普通"
+    },
     "bags": {
       "cannotDestroy": "该物品无法销毁。",
       "rightClickDestroy": "右键单击以销毁",
@@ -1147,7 +1153,7 @@ export const zh_CN: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "管理员",
-        "coredevs": "Core Dev",
+        "coredevs": "核心开发者",
         "devs": "开发者",
         "mods": "管理员",
         "artists": "画师"
@@ -1357,6 +1363,20 @@ export const zh_CN: EnTranslations = {
       "logging": "伐木",
       "herbalism": "草药学"
     },
+    "archetypeTitle": {
+      "label": "称号",
+      "none": "无",
+      "armorcrafting": "锻甲师",
+      "weaponcrafting": "武器匠",
+      "jewelcrafting": "珠宝匠",
+      "alchemy": "炼金师",
+      "engineering": "工程师",
+      "cooking": "厨师",
+      "inscription": "铭文师",
+      "enchanting": "附魔师",
+      "tailoring": "裁缝",
+      "leatherworking": "制皮师"
+    },
     "crafting": {
       "title": "制作",
       "close": "关闭制作",
@@ -1475,6 +1495,7 @@ export const zh_CN: EnTranslations = {
       "bestiary": "生物图鉴",
       "models": "3D 模型",
       "gear": "装备与物品",
+      "professions": "专业",
       "economy": "经济与交易",
       "social": "社交与组队",
       "stats": "角色与属性",
@@ -2254,6 +2275,35 @@ export const zh_CN: EnTranslations = {
       "cosmeticsSkins": "有两条外观线可供收集。大多数职业都有几款备选外观，是对该职业造型的全新演绎，专属于你、可供穿戴。与之相伴的还有炫彩：那是一组组带名号的双色配色方案，能将外观彻底重涂，从素雅的金属色到明艳的帝王色，应有尽有。",
       "cosmeticsCache": "其中少数来自一个神秘的外观宝箱，那是一份封缄的奖励，开启时会随机滚出三种品质等级中的一种，并授予与之匹配的外观。它纯粹为了好看：里面没有任何东西能让你变强，只会让你更赏心悦目。",
       "cosmeticsApply": "在角色界面的外观一栏设置你当前的造型，并在已解锁的所有外观之间自由切换。"
+    },
+    "professions": {
+      "intro": "除了战斗和任务之外，这个世界还会奖励你耕耘土地与锻造：采集原材料，在十种不同行业的制作站中将其打造成装备，并在这些行业所代表的十种命途之一中确立自己的身份。",
+      "gatherTitle": "采集：采矿、伐木与草药学",
+      "gatherIntro": "三种采集行业让你从世界中直接获取原材料：采矿从矿脉中开采矿石与石料，伐木从林地中砍伐木材，草药学采集野生生长的草药与植物。三者分别计算进度，从事其中一项不会拖慢你在另一项上的进展。",
+      "gatherWhatTitle": "资源节点",
+      "gatherWhatBody": "矿脉、林地与药草丛作为可见、无主的地物分布在各个区域中。走近并与之互动即可采集其中的资源。采集过一个节点后，它需要一段时间才能恢复供你本人再次采集，但这从不会阻挡其他玩家：其他人可以在此期间采集同一个节点。",
+      "gatherProficiencyTitle": "熟练度与材料品质",
+      "gatherProficiencyBody": "每次成功采集都会提升你在该采集行业的熟练度。更高的熟练度会让你从节点中获得更稀有品级材料的几率提高，从普通往上依次递增，不过最稀有的品级即便在高熟练度下依然稀少。多加练习永远不会降低你的几率，只会不断提升它。",
+      "gatherToolsTitle": "行业工具",
+      "gatherToolsBody": "商人出售各采集行业的基础工具，更好的工具则可以被制作出来，因此为节点采集做准备应当让人感觉自己在不断变强，而不是原地踏步。更高级的工具是解锁更丰富节点、并在长时间游玩中更高效采集的既定途径。",
+      "craftTitle": "十大制作行业",
+      "craftIntro": "十种制作行业将采集到的材料转化为成品装备与物品：制甲、制械与珠宝加工将原材料塑形为可穿戴装备；炼金术与工程学依靠反复试验；烹饪、铭文与附魔各自作用于其他行业的产出；裁缝与制皮则依照精确的图样进行。它们共同构成一个轮环，每种行业都与两个邻居相邻，并与另一种行业相对。",
+      "craftRingTitle": "专精之轮",
+      "craftRingBody": "十种行业排列在一个固定的轮环上，行业在轮环上的位置很重要：相邻的行业彼此之间的共通之处比处于对面的行业更多。专注于一种行业应当让人感觉像是加入了一个相关行业组成的家族，而不是选择了一项孤立的技能。",
+      "craftRecipesTitle": "配方与材料",
+      "craftRecipesBody": "每种行业都有自己的配方，各自需要你采集或购买的特定材料。每种行业中最基础的配方只需要普通材料即可制作，从一开始就可以上手，因此你拿起一门行业后即可立刻开始制作，而无需等待解锁。",
+      "craftMasteryTitle": "技能与精通",
+      "craftMasteryBody": "成功制作会提升你在该行业的技能，而更丰富的配方需要更高的技能才能解锁：基础配方对所有人开放，而越进阶的配方则需要越高的精通程度才能尝试。提升你在某行业的技能，是从简单的入门物品通往其更具野心的配方的必经之路。",
+      "craftComboTitle": "组合配方",
+      "craftComboBody": "除了单一行业自身的配方列表之外，这个轮环还支持需要同时调用两个相邻行业的组合配方，用以奖励那些（或是一对交易伙伴）投入了轮环上相邻行业的角色，而非只专精孤立的一项。",
+      "archetypeTitle": "十大命途",
+      "archetypeIntro": "十种行业各自也代表一种命途，一种超越单纯从事该行业本身的更广阔身份。你的当前命途一次只能有一个，而非一份清单：你只承载一个命途，但如果愿意，之后可以更改。",
+      "archetypeChooseTitle": "选择你的命途",
+      "archetypeChooseBody": "你需要通过第一区域中一个正式接纳你进入该身份的早期剧情任务，来宣告你的第一个命途。在完成该任务之前，你尚未选择任何命途。",
+      "archetypeSwitchTitle": "回心转意",
+      "archetypeSwitchBody": "一旦宣告过一种命途，并不意味着你会永远被束缚其中。改换成另一种命途，需要先为你的旧命途完成一个可重复的赎罪任务，而且每次转换后，下一次所需的赎罪都会略微加重，因此转换命途始终有意义，而不是毫无代价。",
+      "archetypeIdentityTitle": "你的命途意味着什么",
+      "archetypeIdentityBody": "你当前的命途，是关于你的角色在这个世界中是谁的一种宣告，会体现在他人与世界如何称呼你之中。它所附带的具体奖励与认可仍在完善之中；请随着系统的完善持续关注。"
     },
     "economy": {
       "intro": "钱币让整个世界运转：它能购买你的装备、补给与旅行用具，还能在玩家之间易手。这一切只需游玩便能逐渐到手，所以不妨把本页看作一张地图，标明你的钱从何而来、又向何处去。",
@@ -3335,6 +3385,10 @@ export const zh_CN: EnTranslations = {
       "hard": "顶级战利品"
     },
     "closeAria": "关闭"
+  },
+  "heroicShop": {
+    "balance": "英雄徽记: {count}",
+    "buyAria": "用{marks}枚英雄徽记购买{item}"
   },
   "delveUi": {
     "board": {
@@ -4628,12 +4682,14 @@ export const zh_CN: EnTranslations = {
     "slots": {
       "mainhand": "主手",
       "helmet": "头部",
+      "neck": "颈部",
       "shoulder": "肩部",
       "chest": "胸部",
       "waist": "腰部",
       "legs": "腿部",
       "gloves": "手部",
-      "feet": "脚部"
+      "feet": "脚部",
+      "ring": "手指"
     },
     "quality": {
       "poor": "粗糙",
@@ -6563,6 +6619,132 @@ export const zh_CN: EnTranslations = {
       "event_skin_token": {
         "name": "神秘外观宝箱"
       },
+      "heroic_mark": {
+        "name": "英雄徽记"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "莫尔森的墓铸锁甲"
+      },
+      "shadowpulse_handwraps": {
+        "name": "暗影脉冲裹手"
+      },
+      "bonechill_striders": {
+        "name": "骨寒行者之靴"
+      },
+      "mistcallers_fang": {
+        "name": "唤雾者之牙"
+      },
+      "tidebound_spaulders": {
+        "name": "缚潮护肩"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "沉没王庭腰带"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "月潮巨杖"
+      },
+      "tidewoven_trousers": {
+        "name": "织潮长裤"
+      },
+      "choirmothers_casque": {
+        "name": "唱诗圣母的头盔"
+      },
+      "gravewyrm_cleaver": {
+        "name": "墓龙劈斩刀"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "墓龙裹布"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "圣殿潜行者的手套"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "不死王庭权杖"
+      },
+      "deathless_warguard_legmail": {
+        "name": "不死战卫腿甲"
+      },
+      "soulrend_diadem": {
+        "name": "裂魂冠冕"
+      },
+      "scourgehide_carapace": {
+        "name": "灾祸之皮甲壳"
+      },
+      "cryptplate_helm": {
+        "name": "墓板头盔"
+      },
+      "shadowpulse_slippers": {
+        "name": "暗影脉冲便鞋"
+      },
+      "bonechill_cord": {
+        "name": "骨寒腰绳"
+      },
+      "mistforged_pauldrons": {
+        "name": "雾铸肩铠"
+      },
+      "tideguard_faceguard": {
+        "name": "守潮面甲"
+      },
+      "sunken_court_mantle": {
+        "name": "沉没王庭披肩"
+      },
+      "lunar_choir_leggings": {
+        "name": "月唱护腿"
+      },
+      "choir_blessed_spaulders": {
+        "name": "唱诗祝福肩铠"
+      },
+      "tideworn_warboots": {
+        "name": "潮蚀战靴"
+      },
+      "gravewyrm_claws": {
+        "name": "墓龙护爪"
+      },
+      "gravescale_girdle": {
+        "name": "墓鳞腰带"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "龙唱裹手"
+      },
+      "deathless_greatblade": {
+        "name": "不死巨刃"
+      },
+      "soulforged_warplate": {
+        "name": "铸魂战甲"
+      },
+      "stormcallers_focus": {
+        "name": "唤雷之核"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "九誓之印"
+      },
+      "nielas_coldlight_band": {
+        "name": "妮拉的冷光指环"
+      },
+      "sutils_gambit": {
+        "name": "苏蒂尔的赌局"
+      },
+      "oath_of_the_round_table": {
+        "name": "圆桌誓约"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "兹兹的不朽印戒"
+      },
+      "architects_cornerstone": {
+        "name": "建筑师的奠基石"
+      },
+      "swiftfang_talisman": {
+        "name": "迅牙护符"
+      },
+      "yumis_keepsake_locket": {
+        "name": "由美的纪念小盒"
+      },
+      "zense_meridian": {
+        "name": "泽恩斯子午坠"
+      },
+      "medallion_of_endless_profit": {
+        "name": "无尽利润勋章"
+      },
       "deathless_heartwood": {
         "name": "不朽王冠之心木"
       },
@@ -7100,6 +7282,11 @@ export const zh_CN: EnTranslations = {
         "name": "霍德护甲匠",
         "title": "护甲大师",
         "greeting": "炉火正旺，砂轮正转。能砍的东西，我都卖。"
+      },
+      "heroic_quartermaster": {
+        "name": "军需官维克斯",
+        "title": "英雄军需官",
+        "greeting": "英雄深渊的凭证能换来高崖望最上等的戒指和吊坠。把你的徽记拿给我看。"
       },
       "loremaster_caddis": {
         "name": "凯迪斯博学者",
@@ -8190,12 +8377,14 @@ export const zh_CN: EnTranslations = {
       "crownforged": {
         "name": "骨铸战装",
         "bonus2": "攻击强度提高 40 点。",
-        "bonus3": "力量提高 15 点，耐力提高 15 点，攻击速度和施法速度提高 15%。"
+        "bonus3": "力量提高 15 点，耐力提高 15 点，攻击速度和施法速度提高 15%。",
+        "bonus4": "你的武器致命一击会使目标产生“骨刺”，每 2 秒流血 8 点伤害，持续 12 秒。最多叠加 3 层。"
       },
       "deathlord": {
         "name": "冢主战甲",
         "bonus2": "攻击强度提高 40 点。",
-        "bonus3": "力量提高 15 点，耐力提高 15 点。"
+        "bonus3": "力量提高 15 点，耐力提高 15 点。",
+        "bonus4": "你的武器致命一击有 50% 的几率触发“墓冢之力”，使攻击强度提高 60 点，持续 10 秒。"
       },
       "greyjaw_stalker": {
         "name": "灰颚追猎者装备",
@@ -8205,22 +8394,25 @@ export const zh_CN: EnTranslations = {
         "name": "哀织法衣",
         "bonus2": "你不会被击退（击退抗性 100%）。",
         "bonus3": "智力提高 10 点，耐力提高 10 点。",
-        "bonus4": "你的法术有几率触发“清晰施法”，使你的下一个法术免费施放。"
+        "bonus4": "你的法术有 10% 的几率触发“清晰施法”，使你的下一个法术免费施放。"
       },
       "nighttalon": {
         "name": "恐牙皮甲",
         "bonus2": "攻击强度提高 40 点。",
-        "bonus3": "敏捷提高 15 点，致命一击几率提高 2%，攻击速度和施法速度提高 15%。"
+        "bonus3": "敏捷提高 15 点，致命一击几率提高 2%，攻击速度和施法速度提高 15%。",
+        "bonus4": "你的武器致命一击会撕开“撕裂伤口”，使目标每 2 秒流血 6 点伤害，持续 12 秒。最多叠加 3 层。"
       },
       "soulflame": {
         "name": "魂焰法衣",
         "bonus2": "你不会被击退（击退抗性 100%）。",
-        "bonus3": "智力提高 15 点，精神提高 15 点，攻击速度和施法速度提高 15%。"
+        "bonus3": "智力提高 15 点，精神提高 15 点，攻击速度和施法速度提高 15%。",
+        "bonus4": "你的法术有 10% 的几率触发“灼魂之焰”，使法术强度提高 40 点，持续 10 秒。"
       },
       "stormcallers": {
         "name": "唤风法衣",
         "bonus2": "你不会被击退（击退抗性 100%）。",
-        "bonus3": "智力提高 15 点，精神提高 15 点，攻击速度和施法速度提高 15%。"
+        "bonus3": "智力提高 15 点，精神提高 15 点，攻击速度和施法速度提高 15%。",
+        "bonus4": "你的法术有 10% 的几率触发“灼魂之焰”，使法术强度提高 40 点，持续 10 秒。"
       },
       "vale_arcanist": {
         "name": "谷地秘法师法衣",
@@ -8229,7 +8421,8 @@ export const zh_CN: EnTranslations = {
       "wyrmshadow": {
         "name": "夜牙法衣",
         "bonus2": "攻击强度提高 40 点。",
-        "bonus3": "敏捷提高 15 点，致命一击几率提高 2%。"
+        "bonus3": "敏捷提高 15 点，致命一击几率提高 2%。",
+        "bonus4": "你的武器致命一击有 50% 的几率触发“獠牙疾袭”，使攻击速度提高 25%，持续 8 秒。"
       }
     }
   },

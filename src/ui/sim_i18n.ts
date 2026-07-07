@@ -169,6 +169,11 @@ const baseEnTable = {
   'presence.dndDefault': 'Do Not Disturb',
   'log.channelJoined': 'Joined the {channel} channel. Type /{channel} <message> to talk.',
   'log.channelLeft': 'Left the {channel} channel.',
+  'log.dungeonDifficultyHeroic': 'Dungeon difficulty set to Heroic.',
+  'log.dungeonDifficultyNormal': 'Dungeon difficulty set to Normal.',
+  'log.dungeonDifficultyIsHeroic': 'Dungeon difficulty: Heroic. Use /dungeon normal to change it.',
+  'log.dungeonDifficultyIsNormal': 'Dungeon difficulty: Normal. Use /dungeon heroic to change it.',
+  'error.heroicMarksNeeded': 'You need {marks} Heroic Marks to buy {name}.',
   'error.channelUsage': 'Usage: /{action} <channel>. Channels: {list}.',
   'error.generalAlwaysOn': 'The General channel is always on - just use /general.',
   'error.noSuchChannel': "There is no channel named '{name}'. Channels: {list}.",
@@ -242,6 +247,13 @@ const baseEnTable = {
   'aura.feedingFrenzy': 'Feeding Frenzy',
   'aura.demoralized': 'Demoralized',
   'aura.resurrectionSickness': "The Keeper's Toll",
+  // 4-piece set-bonus proc buffs (src/sim/content/item_sets.ts SetProc names).
+  'aura.clearcasting': 'Clearcasting',
+  'aura.gravemight': 'Gravemight',
+  'aura.fangrush': 'Fangrush',
+  'aura.bonesplinter': 'Bonesplinter',
+  'aura.raggedGash': 'Ragged Gash',
+  'aura.soulblaze': 'Soulblaze',
 } as const;
 
 const petEnTable = {
@@ -463,6 +475,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.resurrectionSickness': "The Keeper's Toll",
   },
   es: {
+    'error.heroicMarksNeeded': 'Necesitas {marks} Marcas Heroicas para comprar {name}.',
     'groundPickup.supplyCrateDeny': 'El cajón está cerrado con clavos.',
     'groundPickup.gravecallerSigilDeny': 'El sigilo repele tu tacto.',
     'groundPickup.ledgerPageDeny':
@@ -681,6 +694,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.elixirBear': 'Poder del Oso',
   },
   es_ES: {
+    'error.heroicMarksNeeded': 'Necesitas {marks} Marcas Heroicas para comprar {name}.',
     'groundPickup.supplyCrateDeny': 'El cajón está cerrado con clavos.',
     'groundPickup.gravecallerSigilDeny': 'El sigilo repele tu contacto.',
     'groundPickup.ledgerPageDeny':
@@ -899,6 +913,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.elixirBear': 'Poder del Oso',
   },
   fr_FR: {
+    'error.heroicMarksNeeded': 'Il vous faut {marks} Marques héroïques pour acheter {name}.',
     'groundPickup.supplyCrateDeny': 'La caisse est solidement clouée.',
     'groundPickup.gravecallerSigilDeny': 'Le sceau repousse votre main.',
     'groundPickup.ledgerPageDeny':
@@ -1119,6 +1134,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.elixirBear': "Puissance de l'Ours",
   },
   fr_CA: {
+    'error.heroicMarksNeeded': 'Il vous faut {marks} Marques héroïques pour acheter {name}.',
     'groundPickup.supplyCrateDeny': 'La caisse est solidement clouée.',
     'groundPickup.gravecallerSigilDeny': 'Le sceau repousse votre main.',
     'groundPickup.ledgerPageDeny':
@@ -1504,6 +1520,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.elixirBear': 'Might of the Bear',
   },
   it_IT: {
+    'error.heroicMarksNeeded': 'Ti servono {marks} Marchi Eroici per comprare {name}.',
     'groundPickup.supplyCrateDeny': 'La cassa è inchiodata.',
     'groundPickup.gravecallerSigilDeny': 'Il sigillo respinge il tuo tocco.',
     'groundPickup.ledgerPageDeny':
@@ -1720,6 +1737,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.elixirBear': "Potenza dell'Orso",
   },
   de_DE: {
+    'error.heroicMarksNeeded': 'Du brauchst {marks} Heroische Marken, um {name} zu kaufen.',
     'groundPickup.supplyCrateDeny': 'Die Kiste ist fest vernagelt.',
     'groundPickup.gravecallerSigilDeny': 'Das Siegel weist Eure Berührung ab.',
     'groundPickup.ledgerPageDeny': 'Die Buchseiten sind zu fest gebunden, um sie mitzunehmen.',
@@ -1937,6 +1955,13 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.elixirBear': 'Macht des Bären',
   },
   zh_CN: {
+    'error.heroicMarksNeeded': '购买{name}需要{marks}个英雄徽记。',
+    'aura.clearcasting': '清晰施法',
+    'aura.gravemight': '墓冢之力',
+    'aura.fangrush': '獠牙疾袭',
+    'aura.bonesplinter': '骨刺',
+    'aura.raggedGash': '撕裂伤口',
+    'aura.soulblaze': '灼魂之焰',
     'groundPickup.supplyCrateDeny': '箱子被钉得严严实实。',
     'groundPickup.gravecallerSigilDeny': '徽记排斥着你的触碰。',
     'groundPickup.ledgerPageDeny': '账页装订得太紧，无法取下。',
@@ -2144,6 +2169,13 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.elixirBear': '巨熊之力',
   },
   zh_TW: {
+    'error.heroicMarksNeeded': '購買{name}需要{marks}個英雄徽記。',
+    'aura.clearcasting': '清晰施法',
+    'aura.gravemight': '墓塚之力',
+    'aura.fangrush': '獠牙疾襲',
+    'aura.bonesplinter': '骨刺',
+    'aura.raggedGash': '撕裂傷口',
+    'aura.soulblaze': '灼魂之焰',
     'groundPickup.supplyCrateDeny': '箱子被牢牢釘死了。',
     'groundPickup.gravecallerSigilDeny': '徽記排斥你的觸碰。',
     'groundPickup.ledgerPageDeny': '帳頁裝訂得太緊，無法取下。',
@@ -2351,6 +2383,13 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.elixirBear': '巨熊之力',
   },
   ko_KR: {
+    'error.heroicMarksNeeded': '{name}을(를) 구매하려면 영웅의 징표 {marks}개가 필요합니다.',
+    'aura.clearcasting': '선명한 시전',
+    'aura.gravemight': '무덤의 위력',
+    'aura.fangrush': '송곳니 질주',
+    'aura.bonesplinter': '뼈 파편',
+    'aura.raggedGash': '찢어진 상처',
+    'aura.soulblaze': '영혼의 불길',
     'groundPickup.supplyCrateDeny': '상자는 못질로 굳게 닫혀 있습니다.',
     'groundPickup.gravecallerSigilDeny': '인장이 당신의 손길을 밀어냅니다.',
     'groundPickup.ledgerPageDeny': '장부 페이지가 너무 단단히 묶여 있어 뜯어낼 수 없습니다.',
@@ -2564,6 +2603,13 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.elixirBear': '곰의 힘',
   },
   ja_JP: {
+    'error.heroicMarksNeeded': '{name}を購入するには英雄の証が{marks}個必要です。',
+    'aura.clearcasting': 'クリアキャスティング',
+    'aura.gravemight': 'グレイブマイト',
+    'aura.fangrush': 'ファングラッシュ',
+    'aura.bonesplinter': 'ボーンスプリンター',
+    'aura.raggedGash': '裂けた傷',
+    'aura.soulblaze': 'ソウルブレイズ',
     'groundPickup.supplyCrateDeny': '木箱は釘で固く打ち付けられています。',
     'groundPickup.gravecallerSigilDeny': '印章はあなたの手を拒んでいます。',
     'groundPickup.ledgerPageDeny': '帳簿のページは固く綴じられていて、抜き取れません。',
@@ -2782,6 +2828,7 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.elixirBear': '熊の力',
   },
   pt_BR: {
+    'error.heroicMarksNeeded': 'Você precisa de {marks} Marcas Heroicas para comprar {name}.',
     'groundPickup.supplyCrateDeny': 'O caixote está fechado com pregos.',
     'groundPickup.gravecallerSigilDeny': 'O sigilo repele seu toque.',
     'groundPickup.ledgerPageDeny':
@@ -2998,6 +3045,13 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'aura.elixirBear': 'Força do Urso',
   },
   ru_RU: {
+    'error.heroicMarksNeeded': 'Вам нужно {marks} Героических знаков, чтобы купить {name}.',
+    'aura.clearcasting': 'Ясность',
+    'aura.gravemight': 'Могильная мощь',
+    'aura.fangrush': 'Клыкастый порыв',
+    'aura.bonesplinter': 'Костяной осколок',
+    'aura.raggedGash': 'Рваная рана',
+    'aura.soulblaze': 'Пламя души',
     'groundPickup.supplyCrateDeny': 'Ящик наглухо заколочен.',
     'groundPickup.gravecallerSigilDeny': 'Сигил отвергает ваше прикосновение.',
     'groundPickup.ledgerPageDeny':
@@ -3884,6 +3938,13 @@ const AURA_NAME_KEY: Record<string, SimMessageKey> = {
   'Feeding Frenzy': 'aura.feedingFrenzy',
   Demoralized: 'aura.demoralized',
   'Resurrection Sickness': 'aura.resurrectionSickness',
+  // 4-piece set-bonus proc buffs (item_sets.ts): shown in the buff frame.
+  Clearcasting: 'aura.clearcasting',
+  Gravemight: 'aura.gravemight',
+  Fangrush: 'aura.fangrush',
+  Bonesplinter: 'aura.bonesplinter',
+  'Ragged Gash': 'aura.raggedGash',
+  Soulblaze: 'aura.soulblaze',
 };
 export function localizeSimAuraName(name: string): string | null {
   const key = AURA_NAME_KEY[name];
@@ -5476,6 +5537,10 @@ const RULES: Rule[] = [
   {
     re: /^You need (.+) Delve Marks to buy (.+)\.$/,
     build: (m) => t('sim.delve.shopMarksRequired', { marks: m[1], name: locItem(m[2]) }),
+  },
+  {
+    re: /^You need (.+) Heroic Marks to buy (.+)\.$/,
+    build: (m) => tSim('error.heroicMarksNeeded', { marks: m[1], name: locItem(m[2]) }),
   },
   {
     re: /^You pass through the tombstone into (.+)\.$/,

@@ -14,6 +14,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.discord.roleTag.coredevs': 'Ведущий разработчик',
+  'hudChrome.options.version': 'v{version} ({build})',
   'auth.emailPlaceholder': 'ivan@example.com',
   'auth.recovery.logOut': 'Выйти',
   'delveRiteUi.easy': 'Лёгкий',
@@ -185,6 +187,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.lootSettings.title': 'Настройки добычи',
   'hudChrome.lootSettings.close': 'Закрыть настройки добычи',
   'hudChrome.lootSettings.menuItem': 'Настройки добычи',
+  'hudChrome.dungeonDifficulty.setHeroic': 'Установить сложность подземелий: героическая',
+  'hudChrome.dungeonDifficulty.setNormal': 'Установить сложность подземелий: обычная',
   'hudChrome.lootSettings.method': 'Способ добычи',
   'hudChrome.lootSettings.rollThreshold': 'Порог броска',
   'hudChrome.lootSettings.groupLoot': 'Групповая добыча',
@@ -1598,6 +1602,10 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'itemUi.slots.shoulder': 'Плечи',
   'itemUi.slots.waist': 'Пояс',
   'itemUi.slots.gloves': 'Кисти рук',
+  'itemUi.slots.neck': 'Шея',
+  'itemUi.slots.ring': 'Палец',
+  'heroicShop.balance': 'Героические знаки: {count}',
+  'heroicShop.buyAria': 'Купить {item} за {marks} героических знаков',
   'itemUi.quality.poor': 'Низкое',
   'itemUi.quality.common': 'Обычное',
   'itemUi.quality.uncommon': 'Необычное',
@@ -2654,6 +2662,10 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.armorer_hode.name': 'Бронник Ходе',
   'entities.npcs.armorer_hode.title': 'Мастер-бронник',
   'entities.npcs.armorer_hode.greeting': 'Горн горяч, точило крутится. Если режет, я это продаю.',
+  'entities.npcs.heroic_quartermaster.name': 'Интендант Векс',
+  'entities.npcs.heroic_quartermaster.title': 'Героический интендант',
+  'entities.npcs.heroic_quartermaster.greeting':
+    'Знаки героических глубин покупают лучшие кольца и кулоны Хайвотча. Покажи мне свои знаки.',
   'entities.npcs.loremaster_caddis.name': 'Хранитель знаний Каддис',
   'entities.npcs.loremaster_caddis.title': 'Хранитель знаний',
   'entities.npcs.loremaster_caddis.greeting':
@@ -3205,6 +3217,50 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.items.crypt_ritual_circle.name': 'Ритуальный круг',
   'entities.items.kings_signet.name': 'Перстень короля',
   'entities.items.event_skin_token.name': 'Загадочный косметический тайник',
+  'entities.items.heroic_mark.name': 'Героический знак',
+  'hudChrome.raidLockout.heroicName': 'Героический режим: {name}',
+  'hudChrome.raidLockout.heroicLocked': 'Вы закреплены за героическим подземельем: {name}.',
+  'entities.items.morthens_cryptforged_hauberk.name': 'Кольчуга Мортена из гробничной стали',
+  'entities.items.shadowpulse_handwraps.name': 'Обмотки теневого пульса',
+  'entities.items.bonechill_striders.name': 'Сапоги костяного холода',
+  'entities.items.mistcallers_fang.name': 'Клык призывателя туманов',
+  'entities.items.tidebound_spaulders.name': 'Наплечники скованных приливов',
+  'entities.items.sash_of_the_sunken_court.name': 'Кушак затонувшего двора',
+  'entities.items.lunar_tide_greatstaff.name': 'Великий посох лунного прилива',
+  'entities.items.tidewoven_trousers.name': 'Штаны приливного плетения',
+  'entities.items.choirmothers_casque.name': 'Шлем матери хора',
+  'entities.items.gravewyrm_cleaver.name': 'Тесак могильного змея',
+  'entities.items.shroud_of_the_gravewyrm.name': 'Саван могильного змея',
+  'entities.items.sanctum_prowlers_grips.name': 'Перчатки святилищного охотника',
+  'entities.items.scepter_of_the_deathless_court.name': 'Скипетр бессмертного двора',
+  'entities.items.deathless_warguard_legmail.name': 'Ножные латы бессмертного стража',
+  'entities.items.soulrend_diadem.name': 'Диадема разрыва души',
+  'entities.items.scourgehide_carapace.name': 'Панцирь бичевой шкуры',
+  'entities.items.cryptplate_helm.name': 'Гробничный латный шлем',
+  'entities.items.shadowpulse_slippers.name': 'Туфли теневого пульса',
+  'entities.items.bonechill_cord.name': 'Пояс костяного холода',
+  'entities.items.mistforged_pauldrons.name': 'Наплечники туманной ковки',
+  'entities.items.tideguard_faceguard.name': 'Лицевой щит стража приливов',
+  'entities.items.sunken_court_mantle.name': 'Накидка затонувшего двора',
+  'entities.items.lunar_choir_leggings.name': 'Поножи лунного хора',
+  'entities.items.choir_blessed_spaulders.name': 'Наплечники хорового благословения',
+  'entities.items.tideworn_warboots.name': 'Боевые сапоги приливного износа',
+  'entities.items.gravewyrm_claws.name': 'Когти могильного змея',
+  'entities.items.gravescale_girdle.name': 'Пояс могильной чешуи',
+  'entities.items.wyrmchoir_handwraps.name': 'Обмотки змеиного хора',
+  'entities.items.deathless_greatblade.name': 'Бессмертный великий клинок',
+  'entities.items.soulforged_warplate.name': 'Душекованый боевой доспех',
+  'entities.items.stormcallers_focus.name': 'Средоточие буревестника',
+  'entities.items.zense_meridian.name': 'Меридиан Зенсе',
+  'entities.items.seal_of_the_nine_oaths.name': 'Печать девяти клятв',
+  'entities.items.nielas_coldlight_band.name': 'Кольцо холодного света Ниэлы',
+  'entities.items.sutils_gambit.name': 'Гамбит Сутила',
+  'entities.items.oath_of_the_round_table.name': 'Клятва Круглого стола',
+  'entities.items.zyzzs_deathless_signet.name': 'Бессмертная печатка Зизза',
+  'entities.items.architects_cornerstone.name': 'Краеугольный камень архитектора',
+  'entities.items.yumis_keepsake_locket.name': 'Медальон-память Юми',
+  'entities.items.swiftfang_talisman.name': 'Талисман быстрого клыка',
+  'entities.items.medallion_of_endless_profit.name': 'Медальон бесконечной прибыли',
   'entities.mobs.fallen_captain_aldren.name': 'Павший капитан Алдрен',
   'entities.mobs.corrupted_priest_malric.name': 'Оскверненный жрец Малрик',
   'entities.mobs.deathstalker_voss.name': 'Смертолаз Восс',
@@ -4705,6 +4761,7 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'guide.models.title': 'Просмотр 3D-моделей',
   'guide.nav.economy': 'Экономика и торговля',
   'guide.nav.gear': 'Снаряжение и предметы',
+  'guide.nav.professions': 'Ремесла',
   'guide.nav.models': '3D-модели',
   'guide.nav.progression': 'Уровни и развитие',
   'guide.nav.social': 'Общение и группы',
@@ -5231,9 +5288,13 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.crownforged.bonus2': 'Сила атаки повышается на 40.',
   'entities.itemSets.crownforged.bonus3':
     'Сила повышается на 15, выносливость на 15, а скорость атаки и произнесения заклинаний на 15%.',
+  'entities.itemSets.crownforged.bonus4':
+    'Критические удары оружием оставляют в цели «Костяной осколок»: 8 ед. урона от кровотечения каждые 2 сек. в течение 12 сек. Суммируется до 3 раз.',
   'entities.itemSets.deathlord.name': 'Боевой доспех Владыки Кургана',
   'entities.itemSets.deathlord.bonus2': 'Сила атаки повышается на 40.',
   'entities.itemSets.deathlord.bonus3': 'Сила повышается на 15, выносливость на 15.',
+  'entities.itemSets.deathlord.bonus4':
+    'Критические удары оружием с вероятностью 50% даруют «Могильную мощь», увеличивая силу атаки на 60 на 10 сек.',
   'entities.itemSets.greyjaw_stalker.name': 'Снаряжение ловчего Серой Челюсти',
   'entities.itemSets.greyjaw_stalker.bonus3':
     'Скорость атаки и произнесения заклинаний повышается на 15%.',
@@ -5242,21 +5303,27 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
     'Вас невозможно отбросить (100% сопротивление отбрасыванию).',
   'entities.itemSets.necromancers.bonus3': 'Интеллект повышается на 10, выносливость на 10.',
   'entities.itemSets.necromancers.bonus4':
-    'Ваши заклинания могут даровать «Ясность», делая следующее заклинание бесплатным.',
+    'Ваши заклинания с вероятностью 10% даруют «Ясность», делая следующее заклинание бесплатным.',
   'entities.itemSets.nighttalon.name': 'Кожаный доспех Лютого Клыка',
   'entities.itemSets.nighttalon.bonus2': 'Сила атаки повышается на 40.',
   'entities.itemSets.nighttalon.bonus3':
     'Ловкость повышается на 15, вероятность критического удара на 2%, а скорость атаки и произнесения заклинаний на 15%.',
+  'entities.itemSets.nighttalon.bonus4':
+    'Критические удары оружием наносят «Рваную рану»: цель теряет 6 ед. здоровья от кровотечения каждые 2 сек. в течение 12 сек. Суммируется до 3 раз.',
   'entities.itemSets.soulflame.name': 'Одеяние Призрачного пламени',
   'entities.itemSets.soulflame.bonus2':
     'Вас невозможно отбросить (100% сопротивление отбрасыванию).',
   'entities.itemSets.soulflame.bonus3':
     'Интеллект повышается на 15, дух на 15, а скорость атаки и произнесения заклинаний на 15%.',
+  'entities.itemSets.soulflame.bonus4':
+    'Ваши заклинания с вероятностью 10% даруют «Пламя души», увеличивая силу заклинаний на 40 на 10 сек.',
   'entities.itemSets.stormcallers.name': 'Одеяние Зова Бури',
   'entities.itemSets.stormcallers.bonus2':
     'Вас невозможно отбросить (100% сопротивление отбрасыванию).',
   'entities.itemSets.stormcallers.bonus3':
     'Интеллект повышается на 15, дух на 15, а скорость атаки и произнесения заклинаний на 15%.',
+  'entities.itemSets.stormcallers.bonus4':
+    'Ваши заклинания с вероятностью 10% даруют «Пламя души», увеличивая силу заклинаний на 40 на 10 сек.',
   'entities.itemSets.vale_arcanist.name': 'Регалии арканиста Долины',
   'entities.itemSets.vale_arcanist.bonus3':
     'Скорость атаки и произнесения заклинаний повышается на 15%.',
@@ -5264,6 +5331,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.bonus2': 'Сила атаки повышается на 40.',
   'entities.itemSets.wyrmshadow.bonus3':
     'Ловкость повышается на 15, вероятность критического удара на 2%.',
+  'entities.itemSets.wyrmshadow.bonus4':
+    'Критические удары оружием с вероятностью 50% даруют «Клыкастый порыв», увеличивая скорость атаки на 25% на 8 сек.',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
   'hudChrome.itemProc.onMeleeHit': 'Шанс при попадании ({chance}%): {effect}',
   'hudChrome.itemProc.onSpellDamage': 'Шанс от уронных заклинаний ({chance}%): {effect}',
@@ -5961,6 +6030,56 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.remainingMinutes': '{minutes}м',
   'hudChrome.dailyRewards.sol': '{amount} SOL',
   'hudChrome.dailyRewards.usd': '{amount} USD',
+  'hudChrome.crafting.title': 'Крафт',
+  'hudChrome.crafting.close': 'Закрыть крафт',
+  'hudChrome.crafting.craft': 'Создать',
+  'hudChrome.crafting.reagentsNeeded': 'Требуется:',
+  'hudChrome.crafting.empty': 'Известных рецептов пока нет.',
+  'hudChrome.crafting.resultAria': 'Создать {name}',
+  'hudChrome.crafting.craftedToast': 'Создано: {name}',
+  'hudChrome.crafting.insufficientMaterials': 'У вас недостаточно материалов.',
+  'hudChrome.crafting.unknownRecipe': 'Такого рецепта не существует.',
+  'guide.professions.intro':
+    'Помимо боя и заданий, мир вознаграждает и тех, кто трудится на земле и у горна: собирайте сырье, превращайте его в снаряжение на ремесленных станциях десяти разных ремесел и обретайте одну из десяти призваний, которые эти ремесла олицетворяют.',
+  'guide.professions.gatherTitle': 'Сбор: горное дело, лесозаготовка и травничество',
+  'guide.professions.gatherIntro':
+    'Три ремесла сбора позволяют добывать сырье прямо из мира: горное дело извлекает руду и камень из жил, лесозаготовка валит древесину в рощах, а травничество собирает дикорастущие травы и растения. Каждое отслеживается отдельно, так что развитие в одном никогда не замедляет прогресс в другом.',
+  'guide.professions.gatherWhatTitle': 'Узлы ресурсов',
+  'guide.professions.gatherWhatBody':
+    'Рудные жилы, рощи и травяные поляны размещены по зонам как видимые, ничейные объекты. Подойдите и взаимодействуйте с узлом, чтобы собрать то, что в нем есть. После сбора узлу требуется время на восстановление, прежде чем вы сможете собрать его снова, но это никогда не мешает другим: другой игрок может собрать тот же узел в это время.',
+  'guide.professions.gatherProficiencyTitle': 'Мастерство и качество материалов',
+  'guide.professions.gatherProficiencyBody':
+    'Каждый успешный сбор повышает ваше мастерство в этом ремесле. Более высокое мастерство смещает то, что вы получаете из узла, в сторону более редких сортов материала, начиная с обычного, хотя самые редкие сорта остаются редкими даже при высоком мастерстве. Практика никогда не ухудшает шансы, только улучшает их.',
+  'guide.professions.gatherToolsTitle': 'Инструменты ремесла',
+  'guide.professions.gatherToolsBody':
+    'Торговцы продают базовые инструменты для каждого ремесла сбора, а лучшие можно скрафтить, так что работа с узлом ресурсов должна ощущаться как постепенный рост возможностей по мере снаряжения, а не топтание на месте. Инструменты более высокого уровня задуманы как способ открыть доступ к более богатым узлам и работать с ними эффективнее в течение долгой сессии.',
+  'guide.professions.craftTitle': 'Десять ремесел',
+  'guide.professions.craftIntro':
+    'Десять ремесел превращают собранные материалы в готовое снаряжение и вещи: бронеделие, оружейное дело и ювелирное дело придают сырью форму носимого снаряжения; алхимия и инженерия основаны на пробах и ошибках; кулинария, начертание и зачарование каждое дорабатывает продукцию других ремесел; портняжное дело и кожевничество работают по точным выкройкам. Вместе они образуют колесо, в котором каждое ремесло соседствует с двумя другими и противостоит одному.',
+  'guide.professions.craftRingTitle': 'Колесо специальностей',
+  'guide.professions.craftRingBody':
+    'Десять ремесел расположены на фиксированном колесе, и то, где ремесло находится на этом колесе, имеет значение: соседние на колесе ремесла имеют между собой больше общего, чем ремесла на противоположных сторонах. Посвятить себя одному ремеслу должно ощущаться как присоединение к семье родственных занятий, а не выбор изолированного навыка.',
+  'guide.professions.craftRecipesTitle': 'Рецепты и реагенты',
+  'guide.professions.craftRecipesBody':
+    'У каждого ремесла свои рецепты, каждый из которых требует конкретных реагентов, которые вы собираете или покупаете. Самые базовые рецепты каждого ремесла требуют лишь обычных материалов и доступны с самого начала, так что вы можете начать работать в ремесле сразу же, как только его освоите, не дожидаясь разблокировки.',
+  'guide.professions.craftMasteryTitle': 'Навык и мастерство',
+  'guide.professions.craftMasteryBody':
+    'Успешное изготовление повышает ваш навык в этом ремесле, а более богатые рецепты открываются за более высоким навыком: базовые рецепты доступны всем, а чем дальше, тем более продвинутые требуют все большего мастерства для попытки. Развитие навыка в ремесле — это путь от простых стартовых изделий к его более амбициозным рецептам.',
+  'guide.professions.craftComboTitle': 'Комбинированные рецепты',
+  'guide.professions.craftComboBody':
+    'Помимо собственного списка рецептов одного ремесла, колесо также поддерживает комбинированные рецепты, требующие сразу двух соседних ремесел, вознаграждая персонажа (или пару торговых партнеров), вложившихся в соседние ремесла на колесе, а не в одно изолированное.',
+  'guide.professions.archetypeTitle': 'Десять призваний',
+  'guide.professions.archetypeIntro':
+    'Каждое из десяти ремесел также олицетворяет призвание — более широкую идентичность, которую можно принять помимо простого занятия этим ремеслом. Ваше текущее призвание — это единственный выбор в один момент времени, а не список: вы носите одно, и при желании можете позже сменить его на другое.',
+  'guide.professions.archetypeChooseTitle': 'Выбор призвания',
+  'guide.professions.archetypeChooseBody':
+    'Вы заявляете свое первое призвание через раннее сюжетное задание в первой зоне, которое официально принимает вас в эту идентичность. Пока вы не выполните это задание, у вас еще нет никакого призвания.',
+  'guide.professions.archetypeSwitchTitle': 'Перемена решения',
+  'guide.professions.archetypeSwitchBody':
+    'Однажды заявленное призвание не привязывает вас к нему навсегда. Смена на другое призвание означает сначала выполнение повторяемого задания на «искупление» для прежнего, и с каждой сменой требуемое в следующий раз искупление становится немного тяжелее, так что смена всегда остается значимой, а не бесплатной.',
+  'guide.professions.archetypeIdentityTitle': 'Что значит ваше призвание',
+  'guide.professions.archetypeIdentityBody':
+    'Ваше текущее призвание — это заявление о том, кем является ваш персонаж в этом мире, отражающееся в том, как к вам обращаются другие и сам мир. Конкретные награды и признание, связанные с ним, еще уточняются; загляните позже, когда система будет доработана.',
   // apiError.* server error-code catalog (M16 non-Latin fill, Phase 22)
   'apiError.validation.failed':
     'Некоторые поля заполнены неверно. Проверьте форму и попробуйте снова.',
@@ -6137,17 +6256,20 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': 'Горное дело',
   'hudChrome.gathering.logging': 'Лесозаготовка',
   'hudChrome.gathering.herbalism': 'Травничество',
+  'hudChrome.archetypeTitle.label': 'Титул',
+  'hudChrome.archetypeTitle.none': 'Нет',
+  'hudChrome.archetypeTitle.armorcrafting': 'Бронник',
+  'hudChrome.archetypeTitle.weaponcrafting': 'Оружейник',
+  'hudChrome.archetypeTitle.jewelcrafting': 'Ювелир',
+  'hudChrome.archetypeTitle.alchemy': 'Алхимик',
+  'hudChrome.archetypeTitle.engineering': 'Механик',
+  'hudChrome.archetypeTitle.cooking': 'Повар',
+  'hudChrome.archetypeTitle.inscription': 'Писарь',
+  'hudChrome.archetypeTitle.enchanting': 'Зачарователь',
+  'hudChrome.archetypeTitle.tailoring': 'Портной',
+  'hudChrome.archetypeTitle.leatherworking': 'Кожевник',
   // Release v0.22.0 locale fill.
   'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
-  'hudChrome.crafting.title': 'Крафт',
-  'hudChrome.crafting.close': 'Закрыть крафт',
-  'hudChrome.crafting.craft': 'Создать',
-  'hudChrome.crafting.reagentsNeeded': 'Требуется:',
-  'hudChrome.crafting.empty': 'Известных рецептов пока нет.',
-  'hudChrome.crafting.resultAria': 'Создать {name}',
-  'hudChrome.crafting.craftedToast': 'Создано: {name}',
-  'hudChrome.crafting.insufficientMaterials': 'У вас недостаточно материалов.',
-  'hudChrome.crafting.unknownRecipe': 'Такого рецепта не существует.',
   'hudChrome.crafting.comboRequirementUnmet':
     'У вас нет обоих требуемых ремесел нужного уровня для этого рецепта.',
   'hudChrome.mobile.actionPageIndicator': 'Стр. {page}',

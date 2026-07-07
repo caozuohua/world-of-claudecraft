@@ -368,7 +368,9 @@ export const da_DK: EnTranslations = {
       "hoursMinutes": "{h}t {m}m",
       "minutes": "{m}m",
       "lessThanMinute": "<1m",
-      "lockedToast": "Du er låst til {raid}. Låses op om {time}."
+      "lockedToast": "Du er låst til {raid}. Låses op om {time}.",
+      "heroicName": "Heroisk {name}",
+      "heroicLocked": "Du er låst til Heroisk {name}."
     },
     "compass": {
       "N": "N",
@@ -661,8 +663,8 @@ export const da_DK: EnTranslations = {
       "fromYour": "Fra din {value} {stat}:",
       "names": {
         "spellPower": "Besværgelseskraft",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Kritvurdering",
+        "hasteRating": "Hastevurdering"
       },
       "desc": {
         "str": "Øger din angrebsstyrke, så dine våbenslag rammer hårdere.",
@@ -676,8 +678,8 @@ export const da_DK: EnTranslations = {
         "dps": "Din anslåede våbenskade pr. sekund, der kombinerer dit våbens skade og hastighed med din angrebsstyrke.",
         "critChance": "Din chance for at et angreb rammer kritisk og gør dobbelt skade.",
         "dodge": "Din chance for helt at undgå et indkommende nærkampsangreb og tage ingen skade.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Kritvurdering fra dit udstyr og sætbonusser, der hæver din chance for kritisk slag. Cirka 10 vurdering giver 1% krit.",
+        "hasteRating": "Hastevurdering fra dit udstyr og sætbonusser, der fremskynder dine angreb og besværgelser. Cirka 10 vurdering giver 1% hast."
       },
       "effects": {
         "attackPower": "+{value} Angrebsstyrke",
@@ -719,13 +721,13 @@ export const da_DK: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Chance ved træffer ({chance}%): {effect}",
+      "onSpellDamage": "Chance ved dine skadevoldende besværgelser ({chance}%): {effect}",
+      "onHeal": "Chance ved dine helbredelser ({chance}%): {effect}",
+      "chainArc": "rammer målet med en {school} {name} ({damage}), der springer til {jumps} nærliggende fjender for aftagende skade",
+      "attackSlow": "og sænker målets angrebshastighed med {pct}% i {duration} sek.",
+      "dot": "fremkalder {name}, en {school} skade-over-tid der volder {total} over {duration} sek.",
+      "hot": "udløser {name}, en helbredelse-over-tid der genopretter {total} over {duration} sek."
     },
     "questShare": {
       "notShareable": "Denne opgave kan ikke deles.",
@@ -929,9 +931,13 @@ export const da_DK: EnTranslations = {
       "leaderOption": "Bytteleder: Leder (dig)",
       "masterOption": "Bytteleder: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Indstil fangekældersværhedsgrad: Heroisk",
+      "setNormal": "Indstil fangekældersværhedsgrad: Normal"
+    },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Denne genstand kan ikke ødelægges.",
+      "rightClickDestroy": "Højreklik for at ødelægge",
       "filterGroupAria": "Filtrér tasker efter kategori",
       "filterAll": "Alle",
       "filterWeapon": "Våben",
@@ -1147,7 +1153,7 @@ export const da_DK: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
-        "coredevs": "Core Dev",
+        "coredevs": "Kerneudvikler",
         "devs": "Udvikler",
         "mods": "Moderator",
         "artists": "Kunstner"
@@ -1357,6 +1363,20 @@ export const da_DK: EnTranslations = {
       "logging": "Skovhugst",
       "herbalism": "Urtekundskab"
     },
+    "archetypeTitle": {
+      "label": "Titel",
+      "none": "Ingen",
+      "armorcrafting": "Rustningssmed",
+      "weaponcrafting": "Våbensmed",
+      "jewelcrafting": "Juveler",
+      "alchemy": "Alkymist",
+      "engineering": "Ingeniør",
+      "cooking": "Kok",
+      "inscription": "Skriver",
+      "enchanting": "Fortryller",
+      "tailoring": "Skrædder",
+      "leatherworking": "Garver"
+    },
     "crafting": {
       "title": "Håndværk",
       "close": "Tæt håndværk",
@@ -1368,7 +1388,7 @@ export const da_DK: EnTranslations = {
       "craftedToast": "Udformet: {name}",
       "insufficientMaterials": "Det har du ikke materialerne til.",
       "unknownRecipe": "Den opskrift findes ikke.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "Du har ikke begge de krævede håndværk på det krævede niveau til den opskrift."
     }
   },
   "apiError": {
@@ -1475,6 +1495,7 @@ export const da_DK: EnTranslations = {
       "bestiary": "Bestiarium",
       "models": "3D-modeller",
       "gear": "Udstyr & Genstande",
+      "professions": "Professions",
       "economy": "Økonomi & Handel",
       "social": "Socialt & Grupper",
       "stats": "Karakter & Egenskaber",
@@ -2254,6 +2275,35 @@ export const da_DK: EnTranslations = {
       "cosmeticsSkins": "Der er to kosmetiske linjer at samle. De fleste klasser har flere alternative udseender, et nyt blik på klassens stil som kun er dit at bære. Ved siden af dem sidder chromaer: navngivne totonede farveskemaer der maler et udseende helt om, fra sobre metaller til klare kejserlige farver.",
       "cosmeticsCache": "Nogle få af disse kommer fra et mystisk kosmetisk skrin, en forseglet præmie der ruller en af tre kvalitetsgrader, når du åbner det, og giver det matchende udseende. Det er rent til pynt: intet indeni gør dig stærkere, kun finere at se på.",
       "cosmeticsApply": "Vælg dit aktive udseende fra udseenderækken på din karakterskærm, og skift frit mellem alt, du har låst op."
+    },
+    "professions": {
+      "intro": "Beyond combat and quests, the world rewards you for working the land and the forge: gathering raw materials, turning them into gear at the crafting stations of ten different trades, and settling into an identity as one of the ten archetypes those trades represent.",
+      "gatherTitle": "Gathering: Mining, Logging, and Herbalism",
+      "gatherIntro": "Three gathering trades let you pull raw materials straight out of the world: Mining strikes ore and stone from veins, Logging fells timber from stands of trees, and Herbalism collects herbs and plants growing wild. Each is tracked separately, so working one never slows your progress in another.",
+      "gatherWhatTitle": "Resource nodes",
+      "gatherWhatBody": "Ore veins, wood stands, and herb patches are placed out in the zones as visible, unowned fixtures. Walk up to one and interact with it to harvest whatever it holds. Once you have harvested a node, it needs time to recover before you personally can harvest it again, though it never blocks anyone else: another player can harvest the very same node in the meantime.",
+      "gatherProficiencyTitle": "Proficiency and material quality",
+      "gatherProficiencyBody": "Every successful harvest builds your proficiency in that gathering trade. A higher proficiency shifts what you pull out of a node toward rarer grades of material, from common on up, though the rarest grades stay rare even at high proficiency. More practice never hurts your odds, it only ever improves them.",
+      "gatherToolsTitle": "Tools of the trade",
+      "gatherToolsBody": "Vendors sell basic tools for each gathering trade, and better ones can be crafted, so working a resource node is meant to feel more capable as you gear up for it rather than staying static. Higher-tier tools are the intended way to unlock access to richer nodes and to work them more efficiently over a long session.",
+      "craftTitle": "The ten crafts",
+      "craftIntro": "Ten crafting trades turn gathered materials into finished gear and goods: Armorcrafting, Weaponcrafting, and Jewelcrafting shape raw matter into wearable gear; Alchemy and Engineering are driven by trial and error; Cooking, Inscription, and Enchanting each touch other crafts' output; Tailoring and Leatherworking work from exact patterns. Together they form a wheel, with each craft sitting next to two neighbors and opposite one other.",
+      "craftRingTitle": "A wheel of specialties",
+      "craftRingBody": "The ten crafts are arranged in a fixed ring, and where a craft sits on that ring matters: crafts next to each other on the wheel share more in common with each other than crafts on opposite sides do. Committing to one craft is meant to feel like joining a family of related trades, not picking an isolated skill.",
+      "craftRecipesTitle": "Recipes and reagents",
+      "craftRecipesBody": "Every craft has its own recipes, each calling for specific reagents you gather or buy. The most basic recipes in each craft ask for nothing but common materials and are craftable from the very start, so you can begin working a trade the moment you pick it up rather than waiting to unlock it.",
+      "craftMasteryTitle": "Skill and mastery",
+      "craftMasteryBody": "Crafting successfully builds skill in that trade, and richer recipes are gated behind higher skill: the basic recipes are open to everyone, while progressively more advanced ones ask for progressively more mastery to attempt. Growing your skill in a craft is the path from simple starter goods to its more ambitious recipes.",
+      "craftComboTitle": "Combination recipes",
+      "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character (or a pair of trading partners) who has invested in adjacent trades on the ring rather than one in isolation.",
+      "archetypeTitle": "The ten archetypes",
+      "archetypeIntro": "Each of the ten crafts also stands for an archetype, a broader identity you can adopt beyond just working that trade. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
+      "archetypeChooseTitle": "Choosing your archetype",
+      "archetypeChooseBody": "You declare your first archetype through an early, zone one story quest that formally accepts you into that identity. Until you complete that quest, you have not yet chosen an archetype at all.",
+      "archetypeSwitchTitle": "Changing your mind",
+      "archetypeSwitchBody": "Having declared an archetype once does not lock you into it forever. Changing to a different archetype means first completing a repeatable \"make amends\" quest for your old one, and each time you switch, the amends expected of you the next time grow a little steeper, so switching stays meaningful rather than costless.",
+      "archetypeIdentityTitle": "What your archetype means",
+      "archetypeIdentityBody": "Your active archetype is a statement about who your character is in the world, recognized in how others and the world address you. The exact rewards and recognition that come with it are still being finalized; check back as the system fills in."
     },
     "economy": {
       "intro": "Mønter smører hele verden: de køber dit udstyr, dine forsyninger og dit rejsegrej og skifter hænder mellem spillere. Du opsamler det hele bare ved at spille, så tænk på denne side som et kort over, hvor dine penge kommer fra og går hen.",
@@ -3335,6 +3385,10 @@ export const da_DK: EnTranslations = {
       "hard": "Premium-bytte"
     },
     "closeAria": "Luk"
+  },
+  "heroicShop": {
+    "balance": "Heroiske Mærker: {count}",
+    "buyAria": "Køb {item} for {marks} Heroiske Mærker"
   },
   "delveUi": {
     "board": {
@@ -4628,12 +4682,14 @@ export const da_DK: EnTranslations = {
     "slots": {
       "mainhand": "Hovedhånd",
       "helmet": "Hjelm",
+      "neck": "Hals",
       "shoulder": "Skulder",
       "chest": "Bryst",
       "waist": "Talje",
       "legs": "Ben",
       "gloves": "Handsker",
-      "feet": "Fødder"
+      "feet": "Fødder",
+      "ring": "Finger"
     },
     "quality": {
       "poor": "Ringe",
@@ -6563,6 +6619,132 @@ export const da_DK: EnTranslations = {
       "event_skin_token": {
         "name": "Mystisk Kosmetisk Skrin"
       },
+      "heroic_mark": {
+        "name": "Heroisk Mærke"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Morthens Kryptsmedede Brynje"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Skyggepuls-Håndomvikling"
+      },
+      "bonechill_striders": {
+        "name": "Benkulde-Skridtsko"
+      },
+      "mistcallers_fang": {
+        "name": "Fogbinderens Hugtand"
+      },
+      "tidebound_spaulders": {
+        "name": "Tidevandsbundne Skulderplader"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Skærf fra Det Sunkne Hof"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Månetidevands-Storstav"
+      },
+      "tidewoven_trousers": {
+        "name": "Tidevandsvævede Benklæder"
+      },
+      "choirmothers_casque": {
+        "name": "Kormoderens Hjelm"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Gravorm-Kløver"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Gravormens Ligklæde"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Helligdommens Luskers Greb"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Scepter fra Det Udødelige Hof"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Udødelig Krigsvagt-Benbrynje"
+      },
+      "soulrend_diadem": {
+        "name": "Sjæleflæng-Diadem"
+      },
+      "scourgehide_carapace": {
+        "name": "Svøbehud-Panser"
+      },
+      "cryptplate_helm": {
+        "name": "Kryptplade-Hjelm"
+      },
+      "shadowpulse_slippers": {
+        "name": "Skyggepuls-Futter"
+      },
+      "bonechill_cord": {
+        "name": "Benkulde-Snor"
+      },
+      "mistforged_pauldrons": {
+        "name": "Tågesmedede Skulderplader"
+      },
+      "tideguard_faceguard": {
+        "name": "Tidevandsvagt-Ansigtsværn"
+      },
+      "sunken_court_mantle": {
+        "name": "Kappe fra Det Sunkne Hof"
+      },
+      "lunar_choir_leggings": {
+        "name": "Månekor-Benbeklædning"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Korvelsignede Skulderplader"
+      },
+      "tideworn_warboots": {
+        "name": "Tidevandsslidte Krigsstøvler"
+      },
+      "gravewyrm_claws": {
+        "name": "Gravorm-Kløer"
+      },
+      "gravescale_girdle": {
+        "name": "Gravskæl-Livgjord"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Ormekor-Håndomvikling"
+      },
+      "deathless_greatblade": {
+        "name": "Udødelig Storklinge"
+      },
+      "soulforged_warplate": {
+        "name": "Sjælesmedet Krigsplade"
+      },
+      "stormcallers_focus": {
+        "name": "Stormkalderens Fokus"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Segl over De Ni Eder"
+      },
+      "nielas_coldlight_band": {
+        "name": "Nielas Koldlys-Ring"
+      },
+      "sutils_gambit": {
+        "name": "Sutils Gambit"
+      },
+      "oath_of_the_round_table": {
+        "name": "Ed til Det Runde Bord"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Zyzzs Udødelige Signetring"
+      },
+      "architects_cornerstone": {
+        "name": "Arkitektens Hjørnesten"
+      },
+      "swiftfang_talisman": {
+        "name": "Snartand-Talisman"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Yumis Minde-Medaljon"
+      },
+      "zense_meridian": {
+        "name": "Zense-Meridian"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Medaljon for Uendelig Profit"
+      },
       "deathless_heartwood": {
         "name": "Kerneved fra Den Udødelige Krone"
       },
@@ -7100,6 +7282,11 @@ export const da_DK: EnTranslations = {
         "name": "Rustningssmed Hode",
         "title": "Mesterrustningssmed",
         "greeting": "Essen er varm og slibestenen drejer. Hvis det skærer, sælger jeg det."
+      },
+      "heroic_quartermaster": {
+        "name": "Kvartermester Vex",
+        "title": "Heroisk Kvartermester",
+        "greeting": "Bevis på de heroiske dyb køber de fineste ringe og vedhæng i Højvagt. Vis mig dine mærker."
       },
       "loremaster_caddis": {
         "name": "Lærdomsmester Caddis",
@@ -8190,12 +8377,14 @@ export const da_DK: EnTranslations = {
       "crownforged": {
         "name": "Bonewrought regalier",
         "bonus2": "Øger angrebskraft med 40.",
-        "bonus3": "Øger styrke med 15, udholdenhed med 15 og angrebs- og magihastighed med 15%."
+        "bonus3": "Øger styrke med 15, udholdenhed med 15 og angrebs- og magihastighed med 15%.",
+        "bonus4": "Dine kritiske våbenslag splintrer målet med Bensplint og påfører 8 blødningsskade hvert 2. sek. i 12 sek. Stakker op til 3 gange."
       },
       "deathlord": {
         "name": "Barrowlord kampudstyr",
         "bonus2": "Øger angrebskraft med 40.",
-        "bonus3": "Øger styrke med 15 og udholdenhed med 15."
+        "bonus3": "Øger styrke med 15 og udholdenhed med 15.",
+        "bonus4": "Dine kritiske våbenslag har 50% chance for at give Gravmagt og øge angrebskraft med 60 i 10 sek."
       },
       "greyjaw_stalker": {
         "name": "Gråkæbe-jægerens udstyr",
@@ -8205,22 +8394,25 @@ export const da_DK: EnTranslations = {
         "name": "Mournweave klæder",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
         "bonus3": "Øger intellekt med 10 og udholdenhed med 10.",
-        "bonus4": "Your spells have a chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Dine besværgelser har 10% chance for at give Klartrylleri, som gør din næste besværgelse gratis."
       },
       "nighttalon": {
         "name": "Direfang pels",
         "bonus2": "Øger angrebskraft med 40.",
-        "bonus3": "Øger smidighed med 15, kritisk chance med 2% og angrebs- og magihastighed med 15%."
+        "bonus3": "Øger smidighed med 15, kritisk chance med 2% og angrebs- og magihastighed med 15%.",
+        "bonus4": "Dine kritiske våbenslag river en Laset Flænge og påfører 6 blødningsskade hvert 2. sek. i 12 sek. Stakker op til 3 gange."
       },
       "soulflame": {
         "name": "Wraithfire regalier",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
-        "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%."
+        "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%.",
+        "bonus4": "Dine besværgelser har 10% chance for at give Sjælebrand og øge besværgelseskraft med 40 i 10 sek."
       },
       "stormcallers": {
         "name": "Galecall klæder",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
-        "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%."
+        "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%.",
+        "bonus4": "Dine besværgelser har 10% chance for at give Sjælebrand og øge besværgelseskraft med 40 i 10 sek."
       },
       "vale_arcanist": {
         "name": "Dalarkanistens klæder",
@@ -8229,7 +8421,8 @@ export const da_DK: EnTranslations = {
       "wyrmshadow": {
         "name": "Nightfang klæder",
         "bonus2": "Øger angrebskraft med 40.",
-        "bonus3": "Øger smidighed med 15 og kritisk chance med 2%."
+        "bonus3": "Øger smidighed med 15 og kritisk chance med 2%.",
+        "bonus4": "Dine kritiske våbenslag har 50% chance for at give Hugtandsfart og øge angrebshastighed med 25% i 8 sek."
       }
     }
   },

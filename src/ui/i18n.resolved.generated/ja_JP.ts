@@ -368,7 +368,9 @@ export const ja_JP: EnTranslations = {
       "hoursMinutes": "{h}時間{m}分",
       "minutes": "{m}分",
       "lessThanMinute": "1分未満",
-      "lockedToast": "{raid}にロックされています。解除まで{time}。"
+      "lockedToast": "{raid}にロックされています。解除まで{time}。",
+      "heroicName": "ヒロイック:{name}",
+      "heroicLocked": "ヒロイックの{name}にロックされています。"
     },
     "compass": {
       "N": "北",
@@ -929,6 +931,10 @@ export const ja_JP: EnTranslations = {
       "leaderOption": "分配担当：パーティリーダー（あなた）",
       "masterOption": "分配担当：{name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "ダンジョン難易度をヒロイックに設定",
+      "setNormal": "ダンジョン難易度をノーマルに設定"
+    },
     "bags": {
       "cannotDestroy": "このアイテムは破壊できません。",
       "rightClickDestroy": "右クリックで破壊",
@@ -1147,7 +1153,7 @@ export const ja_JP: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "管理者",
-        "coredevs": "Core Dev",
+        "coredevs": "コア開発者",
         "devs": "開発者",
         "mods": "モデレーター",
         "artists": "アーティスト"
@@ -1357,6 +1363,20 @@ export const ja_JP: EnTranslations = {
       "logging": "伐採",
       "herbalism": "薬草学"
     },
+    "archetypeTitle": {
+      "label": "称号",
+      "none": "なし",
+      "armorcrafting": "防具鍛冶師",
+      "weaponcrafting": "武器鍛冶師",
+      "jewelcrafting": "宝石職人",
+      "alchemy": "錬金術師",
+      "engineering": "工作師",
+      "cooking": "料理人",
+      "inscription": "銘文師",
+      "enchanting": "エンチャンター",
+      "tailoring": "仕立て屋",
+      "leatherworking": "皮革職人"
+    },
     "crafting": {
       "title": "製作",
       "close": "製作を閉じる",
@@ -1475,6 +1495,7 @@ export const ja_JP: EnTranslations = {
       "bestiary": "モンスター図鑑",
       "models": "3Dモデル",
       "gear": "ギアとアイテム",
+      "professions": "生産職",
       "economy": "経済と取引",
       "social": "ソーシャルとグループ",
       "stats": "キャラクターとステータス",
@@ -2254,6 +2275,35 @@ export const ja_JP: EnTranslations = {
       "cosmeticsSkins": "集められる装飾の系統は二つあります。ほとんどのクラスには、そのクラスならではのいくつかの別バージョンの外見があり、あなただけが身につけられる新たな装いです。それと並ぶのがクロマ。見た目を丸ごと塗り替える、名前付きのツートーンのカラースキームで、渋い金属色から鮮やかな帝国色まで揃っています。",
       "cosmeticsCache": "その一部は謎めいた装飾キャッシュから手に入ります。封じられた賞品で、開けると三段階の品質のいずれかが抽選され、それに見合った外見が与えられます。純粋に見た目のためのもので、中身であなたが強くなることはなく、ただ見栄えが良くなるだけです。",
       "cosmeticsApply": "キャラクター画面の外見の項目から、いま使う見た目を設定できます。アンロック済みのものなら、いつでも自由に切り替えられます。"
+    },
+    "professions": {
+      "intro": "戦闘やクエストだけでなく、この世界は大地を耕し鍛冶場に立つあなたにも報いてくれる。原材料を採集し、十種の異なる製作台でそれを装備へと変え、それらの職が体現する十の生き方のひとつとして自らのアイデンティティを築いていく。",
+      "gatherTitle": "採集：採掘、伐採、薬草学",
+      "gatherIntro": "三つの採集職があり、世界から直接原材料を得られる。採掘は鉱脈から鉱石と石を掘り出し、伐採は木立から木材を切り出し、薬草学は野生に育つ薬草や植物を集める。それぞれ別々に進行が管理されるため、ひとつに取り組んでも他の進行が遅れることはない。",
+      "gatherWhatTitle": "資源ノード",
+      "gatherWhatBody": "鉱脈、木立、薬草の茂みは、各ゾーンに目に見える所有者のない設備として配置されている。近づいて操作すれば、そこにあるものを採集できる。一度採集したノードは、あなた自身が再び採集できるようになるまで回復に時間がかかるが、他のプレイヤーを妨げることは決してない。その間に別のプレイヤーが同じノードを採集することもできる。",
+      "gatherProficiencyTitle": "熟練度と素材の品質",
+      "gatherProficiencyBody": "採集に成功するたびに、その採集職の熟練度が上がる。熟練度が高いほど、ノードから得られる素材はより希少なグレードへと偏っていくが、コモンから始まり、最も希少なグレードは高熟練度でも依然として希少なままである。練習を重ねることは決して不利にならず、常に有利に働く。",
+      "gatherToolsTitle": "職の道具",
+      "gatherToolsBody": "各採集職の基本的な道具は商人から購入でき、より優れた道具は製作できる。資源ノードでの作業は、装備を整えるにつれて着実に有能になっていく感覚であるべきで、その場に留まるものではない。上位ティアの道具は、より豊かなノードへのアクセスを解放し、長いセッションでもより効率よく作業するための意図された手段である。",
+      "craftTitle": "十の製作職",
+      "craftIntro": "十の製作職は、採集した素材を完成した装備や品へと変える：防具製作、武器製作、宝石細工は原材料を装備品へと形作り、錬金術と工学は試行錯誤に基づき、料理、書記、エンチャントはそれぞれ他の職の産物に手を加え、裁縫と革細工は正確な型紙に沿って作業する。これらは合わせてひとつの輪を形成し、各職は二つの隣人と隣り合い、もう一つの職と向かい合う。",
+      "craftRingTitle": "専門職の輪",
+      "craftRingBody": "十の職は固定された輪の上に配置され、その輪上での位置が重要な意味を持つ：輪の上で隣り合う職同士は、対角にある職同士よりも多くの共通点を持つ。ひとつの職に打ち込むことは、孤立した技能を選ぶのではなく、関連する職の一族に加わるような感覚であるべきだ。",
+      "craftRecipesTitle": "レシピと材料",
+      "craftRecipesBody": "各職には独自のレシピがあり、それぞれ採集または購入する特定の材料を必要とする。各職の最も基本的なレシピは一般的な材料だけで作れ、最初から製作可能なので、その職を手に入れた瞬間から作業を始められ、解放を待つ必要はない。",
+      "craftMasteryTitle": "技能と熟達",
+      "craftMasteryBody": "製作に成功するとその職の技能が上がり、より豊かなレシピはより高い技能の先に解放される：基本的なレシピは誰にでも開かれているが、より高度なものへ進むほど、挑戦にはより高い熟達が求められる。ある職の技能を伸ばすことは、単純な初期の品からより野心的なレシピへと至る道のりである。",
+      "craftComboTitle": "組み合わせレシピ",
+      "craftComboBody": "単独の職自身のレシピ一覧に加えて、この輪は隣り合う二つの職を同時に呼び出す組み合わせレシピにも対応しており、輪の上で隣接する職に投資したキャラクター（あるいは取引相手のペア）に報いる。孤立した一職だけに投資した場合は得られない。",
+      "archetypeTitle": "十の生き方",
+      "archetypeIntro": "十の職はそれぞれ生き方も体現しており、その職に単に従事すること以上の、より広いアイデンティティを取り入れることができる。あなたの現在の生き方は一度にひとつだけであり、チェックリストではない：あなたは一つを担い、望むならば後で変更することもできる。",
+      "archetypeChooseTitle": "生き方を選ぶ",
+      "archetypeChooseBody": "最初の生き方は、ゾーン1にある初期の物語クエストを通じて宣言し、そのクエストがあなたを正式にそのアイデンティティへと迎え入れる。そのクエストを完了するまで、あなたはまだ何の生き方も選んでいない。",
+      "archetypeSwitchTitle": "心変わり",
+      "archetypeSwitchBody": "一度生き方を宣言しても、永遠にそれに縛られるわけではない。別の生き方に変えるには、まず古い生き方のために繰り返し可能な「償い」クエストを完了する必要があり、切り替えるたびに次に求められる償いは少しずつ厳しくなる。そのため切り替えは意味のあるものであり続け、代償のないものにはならない。",
+      "archetypeIdentityTitle": "あなたの生き方が意味するもの",
+      "archetypeIdentityBody": "あなたの現在の生き方は、あなたのキャラクターがこの世界で何者であるかについての表明であり、他者や世界があなたをどう呼ぶかに反映される。それに伴う具体的な報酬や認知はまだ調整中だ。システムが充実していくのを見守ってほしい。"
     },
     "economy": {
       "intro": "コインは世界全体の潤滑油です。装備や物資、旅の道具を買い、プレイヤー間でやり取りされます。これらはすべて遊んでいるだけで身につくので、このページはお金がどこから来てどこへ行くのかを示す地図だと思ってください。",
@@ -3335,6 +3385,10 @@ export const ja_JP: EnTranslations = {
       "hard": "極上の戦利品"
     },
     "closeAria": "閉じる"
+  },
+  "heroicShop": {
+    "balance": "英雄の証: {count}",
+    "buyAria": "英雄の証{marks}個で{item}を購入"
   },
   "delveUi": {
     "board": {
@@ -4628,12 +4682,14 @@ export const ja_JP: EnTranslations = {
     "slots": {
       "mainhand": "メインハンド",
       "helmet": "頭",
+      "neck": "首",
       "shoulder": "肩",
       "chest": "胸",
       "waist": "腰",
       "legs": "脚",
       "gloves": "手",
-      "feet": "足"
+      "feet": "足",
+      "ring": "指"
     },
     "quality": {
       "poor": "粗悪",
@@ -6563,6 +6619,132 @@ export const ja_JP: EnTranslations = {
       "event_skin_token": {
         "name": "謎めいた装いの宝箱"
       },
+      "heroic_mark": {
+        "name": "英雄の証"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "モルセンの墓鋳ホーバーク"
+      },
+      "shadowpulse_handwraps": {
+        "name": "シャドウパルスの手巻き"
+      },
+      "bonechill_striders": {
+        "name": "ボーンチルのストライダー"
+      },
+      "mistcallers_fang": {
+        "name": "ミストコーラーの牙"
+      },
+      "tidebound_spaulders": {
+        "name": "タイドバウンドの肩当て"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "沈んだ宮廷のサッシュ"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "ルナタイドの大杖"
+      },
+      "tidewoven_trousers": {
+        "name": "タイドウーヴンのズボン"
+      },
+      "choirmothers_casque": {
+        "name": "クワイアマザーのキャスク"
+      },
+      "gravewyrm_cleaver": {
+        "name": "グレイヴワームのクリーバー"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "グレイヴワームの帳"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "サンクタムプラウラーのグリップ"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "不死の宮廷の笏"
+      },
+      "deathless_warguard_legmail": {
+        "name": "不死の戦衛レッグメイル"
+      },
+      "soulrend_diadem": {
+        "name": "ソウルレンドの宝冠"
+      },
+      "scourgehide_carapace": {
+        "name": "スカージハイドの甲殻"
+      },
+      "cryptplate_helm": {
+        "name": "クリプトプレートヘルム"
+      },
+      "shadowpulse_slippers": {
+        "name": "シャドウパルスのスリッパ"
+      },
+      "bonechill_cord": {
+        "name": "ボーンチルの帯"
+      },
+      "mistforged_pauldrons": {
+        "name": "ミストフォージの肩当て"
+      },
+      "tideguard_faceguard": {
+        "name": "タイドガードのフェイスガード"
+      },
+      "sunken_court_mantle": {
+        "name": "沈んだ宮廷のマント"
+      },
+      "lunar_choir_leggings": {
+        "name": "ルナクワイアのレギンス"
+      },
+      "choir_blessed_spaulders": {
+        "name": "聖歌祝福の肩当て"
+      },
+      "tideworn_warboots": {
+        "name": "潮蝕のウォーブーツ"
+      },
+      "gravewyrm_claws": {
+        "name": "グレイヴワームの爪"
+      },
+      "gravescale_girdle": {
+        "name": "グレイヴスケイルの帯"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "ワームクワイアの手巻き"
+      },
+      "deathless_greatblade": {
+        "name": "不死の大剣"
+      },
+      "soulforged_warplate": {
+        "name": "魂鍛の戦甲"
+      },
+      "stormcallers_focus": {
+        "name": "ストームコーラーの焦点"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "九誓の印章"
+      },
+      "nielas_coldlight_band": {
+        "name": "ニエラの冷光の指輪"
+      },
+      "sutils_gambit": {
+        "name": "スティルの賭け"
+      },
+      "oath_of_the_round_table": {
+        "name": "円卓の誓い"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "ジズの不滅の印章"
+      },
+      "architects_cornerstone": {
+        "name": "アーキテクトの礎石"
+      },
+      "swiftfang_talisman": {
+        "name": "迅牙のタリスマン"
+      },
+      "yumis_keepsake_locket": {
+        "name": "ユミの形見のロケット"
+      },
+      "zense_meridian": {
+        "name": "ゼンセの子午線"
+      },
+      "medallion_of_endless_profit": {
+        "name": "無限の利益のメダリオン"
+      },
       "deathless_heartwood": {
         "name": "不死王冠の心材"
       },
@@ -7100,6 +7282,11 @@ export const ja_JP: EnTranslations = {
         "name": "防具師ホード",
         "title": "熟練防具師",
         "greeting": "炉は熱く、砥石は回っています。切れるものなら売ります。"
+      },
+      "heroic_quartermaster": {
+        "name": "補給係ヴェックス",
+        "title": "英雄補給係",
+        "greeting": "英雄の深部の証があれば、ハイウォッチ一の指輪とペンダントが手に入る。あなたの証を見せてくれ。"
       },
       "loremaster_caddis": {
         "name": "博識者キャディス",
@@ -8190,12 +8377,14 @@ export const ja_JP: EnTranslations = {
       "crownforged": {
         "name": "ボーンロートの戦装束",
         "bonus2": "攻撃力が40上昇します。",
-        "bonus3": "筋力が15、スタミナが15上昇し、攻撃速度と詠唱速度が15%上昇します。"
+        "bonus3": "筋力が15、スタミナが15上昇し、攻撃速度と詠唱速度が15%上昇します。",
+        "bonus4": "武器のクリティカルヒットで対象に「ボーンスプリンター」を刻み、2秒ごとに8ダメージの出血を12秒間与えます。最大3回まで累積します。"
       },
       "deathlord": {
         "name": "バロウロードの戦装束",
         "bonus2": "攻撃力が40上昇します。",
-        "bonus3": "筋力が15、スタミナが15上昇します。"
+        "bonus3": "筋力が15、スタミナが15上昇します。",
+        "bonus4": "武器のクリティカルヒット時に50%の確率で「グレイブマイト」が発動し、攻撃力が10秒間60上昇します。"
       },
       "greyjaw_stalker": {
         "name": "グレイジョーの追跡者の装備",
@@ -8205,22 +8394,25 @@ export const ja_JP: EnTranslations = {
         "name": "モーンウィーヴの法衣",
         "bonus2": "ノックバックされなくなります（ノックバック耐性100%）。",
         "bonus3": "知力が10、スタミナが10上昇します。",
-        "bonus4": "呪文に一定確率で「クリアキャスティング」が発動し、次の呪文が無償になります。"
+        "bonus4": "呪文に10%の確率で「クリアキャスティング」が発動し、次の呪文が無償になります。"
       },
       "nighttalon": {
         "name": "ダイアファングの革装束",
         "bonus2": "攻撃力が40上昇します。",
-        "bonus3": "敏捷性が15、クリティカル率が2%上昇し、攻撃速度と詠唱速度が15%上昇します。"
+        "bonus3": "敏捷性が15、クリティカル率が2%上昇し、攻撃速度と詠唱速度が15%上昇します。",
+        "bonus4": "武器のクリティカルヒットで「裂けた傷」を与え、対象に2秒ごとに6ダメージの出血を12秒間与えます。最大3回まで累積します。"
       },
       "soulflame": {
         "name": "レイスファイアの法衣",
         "bonus2": "ノックバックされなくなります（ノックバック耐性100%）。",
-        "bonus3": "知力が15、精神力が15上昇し、攻撃速度と詠唱速度が15%上昇します。"
+        "bonus3": "知力が15、精神力が15上昇し、攻撃速度と詠唱速度が15%上昇します。",
+        "bonus4": "呪文に10%の確率で「ソウルブレイズ」が発動し、呪文の威力が10秒間40上昇します。"
       },
       "stormcallers": {
         "name": "ゲイルコールの法衣",
         "bonus2": "ノックバックされなくなります（ノックバック耐性100%）。",
-        "bonus3": "知力が15、精神力が15上昇し、攻撃速度と詠唱速度が15%上昇します。"
+        "bonus3": "知力が15、精神力が15上昇し、攻撃速度と詠唱速度が15%上昇します。",
+        "bonus4": "呪文に10%の確率で「ソウルブレイズ」が発動し、呪文の威力が10秒間40上昇します。"
       },
       "vale_arcanist": {
         "name": "谷の秘術師の装束",
@@ -8229,7 +8421,8 @@ export const ja_JP: EnTranslations = {
       "wyrmshadow": {
         "name": "ナイトファングの装束",
         "bonus2": "攻撃力が40上昇します。",
-        "bonus3": "敏捷性が15、クリティカル率が2%上昇します。"
+        "bonus3": "敏捷性が15、クリティカル率が2%上昇します。",
+        "bonus4": "武器のクリティカルヒット時に50%の確率で「ファングラッシュ」が発動し、攻撃速度が8秒間25%上昇します。"
       }
     }
   },

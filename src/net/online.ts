@@ -27,10 +27,12 @@ import { LEADERBOARD_PAGE_SIZE } from '../sim/leaderboard_page';
 import type { Ante, PickAction } from '../sim/lockpick';
 import type { MarketQuery } from '../sim/market_query';
 import { normalizeMoveFacing, sanitizeMoveInput } from '../sim/move_input';
+import { getArchetypeTitle } from '../sim/professions/archetype';
 import type { MaterialRarity } from '../sim/professions/gathering';
 import { emptyCraftSkills } from '../sim/professions/wheel';
 import { computeQuestState, type ResolvedAbility } from '../sim/sim';
 import {
+  type DungeonDifficulty,
   type Entity,
   type EquipSlot,
   emptyMoveInput,
@@ -949,6 +951,7 @@ export class ClientWorld implements IWorld {
   // The raid-target markers ride the `markers` map below; IWorldPet keeps no mirror
   // field (pet state lives on the owned-mob entity wire). ---
   partyInfo: PartyInfo | null = null;
+  private selectedDungeonDifficulty: DungeonDifficulty = 'normal';
   // --- IWorldTrade: active trade-window state, mirrored from the snapshot self
   // (`s.trade`, delta-omitted). ---
   tradeInfo: TradeInfo | null = null;
@@ -1036,6 +1039,13 @@ export class ClientWorld implements IWorld {
   acceptArchetypeQuest(_craftId: string): void {}
   advanceAmendsProgress(): void {}
   switchArchetype(_craftId: string): void {}
+  // Title granted by the active archetype (#1130): derived, not a stored mirror
+  // field, so it stays correct the moment a future wire-up starts pushing
+  // `activeArchetype` snapshot updates (until then it tracks the stub default
+  // above, i.e. always null). See src/sim/professions/archetype.ts.
+  get archetypeTitle(): string | null {
+    return getArchetypeTitle(this.activeArchetype);
+  }
   // --- IWorldParty: raid-target marker mirror, from the self-wire `marks` (markerFor
   // reads it, no send). ---
   markers: Record<number, number> = {}; // entityId -> markerId, mirrored from the self-wire
@@ -1528,9 +1538,16 @@ export class ClientWorld implements IWorld {
       // the global snapshot clock the camera follow uses.
       const prevUpdatedAt = e.netUpdatedAt;
       const prevInterval = e.netInterval;
+      // LOCKSTEP with remoteEntityAlpha (src/render/net_interp_core.ts, which
+      // net/ cannot import): unknown-cadence entities interpolate on a fixed
+      // 120 ms fallback interval capped at 1, so the re-anchor lands exactly
+      // on the pose the renderer drew instead of the global snapshot clock.
       const entAlpha =
-        w.id !== this.playerId && prevUpdatedAt !== undefined && prevInterval !== undefined
-          ? Math.min(1.25, (now - prevUpdatedAt) / Math.max(20, prevInterval))
+        w.id !== this.playerId && prevUpdatedAt !== undefined
+          ? Math.min(
+              prevInterval === undefined ? 1 : 1.25,
+              (now - prevUpdatedAt) / Math.max(20, prevInterval ?? 120),
+            )
           : contAlpha;
       const entFacingAlpha = Math.min(1, entAlpha);
       // per-entity update clock: distant entities are sent below snapshot
@@ -1565,7 +1582,12 @@ export class ClientWorld implements IWorld {
           y: e.prevPos.y + (e.pos.y - e.prevPos.y) * entAlpha,
           z: e.prevPos.z + (e.pos.z - e.prevPos.z) * entAlpha,
         };
-        e.prevFacing = e.prevFacing + wrapAngle(e.facing - e.prevFacing) * entFacingAlpha;
+        // wrapAngle keeps the stored basis bounded: converging toward a facing
+        // that keeps crossing the +-PI seam otherwise grows prevFacing by 2*PI
+        // per revolution, unbounded over a long session.
+        e.prevFacing = wrapAngle(
+          e.prevFacing + wrapAngle(e.facing - e.prevFacing) * entFacingAlpha,
+        );
       }
       e.pos.x = w.x;
       e.pos.y = w.y;
@@ -1644,6 +1666,9 @@ export class ClientWorld implements IWorld {
           // sends it only when defined (server/game.ts), so an ordinary aura or an old server
           // decodes to undefined and the badge falls back to the stacks path, exactly as before.
           rec.charges = a.charges;
+          // The caster's entity id, for the target strip's own-aura prominence
+          // (auras_view ownFirst). An old server omits it; 0 matches no player id.
+          rec.sourceId = a.src ?? 0;
         }
       } else {
         e.auras = wireAuras.map((a: any) => ({
@@ -1656,7 +1681,7 @@ export class ClientWorld implements IWorld {
           value2: a.value2,
           value3: a.value3,
           tickInterval: a.tickInterval,
-          sourceId: 0,
+          sourceId: a.src ?? 0,
           school: a.school ?? 'physical',
           stacks: a.stacks,
           charges: a.charges,
@@ -1778,6 +1803,7 @@ export class ClientWorld implements IWorld {
         this.questLog = new Map((s.qlog as QuestProgress[]).map((q) => [q.questId, q]));
       if (s.qdone !== undefined) this.questsDone = new Set(s.qdone);
       if (s.lockouts !== undefined) this.selfLockouts = s.lockouts as Record<string, number>;
+      if (s.ddiff === 'normal' || s.ddiff === 'heroic') this.selectedDungeonDifficulty = s.ddiff;
       if (s.qlog !== undefined || s.qdone !== undefined) this.pendingQuestCommands?.clear();
       // IWorldTalents facet (W7) self-decode: tal is delta-guarded (omitted keeps
       // the prior mirror); the known rebuild below is display-only (re-renders what
@@ -2393,6 +2419,16 @@ export class ClientWorld implements IWorld {
   }
   leaveDungeon(): void {
     this.cmd({ cmd: 'leave_dungeon' });
+  }
+  dungeonDifficulty(): DungeonDifficulty {
+    return this.selectedDungeonDifficulty ?? 'normal';
+  }
+  setDungeonDifficulty(difficulty: DungeonDifficulty): void {
+    this.selectedDungeonDifficulty = difficulty;
+    this.cmd({ cmd: 'set_dungeon_difficulty', difficulty });
+  }
+  buyHeroicVendorItem(itemId: string): void {
+    this.cmd({ cmd: 'heroic_buy', itemId });
   }
   // Raid lockouts mirrored from snapshot self as {dungeonId: expiryEpochMs}; the
   // remaining time is derived locally so the countdown ticks down without traffic.

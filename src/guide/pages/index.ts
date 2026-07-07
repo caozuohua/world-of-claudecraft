@@ -18,6 +18,7 @@ import { glossary } from './glossary';
 import { home } from './home';
 import { howToPlay } from './how_to_play';
 import { models } from './models';
+import { professions } from './professions';
 import { progression } from './progression';
 import { quests } from './quests';
 import { settings } from './settings';
@@ -41,6 +42,7 @@ const PAGES: Record<string, GuidePage> = {
   models,
   world,
   gear,
+  professions,
   economy,
   quests,
   dungeons,

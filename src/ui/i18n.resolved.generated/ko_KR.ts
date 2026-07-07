@@ -368,7 +368,9 @@ export const ko_KR: EnTranslations = {
       "hoursMinutes": "{h}시간 {m}분",
       "minutes": "{m}분",
       "lessThanMinute": "1분 미만",
-      "lockedToast": "{raid}에 잠겨 있습니다. {time} 후 해제됩니다."
+      "lockedToast": "{raid}에 잠겨 있습니다. {time} 후 해제됩니다.",
+      "heroicName": "영웅: {name}",
+      "heroicLocked": "영웅 난이도 {name}에 귀속되었습니다."
     },
     "compass": {
       "N": "북",
@@ -929,6 +931,10 @@ export const ko_KR: EnTranslations = {
       "leaderOption": "분배 담당자: 파티장(나)",
       "masterOption": "분배 담당자: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "던전 난이도 설정: 영웅",
+      "setNormal": "던전 난이도 설정: 일반"
+    },
     "bags": {
       "cannotDestroy": "이 아이템은 파괴할 수 없습니다.",
       "rightClickDestroy": "마우스 오른쪽 버튼으로 파괴",
@@ -1147,7 +1153,7 @@ export const ko_KR: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "관리자",
-        "coredevs": "Core Dev",
+        "coredevs": "핵심 개발자",
         "devs": "개발자",
         "mods": "운영자",
         "artists": "아티스트"
@@ -1357,6 +1363,20 @@ export const ko_KR: EnTranslations = {
       "logging": "벌목",
       "herbalism": "약초학"
     },
+    "archetypeTitle": {
+      "label": "칭호",
+      "none": "없음",
+      "armorcrafting": "방어구 장인",
+      "weaponcrafting": "무기 장인",
+      "jewelcrafting": "보석 세공사",
+      "alchemy": "연금술사",
+      "engineering": "기술자",
+      "cooking": "요리사",
+      "inscription": "필경사",
+      "enchanting": "마법부여사",
+      "tailoring": "재단사",
+      "leatherworking": "가죽공예사"
+    },
     "crafting": {
       "title": "제작",
       "close": "제작 닫기",
@@ -1475,6 +1495,7 @@ export const ko_KR: EnTranslations = {
       "bestiary": "몬스터 도감",
       "models": "3D 모델",
       "gear": "장비와 물품",
+      "professions": "생산 전문직",
       "economy": "경제와 거래",
       "social": "사교와 파티",
       "stats": "캐릭터와 능력치",
@@ -2254,6 +2275,35 @@ export const ko_KR: EnTranslations = {
       "cosmeticsSkins": "모을 수 있는 외형 장식은 두 갈래입니다. 대부분의 직업에는 본연의 모습을 새롭게 풀어낸, 오직 자신만이 걸칠 수 있는 대체 외형이 몇 가지 있습니다. 그 곁에는 크로마가 있는데, 차분한 금속빛부터 화려한 황실의 색까지 외형을 통째로 다시 칠하는 이름 붙은 두 색조의 배색입니다.",
       "cosmeticsCache": "그중 일부는 신비한 외형 상자에서 나옵니다. 열면 세 가지 품질 등급 중 하나가 결정되어 그에 맞는 외형을 주는 봉인된 보상입니다. 순전히 보기 위한 것이라, 그 안의 무엇도 당신을 더 강하게 만들지 않고 그저 더 멋져 보이게 할 뿐입니다.",
       "cosmeticsApply": "캐릭터 화면의 외형 항목에서 현재 외형을 설정하고, 해금한 모든 외형을 자유롭게 바꿀 수 있습니다."
+    },
+    "professions": {
+      "intro": "전투와 퀘스트를 넘어, 이 세계는 땅을 일구고 대장간에서 일하는 당신에게도 보상을 준다: 원재료를 채집하고, 열 가지 서로 다른 제작소에서 이를 장비로 바꾸며, 그 직업들이 상징하는 열 가지 원형 중 하나로서 정체성을 확립하는 것이다.",
+      "gatherTitle": "채집: 채광, 벌목, 약초학",
+      "gatherIntro": "세 가지 채집 전문직을 통해 세계에서 직접 원재료를 얻을 수 있다: 채광은 광맥에서 광석과 돌을 캐고, 벌목은 나무숲에서 목재를 베어내며, 약초학은 야생에서 자라는 약초와 식물을 모은다. 각각 별도로 진행이 추적되므로, 하나를 익힌다고 해서 다른 하나의 진행이 늦어지지 않는다.",
+      "gatherWhatTitle": "자원 노드",
+      "gatherWhatBody": "광맥, 나무숲, 약초 군락은 각 지역에 눈에 보이는 주인 없는 지형지물로 배치되어 있다. 다가가 상호작용하면 그 안에 있는 것을 채집할 수 있다. 한 번 채집한 노드는 당신이 다시 채집하려면 회복할 시간이 필요하지만, 다른 플레이어를 막는 일은 결코 없다: 그동안 다른 플레이어가 같은 노드를 채집할 수 있다.",
+      "gatherProficiencyTitle": "숙련도와 재료 품질",
+      "gatherProficiencyBody": "채집에 성공할 때마다 해당 채집 전문직의 숙련도가 오른다. 숙련도가 높을수록 노드에서 얻는 재료는 더 희귀한 등급 쪽으로 치우치며, 일반 등급부터 위로 올라가지만, 가장 희귀한 등급은 숙련도가 높아도 여전히 드물다. 더 많은 연습은 결코 확률을 낮추지 않고, 오직 개선할 뿐이다.",
+      "gatherToolsTitle": "전문 도구",
+      "gatherToolsBody": "상인들은 각 채집 전문직의 기본 도구를 판매하며, 더 좋은 도구는 제작할 수 있다. 그래서 자원 노드 작업은 그 자리에 머무르는 것이 아니라 장비를 갖출수록 점점 더 유능해지는 느낌을 주도록 설계되었다. 상위 등급 도구는 더 풍부한 노드에 접근하고 긴 플레이 세션 동안 더 효율적으로 작업하기 위한 의도된 수단이다.",
+      "craftTitle": "열 가지 제작 전문직",
+      "craftIntro": "열 가지 제작 전문직은 채집한 재료를 완성된 장비와 물품으로 바꾼다: 방어구 제작, 무기 제작, 보석 세공은 원재료를 착용 가능한 장비로 형태를 잡고, 연금술과 공학은 시행착오에 기반하며, 요리, 문양학, 마법부여는 각각 다른 전문직의 결과물에 손을 대고, 재봉과 가죽 세공은 정확한 도안을 따라 작업한다. 이들은 함께 하나의 원환을 이루며, 각 전문직은 두 이웃과 인접하고 다른 하나와 마주 본다.",
+      "craftRingTitle": "전문직의 원환",
+      "craftRingBody": "열 가지 전문직은 고정된 원환 위에 배치되어 있으며, 그 원환 위의 위치가 중요하다: 원환에서 서로 인접한 전문직은 반대편에 있는 전문직보다 서로 더 많은 공통점을 가진다. 하나의 전문직에 전념하는 것은 고립된 기술 하나를 고르는 것이 아니라 관련된 전문직 가족에 합류하는 듯한 느낌을 주어야 한다.",
+      "craftRecipesTitle": "제작법과 재료",
+      "craftRecipesBody": "각 전문직은 저마다의 제작법을 가지고 있으며, 각각 당신이 채집하거나 구매하는 특정 재료를 필요로 한다. 각 전문직의 가장 기본적인 제작법은 일반 재료만으로 제작할 수 있고 처음부터 가능하므로, 전문직을 익히는 즉시 작업을 시작할 수 있으며 해금을 기다릴 필요가 없다.",
+      "craftMasteryTitle": "숙련도와 통달",
+      "craftMasteryBody": "제작에 성공하면 해당 전문직의 숙련도가 오르며, 더 풍부한 제작법은 더 높은 숙련도 뒤에 잠겨 있다: 기본 제작법은 누구에게나 열려 있지만, 점점 더 고급스러운 제작법일수록 시도하려면 점점 더 높은 통달이 요구된다. 한 전문직의 숙련도를 키우는 것은 단순한 초기 물품에서 더 야심 찬 제작법으로 가는 길이다.",
+      "craftComboTitle": "조합 제작법",
+      "craftComboBody": "단일 전문직 자체의 제작법 목록을 넘어, 이 원환은 인접한 두 전문직을 동시에 필요로 하는 조합 제작법도 지원하여, 원환 위에서 인접한 전문직에 투자한 캐릭터(또는 거래 파트너 한 쌍)에게 보상을 준다. 고립된 하나의 전문직에만 투자한 경우와는 다르다.",
+      "archetypeTitle": "열 가지 원형",
+      "archetypeIntro": "열 가지 전문직은 각각 원형도 상징하며, 단순히 그 전문직에 종사하는 것을 넘어서는 더 넓은 정체성을 받아들일 수 있다. 당신의 현재 원형은 한 번에 하나뿐이며 목록이 아니다: 당신은 하나를 지니며, 원한다면 나중에 다른 것으로 바꿀 수 있다.",
+      "archetypeChooseTitle": "원형 선택하기",
+      "archetypeChooseBody": "첫 원형은 존1의 초기 스토리 퀘스트를 통해 선언하며, 그 퀘스트가 당신을 그 정체성으로 공식적으로 받아들인다. 그 퀘스트를 완료하기 전까지 당신은 아직 어떤 원형도 선택하지 않은 상태다.",
+      "archetypeSwitchTitle": "마음을 바꾸기",
+      "archetypeSwitchBody": "한 번 원형을 선언했다고 해서 영원히 그것에 묶이는 것은 아니다. 다른 원형으로 바꾸려면 먼저 옛 원형을 위한 반복 가능한 '속죄' 퀘스트를 완료해야 하며, 바꿀 때마다 다음번에 요구되는 속죄는 조금씩 더 무거워진다. 그래서 전환은 항상 의미가 있으며 대가 없이 이루어지지 않는다.",
+      "archetypeIdentityTitle": "당신의 원형이 의미하는 것",
+      "archetypeIdentityBody": "당신의 현재 원형은 이 세계에서 당신의 캐릭터가 누구인지에 대한 선언이며, 다른 이들과 세계가 당신을 부르는 방식에 반영된다. 그에 따르는 구체적인 보상과 인정은 아직 다듬어지는 중이다. 시스템이 채워지는 대로 다시 확인해 보라."
     },
     "economy": {
       "intro": "동전은 온 세계를 움직이는 기름입니다. 장비와 보급품, 여행 장비를 사고, 플레이어들 사이에서 손을 바꿉니다. 이 모든 것은 그저 플레이하는 것만으로 익히게 되니, 이 페이지를 돈이 어디서 들어오고 어디로 나가는지 보여 주는 지도라 여기세요.",
@@ -3335,6 +3385,10 @@ export const ko_KR: EnTranslations = {
       "hard": "최상급 전리품"
     },
     "closeAria": "닫기"
+  },
+  "heroicShop": {
+    "balance": "영웅의 징표: {count}",
+    "buyAria": "영웅의 징표 {marks}개로 {item} 구매"
   },
   "delveUi": {
     "board": {
@@ -4628,12 +4682,14 @@ export const ko_KR: EnTranslations = {
     "slots": {
       "mainhand": "주장비",
       "helmet": "머리",
+      "neck": "목",
       "shoulder": "어깨",
       "chest": "가슴",
       "waist": "허리",
       "legs": "다리",
       "gloves": "손",
-      "feet": "발"
+      "feet": "발",
+      "ring": "손가락"
     },
     "quality": {
       "poor": "하급",
@@ -6563,6 +6619,132 @@ export const ko_KR: EnTranslations = {
       "event_skin_token": {
         "name": "신비한 외형 상자"
       },
+      "heroic_mark": {
+        "name": "영웅의 징표"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "모르텐의 묘지주조 사슬갑옷"
+      },
+      "shadowpulse_handwraps": {
+        "name": "어둠파동 손싸개"
+      },
+      "bonechill_striders": {
+        "name": "뼈서리 장화"
+      },
+      "mistcallers_fang": {
+        "name": "안개소환사의 송곳니"
+      },
+      "tidebound_spaulders": {
+        "name": "조수결속 어깨보호구"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "가라앉은 궁정의 장식띠"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "달조수 대지팡이"
+      },
+      "tidewoven_trousers": {
+        "name": "조수직조 바지"
+      },
+      "choirmothers_casque": {
+        "name": "성가대어머니의 투구"
+      },
+      "gravewyrm_cleaver": {
+        "name": "무덤용 대검"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "무덤용의 장막"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "성소 잠행자의 장갑"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "불사 궁정의 홀"
+      },
+      "deathless_warguard_legmail": {
+        "name": "불사 전쟁수호 다리갑옷"
+      },
+      "soulrend_diadem": {
+        "name": "영혼분열 왕관"
+      },
+      "scourgehide_carapace": {
+        "name": "재앙가죽 갑각"
+      },
+      "cryptplate_helm": {
+        "name": "묘지판금 투구"
+      },
+      "shadowpulse_slippers": {
+        "name": "어둠파동 슬리퍼"
+      },
+      "bonechill_cord": {
+        "name": "뼈서리 허리끈"
+      },
+      "mistforged_pauldrons": {
+        "name": "안개주조 어깨보호구"
+      },
+      "tideguard_faceguard": {
+        "name": "조수방패 面갑"
+      },
+      "sunken_court_mantle": {
+        "name": "가라앉은 궁정의 망토"
+      },
+      "lunar_choir_leggings": {
+        "name": "달노래 각반"
+      },
+      "choir_blessed_spaulders": {
+        "name": "성가 축복의 어깨보호구"
+      },
+      "tideworn_warboots": {
+        "name": "조수마모 전투화"
+      },
+      "gravewyrm_claws": {
+        "name": "무덤용 발톱"
+      },
+      "gravescale_girdle": {
+        "name": "무덤비늘 허리띠"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "용노래 손싸개"
+      },
+      "deathless_greatblade": {
+        "name": "불사 대검"
+      },
+      "soulforged_warplate": {
+        "name": "혼주조 전투갑옷"
+      },
+      "stormcallers_focus": {
+        "name": "폭풍소환사의 매개체"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "아홉 맹세의 인장"
+      },
+      "nielas_coldlight_band": {
+        "name": "니엘라의 냉광 반지"
+      },
+      "sutils_gambit": {
+        "name": "수틸의 도박"
+      },
+      "oath_of_the_round_table": {
+        "name": "원탁의 맹세"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "지즈의 불멸의 인장"
+      },
+      "architects_cornerstone": {
+        "name": "건축가의 초석"
+      },
+      "swiftfang_talisman": {
+        "name": "신속한 송곳니 부적"
+      },
+      "yumis_keepsake_locket": {
+        "name": "유미의 추억 로켓"
+      },
+      "zense_meridian": {
+        "name": "젠세의 자오선"
+      },
+      "medallion_of_endless_profit": {
+        "name": "끝없는 이득의 메달"
+      },
       "deathless_heartwood": {
         "name": "죽지 않는 왕관의 심재"
       },
@@ -7100,6 +7282,11 @@ export const ko_KR: EnTranslations = {
         "name": "방어구 제작자 호드",
         "title": "장인 방어구 제작자",
         "greeting": "화덕은 뜨겁고 숫돌은 돌고 있습니다. 베는 물건이라면 팝니다."
+      },
+      "heroic_quartermaster": {
+        "name": "병참장교 벡스",
+        "title": "영웅 병참장교",
+        "greeting": "영웅 던전의 증표는 하이워치 최고의 반지와 펜던트로 바꿀 수 있소. 징표를 보여 주시오."
       },
       "loremaster_caddis": {
         "name": "현자 캐디스",
@@ -8190,12 +8377,14 @@ export const ko_KR: EnTranslations = {
       "crownforged": {
         "name": "뼈벼림 전투장비",
         "bonus2": "전투력이 40만큼 증가합니다.",
-        "bonus3": "힘이 15, 체력이 15만큼 증가하고 공격 속도와 시전 속도가 15% 증가합니다."
+        "bonus3": "힘이 15, 체력이 15만큼 증가하고 공격 속도와 시전 속도가 15% 증가합니다.",
+        "bonus4": "무기 치명타 적중 시 대상에게 \"뼈 파편\"을 남겨 12초 동안 2초마다 8의 출혈 피해를 입힙니다. 최대 3번 중첩됩니다."
       },
       "deathlord": {
         "name": "고분군주의 전투장비",
         "bonus2": "전투력이 40만큼 증가합니다.",
-        "bonus3": "힘이 15, 체력이 15만큼 증가합니다."
+        "bonus3": "힘이 15, 체력이 15만큼 증가합니다.",
+        "bonus4": "무기 치명타 적중 시 50% 확률로 \"무덤의 위력\"이 발동하여 전투력이 60만큼 증가합니다. 10초 동안 지속됩니다."
       },
       "greyjaw_stalker": {
         "name": "그레이죠 추적자의 장비",
@@ -8205,22 +8394,25 @@ export const ko_KR: EnTranslations = {
         "name": "비탄직물 의복",
         "bonus2": "넉백되지 않습니다 (넉백 저항 100%).",
         "bonus3": "지능이 10, 체력이 10만큼 증가합니다.",
-        "bonus4": "주문 사용 시 일정 확률로 “선명한 시전”이 발동하여 다음 주문을 무료로 시전합니다."
+        "bonus4": "주문 사용 시 10% 확률로 \"선명한 시전\"이 발동하여 다음 주문을 무료로 시전합니다."
       },
       "nighttalon": {
         "name": "흉포송곳니 가죽장비",
         "bonus2": "전투력이 40만큼 증가합니다.",
-        "bonus3": "민첩이 15, 치명타 확률이 2% 증가하고 공격 속도와 시전 속도가 15% 증가합니다."
+        "bonus3": "민첩이 15, 치명타 확률이 2% 증가하고 공격 속도와 시전 속도가 15% 증가합니다.",
+        "bonus4": "무기 치명타 적중 시 \"찢어진 상처\"를 내어 대상이 12초 동안 2초마다 6의 출혈 피해를 입습니다. 최대 3번 중첩됩니다."
       },
       "soulflame": {
         "name": "망령불꽃 의복",
         "bonus2": "넉백되지 않습니다 (넉백 저항 100%).",
-        "bonus3": "지능이 15, 정신력이 15만큼 증가하고 공격 속도와 시전 속도가 15% 증가합니다."
+        "bonus3": "지능이 15, 정신력이 15만큼 증가하고 공격 속도와 시전 속도가 15% 증가합니다.",
+        "bonus4": "주문 사용 시 10% 확률로 \"영혼의 불길\"이 발동하여 주문력이 40만큼 증가합니다. 10초 동안 지속됩니다."
       },
       "stormcallers": {
         "name": "강풍부름 의복",
         "bonus2": "넉백되지 않습니다 (넉백 저항 100%).",
-        "bonus3": "지능이 15, 정신력이 15만큼 증가하고 공격 속도와 시전 속도가 15% 증가합니다."
+        "bonus3": "지능이 15, 정신력이 15만큼 증가하고 공격 속도와 시전 속도가 15% 증가합니다.",
+        "bonus4": "주문 사용 시 10% 확률로 \"영혼의 불길\"이 발동하여 주문력이 40만큼 증가합니다. 10초 동안 지속됩니다."
       },
       "vale_arcanist": {
         "name": "계곡 비전술사의 예복",
@@ -8229,7 +8421,8 @@ export const ko_KR: EnTranslations = {
       "wyrmshadow": {
         "name": "밤송곳니 의복",
         "bonus2": "전투력이 40만큼 증가합니다.",
-        "bonus3": "민첩이 15, 치명타 확률이 2% 증가합니다."
+        "bonus3": "민첩이 15, 치명타 확률이 2% 증가합니다.",
+        "bonus4": "무기 치명타 적중 시 50% 확률로 \"송곳니 질주\"가 발동하여 공격 속도가 25% 증가합니다. 8초 동안 지속됩니다."
       }
     }
   },

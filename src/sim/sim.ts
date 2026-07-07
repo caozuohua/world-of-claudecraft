@@ -138,7 +138,7 @@ import {
   runDespawnDecay,
   tickGroundAoEs,
 } from './entity_roster';
-import { canEquipItem } from './equipment_rules';
+import { canEquipItem, resolveEquipSlot } from './equipment_rules';
 import { fleeSpeed } from './flee_speed';
 import { formatMoney } from './format_money';
 import * as interaction from './interaction';
@@ -197,6 +197,7 @@ import {
   acceptArchetypeQuest as acceptArchetypeQuestImpl,
   advanceAmendsProgress as advanceAmendsProgressImpl,
   archetypeStateFor,
+  archetypeTitleFor,
   emptyArchetypeState,
   normalizeArchetypeState,
   requiredAmendsProgress,
@@ -261,6 +262,12 @@ export type { MailSave } from './mail/post_office';
 export type { MarketSave } from './market';
 
 import {
+  applyHeroicMobTuning,
+  mobLevelForDungeonDifficulty,
+  mobTemplateForDungeonDifficulty,
+} from './instances/difficulty';
+import {
+  awardHeroicMarks as awardHeroicMarksImpl,
   enterCrypt as enterCryptImpl,
   enterDungeon as enterDungeonImpl,
   instanceInfoAt as instanceInfoAtImpl,
@@ -272,6 +279,7 @@ import {
   updateDoorTriggers as updateDoorTriggersImpl,
   updateInstances as updateInstancesImpl,
 } from './instances/dungeons';
+import { buyHeroicVendorItem as buyHeroicVendorItemImpl } from './instances/heroic_vendor';
 import * as questCommands from './quests/quest_commands';
 import {
   checkQuestReady,
@@ -334,6 +342,7 @@ import {
   type DelveModuleDef,
   type DelveRun,
   DT,
+  type DungeonDifficulty,
   dist2d,
   type Entity,
   type EquipSlot,
@@ -345,6 +354,7 @@ import {
   type InvSlot,
   type ItemInstancePayload,
   isConsuming,
+  isDungeonDifficulty,
   isPetClass,
   isQuestTurnInNpc,
   LEASH_DISTANCE,
@@ -371,6 +381,7 @@ import {
   type SkinCatalog,
   type SkinRank,
   type SportRole,
+  steadyAngleTo,
   swingMissChance,
   TURN_SPEED,
   type VcBracket,
@@ -563,6 +574,7 @@ export interface Party {
   raidGroups: Map<number, 1 | 2>; // pid -> raid subgroup
   lootStrategies: LootStrategies;
   lootTurn: number; // round-robin common-item cursor; advances once per awarded item
+  dungeonDifficulty?: DungeonDifficulty;
 }
 
 export interface TradeSession {
@@ -654,6 +666,7 @@ export interface FiestaPowerup {
 
 export interface InstanceSlot {
   dungeonId: string;
+  difficulty: DungeonDifficulty;
   slot: number;
   partyKey: string | null; // party id or 'solo:<pid>'
   mobIds: number[];
@@ -829,6 +842,9 @@ export interface PlayerMeta {
   fiestaRestore: { level: number; xp: number; talents: TalentAllocation } | null;
   loadouts: SavedLoadout[];
   activeLoadout: number; // index into loadouts, or -1 for none
+  // Session-only dungeon preference. Omitted when normal so deterministic
+  // parity samples and character persistence do not churn on a default.
+  dungeonDifficulty?: DungeonDifficulty;
   raidLockouts: Map<string, number>; // dungeon id -> epoch ms expiry
   // Transient presence status. Set by /afk and /dnd, cleared when the player
   // chats again. Session-only — never persisted, so it resets on login.
@@ -844,24 +860,28 @@ export interface PlayerMeta {
   // Session-only World Market browse filter. The market is capped at
   // MARKET_WIRE_LIMIT listings per snapshot to bound wire cost, so this
   // server-side substring filter (matched against item names) is how a player
-  // reaches goods past the cap. Never persisted, resets on login.
+  // reaches goods past the cap. Never persisted: resets on login.
   marketFilter: string;
   // Flat per-craft skill tracking (#1126): one independent, additive-only skill
   // value per craft on the ten-craft ring (see professions/wheel.ts). Persisted
   // in CharacterState.
   craftSkills: Record<string, number>;
-  // One-time Ravenpost welcome letter sent (persisted in CharacterState, so
-  // existing characters get the service announcement exactly once).
-  mailWelcomed: boolean;
   // Active-archetype state and quest-gated switching (#1129, superseded scope: see
   // professions/archetype.ts). Never touches craftSkills. Persisted in CharacterState.
   archetype: ArchetypeState;
+  // One-time Ravenpost welcome letter sent (persisted in CharacterState, so
+  // existing characters get the service announcement exactly once).
+  mailWelcomed: boolean;
   // Delve meta progression (persisted in CharacterState).
   delveMarks: number;
   delveClears: Record<string, number>;
   companionUpgrades: Record<string, number>;
   delveLoreUnlocked: Set<string>;
   delveDaily: { date: string; firstClearXp: Set<string>; markClears: number };
+  // Heroic-mark daily income gate (persisted): dungeon ids whose heroic final
+  // boss already paid this player a Heroic Mark on `date` (host UTC day).
+  // See awardHeroicMarks in instances/dungeons.ts; at most 4 marks per day.
+  heroicDaily: { date: string; marked: Set<string> };
   // World-boss loot lockouts live in `raidLockouts` (keyed worldboss:<mobId>), so the
   // eligibility gate and the rendered raid-lockout countdown are one value. See
   // world_boss.ts (markWorldBossLooted / isWorldBossLootEligible).
@@ -903,6 +923,7 @@ export interface CharacterState {
   // contract (src/sim/professions/CLAUDE.md, #1164) parallel to the existing
   // `delveDaily`/`companionUpgrades` persisted fields.
   professions?: Partial<Record<string, number>>;
+  // load cleanly, defaulting every profession to 0).
   gatheringProficiency?: Partial<Record<string, number>>;
   copper: number;
   hp: number;
@@ -977,6 +998,7 @@ export interface CharacterState {
   companionUpgrades?: Record<string, number>;
   delveLoreUnlocked?: string[];
   delveDaily?: { date: string; firstClearXp: string[]; markClears: number };
+  heroicDaily?: { date: string; marked: string[] };
   // Ravenpost welcome letter already sent (optional so pre-mail saves load
   // cleanly and receive the announcement letter once on their next login).
   mailWelcomed?: boolean;
@@ -1260,6 +1282,7 @@ export class Sim {
         for (let i = 0; i < INSTANCE_SLOT_COUNT; i++) {
           this.instances.push({
             dungeonId: dungeon.id,
+            difficulty: 'normal',
             slot: i,
             partyKey: null,
             mobIds: [],
@@ -1285,6 +1308,7 @@ export class Sim {
       for (let i = 0; i < INSTANCE_SLOT_COUNT; i++) {
         this.instances.push({
           dungeonId: dungeon.id,
+          difficulty: 'normal',
           slot: i,
           partyKey: null,
           mobIds: [],
@@ -1566,15 +1590,16 @@ export class Sim {
       raidLockouts: new Map(),
       away: null,
       marketQuery: defaultMarketQuery(),
-      craftSkills: emptyCraftSkills(),
-      mailWelcomed: false,
       marketFilter: '',
+      craftSkills: emptyCraftSkills(),
       archetype: emptyArchetypeState(),
+      mailWelcomed: false,
       delveMarks: 0,
       delveClears: {},
       companionUpgrades: {},
       delveLoreUnlocked: new Set(),
       delveDaily: { date: '', firstClearXp: new Set(), markClears: 0 },
+      heroicDaily: { date: '', marked: new Set() },
     };
     // A fresh character sets out provisioned (class-defined starter rations);
     // a saved character loads its own bags from savedState below.
@@ -1667,8 +1692,8 @@ export class Sim {
         }
       }
       meta.craftSkills = normalizeCraftSkills(s.craftSkills);
-      meta.mailWelcomed = s.mailWelcomed === true;
       meta.archetype = normalizeArchetypeState(s.archetype);
+      meta.mailWelcomed = s.mailWelcomed === true;
       meta.delveMarks = s.delveMarks ?? 0;
       meta.delveClears = { ...(s.delveClears ?? {}) };
       meta.companionUpgrades = { ...(s.companionUpgrades ?? {}) };
@@ -1679,6 +1704,9 @@ export class Sim {
           firstClearXp: new Set(s.delveDaily.firstClearXp),
           markClears: s.delveDaily.markClears,
         };
+      }
+      if (s.heroicDaily) {
+        meta.heroicDaily = { date: s.heroicDaily.date, marked: new Set(s.heroicDaily.marked) };
       }
     }
 
@@ -1958,6 +1986,7 @@ export class Sim {
         firstClearXp: [...meta.delveDaily.firstClearXp],
         markClears: meta.delveDaily.markClears,
       },
+      heroicDaily: { date: meta.heroicDaily.date, marked: [...meta.heroicDaily.marked] },
       mailWelcomed: meta.mailWelcomed,
       // World-boss lockouts serialize via raidLockouts (above), not a separate field.
     };
@@ -2583,6 +2612,9 @@ export class Sim {
       instanceOriginOf: sim.instanceOriginOf.bind(sim),
       enterDungeon: sim.enterDungeon.bind(sim),
       leaveDungeon: sim.leaveDungeon.bind(sim),
+      dungeonDifficulty: sim.dungeonDifficulty.bind(sim),
+      setDungeonDifficulty: sim.setDungeonDifficulty.bind(sim),
+      awardHeroicMarks: sim.awardHeroicMarks.bind(sim),
       addEntity: sim.addEntity.bind(sim),
       dropEntity: sim.dropEntity.bind(sim),
       rebucket: sim.rebucket.bind(sim),
@@ -3269,7 +3301,7 @@ export class Sim {
     const done = (arrived: boolean): boolean => {
       p.chargeTargetId = null;
       p.chargePath = [];
-      if (target) p.facing = angleTo(p.pos, target.pos);
+      if (target) p.facing = steadyAngleTo(p.pos, target.pos, p.facing);
       if (arrived) this.startAutoAttack(p.id);
       return true;
     };
@@ -3348,7 +3380,7 @@ export class Sim {
       return false;
     }
     // always turn to face the leader, even while held in place
-    p.facing = angleTo(p.pos, t.pos);
+    p.facing = steadyAngleTo(p.pos, t.pos, p.facing);
     if (isStunned(p) || isRooted(p) || d <= FOLLOW_STOP_DIST) return true;
     let speed = RUN_SPEED * this.moveSpeedMult(p);
     if (this.isSwimming(p)) speed *= SWIM_SPEED_MULT;
@@ -3784,7 +3816,7 @@ export class Sim {
       return;
     if (
       target.kind === 'mob' &&
-      MOBS[target.templateId]?.ccImmune &&
+      (MOBS[target.templateId]?.ccImmune || target.ccImmune) &&
       this.isControlAura(aura.kind) &&
       aura.sourceId !== target.id &&
       !this.isNythraxisScriptedControl(target, aura)
@@ -3793,9 +3825,10 @@ export class Sim {
     // Slow immunity is separate from ccImmune: snares (kind 'slow') are not control auras,
     // so a slowImmune raid boss shrugs off Frostbolt/Hamstring-style movement snares while
     // still taking a self-applied slow (e.g. a scripted mechanic) through sourceId === self.
+    // The entity-level flags are the heroic-spawn twins (see Entity.ccImmune).
     if (
       target.kind === 'mob' &&
-      MOBS[target.templateId]?.slowImmune &&
+      (MOBS[target.templateId]?.slowImmune || target.slowImmune) &&
       aura.kind === 'slow' &&
       aura.sourceId !== target.id
     )
@@ -4473,7 +4506,7 @@ export class Sim {
       pet.swingTimer = Math.max(0, pet.swingTimer - DT);
       return;
     }
-    pet.facing = angleTo(pet.pos, target.pos);
+    pet.facing = steadyAngleTo(pet.pos, target.pos, pet.facing);
     pet.swingTimer -= DT;
     // Emit the projectile + resolve the hit (resisted, not missed: the same
     // semantics as player casts). Shared by the instant path and the windup
@@ -4720,7 +4753,10 @@ export class Sim {
             entityId: mob.id,
           });
           for (const ally of wounded) {
-            const amount = Math.round(this.rng.range(tmpl.mendAlly.healMin, tmpl.mendAlly.healMax));
+            const amount = Math.round(
+              this.rng.range(tmpl.mendAlly.healMin, tmpl.mendAlly.healMax) *
+                (mob.mechanicHealMult ?? 1),
+            );
             this.applyHeal(mob, ally, amount, tmpl.mendAlly.name);
           }
         }
@@ -4757,7 +4793,7 @@ export class Sim {
               kind: 'absorb',
               remaining: tmpl.wardAllies.duration,
               duration: tmpl.wardAllies.duration,
-              value: tmpl.wardAllies.amount,
+              value: Math.round(tmpl.wardAllies.amount * (mob.mechanicHealMult ?? 1)),
               sourceId: mob.id,
               school,
             });
@@ -4914,8 +4950,16 @@ export class Sim {
         boss.pos.x + Math.sin(ang) * spawnRadius,
         boss.pos.z + Math.cos(ang) * spawnRadius,
       );
-      const level = this.rng.int(template.minLevel, template.maxLevel);
-      const add = createMob(this.nextId++, template, level, pos);
+      const rolledLevel = this.rng.int(template.minLevel, template.maxLevel);
+      const difficulty = inst?.difficulty ?? 'normal';
+      const addTemplate = mobTemplateForDungeonDifficulty(
+        template,
+        inst?.dungeonId ?? '',
+        difficulty,
+      );
+      const level = mobLevelForDungeonDifficulty(inst?.dungeonId ?? '', difficulty, rolledLevel);
+      const add = createMob(this.nextId++, addTemplate, level, pos);
+      applyHeroicMobTuning(add, inst?.dungeonId ?? '', difficulty);
       // Leash to the boss's ORIGINAL spawn (not his current, possibly-kited position):
       // pulled too far from it, the add's chase-case leash check evades it home.
       add.spawnPos = { ...boss.spawnPos };
@@ -5283,7 +5327,11 @@ export class Sim {
       if (next && (!cur || next.min + next.max > cur.min + cur.max))
         this.equipItem(itemId, meta.entityId);
     } else {
-      const cur = meta.equipment[def.slot] ? ITEMS[meta.equipment[def.slot]!] : null;
+      // resolveEquipSlot maps a ring item to its concrete ring1/ring2 key
+      // (empty-first), so auto-equip fills an open jewelry slot too.
+      const slot = resolveEquipSlot(def, meta.equipment);
+      const curId = slot ? meta.equipment[slot] : undefined;
+      const cur = curId ? ITEMS[curId] : null;
       if (!cur || (def.stats?.armor ?? 0) > (cur.stats?.armor ?? 0))
         this.equipItem(itemId, meta.entityId);
     }
@@ -6285,6 +6333,59 @@ export class Sim {
     leaveDungeonImpl(this.ctx, pid);
   }
 
+  dungeonDifficulty(pid?: number): DungeonDifficulty {
+    const r = this.resolve(pid);
+    if (!r) return 'normal';
+    return this.dungeonDifficultyForPid(r.meta.entityId);
+  }
+
+  setDungeonDifficulty(difficulty: DungeonDifficulty, pid?: number): void {
+    if (!isDungeonDifficulty(difficulty)) return;
+    const r = this.resolve(pid);
+    if (!r) return;
+    const party = this.partyOf(r.meta.entityId);
+    if (party && party.leader !== r.meta.entityId) {
+      this.error(r.meta.entityId, 'You are not the party leader.');
+      return;
+    }
+    // Only the SETTER's own preference is stamped: members mirror the party via
+    // dungeonDifficultyForPid while grouped and keep their own prior preference
+    // after leaving, so a stale stamp can never leak into another group.
+    if (difficulty === 'normal') delete r.meta.dungeonDifficulty;
+    else r.meta.dungeonDifficulty = difficulty;
+    if (party) {
+      if (difficulty === 'normal') delete party.dungeonDifficulty;
+      else party.dungeonDifficulty = difficulty;
+    }
+    this.error(
+      r.meta.entityId,
+      difficulty === 'heroic'
+        ? 'Dungeon difficulty set to Heroic.'
+        : 'Dungeon difficulty set to Normal.',
+    );
+  }
+
+  // Owned by instances/dungeons (heroic final-boss participation marks); the
+  // C1 death hub reaches it through the seam, this delegate keeps the facade.
+  awardHeroicMarks(mob: Entity, recipients: PlayerMeta[]): void {
+    awardHeroicMarksImpl(this.ctx, mob, recipients);
+  }
+
+  // Heroic Quartermaster purchase (owned by instances/heroic_vendor.ts): the
+  // heroic_buy command dispatch and the offline HUD resolve it on the facade.
+  buyHeroicVendorItem(itemId: string, pid?: number): void {
+    buyHeroicVendorItemImpl(this.ctx, itemId, pid);
+  }
+
+  private dungeonDifficultyForPid(pid: number): DungeonDifficulty {
+    // In a party the PARTY state is the only authority (leader-set): falling
+    // through to a member's personal stamp would let a stale solo preference
+    // bypass the leader-only rule at the dungeon door.
+    const party = this.partyOf(pid);
+    if (party) return party.dungeonDifficulty ?? 'normal';
+    return this.players.get(pid)?.dungeonDifficulty ?? 'normal';
+  }
+
   // Legacy single-dungeon entry points (tests + scripts use these).
   enterCrypt(pid?: number): void {
     enterCryptImpl(this.ctx, pid);
@@ -6858,6 +6959,17 @@ export class Sim {
 
   get archetypeAmendsRequired(): number {
     return this.archetypeAmendsRequiredFor(this.primaryId);
+  }
+
+  /** The title granted by the CURRENTLY-ACTIVE archetype (#1130): the craft id
+   *  whose named title is earned, or null before an archetype is ever chosen. See
+   *  professions/archetype.ts getArchetypeTitle for the "no title" rule. */
+  archetypeTitleFor(pid: number): string | null {
+    return archetypeTitleFor(this.ctx, pid);
+  }
+
+  get archetypeTitle(): string | null {
+    return this.archetypeTitleFor(this.primaryId);
   }
 
   /** Stub entry point for the zone-1 acceptance quest's completion (see

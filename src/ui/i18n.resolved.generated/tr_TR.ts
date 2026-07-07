@@ -368,7 +368,9 @@ export const tr_TR: EnTranslations = {
       "hoursMinutes": "{h}s {m}d",
       "minutes": "{m}d",
       "lessThanMinute": "<1d",
-      "lockedToast": "{raid} akınına kilitlisin. {time} içinde açılır."
+      "lockedToast": "{raid} akınına kilitlisin. {time} içinde açılır.",
+      "heroicName": "Kahramanca {name}",
+      "heroicLocked": "Kahramanca {name} akınına kilitlisin."
     },
     "compass": {
       "N": "K",
@@ -661,8 +663,8 @@ export const tr_TR: EnTranslations = {
       "fromYour": "{value} {stat} değerinden:",
       "names": {
         "spellPower": "Büyü Gücü",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Kritik Puanı",
+        "hasteRating": "Hız Puanı"
       },
       "desc": {
         "str": "Saldırı gücünü artırır, böylece silah darbelerin daha sert iner.",
@@ -676,8 +678,8 @@ export const tr_TR: EnTranslations = {
         "dps": "Silahının hasarını ve hızını saldırı gücünle birleştiren, saniye başına tahmini silah hasarın.",
         "critChance": "Bir saldırının kritik vurma ve çift hasar verme şansın.",
         "dodge": "Gelen bir yakın dövüş saldırısından hiç hasar almadan tamamen kaçınma şansın.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Teçhizatından ve set bonuslarından gelen kritik puanı, kritik vuruş şansını artırır. Yaklaşık 10 puan %1 kritik sağlar.",
+        "hasteRating": "Teçhizatından ve set bonuslarından gelen hız puanı, saldırılarını ve büyü yapmanı hızlandırır. Yaklaşık 10 puan %1 hız sağlar."
       },
       "effects": {
         "attackPower": "+{value} Saldırı Gücü",
@@ -719,13 +721,13 @@ export const tr_TR: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Vuruşta şans (%{chance}): {effect}",
+      "onSpellDamage": "Hasar veren büyülerinde şans (%{chance}): {effect}",
+      "onHeal": "İyileştirmelerinde şans (%{chance}): {effect}",
+      "chainArc": "hedefi, {jumps} yakındaki düşmana sıçrayıp azalan hasar veren bir {school} {name} ({damage}) ile vurur",
+      "attackSlow": "ve hedefin saldırı hızını {duration} sn boyunca %{pct} yavaşlatır",
+      "dot": "{name} yaratır, {duration} sn boyunca {total} veren bir {school} zamana yayılı hasar etkisi",
+      "hot": "{name} açtırır, {duration} sn boyunca {total} geri kazandıran zamana yayılı bir iyileştirme"
     },
     "questShare": {
       "notShareable": "Bu görev paylaşılamaz.",
@@ -929,9 +931,13 @@ export const tr_TR: EnTranslations = {
       "leaderOption": "Ganimet Yöneticisi: Lider (Sen)",
       "masterOption": "Ganimet Yöneticisi: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Zindan Zorluğunu Ayarla: Kahramanca",
+      "setNormal": "Zindan Zorluğunu Ayarla: Normal"
+    },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Bu eşya yok edilemez.",
+      "rightClickDestroy": "Yok etmek için sağ tıkla",
       "filterGroupAria": "Çantaları kategoriye göre filtrele",
       "filterAll": "Tümü",
       "filterWeapon": "Silahlar",
@@ -1147,7 +1153,7 @@ export const tr_TR: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Yönetici",
-        "coredevs": "Core Dev",
+        "coredevs": "Çekirdek Geliştirici",
         "devs": "Geliştirici",
         "mods": "Moderatör",
         "artists": "Sanatçı"
@@ -1357,6 +1363,20 @@ export const tr_TR: EnTranslations = {
       "logging": "Ağaç kesme",
       "herbalism": "Bitkicilik"
     },
+    "archetypeTitle": {
+      "label": "Unvan",
+      "none": "Yok",
+      "armorcrafting": "Zırhçı",
+      "weaponcrafting": "Silah Ustası",
+      "jewelcrafting": "Kuyumcu",
+      "alchemy": "Simyacı",
+      "engineering": "Mühendis",
+      "cooking": "Aşçı",
+      "inscription": "Kâtip",
+      "enchanting": "Efsuncu",
+      "tailoring": "Terzi",
+      "leatherworking": "Derici"
+    },
     "crafting": {
       "title": "işçiliği",
       "close": "İşçiliği kapat",
@@ -1368,7 +1388,7 @@ export const tr_TR: EnTranslations = {
       "craftedToast": "Hazırlanma Tarihi: {name}",
       "insufficientMaterials": "Bunun için malzemeleriniz yok.",
       "unknownRecipe": "O tarif mevcut değil.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "O tarif için gereken iki zanaata da gereken kademede sahip değilsin."
     }
   },
   "apiError": {
@@ -1475,6 +1495,7 @@ export const tr_TR: EnTranslations = {
       "bestiary": "Yaratıklar",
       "models": "3B Modeller",
       "gear": "Teçhizat ve Eşyalar",
+      "professions": "Professions",
       "economy": "Ekonomi ve Ticaret",
       "social": "Sosyal ve Gruplar",
       "stats": "Karakter ve Nitelikler",
@@ -2254,6 +2275,35 @@ export const tr_TR: EnTranslations = {
       "cosmeticsSkins": "Toplanacak iki kozmetik hat vardır. Çoğu sınıfın birkaç alternatif görünümü vardır; sınıf görünümüne, yalnızca size ait giyebileceğiniz taze bir bakış. Onların yanında kromalar yer alır: bir görünümü, ağırbaşlı metallerden parlak imparatorluk renklerine kadar baştan boyayan, isimli iki tonlu renk şemaları.",
       "cosmeticsCache": "Bunların birkaçı, açtığınızda üç kalite kademesinden birini atan ve ona uygun görünümü veren mühürlü bir ödül olan gizemli bir kozmetik sandıktan gelir. Tamamen görünüm içindir: içindeki hiçbir şey sizi güçlendirmez, yalnızca bakılması daha hoş kılar.",
       "cosmeticsApply": "Aktif görünümünüzü karakter ekranınızdaki görünüş satırından belirleyin ve açtığınız her şey arasında özgürce geçiş yapın."
+    },
+    "professions": {
+      "intro": "Beyond combat and quests, the world rewards you for working the land and the forge: gathering raw materials, turning them into gear at the crafting stations of ten different trades, and settling into an identity as one of the ten archetypes those trades represent.",
+      "gatherTitle": "Gathering: Mining, Logging, and Herbalism",
+      "gatherIntro": "Three gathering trades let you pull raw materials straight out of the world: Mining strikes ore and stone from veins, Logging fells timber from stands of trees, and Herbalism collects herbs and plants growing wild. Each is tracked separately, so working one never slows your progress in another.",
+      "gatherWhatTitle": "Resource nodes",
+      "gatherWhatBody": "Ore veins, wood stands, and herb patches are placed out in the zones as visible, unowned fixtures. Walk up to one and interact with it to harvest whatever it holds. Once you have harvested a node, it needs time to recover before you personally can harvest it again, though it never blocks anyone else: another player can harvest the very same node in the meantime.",
+      "gatherProficiencyTitle": "Proficiency and material quality",
+      "gatherProficiencyBody": "Every successful harvest builds your proficiency in that gathering trade. A higher proficiency shifts what you pull out of a node toward rarer grades of material, from common on up, though the rarest grades stay rare even at high proficiency. More practice never hurts your odds, it only ever improves them.",
+      "gatherToolsTitle": "Tools of the trade",
+      "gatherToolsBody": "Vendors sell basic tools for each gathering trade, and better ones can be crafted, so working a resource node is meant to feel more capable as you gear up for it rather than staying static. Higher-tier tools are the intended way to unlock access to richer nodes and to work them more efficiently over a long session.",
+      "craftTitle": "The ten crafts",
+      "craftIntro": "Ten crafting trades turn gathered materials into finished gear and goods: Armorcrafting, Weaponcrafting, and Jewelcrafting shape raw matter into wearable gear; Alchemy and Engineering are driven by trial and error; Cooking, Inscription, and Enchanting each touch other crafts' output; Tailoring and Leatherworking work from exact patterns. Together they form a wheel, with each craft sitting next to two neighbors and opposite one other.",
+      "craftRingTitle": "A wheel of specialties",
+      "craftRingBody": "The ten crafts are arranged in a fixed ring, and where a craft sits on that ring matters: crafts next to each other on the wheel share more in common with each other than crafts on opposite sides do. Committing to one craft is meant to feel like joining a family of related trades, not picking an isolated skill.",
+      "craftRecipesTitle": "Recipes and reagents",
+      "craftRecipesBody": "Every craft has its own recipes, each calling for specific reagents you gather or buy. The most basic recipes in each craft ask for nothing but common materials and are craftable from the very start, so you can begin working a trade the moment you pick it up rather than waiting to unlock it.",
+      "craftMasteryTitle": "Skill and mastery",
+      "craftMasteryBody": "Crafting successfully builds skill in that trade, and richer recipes are gated behind higher skill: the basic recipes are open to everyone, while progressively more advanced ones ask for progressively more mastery to attempt. Growing your skill in a craft is the path from simple starter goods to its more ambitious recipes.",
+      "craftComboTitle": "Combination recipes",
+      "craftComboBody": "Beyond a single craft's own recipe list, the wheel also supports combination recipes that call on two neighboring crafts at once, rewarding a character (or a pair of trading partners) who has invested in adjacent trades on the ring rather than one in isolation.",
+      "archetypeTitle": "The ten archetypes",
+      "archetypeIntro": "Each of the ten crafts also stands for an archetype, a broader identity you can adopt beyond just working that trade. Your active archetype is a single choice at a time, not a checklist: you carry one, and can change which one later if you choose to.",
+      "archetypeChooseTitle": "Choosing your archetype",
+      "archetypeChooseBody": "You declare your first archetype through an early, zone one story quest that formally accepts you into that identity. Until you complete that quest, you have not yet chosen an archetype at all.",
+      "archetypeSwitchTitle": "Changing your mind",
+      "archetypeSwitchBody": "Having declared an archetype once does not lock you into it forever. Changing to a different archetype means first completing a repeatable \"make amends\" quest for your old one, and each time you switch, the amends expected of you the next time grow a little steeper, so switching stays meaningful rather than costless.",
+      "archetypeIdentityTitle": "What your archetype means",
+      "archetypeIdentityBody": "Your active archetype is a statement about who your character is in the world, recognized in how others and the world address you. The exact rewards and recognition that come with it are still being finalized; check back as the system fills in."
     },
     "economy": {
       "intro": "Para tüm dünyayı çevirir: teçhizatınızı, erzakınızı ve yolculuk gereçlerinizi alır, oyuncular arasında el değiştirir. Bütün bunları sadece oynayarak öğrenirsiniz, bu yüzden bu sayfayı paranızın nereden gelip nereye gittiğinin bir haritası olarak düşünün.",
@@ -3335,6 +3385,10 @@ export const tr_TR: EnTranslations = {
       "hard": "Premium ganimet"
     },
     "closeAria": "Kapat"
+  },
+  "heroicShop": {
+    "balance": "Kahramanca Nişanlar: {count}",
+    "buyAria": "{item} ürününü {marks} Kahramanca Nişan karşılığında satın al"
   },
   "delveUi": {
     "board": {
@@ -4628,12 +4682,14 @@ export const tr_TR: EnTranslations = {
     "slots": {
       "mainhand": "Ana El",
       "helmet": "Miğfer",
+      "neck": "Boyun",
       "shoulder": "Omuzluk",
       "chest": "Göğüslük",
       "waist": "Bel",
       "legs": "Bacaklar",
       "gloves": "Eldivenler",
-      "feet": "Ayaklar"
+      "feet": "Ayaklar",
+      "ring": "Parmak"
     },
     "quality": {
       "poor": "Değersiz",
@@ -6563,6 +6619,132 @@ export const tr_TR: EnTranslations = {
       "event_skin_token": {
         "name": "Gizemli Kozmetik Sandığı"
       },
+      "heroic_mark": {
+        "name": "Kahramanca Nişan"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Morthen'in Mezardövümü Zırh Gömleği"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Gölgenabzı El Sargıları"
+      },
+      "bonechill_striders": {
+        "name": "Kemikürperti Adımları"
+      },
+      "mistcallers_fang": {
+        "name": "Sisçağıranın Dişi"
+      },
+      "tidebound_spaulders": {
+        "name": "Gelgitbağı Omuzlukları"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Boğulmuş Saray Kuşağı"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Ay Gelgiti Büyük Asası"
+      },
+      "tidewoven_trousers": {
+        "name": "Gelgitörgüsü Pantolonu"
+      },
+      "choirmothers_casque": {
+        "name": "Koroana'nın Miğferi"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Mezarejderi Satırı"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Mezarejderi Kefeni"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Mabet Avcısının Eldivenleri"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Ölümsüz Saray Asası"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Ölümsüz Savaşmuhafızı Bacak Zırhı"
+      },
+      "soulrend_diadem": {
+        "name": "Ruhyırtan Tacı"
+      },
+      "scourgehide_carapace": {
+        "name": "Afetpostu Kabuğu"
+      },
+      "cryptplate_helm": {
+        "name": "Mezarzırh Miğferi"
+      },
+      "shadowpulse_slippers": {
+        "name": "Gölgenabzı Terlikleri"
+      },
+      "bonechill_cord": {
+        "name": "Kemikürperti Kuşağı"
+      },
+      "mistforged_pauldrons": {
+        "name": "Sisdövümü Omuzlukları"
+      },
+      "tideguard_faceguard": {
+        "name": "Gelgitmuhafızı Yüzlüğü"
+      },
+      "sunken_court_mantle": {
+        "name": "Boğulmuş Saray Pelerini"
+      },
+      "lunar_choir_leggings": {
+        "name": "Ay Korosu Tozlukları"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Koro Kutsamalı Omuzlukları"
+      },
+      "tideworn_warboots": {
+        "name": "Gelgityıpranmış Savaş Çizmeleri"
+      },
+      "gravewyrm_claws": {
+        "name": "Mezarejderi Pençeleri"
+      },
+      "gravescale_girdle": {
+        "name": "Mezarpulu Kemeri"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Ejderkorosu El Sargıları"
+      },
+      "deathless_greatblade": {
+        "name": "Ölümsüz Pala"
+      },
+      "soulforged_warplate": {
+        "name": "Ruhdövümü Savaş Zırhı"
+      },
+      "stormcallers_focus": {
+        "name": "Fırtınaçağıranın Odağı"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Dokuz Yeminin Mührü"
+      },
+      "nielas_coldlight_band": {
+        "name": "Niela'nın Soğukışık Halkası"
+      },
+      "sutils_gambit": {
+        "name": "Sutil'in Kumarı"
+      },
+      "oath_of_the_round_table": {
+        "name": "Yuvarlak Masa Yemini"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Zyzz'in Ölümsüz Mühür Yüzüğü"
+      },
+      "architects_cornerstone": {
+        "name": "Mimarın Köşe Taşı"
+      },
+      "swiftfang_talisman": {
+        "name": "Tezdiş Tılsımı"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Yumi'nin Yadigâr Madalyonu"
+      },
+      "zense_meridian": {
+        "name": "Zense Meridyeni"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Bitmez Kâr Madalyonu"
+      },
       "deathless_heartwood": {
         "name": "Ölümsüz Taç'ın Öz Odunu"
       },
@@ -7100,6 +7282,11 @@ export const tr_TR: EnTranslations = {
         "name": "Zırhçı Hode",
         "title": "Usta Zırhçı",
         "greeting": "Ocak kızgın, bileği taşı dönüyor. Kesiyorsa, satarım."
+      },
+      "heroic_quartermaster": {
+        "name": "Levazımcı Vex",
+        "title": "Kahramanca Levazımcı",
+        "greeting": "Kahramanca derinliklerin kanıtı, Highwatch'taki en iyi yüzükleri ve kolyeleri satın alır. Nişanlarını göster bana."
       },
       "loremaster_caddis": {
         "name": "İrfan Ustası Caddis",
@@ -8190,12 +8377,14 @@ export const tr_TR: EnTranslations = {
       "crownforged": {
         "name": "Bonewrought Kıyafetleri",
         "bonus2": "Saldırı gücünü 40 artırır.",
-        "bonus3": "Gücü 15, dayanıklılığı 15, saldırı ve büyü hızını %15 artırır."
+        "bonus3": "Gücü 15, dayanıklılığı 15, saldırı ve büyü hızını %15 artırır.",
+        "bonus4": "Silah kritik vuruşların hedefi Kemikkıymık ile parçalar, 12 sn boyunca her 2 sn'de 8 kanama hasarı verir. 3 kata kadar üst üste binebilir."
       },
       "deathlord": {
         "name": "Barrowlord Savaş Takımı",
         "bonus2": "Saldırı gücünü 40 artırır.",
-        "bonus3": "Gücü 15 ve dayanıklılığı 15 artırır."
+        "bonus3": "Gücü 15 ve dayanıklılığı 15 artırır.",
+        "bonus4": "Silah kritik vuruşlarının %50 ihtimalle Mezargücü kazandırır, 10 sn boyunca saldırı gücünü 60 artırır."
       },
       "greyjaw_stalker": {
         "name": "Greyjaw İzsürücü takımı",
@@ -8205,22 +8394,25 @@ export const tr_TR: EnTranslations = {
         "name": "Mournweave Giysileri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
         "bonus3": "Zekayı 10 ve dayanıklılığı 10 artırır.",
-        "bonus4": "Your spells have a chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Büyülerinin %10 ihtimalle Berrak Büyü kazandırır, bir sonraki büyünü bedava yapar."
       },
       "nighttalon": {
         "name": "Direfang Postu",
         "bonus2": "Saldırı gücünü 40 artırır.",
-        "bonus3": "Çevikliği 15, kritik şansını %2, saldırı ve büyü hızını %15 artırır."
+        "bonus3": "Çevikliği 15, kritik şansını %2, saldırı ve büyü hızını %15 artırır.",
+        "bonus4": "Silah kritik vuruşların bir Pürüzlü Yarık açar, hedefi 12 sn boyunca her 2 sn'de 6 kanama hasarıyla kanatır. 3 kata kadar üst üste binebilir."
       },
       "soulflame": {
         "name": "Wraithfire Kıyafetleri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
-        "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır."
+        "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır.",
+        "bonus4": "Büyülerinin %10 ihtimalle Ruhalazı kazandırır, 10 sn boyunca büyü gücünü 40 artırır."
       },
       "stormcallers": {
         "name": "Galecall Cübbeleri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
-        "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır."
+        "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır.",
+        "bonus4": "Büyülerinin %10 ihtimalle Ruhalazı kazandırır, 10 sn boyunca büyü gücünü 40 artırır."
       },
       "vale_arcanist": {
         "name": "Vadi Arkanisti giysileri",
@@ -8229,7 +8421,8 @@ export const tr_TR: EnTranslations = {
       "wyrmshadow": {
         "name": "Nightfang Cübbeleri",
         "bonus2": "Saldırı gücünü 40 artırır.",
-        "bonus3": "Çevikliği 15 ve kritik şansını %2 artırır."
+        "bonus3": "Çevikliği 15 ve kritik şansını %2 artırır.",
+        "bonus4": "Silah kritik vuruşlarının %50 ihtimalle Dişhücumu kazandırır, 8 sn boyunca saldırı hızını %25 artırır."
       }
     }
   },
