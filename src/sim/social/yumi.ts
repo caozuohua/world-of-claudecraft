@@ -43,10 +43,6 @@ export const YUMI_SUDDEN_BLEED_EVERY = 2; // s between neutral bleed pulses
 
 export type YumiFormat = 'yumi3' | 'yumi5';
 
-export function isYumiFormat(fmt: string): fmt is YumiFormat {
-  return fmt === 'yumi3' || fmt === 'yumi5';
-}
-
 export function yumiTeamSize(fmt: YumiFormat): 3 | 5 {
   return fmt === 'yumi3' ? 3 : 5;
 }
@@ -246,8 +242,9 @@ export function startYumiMatch(
       dmgToYumiA: 0,
       dmgToYumiB: 0,
       lastStatusSecond: -1,
-      // Per-match deterministic stream (fiesta's seeding recipe): teleport
-      // picks + the tiebreak coin never touch the shared draw order.
+      // Per-match deterministic stream (the fiesta two-stream rule; seeded
+      // off the sim clock + this match's own id): teleport picks + the
+      // tiebreak coin never touch the shared draw order.
       rng: new Rng((ctx.tickCount * 2654435761 + matchId * 40503) >>> 0),
     },
   };
