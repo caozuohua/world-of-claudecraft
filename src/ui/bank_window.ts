@@ -117,6 +117,11 @@ export interface BankWindowDeps extends PainterHostPresentation {
   /** Close the sibling windows this one displaces (bank + bags cluster). */
   closeOthers(): void;
   hideTooltip(): void;
+  /** True when this click is the release of a long-press tooltip peek, so the
+   *  cell's withdraw must be SUPPRESSED (holding a cell to read its tooltip must
+   *  not withdraw on release). Wired to the shared Hud TouchPeekGuard; a plain
+   *  tap and every desktop click return false. */
+  consumePeek(): boolean;
   // Non-modal focus capture/return (WCAG 2.4.3). The bank rides alongside the bags
   // window, so it does NOT trap focus; it only records its opener on open and returns
   // focus there on close. Wired to the FocusManager's activeFocusable / restore, NOT
@@ -364,7 +369,16 @@ export class BankWindow {
         t('itemUi.bags.itemAria', { item: itemName, count: this.fmt(slot.count) }),
       );
       cell.innerHTML = `${this.deps.itemIcon(item)}<span class="bank-count">${slot.showCount ? esc(t('itemUi.bags.stackCount', { count: this.fmt(slot.count) })) : ''}</span>`;
-      cell.addEventListener('click', (ev) => this.onSlotClick(slot.slotIndex, ev.shiftKey));
+      cell.addEventListener('click', (ev) => {
+        // On touch, the click that ends a long-press peek inspects the slot (its
+        // tooltip is already shown) instead of withdrawing: the release dismisses
+        // the tooltip and fires nothing. A plain tap / desktop click falls through.
+        if (this.deps.consumePeek()) {
+          this.deps.hideTooltip();
+          return;
+        }
+        this.onSlotClick(slot.slotIndex, ev.shiftKey);
+      });
       this.deps.attachTooltip(cell, () => {
         const partial = slot.showCount
           ? `<div class="tt-sub">${esc(t('hudChrome.bank.withdrawPartialHint'))}</div>`

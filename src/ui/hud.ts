@@ -1864,6 +1864,15 @@ export class Hud {
       (el.id === 'vendor-window' || el.id === 'bags')
     )
       return;
+    // The bank docks its bags companion the same way the vendor does (a fixed
+    // side-by-side cluster driven by body.bank-open, mobile-paired 50/50); baking a
+    // cascade-offset inline position onto either half would defeat that layout (the
+    // inline inset beats the docking CSS), so skip the cascade for the bank cluster.
+    if (
+      document.body.classList.contains('bank-open') &&
+      (el.id === 'bank-window' || el.id === 'bags')
+    )
+      return;
     const openCount = [...document.querySelectorAll<HTMLElement>('.window.panel')].filter(
       (win) => win !== el && this.isWindowVisible(win),
     ).length;
@@ -2027,6 +2036,11 @@ export class Hud {
         break;
       case 'bags':
         if (this.vendorOpen && document.body.classList.contains('mobile-touch')) this.closeVendor();
+        // The bank cluster is one unit on touch exactly like the vendor cluster
+        // (the bank hides its own x-btn under the pairing), so the managed close
+        // of bags closes the bank companion too, never leaving a half-width orphan.
+        else if (this.bankWindow.isOpen && document.body.classList.contains('mobile-touch'))
+          this.closeBank();
         // Route through the painter so focus returns to the opener (WCAG 2.4.3),
         // consistent with the toggle / X close path. NON-MODAL: no trap is released.
         else this.bagsWindow.close();
@@ -3255,6 +3269,8 @@ export class Hud {
     isBankOpen: () => this.bankWindow.isOpen,
     pendingPetFeed: () => this.pendingPetFeed,
     closeVendor: () => this.closeVendor(),
+    closeBank: () => this.closeBank(),
+    onClosed: () => this.onBagsClosed(),
     addItemToTrade: (itemId) => this.addItemToTrade(itemId),
     stageMarketSell: (itemId) => this.marketWindow.stageSell(itemId),
     stageMailParcel: (itemId) => this.mailboxWindow.stageParcel(itemId),
@@ -3328,6 +3344,7 @@ export class Hud {
     world: () => this.sim,
     closeOthers: () => this.closeOtherWindows(['#bank-window', '#bags']),
     hideTooltip: () => this.hideTooltip(),
+    consumePeek: () => this.peekGuard.consume(),
     // Non-trapping focus capture/return (bank is a non-modal companion of bags):
     // NOT windowFocus('#bank-window'), which would install a Tab trap.
     captureFocus: () => this.focusManager.activeFocusable(),
@@ -10204,6 +10221,19 @@ export class Hud {
     return this.bankWindow.isOpen;
   }
 
+  // Fired by the bags painter after its close() teardown. On touch, a bags close
+  // that leaves the bank open (the tray/minimap bags toggle; Esc and the bags x-btn
+  // close the whole cluster instead) undocks the pairing so the standalone mobile
+  // full-screen rule takes over: the bank widens to the full viewport and its own
+  // x-btn reappears (the pairing hid it), so a touch close affordance survives.
+  // Desktop deliberately keeps the docked offset until the bank closes (the
+  // recorded vendor-family behavior); toggleBags re-adds the class on re-open.
+  private onBagsClosed(): void {
+    if (document.body.classList.contains('mobile-touch') && this.bankWindow.isOpen) {
+      document.body.classList.remove('bank-open');
+    }
+  }
+
   toggleCalendar(): void {
     this.calendarWindow.toggle();
   }
@@ -10260,6 +10290,10 @@ export class Hud {
     this.bagsWindow.noteOpener();
     this.renderBags();
     el.style.display = 'flex';
+    // Re-dock the bank pairing when its companion re-opens (the mobile undock in
+    // onBagsClosed drops the class while the bank stays up; idempotent on desktop,
+    // which never undocks).
+    if (this.bankWindow.isOpen) document.body.classList.add('bank-open');
     audio.bagOpen();
     // Pull a fresh on-chain $WOC balance for the footer; the async result
     // re-renders the bag via the onWalletUiChange listener wired in the ctor.

@@ -11,6 +11,7 @@ import { describe, expect, it } from 'vitest';
 const painter = readFileSync(new URL('../src/ui/bank_window.ts', import.meta.url), 'utf8');
 const tokens = readFileSync(new URL('../src/styles/tokens.css', import.meta.url), 'utf8');
 const components = readFileSync(new URL('../src/styles/components.css', import.meta.url), 'utf8');
+const mobileCss = readFileSync(new URL('../src/styles/hud.mobile.css', import.meta.url), 'utf8');
 const hud = readFileSync(new URL('../src/ui/hud.ts', import.meta.url), 'utf8');
 const indexHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const playHtml = readFileSync(new URL('../play.html', import.meta.url), 'utf8');
@@ -332,3 +333,74 @@ describe('bank_window: Phase 6 search / sort / deposit-all', () => {
     expect(components).toContain('#bank-window .bag-filter-bar {');
   });
 });
+
+describe('bank_window: Phase 7 touch peek suppression', () => {
+  it('consults the shared peek guard FIRST in the cell click, before onSlotClick', () => {
+    // A long-press peek shows the tooltip and marks the guard; the release click must
+    // consume that peek and inspect the slot instead of withdrawing. The guard check
+    // must sit BEFORE onSlotClick, so deleting it (or moving onSlotClick above it)
+    // reds this. A plain tap / desktop click returns false and falls through.
+    expect(painter).toContain('consumePeek(): boolean;');
+    expect(painter).toMatch(
+      /cell\.addEventListener\('click', \(ev\) => \{[\s\S]{0,260}?if \(this\.deps\.consumePeek\(\)\) \{\s*this\.deps\.hideTooltip\(\);\s*return;\s*\}\s*this\.onSlotClick\(slot\.slotIndex, ev\.shiftKey\);/,
+    );
+  });
+
+  it('hud wires consumePeek to the shared TouchPeekGuard at the BANK construction site', () => {
+    // Slice to the bank construction block (bounded by the next window) so this pins the
+    // BANK wiring specifically, not the identically-worded bags one.
+    const bankSite = hud.slice(hud.indexOf('new BankWindow({'), hud.indexOf('new CalendarWindow('));
+    expect(bankSite.length).toBeGreaterThan(0);
+    expect(bankSite).toContain('consumePeek: () => this.peekGuard.consume(),');
+  });
+});
+
+describe('bank_window: Phase 7 mobile pairing (hud.mobile.css)', () => {
+  it('pairs the bank cluster 50/50, mirroring the vendor (bank right:50vw, bags left:50vw)', () => {
+    expect(mobileCss).toMatch(/body\.mobile-touch\.bank-open #bank-window \{[^}]*right: 50vw/);
+    expect(mobileCss).toMatch(/body\.mobile-touch\.bank-open #bags \{[^}]*left: 50vw/);
+  });
+
+  it('standalone mobile block neutralizes the desktop dock (transform:none, max-height:none, safe-area)', () => {
+    const start = mobileCss.indexOf('body.mobile-touch #bank-window {');
+    const block = mobileCss.slice(start, mobileCss.indexOf('}', start));
+    expect(start).toBeGreaterThan(0);
+    expect(block).toContain('transform: none');
+    expect(block).toContain('max-height: none');
+    expect(block).toContain('top: max(10px, env(safe-area-inset-top))');
+    expect(block).toContain('bottom: calc(72px + env(safe-area-inset-bottom))');
+  });
+
+  it('hides the bank x-btn under the pairing (the bags x-btn closes the whole cluster)', () => {
+    expect(mobileCss).toMatch(
+      /body\.mobile-touch\.bank-open #bank-window \.panel-title \.x-btn \{\s*display: none;/,
+    );
+  });
+
+  it('keeps every bank tap target at the 40px floor and never weakens it on mobile', () => {
+    // The 40px floors live in components.css (WCAG 2.5.8: 40x40 preferred, never
+    // deliberately weakened to the 24px minimum). Pin the load-bearing floors...
+    expect(components).toMatch(/\.bank-item \{[^}]*min-height: 40px/);
+    expect(components).toMatch(/\.bank-buy-btn \{[^}]*min-height: 40px/);
+    expect(components).toMatch(/body\.mobile-touch \.bank-deposit-all \{\s*min-height: 40px;/);
+    // ...and prove no mobile bank rule introduces a sub-40 min tap dimension.
+    const bankMobileRules = [
+      ...mobileCss.matchAll(/(?:#bank-window|\.bank-[\w-]*)[^{}]*\{[^}]*\}/g),
+    ]
+      .map((m) => m[0])
+      .join('\n');
+    for (const m of bankMobileRules.matchAll(/min-(?:height|width):\s*(\d+)px/g)) {
+      expect(Number(m[1])).toBeGreaterThanOrEqual(40);
+    }
+  });
+
+  it('exempts the bank cluster from the window-cascade position bake (mirrors the vendor guard)', () => {
+    // placeNewWindow bakes an inline cascade-offset inset; on mobile that inline inset
+    // beats the docking CSS and breaks the 50/50 pairing. The bank cluster must be
+    // exempted exactly as the vendor cluster is, or the mobile pairing silently regresses.
+    expect(hud).toMatch(
+      /classList\.contains\('bank-open'\)\s*&&\s*\(el\.id === 'bank-window' \|\| el\.id === 'bags'\)/,
+    );
+  });
+});
+

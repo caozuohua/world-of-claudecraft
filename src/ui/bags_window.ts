@@ -124,6 +124,15 @@ export interface BagsWindowDeps extends PainterHostPresentation {
   pendingPetFeed(): boolean;
   // Cross-window commands the bag click fans out to.
   closeVendor(): void;
+  /** Close the bank cluster (bank + this bags companion). On touch the bank hides
+   *  its own x-btn under the pairing, so the bags x-btn is the cluster's single
+   *  close control, mirroring closeVendor. */
+  closeBank(): void;
+  /** Fired after close() finished its teardown. The HUD uses it to undock a still
+   *  open bank companion on touch (the tray/minimap bags toggle hides bags without
+   *  closing the bank; dropping the docking class lets the mobile standalone
+   *  full-screen rule take over instead of leaving a half-width orphan). */
+  onClosed(): void;
   addItemToTrade(itemId: string): void;
   /** Stage a bag item for a Market listing (selects it + repaints the market). */
   stageMarketSell(itemId: string): void;
@@ -186,6 +195,7 @@ export class BagsWindow {
     this.deps.cancelPetFeed();
     this.deps.restoreFocus(this.openerFocus);
     this.openerFocus = null;
+    this.deps.onClosed();
   }
 
   render(): void {
@@ -210,9 +220,19 @@ export class BagsWindow {
     moneyRow.innerHTML = `${this.deps.wocBalanceHtml()}${this.deps.moneyHtml(world.copper)}`;
     el.appendChild(moneyRow);
     el.querySelector('[data-close]')?.addEventListener('click', () => {
-      if (this.deps.vendorOpen() && document.body.classList.contains('mobile-touch')) {
-        this.deps.closeVendor();
-        return;
+      // On touch the vendor / bank clusters hide their LEFT panel's own x-btn, so
+      // this bags x-btn is the whole cluster's single close control: it closes the
+      // companion window too (mirroring closeVendor's / onBankClosed's teardown),
+      // never leaving a half-screen orphan.
+      if (document.body.classList.contains('mobile-touch')) {
+        if (this.deps.vendorOpen()) {
+          this.deps.closeVendor();
+          return;
+        }
+        if (this.deps.isBankOpen()) {
+          this.deps.closeBank();
+          return;
+        }
       }
       this.close();
     });

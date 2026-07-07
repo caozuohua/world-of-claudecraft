@@ -113,3 +113,49 @@ describe('bags_window: bank-deposit mode wiring', () => {
     expect(painter).toContain('+ extra + partial + link');
   });
 });
+
+describe('bags_window: Phase 7 touch peek + bank-cluster close', () => {
+  it('the bags x-btn closes the whole bank cluster on touch (mirrors the vendor close)', () => {
+    // On mobile the bank hides its own x-btn under the pairing, so the bags x-btn is
+    // the cluster's single close control: it must close the bank companion too, never
+    // leaving a half-screen orphan (the family behavior, cloned from closeVendor).
+    expect(painter).toContain('closeBank(): void;');
+    expect(painter).toMatch(
+      /if \(this\.deps\.isBankOpen\(\)\) \{\s*this\.deps\.closeBank\(\);\s*return;\s*\}/,
+    );
+    // Guarded behind the mobile-touch gate (desktop keeps the bank's own x-btn).
+    expect(painter).toMatch(
+      /if \(document\.body\.classList\.contains\('mobile-touch'\)\) \{[\s\S]{0,200}?this\.deps\.closeBank\(\)/,
+    );
+    expect(hud).toContain('closeBank: () => this.closeBank(),');
+  });
+
+  it('the managed (Esc) close of bags closes the bank cluster on touch too', () => {
+    // Mirrors the vendor arm one line above it in closeManagedWindow: on touch the
+    // cluster is one unit and the bank's own x-btn is hidden, so peeling bags off
+    // with Esc must not leave a half-width orphan bank.
+    expect(hud).toMatch(
+      /case 'bags':[\s\S]{0,700}?else if \(this\.bankWindow\.isOpen && document\.body\.classList\.contains\('mobile-touch'\)\)\s*this\.closeBank\(\);/,
+    );
+  });
+
+  it('a bags close that leaves the bank open undocks the pairing on touch (standalone full-screen)', () => {
+    // The tray/minimap bags toggle hides bags WITHOUT closing the bank; dropping
+    // body.bank-open lets the mobile standalone full-screen rule take over (and the
+    // bank x-btn reappear). close() must fire the hook on every teardown, the hud
+    // must gate the undock on mobile + bank-open, and toggleBags must re-dock on
+    // re-open, or the pairing never comes back.
+    expect(painter).toContain('onClosed(): void;');
+    expect(painter).toMatch(
+      /this\.deps\.restoreFocus\(this\.openerFocus\);\s*this\.openerFocus = null;\s*this\.deps\.onClosed\(\);/,
+    );
+    expect(hud).toContain('onClosed: () => this.onBagsClosed(),');
+    expect(hud).toMatch(
+      /private onBagsClosed\(\): void \{\s*if \(document\.body\.classList\.contains\('mobile-touch'\) && this\.bankWindow\.isOpen\) \{\s*document\.body\.classList\.remove\('bank-open'\);/,
+    );
+    expect(hud).toMatch(
+      /this\.bagsWindow\.noteOpener\(\);[\s\S]{0,400}?if \(this\.bankWindow\.isOpen\) document\.body\.classList\.add\('bank-open'\);/,
+    );
+  });
+
+});
