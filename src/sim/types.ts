@@ -36,6 +36,15 @@ export const DUNGEON_LEASH_DISTANCE = 70;
 // updateMob); the boss id NYTHRAXIS_BOSS_ID lives lower in this file (C1 relocation).
 export const NYTHRAXIS_ADD_ID = 'nythraxis_skeleton_warrior';
 export const GCD = 1.5; // seconds
+// Combat ratings are gear-facing stats converted to fractions in recalcPlayerStats.
+export const HASTE_RATING_PER_PCT = 10; // 10 haste rating = 1% faster
+export const CRIT_RATING_PER_PCT = 10; // 10 crit rating = +1% crit chance
+export function hasteFractionFromRating(rating: number): number {
+  return rating / (HASTE_RATING_PER_PCT * 100);
+}
+export function critFractionFromRating(rating: number): number {
+  return rating / (CRIT_RATING_PER_PCT * 100);
+}
 // Shared cooldown across ALL combat potions (classic-era potion sickness): one
 // potion locks every other potion for this long (#103). 2 minutes, the classic-era value.
 export const POTION_COOLDOWN = 120; // seconds
@@ -311,6 +320,9 @@ interface BaseItemDef {
   // Kept off `Stats` because Spell Power is a derived combat rating (like attackPower),
   // not one of the six primary attributes.
   spellPower?: number;
+  // Combat ratings, converted to crit%/haste% in recalcPlayerStats.
+  critRating?: number;
+  hasteRating?: number;
   use?: ItemUse;
   sellValue: number; // copper (vendor buys at this)
   buyValue?: number; // copper (vendor sells at this)
@@ -354,6 +366,17 @@ interface BaseItemDef {
 // damage-driven cast pushback in combat/casting_lifecycle.ts. `knockbackResistance` (0..1)
 // scales on-hit knockback distance. Balance values are authored in
 // content/item_sets.ts, never inline in engine code.
+export interface SetProc {
+  id: string; // unique aura/proc id, e.g. 'set_clearcasting'
+  name: string; // buff display name, e.g. 'Clearcasting'
+  trigger: 'spellCast' | 'meleeCrit' | 'spellCrit' | 'kill';
+  chance: number; // 0..1 proc chance
+  aura: AuraKind; // the buff to grant, e.g. 'next_cast_free'
+  duration: number; // seconds the granted aura lasts
+  value?: number; // optional aura value
+  icd?: number; // internal cooldown seconds, min gap between procs
+}
+
 export interface SetBonusEffect {
   str?: number;
   agi?: number;
@@ -361,13 +384,17 @@ export interface SetBonusEffect {
   int?: number;
   spi?: number;
   ap?: number; // flat attack power
+  sp?: number; // flat spell power (mirrors `ap` for the caster archetype)
   crit?: number; // flat crit chance, 0..1
+  critRating?: number; // crit rating (converted to % in recalcPlayerStats)
   // Haste fraction (0.15 = 15% faster). ONE stat: it speeds melee and ranged
   // auto-attack swings AND shortens spell cast/channel time, all together
   // (folded into Entity.meleeHaste/rangedHaste/spellHaste in recalcPlayerStats).
   haste?: number;
+  hasteRating?: number; // haste rating (converted to % in recalcPlayerStats)
   castPushbackReduction?: number; // 0..1: fraction of damage cast-pushback removed (1 = immune)
   knockbackResistance?: number; // 0..1: fraction of on-hit knockback distance resisted (1 = immune)
+  proc?: SetProc;
 }
 
 export interface SetBonusTier {
@@ -394,6 +421,49 @@ export interface WeaponItemDef extends BaseItemDef {
   slot: 'mainhand';
   weapon: WeaponInfo;
   armorType?: never;
+  // Legendary "chance on action" procs; see WeaponProc below.
+  weaponProcs?: WeaponProc[];
+}
+
+// A legendary weapon proc: a "chance on action" effect that rolls when the wielder
+// performs the trigger action (lands a melee swing, lands a damaging spell, or lands
+// a heal) and, on success, fires its effects. Handled by
+// src/sim/combat/equip_procs.ts. The proc's rng roll is gated on the wielder actually
+// carrying a proc weapon, so ordinary gear draws no extra rng and the deterministic
+// draw order (and every parity golden that equips no legendary) is unchanged.
+export type WeaponProcTrigger = 'meleeHit' | 'spellDamage' | 'heal';
+
+export type WeaponProcEffect =
+  // Thunderfury-style arc: a bolt that strikes the primary target and then jumps to
+  // up to `jumps` nearby enemies for `falloff`-decaying damage.
+  | {
+      kind: 'chainArc';
+      school: Aura['school'];
+      damage: number;
+      jumps: number;
+      falloff: number;
+      radius: number;
+    }
+  // Slows the primary target's attack speed (an `attackspeed` aura, mult > 1).
+  | { kind: 'attackSlow'; name: string; mult: number; duration: number }
+  // A damage-over-time on the target (e.g. Deathbloom).
+  | {
+      kind: 'dot';
+      name: string;
+      school: Aura['school'];
+      perTick: number;
+      interval: number;
+      duration: number;
+    }
+  // A heal-over-time on the trigger's target (e.g. Lifebloom).
+  | { kind: 'hot'; name: string; perTick: number; interval: number; duration: number };
+
+export interface WeaponProc {
+  id: string; // unique per item; used for the applied aura ids
+  name: string; // player-visible proc name (also the chain arc's damage label)
+  trigger: WeaponProcTrigger;
+  chance: number; // 0..1 per trigger action
+  effects: WeaponProcEffect[];
 }
 
 export interface OtherItemDef extends BaseItemDef {
@@ -1509,7 +1579,11 @@ export interface Entity {
   meleeHaste: number;
   rangedHaste: number;
   spellHaste: number;
+  setProcs: SetProc[];
+  procReadyAt: Record<string, number>;
   critChance: number; // 0..1
+  critRating: number; // accumulated crit rating from gear + set bonuses
+  hasteRating: number; // accumulated haste rating from gear + set bonuses
   dodgeChance: number;
   castPushbackReduction: number; // 0..1: damage cast-pushback removed by item-set bonuses (1 = immune)
   knockbackResistance: number; // 0..1: on-hit knockback distance resisted by item-set bonuses (1 = immune)

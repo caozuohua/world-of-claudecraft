@@ -522,7 +522,9 @@ export const en: EnTranslations = {
     "statInfo": {
       "fromYour": "From your {value} {stat}:",
       "names": {
-        "spellPower": "Spell Power"
+        "spellPower": "Spell Power",
+        "critRating": "Crit Rating",
+        "hasteRating": "Haste Rating"
       },
       "desc": {
         "str": "Increases your attack power, so your weapon strikes land harder.",
@@ -535,7 +537,9 @@ export const en: EnTranslations = {
         "spellPower": "Increases the damage of your spells and the strength of your heals. Each point of Intellect grants a little Spell Power, on top of any from gear or buffs.",
         "dps": "Your estimated weapon damage per second, combining your weapon's damage and speed with your attack power.",
         "critChance": "Your chance for an attack to strike critically, dealing double damage.",
-        "dodge": "Your chance to completely avoid an incoming melee attack, taking no damage."
+        "dodge": "Your chance to completely avoid an incoming melee attack, taking no damage.",
+        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
       },
       "effects": {
         "attackPower": "+{value} Attack Power",
@@ -575,6 +579,15 @@ export const en: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
+      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
+      "onHeal": "Chance on your heals ({chance}%): {effect}",
+      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
+      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
+      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
+      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
     },
     "questShare": {
       "notShareable": "This quest can't be shared.",
@@ -6194,7 +6207,7 @@ export const en: EnTranslations = {
         "name": "Cryptbone Pauldrons"
       },
       "deathlords_dread_visage": {
-        "name": "Barrowlord's Dread Visage"
+        "name": "Barrowlord Dread Visage"
       },
       "gravewyrm_gauntlets": {
         "name": "Gravewyrm Gauntlets"
@@ -6425,28 +6438,28 @@ export const en: EnTranslations = {
         "name": "Vanguard Chrome"
       },
       "crownforged_gauntlets": {
-        "name": "Crownforged Gauntlets"
+        "name": "Bonewrought Gauntlets"
       },
       "nighttalon_grips": {
-        "name": "Nighttalon Grips"
+        "name": "Direfang Grips"
       },
       "soulflame_gloves": {
-        "name": "Soulflame Gloves"
+        "name": "Wraithfire Gloves"
       },
       "stormcallers_handguards": {
-        "name": "Stormcaller's Handguards"
+        "name": "Galecall Handguards"
       },
       "crownforged_girdle": {
-        "name": "Crownforged Girdle"
+        "name": "Bonewrought Girdle"
       },
       "nighttalon_waistband": {
-        "name": "Nighttalon Waistband"
+        "name": "Direfang Waistband"
       },
       "soulflame_cord": {
-        "name": "Soulflame Cord"
+        "name": "Wraithfire Cord"
       },
       "stormcallers_waistguard": {
-        "name": "Stormcaller's Waistguard"
+        "name": "Galecall Waistguard"
       }
     },
     "mobs": {
@@ -7972,8 +7985,9 @@ export const en: EnTranslations = {
       },
       "necromancers": {
         "name": "Mournweave Raiment",
-        "bonus2": "You cannot be knocked back (100% knockback resistance).",
-        "bonus3": "Increases Intellect by 10 and Stamina by 10."
+        "bonus2": "Increases spell power by 20. You cannot be knocked back (100% knockback resistance).",
+        "bonus3": "Increases Intellect by 10 and Stamina by 10.",
+        "bonus4": "Your spells have a chance to grant Clearcasting, making your next spell free."
       },
       "nighttalon": {
         "name": "Direfang Pelt",
@@ -7982,12 +7996,12 @@ export const en: EnTranslations = {
       },
       "soulflame": {
         "name": "Wraithfire Regalia",
-        "bonus2": "You cannot be knocked back (100% knockback resistance).",
+        "bonus2": "Increases spell power by 20. You cannot be knocked back (100% knockback resistance).",
         "bonus3": "Increases Intellect by 15, Spirit by 15, and attack and casting speed by 15%."
       },
       "stormcallers": {
         "name": "Galecall Vestments",
-        "bonus2": "You cannot be knocked back (100% knockback resistance).",
+        "bonus2": "Increases spell power by 20. You cannot be knocked back (100% knockback resistance).",
         "bonus3": "Increases Intellect by 15, Spirit by 15, and attack and casting speed by 15%."
       },
       "vale_arcanist": {

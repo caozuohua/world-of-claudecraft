@@ -522,7 +522,9 @@ export const nl_NL: EnTranslations = {
     "statInfo": {
       "fromYour": "Van je {value} {stat}:",
       "names": {
-        "spellPower": "Spreukkracht"
+        "spellPower": "Spreukkracht",
+        "critRating": "Crit Rating",
+        "hasteRating": "Haste Rating"
       },
       "desc": {
         "str": "Verhoogt je aanvalskracht, zodat je wapenslagen harder aankomen.",
@@ -535,7 +537,9 @@ export const nl_NL: EnTranslations = {
         "spellPower": "Verhoogt de schade van je spreuken en de kracht van je genezingen. Elk punt Intellect verleent een beetje Spreukkracht, bovenop wat je krijgt van uitrusting of buffs.",
         "dps": "Je geschatte wapenschade per seconde, een combinatie van de schade en snelheid van je wapen met je aanvalskracht.",
         "critChance": "Je kans dat een aanval kritiek raakt en dubbele schade aanricht.",
-        "dodge": "Je kans om een inkomende slagaanval volledig te ontwijken, zonder schade op te lopen."
+        "dodge": "Je kans om een inkomende slagaanval volledig te ontwijken, zonder schade op te lopen.",
+        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
       },
       "effects": {
         "attackPower": "+{value} Aanvalskracht",
@@ -575,6 +579,15 @@ export const nl_NL: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
+      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
+      "onHeal": "Chance on your heals ({chance}%): {effect}",
+      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
+      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
+      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
+      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
     },
     "questShare": {
       "notShareable": "Deze queeste kan niet gedeeld worden.",
@@ -7973,7 +7986,8 @@ export const nl_NL: EnTranslations = {
       "necromancers": {
         "name": "Mournweave-Gewaden",
         "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
-        "bonus3": "Verhoogt intellect met 10 en uithoudingsvermogen met 10."
+        "bonus3": "Verhoogt intellect met 10 en uithoudingsvermogen met 10.",
+        "bonus4": "Your spells have a chance to grant Clearcasting, making your next spell free."
       },
       "nighttalon": {
         "name": "Direfang-Pels",

@@ -522,7 +522,9 @@ export const da_DK: EnTranslations = {
     "statInfo": {
       "fromYour": "Fra din {value} {stat}:",
       "names": {
-        "spellPower": "Besværgelseskraft"
+        "spellPower": "Besværgelseskraft",
+        "critRating": "Crit Rating",
+        "hasteRating": "Haste Rating"
       },
       "desc": {
         "str": "Øger din angrebsstyrke, så dine våbenslag rammer hårdere.",
@@ -535,7 +537,9 @@ export const da_DK: EnTranslations = {
         "spellPower": "Øger skaden fra dine besværgelser og styrken af dine helbredelser. Hvert point Intellekt giver en smule Besværgelseskraft, oven i det, der kommer fra udstyr eller buffs.",
         "dps": "Din anslåede våbenskade pr. sekund, der kombinerer dit våbens skade og hastighed med din angrebsstyrke.",
         "critChance": "Din chance for at et angreb rammer kritisk og gør dobbelt skade.",
-        "dodge": "Din chance for helt at undgå et indkommende nærkampsangreb og tage ingen skade."
+        "dodge": "Din chance for helt at undgå et indkommende nærkampsangreb og tage ingen skade.",
+        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
       },
       "effects": {
         "attackPower": "+{value} Angrebsstyrke",
@@ -575,6 +579,15 @@ export const da_DK: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
+      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
+      "onHeal": "Chance on your heals ({chance}%): {effect}",
+      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
+      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
+      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
+      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
     },
     "questShare": {
       "notShareable": "Denne opgave kan ikke deles.",
@@ -7973,7 +7986,8 @@ export const da_DK: EnTranslations = {
       "necromancers": {
         "name": "Mournweave klæder",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
-        "bonus3": "Øger intellekt med 10 og udholdenhed med 10."
+        "bonus3": "Øger intellekt med 10 og udholdenhed med 10.",
+        "bonus4": "Your spells have a chance to grant Clearcasting, making your next spell free."
       },
       "nighttalon": {
         "name": "Direfang pels",

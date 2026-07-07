@@ -231,6 +231,12 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': 'От вашей характеристики ({value} {stat}):',
   'hudChrome.statInfo.names.spellPower': 'Сила заклинаний',
+  'hudChrome.statInfo.names.critRating': 'Рейтинг крит. удара',
+  'hudChrome.statInfo.names.hasteRating': 'Рейтинг ускорения',
+  'hudChrome.statInfo.desc.critRating':
+    'Рейтинг критического удара от снаряжения и бонусов комплекта повышает шанс критического удара. Примерно 10 рейтинга дают 1% крит. удара.',
+  'hudChrome.statInfo.desc.hasteRating':
+    'Рейтинг ускорения от снаряжения и бонусов комплекта ускоряет ваши атаки и заклинания. Примерно 10 рейтинга дают 1% ускорения.',
   'hudChrome.statInfo.desc.spellPower':
     'Увеличивает урон ваших заклинаний и силу исцелений. Каждая единица интеллекта дает немного силы заклинаний, вдобавок к получаемой от снаряжения и усилений.',
   'hudChrome.statInfo.sources.header': 'Складывается из:',
@@ -5233,6 +5239,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.necromancers.bonus2':
     'Вас невозможно отбросить (100% сопротивление отбрасыванию).',
   'entities.itemSets.necromancers.bonus3': 'Интеллект повышается на 10, выносливость на 10.',
+  'entities.itemSets.necromancers.bonus4':
+    'Ваши заклинания могут даровать «Ясность», делая следующее заклинание бесплатным.',
   'entities.itemSets.nighttalon.name': 'Кожаный доспех Лютого Клыка',
   'entities.itemSets.nighttalon.bonus2': 'Сила атаки повышается на 40.',
   'entities.itemSets.nighttalon.bonus3':
@@ -5255,6 +5263,16 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'entities.itemSets.wyrmshadow.bonus3':
     'Ловкость повышается на 15, вероятность критического удара на 2%.',
   'hudChrome.itemSet.header': '{name} ({have}/{total})',
+  'hudChrome.itemProc.onMeleeHit': 'Шанс при попадании ({chance}%): {effect}',
+  'hudChrome.itemProc.onSpellDamage': 'Шанс от уронных заклинаний ({chance}%): {effect}',
+  'hudChrome.itemProc.onHeal': 'Шанс при исцелении ({chance}%): {effect}',
+  'hudChrome.itemProc.chainArc':
+    'поражает цель эффектом «{name}» ({school}, {damage}) и перескакивает на {jumps} ближайших врагов с затухающим уроном',
+  'hudChrome.itemProc.attackSlow': 'и снижает скорость атаки цели на {pct}% на {duration} сек',
+  'hudChrome.itemProc.dot':
+    'вызывает «{name}», периодический урон ({school}), нанося {total} за {duration} сек',
+  'hudChrome.itemProc.hot':
+    'распускает «{name}», периодическое исцеление, восполняя {total} за {duration} сек',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hudChrome.abilityScaling.bonus': '(+{value})',
   // Discord integration (two-way login, rewards, relay, in-game flair).

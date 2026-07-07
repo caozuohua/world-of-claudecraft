@@ -17,11 +17,13 @@
 // data-as-code: balance numbers live here, never inline in the engine.
 // `aggregateSetBonuses` is the pure resolver imported by `entity.ts`.
 
-import type { ItemSet, SetBonusEffect, SetBonusTier } from '../types';
+import type { ItemSet, SetBonusEffect, SetBonusTier, SetProc } from '../types';
 
 // Haste granted by a 3-piece bonus (fraction). The one knob for every haste
 // source: 0.15 makes swings 15% faster and casts/channels 15% shorter.
 export const SET_HASTE_3PC = 0.15;
+export const SET_HASTE_3PC_RATING = 150; // -> 15% haste at 10 rating = 1%
+export const SET_CRIT_3PC_RATING = 20; // -> +2% crit at 10 rating = 1%
 
 // Set ids. Tier-1 families drop from the Gravewyrm Sanctum; tier-2 from the
 // Nythraxis raid. The string is also the `set` tag on each member item.
@@ -52,20 +54,35 @@ const AGILITY_T1_BONUSES: SetBonusTier[] = [
   { pieces: 2, effect: { ap: 40 }, text: 'Increases attack power by 40.' },
   {
     pieces: 3,
-    effect: { agi: 15, crit: 0.02 },
+    effect: { agi: 15, critRating: SET_CRIT_3PC_RATING },
     text: 'Increases Agility by 15 and critical strike chance by 2%.',
   },
 ];
 const CASTER_T1_BONUSES: SetBonusTier[] = [
   {
     pieces: 2,
-    effect: { knockbackResistance: 1 },
-    text: 'You cannot be knocked back (100% knockback resistance).',
+    effect: { knockbackResistance: 1, sp: 20 },
+    text: 'Increases spell power by 20. You cannot be knocked back (100% knockback resistance).',
   },
   {
     pieces: 3,
     effect: { int: 10, sta: 10 },
     text: 'Increases Intellect by 10 and Stamina by 10.',
+  },
+  {
+    pieces: 4,
+    effect: {
+      proc: {
+        id: 'set_clearcasting',
+        name: 'Clearcasting',
+        trigger: 'spellCast',
+        chance: 0.1,
+        aura: 'next_cast_free',
+        duration: 12,
+        icd: 4,
+      },
+    },
+    text: 'Your spells have a chance to grant Clearcasting, making your next spell free.',
   },
 ];
 // Tier-2 3-piece tiers carry the tier-1 stats PLUS haste.
@@ -73,7 +90,7 @@ const STRENGTH_T2_BONUSES: SetBonusTier[] = [
   { pieces: 2, effect: { ap: 40 }, text: 'Increases attack power by 40.' },
   {
     pieces: 3,
-    effect: { str: 15, sta: 15, haste: SET_HASTE_3PC },
+    effect: { str: 15, sta: 15, hasteRating: SET_HASTE_3PC_RATING },
     text: 'Increases Strength by 15, Stamina by 15, and attack and casting speed by 15%.',
   },
 ];
@@ -81,19 +98,19 @@ const AGILITY_T2_BONUSES: SetBonusTier[] = [
   { pieces: 2, effect: { ap: 40 }, text: 'Increases attack power by 40.' },
   {
     pieces: 3,
-    effect: { agi: 15, crit: 0.02, haste: SET_HASTE_3PC },
+    effect: { agi: 15, critRating: SET_CRIT_3PC_RATING, hasteRating: SET_HASTE_3PC_RATING },
     text: 'Increases Agility by 15, critical strike chance by 2%, and attack and casting speed by 15%.',
   },
 ];
 const CASTER_T2_BONUSES: SetBonusTier[] = [
   {
     pieces: 2,
-    effect: { knockbackResistance: 1 },
-    text: 'You cannot be knocked back (100% knockback resistance).',
+    effect: { knockbackResistance: 1, sp: 20 },
+    text: 'Increases spell power by 20. You cannot be knocked back (100% knockback resistance).',
   },
   {
     pieces: 3,
-    effect: { int: 15, spi: 15, haste: SET_HASTE_3PC },
+    effect: { int: 15, spi: 15, hasteRating: SET_HASTE_3PC_RATING },
     text: 'Increases Intellect by 15, Spirit by 15, and attack and casting speed by 15%.',
   },
 ];
@@ -102,7 +119,7 @@ const CASTER_T2_BONUSES: SetBonusTier[] = [
 const HASTE_KIT_BONUSES: SetBonusTier[] = [
   {
     pieces: 3,
-    effect: { haste: SET_HASTE_3PC },
+    effect: { hasteRating: SET_HASTE_3PC_RATING },
     text: 'Increases attack and casting speed by 15%.',
   },
 ];
@@ -161,10 +178,14 @@ export interface AggregatedSetEffect {
   int: number;
   spi: number;
   ap: number;
+  sp: number;
   crit: number;
+  critRating: number;
   haste: number;
+  hasteRating: number;
   castPushbackReduction: number;
   knockbackResistance: number;
+  procs: SetProc[];
 }
 
 function zeroEffect(): AggregatedSetEffect {
@@ -175,10 +196,14 @@ function zeroEffect(): AggregatedSetEffect {
     int: 0,
     spi: 0,
     ap: 0,
+    sp: 0,
     crit: 0,
+    critRating: 0,
     haste: 0,
+    hasteRating: 0,
     castPushbackReduction: 0,
     knockbackResistance: 0,
+    procs: [],
   };
 }
 
@@ -200,14 +225,18 @@ export function aggregateSetBonuses(counts: Map<string, number>): AggregatedSetE
       out.int += e.int ?? 0;
       out.spi += e.spi ?? 0;
       out.ap += e.ap ?? 0;
+      out.sp += e.sp ?? 0;
       out.crit += e.crit ?? 0;
+      out.critRating += e.critRating ?? 0;
       out.haste += e.haste ?? 0;
+      out.hasteRating += e.hasteRating ?? 0;
       if (e.castPushbackReduction != null) {
         out.castPushbackReduction = Math.max(out.castPushbackReduction, e.castPushbackReduction);
       }
       if (e.knockbackResistance != null) {
         out.knockbackResistance = Math.max(out.knockbackResistance, e.knockbackResistance);
       }
+      if (e.proc) out.procs.push(e.proc);
     }
   }
   out.castPushbackReduction = Math.min(1, Math.max(0, out.castPushbackReduction));

@@ -10,29 +10,101 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "es_ES": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "fr_FR": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "fr_CA": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "en_CA": [],
   "it_IT": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "de_DE": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "zh_CN": [
     "hudChrome.discord.roleTag.coredevs"
@@ -47,15 +119,35 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.discord.roleTag.coredevs"
   ],
   "pt_BR": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "ru_RU": [
     "hudChrome.discord.roleTag.coredevs"
   ],
   "cs_CZ": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
     "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
     "hudChrome.mobile.actionPageIndicator",
     "hudChrome.mobile.actionPageToggle",
     "hudChrome.mobile.actionRing",
@@ -65,34 +157,122 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mobile.targetCycle",
     "hudChrome.mobile.targetCycleShort",
     "hudChrome.options.mobileCameraJoystick",
-    "hudChrome.options.mobileLeftHanded"
+    "hudChrome.options.mobileLeftHanded",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "nl_NL": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "pl_PL": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "id_ID": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "tr_TR": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "sv_SE": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "vi_VN": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ],
   "da_DK": [
+    "entities.itemSets.necromancers.bonus4",
     "hudChrome.crafting.comboRequirementUnmet",
-    "hudChrome.discord.roleTag.coredevs"
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.itemProc.attackSlow",
+    "hudChrome.itemProc.chainArc",
+    "hudChrome.itemProc.dot",
+    "hudChrome.itemProc.hot",
+    "hudChrome.itemProc.onHeal",
+    "hudChrome.itemProc.onMeleeHit",
+    "hudChrome.itemProc.onSpellDamage",
+    "hudChrome.statInfo.desc.critRating",
+    "hudChrome.statInfo.desc.hasteRating",
+    "hudChrome.statInfo.names.critRating",
+    "hudChrome.statInfo.names.hasteRating"
   ]
 };

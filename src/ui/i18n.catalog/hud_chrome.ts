@@ -573,6 +573,8 @@ export const hudChromeStrings = {
     // item-stats catalog.
     names: {
       spellPower: 'Spell Power',
+      critRating: 'Crit Rating',
+      hasteRating: 'Haste Rating',
     },
     desc: {
       str: 'Increases your attack power, so your weapon strikes land harder.',
@@ -588,6 +590,10 @@ export const hudChromeStrings = {
       dps: "Your estimated weapon damage per second, combining your weapon's damage and speed with your attack power.",
       critChance: 'Your chance for an attack to strike critically, dealing double damage.',
       dodge: 'Your chance to completely avoid an incoming melee attack, taking no damage.',
+      critRating:
+        'Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.',
+      hasteRating:
+        'Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste.',
     },
     // One line per derived effect a stat contributes. {value} is a live number.
     effects: {
@@ -639,6 +645,19 @@ export const hudChromeStrings = {
   itemSet: {
     header: '{name} ({have}/{total})',
     bonusLine: '({pieces}) {bonus}',
+  },
+  // Legendary weapon "chance on action" procs, rendered in the item tooltip from
+  // the ItemDef.weaponProcs data (see src/ui/weapon_proc_view.ts). One trigger
+  // line wraps the joined effect fragments below it.
+  itemProc: {
+    onMeleeHit: 'Chance on hit ({chance}%): {effect}',
+    onSpellDamage: 'Chance on your damaging spells ({chance}%): {effect}',
+    onHeal: 'Chance on your heals ({chance}%): {effect}',
+    chainArc:
+      'blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage',
+    attackSlow: 'and slows the target attack speed by {pct}% for {duration} sec',
+    dot: 'festers {name}, a {school} damage-over-time dealing {total} over {duration} sec',
+    hot: 'blooms {name}, a heal-over-time restoring {total} over {duration} sec',
   },
   // Quest-link sharing: the chat-link affordance and its sim-emitted notices
   // (re-localized through the hud-local localizeErrorText/localizeSystemText arms).

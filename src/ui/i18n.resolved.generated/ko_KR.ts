@@ -522,7 +522,9 @@ export const ko_KR: EnTranslations = {
     "statInfo": {
       "fromYour": "당신의 {value} {stat}에서:",
       "names": {
-        "spellPower": "주문력"
+        "spellPower": "주문력",
+        "critRating": "치명타 등급",
+        "hasteRating": "가속 등급"
       },
       "desc": {
         "str": "전투력을 증가시켜 무기 공격이 더 강하게 적중하도록 합니다.",
@@ -535,7 +537,9 @@ export const ko_KR: EnTranslations = {
         "spellPower": "주문의 피해량과 치유량을 증가시킵니다. 지능 1당 장비나 버프로 얻는 양에 더해 약간의 주문력을 부여합니다.",
         "dps": "무기의 피해와 속도, 전투력을 종합한 예상 무기 초당 피해입니다.",
         "critChance": "공격이 치명적으로 적중하여 두 배의 피해를 입힐 확률입니다.",
-        "dodge": "들어오는 근접 공격을 완전히 피해 피해를 전혀 입지 않을 확률입니다."
+        "dodge": "들어오는 근접 공격을 완전히 피해 피해를 전혀 입지 않을 확률입니다.",
+        "critRating": "장비와 세트 보너스에서 얻는 치명타 등급으로 치명타 확률이 증가합니다. 약 10등급당 1% 치명타.",
+        "hasteRating": "장비와 세트 보너스에서 얻는 가속 등급으로 공격과 시전 속도가 빨라집니다. 약 10등급당 1% 가속."
       },
       "effects": {
         "attackPower": "+{value} 전투력",
@@ -575,6 +579,15 @@ export const ko_KR: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "적중 시 확률 ({chance}%): {effect}",
+      "onSpellDamage": "피해 주문 시 확률 ({chance}%): {effect}",
+      "onHeal": "치유 시 확률 ({chance}%): {effect}",
+      "chainArc": "{school} {name}({damage})으로 대상을 강타하고 주변의 적 {jumps}명에게 감소하는 피해로 도약합니다",
+      "attackSlow": "대상의 공격 속도를 {duration}초 동안 {pct}% 감소시킵니다",
+      "dot": "{name}을 유발하여 {duration}초 동안 {total}의 {school} 지속 피해를 입힙니다",
+      "hot": "{name}을 피워 {duration}초 동안 {total}의 생명력을 회복시킵니다"
     },
     "questShare": {
       "notShareable": "이 퀘스트는 공유할 수 없습니다.",
@@ -7973,7 +7986,8 @@ export const ko_KR: EnTranslations = {
       "necromancers": {
         "name": "비탄직물 의복",
         "bonus2": "넉백되지 않습니다 (넉백 저항 100%).",
-        "bonus3": "지능이 10, 체력이 10만큼 증가합니다."
+        "bonus3": "지능이 10, 체력이 10만큼 증가합니다.",
+        "bonus4": "주문 사용 시 일정 확률로 “선명한 시전”이 발동하여 다음 주문을 무료로 시전합니다."
       },
       "nighttalon": {
         "name": "흉포송곳니 가죽장비",
