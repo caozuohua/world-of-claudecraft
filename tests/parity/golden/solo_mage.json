@@ -14,8 +14,8 @@
     {
       "tick": 0,
       "time": 0,
-      "nextId": 401,
-      "state": "72889ea4",
+      "nextId": 402,
+      "state": "2b44a325",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -41,12 +41,13 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 401,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -62,8 +63,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {}
+          }
         }
       ],
       "entities": [
@@ -78,7 +78,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 99,
           "hp": 54,
-          "id": 400,
+          "id": 401,
           "kind": "player",
           "level": 1,
           "lootFfaTimer": "Infinity",
@@ -122,9 +122,9 @@
     {
       "tick": 20,
       "time": 1,
-      "nextId": 402,
-      "state": "031d6712",
-      "events": "9bba49b4",
+      "nextId": 403,
+      "state": "74f936dc",
+      "events": "67b75b0a",
       "rng": {
         "draws": 3,
         "digest": "73521d70"
@@ -133,9 +133,9 @@
     {
       "tick": 40,
       "time": 2,
-      "nextId": 402,
-      "state": "d3b44543",
-      "events": "fbffbbed",
+      "nextId": 403,
+      "state": "488cfb2e",
+      "events": "dcb63877",
       "rng": {
         "draws": 3,
         "digest": "73521d70"
@@ -144,9 +144,9 @@
     {
       "tick": 60,
       "time": 3,
-      "nextId": 402,
-      "state": "1b859e13",
-      "events": "e7371025",
+      "nextId": 403,
+      "state": "e85cbe3e",
+      "events": "f2f46328",
       "rng": {
         "draws": 73,
         "digest": "7ef074c8"
@@ -155,9 +155,9 @@
     {
       "tick": 80,
       "time": 4,
-      "nextId": 402,
-      "state": "9352df87",
-      "events": "e7371025",
+      "nextId": 403,
+      "state": "694a805a",
+      "events": "f2f46328",
       "rng": {
         "draws": 162,
         "digest": "a72d4df2"
@@ -166,9 +166,9 @@
     {
       "tick": 100,
       "time": 5,
-      "nextId": 402,
-      "state": "78124777",
-      "events": "91956d6d",
+      "nextId": 403,
+      "state": "12e2a652",
+      "events": "a04db59b",
       "rng": {
         "draws": 254,
         "digest": "8a8c6a7c"
@@ -177,9 +177,9 @@
     {
       "tick": 120,
       "time": 6,
-      "nextId": 402,
-      "state": "c7f08e8c",
-      "events": "e7371025",
+      "nextId": 403,
+      "state": "3fa76649",
+      "events": "f2f46328",
       "rng": {
         "draws": 367,
         "digest": "6d00992d"
@@ -188,8 +188,8 @@
     {
       "tick": 128,
       "time": 6.4,
-      "nextId": 402,
-      "state": "9ef9a55c",
+      "nextId": 403,
+      "state": "c6c80059",
       "events": "741638a5",
       "rng": {
         "draws": 411,
@@ -215,12 +215,13 @@
           "craftSkills": {},
           "delveClears": {},
           "delveDaily": {},
-          "entityId": 400,
+          "entityId": 401,
           "equipment": {
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
           "gatheringProficiency": {},
+          "heroicDaily": {},
           "inventory": [
             {
               "count": 5,
@@ -237,8 +238,7 @@
           "talents": {
             "choices": {},
             "ranks": {}
-          },
-          "townFocus": {}
+          }
         }
       ],
       "entities": [
@@ -255,7 +255,7 @@
           "fallStartY": 1.5,
           "fiveSecondRule": 105.4,
           "hp": 50000,
-          "id": 400,
+          "id": 401,
           "kind": "player",
           "level": 10,
           "lootFfaTimer": "Infinity",
@@ -287,7 +287,7 @@
             "sta": 23,
             "str": 10
           },
-          "targetId": 401,
+          "targetId": 402,
           "templateId": "mage",
           "weapon": {
             "max": 6,
@@ -307,7 +307,7 @@
           "fiveSecondRule": 99,
           "hostile": true,
           "hp": 9000,
-          "id": 401,
+          "id": 402,
           "kind": "mob",
           "level": 5,
           "lootFfaTimer": "Infinity",

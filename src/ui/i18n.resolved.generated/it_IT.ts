@@ -368,7 +368,9 @@ export const it_IT: EnTranslations = {
       "hoursMinutes": "{h}h {m}m",
       "minutes": "{m}m",
       "lessThanMinute": "<1m",
-      "lockedToast": "Sei bloccato in {raid}. Si sblocca tra {time}."
+      "lockedToast": "Sei bloccato in {raid}. Si sblocca tra {time}.",
+      "heroicName": "{name} Eroico",
+      "heroicLocked": "Sei bloccato sulla versione Eroica di {name}."
     },
     "compass": {
       "N": "N",
@@ -524,8 +526,8 @@ export const it_IT: EnTranslations = {
       "fromYour": "Dai tuoi {value} punti {stat}:",
       "names": {
         "spellPower": "Potere Magico",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Indice di critico",
+        "hasteRating": "Indice di celerità"
       },
       "desc": {
         "str": "Aumenta la tua potenza d'attacco, così i colpi della tua arma sono più potenti.",
@@ -539,8 +541,8 @@ export const it_IT: EnTranslations = {
         "dps": "I danni al secondo stimati della tua arma, combinando i danni e la velocità della tua arma con la tua potenza d'attacco.",
         "critChance": "La tua probabilità che un attacco colpisca in modo critico, infliggendo danni doppi.",
         "dodge": "La tua probabilità di evitare completamente un attacco in mischia in arrivo, senza subire danni.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Indice di critico dal tuo equipaggiamento e dai bonus di set, che aumenta la tua probabilità di colpo critico. Circa 10 punti conferiscono l'1% di critico.",
+        "hasteRating": "Indice di celerità dal tuo equipaggiamento e dai bonus di set, che accelera i tuoi attacchi e i tuoi lanci. Circa 10 punti conferiscono l'1% di celerità."
       },
       "effects": {
         "attackPower": "+{value} Potenza d'attacco",
@@ -582,13 +584,13 @@ export const it_IT: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Probabilità al colpo ({chance}%): {effect}",
+      "onSpellDamage": "Probabilità sui tuoi incantesimi dannosi ({chance}%): {effect}",
+      "onHeal": "Probabilità sulle tue cure ({chance}%): {effect}",
+      "chainArc": "colpisce il bersaglio con {name} ({school}, {damage}) che rimbalza su {jumps} nemici vicini infliggendo danno decrescente",
+      "attackSlow": "e rallenta la velocità d'attacco del bersaglio del {pct}% per {duration} sec",
+      "dot": "provoca {name}, un danno nel tempo di tipo {school} che infligge {total} in {duration} sec",
+      "hot": "fa sbocciare {name}, una cura nel tempo che ripristina {total} in {duration} sec"
     },
     "questShare": {
       "notShareable": "Questa missione non può essere condivisa.",
@@ -801,9 +803,13 @@ export const it_IT: EnTranslations = {
       "leaderOption": "Distributore del Bottino: Capo (Tu)",
       "masterOption": "Distributore del Bottino: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Imposta difficoltà del dungeon: Eroica",
+      "setNormal": "Imposta difficoltà del dungeon: Normale"
+    },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Questo oggetto non può essere distrutto.",
+      "rightClickDestroy": "Clic destro per distruggere",
       "filterGroupAria": "Filtra le borse per categoria",
       "filterAll": "Tutti",
       "filterWeapon": "Armi",
@@ -1019,7 +1025,7 @@ export const it_IT: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
-        "coredevs": "Core Dev",
+        "coredevs": "Sviluppatore Principale",
         "devs": "Dev",
         "mods": "Mod",
         "artists": "Artista"
@@ -1229,6 +1235,20 @@ export const it_IT: EnTranslations = {
       "logging": "Taglio del legname",
       "herbalism": "Erbalismo"
     },
+    "archetypeTitle": {
+      "label": "Titolo",
+      "none": "Nessuno",
+      "armorcrafting": "Armaiolo",
+      "weaponcrafting": "Fabbro d'armi",
+      "jewelcrafting": "Gioielliere",
+      "alchemy": "Alchimista",
+      "engineering": "Ingegnere",
+      "cooking": "Cuoco",
+      "inscription": "Scriba",
+      "enchanting": "Incantatore",
+      "tailoring": "Sarto",
+      "leatherworking": "Conciatore"
+    },
     "crafting": {
       "title": "Creazione",
       "close": "Chiudi la lavorazione",
@@ -1240,7 +1260,7 @@ export const it_IT: EnTranslations = {
       "craftedToast": "Realizzato: {name}",
       "insufficientMaterials": "Non hai i materiali per quello.",
       "unknownRecipe": "Quella ricetta non esiste.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "Non possiedi entrambe le professioni richieste al livello necessario per quella ricetta."
     }
   },
   "apiError": {
@@ -3181,6 +3201,10 @@ export const it_IT: EnTranslations = {
     },
     "closeAria": "Chiudi"
   },
+  "heroicShop": {
+    "balance": "Marchi Eroici: {count}",
+    "buyAria": "Compra {item} per {marks} Marchi Eroici"
+  },
   "delveUi": {
     "board": {
       "title": "Tabellone delle Incursioni",
@@ -4473,12 +4497,14 @@ export const it_IT: EnTranslations = {
     "slots": {
       "mainhand": "Mano principale",
       "helmet": "Testa",
+      "neck": "Collo",
       "shoulder": "Spalle",
       "chest": "Torace",
       "waist": "Vita",
       "legs": "Gambe",
       "gloves": "Mani",
-      "feet": "Piedi"
+      "feet": "Piedi",
+      "ring": "Dito"
     },
     "quality": {
       "poor": "Scadente",
@@ -6368,6 +6394,132 @@ export const it_IT: EnTranslations = {
       "event_skin_token": {
         "name": "Scrigno cosmetico misterioso"
       },
+      "heroic_mark": {
+        "name": "Marchio Eroico"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Usbergo forgiacripta di Morthen"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Bende ombrapulsante"
+      },
+      "bonechill_striders": {
+        "name": "Falcate del gelo osseo"
+      },
+      "mistcallers_fang": {
+        "name": "Zanna dell'evocanebbia"
+      },
+      "tidebound_spaulders": {
+        "name": "Spallacci vincolati alla marea"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Fascia della corte sommersa"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Grande bastone della marea lunare"
+      },
+      "tidewoven_trousers": {
+        "name": "Calzoni tessuti dalla marea"
+      },
+      "choirmothers_casque": {
+        "name": "Elmetto della madre del coro"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Mannaia del wyrm tombale"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Sudario del wyrm tombale"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Prese del predatore del santuario"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Scettro della corte senza morte"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Cosciali di maglia del guardiaguerra senza morte"
+      },
+      "soulrend_diadem": {
+        "name": "Diadema straccianima"
+      },
+      "scourgehide_carapace": {
+        "name": "Carapace di pelle del flagello"
+      },
+      "cryptplate_helm": {
+        "name": "Elmo della corazza della cripta"
+      },
+      "shadowpulse_slippers": {
+        "name": "Calzari ombrapulsante"
+      },
+      "bonechill_cord": {
+        "name": "Cordone del gelo osseo"
+      },
+      "mistforged_pauldrons": {
+        "name": "Spallacci forgiati nella nebbia"
+      },
+      "tideguard_faceguard": {
+        "name": "Visiera della guardia della marea"
+      },
+      "sunken_court_mantle": {
+        "name": "Mantello della corte sommersa"
+      },
+      "lunar_choir_leggings": {
+        "name": "Gambali del coro lunare"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Spallacci benedetti dal coro"
+      },
+      "tideworn_warboots": {
+        "name": "Stivali da guerra logori di marea"
+      },
+      "gravewyrm_claws": {
+        "name": "Artigli del wyrm tombale"
+      },
+      "gravescale_girdle": {
+        "name": "Cintura scagliatomba"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Bende del coro dei wyrm"
+      },
+      "deathless_greatblade": {
+        "name": "Spadone senza morte"
+      },
+      "soulforged_warplate": {
+        "name": "Corazza da guerra forgianima"
+      },
+      "stormcallers_focus": {
+        "name": "Focus dell'evocatempesta"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Sigillo dei nove giuramenti"
+      },
+      "nielas_coldlight_band": {
+        "name": "Anello lucegelida di Niela"
+      },
+      "sutils_gambit": {
+        "name": "Gambetto di Sutil"
+      },
+      "oath_of_the_round_table": {
+        "name": "Giuramento della Tavola Rotonda"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Sigillo senza morte di Zyzz"
+      },
+      "architects_cornerstone": {
+        "name": "La Pietra Angolare dell'Architetto"
+      },
+      "swiftfang_talisman": {
+        "name": "Talismano zannarapida"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Medaglione ricordo di Yumi"
+      },
+      "zense_meridian": {
+        "name": "Meridiano di Zense"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Medaglione del profitto infinito"
+      },
       "deathless_heartwood": {
         "name": "Cuorlegno della Corona immortale"
       },
@@ -6902,6 +7054,11 @@ export const it_IT: EnTranslations = {
         "name": "Armaiolo Hode",
         "title": "Maestro armaiolo",
         "greeting": "La forgia è calda e la mola gira. Se taglia, lo vendo."
+      },
+      "heroic_quartermaster": {
+        "name": "Quartiermastro Vex",
+        "title": "Quartiermastro Eroico",
+        "greeting": "La prova degli abissi eroici compra gli anelli e i pendenti più pregiati di Highwatch. Mostrami i tuoi marchi."
       },
       "loremaster_caddis": {
         "name": "Maestro del sapere Caddis",
@@ -7985,13 +8142,13 @@ export const it_IT: EnTranslations = {
         "name": "Tenuta da battaglia Bonewrought",
         "bonus2": "Aumenta la potenza d'attacco di 40.",
         "bonus3": "Aumenta la forza di 15, la vigoria di 15 e la velocità d'attacco e di lancio del 15%.",
-        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "I colpi critici della tua arma scheggiano il bersaglio con Scheggiaossa, facendolo sanguinare per 8 danni ogni 2 sec per 12 sec. Si accumula fino a 3 volte."
       },
       "deathlord": {
         "name": "Tenuta da battaglia di Barrowlord",
         "bonus2": "Aumenta la potenza d'attacco di 40.",
         "bonus3": "Aumenta la forza di 15 e la vigoria di 15.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
+        "bonus4": "I colpi critici della tua arma hanno una probabilità del 50% di conferire Possanza Tombale, aumentando la potenza d'attacco di 60 per 10 sec."
       },
       "greyjaw_stalker": {
         "name": "Equipaggiamento del Braccatore di Greyjaw",
@@ -8001,25 +8158,25 @@ export const it_IT: EnTranslations = {
         "name": "Vesti Mournweave",
         "bonus2": "Non puoi essere respinto (100% di resistenza alla respinta).",
         "bonus3": "Aumenta l'intelletto di 10 e la tempra di 10.",
-        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
+        "bonus4": "I tuoi incantesimi hanno una probabilità del 10% di conferire Lancio Limpido, rendendo gratuito il tuo prossimo incantesimo."
       },
       "nighttalon": {
         "name": "Tenuta di cuoio Direfang",
         "bonus2": "Aumenta la potenza d'attacco di 40.",
         "bonus3": "Aumenta l'agilità di 15, la probabilità di critico del 2% e la velocità d'attacco e di lancio del 15%.",
-        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "I colpi critici della tua arma aprono uno Squarcio Frastagliato, facendo sanguinare il bersaglio per 6 danni ogni 2 sec per 12 sec. Si accumula fino a 3 volte."
       },
       "soulflame": {
         "name": "Paramenti Wraithfire",
         "bonus2": "Non puoi essere respinto (100% di resistenza alla respinta).",
         "bonus3": "Aumenta l'intelletto di 15, lo spirito di 15 e la velocità d'attacco e di lancio del 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "I tuoi incantesimi hanno una probabilità del 10% di conferire Vampanima, aumentando la potenza magica di 40 per 10 sec."
       },
       "stormcallers": {
         "name": "Vesti Galecall",
         "bonus2": "Non puoi essere respinto (100% di resistenza alla respinta).",
         "bonus3": "Aumenta l'intelletto di 15, lo spirito di 15 e la velocità d'attacco e di lancio del 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "I tuoi incantesimi hanno una probabilità del 10% di conferire Vampanima, aumentando la potenza magica di 40 per 10 sec."
       },
       "vale_arcanist": {
         "name": "Tenuta dell'Arcanista della Valle",
@@ -8029,7 +8186,7 @@ export const it_IT: EnTranslations = {
         "name": "Vesti Nightfang",
         "bonus2": "Aumenta la potenza d'attacco di 40.",
         "bonus3": "Aumenta l’agilità di 15 e la probabilità di critico del 2%.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
+        "bonus4": "I colpi critici della tua arma hanno una probabilità del 50% di conferire Zannimpeto, aumentando la velocità d'attacco del 25% per 8 sec."
       }
     }
   },

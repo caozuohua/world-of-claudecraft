@@ -105,6 +105,7 @@ function bareClient(pid: number): ClientWorld {
   c.questsDone = new Set();
   c.pendingQuestCommands = new Map();
   c.partyInfo = null;
+  c.selectedDungeonDifficulty = 'normal';
   c.tradeInfo = null;
   c.duelInfo = null;
   c.lastSnapAt = 0;
@@ -864,6 +865,65 @@ describe('raid party wire', () => {
     expect(client.partyInfo).not.toBeNull();
     expect(client.partyInfo?.raid).toBe(true);
     expect(client.partyInfo?.members.find((m) => m.pid === member.pid)?.group).toBe(2);
+  });
+});
+
+describe('dungeon difficulty wire', () => {
+  it('ships the selected dungeon difficulty and ClientWorld mirrors it', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Hero');
+    server.sim.setDungeonDifficulty('heroic', session.pid);
+
+    broadcast(server);
+
+    const snap = lastSnap(fc.sent);
+    expect(snap.self.ddiff).toBe('heroic');
+    const client = bareClient(session.pid);
+    (client as any).applySnapshot(snap);
+    expect(client.dungeonDifficulty()).toBe('heroic');
+  });
+
+  it('dispatches set_dungeon_difficulty through the wire and rejects invalid values', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Hero');
+
+    const send = (difficulty: unknown) =>
+      server.handleMessage(
+        session,
+        JSON.stringify({ t: 'cmd', cmd: 'set_dungeon_difficulty', difficulty }),
+      );
+
+    send('heroic');
+    expect(server.sim.dungeonDifficulty(session.pid)).toBe('heroic');
+
+    // isDungeonDifficulty guards the dispatch arm: junk values change nothing.
+    send('mythic');
+    expect(server.sim.dungeonDifficulty(session.pid)).toBe('heroic');
+    send(7);
+    expect(server.sim.dungeonDifficulty(session.pid)).toBe('heroic');
+    send(undefined);
+    expect(server.sim.dungeonDifficulty(session.pid)).toBe('heroic');
+
+    send('normal');
+    expect(server.sim.dungeonDifficulty(session.pid)).toBe('normal');
+  });
+
+  it('dispatches heroic_buy through the wire and validates the itemId', () => {
+    const server = new GameServer();
+    const fc = fakeWs();
+    const session = joinServer(server, fc, 1, 'Hero');
+    const send = (itemId: unknown) =>
+      server.handleMessage(session, JSON.stringify({ t: 'cmd', cmd: 'heroic_buy', itemId }));
+
+    // Junk payloads never reach the sim handler (typeof string guard).
+    send(7);
+    send(undefined);
+    // A valid string flows through; far from the quartermaster the sim refuses
+    // with an error event rather than granting anything.
+    send('seal_of_the_nine_oaths');
+    expect(server.sim.countItem('seal_of_the_nine_oaths', session.pid)).toBe(0);
   });
 });
 

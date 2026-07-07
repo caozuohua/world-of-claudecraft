@@ -2627,6 +2627,20 @@ const ITEM_RECIPES: Record<string, IconRecipe> = {
     ],
     ['glow', 'sparkle'],
   ),
+  // Heroic-dungeon participation token (final-boss personal drop).
+  heroic_mark: r('holy', 'holyGold', ['sigil_rune'], ['glow']),
+  // Heroic Quartermaster jewelry (marks-vendor rings and pendants); a coin
+  // base reads as the band, the overlay carries the stat identity.
+  seal_of_the_nine_oaths: r('fury', 'blood', ['coin', 'gem'], ['glow']),
+  nielas_coldlight_band: r('arcane', 'arcanePink', ['coin', 'gem'], ['glow']),
+  sutils_gambit: r('nature', 'leafGreen', ['coin', 'gem'], ['sparkle']),
+  oath_of_the_round_table: r('earth', 'earthBrown', ['coin', 'gem'], ['glow']),
+  zyzzs_deathless_signet: r('holy', 'holyGold', ['coin', 'sigil_rune'], ['glow']),
+  architects_cornerstone: r('arcane', 'sky', ['coin', 'scroll'], ['glow']),
+  swiftfang_talisman: r('storm', 'silverWhite', ['wing', 'gem'], ['motion']),
+  yumis_keepsake_locket: r('storm', 'sky', ['gem'], ['sparkle', 'glow']),
+  zense_meridian: r('arcane', 'arcanePink', ['moon', 'gem'], ['glow']),
+  medallion_of_endless_profit: r('treasure', 'gold', ['coin', 'sunburst'], ['sparkle']),
   // misc UI icons (not real items)
   coin_gold: r('treasure', 'gold', ['coin'], ['sparkle']),
   slot_empty: r('junk', 'silverWhite', []),

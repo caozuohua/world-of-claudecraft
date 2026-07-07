@@ -368,7 +368,9 @@ export const vi_VN: EnTranslations = {
       "hoursMinutes": "{h}g {m}p",
       "minutes": "{m}p",
       "lessThanMinute": "<1p",
-      "lockedToast": "Bạn đang bị khóa với {raid}. Mở khóa sau {time}."
+      "lockedToast": "Bạn đang bị khóa với {raid}. Mở khóa sau {time}.",
+      "heroicName": "{name} Anh Hùng",
+      "heroicLocked": "Bạn đang bị khóa với {name} Anh Hùng."
     },
     "compass": {
       "N": "B",
@@ -395,7 +397,7 @@ export const vi_VN: EnTranslations = {
     "options": {
       "clickMoveLeft": "Nhấp Trái",
       "clickMoveRight": "Nhấp Phải",
-      "version": "v{version} ({build})",
+      "version": "phiên bản {version} ({build})",
       "browserEffects": "Hiệu Ứng Trình Duyệt",
       "browserEffectsAuto": "Tự Động",
       "browserEffectsFull": "Đầy Đủ",
@@ -524,8 +526,8 @@ export const vi_VN: EnTranslations = {
       "fromYour": "Từ {value} {stat} của bạn:",
       "names": {
         "spellPower": "Sức Mạnh Phép Thuật",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Chỉ Số Chí Mạng",
+        "hasteRating": "Chỉ Số Thần Tốc"
       },
       "desc": {
         "str": "Tăng sức công kích, giúp đòn vũ khí của bạn đánh mạnh hơn.",
@@ -539,8 +541,8 @@ export const vi_VN: EnTranslations = {
         "dps": "Sát thương vũ khí ước tính mỗi giây của bạn, kết hợp sát thương và tốc độ vũ khí với sức công kích.",
         "critChance": "Tỉ lệ một đòn tấn công đánh chí mạng, gây sát thương gấp đôi.",
         "dodge": "Tỉ lệ bạn né hoàn toàn một đòn cận chiến, không nhận sát thương.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Chỉ số chí mạng từ trang bị và phần thưởng bộ trang bị của bạn, nâng tỉ lệ chí mạng của bạn. Khoảng 10 điểm chỉ số ban 1% chí mạng.",
+        "hasteRating": "Chỉ số thần tốc từ trang bị và phần thưởng bộ trang bị của bạn, đẩy nhanh các đòn tấn công và việc thi triển phép của bạn. Khoảng 10 điểm chỉ số ban 1% thần tốc."
       },
       "effects": {
         "attackPower": "+{value} Công Kích",
@@ -582,13 +584,13 @@ export const vi_VN: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Cơ hội khi đánh trúng ({chance}%): {effect}",
+      "onSpellDamage": "Cơ hội khi phép của bạn gây sát thương ({chance}%): {effect}",
+      "onHeal": "Cơ hội khi bạn hồi máu ({chance}%): {effect}",
+      "chainArc": "oanh kích mục tiêu bằng một {name} hệ {school} ({damage}) nảy sang {jumps} kẻ địch gần đó với sát thương giảm dần",
+      "attackSlow": "và làm chậm tốc độ tấn công của mục tiêu thêm {pct}% trong {duration} giây",
+      "dot": "gieo rắc {name}, một hiệu ứng sát thương theo thời gian hệ {school} gây {total} trong {duration} giây",
+      "hot": "làm nở rộ {name}, một hiệu ứng hồi máu theo thời gian phục hồi {total} trong {duration} giây"
     },
     "questShare": {
       "notShareable": "Nhiệm vụ này không thể chia sẻ.",
@@ -801,9 +803,13 @@ export const vi_VN: EnTranslations = {
       "leaderOption": "Người Chia Chiến Lợi Phẩm: Đội Trưởng (Bạn)",
       "masterOption": "Người Chia Chiến Lợi Phẩm: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Đặt Độ Khó Hầm Ngục: Anh Hùng",
+      "setNormal": "Đặt Độ Khó Hầm Ngục: Thường"
+    },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Không thể phá hủy vật phẩm này.",
+      "rightClickDestroy": "Nhấp phải để phá hủy",
       "filterGroupAria": "Lọc túi đồ theo danh mục",
       "filterAll": "Tất cả",
       "filterWeapon": "Vũ khí",
@@ -1019,7 +1025,7 @@ export const vi_VN: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Quản Trị Viên",
-        "coredevs": "Core Dev",
+        "coredevs": "Nhà Phát Triển Chính",
         "devs": "Lập Trình Viên",
         "mods": "Điều Hành Viên",
         "artists": "Họa Sĩ"
@@ -1229,6 +1235,20 @@ export const vi_VN: EnTranslations = {
       "logging": "Đốn gỗ",
       "herbalism": "Thảo dược học"
     },
+    "archetypeTitle": {
+      "label": "Danh hiệu",
+      "none": "Không có",
+      "armorcrafting": "Thợ Giáp",
+      "weaponcrafting": "Thợ Rèn Vũ Khí",
+      "jewelcrafting": "Thợ Kim Hoàn",
+      "alchemy": "Nhà Giả Kim",
+      "engineering": "Kỹ Sư",
+      "cooking": "Đầu Bếp",
+      "inscription": "Thợ Khắc Chữ",
+      "enchanting": "Thợ Phù Phép",
+      "tailoring": "Thợ May",
+      "leatherworking": "Thợ Da"
+    },
     "crafting": {
       "title": "Chế tạo",
       "close": "Đóng chế tạo",
@@ -1240,7 +1260,7 @@ export const vi_VN: EnTranslations = {
       "craftedToast": "Đã chế tác: {name}",
       "insufficientMaterials": "Bạn không có tài liệu cho việc đó.",
       "unknownRecipe": "Công thức đó không tồn tại.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "Bạn chưa có cả hai nghề chế tạo cần thiết ở bậc yêu cầu cho công thức đó."
     }
   },
   "apiError": {
@@ -3181,6 +3201,10 @@ export const vi_VN: EnTranslations = {
     },
     "closeAria": "Đóng"
   },
+  "heroicShop": {
+    "balance": "Dấu Ấn Anh Hùng: {count}",
+    "buyAria": "Mua {item} với giá {marks} Dấu Ấn Anh Hùng"
+  },
   "delveUi": {
     "board": {
       "title": "Bảng Hang Sâu",
@@ -4473,12 +4497,14 @@ export const vi_VN: EnTranslations = {
     "slots": {
       "mainhand": "Tay Chính",
       "helmet": "Mũ Giáp",
+      "neck": "Cổ",
       "shoulder": "Giáp Vai",
       "chest": "Áo Giáp",
       "waist": "Thắt Lưng",
       "legs": "Quần Giáp",
       "gloves": "Găng Tay",
-      "feet": "Giày"
+      "feet": "Giày",
+      "ring": "Ngón Tay"
     },
     "quality": {
       "poor": "Kém",
@@ -6368,6 +6394,132 @@ export const vi_VN: EnTranslations = {
       "event_skin_token": {
         "name": "Rương Trang Phục Bí Ẩn"
       },
+      "heroic_mark": {
+        "name": "Dấu Ấn Anh Hùng"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Áo Giáp Lưới Rèn Hầm Mộ của Morthen"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Quấn Tay Mạch Bóng Tối"
+      },
+      "bonechill_striders": {
+        "name": "Giày Bước Hàn Cốt"
+      },
+      "mistcallers_fang": {
+        "name": "Nanh của Kẻ Gọi Sương"
+      },
+      "tidebound_spaulders": {
+        "name": "Giáp Vai Ràng Buộc Thủy Triều"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Đai Lưng Triều Đình Chìm"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Đại Trượng Triều Nguyệt"
+      },
+      "tidewoven_trousers": {
+        "name": "Quần Dệt Thủy Triều"
+      },
+      "choirmothers_casque": {
+        "name": "Mũ Trụ của Mẹ Hợp Ca"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Đao Phanh Mộ Long"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Vải Liệm Mộ Long"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Găng Kẻ Rình Thánh Đường"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Vương Trượng Triều Đình Bất Tử"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Giáp Chân Lưới Vệ Chiến Bất Tử"
+      },
+      "soulrend_diadem": {
+        "name": "Vương Miện Xé Hồn"
+      },
+      "scourgehide_carapace": {
+        "name": "Giáp Mai Da Tai Ương"
+      },
+      "cryptplate_helm": {
+        "name": "Mũ Giáp Tấm Hầm Mộ"
+      },
+      "shadowpulse_slippers": {
+        "name": "Hài Mạch Bóng Tối"
+      },
+      "bonechill_cord": {
+        "name": "Dây Lưng Hàn Cốt"
+      },
+      "mistforged_pauldrons": {
+        "name": "Giáp Vai Rèn Sương"
+      },
+      "tideguard_faceguard": {
+        "name": "Mũ Che Mặt Vệ Triều"
+      },
+      "sunken_court_mantle": {
+        "name": "Áo Choàng Triều Đình Chìm"
+      },
+      "lunar_choir_leggings": {
+        "name": "Quần Giáp Hợp Ca Nguyệt Quang"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Giáp Vai Hợp Ca Ban Phước"
+      },
+      "tideworn_warboots": {
+        "name": "Chiến Ủng Mòn Sóng"
+      },
+      "gravewyrm_claws": {
+        "name": "Vuốt Mộ Long"
+      },
+      "gravescale_girdle": {
+        "name": "Đai Lưng Vảy Mộ"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Quấn Tay Hợp Ca Long"
+      },
+      "deathless_greatblade": {
+        "name": "Đại Kiếm Bất Tử"
+      },
+      "soulforged_warplate": {
+        "name": "Chiến Giáp Rèn Hồn"
+      },
+      "stormcallers_focus": {
+        "name": "Pháp Khí của Kẻ Gọi Bão"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Ấn Chín Lời Thề"
+      },
+      "nielas_coldlight_band": {
+        "name": "Nhẫn Hàn Quang của Niela"
+      },
+      "sutils_gambit": {
+        "name": "Nước Cờ của Sutil"
+      },
+      "oath_of_the_round_table": {
+        "name": "Lời Thề Bàn Tròn"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Nhẫn Ấn Bất Tử của Zyzz"
+      },
+      "architects_cornerstone": {
+        "name": "Viên Đá Nền của Kiến Trúc Sư"
+      },
+      "swiftfang_talisman": {
+        "name": "Bùa Nanh Thần Tốc"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Mề Đay Kỷ Vật của Yumi"
+      },
+      "zense_meridian": {
+        "name": "Kinh Mạch Zense"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Huy Chương Lợi Nhuận Bất Tận"
+      },
       "deathless_heartwood": {
         "name": "Lõi Gỗ Của Vương Miện Bất Tử"
       },
@@ -6902,6 +7054,11 @@ export const vi_VN: EnTranslations = {
         "name": "Thợ Giáp Hode",
         "title": "Thợ Giáp Bậc Thầy",
         "greeting": "Lò rèn đang nóng và đá mài đang quay. Cái gì chém được, ta bán."
+      },
+      "heroic_quartermaster": {
+        "name": "Quân Nhu Trưởng Vex",
+        "title": "Quân Nhu Trưởng Anh Hùng",
+        "greeting": "Bằng chứng chinh phục những vực sâu Anh Hùng mua được những chiếc nhẫn và mặt dây chuyền tinh xảo nhất Highwatch. Cho ta xem dấu ấn của ngươi."
       },
       "loremaster_caddis": {
         "name": "Sử Gia Caddis",
@@ -7985,13 +8142,13 @@ export const vi_VN: EnTranslations = {
         "name": "Bộ Lễ Phục Bonewrought",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
         "bonus3": "Tăng sức mạnh thêm 15, thể lực thêm 15 và tốc độ tấn công cùng thi triển thêm 15%.",
-        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Các đòn chí mạng bằng vũ khí của bạn găm Dằm Xương vào mục tiêu, khiến nó chảy máu nhận 8 sát thương mỗi 2 giây trong 12 giây. Cộng dồn tối đa 3 lần."
       },
       "deathlord": {
         "name": "Bộ Chiến Barrowlord",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
         "bonus3": "Tăng sức mạnh thêm 15 và thể lực thêm 15.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
+        "bonus4": "Các đòn chí mạng bằng vũ khí của bạn có 50% cơ hội ban Uy Lực Mộ Phần, tăng sức mạnh tấn công thêm 60 trong 10 giây."
       },
       "greyjaw_stalker": {
         "name": "Bộ Kẻ Rình Rập Greyjaw",
@@ -8001,25 +8158,25 @@ export const vi_VN: EnTranslations = {
         "name": "Y Phục Mournweave",
         "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
         "bonus3": "Tăng trí tuệ thêm 10 và thể lực thêm 10.",
-        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Các phép của bạn có 10% cơ hội ban Tâm Trí Thông Suốt, khiến phép kế tiếp của bạn được thi triển miễn phí."
       },
       "nighttalon": {
         "name": "Bộ Da Direfang",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
         "bonus3": "Tăng nhanh nhẹn thêm 15, tỉ lệ chí mạng thêm 2% và tốc độ tấn công cùng thi triển thêm 15%.",
-        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Các đòn chí mạng bằng vũ khí của bạn xé ra một Vết Rách Toạc, khiến mục tiêu chảy máu nhận 6 sát thương mỗi 2 giây trong 12 giây. Cộng dồn tối đa 3 lần."
       },
       "soulflame": {
         "name": "Lễ Phục Wraithfire",
         "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
         "bonus3": "Tăng trí tuệ thêm 15, tinh thần thêm 15 và tốc độ tấn công cùng thi triển thêm 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Các phép của bạn có 10% cơ hội ban Hồn Hỏa, tăng sức mạnh phép thuật thêm 40 trong 10 giây."
       },
       "stormcallers": {
         "name": "Áo Lễ Galecall",
         "bonus2": "Bạn không thể bị đẩy lùi (kháng đẩy lùi 100%).",
         "bonus3": "Tăng trí tuệ thêm 15, tinh thần thêm 15 và tốc độ tấn công cùng thi triển thêm 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Các phép của bạn có 10% cơ hội ban Hồn Hỏa, tăng sức mạnh phép thuật thêm 40 trong 10 giây."
       },
       "vale_arcanist": {
         "name": "Bộ Arcanist Thung Khê",
@@ -8029,7 +8186,7 @@ export const vi_VN: EnTranslations = {
         "name": "Áo Lễ Nightfang",
         "bonus2": "Tăng sức mạnh tấn công thêm 40.",
         "bonus3": "Tăng nhanh nhẹn thêm 15 và tỉ lệ chí mạng thêm 2%.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
+        "bonus4": "Các đòn chí mạng bằng vũ khí của bạn có 50% cơ hội ban Cuồng Nanh, tăng tốc độ tấn công thêm 25% trong 8 giây."
       }
     }
   },

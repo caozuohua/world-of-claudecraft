@@ -344,6 +344,11 @@ export const hudChromeStrings = {
     // Entry-denied toast, enriched client-side with the live unlock countdown
     // ({raid} = the localized raid name, {time} = the formatted countdown).
     lockedToast: 'You are locked to {raid}. Unlocks in {time}.',
+    // Display name for a heroic-difficulty lockout row ({name} = dungeon name).
+    heroicName: 'Heroic {name}',
+    // Entry-denied toast for a heroic daily lockout when no live countdown is
+    // mirrored yet ({name} = dungeon name).
+    heroicLocked: 'You are locked to Heroic {name}.',
   },
   // Eight-point compass abbreviations as drawn on the heading strip. Each locale
   // overrides with its own established compass abbreviations (e.g. West = "O" in
@@ -921,6 +926,14 @@ export const hudChromeStrings = {
     leaderOption: 'Master Looter: Leader (You)',
     masterOption: 'Master Looter: {name}',
   },
+  // Self-portrait context menu: the dungeon-difficulty toggle (classic
+  // portrait-menu placement). The labels are ACTION labels (what clicking
+  // does); shown only to solo players and party leaders, since the sim
+  // rejects the change from anyone else.
+  dungeonDifficulty: {
+    setHeroic: 'Set Dungeon Difficulty: Heroic',
+    setNormal: 'Set Dungeon Difficulty: Normal',
+  },
   // Modular bag filtering controls: the category chips, sort dropdown, and live
   // search above the bag grid, plus the "no items match" empty state.
   bags: {
@@ -1418,6 +1431,25 @@ export const hudChromeStrings = {
     mining: 'Mining',
     logging: 'Logging',
     herbalism: 'Herbalism',
+  },
+  // Archetype title (#1130): the named title granted by a character's currently
+  // active craft archetype (see src/sim/professions/archetype.ts). `none` is shown
+  // before the zone-1 acceptance quest has ever been completed (no "Jack of All
+  // Trades" fallback, just untitled). The ten per-craft names are keyed by the
+  // same craft id as CRAFT_RING (src/sim/content/professions.ts); keep both in sync.
+  archetypeTitle: {
+    label: 'Title',
+    none: 'None',
+    armorcrafting: 'Armorer',
+    weaponcrafting: 'Weaponsmith',
+    jewelcrafting: 'Jeweler',
+    alchemy: 'Alchemist',
+    engineering: 'Tinkerer',
+    cooking: 'Chef',
+    inscription: 'Scribe',
+    enchanting: 'Enchanter',
+    tailoring: 'Tailor',
+    leatherworking: 'Leathercrafter',
   },
   // Crafting window (#1127): the minimal common-tier crafting action, one row
   // per known recipe, a Craft button enabled only when every reagent is held.

@@ -368,7 +368,9 @@ export const sv_SE: EnTranslations = {
       "hoursMinutes": "{h}h {m}m",
       "minutes": "{m}m",
       "lessThanMinute": "<1m",
-      "lockedToast": "Du är låst till {raid}. Låses upp om {time}."
+      "lockedToast": "Du är låst till {raid}. Låses upp om {time}.",
+      "heroicName": "Heroisk {name}",
+      "heroicLocked": "Du är låst till Heroisk {name}."
     },
     "compass": {
       "N": "N",
@@ -524,8 +526,8 @@ export const sv_SE: EnTranslations = {
       "fromYour": "Från dina {value} {stat}:",
       "names": {
         "spellPower": "Besvärjelsekraft",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Kritvärde",
+        "hasteRating": "Snabbhetsvärde"
       },
       "desc": {
         "str": "Ökar din attackstyrka, så att dina vapenslag landar hårdare.",
@@ -539,8 +541,8 @@ export const sv_SE: EnTranslations = {
         "dps": "Din uppskattade vapenskada per sekund, som kombinerar ditt vapens skada och hastighet med din attackstyrka.",
         "critChance": "Din chans att en attack träffar kritiskt och orsakar dubbel skada.",
         "dodge": "Din chans att helt undvika en inkommande närstridsattack utan att ta skada.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Kritvärde från din utrustning och setbonusar, som höjer din chans till kritisk träff. Ungefär 10 i värde ger 1% krit.",
+        "hasteRating": "Snabbhetsvärde från din utrustning och setbonusar, som snabbar upp dina attacker och besvärjelser. Ungefär 10 i värde ger 1% snabbhet."
       },
       "effects": {
         "attackPower": "+{value} Attackstyrka",
@@ -582,13 +584,13 @@ export const sv_SE: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Chans vid träff ({chance}%): {effect}",
+      "onSpellDamage": "Chans vid dina skadebesvärjelser ({chance}%): {effect}",
+      "onHeal": "Chans vid dina läkningar ({chance}%): {effect}",
+      "chainArc": "träffar målet med en {school} {name} ({damage}) som hoppar till {jumps} närliggande fiender med avtagande skada",
+      "attackSlow": "och saktar målets attackhastighet med {pct}% i {duration} sek",
+      "dot": "sätter {name}, en {school} skada över tid som vållar {total} över {duration} sek",
+      "hot": "blommar {name}, en läkning över tid som återställer {total} över {duration} sek"
     },
     "questShare": {
       "notShareable": "Det här uppdraget kan inte delas.",
@@ -801,9 +803,13 @@ export const sv_SE: EnTranslations = {
       "leaderOption": "Bytesmästare: Ledare (Du)",
       "masterOption": "Bytesmästare: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Ställ in fängelsehålans svårighetsgrad: Heroisk",
+      "setNormal": "Ställ in fängelsehålans svårighetsgrad: Normal"
+    },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Det här föremålet kan inte förstöras.",
+      "rightClickDestroy": "Högerklicka för att förstöra",
       "filterGroupAria": "Filtrera väskor efter kategori",
       "filterAll": "Alla",
       "filterWeapon": "Vapen",
@@ -1019,7 +1025,7 @@ export const sv_SE: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
-        "coredevs": "Core Dev",
+        "coredevs": "Kärnutvecklare",
         "devs": "Utvecklare",
         "mods": "Moderator",
         "artists": "Konstnär"
@@ -1229,6 +1235,20 @@ export const sv_SE: EnTranslations = {
       "logging": "Skogsavverkning",
       "herbalism": "Örtkunskap"
     },
+    "archetypeTitle": {
+      "label": "Titel",
+      "none": "Ingen",
+      "armorcrafting": "Rustningssmed",
+      "weaponcrafting": "Vapensmed",
+      "jewelcrafting": "Juvelerare",
+      "alchemy": "Alkemist",
+      "engineering": "Ingenjör",
+      "cooking": "Kock",
+      "inscription": "Skrivare",
+      "enchanting": "Förtrollare",
+      "tailoring": "Skräddare",
+      "leatherworking": "Garvare"
+    },
     "crafting": {
       "title": "Hantverk",
       "close": "Nära hantverk",
@@ -1240,7 +1260,7 @@ export const sv_SE: EnTranslations = {
       "craftedToast": "Tillverkad: {name}",
       "insufficientMaterials": "Du har inte materialet för det.",
       "unknownRecipe": "Det receptet finns inte.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "Du har inte båda de hantverk som krävs på den nivå receptet kräver."
     }
   },
   "apiError": {
@@ -3181,6 +3201,10 @@ export const sv_SE: EnTranslations = {
     },
     "closeAria": "Stäng"
   },
+  "heroicShop": {
+    "balance": "Heroiska märken: {count}",
+    "buyAria": "Köp {item} för {marks} heroiska märken"
+  },
   "delveUi": {
     "board": {
       "title": "Delve-tavla",
@@ -4473,12 +4497,14 @@ export const sv_SE: EnTranslations = {
     "slots": {
       "mainhand": "Främre hand",
       "helmet": "Hjälm",
+      "neck": "Hals",
       "shoulder": "Axlar",
       "chest": "Bröst",
       "waist": "Midja",
       "legs": "Ben",
       "gloves": "Handskar",
-      "feet": "Fötter"
+      "feet": "Fötter",
+      "ring": "Finger"
     },
     "quality": {
       "poor": "Skräp",
@@ -6368,6 +6394,132 @@ export const sv_SE: EnTranslations = {
       "event_skin_token": {
         "name": "Mystiskt kosmetiskt förråd"
       },
+      "heroic_mark": {
+        "name": "Heroiskt märke"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Morthens kryptsmidda brynja"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Skuggpulshandlindor"
+      },
+      "bonechill_striders": {
+        "name": "Benfroststeg"
+      },
+      "mistcallers_fang": {
+        "name": "Dimkallarens bete"
+      },
+      "tidebound_spaulders": {
+        "name": "Tidvattenbundna skuldror"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Sjunkna hovets skärp"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Måntidvattnets storstav"
+      },
+      "tidewoven_trousers": {
+        "name": "Tidvattenvävda byxor"
+      },
+      "choirmothers_casque": {
+        "name": "Körmoderns hjälm"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Gravlindormsklyva"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Gravlindormens svepning"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Helgedomssmygarens handskar"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Odödliga hovets spira"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Odödlig krigsvakts benbrynja"
+      },
+      "soulrend_diadem": {
+        "name": "Själsrivardiadem"
+      },
+      "scourgehide_carapace": {
+        "name": "Gisselhudspansar"
+      },
+      "cryptplate_helm": {
+        "name": "Kryptplåtshjälm"
+      },
+      "shadowpulse_slippers": {
+        "name": "Skuggpulstofflor"
+      },
+      "bonechill_cord": {
+        "name": "Benfrostlina"
+      },
+      "mistforged_pauldrons": {
+        "name": "Dimsmidda skuldror"
+      },
+      "tideguard_faceguard": {
+        "name": "Tidvaktens visir"
+      },
+      "sunken_court_mantle": {
+        "name": "Sjunkna hovets mantel"
+      },
+      "lunar_choir_leggings": {
+        "name": "Månkörens benkläder"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Körvälsignade skuldror"
+      },
+      "tideworn_warboots": {
+        "name": "Tidvattenslitna krigsstövlar"
+      },
+      "gravewyrm_claws": {
+        "name": "Gravlindormsklor"
+      },
+      "gravescale_girdle": {
+        "name": "Gravfjällsgördel"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Lindormskörens handlindor"
+      },
+      "deathless_greatblade": {
+        "name": "Odödlig storklinga"
+      },
+      "soulforged_warplate": {
+        "name": "Själssmidd krigsplåt"
+      },
+      "stormcallers_focus": {
+        "name": "Stormkallarens fokus"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "De nio edernas sigill"
+      },
+      "nielas_coldlight_band": {
+        "name": "Nielas kalljusring"
+      },
+      "sutils_gambit": {
+        "name": "Sutils gambit"
+      },
+      "oath_of_the_round_table": {
+        "name": "Runda bordets ed"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Zyzz odödliga signetring"
+      },
+      "architects_cornerstone": {
+        "name": "Arkitektens hörnsten"
+      },
+      "swiftfang_talisman": {
+        "name": "Snabbetstalisman"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Yumis minnesmedaljong"
+      },
+      "zense_meridian": {
+        "name": "Zenses meridian"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Medaljong av ändlös vinst"
+      },
       "deathless_heartwood": {
         "name": "Kärnved från den odödliga kronan"
       },
@@ -6902,6 +7054,11 @@ export const sv_SE: EnTranslations = {
         "name": "Rustningssmed Hode",
         "title": "Mästerrustningssmed",
         "greeting": "Smedjan är het och slipstenen snurrar. Om det skär så säljer jag det."
+      },
+      "heroic_quartermaster": {
+        "name": "Kvartersmästare Vex",
+        "title": "Heroisk kvartersmästare",
+        "greeting": "Bevis från de heroiska djupen köper de finaste ringar och hängen i Högvakt. Visa mig dina märken."
       },
       "loremaster_caddis": {
         "name": "Läromästare Caddis",
@@ -7985,13 +8142,13 @@ export const sv_SE: EnTranslations = {
         "name": "Bonewrought-regalier",
         "bonus2": "Ökar attackkraft med 40.",
         "bonus3": "Ökar styrka med 15, uthållighet med 15 samt attack- och magihastighet med 15%.",
-        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Dina kritiska vapenträffar splittrar målet med Benflisa och får det att blöda för 8 skada var 2:e sek i 12 sek. Staplas upp till 3 gånger."
       },
       "deathlord": {
         "name": "Barrowlords stridsutrustning",
         "bonus2": "Ökar attackkraft med 40.",
         "bonus3": "Ökar styrka med 15 och uthållighet med 15.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
+        "bonus4": "Dina kritiska vapenträffar har 50% chans att ge Gravmakt och öka attackkraften med 60 i 10 sek."
       },
       "greyjaw_stalker": {
         "name": "Gråkäftssmygarens utrustning",
@@ -8001,25 +8158,25 @@ export const sv_SE: EnTranslations = {
         "name": "Mournweave-skrud",
         "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
         "bonus3": "Ökar intellekt med 10 och uthållighet med 10.",
-        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Dina besvärjelser har 10% chans att ge Klarsyn, vilket gör din nästa besvärjelse gratis."
       },
       "nighttalon": {
         "name": "Direfang-päls",
         "bonus2": "Ökar attackkraft med 40.",
         "bonus3": "Ökar smidighet med 15, kritisk chans med 2% samt attack- och magihastighet med 15%.",
-        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Dina kritiska vapenträffar river upp ett Rivsår och får målet att blöda för 6 skada var 2:e sek i 12 sek. Staplas upp till 3 gånger."
       },
       "soulflame": {
         "name": "Wraithfire-regalier",
         "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
         "bonus3": "Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Dina besvärjelser har 10% chans att ge Själslåga och öka besvärjelseskraften med 40 i 10 sek."
       },
       "stormcallers": {
         "name": "Galecall-skrud",
         "bonus2": "Du kan inte knuffas bakåt (100% motstånd mot tillbakastöt).",
         "bonus3": "Ökar intellekt med 15, ande med 15 samt attack- och magihastighet med 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Dina besvärjelser har 10% chans att ge Själslåga och öka besvärjelseskraften med 40 i 10 sek."
       },
       "vale_arcanist": {
         "name": "Dalarkanistens skrud",
@@ -8029,7 +8186,7 @@ export const sv_SE: EnTranslations = {
         "name": "Nightfang-skrud",
         "bonus2": "Ökar attackkraft med 40.",
         "bonus3": "Ökar smidighet med 15 och kritisk chans med 2%.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
+        "bonus4": "Dina kritiska vapenträffar har 50% chans att ge Betrus och öka attackhastigheten med 25% i 8 sek."
       }
     }
   },

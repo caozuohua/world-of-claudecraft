@@ -368,7 +368,9 @@ export const ko_KR: EnTranslations = {
       "hoursMinutes": "{h}시간 {m}분",
       "minutes": "{m}분",
       "lessThanMinute": "1분 미만",
-      "lockedToast": "{raid}에 잠겨 있습니다. {time} 후 해제됩니다."
+      "lockedToast": "{raid}에 잠겨 있습니다. {time} 후 해제됩니다.",
+      "heroicName": "영웅: {name}",
+      "heroicLocked": "영웅 난이도 {name}에 귀속되었습니다."
     },
     "compass": {
       "N": "북",
@@ -801,6 +803,10 @@ export const ko_KR: EnTranslations = {
       "leaderOption": "분배 담당자: 파티장(나)",
       "masterOption": "분배 담당자: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "던전 난이도 설정: 영웅",
+      "setNormal": "던전 난이도 설정: 일반"
+    },
     "bags": {
       "cannotDestroy": "이 아이템은 파괴할 수 없습니다.",
       "rightClickDestroy": "마우스 오른쪽 버튼으로 파괴",
@@ -1019,7 +1025,7 @@ export const ko_KR: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "관리자",
-        "coredevs": "Core Dev",
+        "coredevs": "핵심 개발자",
         "devs": "개발자",
         "mods": "운영자",
         "artists": "아티스트"
@@ -1228,6 +1234,20 @@ export const ko_KR: EnTranslations = {
       "mining": "채광",
       "logging": "벌목",
       "herbalism": "약초학"
+    },
+    "archetypeTitle": {
+      "label": "칭호",
+      "none": "없음",
+      "armorcrafting": "방어구 장인",
+      "weaponcrafting": "무기 장인",
+      "jewelcrafting": "보석 세공사",
+      "alchemy": "연금술사",
+      "engineering": "기술자",
+      "cooking": "요리사",
+      "inscription": "필경사",
+      "enchanting": "마법부여사",
+      "tailoring": "재단사",
+      "leatherworking": "가죽공예사"
     },
     "crafting": {
       "title": "제작",
@@ -3181,6 +3201,10 @@ export const ko_KR: EnTranslations = {
     },
     "closeAria": "닫기"
   },
+  "heroicShop": {
+    "balance": "영웅의 징표: {count}",
+    "buyAria": "영웅의 징표 {marks}개로 {item} 구매"
+  },
   "delveUi": {
     "board": {
       "title": "탐굴 게시판",
@@ -4473,12 +4497,14 @@ export const ko_KR: EnTranslations = {
     "slots": {
       "mainhand": "주장비",
       "helmet": "머리",
+      "neck": "목",
       "shoulder": "어깨",
       "chest": "가슴",
       "waist": "허리",
       "legs": "다리",
       "gloves": "손",
-      "feet": "발"
+      "feet": "발",
+      "ring": "손가락"
     },
     "quality": {
       "poor": "하급",
@@ -6368,6 +6394,132 @@ export const ko_KR: EnTranslations = {
       "event_skin_token": {
         "name": "신비한 외형 상자"
       },
+      "heroic_mark": {
+        "name": "영웅의 징표"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "모르텐의 묘지주조 사슬갑옷"
+      },
+      "shadowpulse_handwraps": {
+        "name": "어둠파동 손싸개"
+      },
+      "bonechill_striders": {
+        "name": "뼈서리 장화"
+      },
+      "mistcallers_fang": {
+        "name": "안개소환사의 송곳니"
+      },
+      "tidebound_spaulders": {
+        "name": "조수결속 어깨보호구"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "가라앉은 궁정의 장식띠"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "달조수 대지팡이"
+      },
+      "tidewoven_trousers": {
+        "name": "조수직조 바지"
+      },
+      "choirmothers_casque": {
+        "name": "성가대어머니의 투구"
+      },
+      "gravewyrm_cleaver": {
+        "name": "무덤용 대검"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "무덤용의 장막"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "성소 잠행자의 장갑"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "불사 궁정의 홀"
+      },
+      "deathless_warguard_legmail": {
+        "name": "불사 전쟁수호 다리갑옷"
+      },
+      "soulrend_diadem": {
+        "name": "영혼분열 왕관"
+      },
+      "scourgehide_carapace": {
+        "name": "재앙가죽 갑각"
+      },
+      "cryptplate_helm": {
+        "name": "묘지판금 투구"
+      },
+      "shadowpulse_slippers": {
+        "name": "어둠파동 슬리퍼"
+      },
+      "bonechill_cord": {
+        "name": "뼈서리 허리끈"
+      },
+      "mistforged_pauldrons": {
+        "name": "안개주조 어깨보호구"
+      },
+      "tideguard_faceguard": {
+        "name": "조수방패 面갑"
+      },
+      "sunken_court_mantle": {
+        "name": "가라앉은 궁정의 망토"
+      },
+      "lunar_choir_leggings": {
+        "name": "달노래 각반"
+      },
+      "choir_blessed_spaulders": {
+        "name": "성가 축복의 어깨보호구"
+      },
+      "tideworn_warboots": {
+        "name": "조수마모 전투화"
+      },
+      "gravewyrm_claws": {
+        "name": "무덤용 발톱"
+      },
+      "gravescale_girdle": {
+        "name": "무덤비늘 허리띠"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "용노래 손싸개"
+      },
+      "deathless_greatblade": {
+        "name": "불사 대검"
+      },
+      "soulforged_warplate": {
+        "name": "혼주조 전투갑옷"
+      },
+      "stormcallers_focus": {
+        "name": "폭풍소환사의 매개체"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "아홉 맹세의 인장"
+      },
+      "nielas_coldlight_band": {
+        "name": "니엘라의 냉광 반지"
+      },
+      "sutils_gambit": {
+        "name": "수틸의 도박"
+      },
+      "oath_of_the_round_table": {
+        "name": "원탁의 맹세"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "지즈의 불멸의 인장"
+      },
+      "architects_cornerstone": {
+        "name": "건축가의 초석"
+      },
+      "swiftfang_talisman": {
+        "name": "신속한 송곳니 부적"
+      },
+      "yumis_keepsake_locket": {
+        "name": "유미의 추억 로켓"
+      },
+      "zense_meridian": {
+        "name": "젠세의 자오선"
+      },
+      "medallion_of_endless_profit": {
+        "name": "끝없는 이득의 메달"
+      },
       "deathless_heartwood": {
         "name": "죽지 않는 왕관의 심재"
       },
@@ -6902,6 +7054,11 @@ export const ko_KR: EnTranslations = {
         "name": "방어구 제작자 호드",
         "title": "장인 방어구 제작자",
         "greeting": "화덕은 뜨겁고 숫돌은 돌고 있습니다. 베는 물건이라면 팝니다."
+      },
+      "heroic_quartermaster": {
+        "name": "병참장교 벡스",
+        "title": "영웅 병참장교",
+        "greeting": "영웅 던전의 증표는 하이워치 최고의 반지와 펜던트로 바꿀 수 있소. 징표를 보여 주시오."
       },
       "loremaster_caddis": {
         "name": "현자 캐디스",

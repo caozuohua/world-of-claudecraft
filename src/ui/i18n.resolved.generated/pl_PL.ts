@@ -368,7 +368,9 @@ export const pl_PL: EnTranslations = {
       "hoursMinutes": "{h}h {m}m",
       "minutes": "{m}m",
       "lessThanMinute": "<1m",
-      "lockedToast": "Jesteś przypisany do rajdu {raid}. Odblokowanie za {time}."
+      "lockedToast": "Jesteś przypisany do rajdu {raid}. Odblokowanie za {time}.",
+      "heroicName": "Heroiczny {name}",
+      "heroicLocked": "Jesteś przypisany do heroicznego {name}."
     },
     "compass": {
       "N": "Pn",
@@ -524,8 +526,8 @@ export const pl_PL: EnTranslations = {
       "fromYour": "Z twoich {value} pkt. cechy {stat}:",
       "names": {
         "spellPower": "Moc zaklęć",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Ocena krytyczna",
+        "hasteRating": "Ocena pośpiechu"
       },
       "desc": {
         "str": "Zwiększa twoją moc ataku, więc twoje ciosy bronią są mocniejsze.",
@@ -539,8 +541,8 @@ export const pl_PL: EnTranslations = {
         "dps": "Twoje szacowane obrażenia bronią na sekundę, łączące obrażenia i szybkość twojej broni z mocą ataku.",
         "critChance": "Twoja szansa na zadanie ataku krytycznego, zadającego podwójne obrażenia.",
         "dodge": "Twoja szansa na całkowite uniknięcie nadchodzącego ataku wręcz, bez otrzymania obrażeń.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Ocena krytyczna z twojego ekwipunku i bonusów zestawów, zwiększająca szansę na trafienie krytyczne. Około 10 oceny daje 1% trafienia krytycznego.",
+        "hasteRating": "Ocena pośpiechu z twojego ekwipunku i bonusów zestawów, przyspieszająca twoje ataki i rzucanie zaklęć. Około 10 oceny daje 1% pośpiechu."
       },
       "effects": {
         "attackPower": "+{value} mocy ataku",
@@ -582,13 +584,13 @@ export const pl_PL: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Szansa przy trafieniu ({chance}%): {effect}",
+      "onSpellDamage": "Szansa przy zaklęciach zadających obrażenia ({chance}%): {effect}",
+      "onHeal": "Szansa przy leczeniu ({chance}%): {effect}",
+      "chainArc": "razi cel czarem {school} {name} ({damage}), który przeskakuje na {jumps} pobliskich wrogów, zadając malejące obrażenia",
+      "attackSlow": "i spowalnia szybkość ataku celu o {pct}% na {duration} s",
+      "dot": "wywołuje {name}, obrażenia od {school} w czasie zadające łącznie {total} przez {duration} s",
+      "hot": "rozkwita {name}, leczenie w czasie przywracające {total} przez {duration} s"
     },
     "questShare": {
       "notShareable": "Tego zadania nie można udostępnić.",
@@ -801,9 +803,13 @@ export const pl_PL: EnTranslations = {
       "leaderOption": "Główny zbieracz: Przywódca (Ty)",
       "masterOption": "Główny zbieracz: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Ustaw trudność podziemia: Heroiczna",
+      "setNormal": "Ustaw trudność podziemia: Normalna"
+    },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Tego przedmiotu nie można zniszczyć.",
+      "rightClickDestroy": "Kliknij prawym, aby zniszczyć",
       "filterGroupAria": "Filtruj torby według kategorii",
       "filterAll": "Wszystko",
       "filterWeapon": "Bronie",
@@ -1019,7 +1025,7 @@ export const pl_PL: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
-        "coredevs": "Core Dev",
+        "coredevs": "Główny deweloper",
         "devs": "Dev",
         "mods": "Mod",
         "artists": "Grafik"
@@ -1229,6 +1235,20 @@ export const pl_PL: EnTranslations = {
       "logging": "Wyrąb",
       "herbalism": "Zielarstwo"
     },
+    "archetypeTitle": {
+      "label": "Tytuł",
+      "none": "Brak",
+      "armorcrafting": "Płatnerz",
+      "weaponcrafting": "Zbrojmistrz",
+      "jewelcrafting": "Jubiler",
+      "alchemy": "Alchemik",
+      "engineering": "Inżynier",
+      "cooking": "Kucharz",
+      "inscription": "Skryba",
+      "enchanting": "Zaklinacz",
+      "tailoring": "Krawiec",
+      "leatherworking": "Garbarz"
+    },
     "crafting": {
       "title": "Rzemiosło",
       "close": "Zamknij rzemiosło",
@@ -1240,7 +1260,7 @@ export const pl_PL: EnTranslations = {
       "craftedToast": "Wykonane: {name}",
       "insufficientMaterials": "Nie masz na to materiałów.",
       "unknownRecipe": "Ten przepis nie istnieje.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "Nie masz obu wymaganych rzemiosł na wymaganym poziomie dla tego przepisu."
     }
   },
   "apiError": {
@@ -3181,6 +3201,10 @@ export const pl_PL: EnTranslations = {
     },
     "closeAria": "Zamknij"
   },
+  "heroicShop": {
+    "balance": "Znaki heroiczne: {count}",
+    "buyAria": "Kup {item} za {marks} Znaków heroicznych"
+  },
   "delveUi": {
     "board": {
       "title": "Tablica Wypraw",
@@ -4473,12 +4497,14 @@ export const pl_PL: EnTranslations = {
     "slots": {
       "mainhand": "Główna ręka",
       "helmet": "Hełm",
+      "neck": "Szyja",
       "shoulder": "Barki",
       "chest": "Tułów",
       "waist": "Pas",
       "legs": "Nogi",
       "gloves": "Rękawice",
-      "feet": "Stopy"
+      "feet": "Stopy",
+      "ring": "Palec"
     },
     "quality": {
       "poor": "Nędzny",
@@ -6368,6 +6394,132 @@ export const pl_PL: EnTranslations = {
       "event_skin_token": {
         "name": "Tajemnicza skrytka kosmetyczna"
       },
+      "heroic_mark": {
+        "name": "Znak heroiczny"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Kryptokuta kolczuga Morthena"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Owijki cienistego pulsu"
+      },
+      "bonechill_striders": {
+        "name": "Wędrowce kościstego mrozu"
+      },
+      "mistcallers_fang": {
+        "name": "Kieł przyzywacza mgły"
+      },
+      "tidebound_spaulders": {
+        "name": "Naramienniki spętane przypływem"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Szarfa zatopionego dworu"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Wielki kostur księżycowego przypływu"
+      },
+      "tidewoven_trousers": {
+        "name": "Spodnie tkane przypływem"
+      },
+      "choirmothers_casque": {
+        "name": "Hełm matki chóru"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Tasak grobowego żmija"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Całun grobowego żmija"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Rękawice skradacza sanktuarium"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Berło nieśmiertelnego dworu"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Nieśmiertelne nogawice wojennej straży"
+      },
+      "soulrend_diadem": {
+        "name": "Diadem rozdarcia dusz"
+      },
+      "scourgehide_carapace": {
+        "name": "Pancerz ze skóry plagi"
+      },
+      "cryptplate_helm": {
+        "name": "Hełm z kryptowej płyty"
+      },
+      "shadowpulse_slippers": {
+        "name": "Trzewiki cienistego pulsu"
+      },
+      "bonechill_cord": {
+        "name": "Sznur kościstego mrozu"
+      },
+      "mistforged_pauldrons": {
+        "name": "Naramienniki kute we mgle"
+      },
+      "tideguard_faceguard": {
+        "name": "Osłona twarzy straży przypływu"
+      },
+      "sunken_court_mantle": {
+        "name": "Peleryna zatopionego dworu"
+      },
+      "lunar_choir_leggings": {
+        "name": "Nogawice księżycowego chóru"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Naramienniki błogosławione przez chór"
+      },
+      "tideworn_warboots": {
+        "name": "Bojowe buty starte przypływem"
+      },
+      "gravewyrm_claws": {
+        "name": "Szpony grobowego żmija"
+      },
+      "gravescale_girdle": {
+        "name": "Pas z grobowej łuski"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Owijki żmijowego chóru"
+      },
+      "deathless_greatblade": {
+        "name": "Nieśmiertelne wielkie ostrze"
+      },
+      "soulforged_warplate": {
+        "name": "Bojowa zbroja kuta z duszy"
+      },
+      "stormcallers_focus": {
+        "name": "Ognisko przyzywacza burz"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Pieczęć dziewięciu przysiąg"
+      },
+      "nielas_coldlight_band": {
+        "name": "Obrączka zimnego światła Nieli"
+      },
+      "sutils_gambit": {
+        "name": "Gambit Sutila"
+      },
+      "oath_of_the_round_table": {
+        "name": "Przysięga Okrągłego Stołu"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Nieśmiertelny sygnet Zyzza"
+      },
+      "architects_cornerstone": {
+        "name": "Kamień węgielny Architekta"
+      },
+      "swiftfang_talisman": {
+        "name": "Talizman rączego kła"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Pamiątkowy medalionik Yumi"
+      },
+      "zense_meridian": {
+        "name": "Meridian Zense"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Medalion niekończącego się zysku"
+      },
       "deathless_heartwood": {
         "name": "Twardziel Nieśmiertelnej Korony"
       },
@@ -6902,6 +7054,11 @@ export const pl_PL: EnTranslations = {
         "name": "Płatnerz Hode",
         "title": "Mistrz Płatnerski",
         "greeting": "Kuźnia rozgrzana, a kamień szlifierski się obraca. Jeśli to tnie, to ja to sprzedaję."
+      },
+      "heroic_quartermaster": {
+        "name": "Kwatermistrz Vex",
+        "title": "Heroiczny kwatermistrz",
+        "greeting": "Dowód z heroicznych głębin kupi najlepsze pierścienie i wisiory w Wysokiej Straży. Pokaż mi swoje znaki."
       },
       "loremaster_caddis": {
         "name": "Mistrz Wiedzy Caddis",
@@ -7985,13 +8142,13 @@ export const pl_PL: EnTranslations = {
         "name": "Regalia Bonewrought",
         "bonus2": "Zwiększa siłę ataku o 40.",
         "bonus3": "Zwiększa siłę o 15, wytrzymałość o 15 oraz szybkość ataku i rzucania zaklęć o 15%.",
-        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Twoje krytyczne trafienia bronią rozłupują cel Kościaną Drzazgą, zadając 8 obrażeń od krwawienia co 2 s przez 12 s. Kumuluje się do 3 razy."
       },
       "deathlord": {
         "name": "Rynsztunek bojowy Barrowlorda",
         "bonus2": "Zwiększa siłę ataku o 40.",
         "bonus3": "Zwiększa siłę o 15 i wytrzymałość o 15.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
+        "bonus4": "Twoje krytyczne trafienia bronią mają 50% szansy na udzielenie Grobowej Potęgi, zwiększającej moc ataku o 60 na 10 s."
       },
       "greyjaw_stalker": {
         "name": "Rynsztunek tropiciela Szaroszczękiego",
@@ -8001,25 +8158,25 @@ export const pl_PL: EnTranslations = {
         "name": "Szaty Mournweave",
         "bonus2": "Nie można cię odrzucić (100% odporności na odrzucenie).",
         "bonus3": "Zwiększa intelekt o 10 i wytrzymałość o 10.",
-        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Twoje zaklęcia mają 10% szansy na udzielenie Jasności Umysłu, dzięki czemu następne zaklęcie jest darmowe."
       },
       "nighttalon": {
         "name": "Skóra Direfang",
         "bonus2": "Zwiększa siłę ataku o 40.",
         "bonus3": "Zwiększa zręczność o 15, szansę na trafienie krytyczne o 2% oraz szybkość ataku i rzucania zaklęć o 15%.",
-        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Twoje krytyczne trafienia bronią rozrywają cel Poszarpaną Raną, zadając 6 obrażeń od krwawienia co 2 s przez 12 s. Kumuluje się do 3 razy."
       },
       "soulflame": {
         "name": "Regalia Wraithfire",
         "bonus2": "Nie można cię odrzucić (100% odporności na odrzucenie).",
         "bonus3": "Zwiększa intelekt o 15, ducha o 15 oraz szybkość ataku i rzucania zaklęć o 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Twoje zaklęcia mają 10% szansy na udzielenie Płomienia Duszy, zwiększającego moc zaklęć o 40 na 10 s."
       },
       "stormcallers": {
         "name": "Szaty Galecall",
         "bonus2": "Nie można cię odrzucić (100% odporności na odrzucenie).",
         "bonus3": "Zwiększa intelekt o 15, ducha o 15 oraz szybkość ataku i rzucania zaklęć o 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Twoje zaklęcia mają 10% szansy na udzielenie Płomienia Duszy, zwiększającego moc zaklęć o 40 na 10 s."
       },
       "vale_arcanist": {
         "name": "Szaty Arkanisty z Doliny",
@@ -8029,7 +8186,7 @@ export const pl_PL: EnTranslations = {
         "name": "Szaty Nightfang",
         "bonus2": "Zwiększa siłę ataku o 40.",
         "bonus3": "Zwiększa zręczność o 15 i szansę na trafienie krytyczne o 2%.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
+        "bonus4": "Twoje krytyczne trafienia bronią mają 50% szansy na udzielenie Pędu Kłów, zwiększającego szybkość ataku o 25% na 8 s."
       }
     }
   },

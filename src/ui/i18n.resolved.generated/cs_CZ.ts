@@ -312,14 +312,14 @@ export const cs_CZ: EnTranslations = {
       "haptics": "Haptika",
       "hapticsOff": "Haptika vypnuta",
       "toggleHaptics": "Přepnout haptiku",
-      "hotbarPage": "Skills",
-      "hotbarPageAria": "Show next set of skills",
-      "actionRing": "Combat actions",
-      "actionPageToggle": "Switch action page",
+      "hotbarPage": "Dovednosti",
+      "hotbarPageAria": "Zobrazit další sadu dovedností",
+      "actionRing": "Bojové akce",
+      "actionPageToggle": "Přepnout stránku akcí",
       "actionPageIndicator": "{page}",
-      "targetCycle": "Swap target",
-      "targetCycleShort": "Target",
-      "spellbookPageLabel": "Page {page}"
+      "targetCycle": "Přepnout cíl",
+      "targetCycleShort": "Cíl",
+      "spellbookPageLabel": "Strana {page}"
     },
     "tutorial": {
       "moveBodyTouch": "Pohybuj se páčkou pohybu a tažením po obrazovce se rozhlížej. Udělej pár kroků a začni.",
@@ -368,7 +368,9 @@ export const cs_CZ: EnTranslations = {
       "hoursMinutes": "{h} h {m} min",
       "minutes": "{m} min",
       "lessThanMinute": "<1 min",
-      "lockedToast": "Jsi uzamčen(a) k {raid}. Odemkne se za {time}."
+      "lockedToast": "Jsi uzamčen(a) k {raid}. Odemkne se za {time}.",
+      "heroicName": "{name} (hrdinská)",
+      "heroicLocked": "Jsi uzamčen(a) k hrdinské verzi {name}."
     },
     "compass": {
       "N": "S",
@@ -428,8 +430,8 @@ export const cs_CZ: EnTranslations = {
       "itemScoreLine": "Skóre {score}",
       "showSecondaryActionBar": "Zobrazit sekundární akční lištu",
       "showDailyRewardsChest": "Zobrazit truhlu denních odměn",
-      "mobileCameraJoystick": "Camera joystick",
-      "mobileLeftHanded": "Left-handed layout"
+      "mobileCameraJoystick": "Joystick kamery",
+      "mobileLeftHanded": "Rozvržení pro leváky"
     },
     "controller": {
       "title": "Ovladač",
@@ -524,8 +526,8 @@ export const cs_CZ: EnTranslations = {
       "fromYour": "Z tvojí hodnoty {value} {stat}:",
       "names": {
         "spellPower": "Síla kouzel",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Hodnocení kritického zásahu",
+        "hasteRating": "Hodnocení rychlosti"
       },
       "desc": {
         "str": "Zvyšuje tvoji sílu útoku, takže údery zbraní dopadají tvrději.",
@@ -539,8 +541,8 @@ export const cs_CZ: EnTranslations = {
         "dps": "Odhadované poškození zbraně za sekundu, které kombinuje poškození a rychlost zbraně s tvojí silou útoku.",
         "critChance": "Tvoje šance, že útok zasáhne kriticky a způsobí dvojnásobné poškození.",
         "dodge": "Tvoje šance úplně se vyhnout příchozímu útoku na blízko a neutrpět poškození.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Hodnocení kritického zásahu z tvé výbavy a bonusů sad, které zvyšuje tvoji šanci na kritický zásah. Přibližně 10 hodnocení dá 1 % kritického zásahu.",
+        "hasteRating": "Hodnocení rychlosti z tvé výbavy a bonusů sad, které zrychluje tvé útoky a sesílání kouzel. Přibližně 10 hodnocení dá 1 % rychlosti."
       },
       "effects": {
         "attackPower": "+{value} síla útoku",
@@ -582,13 +584,13 @@ export const cs_CZ: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Šance při zásahu ({chance} %): {effect}",
+      "onSpellDamage": "Šance při tvých poškozujících kouzlech ({chance} %): {effect}",
+      "onHeal": "Šance při tvém léčení ({chance} %): {effect}",
+      "chainArc": "zasáhne cíl {school} kouzlem {name} ({damage}), které přeskočí na {jumps} nedalekých nepřátel se slábnoucím poškozením",
+      "attackSlow": "a zpomalí rychlost útoku cíle o {pct} % na {duration} s",
+      "dot": "rozjitří {name}, {school} poškození v čase, které způsobí {total} během {duration} s",
+      "hot": "rozkvete {name}, léčení v čase, které obnoví {total} během {duration} s"
     },
     "questShare": {
       "notShareable": "Tento úkol nelze sdílet.",
@@ -801,9 +803,13 @@ export const cs_CZ: EnTranslations = {
       "leaderOption": "Master looter: vůdce (ty)",
       "masterOption": "Master looter: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Nastavit obtížnost dungeonu: Hrdinská",
+      "setNormal": "Nastavit obtížnost dungeonu: Normální"
+    },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Tento předmět nelze zničit.",
+      "rightClickDestroy": "Zničíš pravým kliknutím",
       "filterGroupAria": "Filtrovat batohy podle kategorie",
       "filterAll": "Vše",
       "filterWeapon": "Zbraně",
@@ -1019,7 +1025,7 @@ export const cs_CZ: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
-        "coredevs": "Core Dev",
+        "coredevs": "Hlavní dev",
         "devs": "Dev",
         "mods": "Mod",
         "artists": "Umělec"
@@ -1229,6 +1235,20 @@ export const cs_CZ: EnTranslations = {
       "logging": "Dřevorubectví",
       "herbalism": "Bylinkářství"
     },
+    "archetypeTitle": {
+      "label": "Titul",
+      "none": "Žádný",
+      "armorcrafting": "Zbrojíř",
+      "weaponcrafting": "Kovář zbraní",
+      "jewelcrafting": "Klenotník",
+      "alchemy": "Alchymista",
+      "engineering": "Inženýr",
+      "cooking": "Kuchař",
+      "inscription": "Písař",
+      "enchanting": "Očarovatel",
+      "tailoring": "Krejčí",
+      "leatherworking": "Koželuh"
+    },
     "crafting": {
       "title": "Výroba",
       "close": "Zavřít výrobu",
@@ -1240,7 +1260,7 @@ export const cs_CZ: EnTranslations = {
       "craftedToast": "Vyrobeno: {name}",
       "insufficientMaterials": "Na to nemáš materiály.",
       "unknownRecipe": "Tento recept neexistuje.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "Nemáš obě požadovaná řemesla na potřebné úrovni pro tento recept."
     }
   },
   "apiError": {
@@ -3181,6 +3201,10 @@ export const cs_CZ: EnTranslations = {
     },
     "closeAria": "Zavřít"
   },
+  "heroicShop": {
+    "balance": "Hrdinské značky: {count}",
+    "buyAria": "Koupit {item} za {marks} hrdinských značek"
+  },
   "delveUi": {
     "board": {
       "title": "Tabule výprav",
@@ -4473,12 +4497,14 @@ export const cs_CZ: EnTranslations = {
     "slots": {
       "mainhand": "Hlavní ruka",
       "helmet": "Helma",
+      "neck": "Krk",
       "shoulder": "Ramena",
       "chest": "Hruď",
       "waist": "Pas",
       "legs": "Nohy",
       "gloves": "Rukavice",
-      "feet": "Chodidla"
+      "feet": "Chodidla",
+      "ring": "Prst"
     },
     "quality": {
       "poor": "Chatrné",
@@ -6368,6 +6394,132 @@ export const cs_CZ: EnTranslations = {
       "event_skin_token": {
         "name": "Tajemná kosmetická skrýš"
       },
+      "heroic_mark": {
+        "name": "Hrdinská značka"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Morthenův kryptově kovaný hauberk"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Omotávky stínového pulzu"
+      },
+      "bonechill_striders": {
+        "name": "Kostimrazá kráčedla"
+      },
+      "mistcallers_fang": {
+        "name": "Tesák poutače mlhy"
+      },
+      "tidebound_spaulders": {
+        "name": "Nárameníky spoutané přílivem"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Šerpa potopeného dvora"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Velká hůl měsíčního přílivu"
+      },
+      "tidewoven_trousers": {
+        "name": "Přílivově tkané kalhoty"
+      },
+      "choirmothers_casque": {
+        "name": "Přilbice matky chóru"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Sekáč Hrobodraka"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Rubáš Hrobodraka"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Rukavice slídila svatyně"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Žezlo nesmrtelného dvora"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Nesmrtelné nohavice válečné stráže"
+      },
+      "soulrend_diadem": {
+        "name": "Diadém rozervání duše"
+      },
+      "scourgehide_carapace": {
+        "name": "Krunýř z kůže pohromy"
+      },
+      "cryptplate_helm": {
+        "name": "Kryptoplátová helma"
+      },
+      "shadowpulse_slippers": {
+        "name": "Střevíce stínového pulzu"
+      },
+      "bonechill_cord": {
+        "name": "Kostimrazá šňůra"
+      },
+      "mistforged_pauldrons": {
+        "name": "Mlhou kované nárameníky"
+      },
+      "tideguard_faceguard": {
+        "name": "Hledí přílivové stráže"
+      },
+      "sunken_court_mantle": {
+        "name": "Plášť potopeného dvora"
+      },
+      "lunar_choir_leggings": {
+        "name": "Nohavice měsíčního chóru"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Chórem požehnané nárameníky"
+      },
+      "tideworn_warboots": {
+        "name": "Přílivem ošlehané válečné boty"
+      },
+      "gravewyrm_claws": {
+        "name": "Spáry Hrobodraka"
+      },
+      "gravescale_girdle": {
+        "name": "Pás z hrobových šupin"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Omotávky dračího chóru"
+      },
+      "deathless_greatblade": {
+        "name": "Nesmrtelná velká čepel"
+      },
+      "soulforged_warplate": {
+        "name": "Duší kovaný válečný plát"
+      },
+      "stormcallers_focus": {
+        "name": "Ohnisko volání vichru"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Pečeť devíti přísah"
+      },
+      "nielas_coldlight_band": {
+        "name": "Nielin prsten chladného světla"
+      },
+      "sutils_gambit": {
+        "name": "Sutilův gambit"
+      },
+      "oath_of_the_round_table": {
+        "name": "Přísaha kulatého stolu"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Zyzzův nesmrtelný pečetní prsten"
+      },
+      "architects_cornerstone": {
+        "name": "Základní kámen Architekta"
+      },
+      "swiftfang_talisman": {
+        "name": "Talisman rychlého tesáku"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Yumin památeční medailonek"
+      },
+      "zense_meridian": {
+        "name": "Zenseho meridián"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Medailon nekonečného zisku"
+      },
       "deathless_heartwood": {
         "name": "Jádrové dřevo nesmrtelné koruny"
       },
@@ -6902,6 +7054,11 @@ export const cs_CZ: EnTranslations = {
         "name": "Zbrojíř Hode",
         "title": "Mistr zbrojíř",
         "greeting": "Výheň je rozpálená a brusný kámen se točí. Pokud to řeže, prodávám to."
+      },
+      "heroic_quartermaster": {
+        "name": "Zásobovač Vex",
+        "title": "Hrdinský zásobovač",
+        "greeting": "Za důkaz z hrdinských hlubin koupíš ty nejlepší prsteny a přívěsky v Highwatchi. Ukaž mi své značky."
       },
       "loremaster_caddis": {
         "name": "Kronikář Caddis",
@@ -7985,13 +8142,13 @@ export const cs_CZ: EnTranslations = {
         "name": "Regálie z kosti",
         "bonus2": "Zvyšuje sílu útoku o 40.",
         "bonus3": "Zvyšuje sílu o 15, výdrž o 15 a rychlost útoku i sesílání o 15 %.",
-        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Kritické zásahy tvé zbraně roztříští cíl efektem Kostitříska a způsobí mu krvácení za 8 poškození každé 2 s po dobu 12 s. Nasčítá se až 3krát."
       },
       "deathlord": {
         "name": "Bojová výbava mohylového pána",
         "bonus2": "Zvyšuje sílu útoku o 40.",
         "bonus3": "Zvyšuje sílu o 15 a výdrž o 15.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
+        "bonus4": "Kritické zásahy tvé zbraně mají 50% šanci udělit Hrobomoc, která zvýší sílu útoku o 60 na 10 s."
       },
       "greyjaw_stalker": {
         "name": "Výbava stopaře Šedočelista",
@@ -8001,25 +8158,25 @@ export const cs_CZ: EnTranslations = {
         "name": "Oděv smutkotkaní",
         "bonus2": "Nelze tě odhodit (100% odolnost proti odhození).",
         "bonus3": "Zvyšuje intelekt o 10 a výdrž o 10.",
-        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Tvá kouzla mají 10% šanci udělit Jasné sesílání, díky němuž je tvé příští kouzlo zdarma."
       },
       "nighttalon": {
         "name": "Kožešina děsivého tesáku",
         "bonus2": "Zvyšuje sílu útoku o 40.",
         "bonus3": "Zvyšuje obratnost o 15, šanci na kritický zásah o 2 % a rychlost útoku i sesílání o 15 %.",
-        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Kritické zásahy tvé zbraně vytrhnou Rozšklebenou ránu a způsobí cíli krvácení za 6 poškození každé 2 s po dobu 12 s. Nasčítá se až 3krát."
       },
       "soulflame": {
         "name": "Regálie přízračného ohně",
         "bonus2": "Nelze tě odhodit (100% odolnost proti odhození).",
         "bonus3": "Zvyšuje intelekt o 15, ducha o 15 a rychlost útoku i sesílání o 15 %.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Tvá kouzla mají 10% šanci udělit Dušový žár, který zvýší sílu kouzel o 40 na 10 s."
       },
       "stormcallers": {
         "name": "Roucha volání vichru",
         "bonus2": "Nelze tě odhodit (100% odolnost proti odhození).",
         "bonus3": "Zvyšuje intelekt o 15, ducha o 15 a rychlost útoku i sesílání o 15 %.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Tvá kouzla mají 10% šanci udělit Dušový žár, který zvýší sílu kouzel o 40 na 10 s."
       },
       "vale_arcanist": {
         "name": "Regálie arkánisty z údolí",
@@ -8029,7 +8186,7 @@ export const cs_CZ: EnTranslations = {
         "name": "Roucha nočního tesáku",
         "bonus2": "Zvyšuje sílu útoku o 40.",
         "bonus3": "Zvyšuje obratnost o 15 a šanci na kritický zásah o 2 %.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
+        "bonus4": "Kritické zásahy tvé zbraně mají 50% šanci udělit Tesákový nápor, který zvýší rychlost útoku o 25 % na 8 s."
       }
     }
   },

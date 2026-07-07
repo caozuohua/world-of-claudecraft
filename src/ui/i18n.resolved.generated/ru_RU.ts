@@ -368,7 +368,9 @@ export const ru_RU: EnTranslations = {
       "hoursMinutes": "{h}ч {m}м",
       "minutes": "{m}м",
       "lessThanMinute": "<1м",
-      "lockedToast": "Вы привязаны к {raid}. Разблокировка через {time}."
+      "lockedToast": "Вы привязаны к {raid}. Разблокировка через {time}.",
+      "heroicName": "Героический режим: {name}",
+      "heroicLocked": "Вы закреплены за героическим подземельем: {name}."
     },
     "compass": {
       "N": "С",
@@ -801,6 +803,10 @@ export const ru_RU: EnTranslations = {
       "leaderOption": "Мастер добычи: лидер группы (вы)",
       "masterOption": "Мастер добычи: {name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "Установить сложность подземелий: героическая",
+      "setNormal": "Установить сложность подземелий: обычная"
+    },
     "bags": {
       "cannotDestroy": "Этот предмет нельзя уничтожить.",
       "rightClickDestroy": "Правый клик, чтобы уничтожить",
@@ -1019,7 +1025,7 @@ export const ru_RU: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Администратор",
-        "coredevs": "Core Dev",
+        "coredevs": "Ведущий разработчик",
         "devs": "Разработчик",
         "mods": "Модератор",
         "artists": "Художник"
@@ -1228,6 +1234,20 @@ export const ru_RU: EnTranslations = {
       "mining": "Горное дело",
       "logging": "Лесозаготовка",
       "herbalism": "Травничество"
+    },
+    "archetypeTitle": {
+      "label": "Титул",
+      "none": "Нет",
+      "armorcrafting": "Бронник",
+      "weaponcrafting": "Оружейник",
+      "jewelcrafting": "Ювелир",
+      "alchemy": "Алхимик",
+      "engineering": "Механик",
+      "cooking": "Повар",
+      "inscription": "Писарь",
+      "enchanting": "Зачарователь",
+      "tailoring": "Портной",
+      "leatherworking": "Кожевник"
     },
     "crafting": {
       "title": "Крафт",
@@ -3181,6 +3201,10 @@ export const ru_RU: EnTranslations = {
     },
     "closeAria": "Закрыть"
   },
+  "heroicShop": {
+    "balance": "Героические знаки: {count}",
+    "buyAria": "Купить {item} за {marks} героических знаков"
+  },
   "delveUi": {
     "board": {
       "title": "Доска Вылазок",
@@ -4473,12 +4497,14 @@ export const ru_RU: EnTranslations = {
     "slots": {
       "mainhand": "Правая рука",
       "helmet": "Голова",
+      "neck": "Шея",
       "shoulder": "Плечи",
       "chest": "Грудь",
       "waist": "Пояс",
       "legs": "Ноги",
       "gloves": "Кисти рук",
-      "feet": "Ступни"
+      "feet": "Ступни",
+      "ring": "Палец"
     },
     "quality": {
       "poor": "Низкое",
@@ -6368,6 +6394,132 @@ export const ru_RU: EnTranslations = {
       "event_skin_token": {
         "name": "Загадочный косметический тайник"
       },
+      "heroic_mark": {
+        "name": "Героический знак"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Кольчуга Мортена из гробничной стали"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Обмотки теневого пульса"
+      },
+      "bonechill_striders": {
+        "name": "Сапоги костяного холода"
+      },
+      "mistcallers_fang": {
+        "name": "Клык призывателя туманов"
+      },
+      "tidebound_spaulders": {
+        "name": "Наплечники скованных приливов"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Кушак затонувшего двора"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Великий посох лунного прилива"
+      },
+      "tidewoven_trousers": {
+        "name": "Штаны приливного плетения"
+      },
+      "choirmothers_casque": {
+        "name": "Шлем матери хора"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Тесак могильного змея"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Саван могильного змея"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Перчатки святилищного охотника"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Скипетр бессмертного двора"
+      },
+      "deathless_warguard_legmail": {
+        "name": "Ножные латы бессмертного стража"
+      },
+      "soulrend_diadem": {
+        "name": "Диадема разрыва души"
+      },
+      "scourgehide_carapace": {
+        "name": "Панцирь бичевой шкуры"
+      },
+      "cryptplate_helm": {
+        "name": "Гробничный латный шлем"
+      },
+      "shadowpulse_slippers": {
+        "name": "Туфли теневого пульса"
+      },
+      "bonechill_cord": {
+        "name": "Пояс костяного холода"
+      },
+      "mistforged_pauldrons": {
+        "name": "Наплечники туманной ковки"
+      },
+      "tideguard_faceguard": {
+        "name": "Лицевой щит стража приливов"
+      },
+      "sunken_court_mantle": {
+        "name": "Накидка затонувшего двора"
+      },
+      "lunar_choir_leggings": {
+        "name": "Поножи лунного хора"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Наплечники хорового благословения"
+      },
+      "tideworn_warboots": {
+        "name": "Боевые сапоги приливного износа"
+      },
+      "gravewyrm_claws": {
+        "name": "Когти могильного змея"
+      },
+      "gravescale_girdle": {
+        "name": "Пояс могильной чешуи"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Обмотки змеиного хора"
+      },
+      "deathless_greatblade": {
+        "name": "Бессмертный великий клинок"
+      },
+      "soulforged_warplate": {
+        "name": "Душекованый боевой доспех"
+      },
+      "stormcallers_focus": {
+        "name": "Средоточие буревестника"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Печать девяти клятв"
+      },
+      "nielas_coldlight_band": {
+        "name": "Кольцо холодного света Ниэлы"
+      },
+      "sutils_gambit": {
+        "name": "Гамбит Сутила"
+      },
+      "oath_of_the_round_table": {
+        "name": "Клятва Круглого стола"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Бессмертная печатка Зизза"
+      },
+      "architects_cornerstone": {
+        "name": "Краеугольный камень архитектора"
+      },
+      "swiftfang_talisman": {
+        "name": "Талисман быстрого клыка"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Медальон-память Юми"
+      },
+      "zense_meridian": {
+        "name": "Меридиан Зенсе"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Медальон бесконечной прибыли"
+      },
       "deathless_heartwood": {
         "name": "Сердцевина бессмертной короны"
       },
@@ -6902,6 +7054,11 @@ export const ru_RU: EnTranslations = {
         "name": "Бронник Ходе",
         "title": "Мастер-бронник",
         "greeting": "Горн горяч, точило крутится. Если режет, я это продаю."
+      },
+      "heroic_quartermaster": {
+        "name": "Интендант Векс",
+        "title": "Героический интендант",
+        "greeting": "Знаки героических глубин покупают лучшие кольца и кулоны Хайвотча. Покажи мне свои знаки."
       },
       "loremaster_caddis": {
         "name": "Хранитель знаний Каддис",

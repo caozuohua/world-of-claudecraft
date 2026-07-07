@@ -368,7 +368,9 @@ export const en_XA: EnTranslations = {
       "hoursMinutes": "[{h}ĥ {m}ɱ]",
       "minutes": "[{m}ɱ]",
       "lessThanMinute": "[<1ɱ]",
-      "lockedToast": "[Ýóú áŕé ļóçķéð ţó {raid}. Úñļóçķš íñ {time}.]"
+      "lockedToast": "[Ýóú áŕé ļóçķéð ţó {raid}. Úñļóçķš íñ {time}.]",
+      "heroicName": "[Ĥéŕóíç {name}]",
+      "heroicLocked": "[Ýóú áŕé ļóçķéð ţó Ĥéŕóíç {name}.]"
     },
     "compass": {
       "N": "[Ñ]",
@@ -801,6 +803,10 @@ export const en_XA: EnTranslations = {
       "leaderOption": "[Ɱášţéŕ Ļóóţéŕ: Ļéáðéŕ (Ýóú)]",
       "masterOption": "[Ɱášţéŕ Ļóóţéŕ: {name}]"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "[Šéţ Ðúñĝéóñ Ðíƒƒíçúļţý: Ĥéŕóíç]",
+      "setNormal": "[Šéţ Ðúñĝéóñ Ðíƒƒíçúļţý: Ñóŕɱáļ]"
+    },
     "bags": {
       "cannotDestroy": "[Ţĥíš íţéɱ çáññóţ ƀé ðéšţŕóýéð.]",
       "rightClickDestroy": "[Ŕíĝĥţ-çļíçķ ţó ðéšţŕóý]",
@@ -1228,6 +1234,20 @@ export const en_XA: EnTranslations = {
       "mining": "[Ɱíñíñĝ]",
       "logging": "[Ļóĝĝíñĝ]",
       "herbalism": "[Ĥéŕƀáļíšɱ]"
+    },
+    "archetypeTitle": {
+      "label": "[Ţíţļé]",
+      "none": "[Ñóñé]",
+      "armorcrafting": "[Áŕɱóŕéŕ]",
+      "weaponcrafting": "[Ŵéáþóñšɱíţĥ]",
+      "jewelcrafting": "[Ĵéŵéļéŕ]",
+      "alchemy": "[Áļçĥéɱíšţ]",
+      "engineering": "[Ţíñķéŕéŕ]",
+      "cooking": "[Çĥéƒ]",
+      "inscription": "[Šçŕíƀé]",
+      "enchanting": "[Éñçĥáñţéŕ]",
+      "tailoring": "[Ţáíļóŕ]",
+      "leatherworking": "[Ļéáţĥéŕçŕáƒţéŕ]"
     },
     "crafting": {
       "title": "[Çŕáƒţíñĝ]",
@@ -3181,6 +3201,10 @@ export const en_XA: EnTranslations = {
     },
     "closeAria": "[Çļóšé]"
   },
+  "heroicShop": {
+    "balance": "[Ĥéŕóíç Ɱáŕķš: {count}]",
+    "buyAria": "[Ɓúý {item} ƒóŕ {marks} Ĥéŕóíç Ɱáŕķš]"
+  },
   "delveUi": {
     "board": {
       "title": "[Ðéļʋé Ɓóáŕð]",
@@ -4473,12 +4497,14 @@ export const en_XA: EnTranslations = {
     "slots": {
       "mainhand": "[Ɱáíñ Ĥáñð]",
       "helmet": "[Ĥéļɱéţ]",
+      "neck": "[Ñéçķ]",
       "shoulder": "[Šĥóúļðéŕ]",
       "chest": "[Çĥéšţ]",
       "waist": "[Ŵáíšţ]",
       "legs": "[Ļéĝš]",
       "gloves": "[Ĝļóʋéš]",
-      "feet": "[Ƒééţ]"
+      "feet": "[Ƒééţ]",
+      "ring": "[Ƒíñĝéŕ]"
     },
     "quality": {
       "poor": "[Þóóŕ]",
@@ -6368,6 +6394,132 @@ export const en_XA: EnTranslations = {
       "event_skin_token": {
         "name": "[Ɱýšţéŕíóúš Çóšɱéţíç Çáçĥé]"
       },
+      "heroic_mark": {
+        "name": "[Ĥéŕóíç Ɱáŕķ]"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "[Ɱóŕţĥéñ'š Çŕýþţƒóŕĝéð Ĥáúƀéŕķ]"
+      },
+      "shadowpulse_handwraps": {
+        "name": "[Šĥáðóŵþúļšé Ĥáñðŵŕáþš]"
+      },
+      "bonechill_striders": {
+        "name": "[Ɓóñéçĥíļļ Šţŕíðéŕš]"
+      },
+      "mistcallers_fang": {
+        "name": "[Ɱíšţçáļļéŕ'š Ƒáñĝ]"
+      },
+      "tidebound_spaulders": {
+        "name": "[Ţíðéƀóúñð Šþáúļðéŕš]"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "[Šášĥ óƒ ţĥé Šúñķéñ Çóúŕţ]"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "[Ļúñáŕ Ţíðé Ĝŕéáţšţáƒƒ]"
+      },
+      "tidewoven_trousers": {
+        "name": "[Ţíðéŵóʋéñ Ţŕóúšéŕš]"
+      },
+      "choirmothers_casque": {
+        "name": "[Çĥóíŕɱóţĥéŕ'š Çášɋúé]"
+      },
+      "gravewyrm_cleaver": {
+        "name": "[Ĝŕáʋéŵýŕɱ Çļéáʋéŕ]"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "[Šĥŕóúð óƒ ţĥé Ĝŕáʋéŵýŕɱ]"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "[Šáñçţúɱ Þŕóŵļéŕ'š Ĝŕíþš]"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "[Šçéþţéŕ óƒ ţĥé Ðéáţĥļéšš Çóúŕţ]"
+      },
+      "deathless_warguard_legmail": {
+        "name": "[Ðéáţĥļéšš Ŵáŕĝúáŕð Ļéĝɱáíļ]"
+      },
+      "soulrend_diadem": {
+        "name": "[Šóúļŕéñð Ðíáðéɱ]"
+      },
+      "scourgehide_carapace": {
+        "name": "[Šçóúŕĝéĥíðé Çáŕáþáçé]"
+      },
+      "cryptplate_helm": {
+        "name": "[Çŕýþţþļáţé Ĥéļɱ]"
+      },
+      "shadowpulse_slippers": {
+        "name": "[Šĥáðóŵþúļšé Šļíþþéŕš]"
+      },
+      "bonechill_cord": {
+        "name": "[Ɓóñéçĥíļļ Çóŕð]"
+      },
+      "mistforged_pauldrons": {
+        "name": "[Ɱíšţƒóŕĝéð Þáúļðŕóñš]"
+      },
+      "tideguard_faceguard": {
+        "name": "[Ţíðéĝúáŕð Ƒáçéĝúáŕð]"
+      },
+      "sunken_court_mantle": {
+        "name": "[Šúñķéñ Çóúŕţ Ɱáñţļé]"
+      },
+      "lunar_choir_leggings": {
+        "name": "[Ļúñáŕ Çĥóíŕ Ļéĝĝíñĝš]"
+      },
+      "choir_blessed_spaulders": {
+        "name": "[Çĥóíŕ-Ɓļéššéð Šþáúļðéŕš]"
+      },
+      "tideworn_warboots": {
+        "name": "[Ţíðéŵóŕñ Ŵáŕƀóóţš]"
+      },
+      "gravewyrm_claws": {
+        "name": "[Ĝŕáʋéŵýŕɱ Çļáŵš]"
+      },
+      "gravescale_girdle": {
+        "name": "[Ĝŕáʋéšçáļé Ĝíŕðļé]"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "[Ŵýŕɱçĥóíŕ Ĥáñðŵŕáþš]"
+      },
+      "deathless_greatblade": {
+        "name": "[Ðéáţĥļéšš Ĝŕéáţƀļáðé]"
+      },
+      "soulforged_warplate": {
+        "name": "[Šóúļƒóŕĝéð Ŵáŕþļáţé]"
+      },
+      "stormcallers_focus": {
+        "name": "[Šţóŕɱçáļļéŕ'š Ƒóçúš]"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "[Šéáļ óƒ ţĥé Ñíñé Óáţĥš]"
+      },
+      "nielas_coldlight_band": {
+        "name": "[Ñíéļá'š Çóļðļíĝĥţ Ɓáñð]"
+      },
+      "sutils_gambit": {
+        "name": "[Šúţíļ'š Ĝáɱƀíţ]"
+      },
+      "oath_of_the_round_table": {
+        "name": "[Óáţĥ óƒ ţĥé Ŕóúñð Ţáƀļé]"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "[Žýžž'š Ðéáţĥļéšš Šíĝñéţ]"
+      },
+      "architects_cornerstone": {
+        "name": "[Ţĥé Áŕçĥíţéçţ'š Çóŕñéŕšţóñé]"
+      },
+      "swiftfang_talisman": {
+        "name": "[Šŵíƒţƒáñĝ Ţáļíšɱáñ]"
+      },
+      "yumis_keepsake_locket": {
+        "name": "[Ýúɱí'š Ķééþšáķé Ļóçķéţ]"
+      },
+      "zense_meridian": {
+        "name": "[Žéñšé Ɱéŕíðíáñ]"
+      },
+      "medallion_of_endless_profit": {
+        "name": "[Ɱéðáļļíóñ óƒ Éñðļéšš Þŕóƒíţ]"
+      },
       "deathless_heartwood": {
         "name": "[Ĥéáŕţŵóóð óƒ ţĥé Ðéáţĥļéšš Çŕóŵñ]"
       },
@@ -6902,6 +7054,11 @@ export const en_XA: EnTranslations = {
         "name": "[Áŕɱóŕéŕ Ĥóðé]",
         "title": "[Ɱášţéŕ Áŕɱóŕéŕ]",
         "greeting": "[Ƒóŕĝé íš ĥóţ áñð ţĥé ĝŕíñðšţóñé íš ţúŕñíñĝ. Íƒ íţ çúţš, Í šéļļ íţ.]"
+      },
+      "heroic_quartermaster": {
+        "name": "[Ɋúáŕţéŕɱášţéŕ Ʋéẋ]",
+        "title": "[Ĥéŕóíç Ɋúáŕţéŕɱášţéŕ]",
+        "greeting": "[Þŕóóƒ óƒ ţĥé ĥéŕóíç ðéþţĥš ƀúýš ţĥé ƒíñéšţ ŕíñĝš áñð þéñðáñţš íñ Ĥíĝĥŵáţçĥ. Šĥóŵ ɱé ýóúŕ ɱáŕķš.]"
       },
       "loremaster_caddis": {
         "name": "[Ļóŕéɱášţéŕ Çáððíš]",

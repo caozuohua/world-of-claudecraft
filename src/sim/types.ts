@@ -98,6 +98,12 @@ export function isPetClass(cls: PlayerClass): boolean {
 // ring) — see docs/design and the Fiesta region of sim.ts.
 export type ArenaFormat = '1v1' | '2v2' | 'fiesta';
 
+export type DungeonDifficulty = 'normal' | 'heroic';
+
+export function isDungeonDifficulty(value: unknown): value is DungeonDifficulty {
+  return value === 'normal' || value === 'heroic';
+}
+
 export interface ArenaStanding {
   rating: number;
   wins: number;
@@ -258,25 +264,37 @@ export interface WeaponInfo {
 export type EquipSlot =
   | 'mainhand'
   | 'helmet'
+  | 'neck'
   | 'shoulder'
   | 'chest'
   | 'waist'
   | 'legs'
   | 'gloves'
-  | 'feet';
+  | 'feet'
+  | 'ring1'
+  | 'ring2';
 
-// The eight equip slots, in the canonical paperdoll order. Single source for
+// The eleven equip slots, in the canonical paperdoll order. Single source for
 // the entity loop and the server's unequip-command validation.
 export const EQUIP_SLOTS: readonly EquipSlot[] = [
   'mainhand',
   'helmet',
+  'neck',
   'shoulder',
   'chest',
   'waist',
   'legs',
   'gloves',
   'feet',
+  'ring1',
+  'ring2',
 ];
+
+// What an ITEM declares as its slot. Rings declare the slot KIND ('ring'); the
+// equip path resolves the concrete ring1/ring2 equipment key at equip time
+// (resolveEquipSlot in equipment_rules.ts). Every other item names its
+// equipment slot directly. Items never carry 'ring1'/'ring2'.
+export type ItemSlot = EquipSlot | 'ring';
 
 export type SkinCatalog = 'class' | 'mech';
 
@@ -313,7 +331,7 @@ type ItemKind =
 interface BaseItemDef {
   id: string;
   name: string;
-  slot?: EquipSlot;
+  slot?: ItemSlot;
   weapon?: WeaponInfo;
   stats?: Partial<Stats>;
   // Spell Power affix (caster gear): flat Spell Power, summed in recalcPlayerStats.
@@ -421,8 +439,19 @@ export interface ItemSet {
 
 export interface ArmorItemDef extends BaseItemDef {
   kind: 'armor';
-  slot: Exclude<EquipSlot, 'mainhand'>;
+  slot: Exclude<EquipSlot, 'mainhand' | 'neck' | 'ring1' | 'ring2'>;
   armorType: ArmorType;
+  weapon?: never;
+}
+
+// Jewelry: neck and ring pieces. kind 'armor' so the equip/budget/tooltip paths
+// treat it as gear, but it carries NO armor class: equipment_rules falls through
+// the armorType gate, so any class can wear jewelry (requiredClass still applies
+// when set). Rings declare slot 'ring'; see resolveEquipSlot.
+export interface JewelryItemDef extends BaseItemDef {
+  kind: 'armor';
+  slot: 'neck' | 'ring';
+  armorType?: never;
   weapon?: never;
 }
 
@@ -481,7 +510,7 @@ export interface OtherItemDef extends BaseItemDef {
   armorType?: never;
 }
 
-export type ItemDef = ArmorItemDef | WeaponItemDef | OtherItemDef;
+export type ItemDef = ArmorItemDef | WeaponItemDef | JewelryItemDef | OtherItemDef;
 
 // Per-instance item payload (#1165). Additive and OPTIONAL: most items stay plain
 // {itemId, count} with no instance payload (fungible, market-listable). A slot
@@ -1349,6 +1378,9 @@ export interface NpcDef {
   // The Merchant: talking to this NPC opens the player-driven World Market
   // (auction house) instead of a fixed vendor stock.
   market?: boolean;
+  // The Heroic Quartermaster: talking to this NPC opens the Heroic Marks
+  // shop (src/sim/content/heroic_vendor.ts) instead of a copper vendor stock.
+  heroicVendor?: boolean;
   greeting: string;
   // Registered but not surface-placed at world init. The owning system spawns
   // the entity on demand (e.g. the Nythraxis encounter walks Brother Aldric in
@@ -1685,6 +1717,19 @@ export interface Entity {
   firedSummons: number; // summonAdds thresholds already triggered
   summonedIds: number[]; // live adds this boss summoned; despawned on reset
   enraged: boolean; // enrage mechanic active
+  // Heroic-instance mechanic scaling (instances/difficulty.ts applyHeroicMobTuning).
+  // Mechanic numbers (aoePulse/bigCast/stomp damage; mendAlly/wardAllies/stoneskin
+  // amounts) are read from the base MOBS table at fire time, so the fire sites
+  // multiply by these AFTER the rng draw. undefined = 1 (normal difficulty).
+  mechanicDamageMult?: number;
+  mechanicHealMult?: number;
+  // Entity-level CC/snare immunity, the per-spawn twin of the MobTemplate
+  // ccImmune/slowImmune flags (which are read from the base MOBS table, so a
+  // spawn-time template transform cannot grant them). Heroic instances set
+  // both on boss-flagged mobs (applyHeroicMobTuning); the applyAura gates and
+  // the polymorph cast gate check template OR entity.
+  ccImmune?: boolean;
+  slowImmune?: boolean;
   healedThisPull: boolean; // desperation self-heal already used this pull
   nythraxis?: NythraxisEncounterState; // sim-only state for the Nythraxis raid encounter
   spawnPos: Vec3;

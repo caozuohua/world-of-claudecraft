@@ -368,7 +368,9 @@ export const zh_CN: EnTranslations = {
       "hoursMinutes": "{h}小时{m}分",
       "minutes": "{m}分",
       "lessThanMinute": "<1分",
-      "lockedToast": "你已锁定到{raid}。{time}后解锁。"
+      "lockedToast": "你已锁定到{raid}。{time}后解锁。",
+      "heroicName": "英雄难度：{name}",
+      "heroicLocked": "你已被锁定至英雄难度的{name}。"
     },
     "compass": {
       "N": "北",
@@ -395,7 +397,7 @@ export const zh_CN: EnTranslations = {
     "options": {
       "clickMoveLeft": "左键",
       "clickMoveRight": "右键",
-      "version": "v{version} ({build})",
+      "version": "v{version}（{build}）",
       "browserEffects": "浏览器特效",
       "browserEffectsAuto": "自动",
       "browserEffectsFull": "完整",
@@ -801,6 +803,10 @@ export const zh_CN: EnTranslations = {
       "leaderOption": "分配者：队长（你）",
       "masterOption": "分配者：{name}"
     },
+    "dungeonDifficulty": {
+      "setHeroic": "设置地下城难度：英雄",
+      "setNormal": "设置地下城难度：普通"
+    },
     "bags": {
       "cannotDestroy": "该物品无法销毁。",
       "rightClickDestroy": "右键单击以销毁",
@@ -1019,7 +1025,7 @@ export const zh_CN: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "管理员",
-        "coredevs": "Core Dev",
+        "coredevs": "核心开发者",
         "devs": "开发者",
         "mods": "管理员",
         "artists": "画师"
@@ -1228,6 +1234,20 @@ export const zh_CN: EnTranslations = {
       "mining": "采矿",
       "logging": "伐木",
       "herbalism": "草药学"
+    },
+    "archetypeTitle": {
+      "label": "称号",
+      "none": "无",
+      "armorcrafting": "锻甲师",
+      "weaponcrafting": "武器匠",
+      "jewelcrafting": "珠宝匠",
+      "alchemy": "炼金师",
+      "engineering": "工程师",
+      "cooking": "厨师",
+      "inscription": "铭文师",
+      "enchanting": "附魔师",
+      "tailoring": "裁缝",
+      "leatherworking": "制皮师"
     },
     "crafting": {
       "title": "制作",
@@ -3181,6 +3201,10 @@ export const zh_CN: EnTranslations = {
     },
     "closeAria": "关闭"
   },
+  "heroicShop": {
+    "balance": "英雄徽记: {count}",
+    "buyAria": "用{marks}枚英雄徽记购买{item}"
+  },
   "delveUi": {
     "board": {
       "title": "探秘面板",
@@ -4473,12 +4497,14 @@ export const zh_CN: EnTranslations = {
     "slots": {
       "mainhand": "主手",
       "helmet": "头部",
+      "neck": "颈部",
       "shoulder": "肩部",
       "chest": "胸部",
       "waist": "腰部",
       "legs": "腿部",
       "gloves": "手部",
-      "feet": "脚部"
+      "feet": "脚部",
+      "ring": "手指"
     },
     "quality": {
       "poor": "粗糙",
@@ -6368,6 +6394,132 @@ export const zh_CN: EnTranslations = {
       "event_skin_token": {
         "name": "神秘外观宝箱"
       },
+      "heroic_mark": {
+        "name": "英雄徽记"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "莫尔森的墓铸锁甲"
+      },
+      "shadowpulse_handwraps": {
+        "name": "暗影脉冲裹手"
+      },
+      "bonechill_striders": {
+        "name": "骨寒行者之靴"
+      },
+      "mistcallers_fang": {
+        "name": "唤雾者之牙"
+      },
+      "tidebound_spaulders": {
+        "name": "缚潮护肩"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "沉没王庭腰带"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "月潮巨杖"
+      },
+      "tidewoven_trousers": {
+        "name": "织潮长裤"
+      },
+      "choirmothers_casque": {
+        "name": "唱诗圣母的头盔"
+      },
+      "gravewyrm_cleaver": {
+        "name": "墓龙劈斩刀"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "墓龙裹布"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "圣殿潜行者的手套"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "不死王庭权杖"
+      },
+      "deathless_warguard_legmail": {
+        "name": "不死战卫腿甲"
+      },
+      "soulrend_diadem": {
+        "name": "裂魂冠冕"
+      },
+      "scourgehide_carapace": {
+        "name": "灾祸之皮甲壳"
+      },
+      "cryptplate_helm": {
+        "name": "墓板头盔"
+      },
+      "shadowpulse_slippers": {
+        "name": "暗影脉冲便鞋"
+      },
+      "bonechill_cord": {
+        "name": "骨寒腰绳"
+      },
+      "mistforged_pauldrons": {
+        "name": "雾铸肩铠"
+      },
+      "tideguard_faceguard": {
+        "name": "守潮面甲"
+      },
+      "sunken_court_mantle": {
+        "name": "沉没王庭披肩"
+      },
+      "lunar_choir_leggings": {
+        "name": "月唱护腿"
+      },
+      "choir_blessed_spaulders": {
+        "name": "唱诗祝福肩铠"
+      },
+      "tideworn_warboots": {
+        "name": "潮蚀战靴"
+      },
+      "gravewyrm_claws": {
+        "name": "墓龙护爪"
+      },
+      "gravescale_girdle": {
+        "name": "墓鳞腰带"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "龙唱裹手"
+      },
+      "deathless_greatblade": {
+        "name": "不死巨刃"
+      },
+      "soulforged_warplate": {
+        "name": "铸魂战甲"
+      },
+      "stormcallers_focus": {
+        "name": "唤雷之核"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "九誓之印"
+      },
+      "nielas_coldlight_band": {
+        "name": "妮拉的冷光指环"
+      },
+      "sutils_gambit": {
+        "name": "苏蒂尔的赌局"
+      },
+      "oath_of_the_round_table": {
+        "name": "圆桌誓约"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "兹兹的不朽印戒"
+      },
+      "architects_cornerstone": {
+        "name": "建筑师的奠基石"
+      },
+      "swiftfang_talisman": {
+        "name": "迅牙护符"
+      },
+      "yumis_keepsake_locket": {
+        "name": "由美的纪念小盒"
+      },
+      "zense_meridian": {
+        "name": "泽恩斯子午坠"
+      },
+      "medallion_of_endless_profit": {
+        "name": "无尽利润勋章"
+      },
       "deathless_heartwood": {
         "name": "不朽王冠之心木"
       },
@@ -6902,6 +7054,11 @@ export const zh_CN: EnTranslations = {
         "name": "霍德护甲匠",
         "title": "护甲大师",
         "greeting": "炉火正旺，砂轮正转。能砍的东西，我都卖。"
+      },
+      "heroic_quartermaster": {
+        "name": "军需官维克斯",
+        "title": "英雄军需官",
+        "greeting": "英雄深渊的凭证能换来高崖望最上等的戒指和吊坠。把你的徽记拿给我看。"
       },
       "loremaster_caddis": {
         "name": "凯迪斯博学者",
