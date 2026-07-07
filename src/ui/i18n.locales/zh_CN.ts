@@ -14,6 +14,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_CN: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.discord.roleTag.coredevs': '核心开发者',
+  'hudChrome.options.version': 'v{version}（{build}）',
   'auth.emailPlaceholder': 'you@example.com',
   'auth.recovery.logOut': '退出登录',
   'delveRiteUi.easy': '简单',
@@ -5807,6 +5809,19 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': '采矿',
   'hudChrome.gathering.logging': '伐木',
   'hudChrome.gathering.herbalism': '草药学',
+  'hudChrome.archetypeTitle.label': '称号',
+  'hudChrome.archetypeTitle.none': '无',
+  'hudChrome.archetypeTitle.armorcrafting': '锻甲师',
+  'hudChrome.archetypeTitle.weaponcrafting': '武器匠',
+  'hudChrome.archetypeTitle.jewelcrafting': '珠宝匠',
+  'hudChrome.archetypeTitle.alchemy': '炼金师',
+  'hudChrome.archetypeTitle.engineering': '工程师',
+  'hudChrome.archetypeTitle.cooking': '厨师',
+  'hudChrome.archetypeTitle.inscription': '铭文师',
+  'hudChrome.archetypeTitle.enchanting': '附魔师',
+  'hudChrome.archetypeTitle.tailoring': '裁缝',
+  'hudChrome.archetypeTitle.leatherworking': '制皮师',
+  // Release v0.22.0 locale fill.
   'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
   'hudChrome.crafting.comboRequirementUnmet': '你没有达到该配方所需组合的两项制造技能等级。',
   'hudChrome.mobile.actionPageIndicator': '第{page}页',

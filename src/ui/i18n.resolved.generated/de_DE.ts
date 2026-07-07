@@ -369,8 +369,8 @@ export const de_DE: EnTranslations = {
       "minutes": "{m}Min",
       "lessThanMinute": "<1Min",
       "lockedToast": "Du bist für {raid} gesperrt. Freischaltung in {time}.",
-      "heroicName": "Heroic {name}",
-      "heroicLocked": "You are locked to Heroic {name}."
+      "heroicName": "Heroisch {name}",
+      "heroicLocked": "Du bist für Heroisch {name} gesperrt."
     },
     "compass": {
       "N": "N",
@@ -526,8 +526,8 @@ export const de_DE: EnTranslations = {
       "fromYour": "Von deinen {value} Punkten {stat}:",
       "names": {
         "spellPower": "Zaubermacht",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Kritische Trefferwertung",
+        "hasteRating": "Tempowertung"
       },
       "desc": {
         "str": "Erhöht deine Angriffskraft, sodass deine Waffenschläge härter treffen.",
@@ -541,8 +541,8 @@ export const de_DE: EnTranslations = {
         "dps": "Dein geschätzter Waffenschaden pro Sekunde, der Schaden und Geschwindigkeit deiner Waffe mit deiner Angriffskraft verbindet.",
         "critChance": "Deine Chance, dass ein Angriff kritisch trifft und doppelten Schaden verursacht.",
         "dodge": "Deine Chance, einem eingehenden Nahkampfangriff vollständig auszuweichen und keinen Schaden zu erleiden.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Kritische Trefferwertung aus deiner Ausrüstung und deinen Setboni, die deine kritische Trefferchance erhöht. Etwa 10 Wertung gewähren 1% kritische Trefferchance.",
+        "hasteRating": "Tempowertung aus deiner Ausrüstung und deinen Setboni, die deine Angriffe und dein Zaubern beschleunigt. Etwa 10 Wertung gewähren 1% Tempo."
       },
       "effects": {
         "attackPower": "+{value} Angriffskraft",
@@ -584,13 +584,13 @@ export const de_DE: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Chance bei Treffer ({chance}%): {effect}",
+      "onSpellDamage": "Chance bei euren schädigenden Zaubern ({chance}%): {effect}",
+      "onHeal": "Chance bei euren Heilungen ({chance}%): {effect}",
+      "chainArc": "trifft das Ziel mit einem {school} {name} ({damage}), der auf {jumps} nahe Gegner mit abnehmendem Schaden überspringt",
+      "attackSlow": "und verlangsamt das Angriffstempo des Ziels {duration} Sek. lang um {pct}%",
+      "dot": "lässt {name} schwären, einen {school} Schaden über Zeit, der {total} über {duration} Sek. verursacht",
+      "hot": "entfaltet {name}, eine Heilung über Zeit, die {total} über {duration} Sek. wiederherstellt"
     },
     "questShare": {
       "notShareable": "Diese Quest kann nicht geteilt werden.",
@@ -795,12 +795,12 @@ export const de_DE: EnTranslations = {
       "masterOption": "Plündermeister: {name}"
     },
     "dungeonDifficulty": {
-      "setHeroic": "Set Dungeon Difficulty: Heroic",
-      "setNormal": "Set Dungeon Difficulty: Normal"
+      "setHeroic": "Dungeon-Schwierigkeit festlegen: Heroisch",
+      "setNormal": "Dungeon-Schwierigkeit festlegen: Normal"
     },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Dieser Gegenstand kann nicht zerstört werden.",
+      "rightClickDestroy": "Rechtsklick zum Zerstören",
       "filterGroupAria": "Taschen nach Kategorie filtern",
       "filterAll": "Alle",
       "filterWeapon": "Waffen",
@@ -1016,7 +1016,7 @@ export const de_DE: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
-        "coredevs": "Core Dev",
+        "coredevs": "Kernentwickler",
         "devs": "Entwickler",
         "mods": "Mod",
         "artists": "Künstler"
@@ -1226,6 +1226,20 @@ export const de_DE: EnTranslations = {
       "logging": "Holzfällen",
       "herbalism": "Kräuterkunde"
     },
+    "archetypeTitle": {
+      "label": "Titel",
+      "none": "Keiner",
+      "armorcrafting": "Rüstungsschmied",
+      "weaponcrafting": "Waffenschmied",
+      "jewelcrafting": "Juwelier",
+      "alchemy": "Alchemist",
+      "engineering": "Ingenieur",
+      "cooking": "Koch",
+      "inscription": "Schreiber",
+      "enchanting": "Verzauberer",
+      "tailoring": "Schneider",
+      "leatherworking": "Gerber"
+    },
     "crafting": {
       "title": "Basteln",
       "close": "Enges Basteln",
@@ -1237,7 +1251,7 @@ export const de_DE: EnTranslations = {
       "craftedToast": "Hergestellt: {name}",
       "insufficientMaterials": "Dafür fehlen Ihnen die Materialien.",
       "unknownRecipe": "Dieses Rezept existiert nicht.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "Ihr besitzt nicht beide erforderlichen Berufe auf der nötigen Stufe für dieses Rezept."
     }
   },
   "apiError": {
@@ -3209,8 +3223,8 @@ export const de_DE: EnTranslations = {
     "closeAria": "Schließen"
   },
   "heroicShop": {
-    "balance": "Heroic Marks: {count}",
-    "buyAria": "Buy {item} for {marks} Heroic Marks"
+    "balance": "Heroische Marken: {count}",
+    "buyAria": "{item} für {marks} Heroische Marken kaufen"
   },
   "delveUi": {
     "board": {
@@ -4504,7 +4518,7 @@ export const de_DE: EnTranslations = {
     "slots": {
       "mainhand": "Waffenhand",
       "helmet": "Kopf",
-      "neck": "Neck",
+      "neck": "Hals",
       "shoulder": "Schultern",
       "chest": "Brust",
       "waist": "Taille",
@@ -6402,130 +6416,130 @@ export const de_DE: EnTranslations = {
         "name": "Geheimnisvolle Kosmetiktruhe"
       },
       "heroic_mark": {
-        "name": "Heroic Mark"
+        "name": "Heroische Marke"
       },
       "morthens_cryptforged_hauberk": {
-        "name": "Morthen's Cryptforged Hauberk"
+        "name": "Morthens gruftgeschmiedetes Kettenhemd"
       },
       "shadowpulse_handwraps": {
-        "name": "Shadowpulse Handwraps"
+        "name": "Schattenpuls-Handwickel"
       },
       "bonechill_striders": {
-        "name": "Bonechill Striders"
+        "name": "Knochenfrost-Schreiter"
       },
       "mistcallers_fang": {
-        "name": "Mistcaller's Fang"
+        "name": "Fangzahn des Nebelrufers"
       },
       "tidebound_spaulders": {
-        "name": "Tidebound Spaulders"
+        "name": "Flutgebundene Schulterstücke"
       },
       "sash_of_the_sunken_court": {
-        "name": "Sash of the Sunken Court"
+        "name": "Schärpe des Versunkenen Hofes"
       },
       "lunar_tide_greatstaff": {
-        "name": "Lunar Tide Greatstaff"
+        "name": "Großstab der Mondflut"
       },
       "tidewoven_trousers": {
-        "name": "Tidewoven Trousers"
+        "name": "Flutgewebte Beinkleider"
       },
       "choirmothers_casque": {
-        "name": "Choirmother's Casque"
+        "name": "Helm der Chormutter"
       },
       "gravewyrm_cleaver": {
-        "name": "Gravewyrm Cleaver"
+        "name": "Grabwyrm-Spalter"
       },
       "shroud_of_the_gravewyrm": {
-        "name": "Shroud of the Gravewyrm"
+        "name": "Leichentuch des Grabwyrms"
       },
       "sanctum_prowlers_grips": {
-        "name": "Sanctum Prowler's Grips"
+        "name": "Griffe des Sanktum-Pirschers"
       },
       "scepter_of_the_deathless_court": {
-        "name": "Scepter of the Deathless Court"
+        "name": "Zepter des Todlosen Hofes"
       },
       "deathless_warguard_legmail": {
-        "name": "Deathless Warguard Legmail"
+        "name": "Todlose Beinkette der Kriegswache"
       },
       "soulrend_diadem": {
-        "name": "Soulrend Diadem"
+        "name": "Seelenriss-Diadem"
       },
       "scourgehide_carapace": {
-        "name": "Scourgehide Carapace"
+        "name": "Geißelhaut-Panzer"
       },
       "cryptplate_helm": {
-        "name": "Cryptplate Helm"
+        "name": "Gruftplatten-Helm"
       },
       "shadowpulse_slippers": {
-        "name": "Shadowpulse Slippers"
+        "name": "Schattenpuls-Schuhe"
       },
       "bonechill_cord": {
-        "name": "Bonechill Cord"
+        "name": "Knochenfrost-Kordel"
       },
       "mistforged_pauldrons": {
-        "name": "Mistforged Pauldrons"
+        "name": "Nebelgeschmiedete Schulterstücke"
       },
       "tideguard_faceguard": {
-        "name": "Tideguard Faceguard"
+        "name": "Gesichtsschutz der Flutwache"
       },
       "sunken_court_mantle": {
-        "name": "Sunken Court Mantle"
+        "name": "Umhang des Versunkenen Hofes"
       },
       "lunar_choir_leggings": {
-        "name": "Lunar Choir Leggings"
+        "name": "Mondchor-Beinschienen"
       },
       "choir_blessed_spaulders": {
-        "name": "Choir-Blessed Spaulders"
+        "name": "Chorgesegnete Schulterstücke"
       },
       "tideworn_warboots": {
-        "name": "Tideworn Warboots"
+        "name": "Flutzerschlissene Kriegsstiefel"
       },
       "gravewyrm_claws": {
-        "name": "Gravewyrm Claws"
+        "name": "Grabwyrm-Klauen"
       },
       "gravescale_girdle": {
-        "name": "Gravescale Girdle"
+        "name": "Grabschuppen-Gürtel"
       },
       "wyrmchoir_handwraps": {
-        "name": "Wyrmchoir Handwraps"
+        "name": "Wyrmchor-Handwickel"
       },
       "deathless_greatblade": {
-        "name": "Deathless Greatblade"
+        "name": "Todlose Großklinge"
       },
       "soulforged_warplate": {
-        "name": "Soulforged Warplate"
+        "name": "Seelengeschmiedete Kriegsplatte"
       },
       "stormcallers_focus": {
-        "name": "Stormcaller's Focus"
+        "name": "Fokus des Sturmrufers"
       },
       "seal_of_the_nine_oaths": {
-        "name": "Seal of the Nine Oaths"
+        "name": "Siegel der Neun Eide"
       },
       "nielas_coldlight_band": {
-        "name": "Niela's Coldlight Band"
+        "name": "Nielas Kaltlicht-Reif"
       },
       "sutils_gambit": {
-        "name": "Sutil's Gambit"
+        "name": "Sutils Gambit"
       },
       "oath_of_the_round_table": {
-        "name": "Oath of the Round Table"
+        "name": "Eid der Tafelrunde"
       },
       "zyzzs_deathless_signet": {
-        "name": "Zyzz's Deathless Signet"
+        "name": "Zyzz' Todloser Siegelring"
       },
       "architects_cornerstone": {
-        "name": "The Architect's Cornerstone"
+        "name": "Der Grundstein des Architekten"
       },
       "swiftfang_talisman": {
-        "name": "Swiftfang Talisman"
+        "name": "Schnellzahn-Talisman"
       },
       "yumis_keepsake_locket": {
-        "name": "Yumi's Keepsake Locket"
+        "name": "Yumis Andenken-Medaillon"
       },
       "zense_meridian": {
-        "name": "Zense Meridian"
+        "name": "Zense-Meridian"
       },
       "medallion_of_endless_profit": {
-        "name": "Medallion of Endless Profit"
+        "name": "Medaillon des endlosen Profits"
       },
       "deathless_heartwood": {
         "name": "Herzholz der todlosen Krone"
@@ -7063,9 +7077,9 @@ export const de_DE: EnTranslations = {
         "greeting": "Die Esse ist heiß und der Schleifstein dreht sich. Wenn es schneidet, verkaufe ich es."
       },
       "heroic_quartermaster": {
-        "name": "Quartermaster Vex",
-        "title": "Heroic Quartermaster",
-        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
+        "name": "Quartiermeister Vex",
+        "title": "Heroischer Quartiermeister",
+        "greeting": "Ein Beweis aus den heroischen Tiefen kauft die feinsten Ringe und Anhänger in Highwatch. Zeig mir deine Marken."
       },
       "loremaster_caddis": {
         "name": "Lehrmeister Caddis",
@@ -8149,13 +8163,13 @@ export const de_DE: EnTranslations = {
         "name": "Bonewrought-Kriegstracht",
         "bonus2": "Erhöht Angriffskraft um 40.",
         "bonus3": "Erhöht Stärke um 15, Ausdauer um 15 sowie Angriffs- und Zaubertempo um 15%.",
-        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Eure kritischen Waffentreffer zersplittern das Ziel mit Knochensplitter und lassen es 12 Sek. lang alle 2 Sek. 8 Schaden bluten. Stapelt sich bis zu 3-mal."
       },
       "deathlord": {
         "name": "Barrowlord-Kriegstracht",
         "bonus2": "Erhöht Angriffskraft um 40.",
         "bonus3": "Erhöht Stärke um 15 und Ausdauer um 15.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
+        "bonus4": "Eure kritischen Waffentreffer haben eine Chance von 50%, Grabesmacht zu gewähren, was die Angriffskraft 10 Sek. lang um 60 erhöht."
       },
       "greyjaw_stalker": {
         "name": "Ausrüstung des Greyjaw-Pirschers",
@@ -8165,25 +8179,25 @@ export const de_DE: EnTranslations = {
         "name": "Mournweave-Gewänder",
         "bonus2": "Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).",
         "bonus3": "Erhöht Intelligenz um 10 und Ausdauer um 10.",
-        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Eure Zauber haben eine Chance von 10%, Klarsicht zu gewähren, wodurch euer nächster Zauber kostenlos wird."
       },
       "nighttalon": {
         "name": "Direfang-Pelz",
         "bonus2": "Erhöht Angriffskraft um 40.",
         "bonus3": "Erhöht Beweglichkeit um 15, kritische Trefferchance um 2% sowie Angriffs- und Zaubertempo um 15%.",
-        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Eure kritischen Waffentreffer reißen eine Zerfetzte Wunde und lassen das Ziel 12 Sek. lang alle 2 Sek. 6 Schaden bluten. Stapelt sich bis zu 3-mal."
       },
       "soulflame": {
         "name": "Wraithfire-Gewänder",
         "bonus2": "Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).",
         "bonus3": "Erhöht Intelligenz um 15, Willenskraft um 15 sowie Angriffs- und Zaubertempo um 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Eure Zauber haben eine Chance von 10%, Seelenbrand zu gewähren, was die Zaubermacht 10 Sek. lang um 40 erhöht."
       },
       "stormcallers": {
         "name": "Galecall-Gewänder",
         "bonus2": "Ihr könnt nicht zurückgestoßen werden (100% Rückstoßwiderstand).",
         "bonus3": "Erhöht Intelligenz um 15, Willenskraft um 15 sowie Angriffs- und Zaubertempo um 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Eure Zauber haben eine Chance von 10%, Seelenbrand zu gewähren, was die Zaubermacht 10 Sek. lang um 40 erhöht."
       },
       "vale_arcanist": {
         "name": "Ornat des Talarkanisten",
@@ -8193,7 +8207,7 @@ export const de_DE: EnTranslations = {
         "name": "Nightfang-Gewänder",
         "bonus2": "Erhöht Angriffskraft um 40.",
         "bonus3": "Erhöht Beweglichkeit um 15 und kritische Trefferchance um 2%.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
+        "bonus4": "Eure kritischen Waffentreffer haben eine Chance von 50%, Fangrausch zu gewähren, was das Angriffstempo 8 Sek. lang um 25% erhöht."
       }
     }
   },

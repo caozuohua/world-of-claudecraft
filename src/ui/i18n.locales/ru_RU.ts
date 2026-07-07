@@ -14,6 +14,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.discord.roleTag.coredevs': 'Ведущий разработчик',
+  'hudChrome.options.version': 'v{version} ({build})',
   'auth.emailPlaceholder': 'ivan@example.com',
   'auth.recovery.logOut': 'Выйти',
   'delveRiteUi.easy': 'Лёгкий',
@@ -6253,6 +6255,19 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': 'Горное дело',
   'hudChrome.gathering.logging': 'Лесозаготовка',
   'hudChrome.gathering.herbalism': 'Травничество',
+  'hudChrome.archetypeTitle.label': 'Титул',
+  'hudChrome.archetypeTitle.none': 'Нет',
+  'hudChrome.archetypeTitle.armorcrafting': 'Бронник',
+  'hudChrome.archetypeTitle.weaponcrafting': 'Оружейник',
+  'hudChrome.archetypeTitle.jewelcrafting': 'Ювелир',
+  'hudChrome.archetypeTitle.alchemy': 'Алхимик',
+  'hudChrome.archetypeTitle.engineering': 'Механик',
+  'hudChrome.archetypeTitle.cooking': 'Повар',
+  'hudChrome.archetypeTitle.inscription': 'Писарь',
+  'hudChrome.archetypeTitle.enchanting': 'Зачарователь',
+  'hudChrome.archetypeTitle.tailoring': 'Портной',
+  'hudChrome.archetypeTitle.leatherworking': 'Кожевник',
+  // Release v0.22.0 locale fill.
   'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
   'hudChrome.crafting.comboRequirementUnmet':
     'У вас нет обоих требуемых ремесел нужного уровня для этого рецепта.',

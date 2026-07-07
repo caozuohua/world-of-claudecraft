@@ -1226,6 +1226,20 @@ export const en_XA: EnTranslations = {
       "logging": "[Ļóĝĝíñĝ]",
       "herbalism": "[Ĥéŕƀáļíšɱ]"
     },
+    "archetypeTitle": {
+      "label": "[Ţíţļé]",
+      "none": "[Ñóñé]",
+      "armorcrafting": "[Áŕɱóŕéŕ]",
+      "weaponcrafting": "[Ŵéáþóñšɱíţĥ]",
+      "jewelcrafting": "[Ĵéŵéļéŕ]",
+      "alchemy": "[Áļçĥéɱíšţ]",
+      "engineering": "[Ţíñķéŕéŕ]",
+      "cooking": "[Çĥéƒ]",
+      "inscription": "[Šçŕíƀé]",
+      "enchanting": "[Éñçĥáñţéŕ]",
+      "tailoring": "[Ţáíļóŕ]",
+      "leatherworking": "[Ļéáţĥéŕçŕáƒţéŕ]"
+    },
     "crafting": {
       "title": "[Çŕáƒţíñĝ]",
       "close": "[Çļóšé çŕáƒţíñĝ]",

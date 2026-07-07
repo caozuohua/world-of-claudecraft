@@ -1420,6 +1420,25 @@ export const hudChromeStrings = {
     logging: 'Logging',
     herbalism: 'Herbalism',
   },
+  // Archetype title (#1130): the named title granted by a character's currently
+  // active craft archetype (see src/sim/professions/archetype.ts). `none` is shown
+  // before the zone-1 acceptance quest has ever been completed (no "Jack of All
+  // Trades" fallback, just untitled). The ten per-craft names are keyed by the
+  // same craft id as CRAFT_RING (src/sim/content/professions.ts); keep both in sync.
+  archetypeTitle: {
+    label: 'Title',
+    none: 'None',
+    armorcrafting: 'Armorer',
+    weaponcrafting: 'Weaponsmith',
+    jewelcrafting: 'Jeweler',
+    alchemy: 'Alchemist',
+    engineering: 'Tinkerer',
+    cooking: 'Chef',
+    inscription: 'Scribe',
+    enchanting: 'Enchanter',
+    tailoring: 'Tailor',
+    leatherworking: 'Leathercrafter',
+  },
   // Crafting window (#1127): the minimal common-tier crafting action, one row
   // per known recipe, a Craft button enabled only when every reagent is held.
   crafting: {

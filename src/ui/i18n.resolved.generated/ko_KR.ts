@@ -1016,7 +1016,7 @@ export const ko_KR: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "관리자",
-        "coredevs": "Core Dev",
+        "coredevs": "핵심 개발자",
         "devs": "개발자",
         "mods": "운영자",
         "artists": "아티스트"
@@ -1225,6 +1225,20 @@ export const ko_KR: EnTranslations = {
       "mining": "채광",
       "logging": "벌목",
       "herbalism": "약초학"
+    },
+    "archetypeTitle": {
+      "label": "칭호",
+      "none": "없음",
+      "armorcrafting": "방어구 장인",
+      "weaponcrafting": "무기 장인",
+      "jewelcrafting": "보석 세공사",
+      "alchemy": "연금술사",
+      "engineering": "기술자",
+      "cooking": "요리사",
+      "inscription": "필경사",
+      "enchanting": "마법부여사",
+      "tailoring": "재단사",
+      "leatherworking": "가죽공예사"
     },
     "crafting": {
       "title": "제작",

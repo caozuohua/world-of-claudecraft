@@ -14,6 +14,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ja_JP: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.discord.roleTag.coredevs': 'コア開発者',
+  'hudChrome.options.version': 'v{version} ({build})',
   'auth.emailPlaceholder': 'mail@example.com',
   'auth.recovery.logOut': 'ログアウト',
   'delveRiteUi.easy': '簡単',
@@ -6136,6 +6138,19 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': '採掘',
   'hudChrome.gathering.logging': '伐採',
   'hudChrome.gathering.herbalism': '薬草学',
+  'hudChrome.archetypeTitle.label': '称号',
+  'hudChrome.archetypeTitle.none': 'なし',
+  'hudChrome.archetypeTitle.armorcrafting': '防具鍛冶師',
+  'hudChrome.archetypeTitle.weaponcrafting': '武器鍛冶師',
+  'hudChrome.archetypeTitle.jewelcrafting': '宝石職人',
+  'hudChrome.archetypeTitle.alchemy': '錬金術師',
+  'hudChrome.archetypeTitle.engineering': '工作師',
+  'hudChrome.archetypeTitle.cooking': '料理人',
+  'hudChrome.archetypeTitle.inscription': '銘文師',
+  'hudChrome.archetypeTitle.enchanting': 'エンチャンター',
+  'hudChrome.archetypeTitle.tailoring': '仕立て屋',
+  'hudChrome.archetypeTitle.leatherworking': '皮革職人',
+  // Release v0.22.0 locale fill.
   'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
   'hudChrome.crafting.comboRequirementUnmet':
     'その組み合わせレシピに必要な両方の生産スキルの熟練度に達していません。',

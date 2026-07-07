@@ -14,6 +14,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ko_KR: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.discord.roleTag.coredevs': '핵심 개발자',
+  'hudChrome.options.version': 'v{version} ({build})',
   'auth.emailPlaceholder': 'you@example.com',
   'auth.recovery.logOut': '로그아웃',
   'delveRiteUi.easy': '쉬움',
@@ -6126,6 +6128,19 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.gathering.mining': '채광',
   'hudChrome.gathering.logging': '벌목',
   'hudChrome.gathering.herbalism': '약초학',
+  'hudChrome.archetypeTitle.label': '칭호',
+  'hudChrome.archetypeTitle.none': '없음',
+  'hudChrome.archetypeTitle.armorcrafting': '방어구 장인',
+  'hudChrome.archetypeTitle.weaponcrafting': '무기 장인',
+  'hudChrome.archetypeTitle.jewelcrafting': '보석 세공사',
+  'hudChrome.archetypeTitle.alchemy': '연금술사',
+  'hudChrome.archetypeTitle.engineering': '기술자',
+  'hudChrome.archetypeTitle.cooking': '요리사',
+  'hudChrome.archetypeTitle.inscription': '필경사',
+  'hudChrome.archetypeTitle.enchanting': '마법부여사',
+  'hudChrome.archetypeTitle.tailoring': '재단사',
+  'hudChrome.archetypeTitle.leatherworking': '가죽공예사',
+  // Release v0.22.0 locale fill.
   'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
   'hudChrome.crafting.comboRequirementUnmet':
     '이 조합 제작법에 필요한 두 제작 기술의 숙련도에 도달하지 못했습니다.',

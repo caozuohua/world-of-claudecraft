@@ -196,6 +196,7 @@ import {
   acceptArchetypeQuest as acceptArchetypeQuestImpl,
   advanceAmendsProgress as advanceAmendsProgressImpl,
   archetypeStateFor,
+  archetypeTitleFor,
   emptyArchetypeState,
   normalizeArchetypeState,
   requiredAmendsProgress,
@@ -6768,6 +6769,17 @@ export class Sim {
 
   get archetypeAmendsRequired(): number {
     return this.archetypeAmendsRequiredFor(this.primaryId);
+  }
+
+  /** The title granted by the CURRENTLY-ACTIVE archetype (#1130): the craft id
+   *  whose named title is earned, or null before an archetype is ever chosen. See
+   *  professions/archetype.ts getArchetypeTitle for the "no title" rule. */
+  archetypeTitleFor(pid: number): string | null {
+    return archetypeTitleFor(this.ctx, pid);
+  }
+
+  get archetypeTitle(): string | null {
+    return this.archetypeTitleFor(this.primaryId);
   }
 
   /** Stub entry point for the zone-1 acceptance quest's completion (see
