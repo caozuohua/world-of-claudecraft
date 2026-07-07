@@ -21,7 +21,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "es_ES": [
     "hudChrome.archetypeTitle.alchemy",
@@ -35,7 +36,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "fr_FR": [
     "hudChrome.archetypeTitle.alchemy",
@@ -49,7 +51,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "fr_CA": [
     "hudChrome.archetypeTitle.alchemy",
@@ -63,7 +66,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "en_CA": [],
   "it_IT": [
@@ -78,7 +82,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "de_DE": [
     "hudChrome.archetypeTitle.alchemy",
@@ -92,12 +97,21 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ],
-  "zh_CN": [],
-  "zh_TW": [],
-  "ko_KR": [],
-  "ja_JP": [],
+  "zh_CN": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "zh_TW": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "ko_KR": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "ja_JP": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
   "pt_BR": [
     "hudChrome.archetypeTitle.alchemy",
     "hudChrome.archetypeTitle.armorcrafting",
@@ -110,9 +124,37 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ],
-  "ru_RU": [],
+  "ru_RU": [
+    "hudChrome.discord.roleTag.coredevs"
+  ],
+  "cs_CZ": [
+    "hudChrome.archetypeTitle.alchemy",
+    "hudChrome.archetypeTitle.armorcrafting",
+    "hudChrome.archetypeTitle.cooking",
+    "hudChrome.archetypeTitle.enchanting",
+    "hudChrome.archetypeTitle.engineering",
+    "hudChrome.archetypeTitle.inscription",
+    "hudChrome.archetypeTitle.jewelcrafting",
+    "hudChrome.archetypeTitle.label",
+    "hudChrome.archetypeTitle.leatherworking",
+    "hudChrome.archetypeTitle.none",
+    "hudChrome.archetypeTitle.tailoring",
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs",
+    "hudChrome.mobile.actionPageIndicator",
+    "hudChrome.mobile.actionPageToggle",
+    "hudChrome.mobile.actionRing",
+    "hudChrome.mobile.hotbarPage",
+    "hudChrome.mobile.hotbarPageAria",
+    "hudChrome.mobile.spellbookPageLabel",
+    "hudChrome.mobile.targetCycle",
+    "hudChrome.mobile.targetCycleShort",
+    "hudChrome.options.mobileCameraJoystick",
+    "hudChrome.options.mobileLeftHanded"
+  ],
   "nl_NL": [
     "hudChrome.archetypeTitle.alchemy",
     "hudChrome.archetypeTitle.armorcrafting",
@@ -125,7 +167,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "pl_PL": [
     "hudChrome.archetypeTitle.alchemy",
@@ -139,7 +182,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "id_ID": [
     "hudChrome.archetypeTitle.alchemy",
@@ -153,7 +197,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "tr_TR": [
     "hudChrome.archetypeTitle.alchemy",
@@ -167,7 +212,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "sv_SE": [
     "hudChrome.archetypeTitle.alchemy",
@@ -181,7 +227,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "vi_VN": [
     "hudChrome.archetypeTitle.alchemy",
@@ -195,7 +242,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ],
   "da_DK": [
     "hudChrome.archetypeTitle.alchemy",
@@ -209,6 +257,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.archetypeTitle.leatherworking",
     "hudChrome.archetypeTitle.none",
     "hudChrome.archetypeTitle.tailoring",
-    "hudChrome.archetypeTitle.weaponcrafting"
+    "hudChrome.archetypeTitle.weaponcrafting",
+    "hudChrome.discord.roleTag.coredevs"
   ]
 };
