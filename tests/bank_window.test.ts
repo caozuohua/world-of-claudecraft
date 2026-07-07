@@ -435,7 +435,9 @@ describe('bank_window: Phase 7 mobile pairing (hud.mobile.css)', () => {
     // --window-scale, not --ui-scale, and under-fills below uiScale 1 without this.
     expect(block).toContain('max-width: none');
     expect(block).toContain('top: max(10px, env(safe-area-inset-top))');
-    expect(block).toContain('bottom: calc(72px + env(safe-area-inset-bottom))');
+    // Full-height standalone (the issue-1577 bags rationale, adopted for the bank
+    // at the Phase 9 adjudication); the 50/50 pairing keeps its 72px reservation.
+    expect(block).toContain('bottom: max(10px, env(safe-area-inset-bottom))');
   });
 
   it('hides the bank x-btn under the pairing (the bags x-btn closes the whole cluster)', () => {

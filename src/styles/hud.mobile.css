@@ -2173,7 +2173,11 @@
     left: max(10px, env(safe-area-inset-left));
     right: max(10px, env(safe-area-inset-right));
     top: max(10px, env(safe-area-inset-top));
-    bottom: calc(72px + env(safe-area-inset-bottom));
+    /* Full-height like standalone #bags (issue 1577 round 2 (9)): the player frame
+       is fine to cover while a modal, world-input-blocking window is open. The
+       bank-open 50/50 pairing below keeps its 72px reservation, mirroring the
+       vendor-split rule that change deliberately kept. */
+    bottom: max(10px, env(safe-area-inset-bottom));
     width: auto;
     transform: none;
     max-height: none;
