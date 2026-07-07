@@ -5,7 +5,7 @@
 // result is memoized per seed, so building the layout draws nothing at all
 // from a running world.
 //
-// Shape: a 13x13 cell grid (4.5yd pitch: 3.5yd clear corridors + 1yd walls),
+// Shape: a 13x13 cell grid (6.75yd pitch: 5.75yd clear corridors + 1yd walls),
 // carved by an iterative recursive backtracker, then 180-degree symmetrized
 // (union of openings, so neither team gets shorter routes), five plazas
 // cleared (NW/SE team spawns, a 3x3 center, NE/SW Yumi starts), and every

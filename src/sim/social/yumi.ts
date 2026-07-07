@@ -7,7 +7,9 @@
 // seconds sudden death latches: teleports freeze, cats take an escalating
 // damage-taken multiplier plus a growing neutral bleed, and a simultaneous
 // bleed kill resolves by pre-pulse hp, then total damage dealt, then the
-// per-match stream, so a bout can never draw.
+// per-match stream, so a fought-out bout never draws. (The one draw left in
+// the mode is mutual abandonment: both teams fully gone at once resolves as
+// winner null in updateArena, with nobody left to see it.)
 //
 // Architecture: a sibling A-slice next to fiesta. Match state rides the
 // ArenaMatch (`match.yumi`), the queues/slot pool/cat index stay on Sim as
