@@ -53,9 +53,5 @@ export function filterBankSlots(
   return filtered;
 }
 
-// True when the filter shows everything (no category, no search): the only view where
-// the free-slot squares are meaningful (a narrowed view shows matches only). Mirrors
-// bags_view's bagFilterIsDefault.
-export function bankFilterIsDefault(state: BagFilterState): boolean {
-  return state.category === 'all' && state.search.trim() === '';
-}
+// The "is the filter showing everything" predicate is the shared bagFilterIsDefault
+// in bag_filter.ts (one copy for bags and bank, like matchesCategory/qualityRank).

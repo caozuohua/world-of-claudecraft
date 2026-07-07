@@ -10,6 +10,7 @@ import {
   type BankItemLookup,
   bankSlotAction,
   buildBankView,
+  depositAllSummaryKey,
   hasDepositableMaterials,
   planDepositAllMaterials,
 } from '../src/ui/bank_view';
@@ -290,6 +291,20 @@ describe('planDepositAllMaterials: selection and order (synthetic lookup)', () =
   });
 });
 
+describe('depositAllSummaryKey: the three-arm summary selection', () => {
+  it('picks None when nothing moved (materials existed but none fit)', () => {
+    expect(depositAllSummaryKey({ stacks: 0, full: true })).toBe('hudChrome.bank.depositAllNone');
+  });
+
+  it('picks Full when some stacks moved but at least one did not fit', () => {
+    expect(depositAllSummaryKey({ stacks: 3, full: true })).toBe('hudChrome.bank.depositAllFull');
+  });
+
+  it('picks Done when every material stack fit', () => {
+    expect(depositAllSummaryKey({ stacks: 3, full: false })).toBe('hudChrome.bank.depositAllDone');
+  });
+});
+
 describe('planDepositAllMaterials: replays cleanly against a real Sim', () => {
   const BANKER = 'bursar_fernando';
   function bankerEntity(sim: Sim): Entity {
@@ -353,6 +368,44 @@ describe('planDepositAllMaterials: replays cleanly against a real Sim', () => {
     // All three materials landed; the quest item stayed in the bags.
     expect(m.bank.inventory.map((s) => s.itemId).sort()).toEqual([...MATS.slice(0, 3)].sort());
     expect(m.inventory.map((s) => s.itemId)).toEqual(['boar_hide']);
+  });
+
+  it('moves an instanced (signed) material whole through the real sim, never merging it', () => {
+    // #1145 corpse harvest stamps rare+ materials with an instance payload; the
+    // deposit-all plan must carry such a slot through the real sim.bankDeposit as
+    // one indivisible unit that never merges into a plain stack of the same id.
+    const sim = new Sim({ seed: 13, playerClass: 'warrior', autoEquip: false });
+    moveToBanker(sim);
+    const m = metaOf(sim);
+    m.inventory.length = 0;
+    m.inventory.push(
+      { itemId: MATS[0], count: 4 }, // plain fungible stack of the SAME id
+      { itemId: MATS[0], count: 1, instance: { signer: 'Bankwyn' } }, // signed copy
+    );
+    m.bank.inventory.length = 0;
+    const plan = planDepositAllMaterials(
+      m.inventory,
+      m.bank.inventory,
+      bankCapacity(m.bank),
+      (id) => REAL_ITEMS[id],
+    );
+    expect(plan.stacks).toBe(2);
+    expect(plan.full).toBe(false);
+    sim.drainEvents();
+    const errors: SimEvent[] = [];
+    for (const send of plan.sends) {
+      sim.bankDeposit(send.slot, send.count);
+      for (const ev of sim.drainEvents()) if (ev.type === 'error') errors.push(ev);
+    }
+    expect(errors).toEqual([]);
+    expect(m.inventory).toEqual([]);
+    // Two separate bank slots: the signed copy keeps its payload and count 1.
+    const banked = m.bank.inventory.filter((s) => s.itemId === MATS[0]);
+    expect(banked).toHaveLength(2);
+    const signed = banked.find((s) => s.instance);
+    expect(signed?.count).toBe(1);
+    expect(signed?.instance).toEqual({ signer: 'Bankwyn' });
+    expect(banked.find((s) => !s.instance)?.count).toBe(4);
   });
 
   it('replays a mid-run-full plan exactly: only the fitting stacks deposit, none refuse', () => {

@@ -183,6 +183,25 @@ export function planDepositAllMaterials(
   return { sends, stacks: sends.length, full };
 }
 
+/** The three deposit-all summary lines, as t() keys so the painter stays a thin
+ *  consumer and the arm CHOICE is unit-pinned here rather than buried in DOM code. */
+export type DepositAllSummaryKey =
+  | 'hudChrome.bank.depositAllNone'
+  | 'hudChrome.bank.depositAllFull'
+  | 'hudChrome.bank.depositAllDone';
+
+/** Which transient summary a finished deposit-all plan earns. Exactly one of three
+ *  arms: no stack moved (materials existed, the button gates on
+ *  hasDepositableMaterials, but none fit) -> depositAllNone; some moved but at least
+ *  one did not fit -> depositAllFull; everything fit -> depositAllDone. */
+export function depositAllSummaryKey(
+  plan: Pick<DepositAllPlan, 'stacks' | 'full'>,
+): DepositAllSummaryKey {
+  if (plan.stacks === 0) return 'hudChrome.bank.depositAllNone';
+  if (plan.full) return 'hudChrome.bank.depositAllFull';
+  return 'hudChrome.bank.depositAllDone';
+}
+
 /** True when the carried inventory holds at least one depositable material stack (a
  *  junk/tool item, never a quest item, which matchesCategory('material') excludes):
  *  the deposit-all button's enabled state. */

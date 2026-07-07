@@ -259,6 +259,9 @@ describe('resolveDepositSubmit (prompt re-resolve + clamp)', () => {
     expect(resolveDepositSubmit(live, captured, -5, 10)).toBe(1);
     // A shrunken live stack (a partial deposit landed under the prompt) clamps down.
     expect(resolveDepositSubmit({ itemId: 'cloth', count: 3 }, captured, 8, 10)).toBe(3);
+    // A GROWN live stack (loot landed under the prompt) still clamps to the max
+    // captured at prompt-open: maxCount binds even as the strict smallest term.
+    expect(resolveDepositSubmit({ itemId: 'cloth', count: 10 }, captured, 8, 5)).toBe(5);
   });
 });
 

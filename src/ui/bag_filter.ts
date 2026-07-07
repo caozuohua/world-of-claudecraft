@@ -27,6 +27,14 @@ export interface BagFilterState {
 
 export const DEFAULT_BAG_FILTER: BagFilterState = { category: 'all', sort: 'recent', search: '' };
 
+// True when the filter is showing everything (no category, no search), the only
+// view where free-slot squares are meaningful (a narrowed view shows matches only;
+// sort never affects it, a re-ordered full view still shows everything). Shared by
+// the bags grid (bags_view) and the bank window, like matchesCategory/qualityRank.
+export function bagFilterIsDefault(filter: BagFilterState): boolean {
+  return filter.category === 'all' && filter.search.trim() === '';
+}
+
 // Look up an item definition by id. Injected so the pure core never imports the
 // live ITEMS table (and tests can supply a synthetic one).
 export type ItemLookup = (itemId: string) => ItemDef | undefined;

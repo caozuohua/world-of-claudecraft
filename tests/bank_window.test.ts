@@ -225,7 +225,7 @@ describe('bank_window: Phase 6 search / sort / deposit-all', () => {
 
   it('runs the pure bank filter core, never a re-derived bag filter', () => {
     expect(painter).toContain('filterBankSlots(');
-    expect(painter).toContain('bankFilterIsDefault(');
+    expect(painter).toContain('bagFilterIsDefault(');
     expect(painter).not.toContain('applyBagFilter(');
   });
 
@@ -272,10 +272,16 @@ describe('bank_window: Phase 6 search / sort / deposit-all', () => {
   it('renders the summary as a transient polite aria-live status line (no hud.ts toast dep)', () => {
     expect(painter).toContain("status.setAttribute('role', 'status')");
     expect(painter).toContain("status.setAttribute('aria-live', 'polite')");
-    expect(painter).toContain("t('hudChrome.bank.depositAllDone'");
-    expect(painter).toContain("t('hudChrome.bank.depositAllFull'");
-    expect(painter).toContain("t('hudChrome.bank.depositAllNone')");
-    expect(painter).toContain('DEPOSIT_STATUS_MS');
+    // The arm CHOICE (none fit / partial / all fit) lives in the pure core's
+    // depositAllSummaryKey, pinned per-arm in bank_view.test.ts; here pin that the
+    // painter delegates to it and renders the None arm count-less.
+    expect(painter).toContain('depositAllSummaryKey(plan)');
+    expect(painter).toContain(
+      'plan.stacks === 0 ? t(key) : t(key, { count: this.fmt(plan.stacks) })',
+    );
+    // Pin the literal like BANK_INFO_GRACE_MS above: it drives BOTH the status-line
+    // lifetime and the deposit-all pending-guard fallback timer.
+    expect(painter).toContain('DEPOSIT_STATUS_MS = 4_000');
   });
 
   it('carries search focus and caret across a FULL render (slow-band repaint mid-typing)', () => {

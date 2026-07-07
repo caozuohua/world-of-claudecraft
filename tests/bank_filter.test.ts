@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { ItemDef } from '../src/sim/types';
 import type { BagFilterState } from '../src/ui/bag_filter';
-import { bankFilterIsDefault, filterBankSlots } from '../src/ui/bank_filter';
+import { filterBankSlots } from '../src/ui/bank_filter';
 import type { BankSlotModel } from '../src/ui/bank_view';
 
 // The bank filter reuses bag_filter's shared vocabulary (categories/sorts/predicates)
@@ -184,12 +184,5 @@ describe('filterBankSlots: unknown ids', () => {
   });
 });
 
-describe('bankFilterIsDefault', () => {
-  it('is true only with the all category and an empty search (any sort)', () => {
-    expect(bankFilterIsDefault(state())).toBe(true);
-    expect(bankFilterIsDefault(state({ sort: 'quality' }))).toBe(true);
-    expect(bankFilterIsDefault(state({ category: 'weapon' }))).toBe(false);
-    expect(bankFilterIsDefault(state({ search: 'x' }))).toBe(false);
-    expect(bankFilterIsDefault(state({ search: '   ' }))).toBe(true);
-  });
-});
+// The "showing everything" predicate is the shared bagFilterIsDefault, consolidated
+// into bag_filter.ts (one copy for bags and bank) and pinned in bag_filter.test.ts.

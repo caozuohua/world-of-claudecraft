@@ -25,17 +25,19 @@ import {
   type BagCategory,
   type BagFilterState,
   type BagSort,
+  bagFilterIsDefault,
   DEFAULT_BAG_FILTER,
   parseBagFilter,
   serializeBagFilter,
 } from './bag_filter';
-import { bankFilterIsDefault, filterBankSlots } from './bank_filter';
+import { filterBankSlots } from './bank_filter';
 import {
   type BankBuySlotsModel,
   type BankSlotModel,
   bankSlotAction,
   buildBankView,
   type DepositAllPlan,
+  depositAllSummaryKey,
   hasDepositableMaterials,
   planDepositAllMaterials,
 } from './bank_view';
@@ -333,7 +335,7 @@ export class BankWindow {
     // Apply the window-local filter/sort. slotIndex rides through, so a filtered or
     // sorted cell still acts on its ORIGINAL bank slot; filterBankSlots drops unknown-id
     // (dormant) slots exactly as the bags filter does.
-    const isDefault = bankFilterIsDefault(this.filter);
+    const isDefault = bagFilterIsDefault(this.filter);
     const visible = filterBankSlots(
       slots,
       (id) => ITEMS[id],
@@ -541,15 +543,11 @@ export class BankWindow {
   // Compose the transient summary from the PLAN (not post-facto state, which the online
   // mirror has not caught up to yet) and arm the self-expire.
   private setDepositStatus(plan: DepositAllPlan): void {
-    let text: string;
-    if (plan.stacks === 0) {
-      // Materials existed (the button was enabled) but none fit: the bank is full.
-      text = t('hudChrome.bank.depositAllNone');
-    } else if (plan.full) {
-      text = t('hudChrome.bank.depositAllFull', { count: this.fmt(plan.stacks) });
-    } else {
-      text = t('hudChrome.bank.depositAllDone', { count: this.fmt(plan.stacks) });
-    }
+    // The arm choice (none fit / partially fit / all fit) lives in the pure core's
+    // depositAllSummaryKey so its selection is unit-pinned; only the None arm
+    // renders without a count token.
+    const key = depositAllSummaryKey(plan);
+    const text = plan.stacks === 0 ? t(key) : t(key, { count: this.fmt(plan.stacks) });
     this.depositStatus = { text, at: performance.now() };
   }
 

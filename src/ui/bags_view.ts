@@ -10,7 +10,12 @@
 // DOM/Three-free (registered in tests/architecture.test.ts UI_PURE_CORES).
 
 import type { InvSlot } from '../sim/types';
-import { applyBagFilter, type BagFilterState, type ItemLookup } from './bag_filter';
+import {
+  applyBagFilter,
+  type BagFilterState,
+  bagFilterIsDefault,
+  type ItemLookup,
+} from './bag_filter';
 
 /** The item facts the bag click/tooltip logic needs (a subset of ItemDef). */
 export interface BagItemInfo {
@@ -189,12 +194,6 @@ export interface BagGridModel {
   /** Stacks above the capacity budget (a legacy over-capacity save); the
    *  painter surfaces it on the capacity counter. 0 when within budget. */
   overflow: number;
-}
-
-/** True when the filter is showing everything (no category, no search), which
- *  is the only view where the free-slot squares are meaningful. */
-export function bagFilterIsDefault(filter: BagFilterState): boolean {
-  return filter.category === 'all' && filter.search.trim() === '';
 }
 
 /** Build the filtered grid model from the raw inventory + filter state, reusing
