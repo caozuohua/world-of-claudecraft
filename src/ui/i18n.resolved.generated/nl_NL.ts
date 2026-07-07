@@ -369,8 +369,8 @@ export const nl_NL: EnTranslations = {
       "minutes": "{m}m",
       "lessThanMinute": "<1m",
       "lockedToast": "Je bent vergrendeld voor {raid}. Ontgrendelt over {time}.",
-      "heroicName": "Heroic {name}",
-      "heroicLocked": "You are locked to Heroic {name}."
+      "heroicName": "Heroïsch {name}",
+      "heroicLocked": "Je bent vergrendeld voor Heroïsch {name}."
     },
     "compass": {
       "N": "N",
@@ -526,8 +526,8 @@ export const nl_NL: EnTranslations = {
       "fromYour": "Van je {value} {stat}:",
       "names": {
         "spellPower": "Spreukkracht",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Crit-waardering",
+        "hasteRating": "Snelheidswaardering"
       },
       "desc": {
         "str": "Verhoogt je aanvalskracht, zodat je wapenslagen harder aankomen.",
@@ -541,8 +541,8 @@ export const nl_NL: EnTranslations = {
         "dps": "Je geschatte wapenschade per seconde, een combinatie van de schade en snelheid van je wapen met je aanvalskracht.",
         "critChance": "Je kans dat een aanval kritiek raakt en dubbele schade aanricht.",
         "dodge": "Je kans om een inkomende slagaanval volledig te ontwijken, zonder schade op te lopen.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Crit-waardering van je uitrusting en setbonussen, die je kans op een kritieke treffer verhoogt. Ongeveer 10 waardering verleent 1% crit.",
+        "hasteRating": "Snelheidswaardering van je uitrusting en setbonussen, die je aanvallen en spreukbezwering versnelt. Ongeveer 10 waardering verleent 1% snelheid."
       },
       "effects": {
         "attackPower": "+{value} Aanvalskracht",
@@ -584,13 +584,13 @@ export const nl_NL: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Kans bij treffer ({chance}%): {effect}",
+      "onSpellDamage": "Kans bij je schadespreuken ({chance}%): {effect}",
+      "onHeal": "Kans bij je genezingen ({chance}%): {effect}",
+      "chainArc": "treft het doelwit met een {school} {name} ({damage}) die naar {jumps} nabije vijanden springt voor afnemende schade",
+      "attackSlow": "en verlaagt de aanvalssnelheid van het doelwit met {pct}% gedurende {duration} sec",
+      "dot": "laat {name} etteren, een {school} schade-over-tijd die {total} toebrengt gedurende {duration} sec",
+      "hot": "laat {name} ontluiken, een genezing-over-tijd die {total} herstelt gedurende {duration} sec"
     },
     "questShare": {
       "notShareable": "Deze queeste kan niet gedeeld worden.",
@@ -795,12 +795,12 @@ export const nl_NL: EnTranslations = {
       "masterOption": "Buitmeester: {name}"
     },
     "dungeonDifficulty": {
-      "setHeroic": "Set Dungeon Difficulty: Heroic",
-      "setNormal": "Set Dungeon Difficulty: Normal"
+      "setHeroic": "Kerkermoeilijkheid instellen: Heroïsch",
+      "setNormal": "Kerkermoeilijkheid instellen: Normaal"
     },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Dit voorwerp kan niet worden vernietigd.",
+      "rightClickDestroy": "Rechtsklik om te vernietigen",
       "filterGroupAria": "Tassen filteren op categorie",
       "filterAll": "Alle",
       "filterWeapon": "Wapens",
@@ -1016,7 +1016,7 @@ export const nl_NL: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
-        "coredevs": "Core Dev",
+        "coredevs": "Kernontwikkelaar",
         "devs": "Dev",
         "mods": "Mod",
         "artists": "Artiest"
@@ -1227,18 +1227,18 @@ export const nl_NL: EnTranslations = {
       "herbalism": "Kruidenkunde"
     },
     "archetypeTitle": {
-      "label": "Title",
-      "none": "None",
-      "armorcrafting": "Armorer",
-      "weaponcrafting": "Weaponsmith",
-      "jewelcrafting": "Jeweler",
+      "label": "Titel",
+      "none": "Geen",
+      "armorcrafting": "Harnasmaker",
+      "weaponcrafting": "Wapensmid",
+      "jewelcrafting": "Juwelier",
       "alchemy": "Alchemist",
-      "engineering": "Tinkerer",
-      "cooking": "Chef",
-      "inscription": "Scribe",
-      "enchanting": "Enchanter",
-      "tailoring": "Tailor",
-      "leatherworking": "Leathercrafter"
+      "engineering": "Knutselaar",
+      "cooking": "Kok",
+      "inscription": "Schrijver",
+      "enchanting": "Betoveraar",
+      "tailoring": "Kleermaker",
+      "leatherworking": "Leerbewerker"
     },
     "crafting": {
       "title": "Knutselen",
@@ -1251,7 +1251,7 @@ export const nl_NL: EnTranslations = {
       "craftedToast": "Gemaakt: {name}",
       "insufficientMaterials": "Daar heb je de materialen niet voor.",
       "unknownRecipe": "Dat recept bestaat niet.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "Je hebt niet beide vereiste ambachten op het vereiste niveau voor dat recept."
     }
   },
   "apiError": {
@@ -3193,8 +3193,8 @@ export const nl_NL: EnTranslations = {
     "closeAria": "Sluiten"
   },
   "heroicShop": {
-    "balance": "Heroic Marks: {count}",
-    "buyAria": "Buy {item} for {marks} Heroic Marks"
+    "balance": "Heroïsche Merken: {count}",
+    "buyAria": "Koop {item} voor {marks} Heroïsche Merken"
   },
   "delveUi": {
     "board": {
@@ -4488,14 +4488,14 @@ export const nl_NL: EnTranslations = {
     "slots": {
       "mainhand": "Hoofdhand",
       "helmet": "Helm",
-      "neck": "Neck",
+      "neck": "Hals",
       "shoulder": "Schouder",
       "chest": "Borst",
       "waist": "Middel",
       "legs": "Benen",
       "gloves": "Handschoenen",
       "feet": "Voeten",
-      "ring": "Finger"
+      "ring": "Vinger"
     },
     "quality": {
       "poor": "Waardeloos",
@@ -6386,130 +6386,130 @@ export const nl_NL: EnTranslations = {
         "name": "Mysterieuze Cosmetische Buidel"
       },
       "heroic_mark": {
-        "name": "Heroic Mark"
+        "name": "Heroïsch Merk"
       },
       "morthens_cryptforged_hauberk": {
-        "name": "Morthen's Cryptforged Hauberk"
+        "name": "Morthens Kryptgesmede Maliënkolder"
       },
       "shadowpulse_handwraps": {
-        "name": "Shadowpulse Handwraps"
+        "name": "Schaduwpuls-Handwindsels"
       },
       "bonechill_striders": {
-        "name": "Bonechill Striders"
+        "name": "Beenvorst-Schrijders"
       },
       "mistcallers_fang": {
-        "name": "Mistcaller's Fang"
+        "name": "Mistroepers Slagtand"
       },
       "tidebound_spaulders": {
-        "name": "Tidebound Spaulders"
+        "name": "Tijgebonden Schouderplaten"
       },
       "sash_of_the_sunken_court": {
-        "name": "Sash of the Sunken Court"
+        "name": "Sjerp van het Verzonken Hof"
       },
       "lunar_tide_greatstaff": {
-        "name": "Lunar Tide Greatstaff"
+        "name": "Maantij-Grootstaf"
       },
       "tidewoven_trousers": {
-        "name": "Tidewoven Trousers"
+        "name": "Tijgeweven Broek"
       },
       "choirmothers_casque": {
-        "name": "Choirmother's Casque"
+        "name": "Koormoeders Helm"
       },
       "gravewyrm_cleaver": {
-        "name": "Gravewyrm Cleaver"
+        "name": "Grafwurm-Kliever"
       },
       "shroud_of_the_gravewyrm": {
-        "name": "Shroud of the Gravewyrm"
+        "name": "Doodskleed van de Grafwurm"
       },
       "sanctum_prowlers_grips": {
-        "name": "Sanctum Prowler's Grips"
+        "name": "Heiligdomsluiper-Grepen"
       },
       "scepter_of_the_deathless_court": {
-        "name": "Scepter of the Deathless Court"
+        "name": "Scepter van het Doodloze Hof"
       },
       "deathless_warguard_legmail": {
-        "name": "Deathless Warguard Legmail"
+        "name": "Doodloze Krijgswacht-Beenmalie"
       },
       "soulrend_diadem": {
-        "name": "Soulrend Diadem"
+        "name": "Zielscheur-Diadeem"
       },
       "scourgehide_carapace": {
-        "name": "Scourgehide Carapace"
+        "name": "Geselhuid-Pantser"
       },
       "cryptplate_helm": {
-        "name": "Cryptplate Helm"
+        "name": "Kryptplaat-Helm"
       },
       "shadowpulse_slippers": {
-        "name": "Shadowpulse Slippers"
+        "name": "Schaduwpuls-Sloffen"
       },
       "bonechill_cord": {
-        "name": "Bonechill Cord"
+        "name": "Beenvorst-Koord"
       },
       "mistforged_pauldrons": {
-        "name": "Mistforged Pauldrons"
+        "name": "Mistgesmede Schouderplaten"
       },
       "tideguard_faceguard": {
-        "name": "Tideguard Faceguard"
+        "name": "Tijwacht-Vizier"
       },
       "sunken_court_mantle": {
-        "name": "Sunken Court Mantle"
+        "name": "Mantel van het Verzonken Hof"
       },
       "lunar_choir_leggings": {
-        "name": "Lunar Choir Leggings"
+        "name": "Maankoor-Beenstukken"
       },
       "choir_blessed_spaulders": {
-        "name": "Choir-Blessed Spaulders"
+        "name": "Koorgezegende Schouderplaten"
       },
       "tideworn_warboots": {
-        "name": "Tideworn Warboots"
+        "name": "Tijversleten Krijgslaarzen"
       },
       "gravewyrm_claws": {
-        "name": "Gravewyrm Claws"
+        "name": "Grafwurm-Klauwen"
       },
       "gravescale_girdle": {
-        "name": "Gravescale Girdle"
+        "name": "Grafschub-Gordel"
       },
       "wyrmchoir_handwraps": {
-        "name": "Wyrmchoir Handwraps"
+        "name": "Wurmkoor-Handwindsels"
       },
       "deathless_greatblade": {
-        "name": "Deathless Greatblade"
+        "name": "Doodloos Grootzwaard"
       },
       "soulforged_warplate": {
-        "name": "Soulforged Warplate"
+        "name": "Zielgesmede Krijgsplaat"
       },
       "stormcallers_focus": {
-        "name": "Stormcaller's Focus"
+        "name": "Stormroepers Focus"
       },
       "seal_of_the_nine_oaths": {
-        "name": "Seal of the Nine Oaths"
+        "name": "Zegel van de Negen Eden"
       },
       "nielas_coldlight_band": {
-        "name": "Niela's Coldlight Band"
+        "name": "Niela's Koudlicht-Ring"
       },
       "sutils_gambit": {
-        "name": "Sutil's Gambit"
+        "name": "Sutils Gambiet"
       },
       "oath_of_the_round_table": {
-        "name": "Oath of the Round Table"
+        "name": "Eed van de Ronde Tafel"
       },
       "zyzzs_deathless_signet": {
-        "name": "Zyzz's Deathless Signet"
+        "name": "Zyzz's Doodloze Zegelring"
       },
       "architects_cornerstone": {
-        "name": "The Architect's Cornerstone"
+        "name": "De Hoeksteen van de Architect"
       },
       "swiftfang_talisman": {
-        "name": "Swiftfang Talisman"
+        "name": "Sneltand-Talisman"
       },
       "yumis_keepsake_locket": {
-        "name": "Yumi's Keepsake Locket"
+        "name": "Yumi's Aandenken-Medaillon"
       },
       "zense_meridian": {
-        "name": "Zense Meridian"
+        "name": "Zense-Meridiaan"
       },
       "medallion_of_endless_profit": {
-        "name": "Medallion of Endless Profit"
+        "name": "Medaillon van Eindeloze Winst"
       },
       "deathless_heartwood": {
         "name": "Kernhout van de Dodeloze Kroon"
@@ -7047,9 +7047,9 @@ export const nl_NL: EnTranslations = {
         "greeting": "De smidse is heet en de slijpsteen draait. Als het snijdt, verkoop ik het."
       },
       "heroic_quartermaster": {
-        "name": "Quartermaster Vex",
-        "title": "Heroic Quartermaster",
-        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
+        "name": "Kwartiermeester Vex",
+        "title": "Heroïsche Kwartiermeester",
+        "greeting": "Bewijs van de heroïsche diepten koopt de fijnste ringen en hangers in Hoogwacht. Laat me je merken zien."
       },
       "loremaster_caddis": {
         "name": "Verhalenmeester Caddis",
@@ -8133,13 +8133,13 @@ export const nl_NL: EnTranslations = {
         "name": "Bonewrought-Regalia",
         "bonus2": "Verhoogt aanvalskracht met 40.",
         "bonus3": "Verhoogt kracht met 15, uithoudingsvermogen met 15 en aanvals- en spreuksnelheid met 15%.",
-        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Je kritieke wapentreffers splinteren het doelwit met Beensplinter, waardoor het 8 schade bloedt elke 2 sec gedurende 12 sec. Stapelt tot 3 keer."
       },
       "deathlord": {
         "name": "Barrowlord-Strijduitrusting",
         "bonus2": "Verhoogt aanvalskracht met 40.",
         "bonus3": "Verhoogt kracht met 15 en uithoudingsvermogen met 15.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
+        "bonus4": "Je kritieke wapentreffers hebben 50% kans om Grafmacht te verlenen, waardoor je aanvalskracht met 60 toeneemt gedurende 10 sec."
       },
       "greyjaw_stalker": {
         "name": "Uitrusting van de Grijskaak-sluiper",
@@ -8149,25 +8149,25 @@ export const nl_NL: EnTranslations = {
         "name": "Mournweave-Gewaden",
         "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
         "bonus3": "Verhoogt intellect met 10 en uithoudingsvermogen met 10.",
-        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Je spreuken hebben 10% kans om Helder Bezweren te verlenen, waardoor je volgende spreuk gratis is."
       },
       "nighttalon": {
         "name": "Direfang-Pels",
         "bonus2": "Verhoogt aanvalskracht met 40.",
         "bonus3": "Verhoogt behendigheid met 15, kritieke kans met 2% en aanvals- en spreuksnelheid met 15%.",
-        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Je kritieke wapentreffers rijten een Rafelige Snee, waardoor het doelwit 6 schade bloedt elke 2 sec gedurende 12 sec. Stapelt tot 3 keer."
       },
       "soulflame": {
         "name": "Wraithfire-Regalia",
         "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
         "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Je spreuken hebben 10% kans om Zielevlam te verlenen, waardoor je spreukkracht met 40 toeneemt gedurende 10 sec."
       },
       "stormcallers": {
         "name": "Galecall-Gewaden",
         "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
         "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Je spreuken hebben 10% kans om Zielevlam te verlenen, waardoor je spreukkracht met 40 toeneemt gedurende 10 sec."
       },
       "vale_arcanist": {
         "name": "Gewaden van de Dal-arcanist",
@@ -8177,7 +8177,7 @@ export const nl_NL: EnTranslations = {
         "name": "Nightfang-Gewaden",
         "bonus2": "Verhoogt aanvalskracht met 40.",
         "bonus3": "Verhoogt behendigheid met 15 en kritieke kans met 2%.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
+        "bonus4": "Je kritieke wapentreffers hebben 50% kans om Slagtandstorm te verlenen, waardoor je aanvalssnelheid met 25% toeneemt gedurende 8 sec."
       }
     }
   },

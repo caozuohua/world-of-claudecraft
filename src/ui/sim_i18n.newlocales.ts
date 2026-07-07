@@ -2,6 +2,7 @@
 /* eslint-disable */
 export const BASE_NEW = {
   cs_CZ: {
+    'error.heroicMarksNeeded': 'Potřebuješ {marks} Hrdinských značek k nákupu {name}.',
     'groundPickup.supplyCrateDeny': 'Bedna je zatlučená hřebíky.',
     'groundPickup.gravecallerSigilDeny': 'Pečeť odpuzuje tvůj dotyk.',
     'groundPickup.ledgerPageDeny':
@@ -208,6 +209,7 @@ export const BASE_NEW = {
     'presence.nowDnd': 'Nyní jsi v režimu Nerušit: {message}',
   },
   da_DK: {
+    'error.heroicMarksNeeded': 'Du skal bruge {marks} Heroiske Mærker for at købe {name}.',
     'groundPickup.supplyCrateDeny': 'Kassen er sømmet til.',
     'groundPickup.gravecallerSigilDeny': 'Seglet frastøder din berøring.',
     'groundPickup.ledgerPageDeny':
@@ -417,6 +419,7 @@ export const BASE_NEW = {
     'presence.nowDnd': 'Du er nu i Forstyr Ikke-tilstand: {message}',
   },
   id_ID: {
+    'error.heroicMarksNeeded': 'Kamu butuh {marks} Tanda Heroik untuk membeli {name}.',
     'groundPickup.supplyCrateDeny': 'Peti itu dipaku rapat.',
     'groundPickup.gravecallerSigilDeny': 'Sigil itu menolak sentuhanmu.',
     'groundPickup.ledgerPageDeny':
@@ -630,6 +633,7 @@ export const BASE_NEW = {
     'presence.nowDnd': 'Kamu kini dalam mode Jangan Diganggu: {message}',
   },
   nl_NL: {
+    'error.heroicMarksNeeded': 'Je hebt {marks} Heroïsche Merken nodig om {name} te kopen.',
     'groundPickup.supplyCrateDeny': 'De kist is dichtgespijkerd.',
     'groundPickup.gravecallerSigilDeny': 'Het zegel weert je aanraking af.',
     'groundPickup.ledgerPageDeny': 'De grootboekbladen zijn te strak ingebonden om mee te nemen.',
@@ -840,6 +844,7 @@ export const BASE_NEW = {
     'presence.nowDnd': 'Je bent nu in de modus Niet Storen: {message}',
   },
   pl_PL: {
+    'error.heroicMarksNeeded': 'Potrzebujesz {marks} Znaków heroicznych, aby kupić {name}.',
     'groundPickup.supplyCrateDeny': 'Skrzynia jest zabita gwoździami na głucho.',
     'groundPickup.gravecallerSigilDeny': 'Sygil odpycha twój dotyk.',
     'groundPickup.ledgerPageDeny': 'Strony księgi są zszyte zbyt ciasno, by je zabrać.',
@@ -1050,6 +1055,7 @@ export const BASE_NEW = {
     'presence.nowDnd': 'Jesteś teraz w trybie Nie przeszkadzać: {message}',
   },
   sv_SE: {
+    'error.heroicMarksNeeded': 'Du behöver {marks} Heroiska märken för att köpa {name}.',
     'groundPickup.supplyCrateDeny': 'Lådan är igenspikad.',
     'groundPickup.gravecallerSigilDeny': 'Sigillet stöter bort din beröring.',
     'groundPickup.ledgerPageDeny': 'Liggarsidorna sitter för hårt bundna för att tas loss.',
@@ -1260,6 +1266,7 @@ export const BASE_NEW = {
     'presence.nowDnd': 'Du är nu i läget Stör ej: {message}',
   },
   tr_TR: {
+    'error.heroicMarksNeeded': '{name} satın almak için {marks} Kahramanca Nişan gerekiyor.',
     'groundPickup.supplyCrateDeny': 'Sandık çiviyle çakılıp kapatılmış.',
     'groundPickup.gravecallerSigilDeny': 'Mühür dokunuşunu geri itiyor.',
     'groundPickup.ledgerPageDeny': 'Defter sayfaları sökülemeyecek kadar sıkı ciltlenmiş.',
@@ -1466,6 +1473,7 @@ export const BASE_NEW = {
     'presence.nowDnd': 'Artık Rahatsız Etmeyin modundasın: {message}',
   },
   vi_VN: {
+    'error.heroicMarksNeeded': 'Bạn cần {marks} Dấu Ấn Anh Hùng để mua {name}.',
     'groundPickup.supplyCrateDeny': 'Thùng gỗ đã bị đóng đinh chặt.',
     'groundPickup.gravecallerSigilDeny': 'Ấn phù đẩy bật tay bạn ra.',
     'groundPickup.ledgerPageDeny': 'Những trang sổ cái được đóng quá chặt, không thể lấy đi.',

@@ -1016,7 +1016,7 @@ export const ja_JP: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "管理者",
-        "coredevs": "Core Dev",
+        "coredevs": "コア開発者",
         "devs": "開発者",
         "mods": "モデレーター",
         "artists": "アーティスト"

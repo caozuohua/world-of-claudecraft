@@ -1016,7 +1016,7 @@ export const ko_KR: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "관리자",
-        "coredevs": "Core Dev",
+        "coredevs": "핵심 개발자",
         "devs": "개발자",
         "mods": "운영자",
         "artists": "아티스트"

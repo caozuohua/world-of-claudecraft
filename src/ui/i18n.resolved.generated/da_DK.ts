@@ -369,8 +369,8 @@ export const da_DK: EnTranslations = {
       "minutes": "{m}m",
       "lessThanMinute": "<1m",
       "lockedToast": "Du er låst til {raid}. Låses op om {time}.",
-      "heroicName": "Heroic {name}",
-      "heroicLocked": "You are locked to Heroic {name}."
+      "heroicName": "Heroisk {name}",
+      "heroicLocked": "Du er låst til Heroisk {name}."
     },
     "compass": {
       "N": "N",
@@ -526,8 +526,8 @@ export const da_DK: EnTranslations = {
       "fromYour": "Fra din {value} {stat}:",
       "names": {
         "spellPower": "Besværgelseskraft",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Kritvurdering",
+        "hasteRating": "Hastevurdering"
       },
       "desc": {
         "str": "Øger din angrebsstyrke, så dine våbenslag rammer hårdere.",
@@ -541,8 +541,8 @@ export const da_DK: EnTranslations = {
         "dps": "Din anslåede våbenskade pr. sekund, der kombinerer dit våbens skade og hastighed med din angrebsstyrke.",
         "critChance": "Din chance for at et angreb rammer kritisk og gør dobbelt skade.",
         "dodge": "Din chance for helt at undgå et indkommende nærkampsangreb og tage ingen skade.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Kritvurdering fra dit udstyr og sætbonusser, der hæver din chance for kritisk slag. Cirka 10 vurdering giver 1% krit.",
+        "hasteRating": "Hastevurdering fra dit udstyr og sætbonusser, der fremskynder dine angreb og besværgelser. Cirka 10 vurdering giver 1% hast."
       },
       "effects": {
         "attackPower": "+{value} Angrebsstyrke",
@@ -584,13 +584,13 @@ export const da_DK: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Chance ved træffer ({chance}%): {effect}",
+      "onSpellDamage": "Chance ved dine skadevoldende besværgelser ({chance}%): {effect}",
+      "onHeal": "Chance ved dine helbredelser ({chance}%): {effect}",
+      "chainArc": "rammer målet med en {school} {name} ({damage}), der springer til {jumps} nærliggende fjender for aftagende skade",
+      "attackSlow": "og sænker målets angrebshastighed med {pct}% i {duration} sek.",
+      "dot": "fremkalder {name}, en {school} skade-over-tid der volder {total} over {duration} sek.",
+      "hot": "udløser {name}, en helbredelse-over-tid der genopretter {total} over {duration} sek."
     },
     "questShare": {
       "notShareable": "Denne opgave kan ikke deles.",
@@ -795,12 +795,12 @@ export const da_DK: EnTranslations = {
       "masterOption": "Bytteleder: {name}"
     },
     "dungeonDifficulty": {
-      "setHeroic": "Set Dungeon Difficulty: Heroic",
-      "setNormal": "Set Dungeon Difficulty: Normal"
+      "setHeroic": "Indstil fangekældersværhedsgrad: Heroisk",
+      "setNormal": "Indstil fangekældersværhedsgrad: Normal"
     },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Denne genstand kan ikke ødelægges.",
+      "rightClickDestroy": "Højreklik for at ødelægge",
       "filterGroupAria": "Filtrér tasker efter kategori",
       "filterAll": "Alle",
       "filterWeapon": "Våben",
@@ -1016,7 +1016,7 @@ export const da_DK: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
-        "coredevs": "Core Dev",
+        "coredevs": "Kerneudvikler",
         "devs": "Udvikler",
         "mods": "Moderator",
         "artists": "Kunstner"
@@ -1227,18 +1227,18 @@ export const da_DK: EnTranslations = {
       "herbalism": "Urtekundskab"
     },
     "archetypeTitle": {
-      "label": "Title",
-      "none": "None",
-      "armorcrafting": "Armorer",
-      "weaponcrafting": "Weaponsmith",
-      "jewelcrafting": "Jeweler",
-      "alchemy": "Alchemist",
-      "engineering": "Tinkerer",
-      "cooking": "Chef",
-      "inscription": "Scribe",
-      "enchanting": "Enchanter",
-      "tailoring": "Tailor",
-      "leatherworking": "Leathercrafter"
+      "label": "Titel",
+      "none": "Ingen",
+      "armorcrafting": "Rustningssmed",
+      "weaponcrafting": "Våbensmed",
+      "jewelcrafting": "Juveler",
+      "alchemy": "Alkymist",
+      "engineering": "Ingeniør",
+      "cooking": "Kok",
+      "inscription": "Skriver",
+      "enchanting": "Fortryller",
+      "tailoring": "Skrædder",
+      "leatherworking": "Garver"
     },
     "crafting": {
       "title": "Håndværk",
@@ -1251,7 +1251,7 @@ export const da_DK: EnTranslations = {
       "craftedToast": "Udformet: {name}",
       "insufficientMaterials": "Det har du ikke materialerne til.",
       "unknownRecipe": "Den opskrift findes ikke.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "Du har ikke begge de krævede håndværk på det krævede niveau til den opskrift."
     }
   },
   "apiError": {
@@ -3193,8 +3193,8 @@ export const da_DK: EnTranslations = {
     "closeAria": "Luk"
   },
   "heroicShop": {
-    "balance": "Heroic Marks: {count}",
-    "buyAria": "Buy {item} for {marks} Heroic Marks"
+    "balance": "Heroiske Mærker: {count}",
+    "buyAria": "Køb {item} for {marks} Heroiske Mærker"
   },
   "delveUi": {
     "board": {
@@ -4488,7 +4488,7 @@ export const da_DK: EnTranslations = {
     "slots": {
       "mainhand": "Hovedhånd",
       "helmet": "Hjelm",
-      "neck": "Neck",
+      "neck": "Hals",
       "shoulder": "Skulder",
       "chest": "Bryst",
       "waist": "Talje",
@@ -6386,130 +6386,130 @@ export const da_DK: EnTranslations = {
         "name": "Mystisk Kosmetisk Skrin"
       },
       "heroic_mark": {
-        "name": "Heroic Mark"
+        "name": "Heroisk Mærke"
       },
       "morthens_cryptforged_hauberk": {
-        "name": "Morthen's Cryptforged Hauberk"
+        "name": "Morthens Kryptsmedede Brynje"
       },
       "shadowpulse_handwraps": {
-        "name": "Shadowpulse Handwraps"
+        "name": "Skyggepuls-Håndomvikling"
       },
       "bonechill_striders": {
-        "name": "Bonechill Striders"
+        "name": "Benkulde-Skridtsko"
       },
       "mistcallers_fang": {
-        "name": "Mistcaller's Fang"
+        "name": "Fogbinderens Hugtand"
       },
       "tidebound_spaulders": {
-        "name": "Tidebound Spaulders"
+        "name": "Tidevandsbundne Skulderplader"
       },
       "sash_of_the_sunken_court": {
-        "name": "Sash of the Sunken Court"
+        "name": "Skærf fra Det Sunkne Hof"
       },
       "lunar_tide_greatstaff": {
-        "name": "Lunar Tide Greatstaff"
+        "name": "Månetidevands-Storstav"
       },
       "tidewoven_trousers": {
-        "name": "Tidewoven Trousers"
+        "name": "Tidevandsvævede Benklæder"
       },
       "choirmothers_casque": {
-        "name": "Choirmother's Casque"
+        "name": "Kormoderens Hjelm"
       },
       "gravewyrm_cleaver": {
-        "name": "Gravewyrm Cleaver"
+        "name": "Gravorm-Kløver"
       },
       "shroud_of_the_gravewyrm": {
-        "name": "Shroud of the Gravewyrm"
+        "name": "Gravormens Ligklæde"
       },
       "sanctum_prowlers_grips": {
-        "name": "Sanctum Prowler's Grips"
+        "name": "Helligdommens Luskers Greb"
       },
       "scepter_of_the_deathless_court": {
-        "name": "Scepter of the Deathless Court"
+        "name": "Scepter fra Det Udødelige Hof"
       },
       "deathless_warguard_legmail": {
-        "name": "Deathless Warguard Legmail"
+        "name": "Udødelig Krigsvagt-Benbrynje"
       },
       "soulrend_diadem": {
-        "name": "Soulrend Diadem"
+        "name": "Sjæleflæng-Diadem"
       },
       "scourgehide_carapace": {
-        "name": "Scourgehide Carapace"
+        "name": "Svøbehud-Panser"
       },
       "cryptplate_helm": {
-        "name": "Cryptplate Helm"
+        "name": "Kryptplade-Hjelm"
       },
       "shadowpulse_slippers": {
-        "name": "Shadowpulse Slippers"
+        "name": "Skyggepuls-Futter"
       },
       "bonechill_cord": {
-        "name": "Bonechill Cord"
+        "name": "Benkulde-Snor"
       },
       "mistforged_pauldrons": {
-        "name": "Mistforged Pauldrons"
+        "name": "Tågesmedede Skulderplader"
       },
       "tideguard_faceguard": {
-        "name": "Tideguard Faceguard"
+        "name": "Tidevandsvagt-Ansigtsværn"
       },
       "sunken_court_mantle": {
-        "name": "Sunken Court Mantle"
+        "name": "Kappe fra Det Sunkne Hof"
       },
       "lunar_choir_leggings": {
-        "name": "Lunar Choir Leggings"
+        "name": "Månekor-Benbeklædning"
       },
       "choir_blessed_spaulders": {
-        "name": "Choir-Blessed Spaulders"
+        "name": "Korvelsignede Skulderplader"
       },
       "tideworn_warboots": {
-        "name": "Tideworn Warboots"
+        "name": "Tidevandsslidte Krigsstøvler"
       },
       "gravewyrm_claws": {
-        "name": "Gravewyrm Claws"
+        "name": "Gravorm-Kløer"
       },
       "gravescale_girdle": {
-        "name": "Gravescale Girdle"
+        "name": "Gravskæl-Livgjord"
       },
       "wyrmchoir_handwraps": {
-        "name": "Wyrmchoir Handwraps"
+        "name": "Ormekor-Håndomvikling"
       },
       "deathless_greatblade": {
-        "name": "Deathless Greatblade"
+        "name": "Udødelig Storklinge"
       },
       "soulforged_warplate": {
-        "name": "Soulforged Warplate"
+        "name": "Sjælesmedet Krigsplade"
       },
       "stormcallers_focus": {
-        "name": "Stormcaller's Focus"
+        "name": "Stormkalderens Fokus"
       },
       "seal_of_the_nine_oaths": {
-        "name": "Seal of the Nine Oaths"
+        "name": "Segl over De Ni Eder"
       },
       "nielas_coldlight_band": {
-        "name": "Niela's Coldlight Band"
+        "name": "Nielas Koldlys-Ring"
       },
       "sutils_gambit": {
-        "name": "Sutil's Gambit"
+        "name": "Sutils Gambit"
       },
       "oath_of_the_round_table": {
-        "name": "Oath of the Round Table"
+        "name": "Ed til Det Runde Bord"
       },
       "zyzzs_deathless_signet": {
-        "name": "Zyzz's Deathless Signet"
+        "name": "Zyzzs Udødelige Signetring"
       },
       "architects_cornerstone": {
-        "name": "The Architect's Cornerstone"
+        "name": "Arkitektens Hjørnesten"
       },
       "swiftfang_talisman": {
-        "name": "Swiftfang Talisman"
+        "name": "Snartand-Talisman"
       },
       "yumis_keepsake_locket": {
-        "name": "Yumi's Keepsake Locket"
+        "name": "Yumis Minde-Medaljon"
       },
       "zense_meridian": {
-        "name": "Zense Meridian"
+        "name": "Zense-Meridian"
       },
       "medallion_of_endless_profit": {
-        "name": "Medallion of Endless Profit"
+        "name": "Medaljon for Uendelig Profit"
       },
       "deathless_heartwood": {
         "name": "Kerneved fra Den Udødelige Krone"
@@ -7047,9 +7047,9 @@ export const da_DK: EnTranslations = {
         "greeting": "Essen er varm og slibestenen drejer. Hvis det skærer, sælger jeg det."
       },
       "heroic_quartermaster": {
-        "name": "Quartermaster Vex",
-        "title": "Heroic Quartermaster",
-        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
+        "name": "Kvartermester Vex",
+        "title": "Heroisk Kvartermester",
+        "greeting": "Bevis på de heroiske dyb køber de fineste ringe og vedhæng i Højvagt. Vis mig dine mærker."
       },
       "loremaster_caddis": {
         "name": "Lærdomsmester Caddis",
@@ -8133,13 +8133,13 @@ export const da_DK: EnTranslations = {
         "name": "Bonewrought regalier",
         "bonus2": "Øger angrebskraft med 40.",
         "bonus3": "Øger styrke med 15, udholdenhed med 15 og angrebs- og magihastighed med 15%.",
-        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Dine kritiske våbenslag splintrer målet med Bensplint og påfører 8 blødningsskade hvert 2. sek. i 12 sek. Stakker op til 3 gange."
       },
       "deathlord": {
         "name": "Barrowlord kampudstyr",
         "bonus2": "Øger angrebskraft med 40.",
         "bonus3": "Øger styrke med 15 og udholdenhed med 15.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
+        "bonus4": "Dine kritiske våbenslag har 50% chance for at give Gravmagt og øge angrebskraft med 60 i 10 sek."
       },
       "greyjaw_stalker": {
         "name": "Gråkæbe-jægerens udstyr",
@@ -8149,25 +8149,25 @@ export const da_DK: EnTranslations = {
         "name": "Mournweave klæder",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
         "bonus3": "Øger intellekt med 10 og udholdenhed med 10.",
-        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Dine besværgelser har 10% chance for at give Klartrylleri, som gør din næste besværgelse gratis."
       },
       "nighttalon": {
         "name": "Direfang pels",
         "bonus2": "Øger angrebskraft med 40.",
         "bonus3": "Øger smidighed med 15, kritisk chance med 2% og angrebs- og magihastighed med 15%.",
-        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Dine kritiske våbenslag river en Laset Flænge og påfører 6 blødningsskade hvert 2. sek. i 12 sek. Stakker op til 3 gange."
       },
       "soulflame": {
         "name": "Wraithfire regalier",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
         "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Dine besværgelser har 10% chance for at give Sjælebrand og øge besværgelseskraft med 40 i 10 sek."
       },
       "stormcallers": {
         "name": "Galecall klæder",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
         "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Dine besværgelser har 10% chance for at give Sjælebrand og øge besværgelseskraft med 40 i 10 sek."
       },
       "vale_arcanist": {
         "name": "Dalarkanistens klæder",
@@ -8177,7 +8177,7 @@ export const da_DK: EnTranslations = {
         "name": "Nightfang klæder",
         "bonus2": "Øger angrebskraft med 40.",
         "bonus3": "Øger smidighed med 15 og kritisk chance med 2%.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
+        "bonus4": "Dine kritiske våbenslag har 50% chance for at give Hugtandsfart og øge angrebshastighed med 25% i 8 sek."
       }
     }
   },

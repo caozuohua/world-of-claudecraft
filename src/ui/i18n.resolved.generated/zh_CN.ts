@@ -397,7 +397,7 @@ export const zh_CN: EnTranslations = {
     "options": {
       "clickMoveLeft": "左键",
       "clickMoveRight": "右键",
-      "version": "v{version} ({build})",
+      "version": "v{version}（{build}）",
       "browserEffects": "浏览器特效",
       "browserEffectsAuto": "自动",
       "browserEffectsFull": "完整",
@@ -1016,7 +1016,7 @@ export const zh_CN: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "管理员",
-        "coredevs": "Core Dev",
+        "coredevs": "核心开发者",
         "devs": "开发者",
         "mods": "管理员",
         "artists": "画师"

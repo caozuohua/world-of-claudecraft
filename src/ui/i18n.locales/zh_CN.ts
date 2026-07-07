@@ -14,6 +14,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_CN: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.discord.roleTag.coredevs': '核心开发者',
+  'hudChrome.options.version': 'v{version}（{build}）',
   'auth.emailPlaceholder': 'you@example.com',
   'auth.recovery.logOut': '退出登录',
   'delveRiteUi.easy': '简单',

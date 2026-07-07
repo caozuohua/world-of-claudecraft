@@ -369,8 +369,8 @@ export const id_ID: EnTranslations = {
       "minutes": "{m}mnt",
       "lessThanMinute": "<1mnt",
       "lockedToast": "Anda terkunci pada {raid}. Terbuka dalam {time}.",
-      "heroicName": "Heroic {name}",
-      "heroicLocked": "You are locked to Heroic {name}."
+      "heroicName": "{name} Heroik",
+      "heroicLocked": "Anda terkunci pada {name} Heroik."
     },
     "compass": {
       "N": "U",
@@ -526,8 +526,8 @@ export const id_ID: EnTranslations = {
       "fromYour": "Dari {value} {stat} Anda:",
       "names": {
         "spellPower": "Kekuatan Mantra",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Rating Kritis",
+        "hasteRating": "Rating Kecepatan"
       },
       "desc": {
         "str": "Meningkatkan daya serang Anda, sehingga serangan senjata Anda menghantam lebih keras.",
@@ -541,8 +541,8 @@ export const id_ID: EnTranslations = {
         "dps": "Perkiraan kerusakan senjata Anda per detik, menggabungkan kerusakan dan kecepatan senjata dengan daya serang Anda.",
         "critChance": "Peluang serangan Anda menghantam secara kritis, memberikan kerusakan ganda.",
         "dodge": "Peluang Anda untuk sepenuhnya menghindari serangan jarak dekat, tanpa menerima kerusakan.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Rating kritis dari perlengkapan dan bonus set Anda, menaikkan peluang serangan kritis Anda. Sekitar 10 rating memberi 1% kritis.",
+        "hasteRating": "Rating kecepatan dari perlengkapan dan bonus set Anda, mempercepat serangan dan rapalan mantra Anda. Sekitar 10 rating memberi 1% kecepatan."
       },
       "effects": {
         "attackPower": "+{value} Daya Serang",
@@ -584,13 +584,13 @@ export const id_ID: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Peluang saat memukul ({chance}%): {effect}",
+      "onSpellDamage": "Peluang saat mantra kerusakanmu ({chance}%): {effect}",
+      "onHeal": "Peluang saat penyembuhanmu ({chance}%): {effect}",
+      "chainArc": "menghantam target dengan {name} {school} ({damage}) yang melompat ke {jumps} musuh terdekat dengan kerusakan yang kian melemah",
+      "attackSlow": "dan memperlambat kecepatan serangan target sebesar {pct}% selama {duration} dtk",
+      "dot": "menjangkitkan {name}, kerusakan berkala {school} yang memberikan {total} selama {duration} dtk",
+      "hot": "memekarkan {name}, penyembuhan berkala yang memulihkan {total} selama {duration} dtk"
     },
     "questShare": {
       "notShareable": "Misi ini tidak dapat dibagikan.",
@@ -795,12 +795,12 @@ export const id_ID: EnTranslations = {
       "masterOption": "Penjarah Utama: {name}"
     },
     "dungeonDifficulty": {
-      "setHeroic": "Set Dungeon Difficulty: Heroic",
-      "setNormal": "Set Dungeon Difficulty: Normal"
+      "setHeroic": "Atur Kesulitan Dungeon: Heroik",
+      "setNormal": "Atur Kesulitan Dungeon: Normal"
     },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Item ini tidak dapat dihancurkan.",
+      "rightClickDestroy": "Klik kanan untuk menghancurkan",
       "filterGroupAria": "Saring tas menurut kategori",
       "filterAll": "Semua",
       "filterWeapon": "Senjata",
@@ -1016,7 +1016,7 @@ export const id_ID: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Admin",
-        "coredevs": "Core Dev",
+        "coredevs": "Dev Inti",
         "devs": "Pengembang",
         "mods": "Moderator",
         "artists": "Seniman"
@@ -1227,18 +1227,18 @@ export const id_ID: EnTranslations = {
       "herbalism": "Herbalisme"
     },
     "archetypeTitle": {
-      "label": "Title",
-      "none": "None",
-      "armorcrafting": "Armorer",
-      "weaponcrafting": "Weaponsmith",
-      "jewelcrafting": "Jeweler",
-      "alchemy": "Alchemist",
-      "engineering": "Tinkerer",
-      "cooking": "Chef",
-      "inscription": "Scribe",
-      "enchanting": "Enchanter",
-      "tailoring": "Tailor",
-      "leatherworking": "Leathercrafter"
+      "label": "Gelar",
+      "none": "Tidak Ada",
+      "armorcrafting": "Pandai Zirah",
+      "weaponcrafting": "Pandai Senjata",
+      "jewelcrafting": "Perajin Permata",
+      "alchemy": "Alkemis",
+      "engineering": "Insinyur",
+      "cooking": "Koki",
+      "inscription": "Juru Tulis",
+      "enchanting": "Pemantra",
+      "tailoring": "Penjahit",
+      "leatherworking": "Perajin Kulit"
     },
     "crafting": {
       "title": "kerajinan",
@@ -1251,7 +1251,7 @@ export const id_ID: EnTranslations = {
       "craftedToast": "Dibuat: {name}",
       "insufficientMaterials": "Anda tidak memiliki bahan untuk itu.",
       "unknownRecipe": "Resep itu tidak ada.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "Kamu tidak memiliki kedua keahlian yang diperlukan pada tingkat yang disyaratkan untuk resep itu."
     }
   },
   "apiError": {
@@ -3193,8 +3193,8 @@ export const id_ID: EnTranslations = {
     "closeAria": "Tutup"
   },
   "heroicShop": {
-    "balance": "Heroic Marks: {count}",
-    "buyAria": "Buy {item} for {marks} Heroic Marks"
+    "balance": "Tanda Heroik: {count}",
+    "buyAria": "Beli {item} seharga {marks} Tanda Heroik"
   },
   "delveUi": {
     "board": {
@@ -4488,14 +4488,14 @@ export const id_ID: EnTranslations = {
     "slots": {
       "mainhand": "Tangan Utama",
       "helmet": "Helm",
-      "neck": "Neck",
+      "neck": "Leher",
       "shoulder": "Bahu",
       "chest": "Dada",
       "waist": "Pinggang",
       "legs": "Tungkai",
       "gloves": "Sarung Tangan",
       "feet": "Kaki",
-      "ring": "Finger"
+      "ring": "Jari"
     },
     "quality": {
       "poor": "Buruk",
@@ -6386,130 +6386,130 @@ export const id_ID: EnTranslations = {
         "name": "Peti Kosmetik Misterius"
       },
       "heroic_mark": {
-        "name": "Heroic Mark"
+        "name": "Tanda Heroik"
       },
       "morthens_cryptforged_hauberk": {
-        "name": "Morthen's Cryptforged Hauberk"
+        "name": "Baju Zirah Tempaan Kripta Morthen"
       },
       "shadowpulse_handwraps": {
-        "name": "Shadowpulse Handwraps"
+        "name": "Pembalut Tangan Denyut Bayangan"
       },
       "bonechill_striders": {
-        "name": "Bonechill Striders"
+        "name": "Bot Langkah Dingin Tulang"
       },
       "mistcallers_fang": {
-        "name": "Mistcaller's Fang"
+        "name": "Taring Pemanggil Kabut"
       },
       "tidebound_spaulders": {
-        "name": "Tidebound Spaulders"
+        "name": "Pelindung Bahu Ikatan Pasang"
       },
       "sash_of_the_sunken_court": {
-        "name": "Sash of the Sunken Court"
+        "name": "Selempang Istana Karam"
       },
       "lunar_tide_greatstaff": {
-        "name": "Lunar Tide Greatstaff"
+        "name": "Tongkat Agung Pasang Rembulan"
       },
       "tidewoven_trousers": {
-        "name": "Tidewoven Trousers"
+        "name": "Celana Tenunan Pasang"
       },
       "choirmothers_casque": {
-        "name": "Choirmother's Casque"
+        "name": "Ketopong Ibu Paduan Suara"
       },
       "gravewyrm_cleaver": {
-        "name": "Gravewyrm Cleaver"
+        "name": "Kapak Pembelah Wyrm Kubur"
       },
       "shroud_of_the_gravewyrm": {
-        "name": "Shroud of the Gravewyrm"
+        "name": "Kafan Sang Wyrm Kubur"
       },
       "sanctum_prowlers_grips": {
-        "name": "Sanctum Prowler's Grips"
+        "name": "Sarung Tangan Pengendap Sanktum"
       },
       "scepter_of_the_deathless_court": {
-        "name": "Scepter of the Deathless Court"
+        "name": "Tongkat Kebesaran Istana Nirmaut"
       },
       "deathless_warguard_legmail": {
-        "name": "Deathless Warguard Legmail"
+        "name": "Zirah Kaki Garda Perang Nirmaut"
       },
       "soulrend_diadem": {
-        "name": "Soulrend Diadem"
+        "name": "Diadem Pengoyak Jiwa"
       },
       "scourgehide_carapace": {
-        "name": "Scourgehide Carapace"
+        "name": "Karapas Kulit Sampar"
       },
       "cryptplate_helm": {
-        "name": "Cryptplate Helm"
+        "name": "Helm Lempeng Kripta"
       },
       "shadowpulse_slippers": {
-        "name": "Shadowpulse Slippers"
+        "name": "Selop Denyut Bayangan"
       },
       "bonechill_cord": {
-        "name": "Bonechill Cord"
+        "name": "Tali Pinggang Dingin Tulang"
       },
       "mistforged_pauldrons": {
-        "name": "Mistforged Pauldrons"
+        "name": "Bahu Tempaan Kabut"
       },
       "tideguard_faceguard": {
-        "name": "Tideguard Faceguard"
+        "name": "Pelindung Wajah Penjaga Pasang"
       },
       "sunken_court_mantle": {
-        "name": "Sunken Court Mantle"
+        "name": "Mantel Istana Karam"
       },
       "lunar_choir_leggings": {
-        "name": "Lunar Choir Leggings"
+        "name": "Celana Paduan Suara Rembulan"
       },
       "choir_blessed_spaulders": {
-        "name": "Choir-Blessed Spaulders"
+        "name": "Pelindung Bahu Berkah Paduan Suara"
       },
       "tideworn_warboots": {
-        "name": "Tideworn Warboots"
+        "name": "Bot Perang Kikisan Pasang"
       },
       "gravewyrm_claws": {
-        "name": "Gravewyrm Claws"
+        "name": "Cakar Wyrm Kubur"
       },
       "gravescale_girdle": {
-        "name": "Gravescale Girdle"
+        "name": "Sabuk Sisik Kubur"
       },
       "wyrmchoir_handwraps": {
-        "name": "Wyrmchoir Handwraps"
+        "name": "Pembalut Tangan Paduan Suara Wyrm"
       },
       "deathless_greatblade": {
-        "name": "Deathless Greatblade"
+        "name": "Bilah Agung Nirmaut"
       },
       "soulforged_warplate": {
-        "name": "Soulforged Warplate"
+        "name": "Zirah Perang Tempaan Jiwa"
       },
       "stormcallers_focus": {
-        "name": "Stormcaller's Focus"
+        "name": "Fokus Pemanggil Badai"
       },
       "seal_of_the_nine_oaths": {
-        "name": "Seal of the Nine Oaths"
+        "name": "Segel Sembilan Sumpah"
       },
       "nielas_coldlight_band": {
-        "name": "Niela's Coldlight Band"
+        "name": "Cincin Cahaya Dingin Niela"
       },
       "sutils_gambit": {
-        "name": "Sutil's Gambit"
+        "name": "Gambit Sutil"
       },
       "oath_of_the_round_table": {
-        "name": "Oath of the Round Table"
+        "name": "Sumpah Meja Bundar"
       },
       "zyzzs_deathless_signet": {
-        "name": "Zyzz's Deathless Signet"
+        "name": "Cincin Stempel Nirmaut Zyzz"
       },
       "architects_cornerstone": {
-        "name": "The Architect's Cornerstone"
+        "name": "Batu Penjuru Sang Arsitek"
       },
       "swiftfang_talisman": {
-        "name": "Swiftfang Talisman"
+        "name": "Talisman Taring Gesit"
       },
       "yumis_keepsake_locket": {
-        "name": "Yumi's Keepsake Locket"
+        "name": "Liontin Kenangan Yumi"
       },
       "zense_meridian": {
-        "name": "Zense Meridian"
+        "name": "Meridian Zense"
       },
       "medallion_of_endless_profit": {
-        "name": "Medallion of Endless Profit"
+        "name": "Medali Laba Tanpa Akhir"
       },
       "deathless_heartwood": {
         "name": "Inti Kayu Mahkota Baka"
@@ -7047,9 +7047,9 @@ export const id_ID: EnTranslations = {
         "greeting": "Tungku menyala dan batu asah berputar. Kalau bisa menebas, aku menjualnya."
       },
       "heroic_quartermaster": {
-        "name": "Quartermaster Vex",
-        "title": "Heroic Quartermaster",
-        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
+        "name": "Kepala Perbekalan Vex",
+        "title": "Kepala Perbekalan Heroik",
+        "greeting": "Bukti dari kedalaman heroik dapat membeli cincin dan liontin terbaik di Highwatch. Tunjukkan tanda-tandamu."
       },
       "loremaster_caddis": {
         "name": "Ahli Sejarah Caddis",
@@ -8133,13 +8133,13 @@ export const id_ID: EnTranslations = {
         "name": "Regalia Bonewrought",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
         "bonus3": "Meningkatkan kekuatan sebesar 15, stamina sebesar 15, serta kecepatan serangan dan rapal sebesar 15%.",
-        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Serangan kritis senjatamu menyerpihkan target dengan Serpih Tulang, membuatnya berdarah sebesar 8 kerusakan setiap 2 detik selama 12 detik. Menumpuk hingga 3 kali."
       },
       "deathlord": {
         "name": "Perlengkapan Tempur Barrowlord",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
         "bonus3": "Meningkatkan kekuatan sebesar 15 dan stamina sebesar 15.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
+        "bonus4": "Serangan kritis senjatamu memiliki peluang 50% memberikan Kuasa Kubur, meningkatkan daya serang sebesar 60 selama 10 detik."
       },
       "greyjaw_stalker": {
         "name": "Perlengkapan Penguntit Greyjaw",
@@ -8149,25 +8149,25 @@ export const id_ID: EnTranslations = {
         "name": "Jubah Mournweave",
         "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
         "bonus3": "Meningkatkan kecerdasan sebesar 10 dan stamina sebesar 10.",
-        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Mantramu memiliki peluang 10% memberikan Rapal Jernih, menjadikan mantra berikutmu tanpa biaya."
       },
       "nighttalon": {
         "name": "Perlengkapan Kulit Direfang",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
         "bonus3": "Meningkatkan kelincahan sebesar 15, peluang kritis sebesar 2%, serta kecepatan serangan dan rapal sebesar 15%.",
-        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Serangan kritis senjatamu mengoyakkan Cabikan Kasar, membuat target berdarah sebesar 6 kerusakan setiap 2 detik selama 12 detik. Menumpuk hingga 3 kali."
       },
       "soulflame": {
         "name": "Regalia Wraithfire",
         "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
         "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Mantramu memiliki peluang 10% memberikan Nyala Jiwa, meningkatkan kekuatan mantra sebesar 40 selama 10 detik."
       },
       "stormcallers": {
         "name": "Jubah Galecall",
         "bonus2": "Kamu tidak dapat terpental (ketahanan pentalan 100%).",
         "bonus3": "Meningkatkan kecerdasan sebesar 15, roh sebesar 15, serta kecepatan serangan dan rapal sebesar 15%.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Mantramu memiliki peluang 10% memberikan Nyala Jiwa, meningkatkan kekuatan mantra sebesar 40 selama 10 detik."
       },
       "vale_arcanist": {
         "name": "Perlengkapan Arkanis Lembah",
@@ -8177,7 +8177,7 @@ export const id_ID: EnTranslations = {
         "name": "Jubah Nightfang",
         "bonus2": "Meningkatkan daya serang sebesar 40.",
         "bonus3": "Meningkatkan kelincahan sebesar 15 dan peluang kritis sebesar 2%.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
+        "bonus4": "Serangan kritis senjatamu memiliki peluang 50% memberikan Sergap Taring, meningkatkan kecepatan serangan sebesar 25% selama 8 detik."
       }
     }
   },

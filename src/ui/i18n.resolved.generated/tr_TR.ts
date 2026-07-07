@@ -369,8 +369,8 @@ export const tr_TR: EnTranslations = {
       "minutes": "{m}d",
       "lessThanMinute": "<1d",
       "lockedToast": "{raid} akınına kilitlisin. {time} içinde açılır.",
-      "heroicName": "Heroic {name}",
-      "heroicLocked": "You are locked to Heroic {name}."
+      "heroicName": "Kahramanca {name}",
+      "heroicLocked": "Kahramanca {name} akınına kilitlisin."
     },
     "compass": {
       "N": "K",
@@ -526,8 +526,8 @@ export const tr_TR: EnTranslations = {
       "fromYour": "{value} {stat} değerinden:",
       "names": {
         "spellPower": "Büyü Gücü",
-        "critRating": "Crit Rating",
-        "hasteRating": "Haste Rating"
+        "critRating": "Kritik Puanı",
+        "hasteRating": "Hız Puanı"
       },
       "desc": {
         "str": "Saldırı gücünü artırır, böylece silah darbelerin daha sert iner.",
@@ -541,8 +541,8 @@ export const tr_TR: EnTranslations = {
         "dps": "Silahının hasarını ve hızını saldırı gücünle birleştiren, saniye başına tahmini silah hasarın.",
         "critChance": "Bir saldırının kritik vurma ve çift hasar verme şansın.",
         "dodge": "Gelen bir yakın dövüş saldırısından hiç hasar almadan tamamen kaçınma şansın.",
-        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
-        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
+        "critRating": "Teçhizatından ve set bonuslarından gelen kritik puanı, kritik vuruş şansını artırır. Yaklaşık 10 puan %1 kritik sağlar.",
+        "hasteRating": "Teçhizatından ve set bonuslarından gelen hız puanı, saldırılarını ve büyü yapmanı hızlandırır. Yaklaşık 10 puan %1 hız sağlar."
       },
       "effects": {
         "attackPower": "+{value} Saldırı Gücü",
@@ -584,13 +584,13 @@ export const tr_TR: EnTranslations = {
       "bonusLine": "({pieces}) {bonus}"
     },
     "itemProc": {
-      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
-      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
-      "onHeal": "Chance on your heals ({chance}%): {effect}",
-      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
-      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
-      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
-      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
+      "onMeleeHit": "Vuruşta şans (%{chance}): {effect}",
+      "onSpellDamage": "Hasar veren büyülerinde şans (%{chance}): {effect}",
+      "onHeal": "İyileştirmelerinde şans (%{chance}): {effect}",
+      "chainArc": "hedefi, {jumps} yakındaki düşmana sıçrayıp azalan hasar veren bir {school} {name} ({damage}) ile vurur",
+      "attackSlow": "ve hedefin saldırı hızını {duration} sn boyunca %{pct} yavaşlatır",
+      "dot": "{name} yaratır, {duration} sn boyunca {total} veren bir {school} zamana yayılı hasar etkisi",
+      "hot": "{name} açtırır, {duration} sn boyunca {total} geri kazandıran zamana yayılı bir iyileştirme"
     },
     "questShare": {
       "notShareable": "Bu görev paylaşılamaz.",
@@ -795,12 +795,12 @@ export const tr_TR: EnTranslations = {
       "masterOption": "Ganimet Yöneticisi: {name}"
     },
     "dungeonDifficulty": {
-      "setHeroic": "Set Dungeon Difficulty: Heroic",
-      "setNormal": "Set Dungeon Difficulty: Normal"
+      "setHeroic": "Zindan Zorluğunu Ayarla: Kahramanca",
+      "setNormal": "Zindan Zorluğunu Ayarla: Normal"
     },
     "bags": {
-      "cannotDestroy": "This item cannot be destroyed.",
-      "rightClickDestroy": "Right-click to destroy",
+      "cannotDestroy": "Bu eşya yok edilemez.",
+      "rightClickDestroy": "Yok etmek için sağ tıkla",
       "filterGroupAria": "Çantaları kategoriye göre filtrele",
       "filterAll": "Tümü",
       "filterWeapon": "Silahlar",
@@ -1016,7 +1016,7 @@ export const tr_TR: EnTranslations = {
       "roleTag": {
         "levyst": "Levy St",
         "admin": "Yönetici",
-        "coredevs": "Core Dev",
+        "coredevs": "Çekirdek Geliştirici",
         "devs": "Geliştirici",
         "mods": "Moderatör",
         "artists": "Sanatçı"
@@ -1227,18 +1227,18 @@ export const tr_TR: EnTranslations = {
       "herbalism": "Bitkicilik"
     },
     "archetypeTitle": {
-      "label": "Title",
-      "none": "None",
-      "armorcrafting": "Armorer",
-      "weaponcrafting": "Weaponsmith",
-      "jewelcrafting": "Jeweler",
-      "alchemy": "Alchemist",
-      "engineering": "Tinkerer",
-      "cooking": "Chef",
-      "inscription": "Scribe",
-      "enchanting": "Enchanter",
-      "tailoring": "Tailor",
-      "leatherworking": "Leathercrafter"
+      "label": "Unvan",
+      "none": "Yok",
+      "armorcrafting": "Zırhçı",
+      "weaponcrafting": "Silah Ustası",
+      "jewelcrafting": "Kuyumcu",
+      "alchemy": "Simyacı",
+      "engineering": "Mühendis",
+      "cooking": "Aşçı",
+      "inscription": "Kâtip",
+      "enchanting": "Efsuncu",
+      "tailoring": "Terzi",
+      "leatherworking": "Derici"
     },
     "crafting": {
       "title": "işçiliği",
@@ -1251,7 +1251,7 @@ export const tr_TR: EnTranslations = {
       "craftedToast": "Hazırlanma Tarihi: {name}",
       "insufficientMaterials": "Bunun için malzemeleriniz yok.",
       "unknownRecipe": "O tarif mevcut değil.",
-      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
+      "comboRequirementUnmet": "O tarif için gereken iki zanaata da gereken kademede sahip değilsin."
     }
   },
   "apiError": {
@@ -3193,8 +3193,8 @@ export const tr_TR: EnTranslations = {
     "closeAria": "Kapat"
   },
   "heroicShop": {
-    "balance": "Heroic Marks: {count}",
-    "buyAria": "Buy {item} for {marks} Heroic Marks"
+    "balance": "Kahramanca Nişanlar: {count}",
+    "buyAria": "{item} ürününü {marks} Kahramanca Nişan karşılığında satın al"
   },
   "delveUi": {
     "board": {
@@ -4488,14 +4488,14 @@ export const tr_TR: EnTranslations = {
     "slots": {
       "mainhand": "Ana El",
       "helmet": "Miğfer",
-      "neck": "Neck",
+      "neck": "Boyun",
       "shoulder": "Omuzluk",
       "chest": "Göğüslük",
       "waist": "Bel",
       "legs": "Bacaklar",
       "gloves": "Eldivenler",
       "feet": "Ayaklar",
-      "ring": "Finger"
+      "ring": "Parmak"
     },
     "quality": {
       "poor": "Değersiz",
@@ -6386,130 +6386,130 @@ export const tr_TR: EnTranslations = {
         "name": "Gizemli Kozmetik Sandığı"
       },
       "heroic_mark": {
-        "name": "Heroic Mark"
+        "name": "Kahramanca Nişan"
       },
       "morthens_cryptforged_hauberk": {
-        "name": "Morthen's Cryptforged Hauberk"
+        "name": "Morthen'in Mezardövümü Zırh Gömleği"
       },
       "shadowpulse_handwraps": {
-        "name": "Shadowpulse Handwraps"
+        "name": "Gölgenabzı El Sargıları"
       },
       "bonechill_striders": {
-        "name": "Bonechill Striders"
+        "name": "Kemikürperti Adımları"
       },
       "mistcallers_fang": {
-        "name": "Mistcaller's Fang"
+        "name": "Sisçağıranın Dişi"
       },
       "tidebound_spaulders": {
-        "name": "Tidebound Spaulders"
+        "name": "Gelgitbağı Omuzlukları"
       },
       "sash_of_the_sunken_court": {
-        "name": "Sash of the Sunken Court"
+        "name": "Boğulmuş Saray Kuşağı"
       },
       "lunar_tide_greatstaff": {
-        "name": "Lunar Tide Greatstaff"
+        "name": "Ay Gelgiti Büyük Asası"
       },
       "tidewoven_trousers": {
-        "name": "Tidewoven Trousers"
+        "name": "Gelgitörgüsü Pantolonu"
       },
       "choirmothers_casque": {
-        "name": "Choirmother's Casque"
+        "name": "Koroana'nın Miğferi"
       },
       "gravewyrm_cleaver": {
-        "name": "Gravewyrm Cleaver"
+        "name": "Mezarejderi Satırı"
       },
       "shroud_of_the_gravewyrm": {
-        "name": "Shroud of the Gravewyrm"
+        "name": "Mezarejderi Kefeni"
       },
       "sanctum_prowlers_grips": {
-        "name": "Sanctum Prowler's Grips"
+        "name": "Mabet Avcısının Eldivenleri"
       },
       "scepter_of_the_deathless_court": {
-        "name": "Scepter of the Deathless Court"
+        "name": "Ölümsüz Saray Asası"
       },
       "deathless_warguard_legmail": {
-        "name": "Deathless Warguard Legmail"
+        "name": "Ölümsüz Savaşmuhafızı Bacak Zırhı"
       },
       "soulrend_diadem": {
-        "name": "Soulrend Diadem"
+        "name": "Ruhyırtan Tacı"
       },
       "scourgehide_carapace": {
-        "name": "Scourgehide Carapace"
+        "name": "Afetpostu Kabuğu"
       },
       "cryptplate_helm": {
-        "name": "Cryptplate Helm"
+        "name": "Mezarzırh Miğferi"
       },
       "shadowpulse_slippers": {
-        "name": "Shadowpulse Slippers"
+        "name": "Gölgenabzı Terlikleri"
       },
       "bonechill_cord": {
-        "name": "Bonechill Cord"
+        "name": "Kemikürperti Kuşağı"
       },
       "mistforged_pauldrons": {
-        "name": "Mistforged Pauldrons"
+        "name": "Sisdövümü Omuzlukları"
       },
       "tideguard_faceguard": {
-        "name": "Tideguard Faceguard"
+        "name": "Gelgitmuhafızı Yüzlüğü"
       },
       "sunken_court_mantle": {
-        "name": "Sunken Court Mantle"
+        "name": "Boğulmuş Saray Pelerini"
       },
       "lunar_choir_leggings": {
-        "name": "Lunar Choir Leggings"
+        "name": "Ay Korosu Tozlukları"
       },
       "choir_blessed_spaulders": {
-        "name": "Choir-Blessed Spaulders"
+        "name": "Koro Kutsamalı Omuzlukları"
       },
       "tideworn_warboots": {
-        "name": "Tideworn Warboots"
+        "name": "Gelgityıpranmış Savaş Çizmeleri"
       },
       "gravewyrm_claws": {
-        "name": "Gravewyrm Claws"
+        "name": "Mezarejderi Pençeleri"
       },
       "gravescale_girdle": {
-        "name": "Gravescale Girdle"
+        "name": "Mezarpulu Kemeri"
       },
       "wyrmchoir_handwraps": {
-        "name": "Wyrmchoir Handwraps"
+        "name": "Ejderkorosu El Sargıları"
       },
       "deathless_greatblade": {
-        "name": "Deathless Greatblade"
+        "name": "Ölümsüz Pala"
       },
       "soulforged_warplate": {
-        "name": "Soulforged Warplate"
+        "name": "Ruhdövümü Savaş Zırhı"
       },
       "stormcallers_focus": {
-        "name": "Stormcaller's Focus"
+        "name": "Fırtınaçağıranın Odağı"
       },
       "seal_of_the_nine_oaths": {
-        "name": "Seal of the Nine Oaths"
+        "name": "Dokuz Yeminin Mührü"
       },
       "nielas_coldlight_band": {
-        "name": "Niela's Coldlight Band"
+        "name": "Niela'nın Soğukışık Halkası"
       },
       "sutils_gambit": {
-        "name": "Sutil's Gambit"
+        "name": "Sutil'in Kumarı"
       },
       "oath_of_the_round_table": {
-        "name": "Oath of the Round Table"
+        "name": "Yuvarlak Masa Yemini"
       },
       "zyzzs_deathless_signet": {
-        "name": "Zyzz's Deathless Signet"
+        "name": "Zyzz'in Ölümsüz Mühür Yüzüğü"
       },
       "architects_cornerstone": {
-        "name": "The Architect's Cornerstone"
+        "name": "Mimarın Köşe Taşı"
       },
       "swiftfang_talisman": {
-        "name": "Swiftfang Talisman"
+        "name": "Tezdiş Tılsımı"
       },
       "yumis_keepsake_locket": {
-        "name": "Yumi's Keepsake Locket"
+        "name": "Yumi'nin Yadigâr Madalyonu"
       },
       "zense_meridian": {
-        "name": "Zense Meridian"
+        "name": "Zense Meridyeni"
       },
       "medallion_of_endless_profit": {
-        "name": "Medallion of Endless Profit"
+        "name": "Bitmez Kâr Madalyonu"
       },
       "deathless_heartwood": {
         "name": "Ölümsüz Taç'ın Öz Odunu"
@@ -7047,9 +7047,9 @@ export const tr_TR: EnTranslations = {
         "greeting": "Ocak kızgın, bileği taşı dönüyor. Kesiyorsa, satarım."
       },
       "heroic_quartermaster": {
-        "name": "Quartermaster Vex",
-        "title": "Heroic Quartermaster",
-        "greeting": "Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks."
+        "name": "Levazımcı Vex",
+        "title": "Kahramanca Levazımcı",
+        "greeting": "Kahramanca derinliklerin kanıtı, Highwatch'taki en iyi yüzükleri ve kolyeleri satın alır. Nişanlarını göster bana."
       },
       "loremaster_caddis": {
         "name": "İrfan Ustası Caddis",
@@ -8133,13 +8133,13 @@ export const tr_TR: EnTranslations = {
         "name": "Bonewrought Kıyafetleri",
         "bonus2": "Saldırı gücünü 40 artırır.",
         "bonus3": "Gücü 15, dayanıklılığı 15, saldırı ve büyü hızını %15 artırır.",
-        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Silah kritik vuruşların hedefi Kemikkıymık ile parçalar, 12 sn boyunca her 2 sn'de 8 kanama hasarı verir. 3 kata kadar üst üste binebilir."
       },
       "deathlord": {
         "name": "Barrowlord Savaş Takımı",
         "bonus2": "Saldırı gücünü 40 artırır.",
         "bonus3": "Gücü 15 ve dayanıklılığı 15 artırır.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
+        "bonus4": "Silah kritik vuruşlarının %50 ihtimalle Mezargücü kazandırır, 10 sn boyunca saldırı gücünü 60 artırır."
       },
       "greyjaw_stalker": {
         "name": "Greyjaw İzsürücü takımı",
@@ -8149,25 +8149,25 @@ export const tr_TR: EnTranslations = {
         "name": "Mournweave Giysileri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
         "bonus3": "Zekayı 10 ve dayanıklılığı 10 artırır.",
-        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Büyülerinin %10 ihtimalle Berrak Büyü kazandırır, bir sonraki büyünü bedava yapar."
       },
       "nighttalon": {
         "name": "Direfang Postu",
         "bonus2": "Saldırı gücünü 40 artırır.",
         "bonus3": "Çevikliği 15, kritik şansını %2, saldırı ve büyü hızını %15 artırır.",
-        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
+        "bonus4": "Silah kritik vuruşların bir Pürüzlü Yarık açar, hedefi 12 sn boyunca her 2 sn'de 6 kanama hasarıyla kanatır. 3 kata kadar üst üste binebilir."
       },
       "soulflame": {
         "name": "Wraithfire Kıyafetleri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
         "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Büyülerinin %10 ihtimalle Ruhalazı kazandırır, 10 sn boyunca büyü gücünü 40 artırır."
       },
       "stormcallers": {
         "name": "Galecall Cübbeleri",
         "bonus2": "Geri itilemezsin (%100 geri itilme direnci).",
         "bonus3": "Zekayı 15, ruhu 15, saldırı ve büyü hızını %15 artırır.",
-        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
+        "bonus4": "Büyülerinin %10 ihtimalle Ruhalazı kazandırır, 10 sn boyunca büyü gücünü 40 artırır."
       },
       "vale_arcanist": {
         "name": "Vadi Arkanisti giysileri",
@@ -8177,7 +8177,7 @@ export const tr_TR: EnTranslations = {
         "name": "Nightfang Cübbeleri",
         "bonus2": "Saldırı gücünü 40 artırır.",
         "bonus3": "Çevikliği 15 ve kritik şansını %2 artırır.",
-        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
+        "bonus4": "Silah kritik vuruşlarının %50 ihtimalle Dişhücumu kazandırır, 8 sn boyunca saldırı hızını %25 artırır."
       }
     }
   },

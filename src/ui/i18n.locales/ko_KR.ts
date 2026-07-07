@@ -14,6 +14,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ko_KR: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.discord.roleTag.coredevs': '핵심 개발자',
+  'hudChrome.options.version': 'v{version} ({build})',
   'auth.emailPlaceholder': 'you@example.com',
   'auth.recovery.logOut': '로그아웃',
   'delveRiteUi.easy': '쉬움',
