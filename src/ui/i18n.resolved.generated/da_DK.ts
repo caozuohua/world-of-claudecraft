@@ -395,6 +395,7 @@ export const da_DK: EnTranslations = {
     "options": {
       "clickMoveLeft": "Venstreklik",
       "clickMoveRight": "Højreklik",
+      "version": "v{version} ({build})",
       "browserEffects": "Browsereffekter",
       "browserEffectsAuto": "Auto",
       "browserEffectsFull": "Fuld",
@@ -522,7 +523,9 @@ export const da_DK: EnTranslations = {
     "statInfo": {
       "fromYour": "Fra din {value} {stat}:",
       "names": {
-        "spellPower": "Besværgelseskraft"
+        "spellPower": "Besværgelseskraft",
+        "critRating": "Crit Rating",
+        "hasteRating": "Haste Rating"
       },
       "desc": {
         "str": "Øger din angrebsstyrke, så dine våbenslag rammer hårdere.",
@@ -535,7 +538,9 @@ export const da_DK: EnTranslations = {
         "spellPower": "Øger skaden fra dine besværgelser og styrken af dine helbredelser. Hvert point Intellekt giver en smule Besværgelseskraft, oven i det, der kommer fra udstyr eller buffs.",
         "dps": "Din anslåede våbenskade pr. sekund, der kombinerer dit våbens skade og hastighed med din angrebsstyrke.",
         "critChance": "Din chance for at et angreb rammer kritisk og gør dobbelt skade.",
-        "dodge": "Din chance for helt at undgå et indkommende nærkampsangreb og tage ingen skade."
+        "dodge": "Din chance for helt at undgå et indkommende nærkampsangreb og tage ingen skade.",
+        "critRating": "Crit rating from your gear and set bonuses, raising your critical strike chance. About 10 rating grants 1% crit.",
+        "hasteRating": "Haste rating from your gear and set bonuses, speeding up your attacks and spellcasting. About 10 rating grants 1% haste."
       },
       "effects": {
         "attackPower": "+{value} Angrebsstyrke",
@@ -575,6 +580,15 @@ export const da_DK: EnTranslations = {
     "itemSet": {
       "header": "{name} ({have}/{total})",
       "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Chance on hit ({chance}%): {effect}",
+      "onSpellDamage": "Chance on your damaging spells ({chance}%): {effect}",
+      "onHeal": "Chance on your heals ({chance}%): {effect}",
+      "chainArc": "blasts the target with a {school} {name} ({damage}) that leaps to {jumps} nearby foes for decaying damage",
+      "attackSlow": "and slows the target attack speed by {pct}% for {duration} sec",
+      "dot": "festers {name}, a {school} damage-over-time dealing {total} over {duration} sec",
+      "hot": "blooms {name}, a heal-over-time restoring {total} over {duration} sec"
     },
     "questShare": {
       "notShareable": "Denne opgave kan ikke deles.",
@@ -788,6 +802,8 @@ export const da_DK: EnTranslations = {
       "masterOption": "Bytteleder: {name}"
     },
     "bags": {
+      "cannotDestroy": "This item cannot be destroyed.",
+      "rightClickDestroy": "Right-click to destroy",
       "filterGroupAria": "Filtrér tasker efter kategori",
       "filterAll": "Alle",
       "filterWeapon": "Våben",
@@ -1069,18 +1085,6 @@ export const da_DK: EnTranslations = {
         }
       }
     },
-    "crafting": {
-      "title": "Håndværk",
-      "close": "Tæt håndværk",
-      "craft": "Håndværk",
-      "reagentsNeeded": "Kræver:",
-      "reagentLine": "{name}: {have}/{required}",
-      "empty": "Ingen opskrifter kendt endnu.",
-      "resultAria": "Håndværk {name}",
-      "craftedToast": "Udformet: {name}",
-      "insufficientMaterials": "Det har du ikke materialerne til.",
-      "unknownRecipe": "Den opskrift findes ikke."
-    },
     "devBadge": {
       "title": "Udvikler",
       "tiers": {
@@ -1224,6 +1228,19 @@ export const da_DK: EnTranslations = {
       "mining": "Minedrift",
       "logging": "Skovhugst",
       "herbalism": "Urtekundskab"
+    },
+    "crafting": {
+      "title": "Håndværk",
+      "close": "Tæt håndværk",
+      "craft": "Håndværk",
+      "reagentsNeeded": "Kræver:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Ingen opskrifter kendt endnu.",
+      "resultAria": "Håndværk {name}",
+      "craftedToast": "Udformet: {name}",
+      "insufficientMaterials": "Det har du ikke materialerne til.",
+      "unknownRecipe": "Den opskrift findes ikke.",
+      "comboRequirementUnmet": "You do not have both required crafts at the required tier for that recipe."
     }
   },
   "apiError": {
@@ -7967,12 +7984,14 @@ export const da_DK: EnTranslations = {
       "crownforged": {
         "name": "Bonewrought regalier",
         "bonus2": "Øger angrebskraft med 40.",
-        "bonus3": "Øger styrke med 15, udholdenhed med 15 og angrebs- og magihastighed med 15%."
+        "bonus3": "Øger styrke med 15, udholdenhed med 15 og angrebs- og magihastighed med 15%.",
+        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "deathlord": {
         "name": "Barrowlord kampudstyr",
         "bonus2": "Øger angrebskraft med 40.",
-        "bonus3": "Øger styrke med 15 og udholdenhed med 15."
+        "bonus3": "Øger styrke med 15 og udholdenhed med 15.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
       },
       "greyjaw_stalker": {
         "name": "Gråkæbe-jægerens udstyr",
@@ -7981,22 +8000,26 @@ export const da_DK: EnTranslations = {
       "necromancers": {
         "name": "Mournweave klæder",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
-        "bonus3": "Øger intellekt med 10 og udholdenhed med 10."
+        "bonus3": "Øger intellekt med 10 og udholdenhed med 10.",
+        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
       },
       "nighttalon": {
         "name": "Direfang pels",
         "bonus2": "Øger angrebskraft med 40.",
-        "bonus3": "Øger smidighed med 15, kritisk chance med 2% og angrebs- og magihastighed med 15%."
+        "bonus3": "Øger smidighed med 15, kritisk chance med 2% og angrebs- og magihastighed med 15%.",
+        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "soulflame": {
         "name": "Wraithfire regalier",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
-        "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%."
+        "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "stormcallers": {
         "name": "Galecall klæder",
         "bonus2": "Du kan ikke stødes tilbage (100% modstand mod tilbagestød).",
-        "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%."
+        "bonus3": "Øger intellekt med 15, ånd med 15 og angrebs- og magihastighed med 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "vale_arcanist": {
         "name": "Dalarkanistens klæder",
@@ -8005,7 +8028,8 @@ export const da_DK: EnTranslations = {
       "wyrmshadow": {
         "name": "Nightfang klæder",
         "bonus2": "Øger angrebskraft med 40.",
-        "bonus3": "Øger smidighed med 15 og kritisk chance med 2%."
+        "bonus3": "Øger smidighed med 15 og kritisk chance med 2%.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
       }
     }
   },

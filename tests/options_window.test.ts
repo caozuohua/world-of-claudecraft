@@ -255,3 +255,56 @@ describe('options_window: title-bar back control', () => {
     expect(rule).toContain('transform: none;');
   });
 });
+
+describe('options_window: uiScale slider commits on release (#1558)', () => {
+  it('the shared commit closure applies the setting from the raw slider value', () => {
+    const commit = painter.slice(painter.indexOf('const commit = () => {'));
+    const body = commit.slice(0, commit.indexOf('};'));
+    expect(body).toContain('hooks.onSettingChange(key, sliderDispatchValue(slider.value))');
+    expect(body).toContain('syncReadout();');
+  });
+
+  it('a commit-on-change slider commits only on change, previewing readout on input', () => {
+    // Isolate the settingSlider commit-on-change branch.
+    const fn = painter.slice(painter.indexOf('if (c.commitOnChange) {'));
+    const branch = fn.slice(0, fn.indexOf('} else {'));
+    // input previews only (readout + fill), and must NOT commit the setting.
+    const inputHandler = branch.slice(
+      branch.indexOf("addEventListener('input'"),
+      branch.indexOf("addEventListener('change'"),
+    );
+    expect(inputHandler).toContain('readoutFromSlider();');
+    expect(inputHandler).not.toContain('onSettingChange');
+    expect(inputHandler).not.toContain('commit');
+    // change (release / keyboard step) commits, via the shared closure.
+    const changeHandler = branch.slice(branch.indexOf("addEventListener('change'"));
+    expect(changeHandler).toContain("addEventListener('change', commit)");
+  });
+
+  it('a normal slider still commits live on input, via the shared closure', () => {
+    const elseArm = painter.slice(
+      painter.indexOf('} else {', painter.indexOf('if (c.commitOnChange) {')),
+    );
+    expect(elseArm.slice(0, elseArm.indexOf('\n    }'))).toContain(
+      "addEventListener('input', commit)",
+    );
+  });
+});
+
+describe('options_window: settings shows the running version (#1541)', () => {
+  it('renders the version + build id from the shared app_version source', () => {
+    // Reuse the single build source, not a re-declared __APP_* global.
+    expect(painter).toContain("import { appVersionInfo } from './app_version'");
+    expect(painter).toContain('appVersionInfo()');
+  });
+
+  it('paints the version as a t() label in the main menu (renderMain)', () => {
+    const renderMain = painter.slice(painter.indexOf('private renderMain(): void {'));
+    const body = renderMain.slice(0, renderMain.indexOf('\n  }\n'));
+    // The label is an i18n key with version+build passed as values (no concat).
+    expect(body).toContain("t('hudChrome.options.version', { version, build })");
+    // Rendered as the .opt-version secondary line appended after the button list.
+    expect(body).toContain("'opt-version'");
+    expect(body.indexOf("'opt-version'")).toBeGreaterThan(body.indexOf('el.appendChild(list)'));
+  });
+});

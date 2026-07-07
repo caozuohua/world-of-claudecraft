@@ -127,6 +127,7 @@ import { type AuraEffectInput, auraEffectDescriptor } from './aura_effect';
 import { AurasPainter, type AurasPainterDeps } from './auras_painter';
 import { type AurasDeps, createAurasView } from './auras_view';
 import { attachAvatarFallback } from './avatar_fallback';
+import { bagsWindowShown } from './bags_view';
 import { BagsWindow } from './bags_window';
 import { CalendarWindow } from './calendar_window';
 import { CastBarPainter } from './cast_bar_painter';
@@ -358,6 +359,7 @@ import {
   wocBalance,
   wocBalanceVerified,
 } from './wallet_balance';
+import { type WeaponProcEffectDesc, weaponProcLines } from './weapon_proc_view';
 import { makeWindowFocus } from './window_focus';
 import { installWindowResize, markResizableWindow } from './window_resize';
 import { formatXp, xpBarView } from './xp_bar';
@@ -3070,6 +3072,9 @@ export class Hud {
       // shared container is returned unrefreshed.
       durationUnits: () => this.auraDurationUnits,
       auraEffectHtml: () => '',
+      // The party rows' wire summaries carry no sourceId and the mini strips are
+      // not ownFirst views, so nothing here is ever "own".
+      isOwn: () => false,
     },
     painter: {
       resolveIconUrl: (iconKey) => `url(${iconDataUrl('aura', iconKey)})`,
@@ -3122,6 +3127,10 @@ export class Hud {
       return u;
     },
     auraEffectHtml: (a) => this.auraEffectTooltipHtml(a),
+    // Own-aura check for the target strip's ownFirst prominence: a missing/zero
+    // sourceId (an old server's mirror) is never own, so the strip degrades to
+    // the un-prioritized layout instead of misattributing another caster's dot.
+    isOwn: (a) => a.sourceId !== undefined && a.sourceId !== 0 && a.sourceId === this.sim.playerId,
   };
   private readonly aurasPainterDeps: AurasPainterDeps = {
     resolveIconUrl: (iconKey) => `url(${iconDataUrl('aura', iconKey)})`,
@@ -3137,7 +3146,13 @@ export class Hud {
   // target's buffs (the shield you just cast on an ally) alongside its debuffs, and
   // an enemy's buffs (a mob's frenzy) alongside the DoTs you keep on it. The element
   // keeps its historical #tf-debuffs id; only the view mode widened.
-  private readonly targetDebuffsView = createAurasView('all', this.aurasViewDeps);
+  // ownFirst: YOUR dots/hots on the target lead the strip and render larger (the
+  // painter's `own` class), so what you are maintaining reads at a glance among
+  // other casters' auras. Extra prominence only, never less information, so every
+  // graphics tier keeps it (gameplay-neutral-graphics invariant).
+  private readonly targetDebuffsView = createAurasView('all', this.aurasViewDeps, {
+    ownFirst: true,
+  });
   // The buff-bar painter alone gets attachCancel: right-clicking one of the local player's
   // own helpful buffs cancels it (classic convention). The debuff / target painters reuse
   // the shared deps (no cancel: a debuff or another entity's aura is never cancelable).
@@ -3843,11 +3858,66 @@ export class Hud {
       const meets = this.sim.player.level >= req;
       html += `<div class="${meets ? 'tt-sub' : 'tt-red'}">${esc(t('hudChrome.itemTooltip.requiresLevel', { level: itemNumber(req) }))}</div>`;
     }
+    html += this.itemProcBlock(item);
     html += this.itemSetBlock(item);
     if (item.sellValue > 0)
       html += `<div class="tt-sub">${esc(t('itemUi.tooltip.sellPrice', { money: formatLocalizedMoney(item.sellValue) }))}</div>`;
     if (compare) html += this.itemCompareBlock(item);
     return html;
+  }
+
+  // Legendary "chance on action" procs: one green trigger line per proc, each
+  // wrapping its joined effect fragments. Reads ItemDef.weaponProcs through the
+  // pure weapon_proc_view core so the derived numbers stay unit-tested.
+  private itemProcBlock(item: ItemDef): string {
+    const lines = weaponProcLines(item.kind === 'weapon' ? item.weaponProcs : undefined);
+    if (!lines.length) return '';
+    let html = '';
+    for (const line of lines) {
+      const effect = line.effects.map((e) => this.procEffectText(e)).join(' ');
+      const triggerKey =
+        line.trigger === 'meleeHit'
+          ? 'hudChrome.itemProc.onMeleeHit'
+          : line.trigger === 'spellDamage'
+            ? 'hudChrome.itemProc.onSpellDamage'
+            : 'hudChrome.itemProc.onHeal';
+      html += `<div class="tt-green">${esc(
+        t(triggerKey, {
+          chance: formatNumber(line.chancePct, { maximumFractionDigits: 0 }),
+          effect,
+        }),
+      )}</div>`;
+    }
+    return html;
+  }
+
+  // One effect fragment (chain arc / attack slow / dot / hot) as localized text.
+  private procEffectText(e: WeaponProcEffectDesc): string {
+    const n = (v: number | undefined): string => formatNumber(v ?? 0, { maximumFractionDigits: 0 });
+    switch (e.kind) {
+      case 'chainArc':
+        return t('hudChrome.itemProc.chainArc', {
+          school: e.school ?? '',
+          name: e.name ?? '',
+          damage: n(e.damage),
+          jumps: n(e.jumps),
+        });
+      case 'attackSlow':
+        return t('hudChrome.itemProc.attackSlow', { pct: n(e.slowPct), duration: n(e.duration) });
+      case 'dot':
+        return t('hudChrome.itemProc.dot', {
+          name: e.name ?? '',
+          school: e.school ?? '',
+          total: n(e.total),
+          duration: n(e.duration),
+        });
+      case 'hot':
+        return t('hudChrome.itemProc.hot', {
+          name: e.name ?? '',
+          total: n(e.total),
+          duration: n(e.duration),
+        });
+    }
   }
 
   // How many equipped pieces belong to the given set (read from IWorld.equipment
@@ -3875,7 +3945,7 @@ export class Hud {
     const name = tEntity({ kind: 'itemSet', id: model.setId, field: 'name' });
     let html = `<div class="tt-set-name">${esc(t('hudChrome.itemSet.header', { name, have: formatNumber(model.equippedPieces, { maximumFractionDigits: 0 }), total: formatNumber(model.totalPieces, { maximumFractionDigits: 0 }) }))}</div>`;
     for (const tier of model.bonusTiers) {
-      const field = tier.pieces === 2 ? 'bonus2' : 'bonus3';
+      const field = tier.pieces === 2 ? 'bonus2' : tier.pieces === 3 ? 'bonus3' : 'bonus4';
       const text = tEntity({ kind: 'itemSet', id: model.setId, field });
       html += `<div class="tt-set-bonus${tier.active ? ' active' : ''}">${esc(t('hudChrome.itemSet.bonusLine', { pieces: formatNumber(tier.pieces, { maximumFractionDigits: 0 }), bonus: text }))}</div>`;
     }
@@ -3943,6 +4013,8 @@ export class Hud {
       spellPower: p.spellPower,
       critChance: p.critChance,
       dodgeChance: p.dodgeChance,
+      critRating: p.critRating,
+      hasteRating: p.hasteRating,
       dps: weaponDps(wpn?.weapon, p.attackPower),
       gear,
       buffs,
@@ -7797,7 +7869,9 @@ export class Hud {
               t(
                 ev.reason === 'unknown_recipe'
                   ? 'hudChrome.crafting.unknownRecipe'
-                  : 'hudChrome.crafting.insufficientMaterials',
+                  : ev.reason === 'combo_requirement_unmet'
+                    ? 'hudChrome.crafting.comboRequirementUnmet'
+                    : 'hudChrome.crafting.insufficientMaterials',
               ),
               '#ff6b6b',
             );
@@ -7873,7 +7947,7 @@ export class Hud {
           this.showError(this.localizeErrorText(ev.text));
           break;
         case 'questAccepted':
-          audio.questAccept();
+          sfx.playUi('quest_accept', { gain: 1.8 });
           this.refreshGossip();
           break;
         case 'questProgress': {
@@ -7892,12 +7966,12 @@ export class Hud {
               status: t('questUi.log.readyStatus'),
             }),
           );
-          audio.questDone();
+          sfx.playUi('quest_ready', { gain: 4.5 });
           this.refreshGossip();
           break;
         }
         case 'questDone':
-          audio.questDone();
+          sfx.playUi('quest_complete', { gain: 1.8 });
           this.refreshGossip();
           break;
         case 'chat': {
@@ -10170,7 +10244,7 @@ export class Hud {
   private renderCrafting(): void {
     renderCraftingWindow(
       $('#crafting-window'),
-      buildCraftingView(this.sim.recipeList, this.sim.inventory, ITEMS),
+      buildCraftingView(this.sim.recipeList, this.sim.inventory, ITEMS, this.sim.craftSkills),
       {
         ...this.presentationBag,
         hideTooltip: () => this.hideTooltip(),
@@ -10260,9 +10334,12 @@ export class Hud {
 
   toggleBags(): void {
     const el = $('#bags');
-    if (el.style.display !== 'none') {
+    if (bagsWindowShown(el.style.display)) {
       // Close through the painter so focus returns to the opener (WCAG 2.4.3); close()
       // owns the hide + tooltip + pet-feed teardown, so keep only the audio cue here.
+      // Only a genuinely shown window closes here: on a cold load the inline display
+      // is '' (hidden by the .window CSS rule), which must open on the first press,
+      // not take this close branch and play the close sound (issue #1538).
       audio.bagClose();
       this.bagsWindow.close();
       return;

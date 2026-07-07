@@ -39,6 +39,7 @@ import {
   SETTING_RANGES,
 } from '../game/settings';
 import type { IWorld } from '../world_api';
+import { appVersionInfo } from './app_version';
 import type { ChatClock } from './chat_timestamp';
 import { markDialogRoot } from './dialog_root';
 import { esc } from './esc';
@@ -391,6 +392,13 @@ export class OptionsWindow {
       list.appendChild(b);
     }
     el.appendChild(list);
+    // Running build, as small secondary text at the foot of the menu, so players can
+    // confirm their version without leaving the settings window (issue 1541).
+    const { version, build } = appVersionInfo();
+    const ver = document.createElement('div');
+    ver.className = 'opt-version';
+    ver.textContent = t('hudChrome.options.version', { version, build });
+    el.appendChild(ver);
     el.querySelector('[data-close]')?.addEventListener('click', () => this.close());
   }
 
@@ -467,11 +475,14 @@ export class OptionsWindow {
     // screen reader announces the human-meaningful value (50%, 90 degrees) instead
     // of the raw stored number. The native range already exposes role=slider plus
     // aria-valuenow/min/max from value/min/max, so only valuetext needs setting.
-    const syncReadout = () => {
-      const text = fmt(hooks.settings.get(key));
+    const applyReadout = (text: string) => {
       val.textContent = text;
       slider.setAttribute('aria-valuetext', text);
     };
+    const syncReadout = () => applyReadout(fmt(hooks.settings.get(key)));
+    // The raw slider position, for the live readout while dragging a commit-on-change
+    // slider (the store is not written until release, so syncReadout would be stale).
+    const readoutFromSlider = () => applyReadout(fmt(Number(slider.value)));
     syncReadout();
     // Paint a gold fill up to the current value on every engine (CSS alone can't
     // read the value; --range-fill drives the webkit track gradient and Firefox's
@@ -487,11 +498,26 @@ export class OptionsWindow {
       );
     };
     paintFill();
-    slider.addEventListener('input', () => {
+    // Commit the setting (from the raw slider value), then sync the readout + fill.
+    const commit = () => {
       hooks.onSettingChange(key, sliderDispatchValue(slider.value));
       syncReadout();
       paintFill();
-    });
+    };
+    if (c.commitOnChange) {
+      // Apply on release. 'input' (drag / each keyboard step) only previews the
+      // readout + fill, so the setting (and any live UI rescale it drives) does not
+      // fire until 'change' (pointer release / touchend, and per keyboard step,
+      // which emits both events). This keeps the uiScale slider from rescaling the
+      // window under the cursor mid-drag (issue 1558).
+      slider.addEventListener('input', () => {
+        readoutFromSlider();
+        paintFill();
+      });
+      slider.addEventListener('change', commit);
+    } else {
+      slider.addEventListener('input', commit);
+    }
     row.append(name, slider, val);
     parent.appendChild(row);
   }
