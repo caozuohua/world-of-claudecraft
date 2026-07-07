@@ -142,6 +142,7 @@ const UI_PURE_CORES = [
   'src/ui/weapon_proc_view.ts',
   'src/ui/options_view.ts',
   'src/ui/vendor_view.ts',
+  'src/ui/heroic_vendor_view.ts',
   'src/ui/loot_settings_view.ts',
   'src/ui/crafting_view.ts',
   'src/ui/market_view.ts',
@@ -151,6 +152,12 @@ const UI_PURE_CORES = [
   'src/ui/map_window_view.ts',
   'src/ui/map_quest_list_view.ts',
   'src/ui/arena_window_view.ts',
+  'src/ui/vale_cup_window_view.ts',
+  'src/ui/vale_cup_indicator_view.ts',
+  'src/ui/vale_cup_hud_view.ts',
+  'src/ui/vale_cup_briefing_view.ts',
+  'src/ui/vale_cup_betting_view.ts',
+  'src/ui/vale_cup_charge_view.ts',
   'src/ui/leaderboard_view.ts',
   'src/ui/guild_leaderboard_view.ts',
   'src/ui/dev_leaderboard_view.ts',
@@ -190,6 +197,7 @@ const UI_PURE_CORES = [
 const RENDER_PURE_CORES = [
   'src/render/cast_bar.ts',
   'src/render/nameplate_view.ts',
+  'src/render/net_interp_core.ts',
   'src/render/terrain_region_core.ts',
   'src/render/water_core.ts',
 ].map((rel) => join(repoRoot, rel));

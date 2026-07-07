@@ -26,6 +26,7 @@
 // sibling targeting module are imported directly (already pure); everything that
 // touches not-yet-extracted Sim state routes through the seam.
 
+import { VALE_CUP_BALL_TEMPLATE_ID } from '../content/vale_cup';
 import { DUNGEON_X_THRESHOLD, MOBS } from '../data';
 import { resetDrownedLitanyBossEncounter } from '../delves/drowned_litany_boss';
 import { PLAYER_BODY_RADIUS, PLAYER_SWIM_DEPTH } from '../pathfind';
@@ -43,6 +44,7 @@ import {
   NYTHRAXIS_ADD_ID,
   NYTHRAXIS_BOSS_ID,
   SISTER_NHALIA_BOSS_ID,
+  steadyAngleTo,
   TOLLING_BELL_TEMPLATE_ID,
   type Vec3,
 } from '../types';
@@ -105,6 +107,19 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
   // by the boss driver: no aggro, no wander, no evade-home, and the hostility
   // safety net below must not re-hostile them.
   if (mob.templateId === TOLLING_BELL_TEMPLATE_ID) {
+    mob.hostile = false;
+    mob.aiState = 'idle';
+    mob.inCombat = false;
+    mob.aggroTargetId = null;
+    clearThreat(mob);
+    return;
+  }
+
+  // The Vale Cup boarball is moved exclusively by the match driver
+  // (social/vale_cup.ts): no aggro, no wander (an idle wander would also draw
+  // rng inside golden-scenario ticks), no evade-home, and the hostility safety
+  // net below must not re-hostile it. Bell pattern, verbatim.
+  if (mob.templateId === VALE_CUP_BALL_TEMPLATE_ID) {
     mob.hostile = false;
     mob.aiState = 'idle';
     mob.inCombat = false;
@@ -298,7 +313,7 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
       }
       // Run directly away from the attacker. A root pins it in place (it just
       // cowers facing away); a stun is already handled by the early return above.
-      const away = angleTo(target.pos, mob.pos);
+      const away = steadyAngleTo(target.pos, mob.pos, mob.facing);
       mob.facing = away;
       if (!ctx.isRooted(mob)) {
         const fleePos = ctx.groundPos(
@@ -351,7 +366,11 @@ function runMobAttackMechanics(ctx: SimContext, mob: Entity): void {
       for (const meta of ctx.players.values()) {
         const pe = ctx.entities.get(meta.entityId);
         if (pe && !pe.dead && dist2d(pe.pos, mob.pos) <= pulse.radius) {
-          const dmg = Math.round(ctx.rng.range(pulse.min, pulse.max));
+          // Heroic scaling multiplies AFTER the draw so the rng stream is
+          // identical across difficulties (mechanicDamageMult, difficulty.ts).
+          const dmg = Math.round(
+            ctx.rng.range(pulse.min, pulse.max) * (mob.mechanicDamageMult ?? 1),
+          );
           ctx.dealDamage(mob, pe, dmg, false, school, pulse.name, 'hit', true);
         }
       }
@@ -377,7 +396,9 @@ function runMobAttackMechanics(ctx: SimContext, mob: Entity): void {
         const pe = ctx.entities.get(meta.entityId);
         if (!pe || pe.dead || dist2d(pe.pos, mob.pos) > stomp.radius) continue;
         if (stomp.min !== undefined && stomp.max !== undefined) {
-          const dmg = Math.round(ctx.rng.range(stomp.min, stomp.max));
+          const dmg = Math.round(
+            ctx.rng.range(stomp.min, stomp.max) * (mob.mechanicDamageMult ?? 1),
+          );
           ctx.dealDamage(mob, pe, dmg, false, school, stomp.name, 'hit', true);
         }
         if (pe.dead) continue; // a fatal slam should not also stun the corpse
@@ -418,7 +439,9 @@ function runMobAttackMechanics(ctx: SimContext, mob: Entity): void {
         for (const meta of ctx.players.values()) {
           const pe = ctx.entities.get(meta.entityId);
           if (pe && !pe.dead && dist2d(pe.pos, mob.pos) <= bigCast.radius) {
-            const dmg = Math.round(ctx.rng.range(bigCast.min, bigCast.max));
+            const dmg = Math.round(
+              ctx.rng.range(bigCast.min, bigCast.max) * (mob.mechanicDamageMult ?? 1),
+            );
             ctx.dealDamage(mob, pe, dmg, false, school, bigCast.name, 'hit', true);
           }
         }
@@ -458,7 +481,7 @@ function runMobAttackMechanics(ctx: SimContext, mob: Entity): void {
         kind: 'absorb',
         remaining: stoneskin.duration,
         duration: stoneskin.duration,
-        value: stoneskin.amount,
+        value: Math.round(stoneskin.amount * (mob.mechanicHealMult ?? 1)),
         sourceId: mob.id,
         school,
       });
