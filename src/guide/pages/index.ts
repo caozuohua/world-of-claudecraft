@@ -26,6 +26,7 @@ import { social } from './social';
 import { stats } from './stats';
 import { talents } from './talents';
 import type { GuidePage, PageContext } from './types';
+import { valeCup } from './vale_cup';
 import { wishIKnew } from './wish_i_knew';
 import { world } from './world';
 
@@ -47,6 +48,7 @@ const PAGES: Record<string, GuidePage> = {
   dungeons,
   delves,
   arena,
+  'vale-cup': valeCup,
   combat,
   stats,
   progression,

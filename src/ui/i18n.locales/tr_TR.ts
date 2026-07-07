@@ -621,6 +621,7 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.thunzharr_stormling.name': 'Uyanmış Fırtına Dölü',
   'entities.mobs.thunzharr_waking_peak.name': 'Thunzharr, Uyanan Zirve',
   'entities.mobs.tolling_bell.name': 'Çalan Çan',
+  'entities.mobs.vale_cup_ball.name': 'Yaban Domuzu Topu',
   'entities.npcs.brother_halven_marsh.greeting':
     'İz kuzeye çıktı. Bir emanetlik daha, bir ayin daha. Kademeni seç, sen dönene dek ipi ben tutarım.',
   'entities.npcs.brother_halven_marsh.name': 'Birader Halven',

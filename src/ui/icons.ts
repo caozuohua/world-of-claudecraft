@@ -2319,6 +2319,17 @@ const ABILITY_RECIPES: Record<string, IconRecipe> = {
   concussive_shot: r('storm', 'sky', ['arrow'], ['arcs']),
   mongoose_bite: r('earth', 'steel', ['fang', { p: 'claw_slash', ...BR }], ['motion']),
   wing_clip: r('earth', 'blood', ['wing', { p: 'claw_slash', ...BR }]),
+  // the Vale Cup sport kit (boarball): the 'coin' disc reads as the ball
+  sport_kick: r('earth', 'leather', ['coin', { p: 'boot', ...BR }]),
+  sport_shoot: r('fury', 'ember', ['coin', { p: 'boot', ...BR }], ['motion']),
+  sport_pass: r('nature', 'gold', ['coin', { p: 'boot', ...TL }], ['motion']),
+  sport_boot: r('fury', 'gold', ['coin', { p: 'boot', ...BR }], ['motion']),
+  sport_hoof: r('fury', 'steel', ['boot', { p: 'coin', ...TR }], ['arcs']),
+  sport_punt: r('nature', 'leafGreen', ['coin', { p: 'sunburst', ...TL }], ['motion']),
+  sport_feint: r('shadow', 'steel', ['boot'], ['arcs']),
+  sport_dive: r('earth', 'leather', ['gauntlet', { p: 'coin', ...TR }], ['motion']),
+  sport_shoulder: r('fury', 'steel', ['pauldron', { p: 'claw_slash', ...BR }]),
+  sport_second_wind: r('nature', 'leafGreen', ['boot', { p: 'leaf', ...TR }], ['glow']),
   // priest
   smite: r('holy', 'holyGold', ['bolt', { p: 'sunburst', ...TL }], ['glow']),
   lesser_heal: r('holy', 'silverWhite', ['cross'], ['glow']),

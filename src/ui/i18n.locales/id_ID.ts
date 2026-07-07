@@ -624,6 +624,7 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.thunzharr_stormling.name': 'Anak Badai Terjaga',
   'entities.mobs.thunzharr_waking_peak.name': 'Thunzharr, Puncak yang Terjaga',
   'entities.mobs.tolling_bell.name': 'Lonceng Berdentang',
+  'entities.mobs.vale_cup_ball.name': 'Bola Babi Hutan',
   'entities.npcs.brother_halven_marsh.greeting':
     'Jejak itu menuntun ke utara. Relikuari lain, ritus lain. Pilih tingkat kesulitanmu, dan aku akan memegangi talinya sampai kau kembali.',
   'entities.npcs.brother_halven_marsh.name': 'Bruder Halven',

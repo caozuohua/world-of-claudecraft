@@ -392,7 +392,144 @@ export const ko_KR: EnTranslations = {
       "emoteWheel": "감정 표현 휠",
       "targetFriendly": "가장 가까운 아군 대상 지정",
       "targetFriendlyNext": "아군 대상 순환",
-      "discord": "Discord"
+      "discord": "Discord",
+      "valecup": "베일 컵"
+    },
+    "vcup": {
+      "title": "베일 컵",
+      "shootPower": "POWER",
+      "close": "베일 컵 창 닫기",
+      "offlineNote": "대진표가 닫혀 있습니다. 지금은 베일 컵을 이용할 수 없습니다.",
+      "recordLine": "전적: {wins}승 {losses}패 {draws}무.",
+      "bracketsAria": "경기 등급",
+      "bracketLabel": "{n}대{n}",
+      "waitingCount": "{count}명 대기 중",
+      "nationsHeading": "깃발 국가",
+      "nation": {
+        "vale": "이스트브룩 골짜기",
+        "mirefen": "마이어펜",
+        "thornpeak": "쏜피크",
+        "coliseum": "잿빛 원형경기장",
+        "choir": "창백한 성가대",
+        "ogre": "오우거 부족",
+        "moon": "창백한 달",
+        "copperdig": "구리 광산"
+      },
+      "awayNote": "양 팀이 같은 깃발을 선택하면 원정 팀이 반전 배색으로 경기합니다.",
+      "rolesHeading": "포지션",
+      "role": {
+        "allrounder": {
+          "name": "올라운더",
+          "desc": "조금씩 다 합니다: 킥, 롱킥, 그리고 정당한 어깨싸움."
+        },
+        "striker": {
+          "name": "스트라이커",
+          "desc": "롱킥과 재빠른 사이드스텝에 사는 포지션."
+        },
+        "sweeper": {
+          "name": "스위퍼",
+          "desc": "공을 가진 상대를 밀쳐내고 멀리 걷어냅니다."
+        },
+        "keeper": {
+          "name": "키퍼",
+          "desc": "캐치, 다이빙, 펀트로 골 지역을 지킵니다."
+        }
+      },
+      "queue": "대기열 참가",
+      "leaveQueue": "대기열 떠나기",
+      "queueNote": "어디서든 줄을 설 수 있습니다. 휘슬이 울리면 소우필드로 부릅니다.",
+      "queuedStatus": "{bracket} 대기 중: {count}명 중 {position}번째.",
+      "blockNation": "먼저 깃발 국가를 선택하세요.",
+      "blockPartySize": "해당 등급에는 더 작은 파티가 필요합니다.",
+      "blockNotLeader": "파티장만 팀을 대기열에 올릴 수 있습니다.",
+      "inMatchNote": "당신의 팀이 경기장에 있습니다. 계속 뛰세요!",
+      "deserterNote": "경기장 관리인은 기억하고 있습니다. {seconds}초 후에 다시 줄을 설 수 있습니다.",
+      "liveHeading": "지금 소우필드에서는",
+      "liveAria": "베일 컵: {nationA} {scoreA}, {nationB} {scoreB}",
+      "walkUp": "소우필드로 걸어가 관중석에서 관전하세요.",
+      "noLive": "경기장이 조용합니다. 진행 중인 경기가 없습니다.",
+      "boardHeading": "우승자 명판",
+      "boardEmpty": "아직 기록된 우승자가 없습니다. 구리 들통이 기다립니다.",
+      "boardWins": "{count}승",
+      "enterAsGuild": "{guild} 깃발 아래 출전",
+      "guildRecordLine": "길드 전적: {wins}승 {losses}패.",
+      "guildBoardHeading": "길드 깃발",
+      "guildBoardEmpty": "아직 출전한 길드가 없습니다. 깃발을 올리세요!",
+      "guildBoardWl": "{wins} W, {losses} L",
+      "practice": "봇 연습 경기",
+      "practiceNote": "소우필드에서 봇과의 정식 경기를 즉시 시작합니다.",
+      "practicingNow": "연습 중 ({count}):",
+      "clock": "{minutes}:{seconds}",
+      "indicatorQueued": "베일 컵 대기열: {bracket}, {count}명 중 {position}번째",
+      "indicatorLive": "베일 컵",
+      "indicatorOpen": "베일 컵 창 열기",
+      "phaseCountdown": "킥오프까지 {seconds}",
+      "phaseGoal": "골!",
+      "phaseGolden": "골든골",
+      "phaseOver": "경기 종료",
+      "bannerFound": "베일 컵이 부릅니다: {nationA} 대 {nationB}!",
+      "bannerCountdown": "킥오프까지 {seconds}초...",
+      "bannerKickoff": "킥오프!",
+      "bannerGoal": "골! {nation}의 득점!",
+      "bannerSave": "{name}의 선방!",
+      "bannerGolden": "골든골: 다음 득점이 승부를 가릅니다!",
+      "bannerEnd": "경기 종료: {nationA} {scoreA}, {nationB} {scoreB}",
+      "bannerWin": "소우필드의 승리!",
+      "bannerDraw": "소우필드의 한판이 무승부로 끝났습니다.",
+      "bannerLoss": "소우필드에서의 패배.",
+      "logQueued": "{bracket} 베일 컵 대기열에 참가했습니다({position}번째).",
+      "logUnqueued": "베일 컵 대기열에서 나왔습니다.",
+      "logFound": "베일 컵 경기가 준비되었습니다: {nationA} 대 {nationB}.",
+      "logRoster": "아군: {allies}. 상대: {enemies}.",
+      "logGoal": "{name}, {nation}을(를) 위한 득점! {nationA} {scoreA}, {nationB} {scoreB}.",
+      "logSave": "{name}의 선방!",
+      "logWin": "소우필드의 한판에서 승리했습니다.",
+      "logDraw": "소우필드의 한판이 무승부로 끝났습니다.",
+      "logLoss": "소우필드의 한판에서 패배했습니다.",
+      "gossipOpen": "대진표",
+      "gossipOpenAria": "베일 컵 창 열기",
+      "mobileLabel": "컵",
+      "briefing": {
+        "subtitle": "경기 전 브리핑",
+        "vs": "대",
+        "rulesHeading": "플레이 방법",
+        "rule1": "공을 상대 골대에 차거나 패스해 득점하세요.",
+        "rule2": "먼저 5골을 넣으면 승리, 종료 시 더 많이 넣은 쪽이 승리.",
+        "rule3": "종료 시 동점이면 골든골, 다음 득점자가 승리합니다.",
+        "rule4": "태클은 넘어뜨릴 뿐, 추수 휴전으로 아무도 다치지 않습니다.",
+        "rule5": "누구나 다가와 관중석에서 응원할 수 있습니다.",
+        "kitHeading": "내 기술",
+        "kitNote": "경기 동안 이 동작들이 직업 능력을 대신합니다.",
+        "rosterHeading": "출전 명단",
+        "you": "나",
+        "bot": "봇",
+        "ready": "준비 완료",
+        "readyDone": "준비됨",
+        "readyAria": "킥오프 준비",
+        "waiting": "상대편의 준비를 기다리는 중...",
+        "whistle": "{seconds}초 후 휘슬이 울립니다.",
+        "readyCount": "준비 완료 {ready}/{total}"
+      },
+      "bet": {
+        "title": "경기 베팅",
+        "aria": "베일 컵 경기 베팅",
+        "closesIn": "{seconds}초 후 베팅 마감",
+        "closed": "베팅 마감",
+        "prize": "상금 풀 {amount}",
+        "splitAria": "양 팀 베팅 풀 비율",
+        "expand": "베팅 보기 및 걸기",
+        "collapse": "베팅 숨기기",
+        "oddsLabel": "배당",
+        "back": "{team} 베팅",
+        "form": "{wins}승-{losses}패",
+        "mine": "내 베팅: {amount}, {team}",
+        "none": "아직 이 경기에 베팅하지 않았습니다.",
+        "record": "베팅 전적: {wins}승-{losses}패, {sign}{net}",
+        "wonBanner": "베팅 적중!",
+        "wonLog": "베일 컵 베팅 적중: {amount} 반환.",
+        "lostLog": "베일 컵 베팅 실패: {amount}.",
+        "refundLog": "베팅 무효, 베팅금 {amount} 반환."
+      }
     },
     "options": {
       "clickMoveLeft": "왼쪽 클릭",
@@ -1374,6 +1511,7 @@ export const ko_KR: EnTranslations = {
       "combat": "전투",
       "talents": "특성",
       "arena": "투기장과 PvP",
+      "valeCup": "베일 컵",
       "glossary": "용어집",
       "wishIKnew": "미리 알았으면 좋았을 것들",
       "faq": "자주 묻는 질문",
@@ -2028,6 +2166,32 @@ export const ko_KR: EnTranslations = {
       "powerupsBody": "빛나는 구슬이 전투 도중 투기장 안으로 떨어지기도 하며, 먼저 닿는 사람이 임자입니다. 일부러 과장되게 만들어졌고 효과는 잠깐뿐입니다. 눈이 멀 듯한 속도를 주는 스피드 데몬, 굼뜬 거인으로 부풀어 오르는 콜로서스, 저중력으로 통통 튀어 오르게 하는 문 부츠, 그리고 분노가 한순간에 폭발하는 버서커가 있습니다.",
       "ladderHeading": "순위 올리기",
       "ladderBody": "등급전은 시간이 지나며 당신의 순위를 기록합니다. 순위표를 확인해 자신의 위치와 서버 정상에 오른 이가 누구인지 살펴보세요."
+    },
+    "valeCupPage": {
+      "heading": "베일 컵",
+      "intro": "소우필드의 보어볼: 깃발을 고르고 포지션을 골라, 짚을 채운 멧돼지 가죽 공을 키퍼 너머로 차 넣고 구리 들통을 노리세요. 피도 전리품도 없이, 오직 관중석의 함성뿐.",
+      "loreHeading": "보어볼과 수확 휴전",
+      "loreOldSow": "망자들이 깨어나기 훨씬 전, 이스트브룩의 농부들은 수확이 끝난 그루터기 밭에서 보어볼을 즐겼습니다. 두 무리, 짚을 채운 멧돼지 가죽 하나, 그리고 풀밭 양 끝으로 끌어다 놓은 짐마차 문 두 짝. 첫 번째 공 \"올드 소우\"는 청동을 입고 선술집 벽난로 위에 걸려 있습니다.",
+      "loreTruce": "잿빛 원형경기장이 전쟁 경기를 공인하기 시작하자 레드브룩 원수는 더 온화한 것으로 답했습니다. 옛 풀밭에 상시 수확 휴전을 선포한 것입니다. 짐마차 문은 골대가 되었고, 풀밭에는 담장과 관중석, 그리고 \"소우필드\"라는 이름이 생겼습니다. 상품은 언제나 같았습니다. 우승자들이 돌려 마시던 찌그러진 우유통, 구리 들통입니다.",
+      "howHeading": "경기 방법",
+      "howQueue": "베일 컵 창으로 어디서든 줄을 서거나, 소우필드 정문의 경기장 관리인 브람에게 말을 거세요. 1대1부터 5대5까지의 등급과 깃발 국가, 포지션을 고르고, 혼자든 파티든 참가할 수 있습니다.",
+      "howMatch": "킥오프와 함께 직업 기술이 스포츠 키트로 바뀌고 경기 후 정확히 복원됩니다. 킥은 지면 조준점으로 겨냥하고, 공은 펜스에 튕기며, 드리블은 공과 함께 달리는 것뿐입니다. 종료 전까지 상대보다 많이 득점하세요. 무승부면 골든골로 이어집니다.",
+      "howTruce": "소우필드에서는 아무도 피 흘리지 않습니다. 태클은 구르게 할 뿐 아무것도 다치게 하지 않고, 펫은 경기 동안 쉬어 갑니다.",
+      "spectateBody": "경기장에서는 한 번에 한 경기만 열리며, 누구나 걸어와 관중석에서 관전할 수 있습니다.",
+      "nationsHeading": "여덟 깃발 국가",
+      "nationsBody": "모든 팀은 깃발 아래에서 경기합니다. 주장이 국가를 고르며, 양측이 같은 깃발을 들면 원정 팀이 반전 배색으로 뜁니다.",
+      "nationVale": "초록과 금, 밀단 깃발: 뼛속까지 농사꾼인 홈 팀.",
+      "nationMirefen": "청록과 회색, 왜가리 아래: 참을성 있고, 다리 길고, 서두르지 않는다.",
+      "nationThornpeak": "얼음빛 파랑과 하양, 산봉우리 아래: 발걸음이 굳세고 고집이 세다.",
+      "nationColiseum": "빨강과 검정, 교차한 검: 아직도 전쟁 경기인 줄 알고 뛴다.",
+      "nationChoir": "옅은 파랑과 은빛, 종 아래: 으스스하고 정밀하며 아주 조용하다.",
+      "nationOgre": "주황과 암갈색, 주먹을 앞세워: 어깨부터 들이밀고 그걸 자랑한다.",
+      "nationMoon": "보라와 은빛, 초승달 아래: 밤의 선수들, 발놀림이 가볍다.",
+      "nationCopperdig": "구리빛과 갈색, 곡괭이와 함께: 쉬지 않고 달리는 광부들.",
+      "rolesHeading": "포지션",
+      "rolesBody": "포지션이 경기장에 들고 갈 키트를 정합니다. 누구나 공을 찹니다. 나머지는 기질의 문제입니다.",
+      "rewardsHeading": "휴전 규칙",
+      "rewardsBody": "휴전 규칙이란 경험치도 전리품도 없다는 뜻입니다. 승부가 난 경기는 전적과 우승자 명판에 기록되고 일일 보상 점수가 따라옵니다. 경기를 버리면 자리가 비고, 경기장 관리인은 기억합니다."
     },
     "wishPage": {
       "heading": "미리 알았으면 좋았을 것들",
@@ -4730,6 +4894,46 @@ export const ko_KR: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "sport_kick": {
+        "name": "킥",
+        "description": "조준 지점을 향해 공을 땅볼로 차 보냅니다."
+      },
+      "sport_shoot": {
+        "name": "슛",
+        "description": "길게 눌러 힘을 모으고 놓아서 슛. 힘이 너무 세면 골대를 넘어갑니다."
+      },
+      "sport_pass": {
+        "name": "패스",
+        "description": "지정한 팀원에게 힘 있는 패스를 굴려 주며, 달리는 길목으로 이어 줍니다."
+      },
+      "sport_boot": {
+        "name": "빅 부트",
+        "description": "조준 지점을 향해 길게 띄워 차는 킥. 관중이 열광합니다."
+      },
+      "sport_hoof": {
+        "name": "걷어내기",
+        "description": "공을 낮고 강하게 전방으로 후려칩니다."
+      },
+      "sport_punt": {
+        "name": "롱 펀트",
+        "description": "골키퍼의 펀트, 높고 멀리 날아갑니다."
+      },
+      "sport_feint": {
+        "name": "페인트",
+        "description": "조준 지점을 향한 재빠른 사이드스텝 돌진."
+      },
+      "sport_dive": {
+        "name": "다이빙",
+        "description": "조준 지점을 향해 몸을 날립니다. 가로지르는 공이 몸에 붙습니다."
+      },
+      "sport_shoulder": {
+        "name": "어깨 밀치기",
+        "description": "수확 휴전 규칙에 맞는 정당한 어깨싸움. 상대를 공에서 밀쳐 넘어뜨립니다."
+      },
+      "sport_second_wind": {
+        "name": "재도약",
+        "description": "기운을 되찾습니다: 4초 동안 이동 속도가 50% 증가합니다."
+      },
       "flamestrike": {
         "name": "화염 폭발",
         "description": "지정한 지역에 화염 폭발을 일으켜 폭발 범위 안의 적에게 {damage}의 화염 피해를 입힙니다."
@@ -6871,6 +7075,9 @@ export const ko_KR: EnTranslations = {
       "tolling_bell": {
         "name": "울리는 종"
       },
+      "vale_cup_ball": {
+        "name": "멧돼지 가죽 공"
+      },
       "thunzharr_waking_peak": {
         "name": "천자르, 깨어나는 봉우리"
       },
@@ -7111,6 +7318,11 @@ export const ko_KR: EnTranslations = {
         "name": "영혼 치유사",
         "title": "죽은 자의 수호자",
         "greeting": "편히 쉬게, 영혼이여. 그대를 육신으로 돌려보낼 수 있으나, 돌아오는 길은 그대를 약하게 만들 것이네."
+      },
+      "groundskeeper_bram": {
+        "name": "경기장 관리인 브람",
+        "title": "소우필드의 관리인",
+        "greeting": "소우필드에서는 휴전이 지켜지고 있소, {className}. 발과 어깨만 쓸 수 있소. 구리 들통을 걸고 한판 하겠소?"
       },
       "tidewatcher_ondrel": {
         "name": "온드렐 베인",
@@ -8019,6 +8231,9 @@ export const ko_KR: EnTranslations = {
           },
           "9": {
             "label": "브라이트우드 숲"
+          },
+          "10": {
+            "label": "소우필드"
           }
         }
       },

@@ -392,7 +392,144 @@ export const zh_CN: EnTranslations = {
       "emoteWheel": "表情轮盘",
       "targetFriendly": "选中最近友方",
       "targetFriendlyNext": "切换友方目标",
-      "discord": "Discord"
+      "discord": "Discord",
+      "valecup": "溪谷杯"
+    },
+    "vcup": {
+      "title": "溪谷杯",
+      "shootPower": "POWER",
+      "close": "关闭溪谷杯窗口",
+      "offlineNote": "赛程簿已合上。溪谷杯目前不可用。",
+      "recordLine": "你的战绩：{wins} 胜，{losses} 负，{draws} 平。",
+      "bracketsAria": "比赛赛级",
+      "bracketLabel": "{n}对{n}",
+      "waitingCount": "{count} 人等待中",
+      "nationsHeading": "旗帜国度",
+      "nation": {
+        "vale": "东溪谷",
+        "mirefen": "泥沼",
+        "thornpeak": "荆峰",
+        "coliseum": "灰烬斗技场",
+        "choir": "苍白唱诗班",
+        "ogre": "食人魔氏族",
+        "moon": "苍白之月",
+        "copperdig": "铜矿坑"
+      },
+      "awayNote": "若双方举同一面旗帜，客队将使用反转配色。",
+      "rolesHeading": "运动位置",
+      "role": {
+        "allrounder": {
+          "name": "全能型",
+          "desc": "样样都会：踢球、长传，还有一记正当的肩撞。"
+        },
+        "striker": {
+          "name": "前锋",
+          "desc": "为大脚开球和灵巧侧身而生。"
+        },
+        "sweeper": {
+          "name": "清道夫",
+          "desc": "把持球者撞开，再把球大脚解围。"
+        },
+        "keeper": {
+          "name": "守门员",
+          "desc": "用抓球、扑救和长踢守住球门区。"
+        }
+      },
+      "queue": "加入队列",
+      "leaveQueue": "离开队列",
+      "queueNote": "随时随地排队；哨声会召唤你前往母猪场。",
+      "queuedStatus": "已排入 {bracket}：第 {position} 位，共 {count} 人。",
+      "blockNation": "请先选择一个旗帜国度。",
+      "blockPartySize": "这个赛级需要更小的队伍。",
+      "blockNotLeader": "只有队长才能为队伍排队。",
+      "inMatchNote": "你的队伍正在场上。继续比赛！",
+      "deserterNote": "场地管理员记着呢。{seconds} 秒后才能再次排队。",
+      "liveHeading": "母猪场现况",
+      "liveAria": "溪谷杯：{nationA} {scoreA}，{nationB} {scoreB}",
+      "walkUp": "走到母猪场，从看台上观赛。",
+      "noLive": "球场很安静。目前没有比赛。",
+      "boardHeading": "优胜者榜",
+      "boardEmpty": "尚无优胜记录。铜奶桶还在等待。",
+      "boardWins": "{count} 胜",
+      "enterAsGuild": "以 {guild} 的旗号参赛",
+      "guildRecordLine": "你的公会战绩：{wins} 胜，{losses} 负。",
+      "guildBoardHeading": "公会旗帜榜",
+      "guildBoardEmpty": "还没有公会上场。扬起你的旗帜吧！",
+      "guildBoardWl": "{wins} W, {losses} L",
+      "practice": "与机器人练习赛",
+      "practiceNote": "立即在母猪场开始一场完整的机器人比赛。",
+      "practicingNow": "正在练习（{count}）：",
+      "clock": "{minutes}:{seconds}",
+      "indicatorQueued": "溪谷杯队列：{bracket}，第 {position} 位，共 {count} 人",
+      "indicatorLive": "溪谷杯",
+      "indicatorOpen": "打开溪谷杯窗口",
+      "phaseCountdown": "{seconds} 秒后开球",
+      "phaseGoal": "进球！",
+      "phaseGolden": "金球制",
+      "phaseOver": "全场结束",
+      "bannerFound": "溪谷杯开赛：{nationA} 对阵 {nationB}！",
+      "bannerCountdown": "{seconds} 秒后开球...",
+      "bannerKickoff": "开球！",
+      "bannerGoal": "进球！{nation} 破门！",
+      "bannerSave": "{name} 扑救成功！",
+      "bannerGolden": "金球制：下一球定胜负！",
+      "bannerEnd": "全场结束：{nationA} {scoreA}，{nationB} {scoreB}",
+      "bannerWin": "母猪场的胜利！",
+      "bannerDraw": "母猪场的比赛以平局收场。",
+      "bannerLoss": "在母猪场落败。",
+      "logQueued": "你加入了 {bracket} 溪谷杯队列（第 {position} 位）。",
+      "logUnqueued": "你离开了溪谷杯队列。",
+      "logFound": "你的溪谷杯比赛已就绪：{nationA} 对阵 {nationB}。",
+      "logRoster": "你方：{allies}。对方：{enemies}。",
+      "logGoal": "{name} 为 {nation} 破门！{nationA} {scoreA}，{nationB} {scoreB}。",
+      "logSave": "{name} 完成扑救！",
+      "logWin": "你赢下了母猪场的这一战。",
+      "logDraw": "母猪场的这一战以平局告终。",
+      "logLoss": "你输掉了母猪场的这一战。",
+      "gossipOpen": "赛程簿",
+      "gossipOpenAria": "打开溪谷杯窗口",
+      "mobileLabel": "杯赛",
+      "briefing": {
+        "subtitle": "赛前简报",
+        "vs": "对",
+        "rulesHeading": "玩法",
+        "rule1": "把球踢或传进对方球门即可得分。",
+        "rule2": "先进 5 球者胜，或全场结束时进球最多者胜。",
+        "rule3": "全场打平则进入金球赛：下一个进球者获胜。",
+        "rule4": "铲球只会把人撞倒，没有人会受伤，丰收休战为证。",
+        "rule5": "任何人都可以走上前，在看台上为你助威。",
+        "kitHeading": "你的技能",
+        "kitNote": "比赛期间，这些动作将取代你的职业技能。",
+        "rosterHeading": "出场名单",
+        "you": "你",
+        "bot": "电脑",
+        "ready": "我准备好了",
+        "readyDone": "已准备",
+        "readyAria": "准备开球",
+        "waiting": "正在等待对方准备……",
+        "whistle": "开球哨将在 {seconds} 秒后吹响。",
+        "readyCount": "已准备 {ready}/{total}"
+      },
+      "bet": {
+        "title": "本场投注",
+        "aria": "溪谷杯比赛投注",
+        "closesIn": "{seconds} 秒后停止投注",
+        "closed": "投注已截止",
+        "prize": "奖池 {amount}",
+        "splitAria": "两队投注池占比",
+        "expand": "查看并下注",
+        "collapse": "收起投注",
+        "oddsLabel": "赔率",
+        "back": "押注 {team}",
+        "form": "{wins}胜-{losses}负",
+        "mine": "你的投注：{amount} 押 {team}",
+        "none": "你还没有在本场比赛下注。",
+        "record": "投注战绩：{wins}胜-{losses}负，{sign}{net}",
+        "wonBanner": "你赢了这注！",
+        "wonLog": "你的溪谷杯投注赢了：返还 {amount}。",
+        "lostLog": "你的溪谷杯投注输了：{amount}。",
+        "refundLog": "投注作废，已退还你的 {amount} 本金。"
+      }
     },
     "options": {
       "clickMoveLeft": "左键",
@@ -1374,6 +1511,7 @@ export const zh_CN: EnTranslations = {
       "combat": "战斗",
       "talents": "天赋",
       "arena": "竞技场与 PvP",
+      "valeCup": "溪谷杯",
       "glossary": "术语表",
       "wishIKnew": "我希望早点知道的事",
       "faq": "常见问题",
@@ -2028,6 +2166,32 @@ export const zh_CN: EnTranslations = {
       "powerupsBody": "激战正酣时，发光的能量球还会落入竞技场，谁先抢到便归谁。它们刻意夸张到极致，且只持续片刻：极速恶魔让你瞬间快得令人目眩，巨像将你膨胀成步履蹒跚的庞然大物，月靴带来低重力的弹跳腾跃，狂战士则让你猛然涌起一股暴怒。",
       "ladderHeading": "攀登天梯",
       "ladderBody": "排名对战会长期追踪你的排名。查看排行榜，看看你身处何处，以及谁占据着这片位面的榜首。"
+    },
+    "valeCupPage": {
+      "heading": "溪谷杯",
+      "intro": "母猪场上的野猪球：选一面旗帜、选一个位置，把塞满稻草的野猪皮球踢过守门员，去争夺铜奶桶。不流血，无战利品，只有看台的欢呼。",
+      "loreHeading": "野猪球与丰收休战",
+      "loreOldSow": "早在亡者苏醒之前，东溪的农工们就在收割后的麦茬地上玩野猪球：两群人，一张塞满稻草的野猪皮，和拖到绿地两端的两扇货车门。第一颗球，“老母猪”，如今镀铜挂在酒馆壁炉上方。",
+      "loreTruce": "当灰烬斗技场开始批准战争竞技时，红溪元帅以更温和的方式回应：在老绿地上立下长期的丰收休战。货车门变成了球门，绿地有了围墙、看台和一个名字：母猪场。而奖品始终是优胜者们共饮的那只瘪了的奶桶：铜奶桶。",
+      "howHeading": "怎么玩",
+      "howQueue": "通过溪谷杯窗口随处排队，或到母猪场大门找场地管理员布拉姆。选择从一对一到五对五的赛级、一面旗帜国度和一个运动位置；可以单排，也可以带上队伍。",
+      "howMatch": "开球时你的职业技能会被换成运动技能，赛后原样恢复。踢球以地面准星瞄准，球会在挡板上反弹，带球就是推着球跑。在全场结束前比对方进更多球；平局进入金球制。",
+      "howTruce": "母猪场上无人流血：铲抢只会让人翻滚，什么都不会造成伤害，宠物也会场外休息。",
+      "spectateBody": "球场同一时间只进行一场比赛，任何人都可以走到看台观赛。",
+      "nationsHeading": "八个旗帜国度",
+      "nationsBody": "每支队伍都在一面旗帜下比赛。队长选择国度；若双方举同一面旗，客队使用反转配色。",
+      "nationVale": "绿与金，扬着麦捆旗：主场球队，骨子里都是农工。",
+      "nationMirefen": "青与灰，苍鹭旗下：耐心、腿长、从不着急。",
+      "nationThornpeak": "冰蓝与白，山峰旗下：步伐稳健、性子倔强。",
+      "nationColiseum": "红与黑，交叉双剑：他们踢起球来仍像在打仗。",
+      "nationChoir": "淡蓝与银，铃铛旗下：诡异、精准、非常安静。",
+      "nationOgre": "橙与棕，铁拳当先：肩膀开路，并引以为豪。",
+      "nationMoon": "紫与银，弯月旗下：夜行的球员，脚步轻盈。",
+      "nationCopperdig": "铜与褐，别着镐头：跑不停歇的矿工。",
+      "rolesHeading": "运动位置",
+      "rolesBody": "你的位置决定你带上球场的技能。人人都会踢球；其余看性情。",
+      "rewardsHeading": "休战规矩",
+      "rewardsBody": "休战规矩意味着没有经验也没有战利品：一场分出胜负的比赛会计入你的战绩和优胜者榜，并附带每日奖励点数。中途弃赛会让你的位置空缺，而场地管理员记着呢。"
     },
     "wishPage": {
       "heading": "我希望早点知道的事",
@@ -4730,6 +4894,46 @@ export const zh_CN: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "sport_kick": {
+        "name": "踢球",
+        "description": "沿地面把球踢向瞄准点。"
+      },
+      "sport_shoot": {
+        "name": "射门",
+        "description": "按住蓄力，松手射门。力量过大球会飞高。"
+      },
+      "sport_pass": {
+        "name": "传球",
+        "description": "把球稳稳地传给你选定的队友，提前送到他的跑动路线上。"
+      },
+      "sport_boot": {
+        "name": "大脚开球",
+        "description": "朝瞄准点来一记高远长传。观众最爱这一脚。"
+      },
+      "sport_hoof": {
+        "name": "大脚解围",
+        "description": "把球又低又狠地轰向前场。"
+      },
+      "sport_punt": {
+        "name": "守门员长踢",
+        "description": "守门员的一记开球，又高又远。"
+      },
+      "sport_feint": {
+        "name": "假动作",
+        "description": "朝瞄准点快速侧身突进。"
+      },
+      "sport_dive": {
+        "name": "鱼跃扑救",
+        "description": "朝瞄准点飞身扑出。横传球会被你牢牢抱住。"
+      },
+      "sport_shoulder": {
+        "name": "肩撞",
+        "description": "一记符合丰收休战规矩的肩撞，把对手撞得摔离球。"
+      },
+      "sport_second_wind": {
+        "name": "重振旗鼓",
+        "description": "找回状态：移动速度提高50%，持续4秒。"
+      },
       "flamestrike": {
         "name": "烈焰风暴",
         "description": "在目标区域召唤一次烈焰爆发，对爆炸范围内的敌人造成 {damage} 点火焰伤害。"
@@ -6871,6 +7075,9 @@ export const zh_CN: EnTranslations = {
       "tolling_bell": {
         "name": "鸣钟"
       },
+      "vale_cup_ball": {
+        "name": "野猪皮球"
+      },
       "thunzharr_waking_peak": {
         "name": "桑扎尔，觉醒之峰"
       },
@@ -7111,6 +7318,11 @@ export const zh_CN: EnTranslations = {
         "name": "灵魂医者",
         "title": "亡者的守护者",
         "greeting": "安息吧，灵魂。我可以让你重返躯体，但归途会让你变得虚弱。"
+      },
+      "groundskeeper_bram": {
+        "name": "场地管理员布拉姆",
+        "title": "母猪场看守",
+        "greeting": "休战约定在母猪场依然有效，{className}：只许用脚和肩膀。想为铜奶桶一战吗？"
       },
       "tidewatcher_ondrel": {
         "name": "翁德雷尔·凡恩",
@@ -8019,6 +8231,9 @@ export const zh_CN: EnTranslations = {
           },
           "9": {
             "label": "明木林地"
+          },
+          "10": {
+            "label": "母猪场"
           }
         }
       },

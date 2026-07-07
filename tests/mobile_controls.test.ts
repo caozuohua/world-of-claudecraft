@@ -475,6 +475,7 @@ function mobileCallbacks() {
     onDonate: noop,
     onEmotes: noop,
     onArena: noop,
+    onValeCup: noop,
     onQuestLog: noop,
     onCharacter: noop,
     onBags: noop,

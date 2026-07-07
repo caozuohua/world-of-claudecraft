@@ -26,6 +26,7 @@
 // sibling targeting module are imported directly (already pure); everything that
 // touches not-yet-extracted Sim state routes through the seam.
 
+import { VALE_CUP_BALL_TEMPLATE_ID } from '../content/vale_cup';
 import { DUNGEON_X_THRESHOLD, MOBS } from '../data';
 import { resetDrownedLitanyBossEncounter } from '../delves/drowned_litany_boss';
 import { PLAYER_BODY_RADIUS, PLAYER_SWIM_DEPTH } from '../pathfind';
@@ -106,6 +107,19 @@ export function updateMob(ctx: SimContext, mob: Entity): void {
   // by the boss driver: no aggro, no wander, no evade-home, and the hostility
   // safety net below must not re-hostile them.
   if (mob.templateId === TOLLING_BELL_TEMPLATE_ID) {
+    mob.hostile = false;
+    mob.aiState = 'idle';
+    mob.inCombat = false;
+    mob.aggroTargetId = null;
+    clearThreat(mob);
+    return;
+  }
+
+  // The Vale Cup boarball is moved exclusively by the match driver
+  // (social/vale_cup.ts): no aggro, no wander (an idle wander would also draw
+  // rng inside golden-scenario ticks), no evade-home, and the hostility safety
+  // net below must not re-hostile it. Bell pattern, verbatim.
+  if (mob.templateId === VALE_CUP_BALL_TEMPLATE_ID) {
     mob.hostile = false;
     mob.aiState = 'idle';
     mob.inCombat = false;

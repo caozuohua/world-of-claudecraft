@@ -623,6 +623,7 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.thunzharr_stormling.name': 'Tinh Linh Bão Trỗi Dậy',
   'entities.mobs.thunzharr_waking_peak.name': 'Thunzharr, Đỉnh Núi Thức Giấc',
   'entities.mobs.tolling_bell.name': 'Chuông Ngân Vang',
+  'entities.mobs.vale_cup_ball.name': 'Bóng Da Heo Rừng',
   'entities.npcs.brother_halven_marsh.greeting':
     'Dấu vết dẫn về phương bắc. Lại một hộp thánh tích nữa, lại một nghi lễ nữa. Chọn độ khó của ngươi đi, và ta sẽ giữ dây thừng cho đến khi ngươi trở về.',
   'entities.npcs.brother_halven_marsh.name': 'Tu Huynh Halven',

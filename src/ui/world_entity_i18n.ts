@@ -94,6 +94,7 @@ const MOB_IDS = [
   'sister_nhalia_drowned_canticle',
   'edda_reedhand',
   'tolling_bell',
+  'vale_cup_ball',
   // Thornpeak Heights world boss + its summoned adds
   'thunzharr_waking_peak',
   'thunzharr_stormling',
@@ -125,6 +126,7 @@ const NPC_IDS = [
   'brother_halven', // Collapsed Reliquary delve board NPC
   'brother_halven_marsh', // Drowned Litany delve board NPC (same character, marsh camp)
   'spirit_healer', // the graveyard angel (spawned at every graveyard + dungeon entry)
+  'groundskeeper_bram', // Vale Cup queue master at the Sowfield gate (docs/prd/vale-cup.md)
 ] as const;
 
 const QUEST_IDS = [

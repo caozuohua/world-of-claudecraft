@@ -155,6 +155,13 @@ export const GUIDE_ROUTES: GuideRoute[] = [
     descKey: 'guide.arenaPage.intro',
   },
   {
+    id: 'vale-cup',
+    sub: 'vale-cup',
+    navKey: 'guide.nav.valeCup',
+    group: 'compendium',
+    descKey: 'guide.valeCupPage.intro',
+  },
+  {
     id: 'controls',
     sub: 'reference/controls',
     navKey: 'guide.nav.controls',

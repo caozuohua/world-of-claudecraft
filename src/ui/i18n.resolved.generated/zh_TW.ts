@@ -392,7 +392,144 @@ export const zh_TW: EnTranslations = {
       "emoteWheel": "表情輪盤",
       "targetFriendly": "選取最近友方",
       "targetFriendlyNext": "切換友方目標",
-      "discord": "Discord"
+      "discord": "Discord",
+      "valecup": "溪谷盃"
+    },
+    "vcup": {
+      "title": "溪谷盃",
+      "shootPower": "POWER",
+      "close": "關閉溪谷盃視窗",
+      "offlineNote": "賽程簿已闔上。溪谷盃目前無法使用。",
+      "recordLine": "你的戰績：{wins} 勝，{losses} 敗，{draws} 平。",
+      "bracketsAria": "比賽賽級",
+      "bracketLabel": "{n}對{n}",
+      "waitingCount": "{count} 人等待中",
+      "nationsHeading": "旗幟國度",
+      "nation": {
+        "vale": "東溪谷",
+        "mirefen": "泥沼",
+        "thornpeak": "荊峰",
+        "coliseum": "灰燼競技場",
+        "choir": "蒼白唱詩班",
+        "ogre": "食人魔氏族",
+        "moon": "蒼白之月",
+        "copperdig": "銅礦坑"
+      },
+      "awayNote": "若雙方舉同一面旗幟，客隊將使用反轉配色。",
+      "rolesHeading": "運動位置",
+      "role": {
+        "allrounder": {
+          "name": "全能型",
+          "desc": "樣樣都會：踢球、長傳，還有一記正當的肩撞。"
+        },
+        "striker": {
+          "name": "前鋒",
+          "desc": "為大腳開球和靈巧側身而生。"
+        },
+        "sweeper": {
+          "name": "清道夫",
+          "desc": "把持球者撞開，再把球大腳解圍。"
+        },
+        "keeper": {
+          "name": "守門員",
+          "desc": "用抓球、撲救和長踢守住球門區。"
+        }
+      },
+      "queue": "加入佇列",
+      "leaveQueue": "離開佇列",
+      "queueNote": "隨時隨地排隊；哨聲會召喚你前往母豬場。",
+      "queuedStatus": "已排入 {bracket}：第 {position} 位，共 {count} 人。",
+      "blockNation": "請先選擇一個旗幟國度。",
+      "blockPartySize": "這個賽級需要更小的隊伍。",
+      "blockNotLeader": "只有隊長才能為隊伍排隊。",
+      "inMatchNote": "你的隊伍正在場上。繼續比賽！",
+      "deserterNote": "場地管理員記著呢。{seconds} 秒後才能再次排隊。",
+      "liveHeading": "母豬場現況",
+      "liveAria": "溪谷盃：{nationA} {scoreA}，{nationB} {scoreB}",
+      "walkUp": "走到母豬場，從看台上觀賽。",
+      "noLive": "球場很安靜。目前沒有比賽。",
+      "boardHeading": "優勝者榜",
+      "boardEmpty": "尚無優勝紀錄。銅奶桶還在等待。",
+      "boardWins": "{count} 勝",
+      "enterAsGuild": "以 {guild} 的旗號參賽",
+      "guildRecordLine": "你的公會戰績：{wins} 勝，{losses} 敗。",
+      "guildBoardHeading": "公會旗幟榜",
+      "guildBoardEmpty": "還沒有公會上場。揚起你的旗幟吧！",
+      "guildBoardWl": "{wins} W, {losses} L",
+      "practice": "與機器人練習賽",
+      "practiceNote": "立即在母豬場開始一場完整的機器人比賽。",
+      "practicingNow": "正在練習（{count}）：",
+      "clock": "{minutes}:{seconds}",
+      "indicatorQueued": "溪谷盃佇列：{bracket}，第 {position} 位，共 {count} 人",
+      "indicatorLive": "溪谷盃",
+      "indicatorOpen": "開啟溪谷盃視窗",
+      "phaseCountdown": "{seconds} 秒後開球",
+      "phaseGoal": "進球！",
+      "phaseGolden": "黃金進球",
+      "phaseOver": "全場結束",
+      "bannerFound": "溪谷盃開賽：{nationA} 對戰 {nationB}！",
+      "bannerCountdown": "{seconds} 秒後開球...",
+      "bannerKickoff": "開球！",
+      "bannerGoal": "進球！{nation} 破門！",
+      "bannerSave": "{name} 撲救成功！",
+      "bannerGolden": "黃金進球：下一球定勝負！",
+      "bannerEnd": "全場結束：{nationA} {scoreA}，{nationB} {scoreB}",
+      "bannerWin": "母豬場的勝利！",
+      "bannerDraw": "母豬場的比賽以平手收場。",
+      "bannerLoss": "在母豬場落敗。",
+      "logQueued": "你加入了 {bracket} 溪谷盃佇列（第 {position} 位）。",
+      "logUnqueued": "你離開了溪谷盃佇列。",
+      "logFound": "你的溪谷盃比賽已就緒：{nationA} 對戰 {nationB}。",
+      "logRoster": "你方：{allies}。對方：{enemies}。",
+      "logGoal": "{name} 為 {nation} 破門！{nationA} {scoreA}，{nationB} {scoreB}。",
+      "logSave": "{name} 完成撲救！",
+      "logWin": "你贏下了母豬場的這一戰。",
+      "logDraw": "母豬場的這一戰以平手告終。",
+      "logLoss": "你輸掉了母豬場的這一戰。",
+      "gossipOpen": "賽程簿",
+      "gossipOpenAria": "開啟溪谷盃視窗",
+      "mobileLabel": "盃賽",
+      "briefing": {
+        "subtitle": "賽前簡報",
+        "vs": "對",
+        "rulesHeading": "玩法",
+        "rule1": "把球踢或傳進對方球門即可得分。",
+        "rule2": "先進 5 球者勝，或全場結束時進球最多者勝。",
+        "rule3": "全場打平則進入金球賽：下一個進球者獲勝。",
+        "rule4": "鏟球只會把人撞倒，沒有人會受傷，豐收休戰為證。",
+        "rule5": "任何人都可以走上前，在看台上為你加油。",
+        "kitHeading": "你的技能",
+        "kitNote": "比賽期間，這些動作將取代你的職業技能。",
+        "rosterHeading": "出場名單",
+        "you": "你",
+        "bot": "電腦",
+        "ready": "我準備好了",
+        "readyDone": "已準備",
+        "readyAria": "準備開球",
+        "waiting": "正在等待對方準備……",
+        "whistle": "開球哨將在 {seconds} 秒後吹響。",
+        "readyCount": "已準備 {ready}/{total}"
+      },
+      "bet": {
+        "title": "本場投注",
+        "aria": "溪谷盃比賽投注",
+        "closesIn": "{seconds} 秒後停止投注",
+        "closed": "投注已截止",
+        "prize": "獎池 {amount}",
+        "splitAria": "兩隊投注池佔比",
+        "expand": "查看並下注",
+        "collapse": "收起投注",
+        "oddsLabel": "賠率",
+        "back": "押注 {team}",
+        "form": "{wins}勝-{losses}負",
+        "mine": "你的投注：{amount} 押 {team}",
+        "none": "你還沒有在本場比賽下注。",
+        "record": "投注戰績：{wins}勝-{losses}負，{sign}{net}",
+        "wonBanner": "你贏了這注！",
+        "wonLog": "你的溪谷盃投注贏了：返還 {amount}。",
+        "lostLog": "你的溪谷盃投注輸了：{amount}。",
+        "refundLog": "投注作廢，已退還你的 {amount} 本金。"
+      }
     },
     "options": {
       "clickMoveLeft": "左鍵",
@@ -1374,6 +1511,7 @@ export const zh_TW: EnTranslations = {
       "combat": "戰鬥",
       "talents": "天賦",
       "arena": "競技場與PvP",
+      "valeCup": "溪谷盃",
       "glossary": "詞彙表",
       "wishIKnew": "我希望早點知道的事",
       "faq": "常見問題",
@@ -2028,6 +2166,32 @@ export const zh_TW: EnTranslations = {
       "powerupsBody": "戰鬥進行到一半，發光的能量球也會落入競技場，誰先搶到就歸誰。它們刻意設計得誇張過火，且只持續短短一陣子：速度惡魔讓你瞬間飆出令人目眩的步伐，巨像讓你脹大成笨重的巨人，月靴帶來低重力的彈跳躍動，狂戰士則是一股突如其來的暴怒之潮。",
       "ladderHeading": "在天梯上攀升",
       "ladderBody": "排名對戰會長期記錄你的名次。查看排行榜便能看到自己的位置，以及誰穩坐王國之巔。"
+    },
+    "valeCupPage": {
+      "heading": "溪谷盃",
+      "intro": "母豬場上的野豬球：選一面旗幟、選一個位置，把塞滿稻草的野豬皮球踢過守門員，去爭奪銅奶桶。不流血，無戰利品，只有看台的歡呼。",
+      "loreHeading": "野豬球與豐收休戰",
+      "loreOldSow": "早在亡者甦醒之前，東溪的農工們就在收割後的麥茬地上玩野豬球：兩群人，一張塞滿稻草的野豬皮，和拖到綠地兩端的兩扇貨車門。第一顆球「老母豬」，如今鍍銅掛在酒館壁爐上方。",
+      "loreTruce": "當灰燼競技場開始批准戰爭競技時，紅溪元帥以更溫和的方式回應：在老綠地上立下長期的豐收休戰。貨車門變成了球門，綠地有了圍牆、看台和一個名字：母豬場。而獎品始終是優勝者們共飲的那只癟了的奶桶：銅奶桶。",
+      "howHeading": "怎麼玩",
+      "howQueue": "透過溪谷盃視窗隨處排隊，或到母豬場大門找場地管理員布拉姆。選擇從一對一到五對五的賽級、一面旗幟國度和一個運動位置；可以單排，也可以帶上隊伍。",
+      "howMatch": "開球時你的職業技能會被換成運動技能，賽後原樣恢復。踢球以地面準星瞄準，球會在擋板上反彈，帶球就是推著球跑。在全場結束前比對方進更多球；平手進入黃金進球。",
+      "howTruce": "母豬場上無人流血：鏟搶只會讓人翻滾，什麼都不會造成傷害，寵物也會場外休息。",
+      "spectateBody": "球場同一時間只進行一場比賽，任何人都可以走到看台觀賽。",
+      "nationsHeading": "八個旗幟國度",
+      "nationsBody": "每支隊伍都在一面旗幟下比賽。隊長選擇國度；若雙方舉同一面旗，客隊使用反轉配色。",
+      "nationVale": "綠與金，揚著麥捆旗：主場球隊，骨子裡都是農工。",
+      "nationMirefen": "青與灰，蒼鷺旗下：耐心、腿長、從不著急。",
+      "nationThornpeak": "冰藍與白，山峰旗下：步伐穩健、性子倔強。",
+      "nationColiseum": "紅與黑，交叉雙劍：他們踢起球來仍像在打仗。",
+      "nationChoir": "淡藍與銀，鈴鐺旗下：詭異、精準、非常安靜。",
+      "nationOgre": "橙與棕，鐵拳當先：肩膀開路，並引以為傲。",
+      "nationMoon": "紫與銀，彎月旗下：夜行的球員，腳步輕盈。",
+      "nationCopperdig": "銅與褐，別著鎬頭：跑不停歇的礦工。",
+      "rolesHeading": "運動位置",
+      "rolesBody": "你的位置決定你帶上球場的技能。人人都會踢球；其餘看性情。",
+      "rewardsHeading": "休戰規矩",
+      "rewardsBody": "休戰規矩意味著沒有經驗也沒有戰利品：一場分出勝負的比賽會計入你的戰績和優勝者榜，並附帶每日獎勵點數。中途棄賽會讓你的位置空缺，而場地管理員記著呢。"
     },
     "wishPage": {
       "heading": "我希望早點知道的事",
@@ -4730,6 +4894,46 @@ export const zh_TW: EnTranslations = {
   },
   "entities": {
     "abilities": {
+      "sport_kick": {
+        "name": "踢球",
+        "description": "沿地面把球踢向瞄準點。"
+      },
+      "sport_shoot": {
+        "name": "射門",
+        "description": "按住蓄力，鬆手射門。力量過大球會飛高。"
+      },
+      "sport_pass": {
+        "name": "傳球",
+        "description": "把球穩穩地傳給你選定的隊友，提前送到他的跑動路線上。"
+      },
+      "sport_boot": {
+        "name": "大腳開球",
+        "description": "朝瞄準點來一記高遠長傳。觀眾最愛這一腳。"
+      },
+      "sport_hoof": {
+        "name": "大腳解圍",
+        "description": "把球又低又狠地轟向前場。"
+      },
+      "sport_punt": {
+        "name": "守門員長踢",
+        "description": "守門員的一記開球，又高又遠。"
+      },
+      "sport_feint": {
+        "name": "假動作",
+        "description": "朝瞄準點快速側身突進。"
+      },
+      "sport_dive": {
+        "name": "魚躍撲救",
+        "description": "朝瞄準點飛身撲出。橫傳球會被你牢牢抱住。"
+      },
+      "sport_shoulder": {
+        "name": "肩撞",
+        "description": "一記符合豐收休戰規矩的肩撞，把對手撞得摔離球。"
+      },
+      "sport_second_wind": {
+        "name": "重振旗鼓",
+        "description": "找回狀態：移動速度提高50%，持續4秒。"
+      },
       "flamestrike": {
         "name": "烈焰風暴",
         "description": "在目標區域召喚一次烈焰爆發，對爆炸範圍內的敵人造成 {damage} 點火焰傷害。"
@@ -6871,6 +7075,9 @@ export const zh_TW: EnTranslations = {
       "tolling_bell": {
         "name": "鳴鐘"
       },
+      "vale_cup_ball": {
+        "name": "野豬皮球"
+      },
       "thunzharr_waking_peak": {
         "name": "桑扎爾，覺醒之峰"
       },
@@ -7111,6 +7318,11 @@ export const zh_TW: EnTranslations = {
         "name": "靈魂醫者",
         "title": "亡者的守護者",
         "greeting": "安息吧，靈魂。我可以讓你重返軀體，但歸途會讓你變得虛弱。"
+      },
+      "groundskeeper_bram": {
+        "name": "場地管理員布拉姆",
+        "title": "母豬場看守",
+        "greeting": "休戰約定在母豬場依然有效，{className}：只許用腳和肩膀。想為銅奶桶一戰嗎？"
       },
       "tidewatcher_ondrel": {
         "name": "翁德瑞爾·韋恩",
@@ -8019,6 +8231,9 @@ export const zh_TW: EnTranslations = {
           },
           "9": {
             "label": "明木林地"
+          },
+          "10": {
+            "label": "母豬場"
           }
         }
       },

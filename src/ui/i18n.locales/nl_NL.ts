@@ -635,6 +635,7 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.thunzharr_stormling.name': 'Gewekte Stormling',
   'entities.mobs.thunzharr_waking_peak.name': 'Thunzharr, de Ontwakende Piek',
   'entities.mobs.tolling_bell.name': 'Luidende Klok',
+  'entities.mobs.vale_cup_ball.name': 'Zwijnenbal',
   'entities.npcs.brother_halven_marsh.greeting':
     'Het spoor leidde noordwaarts. Weer een reliekschrijn, weer een ritueel. Kies je moeilijkheid, en ik houd het touw vast tot je terugkeert.',
   'entities.npcs.brother_halven_marsh.name': 'Broeder Halven',

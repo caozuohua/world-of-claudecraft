@@ -625,6 +625,7 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.thunzharr_stormling.name': 'Väckt stormyngel',
   'entities.mobs.thunzharr_waking_peak.name': 'Thunzharr, den vaknande toppen',
   'entities.mobs.tolling_bell.name': 'Klämtande klocka',
+  'entities.mobs.vale_cup_ball.name': 'Vildsvinsboll',
   'entities.npcs.brother_halven_marsh.greeting':
     'Spåret ledde norrut. Ännu ett relikvarium, ännu en rit. Välj din svårighetsgrad, så håller jag repet tills du kommer tillbaka.',
   'entities.npcs.brother_halven_marsh.name': 'Broder Halven',

@@ -380,6 +380,173 @@ export const hudChromeStrings = {
     targetFriendlyNext: 'Cycle Friendly Target',
     // Discord is a brand name; it stays identical across locales.
     discord: 'Discord',
+    valecup: 'Vale Cup',
+  },
+  // The Vale Cup boarball minigame (docs/prd/vale-cup.md): the queue window,
+  // the persistent indicator button, the in-match score strip, and the event
+  // banners / log lines. Nation names are SHORT proper names; sport ability
+  // names/descriptions localize through the entity catalog
+  // (i18n.catalog/abilities.ts), not here.
+  vcup: {
+    title: 'The Vale Cup',
+    // Label on the hold-to-charge shoot power meter (short, uppercased in CSS).
+    shootPower: 'POWER',
+    close: 'Close the Vale Cup window',
+    offlineNote: 'The fixture book is closed. The Vale Cup is not available right now.',
+    recordLine: 'Your record: {wins} wins, {losses} losses, {draws} draws.',
+    bracketsAria: 'Match bracket',
+    // "3v3" style tab label; {n} is the team size.
+    bracketLabel: '{n}v{n}',
+    waitingCount: '{count} waiting',
+    nationsHeading: 'Banner nation',
+    nation: {
+      vale: 'Eastbrook Vale',
+      mirefen: 'The Mirefen',
+      thornpeak: 'Thornpeak',
+      coliseum: 'The Ashen Coliseum',
+      choir: 'The Pale Choir',
+      ogre: 'The Ogre Clans',
+      moon: 'The Pale Moon',
+      copperdig: 'The Copper Dig',
+    },
+    awayNote: 'If both sides fly the same banner, the away side plays the inverted palette.',
+    rolesHeading: 'Sport role',
+    role: {
+      allrounder: {
+        name: 'All-Rounder',
+        desc: 'A bit of everything: kick, boot, and a fair shoulder.',
+      },
+      striker: {
+        name: 'Striker',
+        desc: 'Lives for the long boot and the quick sidestep.',
+      },
+      sweeper: {
+        name: 'Sweeper',
+        desc: 'Bumps runners off the ball and hoofs it clear.',
+      },
+      keeper: {
+        name: 'Keeper',
+        desc: 'Guards the goal box with grip, dive, and punt.',
+      },
+    },
+    queue: 'Join the Queue',
+    leaveQueue: 'Leave the Queue',
+    queueNote: 'Queue from anywhere; the whistle calls you to the Sowfield.',
+    queuedStatus: 'Queued for {bracket}: position {position} of {count}.',
+    blockNation: 'Pick a banner nation first.',
+    blockPartySize: 'That bracket needs a smaller party.',
+    blockNotLeader: 'Only the party leader can queue the team.',
+    inMatchNote: 'Your team is on the pitch. Play on!',
+    deserterNote: 'The Groundskeeper remembers. You may queue again in {seconds} sec.',
+    liveHeading: 'Now at the Sowfield',
+    liveAria: 'Vale Cup: {nationA} {scoreA}, {nationB} {scoreB}',
+    walkUp: 'Walk up to the Sowfield to watch from the stands.',
+    noLive: 'The pitch is quiet. No match is being played.',
+    boardHeading: 'Winners board',
+    boardEmpty: 'No winners recorded yet. The Copper Pail waits.',
+    boardWins: '{count} wins',
+    // Guild banner entry + guild leaderboard.
+    enterAsGuild: 'Enter under the banner of {guild}',
+    guildRecordLine: 'Your guild record: {wins} wins, {losses} losses.',
+    guildBoardHeading: 'Guild banners',
+    guildBoardEmpty: 'No guild has taken the field yet. Fly your banner!',
+    guildBoardWl: '{wins} W, {losses} L',
+    practice: 'Practice vs. Bots',
+    practiceNote: 'Starts a private bot match on your own practice pitch right away.',
+    // Region indicator: players currently off in a private practice instance.
+    practicingNow: 'Practicing now ({count}):',
+    // mm:ss; {seconds} is pre-padded to two digits.
+    clock: '{minutes}:{seconds}',
+    // Persistent indicator button states.
+    indicatorQueued: 'Vale Cup queue: {bracket}, position {position} of {count}',
+    indicatorLive: 'Vale Cup',
+    indicatorOpen: 'Open the Vale Cup window',
+    // In-match strip phase line.
+    phaseCountdown: 'Kickoff in {seconds}',
+    phaseGoal: 'GOAL!',
+    phaseGolden: 'GOLDEN GOAL',
+    phaseOver: 'FULL TIME',
+    // Event banners (match theatre; also seen by walk-up spectators).
+    bannerFound: 'The Vale Cup calls: {nationA} vs {nationB}!',
+    bannerCountdown: 'Kickoff in {seconds}...',
+    bannerKickoff: 'KICKOFF!',
+    bannerGoal: 'GOAL! {nation} scores!',
+    bannerSave: '{name} SAVES!',
+    bannerGolden: 'GOLDEN GOAL: next score wins!',
+    bannerEnd: 'Full time: {nationA} {scoreA}, {nationB} {scoreB}',
+    bannerWin: 'Victory at the Sowfield!',
+    bannerDraw: 'A draw at the Sowfield.',
+    bannerLoss: 'Defeat at the Sowfield.',
+    // Chat-log lines.
+    logQueued: 'You join the Vale Cup queue for {bracket} (position {position}).',
+    logUnqueued: 'You leave the Vale Cup queue.',
+    logFound: 'Your Vale Cup match is ready: {nationA} vs {nationB}.',
+    logRoster: 'Your side: {allies}. Their side: {enemies}.',
+    logGoal: '{name} scores for {nation}! {nationA} {scoreA}, {nationB} {scoreB}.',
+    logSave: '{name} makes the save!',
+    logWin: 'You win the bout at the Sowfield.',
+    logDraw: 'The bout at the Sowfield ends in a draw.',
+    logLoss: 'You lose the bout at the Sowfield.',
+    // Groundskeeper Bram's gossip-menu entry.
+    gossipOpen: 'The book of fixtures',
+    gossipOpenAria: 'Open the Vale Cup window',
+    mobileLabel: 'Cup',
+    // Pre-match briefing overlay (the full-screen rules-and-kit card before kickoff).
+    briefing: {
+      subtitle: 'Pre-match briefing',
+      // The small "vs" glyph between the two banners in the header.
+      vs: 'vs',
+      rulesHeading: 'How to play',
+      rule1: 'Kick or pass the ball into the enemy goal to score.',
+      rule2: 'First to 5 goals wins, or the most goals when full time blows.',
+      rule3: 'A level match at full time goes to golden goal: the next score wins.',
+      rule4: 'Tackles only tumble you over. Nobody gets hurt under the harvest truce.',
+      rule5: 'Anyone can walk up and cheer you on from the stands.',
+      kitHeading: 'Your kit',
+      kitNote: 'These moves replace your class abilities for the match.',
+      rosterHeading: 'The team sheet',
+      // Row tags on the team sheet.
+      you: 'You',
+      bot: 'Bot',
+      // Ready button: its label, its readied-state label, and its accessible name.
+      ready: "I'm ready",
+      readyDone: 'Ready',
+      readyAria: 'Ready up for kickoff',
+      // Shown once you have readied and the match waits on the other fighters.
+      waiting: 'Waiting for the other side to ready up...',
+      // Live auto-ready countdown ({seconds} whole seconds) and the ready tally.
+      whistle: 'The whistle blows in {seconds}s.',
+      readyCount: '{ready} of {total} ready',
+    },
+    // Spectator parimutuel betting (the walk-up banner + card at the Sowfield).
+    bet: {
+      title: 'Match Bets',
+      aria: 'Vale Cup match betting',
+      // Live wager countdown / closed state.
+      closesIn: 'Bets close in {seconds}s',
+      closed: 'Betting closed',
+      // The prize pool (total copper wagered) shown between the two shares.
+      prize: 'Pool {amount}',
+      splitAria: 'Share of the betting pool on each team',
+      // The expand / collapse toggle for the full card.
+      expand: 'View bets and wager',
+      collapse: 'Hide bets',
+      oddsLabel: 'Pays',
+      // Stake button group heading; {team} is a nation name.
+      back: 'Back {team}',
+      // A fighter's lifetime form on the card.
+      form: '{wins}W-{losses}L',
+      // My current wager ({amount} money, {team} nation name), or none yet.
+      mine: 'Your bet: {amount} on {team}',
+      none: 'You have no bet on this match yet.',
+      // My lifetime betting record; {sign} is + or -, {net} the absolute money.
+      record: 'Betting record: {wins}W-{losses}L, {sign}{net}',
+      // Settlement toasts ({amount} money credited back).
+      wonBanner: 'Your bet won!',
+      wonLog: 'Your Vale Cup bet won: {amount} returned.',
+      lostLog: 'Your Vale Cup bet lost: {amount}.',
+      refundLog: 'Bets voided, your {amount} stake was returned.',
+    },
   },
   // Click-to-move mouse-button toggle labels (Key Bindings panel). The button id
   // 0/2 maps to these at the HUD render boundary.

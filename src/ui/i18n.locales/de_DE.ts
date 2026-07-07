@@ -653,6 +653,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.spider_egg_sac.name': 'Spinnen-Eikokon',
   'entities.mobs.sump_troll_devourer.name': 'Sumpftroll-Verschlinger',
   'entities.mobs.tolling_bell.name': 'Läutende Glocke',
+  'entities.mobs.vale_cup_ball.name': 'Keilerball',
   'entities.npcs.brother_halven_marsh.greeting':
     'Die Spur führte nach Norden. Ein weiteres Reliquiar, ein weiterer Ritus. Wähle deine Schwierigkeit, und ich halte das Seil, bis du zurückkehrst.',
   'entities.npcs.brother_halven_marsh.name': 'Bruder Halven',

@@ -778,6 +778,21 @@ export function chat(ctx: SimContext, text: string, pid?: number): SentChat | nu
     return null;
   }
 
+  // "/sit", "/stand": a real seated POSE (rest on a bench, or up in the Vale
+  // Cup grandstands, which are walkable tiers). Sitting clears the moment you
+  // move, cast, or take a hit (those paths call standUp), so /stand is only for
+  // standing back up in place. Rides the existing `sitting` wire bit, so it works
+  // the same online and offline; no chat text, so nothing to localize.
+  const poseMatch = /^\/(sit|stand)\s*$/i.exec(raw);
+  if (poseMatch) {
+    if (poseMatch[1].toLowerCase() === 'sit') {
+      if (!r.e.dead) r.e.sitting = true;
+    } else {
+      ctx.standUp(r.e);
+    }
+    return null;
+  }
+
   // "/wave", "/dance [name]": predefined social emotes. An optional name
   // targets an online player (in range or not); unknown names fall back to
   // the untargeted form, matching the classic-MMO convention.

@@ -648,6 +648,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.spider_egg_sac.name': 'Sacca di Uova di Ragno',
   'entities.mobs.sump_troll_devourer.name': 'Troll Divoratore del Pantano',
   'entities.mobs.tolling_bell.name': 'Campana Rintoccante',
+  'entities.mobs.vale_cup_ball.name': 'Palla di cinghiale',
   'entities.npcs.brother_halven_marsh.greeting':
     'La pista portava a nord. Un altro reliquiario, un altro rito. Scegli la difficoltà, e io terrò la corda finché non torni.',
   'entities.npcs.brother_halven_marsh.name': 'Fratello Halven',

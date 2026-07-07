@@ -653,6 +653,7 @@ export const fr_FR: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.spider_egg_sac.name': "Sac d'œufs d'araignée",
   'entities.mobs.sump_troll_devourer.name': 'Dévoreur troll du cloaque',
   'entities.mobs.tolling_bell.name': 'Cloche du glas',
+  'entities.mobs.vale_cup_ball.name': 'Ballon de sanglier',
   'entities.npcs.brother_halven_marsh.greeting':
     "La piste menait au nord. Un autre reliquaire, un autre rite. Choisis ton palier, et je tiendrai la corde jusqu'à ton retour.",
   'entities.npcs.brother_halven_marsh.name': 'Frère Halven',

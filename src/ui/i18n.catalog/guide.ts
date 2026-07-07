@@ -44,6 +44,7 @@ export const guideStrings = {
     combat: 'Combat',
     talents: 'Talents',
     arena: 'Arena & PvP',
+    valeCup: 'Vale Cup',
     glossary: 'Glossary',
     wishIKnew: 'Things I Wish I Knew',
     faq: 'FAQ',
@@ -948,6 +949,46 @@ export const guideStrings = {
     ladderHeading: 'Climbing the ladder',
     ladderBody:
       'Ranked play tracks your standing over time. Check the leaderboard to see where you sit and who holds the top of the realm.',
+  },
+
+  // The Vale Cup boarball minigame page (docs/prd/vale-cup.md). Spoiler-safe:
+  // lore, how to play, nations, roles; no kick powers, timers, or matchmaker
+  // internals. Nation/role NAMES render from the shared hudChrome.vcup.* keys.
+  valeCupPage: {
+    heading: 'The Vale Cup',
+    intro:
+      'Boarball at the Sowfield: pick a banner, pick a role, and kick a stuffed boar hide past a keeper for the Copper Pail. No blood, no loot, just the roar of the stands.',
+    loreHeading: 'Boarball and the harvest truce',
+    loreOldSow:
+      "Long before the dead woke, Eastbrook's farmhands played boarball on the stubble fields after harvest: two mobs, one boar's hide stuffed with straw, and two wagon gates dragged to either end of the green. The first ball, the Old Sow, hangs bronzed above the tavern hearth.",
+    loreTruce:
+      'When the Ashen Coliseum began sanctioning war games, Marshal Redbrook answered with something gentler: a standing harvest truce on the old green. The wagon gates became goalposts, the green got walls, stands, and a name, the Sowfield, and the prize was always the same dented milk pail the winners drank from: the Copper Pail.',
+    howHeading: 'How to play',
+    howQueue:
+      'Queue from anywhere through the Vale Cup window, or talk to Groundskeeper Bram at the Sowfield gate. Pick a bracket from one-a-side up to five-a-side, a banner nation, and a sport role; queue solo or bring your party.',
+    howMatch:
+      'On kickoff your class kit is swapped for a sport kit and restored exactly afterward. Kicks aim at the ground reticle, the ball banks off the boards, and dribbling is just running with the ball. Score more goals than the other side before full time; a draw goes to golden goal.',
+    howTruce:
+      'Nobody bleeds at the Sowfield: tackles tumble, nothing hurts, and pets sit the match out.',
+    spectateBody:
+      'One match plays at a time at the stadium, and anyone can walk up and watch from the stands.',
+    nationsHeading: 'The eight banner nations',
+    nationsBody:
+      'Every team plays under a banner. The captain picks the nation, and if both sides fly the same one, the away side plays the inverted palette.',
+    nationVale: 'Green and gold, flying the wheat sheaf: the home side, farmhands to the bone.',
+    nationMirefen: 'Teal and grey under the heron: patient, long-legged, never hurried.',
+    nationThornpeak: 'Ice blue and white under the mountain peak: sure-footed and stubborn.',
+    nationColiseum: 'Red and black with crossed swords: they play like it is still a war game.',
+    nationChoir: 'Pale blue and silver under the bell: eerie, precise, and very quiet.',
+    nationOgre: 'Orange and umber behind the fist: shoulder-first and proud of it.',
+    nationMoon: 'Violet and silver under the crescent: night players, light on their feet.',
+    nationCopperdig: 'Copper and brown with the pickaxe: diggers who never stop running.',
+    rolesHeading: 'Sport roles',
+    rolesBody:
+      'Your role decides the kit you carry onto the pitch. Everyone kicks; the rest is temperament.',
+    rewardsHeading: 'Truce rules',
+    rewardsBody:
+      'Truce rules mean no experience and no loot: a decided match counts toward your record and the winners board, and daily-reward points come with it. Deserting a match benches your slot, and the Groundskeeper remembers.',
   },
 
   // "Things I Wish I Knew" beginner page.

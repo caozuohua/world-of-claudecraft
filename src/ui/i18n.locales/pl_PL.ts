@@ -622,6 +622,7 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.thunzharr_stormling.name': 'Zbudzony Burzowiec',
   'entities.mobs.thunzharr_waking_peak.name': 'Thunzharr, Budzący się Szczyt',
   'entities.mobs.tolling_bell.name': 'Bijący Dzwon',
+  'entities.mobs.vale_cup_ball.name': 'Dziczy Balon',
   'entities.npcs.brother_halven_marsh.greeting':
     'Trop powiódł na północ. Kolejny relikwiarz, kolejny obrzęd. Wybierz poziom trudności, a ja potrzymam linę, aż wrócisz.',
   'entities.npcs.brother_halven_marsh.name': 'Brat Halven',

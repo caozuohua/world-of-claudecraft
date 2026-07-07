@@ -30,6 +30,7 @@ import {
 import type { DelveModuleId } from '../sim/delve_layout';
 import type { BiomeId } from '../sim/types';
 import { ALL_CLASSES, type Entity, type SimEvent } from '../sim/types';
+import { isAtSowfield } from '../sim/vale_cup_layout';
 import { groundHeight, waterLevelAt, zoneBiomeAt } from '../sim/world';
 import { attachAvatarFallback } from '../ui/avatar_fallback';
 import { tEntity } from '../ui/entity_i18n';
@@ -102,6 +103,18 @@ import { buildTerrain, type TerrainView } from './terrain';
 import { sparkleTexture } from './textures';
 import { targetIntensity } from './travel_speed_fx';
 import { TravelSpeedFxPainter } from './travel_speed_fx_painter';
+import {
+  BALL_RADIUS,
+  buildValeCupBall,
+  rollBallSpinner,
+  VALE_CUP_BALL_TEMPLATE,
+  ValeCupBallDust,
+  ValeCupBallTrail,
+} from './vale_cup_ball';
+import { nationColors } from './vale_cup_flags';
+import { ValeCupPracticeSky } from './vale_cup_practice_sky';
+import { buildValeCupStadium, type ValeCupStadiumView } from './vale_cup_stadium';
+import { buildValeCupTeamRings, type ValeCupTeamRingsView } from './vale_cup_team_ring';
 import { SCHOOL_COLORS, Vfx } from './vfx';
 import { buildWater, type WaterView } from './water';
 import { Weather } from './weather';
@@ -934,6 +947,20 @@ export class Renderer {
   // Per-entity power-up glow: emits a coloured swirl around the carrier until it expires.
   private fiestaGlows = new Map<number, { color: number; until: number; nextSwirl: number }>();
 
+  // Vale Cup: the Sowfield set piece, the staggered goal-firework volley queue,
+  // and the boarball's dust pool (created lazily the first time the ball rolls).
+  private valeCupStadium: ValeCupStadiumView;
+  // Futuristic-fantasy skybox for the private practice pitch (a random variant
+  // per bout, camera-centred, only shown while the local player is practicing).
+  private valeCupSky = new ValeCupPracticeSky();
+  private valeCupTeamRings: ValeCupTeamRingsView;
+  private vcupFireworks: { at: number; x: number; z: number; colors: readonly number[] }[] = [];
+  private valeCupBallDust: ValeCupBallDust | null = null;
+  private valeCupBallTrail: ValeCupBallTrail | null = null;
+  // seed-bound ground sampler, built once so the per-frame Vale Cup ring update
+  // allocates no closure (see the drape path in vale_cup_team_ring.ts).
+  private groundSample = (x: number, z: number): number => groundHeight(x, z, this.sim.cfg.seed);
+
   private lowGfx: boolean;
   private post: PostPipeline | null = null;
   private godRays: THREE.Sprite[] = [];
@@ -1275,6 +1302,26 @@ export class Renderer {
     // point-light count stays constant as the player travels (constant
     // numPointLights -> materials never recompile for a light-count change).
     this.fireLights.push(this.impactSite.light);
+    // The Sowfield (Vale Cup stadium): same landmark pattern. Brazier lights ride
+    // the fireLights budget (never the cull-toggled group) and its flames join the
+    // campfire flicker + ember pass.
+    this.valeCupStadium = buildValeCupStadium(this.sim.cfg.seed);
+    this.scene.add(this.valeCupStadium.group);
+    // The private practice-pitch copy (shown at a far instance origin when the
+    // local player is practicing; positioned/toggled by valeCupStadium.update).
+    this.scene.add(this.valeCupStadium.practiceGroup);
+    // The practice skybox (camera-centred; shown only while practicing, driven
+    // in updateAmbience). Category 'sky' so the FX governor treats it like the dome.
+    setRenderCategory(this.valeCupSky.mesh, 'sky');
+    this.scene.add(this.valeCupSky.mesh);
+    for (const light of this.valeCupStadium.lights) {
+      this.scene.add(light);
+      this.fireLights.push(light);
+    }
+    this.flames.push(...this.valeCupStadium.flames);
+    // Team glow rings under live match fighters (ally/enemy/self readability).
+    this.valeCupTeamRings = buildValeCupTeamRings();
+    this.scene.add(this.valeCupTeamRings.group);
     this.propsView = props;
 
     // Map-editor play-test: freely placed GLB models (cosmetic, render-only). Loads
@@ -2950,6 +2997,122 @@ export class Renderer {
         });
         if (ev.entityId === this.sim.playerId) this.addShake(0.5);
         break;
+      case 'vcupGoal': {
+        // Team-colored firework volley above the goal the ball went into (the
+        // event's world anchor). Away palette when both sides fly one banner.
+        const away = ev.nationA === ev.nationB && ev.team === 'B';
+        const nation = ev.team === 'A' ? ev.nationA : ev.nationB;
+        const cols = nationColors(nation, away);
+        this.queueValeCupFireworks(ev.x, ev.z, cols, 6);
+        // a quick team-colored ground flash right at the goal that was scored
+        this.valeCupTeamRings.flashGoal(ev.x, ev.z, cols[0], this.groundSample);
+        break;
+      }
+      case 'vcupEnd': {
+        // Full-time show over the pitch: the winners' colors, or festival gold
+        // for a draw. Audio (horn/roar) is HUD-armed, not fired here.
+        if (ev.winner) {
+          const away = ev.nationA === ev.nationB && ev.winner === 'B';
+          const nation = ev.winner === 'A' ? ev.nationA : ev.nationB;
+          this.queueValeCupFireworks(ev.x, ev.z, nationColors(nation, away), 10);
+        } else {
+          this.queueValeCupFireworks(ev.x, ev.z, [0xffd14d, 0xfff2c0], 5);
+        }
+        break;
+      }
+    }
+  }
+
+  // ---- Vale Cup juice ------------------------------------------------------
+
+  // Stagger a volley of firework shells around a world anchor; tickValeCupFx
+  // pops them as their times come due (the pooled Vfx has no delayed spawn).
+  private queueValeCupFireworks(
+    x: number,
+    z: number,
+    colors: readonly number[],
+    shells: number,
+  ): void {
+    for (let i = 0; i < shells; i++) {
+      this.vcupFireworks.push({
+        at: this.time + i * 0.33 + Math.random() * 0.14,
+        x: x + (Math.random() - 0.5) * 7,
+        z: z + (Math.random() - 0.5) * 7,
+        colors,
+      });
+    }
+  }
+
+  private tickValeCupFx(dt: number): void {
+    this.valeCupBallDust?.update(dt);
+    this.valeCupBallTrail?.update(dt);
+    if (this.vcupFireworks.length === 0) return;
+    for (let i = this.vcupFireworks.length - 1; i >= 0; i--) {
+      const s = this.vcupFireworks[i];
+      if (this.time < s.at) continue;
+      this.vcupFireworks.splice(i, 1);
+      const gy = groundHeight(s.x, s.z, this.sim.cfg.seed);
+      this.tmpV.set(s.x, gy + 9 + Math.random() * 4, s.z);
+      this.vfx.fireworkBurst(this.tmpV, s.colors, 46, 1.15);
+    }
+  }
+
+  // The boarball: client-side roll from render-space position deltas, the
+  // ground-hugging contact blob, and a dust kick while it rolls fast.
+  private updateValeCupBall(e: Entity, v: EntityView, dt: number): void {
+    v.group.rotation.y = 0; // the roll owns orientation; facing means nothing here
+    const bodyGroup = v.objectMesh as THREE.Group | undefined;
+    if (!bodyGroup) return;
+    const spinner = bodyGroup.userData.vcSpinner as THREE.Object3D | undefined;
+    const shadow = bodyGroup.userData.vcShadow as THREE.Mesh | undefined;
+    const x = v.group.position.x;
+    const y = v.group.position.y;
+    const z = v.group.position.z;
+    const dx = x - v.lastX;
+    const dz = z - v.lastZ;
+    v.lastX = x;
+    v.lastZ = z;
+    if (spinner) rollBallSpinner(spinner, dx, dz, spinner.position.y * e.scale);
+    const gy = groundHeight(x, z, this.sim.cfg.seed);
+    const heightAbove = Math.max(0, y - gy);
+    if (shadow) {
+      // group.scale carries e.scale, so the local offset is divided back out
+      shadow.position.y = (gy - y) / Math.max(0.001, e.scale) + 0.04;
+      shadow.scale.setScalar(Math.max(0.4, 1 / (1 + heightAbove * 0.4)));
+      (shadow.material as THREE.MeshBasicMaterial).opacity = Math.max(
+        0.1,
+        0.95 - heightAbove * 0.14,
+      );
+    }
+    const speed = dt > 0 ? Math.hypot(dx, dz) / dt : 0;
+    // Rocket-League-style light trail: a comet dropped at the ball, thicker +
+    // brighter for a hard kick, thin for a dribble. Follows the ball anywhere
+    // (ground or flight), so it is easy to track. Lazy pool, scene-level.
+    if (v.group.visible) {
+      if (!this.valeCupBallTrail) {
+        this.valeCupBallTrail = new ValeCupBallTrail();
+        this.scene.add(this.valeCupBallTrail.group);
+      }
+      this.valeCupBallTrail.emit(x, y + BALL_RADIUS * e.scale, z, speed, dt);
+    }
+    if (speed > 6 && heightAbove < 0.5 && v.group.visible) {
+      if (!this.valeCupBallDust) {
+        this.valeCupBallDust = new ValeCupBallDust();
+        this.scene.add(this.valeCupBallDust.group);
+      }
+      this.valeCupBallDust.kick(x, gy, z, dx, dz, dt);
+    }
+    // Kick puff: the ball leaping from rest (a held/loose ball) to fast is a
+    // clean kick signal (banking off a board keeps speed, so it does not trip
+    // this). Pure render heuristic, no sim event. Reuses the dust pool.
+    const prevSpeed = (bodyGroup.userData.vcLastSpeed as number) ?? 0;
+    bodyGroup.userData.vcLastSpeed = speed;
+    if (prevSpeed < 4 && speed > 13 && heightAbove < 0.7 && v.group.visible) {
+      if (!this.valeCupBallDust) {
+        this.valeCupBallDust = new ValeCupBallDust();
+        this.scene.add(this.valeCupBallDust.group);
+      }
+      this.valeCupBallDust.burst(x, gy, z);
     }
   }
 
@@ -3174,6 +3337,15 @@ export class Renderer {
       sparkle.scale.set(0.9, 0.9, 1);
       sparkle.position.y = 1.35;
       group.add(sparkle);
+    } else if (e.kind === 'mob' && e.templateId === VALE_CUP_BALL_TEMPLATE) {
+      // The boarball: bespoke stitched-leather sphere (an inert mob entity
+      // would otherwise dress as a generic bandit rig). Keeps the default
+      // body click path below, so clicking it is a harmless soft target;
+      // its nameplate is suppressed in nameplate_view.
+      const built = buildValeCupBall();
+      body = built.group;
+      height = built.height;
+      objectMesh = body;
     } else {
       const visualKey = visualKeyFor(e);
       if (visualKey === 'player_mech' && !mechAssetsReady()) {
@@ -3505,8 +3677,14 @@ export class Renderer {
   // Delve module interiors build asynchronously; track in-flight keys so a
   // per-frame ensureDelveInteriorsNear does not re-schedule a build mid-load.
   private pendingInteriors = new Set<string>();
-  private fogState: 'outdoor' | 'dungeon' | 'temple' | 'nythraxis' | 'delve' | 'underwater' =
-    'outdoor';
+  private fogState:
+    | 'outdoor'
+    | 'dungeon'
+    | 'temple'
+    | 'nythraxis'
+    | 'delve'
+    | 'underwater'
+    | 'practice' = 'outdoor';
 
   private buildInterior(interior: string, ox: number, oz: number): void {
     this.dungeons ??= new DungeonInteriors(this.scene, this.lowGfx, this.flames, this.fireLights);
@@ -3600,10 +3778,31 @@ export class Renderer {
     this.buildAllDelveModules(delve.id, slot, origin, modules);
   }
 
+  // Which futuristic sky this practice bout flies: hashed off the match id so it
+  // feels random and stays stable for the whole bout (a new bout, a new sky).
+  private practiceSkyVariant(): number {
+    const id = this.sim.cupInfo?.match?.id ?? 0;
+    return ((id * 2654435761) >>> 0) % this.valeCupSky.variantCount;
+  }
+
   private updateAmbience(px: number, camY: number, dt: number): void {
     const inside = px > DUNGEON_X_THRESHOLD;
     const pz = this.sim.player.pos.z;
-    if (isDelvePos(px)) {
+    // Private Vale Cup practice instance: the pitch sits far out in an instance
+    // band (which would otherwise read as a delve), so give it its own futuristic
+    // skybox + matching fog instead of the delve murk. Detected by the match's
+    // non-zero pitch origin (the real Sowfield match is {0,0}).
+    const po = this.sim.cupInfo?.match?.origin;
+    const inPractice = !!po && (po.x !== 0 || po.z !== 0);
+    if (inPractice) {
+      const idx = this.practiceSkyVariant();
+      this.valeCupSky.setVariant(idx);
+      this.valeCupSky.mesh.position.copy(this.camera.position);
+      this.valeCupSky.mesh.visible = true;
+    } else {
+      this.valeCupSky.mesh.visible = false;
+    }
+    if (isDelvePos(px) && !inPractice) {
       this.ensureDelveInteriorsNear(px, pz);
     } else if (inside && isArenaPos(px)) {
       void ensureDungeonAssets().catch(() => undefined);
@@ -3638,17 +3837,19 @@ export class Renderer {
     const interior = inside && !inDelve && !isArenaPos(px) ? dungeonAt(px)?.interior : null;
     const inTemple = interior === 'temple';
     const inNythraxis = interior === 'nythraxis';
-    const desired = inDelve
-      ? 'delve'
-      : inTemple
-        ? 'temple'
-        : inNythraxis
-          ? 'nythraxis'
-          : inside
-            ? 'dungeon'
-            : camY < waterLevelAt(px, pz) - 0.05
-              ? 'underwater'
-              : 'outdoor';
+    const desired = inPractice
+      ? 'practice'
+      : inDelve
+        ? 'delve'
+        : inTemple
+          ? 'temple'
+          : inNythraxis
+            ? 'nythraxis'
+            : inside
+              ? 'dungeon'
+              : camY < waterLevelAt(px, pz) - 0.05
+                ? 'underwater'
+                : 'outdoor';
     const fog = this.scene.fog as THREE.Fog;
     if (desired !== this.fogState) {
       this.fogState = desired;
@@ -3673,6 +3874,13 @@ export class Renderer {
         fog.color.setHex(0x0e0705);
         fog.near = 14;
         fog.far = 74;
+      } else if (desired === 'practice') {
+        // The private practice pitch under its futuristic sky: tint the fog to
+        // the sky variant and push it well back so the pitch reads clear and lit
+        // (NOT the delve murk this instance band would otherwise get).
+        fog.color.setHex(this.valeCupSky.fogFor(this.practiceSkyVariant()));
+        fog.near = 60;
+        fog.far = 420;
       } else if (desired === 'underwater') {
         fog.color.setHex(0x17506e);
         fog.near = 2;
@@ -4106,6 +4314,11 @@ export class Renderer {
         }
         continue;
       }
+      if (e.templateId === VALE_CUP_BALL_TEMPLATE) {
+        // bespoke ball motion (roll + contact shadow + dust); no rig to animate
+        this.updateValeCupBall(e, v, dt);
+        continue;
+      }
       if (!v.visual) continue;
 
       this.updateBaseVisual(e, v);
@@ -4520,6 +4733,7 @@ export class Renderer {
     this.updateFiestaRing(dt);
     this.updateFiestaPowerups(dt);
     this.tickFiestaGlows(dt);
+    this.tickValeCupFx(dt);
     worldStart = markWorldPhase('vfx', worldStart);
 
     this.updateCamera(selfPos, dt);
@@ -4564,6 +4778,20 @@ export class Renderer {
     this.motes.update(p.pos.x, p.pos.z, dt);
     this.birds.update(p.pos.x, p.pos.z, dt);
     this.impactSite.update(p.pos.x, p.pos.z, dt);
+    // null-safe cupInfo read: the offline Sim may predate the Vale Cup module
+    this.valeCupStadium.update(p.pos.x, p.pos.z, dt, this.sim.cupInfo ?? null);
+    // Team rings ride the live entity views (positions are fresh: the entity loop
+    // ran above). Reads cupInfo.match for a participant, else cupInfo.spectate (a
+    // nearby walk-up at the Sowfield): the sim only fills spectate near the field,
+    // so the rings self-gate to the stadium. The online mirror works the same.
+    this.valeCupTeamRings.update(
+      this.sim.cupInfo?.match ?? this.sim.cupInfo?.spectate ?? null,
+      this.time,
+      dt,
+      this.lowGfx,
+      this.groundSample,
+      this.views,
+    );
     worldStart = markWorldPhase('fish', worldStart);
     this.updateAmbience(p.pos.x, this.camera.position.y, dt);
     worldStart = markWorldPhase('ambience', worldStart);
@@ -5124,7 +5352,10 @@ export class Renderer {
       // Only at the water's edge / in it — sampled at the player, so a loose
       // threshold made the loop bleed across the low marsh from far off.
       const nearWater = !inDungeon && groundHeight(px, pz, seed) < waterLevelAt(px, pz) + 0.4;
-      sink.ambience(biome, inDungeon, precip, nearWater);
+      // Sowfield crowd bed: murmurs near the ground, swells while a match is
+      // live (cupInfo is the IWorld mirror, so this works online too).
+      const crowd = !inDungeon && isAtSowfield(px, pz) ? (this.sim.cupInfo?.live ? 1 : 0.4) : 0;
+      sink.ambience(biome, inDungeon, precip, nearWater, crowd);
     }
   }
 

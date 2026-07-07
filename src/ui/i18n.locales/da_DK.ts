@@ -618,6 +618,7 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.thunzharr_stormling.name': 'Vækket Stormling',
   'entities.mobs.thunzharr_waking_peak.name': 'Thunzharr, den Vågnende Tinde',
   'entities.mobs.tolling_bell.name': 'Klemtende Klokke',
+  'entities.mobs.vale_cup_ball.name': 'Vildsvinebold',
   'entities.npcs.brother_halven_marsh.greeting':
     'Sporet førte mod nord. Endnu et relikvarium, endnu en rite. Vælg din sværhedsgrad, så holder jeg rebet, til du vender tilbage.',
   'entities.npcs.brother_halven_marsh.name': 'Broder Halven',

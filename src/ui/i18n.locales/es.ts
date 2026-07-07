@@ -648,6 +648,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.mobs.spider_egg_sac.name': 'Saco de huevos de araña',
   'entities.mobs.sump_troll_devourer.name': 'Trol devorador del sumidero',
   'entities.mobs.tolling_bell.name': 'Campana doliente',
+  'entities.mobs.vale_cup_ball.name': 'Balón de jabalí',
   'entities.npcs.brother_halven_marsh.greeting':
     'El rastro llevaba al norte. Otro relicario, otro rito. Elige tu dificultad y yo sujetaré la cuerda hasta que vuelvas.',
   'entities.npcs.brother_halven_marsh.name': 'Hermano Halven',
