@@ -513,12 +513,20 @@ export class BagsWindow {
         });
       }
       this.deps.attachTooltip(row, () => {
-        const key = bagTooltipHintKey(item, this.bagMode());
+        const mode = this.bagMode();
+        const key = bagTooltipHintKey(item, mode);
         const extra = key ? `<div class="tt-sub">${esc(t(key))}</div>` : '';
-        const link = bagShiftLinks(this.bagMode())
+        // Advertise the shift-click partial deposit on a splittable stack, the bank
+        // window's withdrawPartialHint twin (tied to the deposit hint arm so a
+        // blocked quest item never shows it).
+        const partial =
+          key === 'hudChrome.bank.depositHint' && bankDepositOpensPrompt(s)
+            ? `<div class="tt-sub">${esc(t('hudChrome.bank.depositPartialHint'))}</div>`
+            : '';
+        const link = bagShiftLinks(mode)
           ? `<div class="tt-sub">${esc(t('hudChrome.itemShare.linkHint'))}</div>`
           : '';
-        return this.deps.itemTooltip(item) + extra + link;
+        return this.deps.itemTooltip(item) + extra + partial + link;
       });
       grid.appendChild(row);
     }

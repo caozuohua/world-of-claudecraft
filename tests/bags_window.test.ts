@@ -103,4 +103,13 @@ describe('bags_window: bank-deposit mode wiring', () => {
       "'.discard-item-prompt, .sell-quantity-prompt, .bank-deposit-prompt'",
     );
   });
+
+  it('advertises the shift-click partial deposit on splittable stacks (withdraw twin)', () => {
+    // The tooltip shows depositPartialHint ONLY on the deposit-hint arm (never on a
+    // blocked quest item) and only for a splittable stack; without this line the
+    // catalog key would be dead and the affordance undiscoverable.
+    expect(painter).toContain("key === 'hudChrome.bank.depositHint' && bankDepositOpensPrompt(s)");
+    expect(painter).toContain("t('hudChrome.bank.depositPartialHint')");
+    expect(painter).toContain('+ extra + partial + link');
+  });
 });
