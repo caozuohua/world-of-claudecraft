@@ -793,6 +793,8 @@ export const es_ES: EnTranslations = {
       "masterOption": "Repartidor: {name}"
     },
     "bags": {
+      "cannotDestroy": "This item cannot be destroyed.",
+      "rightClickDestroy": "Right-click to destroy",
       "filterGroupAria": "Filtrar bolsas por categoría",
       "filterAll": "Todos",
       "filterWeapon": "Armas",
@@ -8032,12 +8034,14 @@ export const es_ES: EnTranslations = {
       "crownforged": {
         "name": "Equipo de batalla Bonewrought",
         "bonus2": "Aumenta el poder de ataque en 40.",
-        "bonus3": "Aumenta la fuerza en 15, el aguante en 15 y la velocidad de ataque y de lanzamiento en 15%."
+        "bonus3": "Aumenta la fuerza en 15, el aguante en 15 y la velocidad de ataque y de lanzamiento en 15%.",
+        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "deathlord": {
         "name": "Equipo de batalla de Barrowlord",
         "bonus2": "Aumenta el poder de ataque en 40.",
-        "bonus3": "Aumenta la fuerza en 15 y el aguante en 15."
+        "bonus3": "Aumenta la fuerza en 15 y el aguante en 15.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
       },
       "greyjaw_stalker": {
         "name": "Equipo del Acechador de Greyjaw",
@@ -8047,22 +8051,25 @@ export const es_ES: EnTranslations = {
         "name": "Vestiduras de Mournweave",
         "bonus2": "No puedes ser empujado hacia atrás (100% de resistencia al empuje).",
         "bonus3": "Aumenta el intelecto en 10 y el aguante en 10.",
-        "bonus4": "Your spells have a chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
       },
       "nighttalon": {
         "name": "Atuendo de cuero Direfang",
         "bonus2": "Aumenta el poder de ataque en 40.",
-        "bonus3": "Aumenta la agilidad en 15, la probabilidad de crítico en 2% y la velocidad de ataque y de lanzamiento en 15%."
+        "bonus3": "Aumenta la agilidad en 15, la probabilidad de crítico en 2% y la velocidad de ataque y de lanzamiento en 15%.",
+        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "soulflame": {
         "name": "Vestiduras de Wraithfire",
         "bonus2": "No puedes ser empujado hacia atrás (100% de resistencia al empuje).",
-        "bonus3": "Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%."
+        "bonus3": "Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "stormcallers": {
         "name": "Vestiduras de Galecall",
         "bonus2": "No puedes ser empujado hacia atrás (100% de resistencia al empuje).",
-        "bonus3": "Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%."
+        "bonus3": "Aumenta el intelecto en 15, el espíritu en 15 y la velocidad de ataque y de lanzamiento en 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "vale_arcanist": {
         "name": "Vestiduras del Arcanista del Valle",
@@ -8071,7 +8078,8 @@ export const es_ES: EnTranslations = {
       "wyrmshadow": {
         "name": "Atuendo de Nightfang",
         "bonus2": "Aumenta el poder de ataque en 40.",
-        "bonus3": "Aumenta la agilidad en 15 y la probabilidad de crítico en 2%."
+        "bonus3": "Aumenta la agilidad en 15 y la probabilidad de crítico en 2%.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
       }
     }
   },

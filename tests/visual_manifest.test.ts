@@ -69,6 +69,21 @@ describe('character visual manifest', () => {
     ).toEqual([]);
   });
 
+  it('points the baked wolf visuals (form_cat, mob_wolf, greyjaw) at clips in their GLBs', async () => {
+    const byUrl = new Map<string, Set<string>>();
+    for (const key of ['form_cat', 'mob_wolf', 'greyjaw'] as const) {
+      const visual = VISUALS[key];
+      const animationNames =
+        byUrl.get(visual.url) ?? (await glbAnimationNames(`public/${visual.url}`));
+      byUrl.set(visual.url, animationNames);
+
+      expect(animationNames.size).toBeGreaterThan(0);
+      expect(
+        [...new Set(expectedClipNames(visual.clips))].filter((name) => !animationNames.has(name)),
+      ).toEqual([]);
+    }
+  });
+
   it('keeps held weapons and props available on low graphics', () => {
     const allWeaponUrls = manifestUrls().filter((url) => url.startsWith('models/weapons/'));
     expect(allWeaponUrls.length).toBeGreaterThan(0);

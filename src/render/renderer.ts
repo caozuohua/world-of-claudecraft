@@ -17,6 +17,7 @@ import {
   delveSlotAt,
   dungeonAt,
   INSTANCE_SLOT_COUNT,
+  ITEM_SETS,
   instanceOrigin,
   isArenaPos,
   isDelvePos,
@@ -80,6 +81,7 @@ import {
   isProjectedNameplateAnchorVisible,
   nameplateScreenTransform,
 } from './nameplate_projection';
+import { facingAlpha, remoteEntityAlpha } from './net_interp_core';
 import { resolveDirectPickEntityId } from './pick_resolution';
 import { PlacedAssetsView } from './placed_assets';
 import { buildComposer, type PostPipeline } from './post';
@@ -186,6 +188,29 @@ const LIGHT_BUDGET_RANGE_SQ = 55 * 55;
 // HDR boosts so the bloom pass picks these out (composer tiers only)
 const SELECTION_RING_BOOST = 1.5;
 const SELECTION_RING_SPIN = 0.6; // rad/s — slow classic target-reticle rotation
+
+// Themed swirl colors for the 4-piece set-proc auras, by proc id; resolved to
+// the buff display NAME below (the aura SimEvent carries only the name) via
+// ITEM_SETS, so a re-coined proc name keeps its effect wired. The bleeds land
+// on the TARGET (a mob), so the aura case below must not gate these on the
+// player kind.
+const SET_PROC_FX_BY_ID: Record<string, number> = {
+  set_clearcasting: 0x8ed2ff, // icy arcane blue: a free cast
+  set_gravemight: 0xffb04d, // burnished gold: attack power
+  set_fangrush: 0xbfff5a, // feral green-yellow: attack speed
+  set_bonesplinter: 0xc22a2a, // blood red: the plate bleed landing
+  set_ragged_gash: 0xc22a2a, // blood red: the leather bleed landing
+  set_soulblaze: 0xff6a9e, // ember pink: spell power
+};
+const SET_PROC_FX_BY_NAME = new Map<string, number>();
+for (const set of Object.values(ITEM_SETS)) {
+  for (const tier of set.bonuses) {
+    const proc = tier.effect.proc;
+    if (proc && SET_PROC_FX_BY_ID[proc.id] !== undefined) {
+      SET_PROC_FX_BY_NAME.set(proc.name, SET_PROC_FX_BY_ID[proc.id]);
+    }
+  }
+}
 const CLICK_MARKER_POOL = 4; // concurrent click-feedback markers before reuse
 const GROUND_AIM_RETICLE_PULSE_HZ = 2;
 const SPARKLE_BOOST = 1.5;
@@ -2855,7 +2880,15 @@ export class Renderer {
         break;
       case 'aura': {
         const tgt = this.sim.entities.get(ev.targetId);
-        if (ev.gained && tgt?.kind === 'player') this.vfx.buffSwirl(ev.targetId);
+        // Set-proc auras announce themselves with a themed swirl: on the wearer
+        // for the self buffs, on the struck mob for the bleeds (so this arm is
+        // NOT player-gated). Everything else keeps the generic player swirl.
+        const procColor = SET_PROC_FX_BY_NAME.get(ev.name);
+        if (ev.gained && procColor !== undefined && tgt) {
+          this.vfx.buffSwirl(ev.targetId, procColor);
+        } else if (ev.gained && tgt?.kind === 'player') {
+          this.vfx.buffSwirl(ev.targetId);
+        }
         break;
       }
       case 'levelup':
@@ -3961,17 +3994,14 @@ export class Renderer {
       // each interpolates on its own clock so they move smoothly instead of
       // freezing and dashing once per update (self keeps the global alpha
       // the camera follow uses)
-      const ea =
-        e.id !== p.id && e.netUpdatedAt !== undefined && e.netInterval !== undefined
-          ? Math.min(1.25, (now - e.netUpdatedAt) / Math.max(20, e.netInterval))
-          : isSelf
-            ? selfSnapshotAlpha(alpha, selfAlphaLead)
-            : alpha;
+      const ea = isSelf
+        ? selfSnapshotAlpha(alpha, selfAlphaLead)
+        : remoteEntityAlpha(now, e.netUpdatedAt, e.netInterval, alpha);
       const x = isSelf ? selfPos.x : e.prevPos.x + (e.pos.x - e.prevPos.x) * ea;
       const y = isSelf ? selfPos.y : e.prevPos.y + (e.pos.y - e.prevPos.y) * ea;
       const z = isSelf ? selfPos.z : e.prevPos.z + (e.pos.z - e.prevPos.z) * ea;
       v.group.position.set(x, y, z);
-      let facing = e.prevFacing + shortestAngle(e.prevFacing, e.facing) * ea;
+      let facing = e.prevFacing + shortestAngle(e.prevFacing, e.facing) * facingAlpha(ea);
       if (id === p.id && renderFacingOverride !== null) {
         // Rate-limit the camera-driven heading so engaging mouselook (or starting
         // to move in Mouse Camera mode) rotates the model smoothly toward the

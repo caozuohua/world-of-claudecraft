@@ -34,6 +34,7 @@ import {
 } from './bag_filter';
 import {
   type BagMode,
+  bagDestroyAction,
   bagItemAction,
   bagQualityKey,
   bagShiftLinks,
@@ -526,9 +527,23 @@ export class BagsWindow {
         }
       });
       row.addEventListener('contextmenu', (ev) => {
-        if (!this.deps.vendorOpen() || (!ev.ctrlKey && !ev.metaKey)) return;
+        // At a vendor, Ctrl/Meta right-click owns the split-stack sell prompt.
+        if (this.deps.vendorOpen()) {
+          if (!ev.ctrlKey && !ev.metaKey) return;
+          ev.preventDefault();
+          this.sellBagItem(s, ev);
+          return;
+        }
+        // Otherwise right-click destroys the item, reusing the quest-item destroy
+        // prompt (confirm + quantity). noDiscard items stay protected (issue 1501).
+        const destroy = bagDestroyAction(item, this.bagMode());
+        if (destroy === 'none') return;
         ev.preventDefault();
-        this.sellBagItem(s, ev);
+        if (destroy === 'discardBlocked') {
+          this.deps.showError(t('hudChrome.bags.cannotDestroy'));
+          return;
+        }
+        this.showDiscardItemPrompt(s.itemId, Math.max(1, Math.floor(s.count)));
       });
       if (!this.deps.tradeOpen() && !this.deps.vendorOpen() && this.deps.isHotbarItemId(s.itemId)) {
         row.draggable = true;
@@ -555,10 +570,16 @@ export class BagsWindow {
           key === 'hudChrome.bank.depositHint' && bankDepositOpensPrompt(s)
             ? `<div class="tt-sub">${esc(t('hudChrome.bank.depositPartialHint'))}</div>`
             : '';
+        // Advertise the right-click destroy affordance (issue 1501) only when the item is
+        // actually destroyable here, so junk items are discoverable without a menu.
+        const destroy =
+          bagDestroyAction(item, mode) === 'discard'
+            ? `<div class="tt-sub">${esc(t('hudChrome.bags.rightClickDestroy'))}</div>`
+            : '';
         const link = bagShiftLinks(mode)
           ? `<div class="tt-sub">${esc(t('hudChrome.itemShare.linkHint'))}</div>`
           : '';
-        return this.deps.itemTooltip(item) + extra + partial + link;
+        return this.deps.itemTooltip(item) + extra + partial + destroy + link;
       });
       grid.appendChild(row);
     }

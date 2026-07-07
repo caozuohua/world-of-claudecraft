@@ -793,6 +793,8 @@ export const nl_NL: EnTranslations = {
       "masterOption": "Buitmeester: {name}"
     },
     "bags": {
+      "cannotDestroy": "This item cannot be destroyed.",
+      "rightClickDestroy": "Right-click to destroy",
       "filterGroupAria": "Tassen filteren op categorie",
       "filterAll": "Alle",
       "filterWeapon": "Wapens",
@@ -8032,12 +8034,14 @@ export const nl_NL: EnTranslations = {
       "crownforged": {
         "name": "Bonewrought-Regalia",
         "bonus2": "Verhoogt aanvalskracht met 40.",
-        "bonus3": "Verhoogt kracht met 15, uithoudingsvermogen met 15 en aanvals- en spreuksnelheid met 15%."
+        "bonus3": "Verhoogt kracht met 15, uithoudingsvermogen met 15 en aanvals- en spreuksnelheid met 15%.",
+        "bonus4": "Your weapon critical strikes splinter the target with Bonesplinter, bleeding it for 8 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "deathlord": {
         "name": "Barrowlord-Strijduitrusting",
         "bonus2": "Verhoogt aanvalskracht met 40.",
-        "bonus3": "Verhoogt kracht met 15 en uithoudingsvermogen met 15."
+        "bonus3": "Verhoogt kracht met 15 en uithoudingsvermogen met 15.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Gravemight, increasing attack power by 60 for 10 sec."
       },
       "greyjaw_stalker": {
         "name": "Uitrusting van de Grijskaak-sluiper",
@@ -8047,22 +8051,25 @@ export const nl_NL: EnTranslations = {
         "name": "Mournweave-Gewaden",
         "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
         "bonus3": "Verhoogt intellect met 10 en uithoudingsvermogen met 10.",
-        "bonus4": "Your spells have a chance to grant Clearcasting, making your next spell free."
+        "bonus4": "Your spells have a 10% chance to grant Clearcasting, making your next spell free."
       },
       "nighttalon": {
         "name": "Direfang-Pels",
         "bonus2": "Verhoogt aanvalskracht met 40.",
-        "bonus3": "Verhoogt behendigheid met 15, kritieke kans met 2% en aanvals- en spreuksnelheid met 15%."
+        "bonus3": "Verhoogt behendigheid met 15, kritieke kans met 2% en aanvals- en spreuksnelheid met 15%.",
+        "bonus4": "Your weapon critical strikes tear a Ragged Gash, bleeding the target for 6 damage every 2 sec for 12 sec. Stacks up to 3 times."
       },
       "soulflame": {
         "name": "Wraithfire-Regalia",
         "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
-        "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%."
+        "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "stormcallers": {
         "name": "Galecall-Gewaden",
         "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
-        "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%."
+        "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%.",
+        "bonus4": "Your spells have a 10% chance to grant Soulblaze, increasing spell power by 40 for 10 sec."
       },
       "vale_arcanist": {
         "name": "Gewaden van de Dal-arcanist",
@@ -8071,7 +8078,8 @@ export const nl_NL: EnTranslations = {
       "wyrmshadow": {
         "name": "Nightfang-Gewaden",
         "bonus2": "Verhoogt aanvalskracht met 40.",
-        "bonus3": "Verhoogt behendigheid met 15 en kritieke kans met 2%."
+        "bonus3": "Verhoogt behendigheid met 15 en kritieke kans met 2%.",
+        "bonus4": "Your weapon critical strikes have a 50% chance to grant Fangrush, increasing attack speed by 25% for 8 sec."
       }
     }
   },

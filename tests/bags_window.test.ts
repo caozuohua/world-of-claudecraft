@@ -110,7 +110,7 @@ describe('bags_window: bank-deposit mode wiring', () => {
     // catalog key would be dead and the affordance undiscoverable.
     expect(painter).toContain("key === 'hudChrome.bank.depositHint' && bankDepositOpensPrompt(s)");
     expect(painter).toContain("t('hudChrome.bank.depositPartialHint')");
-    expect(painter).toContain('+ extra + partial + link');
+    expect(painter).toContain('+ extra + partial + destroy + link');
   });
 });
 

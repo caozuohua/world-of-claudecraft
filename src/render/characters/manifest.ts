@@ -157,6 +157,17 @@ const animal = (attack: string[]): ClipMap => ({
   death: 'Death',
 });
 
+// Custom baked wolf rig (wolf_basic/greyjaw, Dog_Animation donor skeleton): the
+// animal() core plus the donor's Sit/Fall clips so player wolf forms sit and
+// jump properly, and a Walk swim base (a paddling gait at the gentle clip
+// pitch beats the steep no-clip procedural prone on a quadruped).
+const WOLF_BAKED: ClipMap = {
+  ...animal(['Attack']),
+  sitIdle: 'Sit',
+  swim: 'Walk',
+  jump: 'Fall',
+};
+
 // Custom wild boar rig (wild_boar.glb)
 const WILD_BOAR: ClipMap = {
   idle: 'Idle1',
@@ -511,10 +522,13 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 0x5a4030,
     tintStrength: 0.55,
   },
+  // Druid Wolf Form AND shaman Shadewolf (ghost_wolf renders this visual with
+  // the ghost material on top). Same custom baked wolf as the world wolves;
+  // the tawny tint keeps the druid form readable against grey pack wolves.
   form_cat: {
-    url: `${CREATURES}/wolf.glb`,
+    url: `${CREATURES}/wolf_basic.glb`,
     height: 1.6,
-    clips: animal(['Attack']),
+    clips: WOLF_BAKED,
     tint: 0xd08b45,
     tintStrength: 0.35,
   },
@@ -528,11 +542,24 @@ export const VISUALS: Record<string, VisualDef> = {
 
   // -- mob families --------------------------------------------------------
   mob_wolf: {
-    url: `${CREATURES}/wolf.glb`,
+    // Custom Tripo wolf auto-rigged onto the Dog_Animation quadruped skeleton
+    // (same pipeline as greyjaw), clips renamed to the animal() names at bake
+    // time. Baked basecolor texture; keeps a light entity tint so this doubles
+    // as the beast-family fallback and each beast keeps its own colour.
+    url: `${CREATURES}/wolf_basic.glb`,
     height: 1.6,
-    clips: animal(['Attack']),
+    clips: WOLF_BAKED,
     tint: 'entity',
     tintStrength: 0.35,
+  },
+  greyjaw: {
+    // Custom Tripo wolf auto-rigged onto the Dog_Animation quadruped skeleton;
+    // clips renamed to the animal() names at bake time. Baked texture, no tint.
+    // Old Greyjaw's model: 2.2 at scale 1 (his template scale 1.25 makes the
+    // rare ~2.75 in-world vs the 1.6 pack wolf).
+    url: `${CREATURES}/greyjaw.glb`,
+    height: 2.2,
+    clips: WOLF_BAKED,
   },
   mob_boar: {
     url: `${CREATURES}/wild_boar.glb`,
@@ -959,6 +986,9 @@ const MOB_KEYS: Record<string, string> = {
   // beasts that would otherwise fall back to the wolf model (FAMILY_KEYS.beast)
   old_cragmaw: 'mob_bear',
   bog_bloat: 'mob_murloc',
+  // Old Greyjaw: the named rare wolf gets his own custom model (the pack
+  // wolves keep the light mob_wolf)
+  old_greyjaw: 'greyjaw',
   // The Drowned Litany (Mirefen Marsh): give marsh enemies the right silhouette
   // instead of the family fallback (beast -> wolf, undead -> skeleton minion).
   mirefen_widowling: 'mob_spider',
