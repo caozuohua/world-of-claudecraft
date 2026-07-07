@@ -6958,6 +6958,9 @@
       width: auto;
       flex: 1 1 50px;
       min-width: 40px;
+    }
+  }
+
   /* ── Discord in-game panel (#discord-window) + widget ─────────────────── */
   /* Shared by BOTH game entries (index.html and play.html): the panel the U key
      and the mobile More tray Discord button open. Relocated from index.extra.css

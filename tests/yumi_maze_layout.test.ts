@@ -13,6 +13,7 @@ import {
   isArenaPos,
   isDelvePos,
   isYumiMazePos,
+  YUMI_BAND_X_MAX,
   YUMI_BAND_X_MIN,
   YUMI_MAZE_SLOT_COUNT,
   YUMI_MAZE_X,
@@ -199,6 +200,11 @@ describe('yumi maze band edges', () => {
     expect(isArenaPos(YUMI_MAZE_X)).toBe(false);
     expect(isArenaPos(ARENA_X)).toBe(true);
     expect(dungeonAt(YUMI_MAZE_X)).toBeNull();
+    // Two-sided east cap: the Vale Cup practice pitches (x = 30000) must
+    // never classify as the maze band.
+    expect(isYumiMazePos(YUMI_BAND_X_MAX - 1)).toBe(true);
+    expect(isYumiMazePos(YUMI_BAND_X_MAX)).toBe(false);
+    expect(isYumiMazePos(30000)).toBe(false);
   });
 
   it('slot origins resolve back to their slots', () => {

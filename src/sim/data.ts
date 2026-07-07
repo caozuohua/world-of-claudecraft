@@ -502,6 +502,11 @@ export function delveAt(x: number): DelveDef | null {
 // ---------------------------------------------------------------------------
 
 export const YUMI_BAND_X_MIN = 8000; // x at/after this = a yumi maze instance
+// Two-sided cap: the Vale Cup practice pitches sit further east (x = 30000,
+// src/sim/vale_cup_layout.ts vcPracticeOrigin), so the maze band must not
+// claim everything past 8000 the way the delve band once claimed everything
+// past 4773. 12000 leaves generous maze headroom.
+export const YUMI_BAND_X_MAX = 12000;
 export const YUMI_MAZE_X = 8400; // maze instances share this x; slots stack along z
 export const YUMI_MAZE_SLOT_COUNT = 4; // concurrent Protect Yumi matches
 const YUMI_MAZE_Z0 = -1250;
@@ -512,7 +517,7 @@ export function yumiMazeOrigin(slot: number): { x: number; z: number } {
 }
 
 export function isYumiMazePos(x: number): boolean {
-  return x >= YUMI_BAND_X_MIN;
+  return x >= YUMI_BAND_X_MIN && x < YUMI_BAND_X_MAX;
 }
 
 // Nearest maze instance origin to a far-off position, matched by z-band (the
