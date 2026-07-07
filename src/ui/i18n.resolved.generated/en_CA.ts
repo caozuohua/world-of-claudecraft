@@ -3812,7 +3812,7 @@ export const en_CA: EnTranslations = {
       "mobileSocial": "Social",
       "mobileArena": "Arena",
       "mobileMenu": "Menu",
-      "mobileUse": "Use",
+      "mobileUse": "Interact",
       "mobileMeters": "Meters",
       "mobileMap": "Map",
       "closeMap": "Close map",

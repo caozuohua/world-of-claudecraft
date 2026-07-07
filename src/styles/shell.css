@@ -5600,6 +5600,64 @@
     }
   }
 
+  /* ---------- Mobile pre-game chrome compaction (login/charselect/charcreate) ----------
+     On a mobile-touch web session (not just the native-app wrapper, which already had this
+     treatment landscape-only), the marketing lockup (logo + "official website" tagline) and
+     the page footer (language/graphics pickers, legal links) sit above and below every
+     auth/character panel regardless of orientation, forcing a scroll past them to reach the
+     login fields, character roster, or Back/New Character buttons. Once a real auth/character
+     panel is the active start panel, shrink the logo, drop the tagline, and hide the footer so
+     the primary action never requires scrolling on a phone screen. The mode-select landing
+     panel keeps the full marketing chrome untouched. */
+  /* !important: the hud-mobile layer (hud.mobile.css) is declared AFTER this shell
+     layer (see src/styles/index.css's @layer order), so its unconditional
+     `body.mobile-touch #title-logo` width rule would otherwise win over this one
+     regardless of selector specificity. !important is the one thing that still
+     lets an earlier layer beat a later one. */
+  body.mobile-touch[data-start-panel="login-panel"] .official-site-copy,
+  body.mobile-touch[data-start-panel="discord-choice-panel"] .official-site-copy,
+  body.mobile-touch[data-start-panel="realm-panel"] .official-site-copy,
+  body.mobile-touch[data-start-panel="charselect-panel"] .official-site-copy,
+  body.mobile-touch[data-start-panel="charcreate-panel"] .official-site-copy,
+  body.mobile-touch[data-start-panel="offline-select"] .official-site-copy {
+    display: none !important;
+  }
+  body.mobile-touch[data-start-panel="login-panel"] #title-logo,
+  body.mobile-touch[data-start-panel="discord-choice-panel"] #title-logo,
+  body.mobile-touch[data-start-panel="realm-panel"] #title-logo,
+  body.mobile-touch[data-start-panel="charselect-panel"] #title-logo,
+  body.mobile-touch[data-start-panel="charcreate-panel"] #title-logo,
+  body.mobile-touch[data-start-panel="offline-select"] #title-logo {
+    width: min(140px, 26vw) !important;
+    margin-bottom: 2px !important;
+  }
+  body.mobile-touch[data-start-panel="login-panel"] #hero-view,
+  body.mobile-touch[data-start-panel="discord-choice-panel"] #hero-view,
+  body.mobile-touch[data-start-panel="realm-panel"] #hero-view,
+  body.mobile-touch[data-start-panel="charselect-panel"] #hero-view,
+  body.mobile-touch[data-start-panel="charcreate-panel"] #hero-view,
+  body.mobile-touch[data-start-panel="offline-select"] #hero-view {
+    gap: 8px !important;
+    justify-content: flex-start !important;
+  }
+  body.mobile-touch[data-start-panel="login-panel"] #homepage-views-container,
+  body.mobile-touch[data-start-panel="discord-choice-panel"] #homepage-views-container,
+  body.mobile-touch[data-start-panel="realm-panel"] #homepage-views-container,
+  body.mobile-touch[data-start-panel="charselect-panel"] #homepage-views-container,
+  body.mobile-touch[data-start-panel="charcreate-panel"] #homepage-views-container,
+  body.mobile-touch[data-start-panel="offline-select"] #homepage-views-container {
+    padding-top: max(8px, env(safe-area-inset-top)) !important;
+    padding-bottom: max(8px, env(safe-area-inset-bottom)) !important;
+  }
+  body.mobile-touch[data-start-panel="login-panel"] .homepage-footer,
+  body.mobile-touch[data-start-panel="discord-choice-panel"] .homepage-footer,
+  body.mobile-touch[data-start-panel="realm-panel"] .homepage-footer,
+  body.mobile-touch[data-start-panel="charselect-panel"] .homepage-footer,
+  body.mobile-touch[data-start-panel="charcreate-panel"] .homepage-footer,
+  body.mobile-touch[data-start-panel="offline-select"] .homepage-footer {
+    display: none !important;
+  }
+
   /* ---------- Online character-select: showcase claims the header band ----------
      Now that the panel is wide, raise the right-hand showcase so its top edge
      lines up with the realm/wallet header row instead of starting below the
@@ -6037,6 +6095,22 @@
     body.mobile-touch #charcreate-panel .cs-detail-col .cs-preview {
       height: 150px;
       min-height: 150px;
+    }
+
+    /* The login/realm/Discord-choice/offline-select auth panels have no fixed
+       landscape height of their own (unlike the charselect/charcreate panels
+       above), so on a short landscape phone viewport they can grow taller than
+       the viewport. html/body run overflow:hidden for the game shell, so an
+       overflowing panel here would be CLIPPED, not scrollable, hiding fields a
+       player needs (see the login-panel below its own bottom edge). Give these
+       panels a landscape height ceiling and their own internal scroll so every
+       field stays reachable instead of clipped. */
+    body.mobile-touch #login-panel,
+    body.mobile-touch #discord-choice-panel,
+    body.mobile-touch #realm-panel,
+    body.mobile-touch #offline-select {
+      max-height: calc(var(--app-vh) - 24px);
+      overflow-y: auto;
     }
   }
 

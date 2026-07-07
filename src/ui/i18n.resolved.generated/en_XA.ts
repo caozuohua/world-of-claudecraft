@@ -3812,7 +3812,7 @@ export const en_XA: EnTranslations = {
       "mobileSocial": "[Šóçíáļ]",
       "mobileArena": "[Áŕéñá]",
       "mobileMenu": "[Ɱéñú]",
-      "mobileUse": "[Úšé]",
+      "mobileUse": "[Íñţéŕáçţ]",
       "mobileMeters": "[Ɱéţéŕš]",
       "mobileMap": "[Ɱáþ]",
       "closeMap": "[Çļóšé ɱáþ]",
