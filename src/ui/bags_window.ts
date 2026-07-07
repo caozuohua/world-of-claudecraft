@@ -104,6 +104,10 @@ export interface BagsWindowDeps extends PainterHostPresentation {
   /** Localized $WOC on-chain balance markup for the money footer. */
   wocBalanceHtml(): string;
   hideTooltip(): void;
+  /** True when this click is the release of a long-press tooltip peek, so the
+   *  stack's action (use / sell / deposit / feed) must be SUPPRESSED. Wired to the
+   *  shared Hud TouchPeekGuard; a plain tap and every desktop click return false. */
+  consumePeek(): boolean;
   cancelPetFeed(): void;
   // Non-modal focus capture/return (WCAG 2.4.3). Bags rides alongside vendor / trade /
   // market, so it does NOT trap focus; it only records its opener on open and returns
@@ -437,6 +441,14 @@ export class BagsWindow {
       );
       row.innerHTML = `${this.deps.itemIcon(item)}<span class="bi-count">${s.count > 1 ? esc(t('itemUi.bags.stackCount', { count: formatNumber(s.count, { maximumFractionDigits: 0 }) })) : ''}</span>`;
       row.addEventListener('click', (ev) => {
+        // On touch, the click that ends a long-press peek inspects the stack (its
+        // tooltip is already shown) instead of running its action (use / sell /
+        // deposit / feed): the release dismisses the tooltip and fires nothing. A
+        // plain tap / desktop click falls through.
+        if (this.deps.consumePeek()) {
+          this.deps.hideTooltip();
+          return;
+        }
         if (ev.shiftKey && bagShiftLinks(this.bagMode())) {
           this.deps.insertItemChatLink(s.itemId);
           return;

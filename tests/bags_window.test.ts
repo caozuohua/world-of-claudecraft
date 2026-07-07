@@ -115,6 +115,18 @@ describe('bags_window: bank-deposit mode wiring', () => {
 });
 
 describe('bags_window: Phase 7 touch peek + bank-cluster close', () => {
+  it('consults the shared peek guard FIRST in the bag cell click', () => {
+    // On touch, a long-press peek shows the tooltip; the release click must consume
+    // the peek and inspect the stack instead of running its action (use/sell/deposit/
+    // feed). The guard check sits at the TOP of the handler, before the shift-link and
+    // the bagItemAction switch, so a peek release can never fall through to an action.
+    expect(painter).toContain('consumePeek(): boolean;');
+    expect(painter).toMatch(
+      /row\.addEventListener\('click', \(ev\) => \{[\s\S]{0,320}?if \(this\.deps\.consumePeek\(\)\) \{\s*this\.deps\.hideTooltip\(\);\s*return;\s*\}\s*if \(ev\.shiftKey && bagShiftLinks/,
+    );
+    expect(hud).toContain('consumePeek: () => this.peekGuard.consume(),');
+  });
+
   it('the bags x-btn closes the whole bank cluster on touch (mirrors the vendor close)', () => {
     // On mobile the bank hides its own x-btn under the pairing, so the bags x-btn is
     // the cluster's single close control: it must close the bank companion too, never

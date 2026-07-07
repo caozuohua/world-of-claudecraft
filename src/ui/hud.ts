@@ -3255,6 +3255,7 @@ export class Hud {
     world: () => this.sim,
     wocBalanceHtml: () => this.wocBalanceHtml(),
     hideTooltip: () => this.hideTooltip(),
+    consumePeek: () => this.peekGuard.consume(),
     cancelPetFeed: () => this.cancelPetFeed(),
     // Non-trapping focus capture/return (bags is a non-modal companion of vendor /
     // trade / market): NOT windowFocus('#bags'), which would install a Tab trap and
