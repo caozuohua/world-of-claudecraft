@@ -55,10 +55,11 @@ describe('bagsWindowShown', () => {
   it('reads an explicitly hidden window as NOT shown', () => {
     expect(bagsWindowShown('none')).toBe(false);
   });
-  it('reads a shown window as shown, for either shown value (flex, or the block pet-feed path)', () => {
+  it('reads any non-hidden value as shown (not pinned to the current shown value)', () => {
+    // #bags is only ever assigned 'flex' today, but the guard checks the hidden
+    // values (none / '') rather than pinning to 'flex', so it stays correct if the
+    // shown value ever changes. Assert a non-'flex' non-hidden value still closes.
     expect(bagsWindowShown('flex')).toBe(true);
-    // The close() guard documents a 'block' pet-feed path; treat any non-hidden
-    // value as shown so a block-shown bags still closes on toggle.
     expect(bagsWindowShown('block')).toBe(true);
   });
 });
