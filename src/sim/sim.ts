@@ -3493,9 +3493,10 @@ export class Sim {
     if (this.updateFearMovement(p)) return;
     // The rest of the step (turn integration, wish vector, slope gates, swept
     // static collision, the vertical pass with fall damage) moved VERBATIM to
-    // player_motion.ts (MV1); playerMotionDeps binds the live Sim callbacks
-    // (fiesta-aware moveSpeedMult, delve-aware resolveMove, cancelCast/standUp/
-    // dealDamage) so behavior and the rng draw order are unchanged.
+    // player_motion.ts (MV1), which also eases the body off terrain walls at the
+    // end (the standoff); playerMotionDeps binds the live Sim callbacks (fiesta-
+    // aware moveSpeedMult, delve-aware resolveMove, cancelCast/standUp/dealDamage)
+    // so behavior and the rng draw order are unchanged.
     stepPlayerMotion(this.playerMotionDeps, p, meta.moveInput);
   }
 
