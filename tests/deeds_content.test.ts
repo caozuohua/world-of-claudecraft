@@ -98,7 +98,7 @@ describe('table shape', () => {
   });
 
   it('names and descs are non-empty English with no em/en dashes or emoji', () => {
-    const banned = /[–—\u{1F000}-\u{1FAFF}☀-➿]/u;
+    const banned = /[\u2013\u2014\u{1F000}-\u{1FAFF}\u2600-\u27BF]/u;
     for (const def of ALL) {
       expect(def.name.length, def.id).toBeGreaterThan(0);
       expect(def.desc.length, def.id).toBeGreaterThan(0);
