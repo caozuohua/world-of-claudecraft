@@ -6400,7 +6400,7 @@ export class Hud {
     // routes through the elided writer facet; the aria-label keeps its per-frame t()
     // call IN the core while the painter elides the DOM setAttribute (Top risk 4).
     this.renderPetBar();
-    if (this.spellbookWindow.isOpen) this.spellbookWindow.refreshHotbarControls();
+    if (this.spellbookWindow.isOpen) this.spellbookWindow.tickOpen();
     this.actionBarPainter.paint(
       this.actionBarView.tick({ player: p, target: target ?? null, inventory: sim.inventory }),
     );
