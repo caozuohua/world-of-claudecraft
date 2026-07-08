@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { MOBS } from '../src/sim/data';
 import { combatProfileForMob, scaledDefaultMobMeleeRange } from '../src/sim/mob_combat';
 import { Sim } from '../src/sim/sim';
 import type { Entity, SimEvent } from '../src/sim/types';
@@ -730,6 +731,42 @@ describe('world boss is imposing and loud', () => {
     expect(yellTextTo(far).some((t) => /THUNDER ANSWERS/.test(t))).toBe(true);
     // ...but nothing reaches a player 400yd away, past the loud range.
     expect(yellTextTo(tooFar)).toHaveLength(0);
+  });
+});
+
+describe('world boss pathing (phases through obstacles)', () => {
+  it('walks a dead-straight chase line through a building collider', () => {
+    const sim = makeSim();
+    const { boss } = spawnBossNow(sim);
+    // The zone1 house at (10, 12) is a 7x6 OBB collider. Park the boss south of
+    // it and march him due north straight through: with phasesThroughObstacles
+    // his x never deviates and he arrives on the straight-line tick budget. A
+    // sliding mover would have to fan around the OBB (x deviates) or stall.
+    boss.pos = { x: 10, z: 2, y: 0 };
+    const dest = { x: 10, z: 22, y: 0 };
+    let arrived = false;
+    const straightTicks = Math.ceil(20 / (boss.moveSpeed * (1 / 20))) + 2;
+    for (let t = 0; t < straightTicks && !arrived; t++) {
+      arrived = (sim as any).moveToward(boss, dest, boss.moveSpeed);
+      expect(Math.abs(boss.pos.x - 10)).toBeLessThan(1e-6);
+    }
+    expect(arrived).toBe(true);
+  });
+
+  it('an ordinary mob still collides: the same straight line is deflected', () => {
+    const sim = makeSim();
+    const { boss } = spawnBossNow(sim);
+    // Reuse the boss entity but masquerade as an unflagged template: the gate
+    // reads MOBS[templateId], so a plain wolf template must NOT phase.
+    boss.templateId = 'forest_wolf';
+    boss.pos = { x: 10, z: 8, y: 0 };
+    (sim as any).moveToward(boss, { x: 10, z: 22, y: 0 }, 7);
+    const deflected = Math.abs(boss.pos.x - 10) > 1e-6 || Math.abs(boss.pos.z - 8) < 0.3;
+    expect(deflected).toBe(true);
+  });
+
+  it('the template opts in via phasesThroughObstacles', () => {
+    expect(MOBS[BOSS_ID]?.phasesThroughObstacles).toBe(true);
   });
 });
 

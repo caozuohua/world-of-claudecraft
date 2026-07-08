@@ -819,6 +819,10 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     boss: true,
     elite: true,
     canSwim: false,
+    // The mountain does not path around camp furniture: every chase step walks
+    // the straight line through fences, buildings, and the waterline, so he can
+    // always go directly at his target and never wedges on a collider.
+    phasesThroughObstacles: true,
     ccImmune: true,
     // A raid boss cannot be perma-snared by a wall of Frostbolts / Hamstrings: slows do
     // not stick to him (ccImmune already blocks stun/root/etc; slow is separate).
