@@ -854,16 +854,16 @@ export interface PlayerMeta {
   // Session-only: name of the last player who whispered us, for "/r" replies.
   // Never persisted — a fresh login starts with no reply target.
   lastWhisperFrom?: string;
-  // Session-only World Market browse query: the search string, the type / subtype /
-  // rarity filters, and the page index. The server filters + paginates against this,
-  // so the player can page through and filter the WHOLE market a window at a time.
-  // Never persisted, resets on login.
-  marketQuery: MarketQuery;
   // Session-only World Market browse filter. The market is capped at
   // MARKET_WIRE_LIMIT listings per snapshot to bound wire cost, so this
   // server-side substring filter (matched against item names) is how a player
   // reaches goods past the cap. Never persisted: resets on login.
   marketFilter: string;
+  // Session-only World Market browse query: the search string, the type / subtype /
+  // rarity filters, and the page index. The server filters + paginates against this,
+  // so the player can page through and filter the WHOLE market a window at a time.
+  // Never persisted, resets on login.
+  marketQuery: MarketQuery;
   // Flat per-craft skill tracking (#1126): one independent, additive-only skill
   // value per craft on the ten-craft ring (see professions/wheel.ts). Persisted
   // in CharacterState.
@@ -1616,11 +1616,7 @@ export class Sim {
       craftSkills: emptyCraftSkills(),
       marketQuery: defaultMarketQuery(),
       mailWelcomed: false,
-      marketQuery: defaultMarketQuery(),
-      marketFilter: '',
-      craftSkills: emptyCraftSkills(),
       archetype: emptyArchetypeState(),
-      mailWelcomed: false,
       delveMarks: 0,
       delveClears: {},
       companionUpgrades: {},
