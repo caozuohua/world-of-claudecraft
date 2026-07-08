@@ -413,22 +413,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'physical',
     requiresTarget: false,
     exclusiveGroup: 'warrior_shout',
-    effects: [{ type: 'selfBuff', kind: 'buff_ap', value: 20, duration: 120 }],
-    ranks: [
-      {
-        rank: 2,
-        level: 12,
-        cost: 10,
-        effects: [{ type: 'selfBuff', kind: 'buff_ap', value: 35, duration: 120 }],
-      },
-      {
-        rank: 3,
-        level: 20,
-        cost: 10,
-        effects: [{ type: 'selfBuff', kind: 'buff_ap', value: 50, duration: 120 }],
-      },
-    ],
-    description: 'Increases your attack power by 20 for 2 min.',
+    effects: [{ type: 'buffTarget', kind: 'buff_ap_pct', value: 10, duration: 120, party: true }],
+    description: 'A shout that increases the attack power of all party members by 10% for 2 min.',
   },
   commanding_shout: {
     id: 'commanding_shout',
@@ -712,7 +698,7 @@ export const ABILITIES: Record<string, AbilityDef> = {
       },
     ],
     description:
-      "Sunders the target's armor, reducing it by $d per application. Stacks up to 5 times. Generates a high amount of threat.",
+      "Sunders the target's armor, reducing it by 2% per application. Stacks up to 5 times (10% at full stacks). Generates a high amount of threat.",
   },
   taunt: {
     id: 'taunt',
@@ -820,16 +806,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     range: 0,
     school: 'arcane',
     requiresTarget: false,
-    effects: [{ type: 'selfBuff', kind: 'buff_int', value: 2, duration: 1800 }],
-    ranks: [
-      {
-        rank: 2,
-        level: 14,
-        cost: 60,
-        effects: [{ type: 'selfBuff', kind: 'buff_int', value: 7, duration: 1800 }],
-      },
-    ],
-    description: 'Increases Intellect by 2 for 30 min.',
+    effects: [{ type: 'buffTarget', kind: 'buff_int_pct', value: 5, duration: 1800, party: true }],
+    description: 'Increases the Intellect of all party members by 5% for 30 min.',
   },
   frostbolt: {
     id: 'frostbolt',
@@ -1458,9 +1436,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'physical',
     requiresTarget: true,
     spendsCombo: true,
-    effects: [{ type: 'sunder', armor: 170, maxStacks: 1 }],
-    description:
-      'Finishing move that exposes the target, reducing its armor. More combo points spent build into a deeper cut.',
+    // Finisher: lands the full Sunder cap (5 stacks = 10% armor) in one cast.
+    effects: [{ type: 'sunder', armor: 170, maxStacks: 5, full: true }],
+    description: 'Finishing move that exposes the target, reducing its armor by 10% for 30 sec.',
   },
   rupture: {
     id: 'rupture',
@@ -1601,22 +1579,10 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'holy',
     requiresTarget: false,
     exclusiveGroup: 'paladin_aura',
-    effects: [{ type: 'selfBuff', kind: 'buff_armor', value: 40, duration: 1800 }],
-    ranks: [
-      {
-        rank: 2,
-        level: 12,
-        cost: 0,
-        effects: [{ type: 'selfBuff', kind: 'buff_armor', value: 75, duration: 1800 }],
-      },
-      {
-        rank: 3,
-        level: 18,
-        cost: 0,
-        effects: [{ type: 'selfBuff', kind: 'buff_armor', value: 110, duration: 1800 }],
-      },
+    effects: [
+      { type: 'buffTarget', kind: 'buff_armor_pct', value: 10, duration: 1800, party: true },
     ],
-    description: 'Increases your armor by 40 for 30 min.',
+    description: 'Increases the armor of all party members by 10%.',
   },
   judgement: {
     id: 'judgement',
@@ -1645,22 +1611,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'holy',
     requiresTarget: true,
     targetType: 'friendly',
-    effects: [{ type: 'buffTarget', kind: 'buff_ap', value: 15, duration: 300 }],
-    ranks: [
-      {
-        rank: 2,
-        level: 12,
-        cost: 40,
-        effects: [{ type: 'buffTarget', kind: 'buff_ap', value: 30, duration: 300 }],
-      },
-      {
-        rank: 3,
-        level: 20,
-        cost: 60,
-        effects: [{ type: 'buffTarget', kind: 'buff_ap', value: 45, duration: 300 }],
-      },
-    ],
-    description: 'Places a Blessing on a friendly target, increasing attack power by 15 for 5 min.',
+    effects: [{ type: 'buffTarget', kind: 'buff_ap_pct', value: 10, duration: 1800, party: true }],
+    description:
+      'Blesses the party, increasing the attack power of all party members by 10% for 30 min.',
   },
   divine_protection: {
     id: 'divine_protection',
@@ -2119,22 +2072,8 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'holy',
     requiresTarget: true,
     targetType: 'friendly',
-    effects: [{ type: 'buffTarget', kind: 'buff_sta', value: 3, duration: 1800 }],
-    ranks: [
-      {
-        rank: 2,
-        level: 12,
-        cost: 55,
-        effects: [{ type: 'buffTarget', kind: 'buff_sta', value: 7, duration: 1800 }],
-      },
-      {
-        rank: 3,
-        level: 20,
-        cost: 80,
-        effects: [{ type: 'buffTarget', kind: 'buff_sta', value: 12, duration: 1800 }],
-      },
-    ],
-    description: "Increases the target's Stamina by 3 for 30 min.",
+    effects: [{ type: 'buffTarget', kind: 'buff_sta_pct', value: 5, duration: 1800, party: true }],
+    description: 'Increases the Stamina of all party members by 5% for 30 min.',
   },
   shadow_word_pain: {
     id: 'shadow_word_pain',
@@ -2968,22 +2907,11 @@ export const ABILITIES: Record<string, AbilityDef> = {
     school: 'nature',
     requiresTarget: true,
     targetType: 'friendly',
-    effects: [{ type: 'buffTarget', kind: 'buff_armor', value: 25, duration: 1800 }],
-    ranks: [
-      {
-        rank: 2,
-        level: 10,
-        cost: 35,
-        effects: [{ type: 'buffTarget', kind: 'buff_armor', value: 50, duration: 1800 }],
-      },
-      {
-        rank: 3,
-        level: 16,
-        cost: 50,
-        effects: [{ type: 'buffTarget', kind: 'buff_armor', value: 75, duration: 1800 }],
-      },
+    effects: [
+      { type: 'buffTarget', kind: 'buff_stats_pct', value: 5, duration: 1800, party: true },
     ],
-    description: 'Places the Wildward on a friendly target, increasing armor by 25 for 30 min.',
+    description:
+      'Places the Wildward on the party, increasing all attributes of all party members by 5% for 30 min.',
   },
   moonfire: {
     id: 'moonfire',
@@ -3429,8 +3357,9 @@ export const ABILITIES: Record<string, AbilityDef> = {
     range: 30,
     school: 'nature',
     requiresTarget: true,
-    effects: [{ type: 'sunder', armor: 35, maxStacks: 1 }],
-    description: "Decreases the target's armor by 35 for 40 sec.",
+    effects: [{ type: 'faerieFire', duration: 40 }],
+    description:
+      "Decreases the target's armor by 10% for 40 sec. Does not stack with Sunder Armor.",
   },
   hibernate: {
     id: 'hibernate',

@@ -2787,8 +2787,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.defensive_stance.description':
     'Posizione di combattimento difensiva: generi il 30% di minaccia in più, ma infliggi e subisci il 10% di danni in meno. Lanciala di nuovo per uscire dalla posizione.',
   'entities.abilities.sunder_armor.name': 'Trancia Armatura',
-  'entities.abilities.sunder_armor.description':
-    "Lacera l'armatura del bersaglio, riducendola di {damage} per applicazione. Si accumula fino a 5 volte. Genera molta minaccia.",
   'entities.abilities.taunt.name': 'Aizzare',
   'entities.abilities.taunt.description':
     'Provoca il bersaglio: la tua minaccia sale fino a eguagliare quella del suo nemico più odiato e lo costringe ad attaccarti per 3 s.',

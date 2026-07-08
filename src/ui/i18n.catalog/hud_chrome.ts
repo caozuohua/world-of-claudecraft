@@ -1191,10 +1191,22 @@ export const hudChromeStrings = {
       allStats: 'Reduces all attributes by {value}',
     },
     allStatsPctReduce: 'Reduces all attributes by {pct}%',
+    // Percent raid buffs (Arcane Intellect, Mark of the Wild, Fortitude, Battle Shout,
+    // Blessing of Might, Devotion Aura).
+    increasePct: {
+      ap: 'Increases attack power by {pct}%',
+      armor: 'Increases armor by {pct}%',
+      int: 'Increases Intellect by {pct}%',
+      sta: 'Increases Stamina by {pct}%',
+      allStats: 'Increases all attributes by {pct}%',
+    },
     dodge: 'Increases dodge chance by {pct}%',
     dodgeReduce: 'Reduces dodge chance by {pct}%',
     armorFlat: 'Reduces armor by {value}',
     armorFlatStacks: 'Reduces armor by {value} ({stacks} stacks)',
+    // Sunder Armor / Faerie Fire: percent armor reductions (Sunder stacks).
+    armorPct: 'Reduces armor by {pct}%',
+    armorPctStacks: 'Reduces armor by {pct}% ({stacks} stacks)',
     mortalWound: 'Reduces healing received by {pct}%',
     vulnerability: 'Increases damage taken by {pct}%',
     physVuln: 'Increases physical damage taken by {pct}%',

@@ -626,7 +626,11 @@ const classAbilityNamesEn = {
         'Reaver Strike',
         'A strong attack that increases melee damage by {damage}. Activates on your next swing.',
       ],
-      ['battle_shout', 'Iron Bellow', 'Increases your attack power by 20 for 2 min.'],
+      [
+        'battle_shout',
+        'Iron Bellow',
+        'A shout that increases the attack power of all party members by 10% for 2 min.',
+      ],
       ['commanding_shout', 'Bolstering Cry', 'Increases your Stamina by 6 for 2 min.'],
       [
         'demoralizing_shout',
@@ -678,7 +682,7 @@ const classAbilityNamesEn = {
       [
         'sunder_armor',
         'Armor Shear',
-        "Sunders the target's armor, reducing it by {damage} per application. Stacks up to 5 times. Generates a high amount of threat.",
+        "Sunders the target's armor, reducing it by 2% per application. Stacks up to 5 times (10% at full stacks). Generates a high amount of threat.",
       ],
       [
         'taunt',
@@ -695,7 +699,11 @@ const classAbilityNamesEn = {
         'Hoarfrost Mantle',
         'Encases you in frost, increasing armor by 30 for 30 min.',
       ],
-      ['arcane_intellect', 'Aether Insight', 'Increases Intellect by 2 for 30 min.'],
+      [
+        'arcane_intellect',
+        'Aether Insight',
+        'Increases the Intellect of all party members by 5% for 30 min.',
+      ],
       [
         'frostbolt',
         'Rimelance',
@@ -801,7 +809,7 @@ const classAbilityNamesEn = {
       [
         'expose_armor',
         'Armor Breach',
-        'Finishing move that exposes the target, reducing its armor. More combo points spent build into a deeper cut.',
+        'Finishing move that exposes the target, reducing its armor by 10% for 30 sec.',
       ],
       [
         'rupture',
@@ -834,7 +842,7 @@ const classAbilityNamesEn = {
         'Fills you with Holy power for 30 sec, causing each of your melee swings to deal 4 additional Holy damage. Unleash with Verdict.',
       ],
       ['holy_light', 'Mending Light', 'Heals a friendly target for {damage}.'],
-      ['devotion_aura', 'Steadfast Aura', 'Increases your armor by 40 for 30 min.'],
+      ['devotion_aura', 'Steadfast Aura', 'Increases the armor of all party members by 10%.'],
       [
         'judgement',
         'Verdict',
@@ -843,7 +851,7 @@ const classAbilityNamesEn = {
       [
         'blessing_of_might',
         'Oath of Iron',
-        'Places a Blessing on a friendly target, increasing attack power by 15 for 5 min.',
+        'Blesses the party, increasing the attack power of all party members by 10% for 30 min.',
       ],
       ['divine_protection', 'Ward of Faith', 'A protective ward absorbs 50 damage for 10 sec.'],
       ['hammer_of_justice', 'Sundering Gavel', 'Stuns the target for 3 sec.'],
@@ -923,7 +931,7 @@ const classAbilityNamesEn = {
       [
         'power_word_fortitude',
         'Litany of Resolve',
-        "Increases the target's Stamina by 3 for 30 min.",
+        'Increases the Stamina of all party members by 5% for 30 min.',
       ],
       [
         'shadow_word_pain',
@@ -1042,7 +1050,7 @@ const classAbilityNamesEn = {
       [
         'mark_of_the_wild',
         'Wildward',
-        'Places the Wildward on a friendly target, increasing armor by 25 for 30 min.',
+        'Places the Wildward on the party, increasing all attributes of all party members by 5% for 30 min.',
       ],
       [
         'moonfire',
@@ -1105,7 +1113,11 @@ const classAbilityNamesEn = {
       ],
       ['enrage', 'Stoke', 'Generates 20 rage instantly. Bruin Form only.'],
       ['bash', 'Concuss', 'Stuns the target for 2 sec. Bruin Form only.'],
-      ['faerie_fire', 'Witchlight', "Decreases the target's armor by 35 for 40 sec."],
+      [
+        'faerie_fire',
+        'Witchlight',
+        "Decreases the target's armor by 10% for 40 sec. Does not stack with Sunder Armor.",
+      ],
       [
         'hibernate',
         'Slumber',

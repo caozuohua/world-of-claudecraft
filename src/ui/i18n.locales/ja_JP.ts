@@ -1817,7 +1817,7 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
     '防御用の戦闘スタンスです。脅威生成が30%増加しますが、与えるダメージと受けるダメージが10%低下します。再度使用するとスタンスを解除します。',
   'entities.abilities.sunder_armor.name': '装甲切断',
   'entities.abilities.sunder_armor.description':
-    '対象のアーマーを破壊し、1回ごとに {damage} 低下させます。最大5回まで重なります。大量の脅威を生成します。',
+    '対象のアーマーを破壊し、1回ごとに 2% 低下させます。最大5回まで重なります（最大で10%）。大量の脅威を生成します。',
   'entities.abilities.taunt.name': '挑発',
   'entities.abilities.taunt.description':
     '対象を挑発します。あなたの脅威が対象の最も憎む敵と同じ値まで上がり、3秒間あなたを攻撃させます。',
@@ -5152,6 +5152,13 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.dodgeReduce': '回避率を{pct}%低下させる',
   'hudChrome.auraEffect.armorFlat': '防御力を{value}低下させる',
   'hudChrome.auraEffect.armorFlatStacks': '防御力を{value}低下させる({stacks}スタック)',
+  'hudChrome.auraEffect.increasePct.ap': '攻撃力を{pct}%上昇させる',
+  'hudChrome.auraEffect.increasePct.armor': '防御力を{pct}%上昇させる',
+  'hudChrome.auraEffect.increasePct.int': '知力を{pct}%上昇させる',
+  'hudChrome.auraEffect.increasePct.sta': '耐久力を{pct}%上昇させる',
+  'hudChrome.auraEffect.increasePct.allStats': 'すべての能力値を{pct}%上昇させる',
+  'hudChrome.auraEffect.armorPct': '防御力を{pct}%低下させる',
+  'hudChrome.auraEffect.armorPctStacks': '防御力を{pct}%低下させる({stacks}スタック)',
   'hudChrome.auraEffect.physVuln': '受ける物理ダメージを{pct}%増加させる',
   'hudChrome.auraEffect.mortalWound': '受ける回復量を{pct}%低下させる',
   'hudChrome.auraEffect.vulnerability': '受けるダメージを{pct}%増加させる',

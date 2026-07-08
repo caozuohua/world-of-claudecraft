@@ -1801,7 +1801,7 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
     '방어 전투 태세입니다. 위협 수준을 30% 더 생성하지만, 주고받는 피해가 10% 감소합니다. 다시 시전하면 태세를 해제합니다.',
   'entities.abilities.sunder_armor.name': '방어구 절단',
   'entities.abilities.sunder_armor.description':
-    '대상의 방어구를 가르고 적용마다 {damage}만큼 감소시킵니다. 최대 5번 중첩됩니다. 많은 위협 수준을 생성합니다.',
+    '대상의 방어구를 가르고 적용마다 2%만큼 감소시킵니다. 최대 5번 중첩됩니다(최대 중첩 시 10%). 많은 위협 수준을 생성합니다.',
   'entities.abilities.taunt.name': '부추김',
   'entities.abilities.taunt.description':
     '대상을 도발합니다. 자신의 위협 수준이 대상이 가장 증오하는 적과 같아지며, 3초 동안 자신을 공격하게 만듭니다.',
@@ -5161,6 +5161,13 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.dodgeReduce': '회피 확률을 {pct}% 감소시킵니다',
   'hudChrome.auraEffect.armorFlat': '방어도를 {value} 감소시킵니다',
   'hudChrome.auraEffect.armorFlatStacks': '방어도를 {value} 감소시킵니다 ({stacks}중첩)',
+  'hudChrome.auraEffect.increasePct.ap': '공격력을 {pct}% 증가시킵니다',
+  'hudChrome.auraEffect.increasePct.armor': '방어도를 {pct}% 증가시킵니다',
+  'hudChrome.auraEffect.increasePct.int': '지능을 {pct}% 증가시킵니다',
+  'hudChrome.auraEffect.increasePct.sta': '체력을 {pct}% 증가시킵니다',
+  'hudChrome.auraEffect.increasePct.allStats': '모든 능력치를 {pct}% 증가시킵니다',
+  'hudChrome.auraEffect.armorPct': '방어도를 {pct}% 감소시킵니다',
+  'hudChrome.auraEffect.armorPctStacks': '방어도를 {pct}% 감소시킵니다 ({stacks}중첩)',
   'hudChrome.auraEffect.physVuln': '받는 물리 피해를 {pct}% 증가시킵니다',
   'hudChrome.auraEffect.mortalWound': '받는 치유량을 {pct}% 감소시킵니다',
   'hudChrome.auraEffect.vulnerability': '받는 피해를 {pct}% 증가시킵니다',

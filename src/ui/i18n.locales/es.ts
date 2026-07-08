@@ -2795,8 +2795,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.defensive_stance.description':
     'Actitud de combate defensiva: generas un 30% más de amenaza, pero infliges y recibes un 10% menos de daño. Lánzala de nuevo para salir de la actitud.',
   'entities.abilities.sunder_armor.name': 'Cizalla de Armadura',
-  'entities.abilities.sunder_armor.description':
-    'Hiende la armadura del objetivo y la reduce en {damage} por aplicación. Se acumula hasta 5 veces. Genera mucha amenaza.',
   'entities.abilities.taunt.name': 'Provocar',
   'entities.abilities.taunt.description':
     'Provoca al objetivo: tu amenaza sube hasta igualar la de su enemigo más odiado y queda obligado a atacarte durante 3 s.',

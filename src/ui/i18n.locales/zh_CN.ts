@@ -1735,7 +1735,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '防御战斗姿态：你产生的威胁值提高 30%，但造成和受到的伤害降低 10%。再次施放可离开该姿态。',
   'entities.abilities.sunder_armor.name': '削甲',
   'entities.abilities.sunder_armor.description':
-    '撕裂目标的护甲，每次使其降低 {damage}。最多叠加 5 次。产生大量威胁值。',
+    '撕裂目标的护甲，每次使其降低 2%。最多叠加 5 次（叠满时降低 10%）。产生大量威胁值。',
   'entities.abilities.taunt.name': '挑衅',
   'entities.abilities.taunt.description':
     '嘲讽目标：你的威胁值提高到其最仇恨敌人的水平，并强迫其攻击你 3 秒。',
@@ -4896,6 +4896,13 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.auraEffect.dodgeReduce': '躲闪几率降低 {pct}%',
   'hudChrome.auraEffect.armorFlat': '护甲降低 {value}',
   'hudChrome.auraEffect.armorFlatStacks': '护甲降低 {value}（{stacks} 层）',
+  'hudChrome.auraEffect.increasePct.ap': '攻击强度提高 {pct}%',
+  'hudChrome.auraEffect.increasePct.armor': '护甲提高 {pct}%',
+  'hudChrome.auraEffect.increasePct.int': '智力提高 {pct}%',
+  'hudChrome.auraEffect.increasePct.sta': '耐力提高 {pct}%',
+  'hudChrome.auraEffect.increasePct.allStats': '所有属性提高 {pct}%',
+  'hudChrome.auraEffect.armorPct': '护甲降低 {pct}%',
+  'hudChrome.auraEffect.armorPctStacks': '护甲降低 {pct}%（{stacks} 层）',
   'hudChrome.auraEffect.physVuln': '受到的物理伤害提高 {pct}%',
   'hudChrome.auraEffect.mortalWound': '受到的治疗降低 {pct}%',
   'hudChrome.auraEffect.vulnerability': '受到的伤害提高 {pct}%',
