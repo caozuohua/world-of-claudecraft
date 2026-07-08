@@ -398,7 +398,7 @@ export const ko_KR: EnTranslations = {
     },
     "vcup": {
       "title": "베일 컵",
-      "shootPower": "POWER",
+      "shootPower": "파워",
       "close": "베일 컵 창 닫기",
       "offlineNote": "대진표가 닫혀 있습니다. 지금은 베일 컵을 이용할 수 없습니다.",
       "recordLine": "전적: {wins}승 {losses}패 {draws}무.",
@@ -456,7 +456,7 @@ export const ko_KR: EnTranslations = {
       "guildRecordLine": "길드 전적: {wins}승 {losses}패.",
       "guildBoardHeading": "길드 깃발",
       "guildBoardEmpty": "아직 출전한 길드가 없습니다. 깃발을 올리세요!",
-      "guildBoardWl": "{wins} W, {losses} L",
+      "guildBoardWl": "{wins}승 {losses}패",
       "practice": "봇 연습 경기",
       "practiceNote": "소우필드에서 봇과의 정식 경기를 즉시 시작합니다.",
       "practicingNow": "연습 중 ({count}):",

@@ -398,7 +398,7 @@ export const zh_TW: EnTranslations = {
     },
     "vcup": {
       "title": "溪谷盃",
-      "shootPower": "POWER",
+      "shootPower": "力道",
       "close": "關閉溪谷盃視窗",
       "offlineNote": "賽程簿已闔上。溪谷盃目前無法使用。",
       "recordLine": "你的戰績：{wins} 勝，{losses} 敗，{draws} 平。",
@@ -456,7 +456,7 @@ export const zh_TW: EnTranslations = {
       "guildRecordLine": "你的公會戰績：{wins} 勝，{losses} 敗。",
       "guildBoardHeading": "公會旗幟榜",
       "guildBoardEmpty": "還沒有公會上場。揚起你的旗幟吧！",
-      "guildBoardWl": "{wins} W, {losses} L",
+      "guildBoardWl": "{wins} 勝，{losses} 敗",
       "practice": "與機器人練習賽",
       "practiceNote": "立即在母豬場開始一場完整的機器人比賽。",
       "practicingNow": "正在練習（{count}）：",

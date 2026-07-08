@@ -398,7 +398,7 @@ export const ja_JP: EnTranslations = {
     },
     "vcup": {
       "title": "ヴェイルカップ",
-      "shootPower": "POWER",
+      "shootPower": "パワー",
       "close": "ヴェイルカップウィンドウを閉じる",
       "offlineNote": "対戦簿は閉じられている。ヴェイルカップは現在利用できない。",
       "recordLine": "戦績:{wins} 勝 {losses} 敗 {draws} 分。",
@@ -456,7 +456,7 @@ export const ja_JP: EnTranslations = {
       "guildRecordLine": "ギルド成績：{wins} 勝 {losses} 敗。",
       "guildBoardHeading": "ギルド旗",
       "guildBoardEmpty": "まだ参加したギルドはない。旗を掲げよう！",
-      "guildBoardWl": "{wins} W, {losses} L",
+      "guildBoardWl": "{wins} 勝 {losses} 敗",
       "practice": "ボット練習試合",
       "practiceNote": "ソウフィールドでボットとのフル試合をすぐに始める。",
       "practicingNow": "練習中（{count}）：",

@@ -398,7 +398,7 @@ export const ru_RU: EnTranslations = {
     },
     "vcup": {
       "title": "Кубок Долины",
-      "shootPower": "POWER",
+      "shootPower": "СИЛА",
       "close": "Закрыть окно Кубка Долины",
       "offlineNote": "Книга матчей закрыта. Кубок Долины сейчас недоступен.",
       "recordLine": "Ваш счёт: побед {wins}, поражений {losses}, ничьих {draws}.",
@@ -456,7 +456,7 @@ export const ru_RU: EnTranslations = {
       "guildRecordLine": "Счёт вашей гильдии: {wins} побед, {losses} поражений.",
       "guildBoardHeading": "Знамёна гильдий",
       "guildBoardEmpty": "Пока ни одна гильдия не вышла на поле. Поднимите своё знамя!",
-      "guildBoardWl": "{wins} W, {losses} L",
+      "guildBoardWl": "{wins} побед, {losses} поражений",
       "practice": "Тренировка с ботами",
       "practiceNote": "Немедленно начинает полный матч с ботами на Свином поле.",
       "practicingNow": "Сейчас тренируются ({count}):",

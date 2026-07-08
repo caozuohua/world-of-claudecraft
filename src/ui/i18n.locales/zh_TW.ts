@@ -14,6 +14,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const zh_TW: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.vcup.guildBoardWl': '{wins} 勝，{losses} 敗',
+  'hudChrome.vcup.shootPower': '力道',
   'hudChrome.discord.roleTag.coredevs': '核心開發者',
   'hudChrome.options.version': 'v{version}（{build}）',
   'auth.emailPlaceholder': 'you@example.com',

@@ -14,6 +14,8 @@
 import type { TranslationKey } from '../i18n.catalog';
 
 export const ru_RU: Partial<Record<TranslationKey, string>> = {
+  'hudChrome.vcup.guildBoardWl': '{wins} побед, {losses} поражений',
+  'hudChrome.vcup.shootPower': 'СИЛА',
   'hudChrome.discord.roleTag.coredevs': 'Ведущий разработчик',
   'hudChrome.options.version': 'v{version} ({build})',
   'auth.emailPlaceholder': 'ivan@example.com',
