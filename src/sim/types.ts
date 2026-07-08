@@ -1406,6 +1406,9 @@ export interface NpcDef {
   // The Merchant: talking to this NPC opens the player-driven World Market
   // (auction house) instead of a fixed vendor stock.
   market?: boolean;
+  // A banker: talking to this NPC opens the player's bank (deposit box). The bank
+  // deposit/withdraw/buy-slots commands gate on standing near one of these.
+  banker?: true;
   // The Heroic Quartermaster: talking to this NPC opens the Heroic Marks
   // shop (src/sim/content/heroic_vendor.ts) instead of a copper vendor stock.
   heroicVendor?: boolean;
@@ -1982,6 +1985,10 @@ export type SimEvent = { pid?: number } & (
   // `collected` the coin taken, `tooManyParcels` the attachment cap). All
   // always carry pid.
   | { type: 'mailbox' }
+  // Asks the client to open the bank window (the interact path at a banker NPC).
+  // Structured data only (pid supplied by the union intersection); the client
+  // builds every visible string, the mailbox precedent.
+  | { type: 'bank' }
   | { type: 'mailArrived'; senderName: string; letterId?: string }
   | { type: 'mailResult'; code: MailResultCode; value?: number; name?: string }
   // Guild calendar outcome. Emitted only by the server's SocialService (the

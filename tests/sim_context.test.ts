@@ -269,6 +269,7 @@ function makeFakeHost() {
     nextLootRollId: 1,
     devCommands: false,
     marketListings: [],
+    bankerIds: [],
     vcup: createVcState(),
     emit: vi.fn(),
     error: vi.fn(),
@@ -483,6 +484,14 @@ describe('createSimContext (isolated, fake host)', () => {
     clock.tick = 7;
     expect(ctx.time).toBe(12.5);
     expect(ctx.tickCount).toBe(7);
+  });
+
+  it('exposes bankerIds as a live shared view (the marketListings idiom)', () => {
+    const { host } = makeFakeHost();
+    const ctx = createSimContext(host);
+    expect(ctx.bankerIds).toBe(host.bankerIds);
+    host.bankerIds.push(4242); // the Sim ctor pushes ids after the ctx is built
+    expect(ctx.bankerIds).toEqual([4242]);
   });
 
   it('passes every callback through to the host by identity (no rewrapping)', () => {

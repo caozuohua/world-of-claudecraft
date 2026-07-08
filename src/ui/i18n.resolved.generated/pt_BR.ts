@@ -1307,6 +1307,50 @@ export const pt_BR: EnTranslations = {
         "takeParcelsFirst": "Retire as encomendas antes de descartar a carta."
       }
     },
+    "bank": {
+      "title": "Banco",
+      "subtitle": "A Arca Dourada",
+      "close": "Fechar o banco",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Espaços do banco usados: {used} de {total}",
+      "empty": "Seu banco está vazio.",
+      "tooFar": "Você precisa estar perto de um banqueiro para ver seu banco.",
+      "buySlots": "Comprar {count} espaços",
+      "buySlotsMaxed": "Totalmente expandido",
+      "buyConfirm": "Comprar {count} espaços de banco adicionais por {price}?",
+      "buyConfirmAccept": "Comprar",
+      "withdrawHint": "Clique para retirar",
+      "withdrawPartialHint": "Shift-clique para retirar uma quantidade parcial",
+      "depositHint": "Clique para depositar",
+      "depositPartialHint": "Shift-clique para depositar uma quantidade parcial",
+      "cannotDeposit": "Não pode ir para o banco",
+      "depositQuantityTitle": "Depositar {item}",
+      "depositQuantityInput": "Quantidade a depositar",
+      "depositQuantityConfirm": "Depositar",
+      "withdrawQuantityTitle": "Retirar {item}",
+      "withdrawQuantityInput": "Quantidade a retirar",
+      "withdrawQuantityConfirm": "Retirar",
+      "filterGroupAria": "Filtrar o banco por categoria",
+      "sortAria": "Ordenar itens do banco",
+      "searchAria": "Buscar itens do banco pelo nome",
+      "depositAll": "Depositar todos os materiais",
+      "depositAllDone": "Materiais depositados: {count}.",
+      "depositAllFull": "Materiais depositados: {count}. O banco agora está cheio.",
+      "depositAllNone": "Banco cheio: nada foi depositado.",
+      "bonusTitle": "Espaços bônus",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Email verificado",
+      "bonusSourceDiscord": "Discord vinculado",
+      "bonusSourceWallet": "Carteira vinculada",
+      "bonusSourceReferral": "Amigos indicados",
+      "bonusAdvertEmail": "Verifique seu email para ganhar 2 espaços.",
+      "bonusAdvertDiscord": "Vincule seu Discord para ganhar 2 espaços.",
+      "bonusAdvertWallet": "Vincule uma carteira para ganhar 2 espaços.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Convide um amigo: quando ele alcançar o nível 10, cada um de vocês ganha 2 espaços, até 5 amigos.",
+      "bonusSectionAria": "Espaços bônus do banco e como ganhar mais"
+    },
     "calendar": {
       "title": "Calendário de Eventos",
       "close": "Fechar calendário",
@@ -2327,6 +2371,10 @@ export const pt_BR: EnTranslations = {
       "vendorsBody": "Cidades e postos avançados estão salpicados de comerciantes, cada um com seu próprio ramo. Provedores estocam comida e bebida, ferreiros e armeiros têm equipamento, e um intendente mantém apetrechos práticos de viagem. Chegue perto de um para ver o que ele vende.",
       "marksTitle": "Uma segunda moeda: Selos de Incursão",
       "marksBody": "Moedas não são a única coisa que você acumula. As incursões pagam Selos de Incursão, uma moeda separada que você gasta apenas com o guardião de incursões, em melhorias para a companheira e equipamentos que você não encontra em outro lugar. Eles nunca se misturam com o seu dinheiro.",
+      "bankTitle": "O banco",
+      "bankBody": "Toda cidade principal mantém uma agência da Arca Dourada, a casa bancária do reino. Fale com o tesoureiro de lá para abrir seu cofre, um espaço particular além das suas bolsas que seu personagem mantém por toda a vida. O que você deixar com eles espera em segurança, seja qual for a agência que você visitar depois.",
+      "bankHow": "Com o cofre aberto, clique em um item nas suas bolsas para depositá-lo e clique nele no cofre para pegá-lo de volta. O cofre guarda apenas bens, nunca moedas, e itens de missão ficam com você. Quando suas bolsas lotam no meio da jornada, um único botão recolhe todos os seus materiais de fabricação de uma vez.",
+      "bankSlots": "Um cofre novo começa pequeno e cresce com você. O tesoureiro vende espaços adicionais por moedas a preços cada vez mais altos, e jogar online rende espaço bônus por cima, por coisas como um email verificado, contas vinculadas e amigos que você traz para o jogo.",
       "buyingTitle": "Comprar e vender",
       "buyingBody": "Fique perto de um comerciante para abrir a janela dele. Você pode comprar qualquer coisa que ele tenha em estoque, se puder pagar, e vender a maior parte do que está em suas bolsas por moedas. Se vender algo por engano, um vendedor guardará suas vendas recentes para você poder recomprá-las.",
       "junkTitle": "Limpando a tralha",
@@ -7329,6 +7377,21 @@ export const pt_BR: EnTranslations = {
         "name": "Leiloeiro Voss",
         "title": "Guardião do Mercado Global",
         "greeting": "O Mercado Global também está aberto aqui, {className}. Compre de todos os aventureiros do reino ou exponha suas próprias mercadorias."
+      },
+      "bursar_fernando": {
+        "name": "Tesoureiro Fernando",
+        "title": "A Arca Dourada",
+        "greeting": "Bem-vindo à Arca Dourada. Seus bens descansam seguros atrás das nossas fechaduras."
+      },
+      "bursar_petra_vell": {
+        "name": "Tesoureira Petra Vell",
+        "title": "A Arca Dourada",
+        "greeting": "A Arca Dourada mantém registros limpos e cofres mais limpos ainda. O que vamos guardar para você?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Tesoureiro Aldous Crane",
+        "title": "A Arca Dourada",
+        "greeting": "Cada caixote, cofre e bugiganga está a salvo com a Arca Dourada."
       },
       "brother_aldric_raid": {
         "name": "Irmão Aldric",

@@ -5911,7 +5911,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
     '{name} zindanının tüm kopyaları dolu. Birazdan tekrar deneyin.',
   'worldContent.dungeonPartyWarning':
     '{name}, {count} kişilik tam bir grup içindir. Dikkatli ilerleyin.',
-  // Aura effect tooltip summaries.
   'hudChrome.auraEffect.dot': 'Her {interval} sn {value} {school} hasarı verir',
   'hudChrome.auraEffect.hot': 'Her {interval} sn {value} sağlık yeniler',
   'hudChrome.auraEffect.absorb': '{value} hasar emer',
@@ -6224,7 +6223,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.nativeUpdate.notNow': 'Şimdi Değil',
   'hudChrome.nativeUpdate.title': 'Güncelleme Mevcut',
   'hudChrome.nativeUpdate.update': 'Güncelle',
-  // Ravenpost authored letters
   'entities.letters.ravenpost_welcome.sender': 'Kuzgun Postası',
   'entities.letters.ravenpost_welcome.subject': 'Kuzgunlar artık senin için uçuyor',
   'entities.letters.ravenpost_welcome.body':
@@ -6316,7 +6314,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'apiError.two_factor.not_enabled': 'İki adımlı doğrulama etkin değil.',
   'apiError.two_factor.setup_required': 'Önce iki adımlı doğrulama kurulumunu başlatın.',
   'apiError.validation.failed': 'Bazı alanlar geçersiz. Formu kontrol edip tekrar deneyin.',
-  // Release v0.22.0 locale fill.
   'download.linuxCta': 'Linux için indirin',
   'download.linuxHint':
     'AppImage: yürütülebilir hale getirin ve ardından çalıştırın. Kurulum gerekmez.',
@@ -6425,7 +6422,6 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.targetCycleShort': 'Hedef',
   'hudChrome.options.mobileCameraJoystick': "Kamera joystick'i",
   'hudChrome.options.mobileLeftHanded': 'Solak düzen',
-  // Release v0.22.0 professions quest locale fill.
   'entities.quests.q_archetype_acceptance.title': 'Kendinize Ait Bir Zanaat',
   'entities.quests.q_archetype_acceptance.text':
     "Eastbrook'un her zanaatkarı eninde sonunda kendilerine ait bir zanaatta karar kılıyor. Tek bir hareketle kendinizi kanıtlayın, {playerName}, ve yolunuzu ilan edin.",
@@ -6437,4 +6433,66 @@ export const tr_TR: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_make_amends.completion':
     'Değişiklikler yapıldı; önünüze yeni bir yol açılıyor.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Orman kurdu öldürüldü',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    "Her sandık, her çekmece, her biblo Yaldızlı Kasa'da güvendedir.",
+  'entities.npcs.bursar_aldous_crane.name': 'Veznedar Aldous Crane',
+  'entities.npcs.bursar_aldous_crane.title': 'Yaldızlı Kasa',
+  'entities.npcs.bursar_fernando.greeting':
+    "Yaldızlı Kasa'ya hoş geldin. Malların kilitlerimizin ardında güvenle durur.",
+  'entities.npcs.bursar_fernando.name': 'Veznedar Fernando',
+  'entities.npcs.bursar_fernando.title': 'Yaldızlı Kasa',
+  'entities.npcs.bursar_petra_vell.greeting':
+    "Yaldızlı Kasa'nın defterleri temiz, kasaları daha da temizdir. Senin için ne saklayalım?",
+  'entities.npcs.bursar_petra_vell.name': 'Veznedar Petra Vell',
+  'entities.npcs.bursar_petra_vell.title': 'Yaldızlı Kasa',
+  'guide.economy.bankTitle': 'Banka',
+  'guide.economy.bankBody':
+    "Her merkez kasabada diyarın bankacılık müessesesi olan Yaldızlı Kasa'nın bir şubesi bulunur. Oradaki veznedarla konuşarak kasanı aç: çantalarının ötesinde, karakterinin ömür boyu elinde tuttuğu özel bir depo. Oraya bıraktığın her şey, bir sonraki sefer hangi şubeye uğrarsan uğra, güvenle bekler.",
+  'guide.economy.bankHow':
+    'Kasan açıkken, çantandaki bir eşyaya tıklayarak onu yatır; kasadaki eşyaya tıklayarak geri al. Kasa yalnızca eşya tutar, asla para tutmaz; görev eşyaları da sende kalır. Yol ortasında çantaların dolduğunda, tek bir düğme bütün zanaat malzemelerini bir seferde içeri süpürür.',
+  'guide.economy.bankSlots':
+    'Yeni açılmış bir kasa küçük başlar ve seninle birlikte büyür. Veznedar, giderek artan fiyatlarla para karşılığında ek yuvalar satar; çevrimiçi oynamak ise bunun üzerine bonus yer kazandırır: doğrulanmış bir e-posta, bağlanmış hesaplar ve oyuna getirdiğin arkadaşlar gibi şeyler için.',
+  'hudChrome.bank.title': 'Banka',
+  'hudChrome.bank.subtitle': 'Yaldızlı Kasa',
+  'hudChrome.bank.close': 'Bankayı kapat',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': 'Kullanılan banka yuvaları: {used} / {total}',
+  'hudChrome.bank.empty': 'Bankan boş.',
+  'hudChrome.bank.tooFar': 'Bankanı görmek için bir bankacının yanında olmalısın.',
+  'hudChrome.bank.buySlots': '{count} yuva satın al',
+  'hudChrome.bank.buySlotsMaxed': 'Tamamen genişletildi',
+  'hudChrome.bank.buyConfirm': '{price} karşılığında {count} ek banka yuvası satın alınsın mı?',
+  'hudChrome.bank.buyConfirmAccept': 'Satın Al',
+  'hudChrome.bank.withdrawHint': 'Çekmek için tıkla',
+  'hudChrome.bank.withdrawPartialHint': 'Bir kısmını çekmek için Shift ile tıkla',
+  'hudChrome.bank.depositHint': 'Yatırmak için tıkla',
+  'hudChrome.bank.depositPartialHint': 'Bir kısmını yatırmak için Shift ile tıkla',
+  'hudChrome.bank.cannotDeposit': 'Bankaya konulamaz',
+  'hudChrome.bank.depositQuantityTitle': '{item} yatır',
+  'hudChrome.bank.depositQuantityInput': 'Yatırılacak miktar',
+  'hudChrome.bank.depositQuantityConfirm': 'Yatır',
+  'hudChrome.bank.withdrawQuantityTitle': '{item} çek',
+  'hudChrome.bank.withdrawQuantityInput': 'Çekilecek miktar',
+  'hudChrome.bank.withdrawQuantityConfirm': 'Çek',
+  'hudChrome.bank.filterGroupAria': 'Bankayı kategoriye göre filtrele',
+  'hudChrome.bank.sortAria': 'Banka eşyalarını sırala',
+  'hudChrome.bank.searchAria': 'Banka eşyalarını ada göre ara',
+  'hudChrome.bank.depositAll': 'Tüm malzemeleri yatır',
+  'hudChrome.bank.depositAllDone': 'Yatırılan malzeme: {count}.',
+  'hudChrome.bank.depositAllFull': 'Yatırılan malzeme: {count}. Banka artık dolu.',
+  'hudChrome.bank.depositAllNone': 'Banka dolu: hiçbir şey yatırılmadı.',
+  'hudChrome.bank.bonusTitle': 'Bonus yuvalar',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusSourceEmail': 'Doğrulanmış e-posta',
+  'hudChrome.bank.bonusSourceDiscord': 'Discord bağlandı',
+  'hudChrome.bank.bonusSourceWallet': 'Cüzdan bağlandı',
+  'hudChrome.bank.bonusSourceReferral': 'Davet edilen arkadaşlar',
+  'hudChrome.bank.bonusAdvertEmail': '2 yuva kazanmak için e-postanı doğrula.',
+  'hudChrome.bank.bonusAdvertDiscord': '2 yuva kazanmak için Discord hesabını bağla.',
+  'hudChrome.bank.bonusAdvertWallet': '2 yuva kazanmak için bir cüzdan bağla.',
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
+  'hudChrome.bank.bonusReferralExplainer':
+    'Bir arkadaşını davet et: arkadaşın 10. seviyeye ulaştığında ikiniz de 2 yuva kazanırsınız (en fazla 5 arkadaş).',
+  'hudChrome.bank.bonusSectionAria': 'Bonus banka yuvaları ve daha fazlasını kazanmanın yolları',
 };

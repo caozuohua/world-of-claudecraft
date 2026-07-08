@@ -5992,7 +5992,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
     'Semua instansi {name} sedang sibuk. Coba lagi sebentar lagi.',
   'worldContent.dungeonPartyWarning':
     '{name} ditujukan untuk satu party penuh berisi {count}. Berhati-hatilah.',
-  // Aura effect tooltip summaries.
   'hudChrome.auraEffect.dot': 'Memberikan {value} kerusakan {school} setiap {interval} dtk',
   'hudChrome.auraEffect.hot': 'Memulihkan {value} kesehatan setiap {interval} dtk',
   'hudChrome.auraEffect.absorb': 'Menyerap {value} kerusakan',
@@ -6311,7 +6310,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.nativeUpdate.notNow': 'Jangan sekarang',
   'hudChrome.nativeUpdate.title': 'Pembaruan Tersedia',
   'hudChrome.nativeUpdate.update': 'Perbarui',
-  // Ravenpost authored letters
   'entities.letters.ravenpost_welcome.sender': 'Pos Gagak',
   'entities.letters.ravenpost_welcome.subject': 'Kini para gagak terbang untukmu',
   'entities.letters.ravenpost_welcome.body':
@@ -6402,7 +6400,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'apiError.two_factor.not_enabled': 'Autentikasi dua-faktor belum diaktifkan.',
   'apiError.two_factor.setup_required': 'Mulai penyiapan autentikasi dua-faktor terlebih dahulu.',
   'apiError.validation.failed': 'Beberapa kolom tidak valid. Periksa formulir lalu coba lagi.',
-  // Release v0.22.0 locale fill.
   'download.linuxCta': 'Unduh untuk Linux',
   'download.linuxHint':
     'AppImage: membuatnya dapat dieksekusi, lalu jalankan. Tidak perlu instalasi.',
@@ -6512,7 +6509,6 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.targetCycleShort': 'Target',
   'hudChrome.options.mobileCameraJoystick': 'Joystick kamera',
   'hudChrome.options.mobileLeftHanded': 'Tata letak kidal',
-  // Release v0.22.0 professions quest locale fill.
   'entities.quests.q_archetype_acceptance.title': 'Sebuah Kerajinan untuk Disebut Milik Anda',
   'entities.quests.q_archetype_acceptance.text':
     'Setiap pengrajin di Eastbrook akhirnya memilih satu kerajinan yang bisa mereka jadikan milik mereka. Buktikan diri Anda dengan satu akta, {playerName}, dan nyatakan jalur Anda.',
@@ -6525,4 +6521,66 @@ export const id_ID: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_make_amends.completion':
     'Perubahan dilakukan; jalan baru terbuka untuk Anda.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Serigala Hutan dibunuh',
+  'entities.npcs.bursar_aldous_crane.name': 'Bendahara Aldous Crane',
+  'entities.npcs.bursar_aldous_crane.title': 'Brankas Bersepuh Emas',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    'Setiap peti, kotak harta, dan pernak-pernik aman bersama Brankas Bersepuh Emas.',
+  'entities.npcs.bursar_fernando.name': 'Bendahara Fernando',
+  'entities.npcs.bursar_fernando.title': 'Brankas Bersepuh Emas',
+  'entities.npcs.bursar_fernando.greeting':
+    'Selamat datang di Brankas Bersepuh Emas. Barang-barangmu tersimpan aman di balik kunci-kunci kami.',
+  'entities.npcs.bursar_petra_vell.name': 'Bendahara Petra Vell',
+  'entities.npcs.bursar_petra_vell.title': 'Brankas Bersepuh Emas',
+  'entities.npcs.bursar_petra_vell.greeting':
+    'Brankas Bersepuh Emas menjaga buku kas yang bersih dan lemari besi yang lebih bersih lagi. Apa yang hendak kami simpankan untukmu?',
+  'guide.economy.bankTitle': 'Bank',
+  'guide.economy.bankBody':
+    'Setiap kota pusat memiliki cabang Brankas Bersepuh Emas, rumah perbankan realm ini. Bicaralah dengan bendahara di sana untuk membuka lemari besimu, ruang simpanan pribadi di luar tasmu yang dimiliki karaktermu seumur hidup. Apa pun yang kamu titipkan pada mereka menunggu dengan aman, di cabang mana pun yang kamu kunjungi berikutnya.',
+  'guide.economy.bankHow':
+    'Saat lemari besi terbuka, klik sebuah barang di tasmu untuk menyetorkannya dan klik barang itu di lemari besi untuk mengambilnya kembali. Lemari besi hanya menampung barang, tidak pernah koin, dan barang misi tetap bersamamu. Saat tasmu penuh di tengah perjalanan, satu tombol menyapu semua bahan kerajinanmu masuk sekaligus.',
+  'guide.economy.bankSlots':
+    'Lemari besi yang baru mulai dari ukuran kecil dan tumbuh bersamamu. Bendahara menjual slot tambahan dengan koin pada harga yang kian menanjak, dan bermain online memberi ruang bonus di atasnya, untuk hal-hal seperti email terverifikasi, akun tertaut, dan teman yang kamu ajak masuk ke dalam permainan.',
+  'hudChrome.bank.title': 'Bank',
+  'hudChrome.bank.subtitle': 'Brankas Bersepuh Emas',
+  'hudChrome.bank.close': 'Tutup bank',
+  'hudChrome.bank.tooFar': 'Kamu harus berada di dekat bankir untuk melihat bankmu.',
+  'hudChrome.bank.empty': 'Bankmu kosong.',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': 'Slot bank terpakai: {used} dari {total}',
+  'hudChrome.bank.filterGroupAria': 'Saring bank menurut kategori',
+  'hudChrome.bank.searchAria': 'Cari barang bank menurut nama',
+  'hudChrome.bank.sortAria': 'Urutkan barang bank',
+  'hudChrome.bank.depositHint': 'Klik untuk menyetor',
+  'hudChrome.bank.depositPartialHint': 'Shift-klik untuk menyetor sebagian',
+  'hudChrome.bank.withdrawHint': 'Klik untuk menarik',
+  'hudChrome.bank.withdrawPartialHint': 'Shift-klik untuk menarik sebagian',
+  'hudChrome.bank.cannotDeposit': 'Tidak dapat disimpan di bank',
+  'hudChrome.bank.depositQuantityTitle': 'Setor {item}',
+  'hudChrome.bank.depositQuantityInput': 'Jumlah yang disetor',
+  'hudChrome.bank.depositQuantityConfirm': 'Setor',
+  'hudChrome.bank.withdrawQuantityTitle': 'Tarik {item}',
+  'hudChrome.bank.withdrawQuantityInput': 'Jumlah yang ditarik',
+  'hudChrome.bank.withdrawQuantityConfirm': 'Tarik',
+  'hudChrome.bank.depositAll': 'Setor semua bahan',
+  'hudChrome.bank.depositAllDone': 'Bahan disetor: {count}.',
+  'hudChrome.bank.depositAllFull': 'Bahan disetor: {count}. Bank kini penuh.',
+  'hudChrome.bank.depositAllNone': 'Bank penuh: tidak ada yang disetor.',
+  'hudChrome.bank.buySlots': 'Beli {count} slot',
+  'hudChrome.bank.buySlotsMaxed': 'Sudah diperluas penuh',
+  'hudChrome.bank.buyConfirm': 'Beli {count} slot bank tambahan seharga {price}?',
+  'hudChrome.bank.buyConfirmAccept': 'Beli',
+  'hudChrome.bank.bonusTitle': 'Slot bonus',
+  'hudChrome.bank.bonusSectionAria': 'Slot bank bonus dan cara mendapat lebih banyak',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusSourceEmail': 'Email terverifikasi',
+  'hudChrome.bank.bonusSourceDiscord': 'Discord tertaut',
+  'hudChrome.bank.bonusSourceWallet': 'Dompet tertaut',
+  'hudChrome.bank.bonusSourceReferral': 'Teman yang dirujuk',
+  'hudChrome.bank.bonusAdvertEmail': 'Verifikasi emailmu untuk mendapat 2 slot.',
+  'hudChrome.bank.bonusAdvertDiscord': 'Tautkan Discord-mu untuk mendapat 2 slot.',
+  'hudChrome.bank.bonusAdvertWallet': 'Tautkan dompet untuk mendapat 2 slot.',
+  'hudChrome.bank.bonusReferralExplainer':
+    'Undang seorang teman: saat ia mencapai level 10, kalian masing-masing mendapat 2 slot, hingga 5 teman.',
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
 };

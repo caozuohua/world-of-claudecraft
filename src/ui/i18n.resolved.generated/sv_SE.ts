@@ -1307,6 +1307,50 @@ export const sv_SE: EnTranslations = {
         "takeParcelsFirst": "Ta ut paketen innan du kastar brevet."
       }
     },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "Förgyllda kassakistan",
+      "close": "Stäng banken",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Använda bankfack: {used} av {total}",
+      "empty": "Din bank är tom.",
+      "tooFar": "Du måste stå hos en bankir för att se din bank.",
+      "buySlots": "Köp {count} fack",
+      "buySlotsMaxed": "Fullt utbyggd",
+      "buyConfirm": "Köp {count} extra bankfack för {price}?",
+      "buyConfirmAccept": "Köp",
+      "withdrawHint": "Klicka för att ta ut",
+      "withdrawPartialHint": "Skift-klicka för att ta ut en del av antalet",
+      "depositHint": "Klicka för att sätta in",
+      "depositPartialHint": "Skift-klicka för att sätta in en del av antalet",
+      "cannotDeposit": "Kan inte förvaras i banken",
+      "depositQuantityTitle": "Sätt in {item}",
+      "depositQuantityInput": "Antal att sätta in",
+      "depositQuantityConfirm": "Sätt in",
+      "withdrawQuantityTitle": "Ta ut {item}",
+      "withdrawQuantityInput": "Antal att ta ut",
+      "withdrawQuantityConfirm": "Ta ut",
+      "filterGroupAria": "Filtrera banken efter kategori",
+      "sortAria": "Sortera bankföremål",
+      "searchAria": "Sök bankföremål efter namn",
+      "depositAll": "Sätt in alla material",
+      "depositAllDone": "Material insatta: {count}.",
+      "depositAllFull": "Material insatta: {count}. Banken är nu full.",
+      "depositAllNone": "Banken är full: inget sattes in.",
+      "bonusTitle": "Bonusfack",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Verifierad e-post",
+      "bonusSourceDiscord": "Discord länkat",
+      "bonusSourceWallet": "Plånbok länkad",
+      "bonusSourceReferral": "Värvade vänner",
+      "bonusAdvertEmail": "Verifiera din e-post för att tjäna 2 fack.",
+      "bonusAdvertDiscord": "Länka ditt Discord för att tjäna 2 fack.",
+      "bonusAdvertWallet": "Länka en plånbok för att tjäna 2 fack.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Bjud in en vän: när vännen når nivå 10 tjänar ni 2 fack var, upp till 5 vänner.",
+      "bonusSectionAria": "Bonusbankfack och hur du tjänar fler"
+    },
     "calendar": {
       "title": "Evenemangskalender",
       "close": "Stäng kalendern",
@@ -2327,6 +2371,10 @@ export const sv_SE: EnTranslations = {
       "vendorsBody": "Städer och utposter är fulla av köpmän, var och en med sin egen handel. Provianthandlare har mat och dryck, vapensmeder och rustningssmeder bär utrustning, och en kvartersmästare håller praktisk reseutrustning. Gå fram till en för att se vad de säljer.",
       "marksTitle": "En andra valuta: Delve-märken",
       "marksBody": "Mynt är inte det enda du lägger på hög. Delver betalar ut Delve-märken, en separat valuta du bara spenderar hos delvevaktaren, på följeslagaruppgraderingar och utrustning du inte hittar någon annanstans. De blandas aldrig med ditt mynt.",
+      "bankTitle": "Banken",
+      "bankBody": "Varje huvudort har en filial av Förgyllda kassakistan, rikets bankhus. Tala med kamreren där för att öppna ditt valv, ett privat förvaringsutrymme bortom dina väskor som din karaktär behåller livet ut. Vad du än lämnar hos dem väntar tryggt, oavsett vilken filial du besöker härnäst.",
+      "bankHow": "Med valvet öppet klickar du på ett föremål i dina väskor för att sätta in det, och klickar på det i valvet för att ta tillbaka det. Valvet rymmer bara varor, aldrig mynt, och uppdragsföremål stannar hos dig. När väskorna blir fulla mitt under färden sveper en enda knapp in alla dina hantverksmaterial på en gång.",
+      "bankSlots": "Ett nytt valv börjar smått och växer med dig. Kamreren säljer fler fack för mynt till allt brantare priser, och den som spelar online tjänar bonusutrymme därtill, för sådant som en verifierad e-post, länkade konton och vänner du tar med in i spelet.",
       "buyingTitle": "Köpa och sälja",
       "buyingBody": "Ställ dig nära en köpman för att öppna deras fönster. Du kan köpa allt de har i lager om du har råd, och sälja det mesta i dina väskor mot mynt. Om du säljer något av misstag håller en handlare kvar dina senaste försäljningar så att du kan köpa tillbaka dem.",
       "junkTitle": "Rensa bort skräp",
@@ -7329,6 +7377,21 @@ export const sv_SE: EnTranslations = {
         "name": "Auktionsförrättare Voss",
         "title": "Väktare av världsmarknaden",
         "greeting": "World of ClaudeCraft-marknaden är öppen även här, {className}. Köp från varje äventyrare i riket, eller lägg ut dina egna varor."
+      },
+      "bursar_fernando": {
+        "name": "Kamrer Fernando",
+        "title": "Förgyllda kassakistan",
+        "greeting": "Välkommen till Förgyllda kassakistan. Dina ägodelar vilar tryggt bakom våra lås."
+      },
+      "bursar_petra_vell": {
+        "name": "Kamrer Petra Vell",
+        "title": "Förgyllda kassakistan",
+        "greeting": "Förgyllda kassakistan för rena huvudböcker och ännu renare valv. Vad ska vi förvara åt dig?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Kamrer Aldous Crane",
+        "title": "Förgyllda kassakistan",
+        "greeting": "Varje låda, kista och krimskrams är i tryggt förvar hos Förgyllda kassakistan."
       },
       "brother_aldric_raid": {
         "name": "Broder Aldric",

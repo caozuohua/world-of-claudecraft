@@ -1307,6 +1307,50 @@ export const de_DE: EnTranslations = {
         "takeParcelsFirst": "Entnimm erst die Pakete, bevor du den Brief verwirfst."
       }
     },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "Die Vergoldete Schatulle",
+      "close": "Bank schließen",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Belegte Bankfächer: {used} von {total}",
+      "empty": "Deine Bank ist leer.",
+      "tooFar": "Du musst bei einem Bankier stehen, um deine Bank einzusehen.",
+      "buySlots": "{count} Fächer kaufen",
+      "buySlotsMaxed": "Vollständig erweitert",
+      "buyConfirm": "{count} zusätzliche Bankfächer für {price} kaufen?",
+      "buyConfirmAccept": "Kaufen",
+      "withdrawHint": "Klicke, um zu entnehmen",
+      "withdrawPartialHint": "Umschalt-Klick, um eine Teilmenge zu entnehmen",
+      "depositHint": "Klicke, um einzulagern",
+      "depositPartialHint": "Umschalt-Klick, um eine Teilmenge einzulagern",
+      "cannotDeposit": "Kann nicht eingelagert werden",
+      "depositQuantityTitle": "{item} einlagern",
+      "depositQuantityInput": "Einzulagernde Menge",
+      "depositQuantityConfirm": "Einlagern",
+      "withdrawQuantityTitle": "{item} entnehmen",
+      "withdrawQuantityInput": "Zu entnehmende Menge",
+      "withdrawQuantityConfirm": "Entnehmen",
+      "filterGroupAria": "Bank nach Kategorie filtern",
+      "sortAria": "Bankgegenstände sortieren",
+      "searchAria": "Bankgegenstände nach Namen durchsuchen",
+      "depositAll": "Alle Materialien einlagern",
+      "depositAllDone": "Eingelagerte Materialien: {count}.",
+      "depositAllFull": "Eingelagerte Materialien: {count}. Die Bank ist jetzt voll.",
+      "depositAllNone": "Bank voll: nichts eingelagert.",
+      "bonusTitle": "Bonusfächer",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "E-Mail-Adresse bestätigt",
+      "bonusSourceDiscord": "Discord verknüpft",
+      "bonusSourceWallet": "Wallet verknüpft",
+      "bonusSourceReferral": "Geworbene Freunde",
+      "bonusAdvertEmail": "Bestätige deine E-Mail-Adresse und erhalte 2 Fächer.",
+      "bonusAdvertDiscord": "Verknüpfe dein Discord-Konto und erhalte 2 Fächer.",
+      "bonusAdvertWallet": "Verknüpfe eine Wallet und erhalte 2 Fächer.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Lade einen Freund ein: Erreicht er Stufe 10, erhaltet ihr beide 2 Fächer, bis zu 5 Freunde.",
+      "bonusSectionAria": "Bonus-Bankfächer und wie du mehr davon verdienst"
+    },
     "calendar": {
       "title": "Ereigniskalender",
       "close": "Kalender schließen",
@@ -2327,6 +2371,10 @@ export const de_DE: EnTranslations = {
       "vendorsBody": "Städte und Außenposten sind mit Händlern gespickt, jeder mit seinem eigenen Gewerbe. Versorger führen Speis und Trank, Waffenschmiede und Rüstungsschmiede haben Ausrüstung, und ein Quartiermeister hält praktisches Reisegerät bereit. Geh auf einen zu, um zu sehen, was er verkauft.",
       "marksTitle": "Eine zweite Währung: Tiefgang-Marken",
       "marksBody": "Geld ist nicht das Einzige, was du anhäufst. Tiefgänge zahlen Tiefgang-Marken aus, eine eigene Währung, die du nur beim Tiefgang-Hüter ausgibst, für Verbesserungen deiner Gefährtin und Ausrüstung, die du nirgendwo sonst findest. Sie vermischen sich nie mit deinem Geld.",
+      "bankTitle": "Die Bank",
+      "bankBody": "Jede größere Stadt beherbergt eine Filiale der Vergoldeten Schatulle, des Bankhauses des Reichs. Sprich dort mit dem Kämmerer, um deinen Tresor zu eröffnen: einen privaten Stauraum jenseits deiner Taschen, der deinem Charakter ein Leben lang erhalten bleibt. Was du dort zurücklässt, wartet sicher auf dich, welche Filiale du auch als Nächstes besuchst.",
+      "bankHow": "Ist der Tresor geöffnet, klicke einen Gegenstand in deinen Taschen an, um ihn einzulagern, und klicke ihn im Tresor an, um ihn zurückzuholen. Der Tresor fasst nur Waren, niemals Münzen, und Questgegenstände bleiben bei dir. Wenn deine Taschen unterwegs überquellen, fegt ein einziger Knopf alle deine Handwerksmaterialien auf einmal hinein.",
+      "bankSlots": "Ein frischer Tresor beginnt klein und wächst mit dir. Der Kämmerer verkauft weitere Fächer für Münzen zu immer steileren Preisen, und Online-Spielen bringt obendrein Bonusfächer ein, etwa für eine bestätigte E-Mail-Adresse, verknüpfte Konten und Freunde, die du ins Spiel holst.",
       "buyingTitle": "Kaufen und Verkaufen",
       "buyingBody": "Stelle dich neben einen Händler, um sein Fenster zu öffnen. Du kannst alles kaufen, was er führt, sofern du es dir leisten kannst, und das meiste aus deinen Taschen gegen Münzen verkaufen. Verkaufst du etwas aus Versehen, hebt ein Händler deine jüngsten Verkäufe auf, sodass du sie zurückkaufen kannst.",
       "junkTitle": "Plunder loswerden",
@@ -7329,6 +7377,21 @@ export const de_DE: EnTranslations = {
         "name": "Auktionator Voss",
         "title": "Hüter des Weltmarkts",
         "greeting": "Der Weltmarkt ist auch hier geöffnet, {className}. Kauf bei jedem Abenteurer im Reich ein oder biete deine eigenen Waren feil."
+      },
+      "bursar_fernando": {
+        "name": "Kämmerer Fernando",
+        "title": "Die Vergoldete Schatulle",
+        "greeting": "Willkommen bei der Vergoldeten Schatulle. Deine Waren ruhen sicher hinter unseren Schlössern."
+      },
+      "bursar_petra_vell": {
+        "name": "Kämmerin Petra Vell",
+        "title": "Die Vergoldete Schatulle",
+        "greeting": "Die Vergoldete Schatulle führt saubere Bücher und noch sauberere Tresore. Was dürfen wir für dich verwahren?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Kämmerer Aldous Crane",
+        "title": "Die Vergoldete Schatulle",
+        "greeting": "Jede Kiste, jede Truhe und jedes Kleinod ist bei der Vergoldeten Schatulle sicher."
       },
       "brother_aldric_raid": {
         "name": "Bruder Aldric",

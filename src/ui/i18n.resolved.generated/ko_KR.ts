@@ -1307,6 +1307,50 @@ export const ko_KR: EnTranslations = {
         "takeParcelsFirst": "편지를 버리기 전에 소포를 먼저 꺼내세요."
       }
     },
+    "bank": {
+      "title": "은행",
+      "subtitle": "도금 금고",
+      "close": "은행 닫기",
+      "capacity": "{used}/{total}",
+      "capacityAria": "사용 중인 은행 칸: {total}칸 중 {used}칸",
+      "empty": "은행이 비어 있습니다.",
+      "tooFar": "은행을 이용하려면 은행원 옆에 있어야 합니다.",
+      "buySlots": "{count}칸 구매",
+      "buySlotsMaxed": "완전히 확장됨",
+      "buyConfirm": "{price}에 은행 칸 {count}개를 추가로 구매하시겠습니까?",
+      "buyConfirmAccept": "구매",
+      "withdrawHint": "클릭하여 꺼내기",
+      "withdrawPartialHint": "Shift+클릭하여 일부만 꺼내기",
+      "depositHint": "클릭하여 넣기",
+      "depositPartialHint": "Shift+클릭하여 일부만 넣기",
+      "cannotDeposit": "은행에 보관할 수 없음",
+      "depositQuantityTitle": "{item} 넣기",
+      "depositQuantityInput": "넣을 수량",
+      "depositQuantityConfirm": "넣기",
+      "withdrawQuantityTitle": "{item} 꺼내기",
+      "withdrawQuantityInput": "꺼낼 수량",
+      "withdrawQuantityConfirm": "꺼내기",
+      "filterGroupAria": "은행을 분류별로 필터링",
+      "sortAria": "은행 아이템 정렬",
+      "searchAria": "이름으로 은행 아이템 검색",
+      "depositAll": "모든 재료 보관",
+      "depositAllDone": "보관한 재료: {count}.",
+      "depositAllFull": "보관한 재료: {count}. 은행이 가득 찼습니다.",
+      "depositAllNone": "은행이 가득 참: 아무것도 보관하지 못했습니다.",
+      "bonusTitle": "보너스 칸",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "이메일 인증됨",
+      "bonusSourceDiscord": "Discord 연동됨",
+      "bonusSourceWallet": "지갑 연동됨",
+      "bonusSourceReferral": "추천한 친구",
+      "bonusAdvertEmail": "이메일을 인증하면 2칸을 얻습니다.",
+      "bonusAdvertDiscord": "Discord를 연동하면 2칸을 얻습니다.",
+      "bonusAdvertWallet": "지갑을 연동하면 2칸을 얻습니다.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "친구를 초대하세요: 친구가 10레벨에 도달하면 서로 2칸씩 얻으며, 최대 5명까지 가능합니다.",
+      "bonusSectionAria": "보너스 은행 칸과 획득 방법"
+    },
     "calendar": {
       "title": "이벤트 달력",
       "close": "달력 닫기",
@@ -2327,6 +2371,10 @@ export const ko_KR: EnTranslations = {
       "vendorsBody": "마을과 전초기지에는 저마다 다른 물건을 다루는 상인들이 흩어져 있습니다. 보급상은 음식과 음료를 갖추고, 무기 제작자와 방어구 제작자는 장비를 다루며, 병참장교는 실용적인 여행 장비를 둡니다. 다가서면 그들이 무엇을 파는지 볼 수 있습니다.",
       "marksTitle": "두 번째 화폐: 탐굴 증표",
       "marksBody": "모아두는 것이 금화만 있는 것은 아닙니다. 탐굴은 탐굴 증표를 보상으로 주며, 이는 오직 탐굴 관리인에게서만 동료 강화와 다른 곳에서는 구할 수 없는 장비에 쓰는 별도의 화폐입니다. 탐굴 증표는 금화와 절대 섞이지 않습니다.",
+      "bankTitle": "은행",
+      "bankBody": "모든 거점 마을에는 이 땅의 은행 상회인 도금 금고의 지점이 있습니다. 그곳의 출납관에게 말을 걸면 자신의 금고가 열립니다. 가방과는 별개인 개인 보관 공간으로, 캐릭터가 평생 유지합니다. 맡겨 둔 물건은 다음에 어느 지점을 찾아가도 안전하게 기다리고 있습니다.",
+      "bankHow": "금고가 열린 상태에서 가방의 물건을 클릭하면 맡겨지고, 금고의 물건을 클릭하면 되찾습니다. 금고에는 물건만 보관할 수 있고 동전은 맡길 수 없으며, 퀘스트 아이템은 늘 몸에 지니게 됩니다. 여행 중에 가방이 가득 차면 제작 재료를 한 번에 맡기는 버튼도 있습니다.",
+      "bankSlots": "갓 연 금고는 작지만 당신과 함께 자랍니다. 출납관은 추가 칸을 동전에 판매하며 가격은 단계마다 높아집니다. 온라인으로 플레이하면 이메일 인증, 계정 연동, 친구 초대 등으로 보너스 공간도 얻을 수 있습니다.",
       "buyingTitle": "사고팔기",
       "buyingBody": "상인 가까이 서면 상점 창이 열립니다. 형편이 닿는 한 그들이 갖춘 물건은 무엇이든 살 수 있고, 가방 속 대부분은 동전을 받고 팔 수 있습니다. 실수로 무언가를 팔았다면, 상인이 최근 판매 내역을 보관해 두므로 되살 수 있습니다.",
       "junkTitle": "잡동사니 정리",
@@ -7329,6 +7377,21 @@ export const ko_KR: EnTranslations = {
         "name": "경매인 보스",
         "title": "세계 시장 관리자",
         "greeting": "세계 시장은 이곳에서도 이용할 수 있습니다, {className}. 왕국의 모험가들에게서 물건을 사거나 자신의 물건을 내놓으십시오."
+      },
+      "bursar_fernando": {
+        "name": "출납관 페르난도",
+        "title": "도금 금고",
+        "greeting": "도금 금고에 오신 것을 환영합니다. 당신의 물건은 우리의 자물쇠 뒤에서 안전하게 보관됩니다."
+      },
+      "bursar_petra_vell": {
+        "name": "출납관 페트라 벨",
+        "title": "도금 금고",
+        "greeting": "도금 금고는 장부도 깔끔하고 금고는 더욱 깨끗합니다. 무엇을 보관해 드릴까요?"
+      },
+      "bursar_aldous_crane": {
+        "name": "출납관 알도스 크레인",
+        "title": "도금 금고",
+        "greeting": "어떤 상자든, 금궤든, 장신구든 도금 금고에 맡기시면 안전합니다."
       },
       "brother_aldric_raid": {
         "name": "알드릭 수사",

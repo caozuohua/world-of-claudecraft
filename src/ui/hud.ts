@@ -134,7 +134,8 @@ import { AurasPainter, type AurasPainterDeps } from './auras_painter';
 import { type AurasDeps, createAurasView } from './auras_view';
 import { attachAvatarFallback } from './avatar_fallback';
 import { bagsWindowShown } from './bags_view';
-import { BagsWindow } from './bags_window';
+import { BagsWindow, dismissBagPrompts } from './bags_window';
+import { BankWindow } from './bank_window';
 import { CalendarWindow } from './calendar_window';
 import { CastBarPainter } from './cast_bar_painter';
 import { buildPaperdollView, type PaperdollSlot } from './char_view';
@@ -1539,13 +1540,21 @@ export class Hud {
         this.questlogWindow.openWithQuest(row.dataset.quest);
       }
     });
-    // The delve board, lockpick panel, and map window are non-modal overlays, so
-    // canUseGameKeys() stays true and the global jump (Space) / chat (Enter) binds
-    // would otherwise hijack those keys on a focused panel button (the map's
-    // Quests toggle, per-quest track buttons, zoom, and close included). Stop
-    // propagation (but NOT the default, so the button's native activation still
-    // fires) when a panel button has focus, mirroring the quest-tracker guard above.
-    for (const panelId of ['#delve-board', '#lockpick-panel', '#delve-rite-panel', '#map-window']) {
+    // The delve board, lockpick panel, map window, and the bank + bags cluster are
+    // non-modal overlays, so canUseGameKeys() stays true and the global jump (Space)
+    // / chat (Enter) binds would otherwise hijack those keys on a focused panel
+    // button (the map's Quests toggle, a bank grid cell, and each close button
+    // included). Stop propagation (but NOT the default, so the button's native
+    // activation still fires) when a panel button has focus, mirroring the
+    // quest-tracker guard above.
+    for (const panelId of [
+      '#delve-board',
+      '#lockpick-panel',
+      '#delve-rite-panel',
+      '#map-window',
+      '#bank-window',
+      '#bags',
+    ]) {
       $(panelId).addEventListener('keydown', (e) => {
         if ((e.target as HTMLElement).tagName !== 'BUTTON') return;
         if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') e.stopPropagation();
@@ -1942,6 +1951,15 @@ export class Hud {
       (el.id === 'vendor-window' || el.id === 'bags')
     )
       return;
+    // The bank docks its bags companion the same way the vendor does (a fixed
+    // side-by-side cluster driven by body.bank-open, mobile-paired 50/50); baking a
+    // cascade-offset inline position onto either half would defeat that layout (the
+    // inline inset beats the docking CSS), so skip the cascade for the bank cluster.
+    if (
+      document.body.classList.contains('bank-open') &&
+      (el.id === 'bank-window' || el.id === 'bags')
+    )
+      return;
     const openCount = [...document.querySelectorAll<HTMLElement>('.window.panel')].filter(
       (win) => win !== el && this.isWindowVisible(win),
     ).length;
@@ -2072,6 +2090,10 @@ export class Hud {
         // Route through the painter so focus returns to the opener (WCAG 2.2 AA).
         this.mailboxWindow.close();
         break;
+      case 'bank-window':
+        // Route through the painter so focus returns to the opener (WCAG 2.2 AA).
+        this.closeBank();
+        break;
       case 'calendar-window':
         // Route through the painter so focus returns to the opener (WCAG 2.2 AA).
         this.calendarWindow.close();
@@ -2109,6 +2131,11 @@ export class Hud {
         break;
       case 'bags':
         if (this.vendorOpen && document.body.classList.contains('mobile-touch')) this.closeVendor();
+        // The bank cluster is one unit on touch exactly like the vendor cluster
+        // (the bank hides its own x-btn under the pairing), so the managed close
+        // of bags closes the bank companion too, never leaving a half-width orphan.
+        else if (this.bankWindow.isOpen && document.body.classList.contains('mobile-touch'))
+          this.closeBank();
         // Route through the painter so focus returns to the opener (WCAG 2.4.3),
         // consistent with the toggle / X close path. NON-MODAL: no trap is released.
         else this.bagsWindow.close();
@@ -3336,6 +3363,7 @@ export class Hud {
     world: () => this.sim,
     wocBalanceHtml: () => this.wocBalanceHtml(),
     hideTooltip: () => this.hideTooltip(),
+    consumePeek: () => this.peekGuard.consume(),
     cancelPetFeed: () => this.cancelPetFeed(),
     // Non-trapping focus capture/return (bags is a non-modal companion of vendor /
     // trade / market): NOT windowFocus('#bags'), which would install a Tab trap and
@@ -3347,8 +3375,11 @@ export class Hud {
     tradeOpen: () => this.tradeOpen,
     isMarketSell: () => this.marketWindow.isSellTab,
     isMailAttach: () => this.mailboxWindow.isSendTab,
+    isBankOpen: () => this.bankWindow.isOpen,
     pendingPetFeed: () => this.pendingPetFeed,
     closeVendor: () => this.closeVendor(),
+    closeBank: () => this.closeBank(),
+    onClosed: () => this.onBagsClosed(),
     addItemToTrade: (itemId) => this.addItemToTrade(itemId),
     stageMarketSell: (itemId) => this.marketWindow.stageSell(itemId),
     stageMailParcel: (itemId) => this.mailboxWindow.stageParcel(itemId),
@@ -3409,6 +3440,30 @@ export class Hud {
         this.renderBags();
       }
     },
+  });
+  // Bank window painter (bank_view.ts core + bank_window.ts painter). A non-modal
+  // companion of the bags cluster (the vendor-open docking pattern): it composes the
+  // shared presentation bag (icon/money/tooltip) and reads/commands the pooled bank
+  // through IWorld. Non-trapping focus capture/return (NOT windowFocus, which would
+  // install a Tab trap and break the bank + bags cluster); onClosed drops the docking
+  // body class and resyncs bags.
+  private readonly bankWindow = new BankWindow({
+    ...this.presentationBag,
+    root: () => $('#bank-window'),
+    world: () => this.sim,
+    closeOthers: () => this.closeOtherWindows(['#bank-window', '#bags']),
+    hideTooltip: () => this.hideTooltip(),
+    consumePeek: () => this.peekGuard.consume(),
+    // Non-trapping focus capture/return (bank is a non-modal companion of bags):
+    // NOT windowFocus('#bank-window'), which would install a Tab trap.
+    captureFocus: () => this.focusManager.activeFocusable(),
+    restoreFocus: (target) => this.focusManager.restore(target),
+    onClosed: () => this.onBankClosed(),
+    // A bank op (withdraw / deposit-all / buy-slots) moved inventory or coin: repaint
+    // the bags companion (and vendor/char if open) through the same coordinator the
+    // online inventory-delta path calls. Offline this is the ONLY repaint; online the
+    // snapshot echo repaints again authoritatively.
+    onInventoryChanged: () => this.onInventoryChanged(),
   });
   // Event calendar window painter (calendar_view.ts month-grid core +
   // calendar_window.ts painter). System events expand from data rules; guild
@@ -4204,6 +4259,7 @@ export class Hud {
     if (this.openHeroicVendorNpcId !== null && $('#vendor-window').style.display === 'block')
       this.renderHeroicVendor();
     if (this.marketWindow.isOpen) this.marketWindow.render();
+    if (this.bankWindow.isOpen) this.bankWindow.render();
     this.charWindow.renderIfOpen();
     // The arena window's render-skip signature is text-independent (offline sentinel or a
     // JSON of ids/numbers), so a language switch alone never moves it; relocalize() forces
@@ -6669,6 +6725,8 @@ export class Hud {
     }
     // The mailbox closes itself when the mail mirror goes null (walked away).
     if (slowHud && this.mailboxWindow.isOpen) this.mailboxWindow.refreshIfChanged();
+    // The bank closes itself when the bank mirror goes null (left the banker).
+    if (slowHud && this.bankWindow.isOpen) this.bankWindow.refreshIfChanged();
     if (slowHud && this.calendarWindow.isOpen) this.calendarWindow.refreshIfChanged();
     if (slowHud) this.updateMailIndicator();
   }
@@ -8387,6 +8445,10 @@ export class Hud {
           // Keyboard/sim interact at a mailbox object: open the mail window.
           this.openMailbox();
           break;
+        case 'bank':
+          // Keyboard/sim interact at a banker NPC: open the bank window.
+          this.openBank();
+          break;
         case 'mailArrived': {
           // Player names splice verbatim; authored letters carry their
           // letterId, so the sender localizes through the entity dictionary
@@ -10076,6 +10138,15 @@ export class Hud {
   openQuestDialog(npcId: number): void {
     const npc = this.sim.entities.get(npcId);
     if (npc?.kind !== 'npc') return;
+    // A banker never gossips: divert to the sim interact, whose banker intercept
+    // emits the bank event this HUD opens on (case 'bank'), identically in both
+    // worlds. Routing through the sim keeps proximity server-authoritative; the
+    // authored greeting stays un-rendered by design (a deliberate QA adjudication).
+    if (NPCS[npc.templateId]?.banker) {
+      this.sim.targetEntity(npc.id);
+      this.sim.interact();
+      return;
+    }
     this.questDialogOpenedAtMs = performance.now();
     if ($('#quest-dialog').style.display !== 'block')
       this.questDialogTrap = this.focusManager.open({ root: () => $('#quest-dialog') });
@@ -10718,6 +10789,10 @@ export class Hud {
 
   openVendor(npcId: number): void {
     this.closeOtherWindows(['#vendor-window', '#bags']);
+    // The bags companion is exclusive (see openBank): close the bank cluster
+    // through the painter so onBankClosed clears body.bank-open before the
+    // vendor pairing takes over.
+    if (this.bankWindowOpen) this.closeBank();
     this.openHeroicVendorNpcId = null; // the marks shop shares the container
     this.openVendorNpcId = npcId;
     document.body.classList.add('vendor-open');
@@ -10770,6 +10845,10 @@ export class Hud {
 
   openHeroicVendor(npcId: number): void {
     this.closeOtherWindows('#vendor-window');
+    // The bags companion is exclusive (see openBank): close the bank cluster
+    // through the painter so onBankClosed clears body.bank-open before the
+    // marks shop takes the container.
+    if (this.bankWindowOpen) this.closeBank();
     this.openVendorNpcId = null; // shares the container with the copper vendor
     this.openHeroicVendorNpcId = npcId;
     this.renderHeroicVendor();
@@ -10812,8 +10891,11 @@ export class Hud {
     if (closeMobileBags) {
       // Mirror BagsWindow.close()'s teardown backstop: a discard/sell prompt may hold
       // #bags inert (installPromptDialog) and this mobile path hides the grid without
-      // running the prompt's dismiss(), so clear inert here too or the next open shows a
-      // dead grid (invariant: a hidden #bags is never inert).
+      // running the prompt's dismiss(), so clear inert AND remove the prompt node or
+      // it survives as a visible orphaned aria-modal in #prompt-stack that
+      // promptModalOpen() keeps gating game keys on (invariant: a hidden #bags is
+      // never inert and never owns a live prompt).
+      dismissBagPrompts();
       const bags = $('#bags');
       bags.style.display = 'none';
       bags.inert = false;
@@ -10958,6 +11040,66 @@ export class Hud {
     return this.mailboxWindow.isOpen;
   }
 
+  // The bank docks its bags companion alongside (the vendor-open pattern): a body
+  // class drives the side-by-side desktop layout, and the bags window is force-opened
+  // so items can be withdrawn into it. closeBank routes through the painter (which
+  // fires onClosed) so focus returns to the opener (WCAG 2.4.3).
+  openBank(): void {
+    // The bags companion is exclusive: every hub has a vendor within simultaneous
+    // interact range of its banker, and vendor-open + bank-open together overlap
+    // the two windows on the same side of #bags (and on mobile the cluster-close
+    // precedence would strand the bank at half-width with its x-btn hidden).
+    if (this.vendorOpen) this.closeVendor();
+    // The heroic marks shop is a second tenant of #vendor-window that nulls
+    // openVendorNpcId, so the vendorOpen guard above never sees it.
+    if (this.openHeroicVendorNpcId !== null) this.closeHeroicVendor();
+    document.body.classList.add('bank-open');
+    this.bankWindow.open();
+    this.renderBags();
+    $('#bags').style.display = 'flex';
+  }
+
+  closeBank(): void {
+    this.bankWindow.close();
+  }
+
+  private onBankClosed(): void {
+    const closeMobileBags =
+      document.body.classList.contains('mobile-touch') && $('#bags').style.display !== 'none';
+    document.body.classList.remove('bank-open'); // bags (if still open) re-centres
+    if (closeMobileBags) {
+      // Mirror closeVendor's teardown backstop: a discard/sell/deposit prompt may hold
+      // #bags inert (installPromptDialog) and this mobile path hides the grid without
+      // running the prompt's dismiss(), so clear inert AND remove the prompt node too
+      // (a hidden #bags is never inert and never owns a live prompt; an orphan would
+      // keep promptModalOpen() gating game keys).
+      dismissBagPrompts();
+      const bags = $('#bags');
+      bags.style.display = 'none';
+      bags.inert = false;
+      this.cancelPetFeed();
+    } else if ($('#bags').style.display !== 'none') {
+      this.renderBags();
+    }
+  }
+
+  get bankWindowOpen(): boolean {
+    return this.bankWindow.isOpen;
+  }
+
+  // Fired by the bags painter after its close() teardown. On touch, a bags close
+  // that leaves the bank open (the tray/minimap bags toggle; Esc and the bags x-btn
+  // close the whole cluster instead) undocks the pairing so the standalone mobile
+  // full-screen rule takes over: the bank widens to the full viewport and its own
+  // x-btn reappears (the pairing hid it), so a touch close affordance survives.
+  // Desktop deliberately keeps the docked offset until the bank closes (the
+  // recorded vendor-family behavior); toggleBags re-adds the class on re-open.
+  private onBagsClosed(): void {
+    if (document.body.classList.contains('mobile-touch') && this.bankWindow.isOpen) {
+      document.body.classList.remove('bank-open');
+    }
+  }
+
   toggleCalendar(): void {
     this.calendarWindow.toggle();
   }
@@ -11017,6 +11159,10 @@ export class Hud {
     this.bagsWindow.noteOpener();
     this.renderBags();
     el.style.display = 'flex';
+    // Re-dock the bank pairing when its companion re-opens (the mobile undock in
+    // onBagsClosed drops the class while the bank stays up; idempotent on desktop,
+    // which never undocks).
+    if (this.bankWindow.isOpen) document.body.classList.add('bank-open');
     audio.bagOpen();
     // Pull a fresh on-chain $WOC balance for the footer; the async result
     // re-renders the bag via the onWalletUiChange listener wired in the ctor.
@@ -13431,6 +13577,18 @@ export class Hud {
       $('#emote-editor').style.display === 'block' ||
       this.cardModalEl !== null
     );
+  }
+
+  // True while an aria-modal quantity/confirm prompt (the bank/bags
+  // installPromptDialog family) owns the keyboard. Game keybinds must not fire
+  // then: the Enter that confirms a prompt re-focuses a button synchronously, so
+  // the same keydown would bubble to the window handler and open chat, stealing
+  // the WCAG 2.4.3 focus return. Deliberately NOT part of isModalOpen(): these
+  // prompts do not pause movement (the confirm-dialog family precedent), and the
+  // party/trade/duel prompts (no aria-modal) stay non-blocking. Called from
+  // keydown paths only, never per frame.
+  promptModalOpen(): boolean {
+    return $('#prompt-stack').querySelector('.prompt[aria-modal="true"]') !== null;
   }
 
   // True when any interactive HUD surface is open: a modal OR a managed window

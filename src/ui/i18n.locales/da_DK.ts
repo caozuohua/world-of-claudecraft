@@ -5900,7 +5900,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'worldContent.dungeonInstanceBusy': 'Alle instanser af {name} er optaget. Prøv igen snart.',
   'worldContent.dungeonPartyWarning':
     '{name} er beregnet til en fuld gruppe på {count}. Træd varsomt.',
-  // Aura effect tooltip summaries.
   'hudChrome.auraEffect.dot': 'Giver {value} {school}-skade hvert {interval}. sek',
   'hudChrome.auraEffect.hot': 'Gendanner {value} helbred hvert {interval}. sek',
   'hudChrome.auraEffect.absorb': 'Absorberer {value} skade',
@@ -6212,7 +6211,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.nativeUpdate.update': 'Opdater',
   'errors.api.desktopCodeInvalid':
     'Desktop-loginkoden er ugyldig eller udløbet. Prøv venligst igen.',
-  // Ravenpost authored letters
   'entities.letters.ravenpost_welcome.sender': 'Ravneposten',
   'entities.letters.ravenpost_welcome.subject': 'Ravnene flyver nu for dig',
   'entities.letters.ravenpost_welcome.body':
@@ -6300,7 +6298,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'apiError.two_factor.not_enabled': 'To-faktor er ikke aktiveret.',
   'apiError.two_factor.setup_required': 'Start opsætning af to-faktor først.',
   'apiError.validation.failed': 'Nogle felter er ugyldige. Tjek formularen og prøv igen.',
-  // Release v0.22.0 locale fill.
   'download.linuxCta': 'Download til Linux',
   'download.linuxHint':
     'AppImage: gør det eksekverbart, og kør det derefter. Ingen installation nødvendig.',
@@ -6409,7 +6406,6 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.targetCycleShort': 'Mål',
   'hudChrome.options.mobileCameraJoystick': 'Kamera joystick',
   'hudChrome.options.mobileLeftHanded': 'Venstrehånds layout',
-  // Release v0.22.0 professions quest locale fill.
   'entities.quests.q_archetype_acceptance.title': 'Et håndværk at kalde dit eget',
   'entities.quests.q_archetype_acceptance.text':
     'Hver eneste håndværker fra Eastbrook sætter sig til sidst over på et håndværk, som de kalder deres eget. Bevis dig selv med en enkelt gerning, {playerName}, og erklær din vej.',
@@ -6421,4 +6417,66 @@ export const da_DK: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_make_amends.completion':
     'Foretagne ændringer; en ny vej er åben for dig.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Skovulv dræbt',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    'Hver kasse, hvert skrin og hvert smykke er i sikkerhed hos Det Forgyldte Pengeskrin.',
+  'entities.npcs.bursar_aldous_crane.name': 'Skatmester Aldous Crane',
+  'entities.npcs.bursar_aldous_crane.title': 'Det Forgyldte Pengeskrin',
+  'entities.npcs.bursar_fernando.greeting':
+    'Velkommen til Det Forgyldte Pengeskrin. Dine varer hviler trygt bag vores låse.',
+  'entities.npcs.bursar_fernando.name': 'Skatmester Fernando',
+  'entities.npcs.bursar_fernando.title': 'Det Forgyldte Pengeskrin',
+  'entities.npcs.bursar_petra_vell.greeting':
+    'Det Forgyldte Pengeskrin fører rene regnskaber og endnu renere hvælv. Hvad skal vi opbevare for dig?',
+  'entities.npcs.bursar_petra_vell.name': 'Skatmester Petra Vell',
+  'entities.npcs.bursar_petra_vell.title': 'Det Forgyldte Pengeskrin',
+  'guide.economy.bankBody':
+    'Hver hjemmebase har en filial af Det Forgyldte Pengeskrin, rigets bankhus. Tal med skatmesteren der for at åbne din boks, en privat opbevaringsplads ud over dine tasker, som din karakter beholder livet ud. Hvad end du efterlader hos dem, venter i sikkerhed, uanset hvilken filial du besøger næste gang.',
+  'guide.economy.bankHow':
+    'Med boksen åben klikker du på en genstand i dine tasker for at indsætte den, og klikker på den i boksen for at tage den tilbage. Boksen rummer kun varer, aldrig mønter, og opgavegenstande bliver hos dig. Når dine tasker fyldes op undervejs, fejer én knap alle dine håndværksmaterialer ind på én gang.',
+  'guide.economy.bankSlots':
+    'En ny boks starter i det små og vokser med dig. Skatmesteren sælger flere pladser for mønter til stadigt stejlere priser, og at spille online giver bonusplads oveni, for ting som en bekræftet e-mail, forbundne konti og venner, du bringer ind i spillet.',
+  'guide.economy.bankTitle': 'Banken',
+  'hudChrome.bank.bonusAdvertDiscord': 'Forbind din Discord for at optjene 2 pladser.',
+  'hudChrome.bank.bonusAdvertEmail': 'Bekræft din e-mail for at optjene 2 pladser.',
+  'hudChrome.bank.bonusAdvertWallet': 'Forbind en wallet for at optjene 2 pladser.',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusReferralExplainer':
+    'Invitér en ven: når din ven når niveau 10, optjener I hver især 2 pladser, op til 5 venner.',
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
+  'hudChrome.bank.bonusSectionAria': 'Bonuspladser i banken, og hvordan du optjener flere',
+  'hudChrome.bank.bonusSourceDiscord': 'Discord forbundet',
+  'hudChrome.bank.bonusSourceEmail': 'Bekræftet e-mail',
+  'hudChrome.bank.bonusSourceReferral': 'Henviste venner',
+  'hudChrome.bank.bonusSourceWallet': 'Wallet forbundet',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusTitle': 'Bonuspladser',
+  'hudChrome.bank.buyConfirm': 'Køb {count} ekstra bankpladser for {price}?',
+  'hudChrome.bank.buyConfirmAccept': 'Køb',
+  'hudChrome.bank.buySlots': 'Køb {count} pladser',
+  'hudChrome.bank.buySlotsMaxed': 'Fuldt udvidet',
+  'hudChrome.bank.cannotDeposit': 'Kan ikke lægges i banken',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': 'Brugte bankpladser: {used} af {total}',
+  'hudChrome.bank.close': 'Luk banken',
+  'hudChrome.bank.depositAll': 'Indsæt alle materialer',
+  'hudChrome.bank.depositAllDone': 'Materialer indsat: {count}.',
+  'hudChrome.bank.depositAllFull': 'Materialer indsat: {count}. Banken er nu fuld.',
+  'hudChrome.bank.depositAllNone': 'Banken er fuld: intet indsat.',
+  'hudChrome.bank.depositHint': 'Klik for at indsætte',
+  'hudChrome.bank.depositPartialHint': 'Shift-klik for at indsætte et mindre antal',
+  'hudChrome.bank.depositQuantityConfirm': 'Indsæt',
+  'hudChrome.bank.depositQuantityInput': 'Antal at indsætte',
+  'hudChrome.bank.depositQuantityTitle': 'Indsæt {item}',
+  'hudChrome.bank.empty': 'Din bank er tom.',
+  'hudChrome.bank.filterGroupAria': 'Filtrér banken efter kategori',
+  'hudChrome.bank.searchAria': 'Søg i bankens genstande efter navn',
+  'hudChrome.bank.sortAria': 'Sortér bankens genstande',
+  'hudChrome.bank.subtitle': 'Det Forgyldte Pengeskrin',
+  'hudChrome.bank.title': 'Bank',
+  'hudChrome.bank.tooFar': 'Du skal stå hos en skatmester for at se din bank.',
+  'hudChrome.bank.withdrawHint': 'Klik for at tage ud',
+  'hudChrome.bank.withdrawPartialHint': 'Shift-klik for at tage et mindre antal ud',
+  'hudChrome.bank.withdrawQuantityConfirm': 'Tag ud',
+  'hudChrome.bank.withdrawQuantityInput': 'Antal at tage ud',
+  'hudChrome.bank.withdrawQuantityTitle': 'Tag {item} ud',
 };

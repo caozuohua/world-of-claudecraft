@@ -1307,6 +1307,50 @@ export const pl_PL: EnTranslations = {
         "takeParcelsFirst": "Wyjmij paczki, zanim wyrzucisz list."
       }
     },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "Złocona Szkatuła",
+      "close": "Zamknij bank",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Zajęte miejsca w banku: {used} z {total}",
+      "empty": "Twój bank jest pusty.",
+      "tooFar": "Musisz być przy bankierze, aby zajrzeć do swojego banku.",
+      "buySlots": "Kup {count} miejsc",
+      "buySlotsMaxed": "W pełni rozszerzony",
+      "buyConfirm": "Kupić {count} dodatkowych miejsc w banku za {price}?",
+      "buyConfirmAccept": "Kup",
+      "withdrawHint": "Kliknij, aby wyjąć",
+      "withdrawPartialHint": "Kliknij z Shiftem, aby wyjąć część",
+      "depositHint": "Kliknij, aby zdeponować",
+      "depositPartialHint": "Kliknij z Shiftem, aby zdeponować część",
+      "cannotDeposit": "Nie można zdeponować",
+      "depositQuantityTitle": "Zdeponuj: {item}",
+      "depositQuantityInput": "Liczba do zdeponowania",
+      "depositQuantityConfirm": "Zdeponuj",
+      "withdrawQuantityTitle": "Wyjmij: {item}",
+      "withdrawQuantityInput": "Liczba do wyjęcia",
+      "withdrawQuantityConfirm": "Wyjmij",
+      "filterGroupAria": "Filtruj bank według kategorii",
+      "sortAria": "Sortuj przedmioty w banku",
+      "searchAria": "Szukaj przedmiotów w banku po nazwie",
+      "depositAll": "Zdeponuj wszystkie materiały",
+      "depositAllDone": "Zdeponowane materiały: {count}.",
+      "depositAllFull": "Zdeponowane materiały: {count}. Bank jest teraz pełny.",
+      "depositAllNone": "Bank pełny: niczego nie zdeponowano.",
+      "bonusTitle": "Miejsca premiowe",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Zweryfikowany e-mail",
+      "bonusSourceDiscord": "Połączony Discord",
+      "bonusSourceWallet": "Połączony portfel",
+      "bonusSourceReferral": "Zaproszeni przyjaciele",
+      "bonusAdvertEmail": "Zweryfikuj swój e-mail, aby zdobyć 2 miejsca.",
+      "bonusAdvertDiscord": "Połącz swój Discord, aby zdobyć 2 miejsca.",
+      "bonusAdvertWallet": "Połącz portfel, aby zdobyć 2 miejsca.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Zaproś przyjaciela: gdy osiągnie 10. poziom, oboje zdobywacie po 2 miejsca, maksymalnie za 5 przyjaciół.",
+      "bonusSectionAria": "Premiowe miejsca w banku i jak zdobyć ich więcej"
+    },
     "calendar": {
       "title": "Kalendarz wydarzeń",
       "close": "Zamknij kalendarz",
@@ -2327,6 +2371,10 @@ export const pl_PL: EnTranslations = {
       "vendorsBody": "Miasta i posterunki są usiane kupcami, każdy z własnym fachem. Zaopatrzeniowcy mają jedzenie i napoje, płatnerze i zbrojmistrze noszą wyposażenie, a kwatermistrz trzyma praktyczny ekwipunek podróżny. Podejdź do jednego z nich, aby zobaczyć, co sprzedaje.",
       "marksTitle": "Druga waluta: Znaki Wypraw",
       "marksBody": "Monety to nie jedyne, co odkładasz. Wyprawy wypłacają Znaki Wypraw, osobną walutę, którą wydajesz wyłącznie u opiekuna wypraw, na ulepszenia towarzyszki i ekwipunek, którego nie znajdziesz gdzie indziej. Nigdy nie mieszają się z twoimi monetami.",
+      "bankTitle": "Bank",
+      "bankBody": "W każdym głównym mieście działa oddział Złoconej Szkatuły, domu bankowego królestwa. Porozmawiaj z tamtejszym skarbnikiem, aby otworzyć swój skarbiec, prywatny schowek poza torbami, który twoja postać zachowuje na całe życie. Cokolwiek tam zostawisz, czeka bezpiecznie, niezależnie od tego, który oddział odwiedzisz następnym razem.",
+      "bankHow": "Przy otwartym skarbcu kliknij przedmiot w torbach, aby go zdeponować, i kliknij go w skarbcu, aby zabrać z powrotem. Skarbiec przechowuje wyłącznie dobra, nigdy monety, a przedmioty zadań zostają przy tobie. Gdy torby zapełnią ci się w połowie drogi, jeden przycisk zgarnia do środka wszystkie materiały rzemieślnicze naraz.",
+      "bankSlots": "Świeży skarbiec zaczyna skromnie i rośnie razem z tobą. Skarbnik sprzedaje kolejne miejsca za monety po coraz wyższych cenach, a granie online przynosi na dodatek premiowe miejsca, na przykład za zweryfikowany e-mail, połączone konta i przyjaciół, których przyprowadzisz do gry.",
       "buyingTitle": "Kupowanie i sprzedawanie",
       "buyingBody": "Stań przy kupcu, aby otworzyć jego okno. Możesz kupić wszystko, co ma na składzie, jeśli cię na to stać, i sprzedać większość tego, co masz w torbach, za monety. Jeśli sprzedasz coś przez pomyłkę, sprzedawca zachowa twoje niedawne sprzedaże, abyś mógł je odkupić.",
       "junkTitle": "Pozbywanie się rupieci",
@@ -7329,6 +7377,21 @@ export const pl_PL: EnTranslations = {
         "name": "Aukcjoner Voss",
         "title": "Strażnik Rynku Świata",
         "greeting": "Rynek Świata jest otwarty także tutaj, {className}. Kupuj od każdego poszukiwacza przygód w królestwie albo wystaw własne towary."
+      },
+      "bursar_fernando": {
+        "name": "Skarbnik Fernando",
+        "title": "Złocona Szkatuła",
+        "greeting": "Witaj w Złoconej Szkatule. Twoje dobra spoczywają bezpiecznie za naszymi zamkami."
+      },
+      "bursar_petra_vell": {
+        "name": "Skarbniczka Petra Vell",
+        "title": "Złocona Szkatuła",
+        "greeting": "Złocona Szkatuła prowadzi czyste księgi i jeszcze czystsze skarbce. Co mamy dla ciebie przechować?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Skarbnik Aldous Crane",
+        "title": "Złocona Szkatuła",
+        "greeting": "Każda skrzynia, kufer i błyskotka są bezpieczne w Złoconej Szkatule."
       },
       "brother_aldric_raid": {
         "name": "Brat Aldric",

@@ -1307,6 +1307,50 @@ export const zh_CN: EnTranslations = {
         "takeParcelsFirst": "请先取出包裹再丢弃信件。"
       }
     },
+    "bank": {
+      "title": "银行",
+      "subtitle": "镀金保险箱",
+      "close": "关闭银行",
+      "capacity": "{used}/{total}",
+      "capacityAria": "银行格已用：{used}/{total}",
+      "empty": "你的银行是空的。",
+      "tooFar": "你必须站在银行家旁才能查看银行。",
+      "buySlots": "购买 {count} 个格子",
+      "buySlotsMaxed": "已完全扩展",
+      "buyConfirm": "花费 {price} 购买 {count} 个额外的银行格子吗？",
+      "buyConfirmAccept": "购买",
+      "withdrawHint": "点击取出",
+      "withdrawPartialHint": "Shift+点击取出部分数量",
+      "depositHint": "点击存入",
+      "depositPartialHint": "Shift+点击存入部分数量",
+      "cannotDeposit": "无法存入银行",
+      "depositQuantityTitle": "存入 {item}",
+      "depositQuantityInput": "要存入的数量",
+      "depositQuantityConfirm": "存入",
+      "withdrawQuantityTitle": "取出 {item}",
+      "withdrawQuantityInput": "要取出的数量",
+      "withdrawQuantityConfirm": "取出",
+      "filterGroupAria": "按类别筛选银行",
+      "sortAria": "排序银行物品",
+      "searchAria": "按名称搜索银行物品",
+      "depositAll": "存入所有材料",
+      "depositAllDone": "已存入材料：{count}。",
+      "depositAllFull": "已存入材料：{count}。银行已满。",
+      "depositAllNone": "银行已满：未存入任何物品。",
+      "bonusTitle": "奖励格子",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "已验证邮箱",
+      "bonusSourceDiscord": "已绑定 Discord",
+      "bonusSourceWallet": "已绑定钱包",
+      "bonusSourceReferral": "已推荐的好友",
+      "bonusAdvertEmail": "验证邮箱可获得 2 个格子。",
+      "bonusAdvertDiscord": "绑定 Discord 可获得 2 个格子。",
+      "bonusAdvertWallet": "绑定钱包可获得 2 个格子。",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "邀请好友：当好友升到 10 级，你们各获得 2 个格子，最多 5 位好友。",
+      "bonusSectionAria": "奖励银行格子及获取方式"
+    },
     "calendar": {
       "title": "活动日历",
       "close": "关闭日历",
@@ -2327,6 +2371,10 @@ export const zh_CN: EnTranslations = {
       "vendorsBody": "城镇与哨站里星罗棋布地分布着商人，各有各的营生。补给商贩备有食物与饮品，武器匠与护甲匠经营装备，军需官则备有实用的旅行用具。走到其中一位面前，便能看到他们出售的东西。",
       "marksTitle": "第二种货币：探秘印记",
       "marksBody": "你存下的不只有钱币。探秘会产出探秘印记，这是一种独立的货币，只能在探秘看守人处花费，用于同伴升级和别处找不到的装备。它们绝不会与你的钱币混在一起。",
+      "bankTitle": "银行",
+      "bankBody": "每座主城都设有镀金保险箱的分号，它是这片大陆的银行商号。与那里的司库交谈即可打开你的保险库：一处背包之外的私人储物空间，伴随角色终身。无论你下次造访哪家分号，寄存的物品都会安然等候。",
+      "bankHow": "保险库打开后，点击背包中的物品即可存入，点击保险库中的物品即可取回。保险库只存放物品，不存放钱币，任务物品也会留在你身上。旅途中背包装满时，还有一个按钮可将全部制造材料一键存入。",
+      "bankSlots": "新开的保险库空间不大，但会随你一同成长。司库出售更多格位，价格逐级走高；在线游玩还能获得额外空间，例如验证邮箱、关联账号，以及引荐好友加入游戏。",
       "buyingTitle": "买入与卖出",
       "buyingBody": "站到商人身旁即可打开他的窗口。只要付得起钱，你就能买下他所贩售的任何东西，也能把背包里的大部分物品卖掉换取钱币。若你不小心卖错了东西，商人会保留你近期售出的物品，让你可以买回。",
       "junkTitle": "清理废品",
@@ -7329,6 +7377,21 @@ export const zh_CN: EnTranslations = {
         "name": "拍卖师沃斯",
         "title": "世界市场守护者",
         "greeting": "世界市场在此亦可使用，{className}。从王国各地的冒险者手中购买，或出售你自己的货物。"
+      },
+      "bursar_fernando": {
+        "name": "司库费尔南多",
+        "title": "镀金保险箱",
+        "greeting": "欢迎来到镀金保险箱。你的财物在我们的锁后安然无恙。"
+      },
+      "bursar_petra_vell": {
+        "name": "司库佩特拉·维尔",
+        "title": "镀金保险箱",
+        "greeting": "镀金保险箱账目清晰，金库更是一尘不染。想让我们为你存放些什么？"
+      },
+      "bursar_aldous_crane": {
+        "name": "司库奥尔多斯·克莱恩",
+        "title": "镀金保险箱",
+        "greeting": "每一只木箱、每一个钱柜、每一件饰物，交给镀金保险箱都万无一失。"
       },
       "brother_aldric_raid": {
         "name": "奥德里克修士",

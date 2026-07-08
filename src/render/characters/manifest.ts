@@ -362,6 +362,11 @@ export const SKINS: Record<string, (string | null)[]> = {
   // Combat Mech chromas — every index is a real full-model texture (no null
   // default; the embedded base texture is not one of the rewards).
   player_mech: MECH_CHROMAS.map(mechChromaUrl),
+  // Bursar Fernando (the Eastbrook banker easter egg): the rogue palette with
+  // the skin swatch repainted light brown and the hair/brow swatch black, in
+  // the real Fernando's likeness. Index 0 is the real texture (mech precedent):
+  // NPCs always resolve skin 0, so the embedded default is deliberately unused.
+  npc_fernando: [`${SKINS_DIR}/rogue/fernando.png`],
 };
 
 // Emissive (glow) maps keyed exactly like SKINS, applied to .emissiveMap when a
@@ -915,6 +920,15 @@ export const VISUALS: Record<string, VisualDef> = {
     tint: 'entity',
     tintStrength: 0.35,
   },
+  // Bursar Fernando: the villager body with the likeness atlas (SKINS above)
+  // carrying black shoulder-length hair and light brown skin. No entity tint:
+  // the gold NpcDef color would wash the repaint back toward the villager look.
+  npc_fernando: {
+    url: `${PLAYERS}/rogue.glb`,
+    height: HUMANOID_H,
+    clips: kaykit(['1H_Melee_Attack_Chop']),
+    show: [],
+  },
   // Brother Halven, the Reliquary Keeper: a devout male guardian tending the crypt
   // door. Uses the KayKit paladin, one of the newer full-pack adventurer models
   // (unused elsewhere), for a sturdier, holier silhouette than the old hooded
@@ -1056,6 +1070,7 @@ const FAMILY_KEYS: Record<string, string> = {
 };
 
 const NPC_KEYS: Record<string, string> = {
+  bursar_fernando: 'npc_fernando',
   marshal_redbrook: 'npc_knight',
   warden_fenwick: 'npc_knight',
   captain_thessaly: 'npc_knight',

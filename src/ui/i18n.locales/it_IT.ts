@@ -1288,7 +1288,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hud.tutorial.returnTitle': 'Reclama la ricompensa',
   'hud.tutorial.returnBody':
     'Il tuo incarico è compiuto. Torna dal maresciallo Redbrook e premi {interactKey} per consegnarlo.',
-  // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': 'Dai tuoi {value} punti {stat}:',
   'hudChrome.statInfo.desc.str':
     "Aumenta la tua potenza d'attacco, così i colpi della tua arma sono più potenti.",
@@ -2497,9 +2496,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'abilityUi.cast.demonHeal': 'Cura demoniaca',
   'questUi.tracker.title': 'Missioni',
   'questUi.tracker.complete': 'Completata',
-
   'questUi.tracker.showOnMap': 'Mostra {name} sulla mappa',
-
   'questUi.tracker.hideFromMap': 'Nascondi {name} dalla mappa',
   'questUi.log.title': 'Registro missioni',
   'questUi.log.close': 'Chiudi registro missioni',
@@ -4212,7 +4209,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'news.prerelease': 'Anteprima',
   'news.viewOnGithub': 'Vedi su GitHub',
   'wiki.cta': 'Sfoglia la Wiki',
-  // --- qol-changes: character profile, attack-move, login/create labels ---
   'character.portraitAlt': 'Ritratto di {name}',
   'character.viewProfile': 'Vedi profilo',
   'character.profile': 'Profilo',
@@ -4227,7 +4223,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'auth.chromaOption': 'Croma {n}',
   'auth.noAccountPrompt': 'Nuovo nel mondo?',
   'auth.haveAccountPrompt': 'Hai già un account?',
-
   'entities.items.conjured_bread.name': "Focaccia d'avena evocata",
   'entities.items.conjured_bread2.name': 'Pagnotta nera evocata',
   'entities.items.conjured_bread3.name': 'Dolce al miele evocato',
@@ -4294,7 +4289,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.items.elderwood_log.name': 'Tronco di Sambuco Antico',
   'entities.items.goldleaf_herb.name': 'Erba Fogliadoro',
   'entities.items.sunpetal_herb.name': 'Erba Petalosole',
-  // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Aggiungi canale di chat',
   'hud.core.chatChannels.addTitle': 'Aggiungi canale',
   'hud.core.chatChannels.close': 'Chiudi la scheda {channel}',
@@ -4634,11 +4628,9 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.account.title': 'Account',
   'hudChrome.account.walletSummary':
     'Verifica un portafoglio Solana per mostrare il distintivo da titolare sulla tua scheda giocatore.',
-  // On-screen quest tracker (hudChrome.questTracker.*): collapsed count badge + header toggle hover hint.
   'hudChrome.questTracker.count': '({count})',
   'hudChrome.questTracker.collapseHint': 'Comprimi il riquadro Missioni',
   'hudChrome.questTracker.expandHint': 'Espandi il riquadro Missioni',
-  // Modular bag filtering controls (hudChrome.bags.*).
   'hudChrome.bags.filterGroupAria': 'Filtra le borse per categoria',
   'hudChrome.bags.filterAll': 'Tutti',
   'hudChrome.bags.filterWeapon': 'Armi',
@@ -4653,7 +4645,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bags.searchPlaceholder': 'Cerca oggetti',
   'hudChrome.bags.searchAria': 'Cerca gli oggetti della borsa per nome',
   'hudChrome.bags.noMatch': 'Nessun oggetto corrisponde ai tuoi filtri.',
-  // v0.13.0 release i18n fill: bug report, chat window, character takeover, admin bug reports
   'character.inWorldHint': 'Già nel mondo. Esci altrove, oppure prendine il controllo.',
   'character.takeOver': 'Prendi il controllo',
   'character.takeOverConfirm':
@@ -4688,7 +4679,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.chatWindow.resetAction': 'Ripristina',
   'hudChrome.chatWindow.resize': 'Trascina per ridimensionare la finestra della chat',
   'hudChrome.options.clickFeedback': 'Indicatore di clic',
-  // v0.13.0 adaptive browser-effects perf tier (PR #759)
   'hudChrome.options.browserEffects': 'Effetti del browser',
   'hudChrome.options.browserEffectsAuto': 'Auto',
   'hudChrome.options.browserEffectsFull': 'Completi',
@@ -4696,7 +4686,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.browserEffectsMinimal': 'Minimi',
   'hudChrome.options.browserEffectsNote':
     "La modalità automatica attenua gli effetti CSS pesanti (sfocatura, bagliore, movimento dello sfondo) in base al tuo browser e dispositivo. Riducila manualmente se l'interfaccia sembra lenta.",
-  // Guide (/guide) localization.
   'guide.bestiary.heading': 'Bestiario',
   'guide.bestiary.intro':
     "Le creature del mondo, raggruppate per famiglia. Sono i nemici che incontri all'aperto. Le cose più letali attendono, non elencate, dietro le porte dei dungeon.",
@@ -5372,7 +5361,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
     'Tre zone, da sud a nord, ognuna un gradino più in alto di livello. Segui la scia delle missioni e la terra ti porta dalla valle alle vette.',
   'guide.worldPage.places': 'Luoghi notevoli',
   'guide.worldPage.residents': 'Chi incontrerai',
-  // guide.* enrichment fill (lore, gear, social, stats, economy, progression)
   'guide.arenaPage.powerupsBody':
     "Durante lo scontro nell'arena cadono anche sfere luminose, libere per chiunque le raggiunga per primo. Sono volutamente sopra le righe e durano solo un istante: Demone della Velocità per un lampo di ritmo accecante, Colosso per gonfiarti in un gigante ingombrante, Stivali Lunari per un balzo rimbalzante a bassa gravità, e Berserker per un'improvvisa ondata di furia.",
   'guide.arenaPage.powerupsTitle': "Potenziamenti nell'arena",
@@ -5727,9 +5715,7 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.gladeTitle': 'Un angolo quieto: la Radura di Brightwood',
   'guide.worldPage.gladeBody':
     'Non ogni storia della Valle parla dei morti. A nord, una radura assolata chiamata Brightwood Glade mantiene un ritmo più gentile tutto suo, fatto di sentieri silenziosi e luce screziata sotto i rami. È un contrappunto lieve alla pista che stai seguendo e vale la pena vederla quando la strada ti lascia spazio per vagare.',
-  // APM telemetry label from release/v0.14.0
   'hudChrome.perf.labels.apm': 'APM',
-  // Account-security portal (2FA, verified email change, GDPR export) from PR #833.
   'auth.twoFactorLabel': 'Codice di autenticazione',
   'auth.twoFactorPlaceholder': 'Codice a 6 cifre o codice di recupero',
   'auth.twoFactorHint':
@@ -5982,7 +5968,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'sim.lockpick.tierMedium': 'Medio',
   'sim.lockpick.tierPremium': 'Pregiato',
   'sim.lockpick.toolSlips': 'Quello strumento scivola via da questa serratura.',
-  // Guide (/guide) localization.,
   'lockpickUi.pickTitle': 'Scassina la Serratura',
   'lockpickUi.cofferTitle': 'Forziere Ricolmo',
   'lockpickUi.cache': 'Scrigno {tier}',
@@ -6030,8 +6015,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'worldContent.delveSurfaceExitInteract': 'Premi F per risalire',
   'sim.delve.objectiveClearRoom': 'Ripulisci la stanza.',
   'sim.delve.objectiveDefeatBoss': 'Sconfiggi il boss.',
-  // Account-security portal (2FA, verified email change, GDPR export) from PR #833.,
-  // Aura effect tooltip summaries.
   'hudChrome.auraEffect.dot': 'Infligge {value} danni da {school} ogni {interval} s',
   'hudChrome.auraEffect.hot': 'Ripristina {value} salute ogni {interval} s',
   'hudChrome.auraEffect.absorb': 'Assorbe {value} danni',
@@ -6351,7 +6334,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.nativeUpdate.notNow': 'Non ora',
   'hudChrome.nativeUpdate.title': 'Aggiornamento disponibile',
   'hudChrome.nativeUpdate.update': 'Aggiorna',
-  // Ravenpost authored letters
   'entities.letters.ravenpost_welcome.sender': 'La Posta dei Corvi',
   'entities.letters.ravenpost_welcome.subject': 'Ora i corvi volano per te',
   'entities.letters.ravenpost_welcome.body':
@@ -6446,7 +6428,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'apiError.two_factor.setup_required':
     "Avvia prima la configurazione dell'autenticazione a due fattori.",
   'apiError.validation.failed': 'Alcuni campi non sono validi. Controlla il modulo e riprova.',
-  // Release v0.22.0 locale fill.
   'download.linuxCta': 'Scarica per Linux',
   'download.linuxHint':
     'AppImage: rendilo eseguibile, quindi eseguilo. Nessuna installazione necessaria.',
@@ -6557,7 +6538,6 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.targetCycleShort': 'Bersaglio',
   'hudChrome.options.mobileCameraJoystick': 'Joystick della fotocamera',
   'hudChrome.options.mobileLeftHanded': 'Disposizione per mancini',
-  // Release v0.22.0 professions quest locale fill.
   'entities.quests.q_archetype_acceptance.title': 'Un mestiere da chiamare tuo',
   'entities.quests.q_archetype_acceptance.text':
     'Ogni artigiano di Eastbrook alla fine sceglie un mestiere da considerare proprio. Mettiti alla prova con una sola azione, {playerName}, e dichiara il tuo percorso.',
@@ -6569,4 +6549,66 @@ export const it_IT: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_make_amends.completion':
     'Modifiche apportate; una nuova strada è aperta per te.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Lupo della Foresta ucciso',
+  'entities.npcs.bursar_aldous_crane.name': 'Economo Aldous Crane',
+  'entities.npcs.bursar_aldous_crane.title': 'Il Forziere Dorato',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    'Ogni cassa, scrigno e ninnolo è al sicuro presso il Forziere Dorato.',
+  'entities.npcs.bursar_fernando.name': 'Economo Fernando',
+  'entities.npcs.bursar_fernando.title': 'Il Forziere Dorato',
+  'entities.npcs.bursar_fernando.greeting':
+    'Ti diamo il benvenuto al Forziere Dorato. I tuoi beni riposano al sicuro dietro le nostre serrature.',
+  'entities.npcs.bursar_petra_vell.name': 'Economa Petra Vell',
+  'entities.npcs.bursar_petra_vell.title': 'Il Forziere Dorato',
+  'entities.npcs.bursar_petra_vell.greeting':
+    'Il Forziere Dorato tiene registri puliti e caveau ancora più puliti. Cosa possiamo custodire per te?',
+  'guide.economy.bankTitle': 'La banca',
+  'guide.economy.bankBody':
+    "Ogni città principale ospita una filiale del Forziere Dorato, la casa bancaria del reame. Parla con l'economo del posto per aprire il tuo caveau, una riserva privata di spazio oltre le tue borse che il tuo personaggio conserva per tutta la vita. Qualunque cosa lasci in custodia ti aspetta al sicuro, quale che sia la filiale che visiterai la prossima volta.",
+  'guide.economy.bankHow':
+    'Con il caveau aperto, clicca un oggetto nelle borse per depositarlo e cliccalo nel caveau per riprenderlo. Il caveau custodisce solo beni, mai monete, e gli oggetti missione restano con te. Quando le borse si riempiono a metà viaggio, un solo pulsante vi riversa in una volta sola tutti i tuoi materiali da artigianato.',
+  'guide.economy.bankSlots':
+    "Un caveau nuovo parte piccolo e cresce con te. L'economo vende altri spazi in cambio di monete a prezzi sempre più ripidi, e giocare online frutta spazio bonus in aggiunta, per cose come un'email verificata, gli account collegati e gli amici che porti nel gioco.",
+  'hudChrome.bank.title': 'Banca',
+  'hudChrome.bank.subtitle': 'Il Forziere Dorato',
+  'hudChrome.bank.close': 'Chiudi la banca',
+  'hudChrome.bank.empty': 'La tua banca è vuota.',
+  'hudChrome.bank.tooFar': 'Devi essere da un banchiere per consultare la tua banca.',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': 'Spazi della banca usati: {used} di {total}',
+  'hudChrome.bank.filterGroupAria': 'Filtra la banca per categoria',
+  'hudChrome.bank.searchAria': 'Cerca gli oggetti della banca per nome',
+  'hudChrome.bank.sortAria': 'Ordina gli oggetti della banca',
+  'hudChrome.bank.cannotDeposit': 'Non depositabile in banca',
+  'hudChrome.bank.depositHint': 'Clicca per depositare',
+  'hudChrome.bank.depositPartialHint': 'Maiusc + clic per depositare una quantità parziale',
+  'hudChrome.bank.depositQuantityTitle': 'Deposita {item}',
+  'hudChrome.bank.depositQuantityInput': 'Quantità da depositare',
+  'hudChrome.bank.depositQuantityConfirm': 'Deposita',
+  'hudChrome.bank.withdrawHint': 'Clicca per ritirare',
+  'hudChrome.bank.withdrawPartialHint': 'Maiusc + clic per ritirare una quantità parziale',
+  'hudChrome.bank.withdrawQuantityTitle': 'Ritira {item}',
+  'hudChrome.bank.withdrawQuantityInput': 'Quantità da ritirare',
+  'hudChrome.bank.withdrawQuantityConfirm': 'Ritira',
+  'hudChrome.bank.depositAll': 'Deposita tutti i materiali',
+  'hudChrome.bank.depositAllDone': 'Materiali depositati: {count}.',
+  'hudChrome.bank.depositAllFull': 'Materiali depositati: {count}. Ora la banca è piena.',
+  'hudChrome.bank.depositAllNone': 'Banca piena: non è stato depositato nulla.',
+  'hudChrome.bank.buySlots': 'Compra {count} spazi',
+  'hudChrome.bank.buySlotsMaxed': 'Ampliata al massimo',
+  'hudChrome.bank.buyConfirm': 'Acquistare {count} spazi aggiuntivi della banca per {price}?',
+  'hudChrome.bank.buyConfirmAccept': 'Acquista',
+  'hudChrome.bank.bonusTitle': 'Spazi bonus',
+  'hudChrome.bank.bonusSectionAria': 'Spazi bonus della banca e come guadagnarne altri',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusSourceEmail': 'Email verificata',
+  'hudChrome.bank.bonusSourceDiscord': 'Discord collegato',
+  'hudChrome.bank.bonusSourceWallet': 'Portafoglio collegato',
+  'hudChrome.bank.bonusSourceReferral': 'Amici invitati',
+  'hudChrome.bank.bonusAdvertEmail': 'Verifica la tua email per guadagnare 2 spazi.',
+  'hudChrome.bank.bonusAdvertDiscord': 'Collega il tuo Discord per guadagnare 2 spazi.',
+  'hudChrome.bank.bonusAdvertWallet': 'Collega un portafoglio per guadagnare 2 spazi.',
+  'hudChrome.bank.bonusReferralExplainer':
+    'Invita un amico: quando raggiunge il livello 10 guadagnate 2 spazi ciascuno, fino a 5 amici.',
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
 };

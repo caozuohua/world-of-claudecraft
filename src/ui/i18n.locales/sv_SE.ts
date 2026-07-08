@@ -5902,7 +5902,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'worldContent.dungeonInstanceBusy': 'Alla instanser av {name} är upptagna. Försök igen snart.',
   'worldContent.dungeonPartyWarning':
     '{name} är avsedd för en fullständig grupp på {count}. Var försiktig.',
-  // Aura effect tooltip summaries.
   'hudChrome.auraEffect.dot': 'Gör {value} {school}-skada var {interval}:e s',
   'hudChrome.auraEffect.hot': 'Återställer {value} hälsa var {interval}:e s',
   'hudChrome.auraEffect.absorb': 'Absorberar {value} skada',
@@ -6214,7 +6213,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.nativeUpdate.notNow': 'Inte nu',
   'hudChrome.nativeUpdate.title': 'Uppdatering tillgänglig',
   'hudChrome.nativeUpdate.update': 'Uppdatera',
-  // Ravenpost authored letters
   'entities.letters.ravenpost_welcome.sender': 'Korpposten',
   'entities.letters.ravenpost_welcome.subject': 'Korparna flyger nu för dig',
   'entities.letters.ravenpost_welcome.body':
@@ -6320,7 +6318,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'apiError.two_factor.not_enabled': 'Tvåfaktorsautentisering är inte aktiverad.',
   'apiError.two_factor.setup_required': 'Starta konfigurationen av tvåfaktorsautentisering först.',
   'apiError.validation.failed': 'Vissa fält är ogiltiga. Kontrollera formuläret och försök igen.',
-  // Release v0.22.0 locale fill.
   'download.linuxCta': 'Ladda ner för Linux',
   'download.linuxHint': 'AppImage: gör den körbar och kör den sedan. Ingen installation behövs.',
   'loading.reconnecting': 'Anslutning förlorad. Återansluter...',
@@ -6428,7 +6425,6 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.targetCycleShort': 'Mål',
   'hudChrome.options.mobileCameraJoystick': 'Kamera joystick',
   'hudChrome.options.mobileLeftHanded': 'Vänsterhänt layout',
-  // Release v0.22.0 professions quest locale fill.
   'entities.quests.q_archetype_acceptance.title': 'Ett hantverk att kalla ditt eget',
   'entities.quests.q_archetype_acceptance.text':
     'Varje hantverkare i Eastbrook nöjer sig så småningom med ett hantverk att kalla sitt eget. Bevisa dig själv med en enda gärning, {playerName}, och förklara din väg.',
@@ -6439,4 +6435,66 @@ export const sv_SE: Partial<Record<TranslationKey, string>> = {
     'För att avsätta ett hantverk åt ett annat måste en hantverkare först göra gott för vägen som inte gicks, {playerName}.',
   'entities.quests.q_prof_make_amends.completion': 'Gjorda ändringar; en ny väg är öppen för dig.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Skogsvarg dödad',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    'Varje låda, kista och krimskrams är i tryggt förvar hos Förgyllda kassakistan.',
+  'entities.npcs.bursar_aldous_crane.name': 'Kamrer Aldous Crane',
+  'entities.npcs.bursar_aldous_crane.title': 'Förgyllda kassakistan',
+  'entities.npcs.bursar_fernando.greeting':
+    'Välkommen till Förgyllda kassakistan. Dina ägodelar vilar tryggt bakom våra lås.',
+  'entities.npcs.bursar_fernando.name': 'Kamrer Fernando',
+  'entities.npcs.bursar_fernando.title': 'Förgyllda kassakistan',
+  'entities.npcs.bursar_petra_vell.greeting':
+    'Förgyllda kassakistan för rena huvudböcker och ännu renare valv. Vad ska vi förvara åt dig?',
+  'entities.npcs.bursar_petra_vell.name': 'Kamrer Petra Vell',
+  'entities.npcs.bursar_petra_vell.title': 'Förgyllda kassakistan',
+  'guide.economy.bankBody':
+    'Varje huvudort har en filial av Förgyllda kassakistan, rikets bankhus. Tala med kamreren där för att öppna ditt valv, ett privat förvaringsutrymme bortom dina väskor som din karaktär behåller livet ut. Vad du än lämnar hos dem väntar tryggt, oavsett vilken filial du besöker härnäst.',
+  'guide.economy.bankHow':
+    'Med valvet öppet klickar du på ett föremål i dina väskor för att sätta in det, och klickar på det i valvet för att ta tillbaka det. Valvet rymmer bara varor, aldrig mynt, och uppdragsföremål stannar hos dig. När väskorna blir fulla mitt under färden sveper en enda knapp in alla dina hantverksmaterial på en gång.',
+  'guide.economy.bankSlots':
+    'Ett nytt valv börjar smått och växer med dig. Kamreren säljer fler fack för mynt till allt brantare priser, och den som spelar online tjänar bonusutrymme därtill, för sådant som en verifierad e-post, länkade konton och vänner du tar med in i spelet.',
+  'guide.economy.bankTitle': 'Banken',
+  'hudChrome.bank.bonusAdvertDiscord': 'Länka ditt Discord för att tjäna 2 fack.',
+  'hudChrome.bank.bonusAdvertEmail': 'Verifiera din e-post för att tjäna 2 fack.',
+  'hudChrome.bank.bonusAdvertWallet': 'Länka en plånbok för att tjäna 2 fack.',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusReferralExplainer':
+    'Bjud in en vän: när vännen når nivå 10 tjänar ni 2 fack var, upp till 5 vänner.',
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
+  'hudChrome.bank.bonusSectionAria': 'Bonusbankfack och hur du tjänar fler',
+  'hudChrome.bank.bonusSourceDiscord': 'Discord länkat',
+  'hudChrome.bank.bonusSourceEmail': 'Verifierad e-post',
+  'hudChrome.bank.bonusSourceReferral': 'Värvade vänner',
+  'hudChrome.bank.bonusSourceWallet': 'Plånbok länkad',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusTitle': 'Bonusfack',
+  'hudChrome.bank.buyConfirm': 'Köp {count} extra bankfack för {price}?',
+  'hudChrome.bank.buyConfirmAccept': 'Köp',
+  'hudChrome.bank.buySlots': 'Köp {count} fack',
+  'hudChrome.bank.buySlotsMaxed': 'Fullt utbyggd',
+  'hudChrome.bank.cannotDeposit': 'Kan inte förvaras i banken',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': 'Använda bankfack: {used} av {total}',
+  'hudChrome.bank.close': 'Stäng banken',
+  'hudChrome.bank.depositAll': 'Sätt in alla material',
+  'hudChrome.bank.depositAllDone': 'Material insatta: {count}.',
+  'hudChrome.bank.depositAllFull': 'Material insatta: {count}. Banken är nu full.',
+  'hudChrome.bank.depositAllNone': 'Banken är full: inget sattes in.',
+  'hudChrome.bank.depositHint': 'Klicka för att sätta in',
+  'hudChrome.bank.depositPartialHint': 'Skift-klicka för att sätta in en del av antalet',
+  'hudChrome.bank.depositQuantityConfirm': 'Sätt in',
+  'hudChrome.bank.depositQuantityInput': 'Antal att sätta in',
+  'hudChrome.bank.depositQuantityTitle': 'Sätt in {item}',
+  'hudChrome.bank.empty': 'Din bank är tom.',
+  'hudChrome.bank.filterGroupAria': 'Filtrera banken efter kategori',
+  'hudChrome.bank.searchAria': 'Sök bankföremål efter namn',
+  'hudChrome.bank.sortAria': 'Sortera bankföremål',
+  'hudChrome.bank.subtitle': 'Förgyllda kassakistan',
+  'hudChrome.bank.title': 'Bank',
+  'hudChrome.bank.tooFar': 'Du måste stå hos en bankir för att se din bank.',
+  'hudChrome.bank.withdrawHint': 'Klicka för att ta ut',
+  'hudChrome.bank.withdrawPartialHint': 'Skift-klicka för att ta ut en del av antalet',
+  'hudChrome.bank.withdrawQuantityConfirm': 'Ta ut',
+  'hudChrome.bank.withdrawQuantityInput': 'Antal att ta ut',
+  'hudChrome.bank.withdrawQuantityTitle': 'Ta ut {item}',
 };

@@ -1280,7 +1280,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hud.tutorial.returnTitle': 'Reclama tu recompensa',
   'hud.tutorial.returnBody':
     'Tu tarea está hecha. Vuelve con el mariscal Redbrook y pulsa {interactKey} para entregarla.',
-  // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': 'De tu {value} de {stat}:',
   'hudChrome.statInfo.desc.str':
     'Aumenta tu poder de ataque, así que tus golpes con el arma impactan con más fuerza.',
@@ -4220,7 +4219,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'news.prerelease': 'Versión preliminar',
   'news.viewOnGithub': 'Ver en GitHub',
   'wiki.cta': 'Explorar la Wiki',
-  // --- qol-changes: character profile, attack-move, login/create labels ---
   'character.portraitAlt': 'Retrato de {name}',
   'character.viewProfile': 'Ver perfil',
   'character.profile': 'Perfil',
@@ -4235,7 +4233,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'auth.chromaOption': 'Croma {n}',
   'auth.noAccountPrompt': '¿Nuevo en el mundo?',
   'auth.haveAccountPrompt': '¿Ya tienes una cuenta?',
-
   'entities.items.conjured_bread.name': 'Torta de Avena Conjurada',
   'entities.items.conjured_bread2.name': 'Hogaza Negra Conjurada',
   'entities.items.conjured_bread3.name': 'Pastel de Miel Conjurado',
@@ -4302,7 +4299,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.items.elderwood_log.name': 'Tronco de Saúco',
   'entities.items.goldleaf_herb.name': 'Hierba Hoja de Oro',
   'entities.items.sunpetal_herb.name': 'Hierba Pétalo de Sol',
-  // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Añadir canal de chat',
   'hud.core.chatChannels.addTitle': 'Añadir canal',
   'hud.core.chatChannels.close': 'Cerrar la pestaña {channel}',
@@ -4632,11 +4628,9 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.account.title': 'Cuenta',
   'hudChrome.account.walletSummary':
     'Verifica una cartera de Solana para mostrar el distintivo de titular en tu tarjeta de jugador.',
-  // On-screen quest tracker (hudChrome.questTracker.*): collapsed count badge + header toggle hover hint.
   'hudChrome.questTracker.count': '({count})',
   'hudChrome.questTracker.collapseHint': 'Contraer rastreador de misiones',
   'hudChrome.questTracker.expandHint': 'Expandir rastreador de misiones',
-  // Modular bag filtering controls (hudChrome.bags.*).
   'hudChrome.bags.filterGroupAria': 'Filtrar bolsas por categoría',
   'hudChrome.bags.filterAll': 'Todos',
   'hudChrome.bags.filterWeapon': 'Armas',
@@ -4651,7 +4645,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bags.searchPlaceholder': 'Buscar objetos',
   'hudChrome.bags.searchAria': 'Buscar objetos de la bolsa por nombre',
   'hudChrome.bags.noMatch': 'Ningún objeto coincide con tus filtros.',
-  // v0.13.0 release i18n fill: bug report, chat window, character takeover, admin bug reports
   'character.inWorldHint':
     'Ya está en el mundo. Cierra la sesión en otro lugar, o toma el control.',
   'character.takeOver': 'Tomar control',
@@ -4687,7 +4680,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.chatWindow.resetAction': 'Restablecer',
   'hudChrome.chatWindow.resize': 'Arrastra para cambiar el tamaño de la ventana de chat',
   'hudChrome.options.clickFeedback': 'Marcador de clic',
-  // v0.13.0 adaptive browser-effects perf tier (PR #759)
   'hudChrome.options.browserEffects': 'Efectos del navegador',
   'hudChrome.options.browserEffectsAuto': 'Auto',
   'hudChrome.options.browserEffectsFull': 'Completos',
@@ -4695,7 +4687,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.browserEffectsMinimal': 'Mínimos',
   'hudChrome.options.browserEffectsNote':
     'El modo automático atenúa los efectos CSS pesados (desenfoque, brillo, movimiento de fondo) según tu navegador y dispositivo. Redúcelo manualmente si la interfaz va lenta.',
-  // Guide (/guide) localization.
   'guide.bestiary.heading': 'Bestiario',
   'guide.bestiary.intro':
     'Las criaturas del mundo, agrupadas por familia. Estos son los enemigos que encuentras a campo abierto. Las cosas más mortíferas aguardan, sin figurar aquí, tras las puertas de las mazmorras.',
@@ -5367,7 +5358,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Tres zonas, de sur a norte, cada una un escalón más alta en nivel. Sigue el rastro de las misiones y la tierra te lleva del valle a los picos.',
   'guide.worldPage.places': 'Lugares destacados',
   'guide.worldPage.residents': 'A quién te encontrarás',
-  // guide.* enrichment fill (lore, gear, social, stats, economy, progression)
   'guide.arenaPage.powerupsBody':
     'Esferas brillantes también caen en la arena en mitad del combate, libres para quien las alcance primero. Son deliberadamente exageradas y duran solo un instante: Demonio de Velocidad para un parpadeo de paso cegador, Coloso para hincharte hasta volverte un gigante torpe, Botas Lunares para un salto rebotante de baja gravedad y Berserker para una repentina oleada de furia.',
   'guide.arenaPage.powerupsTitle': 'Potenciadores en el ruedo',
@@ -5722,9 +5712,7 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.gladeTitle': 'Un rincón tranquilo: la arboleda de Brightwood',
   'guide.worldPage.gladeBody':
     'No todas las historias del Valle tratan de los muertos. Al norte, una arboleda soleada llamada arboleda de Brightwood conserva su propio ritmo más amable, solo senderos silenciosos y luz moteada bajo las ramas. Es un contrapunto suave al rastro que sigues y merece verse cuando el camino te deje espacio para vagar.',
-  // APM telemetry label from release/v0.14.0
   'hudChrome.perf.labels.apm': 'APM',
-  // Account-security portal (2FA, verified email change, GDPR export) from PR #833.
   'auth.twoFactorLabel': 'Código de autenticación',
   'auth.twoFactorPlaceholder': 'Código de 6 dígitos o de recuperación',
   'auth.twoFactorHint':
@@ -5977,7 +5965,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'sim.lockpick.tierMedium': 'Medio',
   'sim.lockpick.tierPremium': 'Selecto',
   'sim.lockpick.toolSlips': 'Esa herramienta resbala sobre esta cerradura.',
-  // Guide (/guide) localization.,
   'lockpickUi.pickTitle': 'Fuerza la cerradura',
   'lockpickUi.cofferTitle': 'Cofre Pródigo',
   'lockpickUi.cache': 'Botín {tier}',
@@ -6025,8 +6012,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'worldContent.delveSurfaceExitInteract': 'Pulsa F para trepar',
   'sim.delve.objectiveClearRoom': 'Despeja la sala.',
   'sim.delve.objectiveDefeatBoss': 'Derrota al jefe.',
-  // Account-security portal (2FA, verified email change, GDPR export) from PR #833.,
-  // Aura effect tooltip summaries.
   'hudChrome.auraEffect.dot': 'Inflige {value} de daño de {school} cada {interval} s',
   'hudChrome.auraEffect.hot': 'Restaura {value} de salud cada {interval} s',
   'hudChrome.auraEffect.absorb': 'Absorbe {value} de daño',
@@ -6345,7 +6330,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.nativeUpdate.notNow': 'Ahora no',
   'hudChrome.nativeUpdate.title': 'Actualización disponible',
   'hudChrome.nativeUpdate.update': 'Actualizar',
-  // Ravenpost authored letters
   'entities.letters.ravenpost_welcome.sender': 'El Correo del Cuervo',
   'entities.letters.ravenpost_welcome.subject': 'Los cuervos ya vuelan por ti',
   'entities.letters.ravenpost_welcome.body':
@@ -6457,7 +6441,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
     'Primero comienza la configuración de la autenticación en dos pasos.',
   'apiError.validation.failed':
     'Algunos campos no son válidos. Revisa el formulario e inténtalo de nuevo.',
-  // Release v0.22.0 locale fill.
   'download.linuxCta': 'Descargar para Linux',
   'download.linuxHint': 'AppImage: hazlo ejecutable y luego ejecútalo. No se necesita instalación.',
   'loading.reconnecting': 'Conexión perdida. Reconectando...',
@@ -6569,7 +6552,6 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.targetCycleShort': 'Objetivo',
   'hudChrome.options.mobileCameraJoystick': 'Palanca de mando de la cámara',
   'hudChrome.options.mobileLeftHanded': 'Diseño para zurdos',
-  // Release v0.22.0 professions quest locale fill.
   'entities.quests.q_archetype_acceptance.title': 'Un oficio que puedes llamar tuyo',
   'entities.quests.q_archetype_acceptance.text':
     'Cada artesano de Eastbrook finalmente se decide por un oficio que puede considerar suyo. Ponte a prueba con una sola acción, {playerName}, y declara tu camino.',
@@ -6581,4 +6563,66 @@ export const es: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_make_amends.completion':
     'Enmiendas hechas; un nuevo camino está abierto para ti.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Lobo del bosque matado',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    'Cada cajón, cofre y baratija está a salvo en el Arca Dorada.',
+  'entities.npcs.bursar_aldous_crane.name': 'Tesorero Aldous Crane',
+  'entities.npcs.bursar_aldous_crane.title': 'El Arca Dorada',
+  'entities.npcs.bursar_fernando.greeting':
+    'Te damos la bienvenida al Arca Dorada. Tus bienes descansan seguros tras nuestras cerraduras.',
+  'entities.npcs.bursar_fernando.name': 'Tesorero Fernando',
+  'entities.npcs.bursar_fernando.title': 'El Arca Dorada',
+  'entities.npcs.bursar_petra_vell.greeting':
+    'El Arca Dorada lleva registros limpios y bóvedas aún más limpias. ¿Qué guardamos para ti?',
+  'entities.npcs.bursar_petra_vell.name': 'Tesorera Petra Vell',
+  'entities.npcs.bursar_petra_vell.title': 'El Arca Dorada',
+  'guide.economy.bankBody':
+    'Cada pueblo principal mantiene una sucursal del Arca Dorada, la casa de banca del reino. Habla allí con el tesorero para abrir tu bóveda, una reserva privada de espacio más allá de tus bolsas que tu personaje conserva de por vida. Lo que dejes en sus manos espera a salvo, sea cual sea la sucursal que visites la próxima vez.',
+  'guide.economy.bankHow':
+    'Con la bóveda abierta, haz clic en un objeto de tus bolsas para depositarlo y haz clic en él dentro de la bóveda para recuperarlo. La bóveda solo guarda bienes, nunca monedas, y los objetos de misión se quedan contigo. Cuando tus bolsas se llenan a mitad de viaje, un solo botón mete de una vez todos tus materiales de artesanía.',
+  'guide.economy.bankSlots':
+    'Una bóveda recién abierta empieza pequeña y crece contigo. El tesorero vende espacios adicionales por monedas a precios cada vez más altos, y jugar en línea suma espacio extra por cosas como un correo verificado, cuentas vinculadas y amigos que traes al juego.',
+  'guide.economy.bankTitle': 'El banco',
+  'hudChrome.bank.bonusAdvertDiscord': 'Vincula tu Discord para ganar 2 espacios.',
+  'hudChrome.bank.bonusAdvertEmail': 'Verifica tu correo para ganar 2 espacios.',
+  'hudChrome.bank.bonusAdvertWallet': 'Vincula una cartera para ganar 2 espacios.',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusReferralExplainer':
+    'Invita a un amigo: cuando alcance el nivel 10, cada uno gana 2 espacios, hasta 5 amigos.',
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
+  'hudChrome.bank.bonusSectionAria': 'Espacios de banco extra y cómo ganar más',
+  'hudChrome.bank.bonusSourceDiscord': 'Discord vinculado',
+  'hudChrome.bank.bonusSourceEmail': 'Correo verificado',
+  'hudChrome.bank.bonusSourceReferral': 'Amigos invitados',
+  'hudChrome.bank.bonusSourceWallet': 'Cartera vinculada',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusTitle': 'Espacios extra',
+  'hudChrome.bank.buyConfirm': '¿Comprar {count} espacios de banco adicionales por {price}?',
+  'hudChrome.bank.buyConfirmAccept': 'Comprar',
+  'hudChrome.bank.buySlots': 'Comprar {count} espacios',
+  'hudChrome.bank.buySlotsMaxed': 'Ampliado al máximo',
+  'hudChrome.bank.cannotDeposit': 'No se puede guardar en el banco',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': 'Espacios de banco usados: {used} de {total}',
+  'hudChrome.bank.close': 'Cerrar el banco',
+  'hudChrome.bank.depositAll': 'Depositar todos los materiales',
+  'hudChrome.bank.depositAllDone': 'Materiales depositados: {count}.',
+  'hudChrome.bank.depositAllFull': 'Materiales depositados: {count}. El banco está ahora lleno.',
+  'hudChrome.bank.depositAllNone': 'Banco lleno: no se depositó nada.',
+  'hudChrome.bank.depositHint': 'Clic para depositar',
+  'hudChrome.bank.depositPartialHint': 'Mayús+clic para depositar una cantidad parcial',
+  'hudChrome.bank.depositQuantityConfirm': 'Depositar',
+  'hudChrome.bank.depositQuantityInput': 'Cantidad a depositar',
+  'hudChrome.bank.depositQuantityTitle': 'Depositar {item}',
+  'hudChrome.bank.empty': 'Tu banco está vacío.',
+  'hudChrome.bank.filterGroupAria': 'Filtrar el banco por categoría',
+  'hudChrome.bank.searchAria': 'Buscar objetos del banco por nombre',
+  'hudChrome.bank.sortAria': 'Ordenar los objetos del banco',
+  'hudChrome.bank.subtitle': 'El Arca Dorada',
+  'hudChrome.bank.title': 'Banco',
+  'hudChrome.bank.tooFar': 'Debes estar junto a un banquero para ver tu banco.',
+  'hudChrome.bank.withdrawHint': 'Clic para retirar',
+  'hudChrome.bank.withdrawPartialHint': 'Mayús+clic para retirar una cantidad parcial',
+  'hudChrome.bank.withdrawQuantityConfirm': 'Retirar',
+  'hudChrome.bank.withdrawQuantityInput': 'Cantidad a retirar',
+  'hudChrome.bank.withdrawQuantityTitle': 'Retirar {item}',
 };

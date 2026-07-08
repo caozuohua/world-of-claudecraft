@@ -5943,7 +5943,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'worldContent.dungeonInstanceBusy': 'Tất cả các phiên bản của {name} đang bận. Hãy thử lại sau.',
   'worldContent.dungeonPartyWarning':
     '{name} dành cho một nhóm đầy đủ {count} người. Hãy cẩn thận.',
-  // Aura effect tooltip summaries.
   'hudChrome.auraEffect.dot': 'Gây {value} sát thương {school} mỗi {interval} giây',
   'hudChrome.auraEffect.hot': 'Hồi {value} máu mỗi {interval} giây',
   'hudChrome.auraEffect.absorb': 'Hấp thụ {value} sát thương',
@@ -6253,7 +6252,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.nativeUpdate.update': 'Cập Nhật',
   'errors.api.desktopCodeInvalid':
     'Mã đăng nhập máy tính không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.',
-  // Ravenpost authored letters
   'entities.letters.ravenpost_welcome.sender': 'Bưu Quạ',
   'entities.letters.ravenpost_welcome.subject': 'Giờ đây bầy quạ bay vì bạn',
   'entities.letters.ravenpost_welcome.body':
@@ -6343,7 +6341,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'apiError.two_factor.not_enabled': 'Xác thực hai yếu tố chưa được bật.',
   'apiError.two_factor.setup_required': 'Hãy bắt đầu thiết lập xác thực hai yếu tố trước.',
   'apiError.validation.failed': 'Một số trường không hợp lệ. Hãy kiểm tra biểu mẫu và thử lại.',
-  // Release v0.22.0 locale fill.
   'download.linuxCta': 'Tải xuống cho Linux',
   'download.linuxHint': 'AppImage: làm cho nó có thể thực thi được rồi chạy nó. Không cần cài đặt.',
   'loading.reconnecting': 'Mất kết nối. Đang kết nối lại...',
@@ -6451,7 +6448,6 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.targetCycleShort': 'Mục tiêu',
   'hudChrome.options.mobileCameraJoystick': 'Cần điều khiển máy ảnh',
   'hudChrome.options.mobileLeftHanded': 'Bố cục thuận tay trái',
-  // Release v0.22.0 professions quest locale fill.
   'entities.quests.q_archetype_acceptance.title': 'Một nghề để gọi riêng của bạn',
   'entities.quests.q_archetype_acceptance.text':
     'Mỗi nghệ nhân của Eastbrook cuối cùng đều định cư trên một nghề thủ công riêng của họ. Hãy chứng tỏ bản thân bằng một hành động duy nhất, {playerName}, và tuyên bố con đường của bạn.',
@@ -6463,4 +6459,66 @@ export const vi_VN: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_make_amends.completion':
     'Đã thực hiện sửa đổi; một con đường mới đang mở ra cho bạn.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Sói rừng bị giết',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    'Mọi thùng hàng, rương tiền, và món trang sức đều an toàn trong tay Két Sắt Mạ Vàng.',
+  'entities.npcs.bursar_aldous_crane.name': 'Thủ Quỹ Aldous Crane',
+  'entities.npcs.bursar_aldous_crane.title': 'Két Sắt Mạ Vàng',
+  'entities.npcs.bursar_fernando.greeting':
+    'Chào mừng đến với Két Sắt Mạ Vàng. Hàng hóa của ngươi nằm yên an toàn sau những ổ khóa của chúng tôi.',
+  'entities.npcs.bursar_fernando.name': 'Thủ Quỹ Fernando',
+  'entities.npcs.bursar_fernando.title': 'Két Sắt Mạ Vàng',
+  'entities.npcs.bursar_petra_vell.greeting':
+    'Két Sắt Mạ Vàng giữ sổ sách sạch sẽ và những kho két còn sạch sẽ hơn. Chúng tôi cất giữ gì cho ngươi đây?',
+  'entities.npcs.bursar_petra_vell.name': 'Thủ Quỹ Petra Vell',
+  'entities.npcs.bursar_petra_vell.title': 'Két Sắt Mạ Vàng',
+  'guide.economy.bankBody':
+    'Mỗi thị trấn trung tâm đều có một chi nhánh của Két Sắt Mạ Vàng, ngân hiệu của cả vương quốc. Hãy nói chuyện với thủ quỹ ở đó để mở kho két của bạn, một khoang chứa riêng ngoài túi đồ mà nhân vật của bạn giữ trọn đời. Bất cứ thứ gì bạn gửi lại đều chờ bạn an toàn, dù lần sau bạn ghé chi nhánh nào.',
+  'guide.economy.bankHow':
+    'Khi kho két đang mở, nhấp một vật phẩm trong túi để gửi vào và nhấp nó trong kho két để lấy lại. Kho két chỉ giữ hàng hóa, không bao giờ giữ tiền, và vật phẩm nhiệm vụ luôn ở lại bên bạn. Khi túi đầy giữa chuyến đi, một nút bấm sẽ quét toàn bộ nguyên liệu chế tác của bạn vào cùng một lúc.',
+  'guide.economy.bankSlots':
+    'Một kho két mới mở khởi đầu nhỏ bé và lớn dần cùng bạn. Thủ quỹ bán thêm ô với giá tiền vàng ngày một đắt hơn, và chơi trực tuyến còn mang lại chỗ chứa thưởng thêm, cho những việc như xác minh email, liên kết tài khoản, và những người bạn mà bạn đưa vào trò chơi.',
+  'guide.economy.bankTitle': 'Ngân Hàng',
+  'hudChrome.bank.bonusAdvertDiscord': 'Liên kết Discord của bạn để nhận 2 ô.',
+  'hudChrome.bank.bonusAdvertEmail': 'Xác minh email của bạn để nhận 2 ô.',
+  'hudChrome.bank.bonusAdvertWallet': 'Liên kết một ví để nhận 2 ô.',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusReferralExplainer':
+    'Mời một người bạn: khi họ đạt cấp 10, cả bạn lẫn họ mỗi người nhận 2 ô, tối đa 5 người bạn.',
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
+  'hudChrome.bank.bonusSectionAria': 'Ô ngân hàng thưởng và cách kiếm thêm',
+  'hudChrome.bank.bonusSourceDiscord': 'Đã liên kết Discord',
+  'hudChrome.bank.bonusSourceEmail': 'Email đã xác minh',
+  'hudChrome.bank.bonusSourceReferral': 'Bạn bè được giới thiệu',
+  'hudChrome.bank.bonusSourceWallet': 'Đã liên kết ví',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusTitle': 'Ô Thưởng',
+  'hudChrome.bank.buyConfirm': 'Mua thêm {count} ô ngân hàng với giá {price}?',
+  'hudChrome.bank.buyConfirmAccept': 'Mua',
+  'hudChrome.bank.buySlots': 'Mua {count} ô',
+  'hudChrome.bank.buySlotsMaxed': 'Đã mở rộng tối đa',
+  'hudChrome.bank.cannotDeposit': 'Không thể gửi vào ngân hàng',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': 'Ô ngân hàng đã dùng: {used} trên {total}',
+  'hudChrome.bank.close': 'Đóng ngân hàng',
+  'hudChrome.bank.depositAll': 'Gửi tất cả nguyên liệu',
+  'hudChrome.bank.depositAllDone': 'Nguyên liệu đã gửi: {count}.',
+  'hudChrome.bank.depositAllFull': 'Nguyên liệu đã gửi: {count}. Ngân hàng hiện đã đầy.',
+  'hudChrome.bank.depositAllNone': 'Ngân hàng đầy: không gửi được gì.',
+  'hudChrome.bank.depositHint': 'Nhấp để gửi vào',
+  'hudChrome.bank.depositPartialHint': 'Shift-click để gửi vào một phần',
+  'hudChrome.bank.depositQuantityConfirm': 'Gửi Vào',
+  'hudChrome.bank.depositQuantityInput': 'Số lượng cần gửi',
+  'hudChrome.bank.depositQuantityTitle': 'Gửi {item}',
+  'hudChrome.bank.empty': 'Ngân hàng của bạn đang trống.',
+  'hudChrome.bank.filterGroupAria': 'Lọc ngân hàng theo danh mục',
+  'hudChrome.bank.searchAria': 'Tìm vật phẩm ngân hàng theo tên',
+  'hudChrome.bank.sortAria': 'Sắp xếp vật phẩm ngân hàng',
+  'hudChrome.bank.subtitle': 'Két Sắt Mạ Vàng',
+  'hudChrome.bank.title': 'Ngân Hàng',
+  'hudChrome.bank.tooFar': 'Bạn phải ở chỗ nhân viên ngân hàng mới xem được ngân hàng của mình.',
+  'hudChrome.bank.withdrawHint': 'Nhấp để rút ra',
+  'hudChrome.bank.withdrawPartialHint': 'Shift-click để rút ra một phần',
+  'hudChrome.bank.withdrawQuantityConfirm': 'Rút Ra',
+  'hudChrome.bank.withdrawQuantityInput': 'Số lượng cần rút',
+  'hudChrome.bank.withdrawQuantityTitle': 'Rút {item}',
 };

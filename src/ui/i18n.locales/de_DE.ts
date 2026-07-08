@@ -1299,7 +1299,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hud.tutorial.returnTitle': 'Hol dir deine Belohnung',
   'hud.tutorial.returnBody':
     'Deine Aufgabe ist erledigt. Kehre zu Marschall Redbrook zurück und drücke {interactKey}, um sie abzugeben.',
-  // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': 'Von deinen {value} Punkten {stat}:',
   'hudChrome.statInfo.desc.str':
     'Erhöht deine Angriffskraft, sodass deine Waffenschläge härter treffen.',
@@ -2511,9 +2510,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'abilityUi.cast.demonHeal': 'Dämonenheilung',
   'questUi.tracker.title': 'Quests',
   'questUi.tracker.complete': 'Abgeschlossen',
-
   'questUi.tracker.showOnMap': '{name} auf der Karte anzeigen',
-
   'questUi.tracker.hideFromMap': '{name} auf der Karte ausblenden',
   'questUi.log.title': 'Questlog',
   'questUi.log.close': 'Questlog schließen',
@@ -4235,7 +4232,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'news.prerelease': 'Vorabversion',
   'news.viewOnGithub': 'Auf GitHub ansehen',
   'wiki.cta': 'Wiki durchstöbern',
-  // --- qol-changes: character profile, attack-move, login/create labels ---
   'character.portraitAlt': 'Porträt von {name}',
   'character.viewProfile': 'Profil ansehen',
   'character.profile': 'Profil',
@@ -4250,7 +4246,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'auth.chromaOption': 'Chroma {n}',
   'auth.noAccountPrompt': 'Neu in der Welt?',
   'auth.haveAccountPrompt': 'Schon ein Konto?',
-
   'entities.items.conjured_bread.name': 'Herbeigezauberter Haferkuchen',
   'entities.items.conjured_bread2.name': 'Herbeigezaubertes Schwarzbrot',
   'entities.items.conjured_bread3.name': 'Herbeigezauberter Honigkuchen',
@@ -4317,7 +4312,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.items.elderwood_log.name': 'Altholunderscheit',
   'entities.items.goldleaf_herb.name': 'Goldblattkraut',
   'entities.items.sunpetal_herb.name': 'Sonnenblütenkraut',
-  // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': 'Chatkanal hinzufügen',
   'hud.core.chatChannels.addTitle': 'Kanal hinzufügen',
   'hud.core.chatChannels.close': 'Reiter {channel} schließen',
@@ -4663,11 +4657,9 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.account.title': 'Konto',
   'hudChrome.account.walletSummary':
     'Verifiziert ein Solana-Wallet, um Inhaber-Flair auf Eurer Spielerkarte anzuzeigen.',
-  // On-screen quest tracker (hudChrome.questTracker.*): collapsed count badge + header toggle hover hint.
   'hudChrome.questTracker.count': '({count})',
   'hudChrome.questTracker.collapseHint': 'Quests einklappen',
   'hudChrome.questTracker.expandHint': 'Quests ausklappen',
-  // Modular bag filtering controls (hudChrome.bags.*).
   'hudChrome.bags.filterGroupAria': 'Taschen nach Kategorie filtern',
   'hudChrome.bags.filterAll': 'Alle',
   'hudChrome.bags.filterWeapon': 'Waffen',
@@ -4682,7 +4674,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bags.searchPlaceholder': 'Gegenstände durchsuchen',
   'hudChrome.bags.searchAria': 'Taschengegenstände nach Namen durchsuchen',
   'hudChrome.bags.noMatch': 'Keine Gegenstände entsprechen Euren Filtern.',
-  // v0.13.0 release i18n fill: bug report, chat window, character takeover, admin bug reports
   'character.inWorldHint':
     'Bereits in der Welt. Melde dich anderswo ab oder übernimm den Charakter.',
   'character.takeOver': 'Übernehmen',
@@ -4719,7 +4710,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.chatWindow.resetAction': 'Zurücksetzen',
   'hudChrome.chatWindow.resize': 'Ziehen, um die Größe des Chatfensters zu ändern',
   'hudChrome.options.clickFeedback': 'Klickmarkierung',
-  // v0.13.0 adaptive browser-effects perf tier (PR #759)
   'hudChrome.options.browserEffects': 'Browser-Effekte',
   'hudChrome.options.browserEffectsAuto': 'Auto',
   'hudChrome.options.browserEffectsFull': 'Voll',
@@ -4727,7 +4717,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.browserEffectsMinimal': 'Minimal',
   'hudChrome.options.browserEffectsNote':
     'Der Automatikmodus reduziert aufwendige CSS-Effekte (Unschärfe, Leuchten, Hintergrundbewegung) je nach Browser und Gerät. Senke ihn manuell, wenn sich die Oberfläche träge anfühlt.',
-  // Guide (/guide) localization.
   'guide.bestiary.heading': 'Bestiarium',
   'guide.bestiary.intro':
     'Die Kreaturen der Welt, nach Familien gruppiert. Dies sind die Gegner, denen ihr im Freien begegnet. Die tödlichsten Wesen warten ungelistet hinter den Toren der Dungeons.',
@@ -5401,7 +5390,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
     'Drei Gebiete, von Süden nach Norden, jedes eine Stufe höher im Level. Folge der Questspur, und das Land trägt dich vom Tal bis zu den Gipfeln.',
   'guide.worldPage.places': 'Bemerkenswerte Orte',
   'guide.worldPage.residents': 'Wem du begegnen wirst',
-  // guide.* enrichment fill (lore, gear, social, stats, economy, progression)
   'guide.arenaPage.powerupsBody':
     'Mitten im Kampf fallen außerdem leuchtende Kugeln in die Arena, frei für den, der sie zuerst erreicht. Sie sind absichtlich völlig übertrieben und halten nur kurz an: Geschwindigkeitsdämon für einen Wimpernschlag blendenden Tempos, Koloss, um dich zu einem schwerfälligen Riesen anschwellen zu lassen, Mondstiefel für einen federnden Sprung bei niedriger Schwerkraft und Berserker für einen plötzlichen Schub an Raserei.',
   'guide.arenaPage.powerupsTitle': 'Powerups im Ring',
@@ -5758,9 +5746,7 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.gladeTitle': 'Eine stille Ecke: Brightwood Glade',
   'guide.worldPage.gladeBody':
     'Nicht jede Geschichte im Tal handelt von den Toten. Im Norden bewahrt ein sonnenheller Hain namens Brightwood Glade seinen eigenen, sanfteren Rhythmus, ganz aus stillen Pfaden und geflecktem Licht unter den Zweigen. Er ist ein sanfter Gegenklang zu der Spur, der du folgst, und einen Blick wert, wenn die Straße dir Raum zum Umherstreifen lässt.',
-  // APM telemetry label from release/v0.14.0
   'hudChrome.perf.labels.apm': 'APM',
-  // Account-security portal (2FA, verified email change, GDPR export) from PR #833.
   'auth.twoFactorLabel': 'Authentifizierungscode',
   'auth.twoFactorPlaceholder': '6-stelliger Code oder Wiederherstellungscode',
   'auth.twoFactorHint':
@@ -6016,7 +6002,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'sim.lockpick.tierMedium': 'Mittel',
   'sim.lockpick.tierPremium': 'Erlesen',
   'sim.lockpick.toolSlips': 'Dieses Werkzeug rutscht von diesem Schloss ab.',
-  // Guide (/guide) localization.,
   'lockpickUi.pickTitle': 'Knacke das Schloss',
   'lockpickUi.cofferTitle': 'Reich gefüllte Truhe',
   'lockpickUi.cache': '{tier} Hort',
@@ -6064,8 +6049,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'worldContent.delveSurfaceExitInteract': 'Drücke F, um hinaufzuklettern',
   'sim.delve.objectiveClearRoom': 'Den Raum räumen.',
   'sim.delve.objectiveDefeatBoss': 'Den Boss erschlagen.',
-  // Account-security portal (2FA, verified email change, GDPR export) from PR #833.,
-  // Aura effect tooltip summaries.
   'hudChrome.auraEffect.dot': 'Verursacht alle {interval} s {value} {school}schaden',
   'hudChrome.auraEffect.hot': 'Stellt alle {interval} s {value} Gesundheit wieder her',
   'hudChrome.auraEffect.absorb': 'Absorbiert {value} Schaden',
@@ -6387,7 +6370,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.nativeUpdate.notNow': 'Jetzt nicht',
   'hudChrome.nativeUpdate.title': 'Update verfügbar',
   'hudChrome.nativeUpdate.update': 'Aktualisieren',
-  // Ravenpost authored letters
   'entities.letters.ravenpost_welcome.sender': 'Die Rabenpost',
   'entities.letters.ravenpost_welcome.subject': 'Die Raben fliegen nun für Euch',
   'entities.letters.ravenpost_welcome.body':
@@ -6482,7 +6464,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'apiError.two_factor.setup_required': 'Starte zuerst die Zwei-Faktor-Einrichtung.',
   'apiError.validation.failed':
     'Einige Felder sind ungültig. Prüfe das Formular und versuche es erneut.',
-  // Release v0.22.0 locale fill.
   'download.linuxCta': 'Für Linux herunterladen',
   'download.linuxHint':
     'AppImage: Machen Sie es ausführbar und führen Sie es dann aus. Keine Installation erforderlich.',
@@ -6591,7 +6572,6 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.targetCycleShort': 'Ziel',
   'hudChrome.options.mobileCameraJoystick': 'Kamera-Joystick',
   'hudChrome.options.mobileLeftHanded': 'Linkshänder-Layout',
-  // Release v0.22.0 professions quest locale fill.
   'entities.quests.q_archetype_acceptance.title': 'Ein Handwerk, das Sie Ihr Eigen nennen können',
   'entities.quests.q_archetype_acceptance.text':
     'Jeder Kunsthandwerker aus Eastbrook entscheidet sich schließlich für ein Handwerk, das er sein Eigen nennen kann. Beweisen Sie sich mit einer einzigen Tat, {playerName}, und erklären Sie Ihren Weg.',
@@ -6603,4 +6583,66 @@ export const de_DE: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_make_amends.completion':
     'Änderungen vorgenommen; ein neuer Weg steht dir offen.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Waldwolf getötet',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    'Jede Kiste, jede Truhe und jedes Kleinod ist bei der Vergoldeten Schatulle sicher.',
+  'entities.npcs.bursar_aldous_crane.name': 'Kämmerer Aldous Crane',
+  'entities.npcs.bursar_aldous_crane.title': 'Die Vergoldete Schatulle',
+  'entities.npcs.bursar_fernando.greeting':
+    'Willkommen bei der Vergoldeten Schatulle. Deine Waren ruhen sicher hinter unseren Schlössern.',
+  'entities.npcs.bursar_fernando.name': 'Kämmerer Fernando',
+  'entities.npcs.bursar_fernando.title': 'Die Vergoldete Schatulle',
+  'entities.npcs.bursar_petra_vell.greeting':
+    'Die Vergoldete Schatulle führt saubere Bücher und noch sauberere Tresore. Was dürfen wir für dich verwahren?',
+  'entities.npcs.bursar_petra_vell.name': 'Kämmerin Petra Vell',
+  'entities.npcs.bursar_petra_vell.title': 'Die Vergoldete Schatulle',
+  'guide.economy.bankBody':
+    'Jede größere Stadt beherbergt eine Filiale der Vergoldeten Schatulle, des Bankhauses des Reichs. Sprich dort mit dem Kämmerer, um deinen Tresor zu eröffnen: einen privaten Stauraum jenseits deiner Taschen, der deinem Charakter ein Leben lang erhalten bleibt. Was du dort zurücklässt, wartet sicher auf dich, welche Filiale du auch als Nächstes besuchst.',
+  'guide.economy.bankHow':
+    'Ist der Tresor geöffnet, klicke einen Gegenstand in deinen Taschen an, um ihn einzulagern, und klicke ihn im Tresor an, um ihn zurückzuholen. Der Tresor fasst nur Waren, niemals Münzen, und Questgegenstände bleiben bei dir. Wenn deine Taschen unterwegs überquellen, fegt ein einziger Knopf alle deine Handwerksmaterialien auf einmal hinein.',
+  'guide.economy.bankSlots':
+    'Ein frischer Tresor beginnt klein und wächst mit dir. Der Kämmerer verkauft weitere Fächer für Münzen zu immer steileren Preisen, und Online-Spielen bringt obendrein Bonusfächer ein, etwa für eine bestätigte E-Mail-Adresse, verknüpfte Konten und Freunde, die du ins Spiel holst.',
+  'guide.economy.bankTitle': 'Die Bank',
+  'hudChrome.bank.bonusAdvertDiscord': 'Verknüpfe dein Discord-Konto und erhalte 2 Fächer.',
+  'hudChrome.bank.bonusAdvertEmail': 'Bestätige deine E-Mail-Adresse und erhalte 2 Fächer.',
+  'hudChrome.bank.bonusAdvertWallet': 'Verknüpfe eine Wallet und erhalte 2 Fächer.',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusReferralExplainer':
+    'Lade einen Freund ein: Erreicht er Stufe 10, erhaltet ihr beide 2 Fächer, bis zu 5 Freunde.',
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
+  'hudChrome.bank.bonusSectionAria': 'Bonus-Bankfächer und wie du mehr davon verdienst',
+  'hudChrome.bank.bonusSourceDiscord': 'Discord verknüpft',
+  'hudChrome.bank.bonusSourceEmail': 'E-Mail-Adresse bestätigt',
+  'hudChrome.bank.bonusSourceReferral': 'Geworbene Freunde',
+  'hudChrome.bank.bonusSourceWallet': 'Wallet verknüpft',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusTitle': 'Bonusfächer',
+  'hudChrome.bank.buyConfirm': '{count} zusätzliche Bankfächer für {price} kaufen?',
+  'hudChrome.bank.buyConfirmAccept': 'Kaufen',
+  'hudChrome.bank.buySlots': '{count} Fächer kaufen',
+  'hudChrome.bank.buySlotsMaxed': 'Vollständig erweitert',
+  'hudChrome.bank.cannotDeposit': 'Kann nicht eingelagert werden',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': 'Belegte Bankfächer: {used} von {total}',
+  'hudChrome.bank.close': 'Bank schließen',
+  'hudChrome.bank.depositAll': 'Alle Materialien einlagern',
+  'hudChrome.bank.depositAllDone': 'Eingelagerte Materialien: {count}.',
+  'hudChrome.bank.depositAllFull': 'Eingelagerte Materialien: {count}. Die Bank ist jetzt voll.',
+  'hudChrome.bank.depositAllNone': 'Bank voll: nichts eingelagert.',
+  'hudChrome.bank.depositHint': 'Klicke, um einzulagern',
+  'hudChrome.bank.depositPartialHint': 'Umschalt-Klick, um eine Teilmenge einzulagern',
+  'hudChrome.bank.depositQuantityConfirm': 'Einlagern',
+  'hudChrome.bank.depositQuantityInput': 'Einzulagernde Menge',
+  'hudChrome.bank.depositQuantityTitle': '{item} einlagern',
+  'hudChrome.bank.empty': 'Deine Bank ist leer.',
+  'hudChrome.bank.filterGroupAria': 'Bank nach Kategorie filtern',
+  'hudChrome.bank.searchAria': 'Bankgegenstände nach Namen durchsuchen',
+  'hudChrome.bank.sortAria': 'Bankgegenstände sortieren',
+  'hudChrome.bank.subtitle': 'Die Vergoldete Schatulle',
+  'hudChrome.bank.title': 'Bank',
+  'hudChrome.bank.tooFar': 'Du musst bei einem Bankier stehen, um deine Bank einzusehen.',
+  'hudChrome.bank.withdrawHint': 'Klicke, um zu entnehmen',
+  'hudChrome.bank.withdrawPartialHint': 'Umschalt-Klick, um eine Teilmenge zu entnehmen',
+  'hudChrome.bank.withdrawQuantityConfirm': 'Entnehmen',
+  'hudChrome.bank.withdrawQuantityInput': 'Zu entnehmende Menge',
+  'hudChrome.bank.withdrawQuantityTitle': '{item} entnehmen',
 };

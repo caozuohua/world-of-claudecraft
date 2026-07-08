@@ -930,6 +930,7 @@ export const MEDIA_ASSETS: Record<string, string> =
   "textures/skins/rogue/alt_b.png": "/media/textures/skins/rogue/alt_b.338368783406.png",
   "textures/skins/rogue/alt_c.png": "/media/textures/skins/rogue/alt_c.313b6e6b64bb.png",
   "textures/skins/rogue/base.png": "/media/textures/skins/rogue/base.2e2fc741e20e.png",
+  "textures/skins/rogue/fernando.png": "/media/textures/skins/rogue/fernando.64f0ff1d0a43.png",
   "textures/terrain/Grass001_AmbientOcclusion.jpg": "/media/textures/terrain/Grass001_AmbientOcclusion.a5e6e6a1c432.jpg",
   "textures/terrain/Grass001_Color.jpg": "/media/textures/terrain/Grass001_Color.b9b6d61bc3b6.jpg",
   "textures/terrain/Grass001_NormalGL.jpg": "/media/textures/terrain/Grass001_NormalGL.eef0b56db5f0.jpg",

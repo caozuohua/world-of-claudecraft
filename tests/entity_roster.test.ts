@@ -201,6 +201,7 @@ function makeCtx() {
     nextLootRollId: 1,
     devCommands: false,
     marketListings: [],
+    bankerIds: [],
     vcup: createVcState(),
     grantXp: vi.fn(),
     enterCombat: vi.fn(),

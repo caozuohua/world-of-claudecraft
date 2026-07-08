@@ -1307,6 +1307,50 @@ export const da_DK: EnTranslations = {
         "takeParcelsFirst": "Tag pakkerne ud, før du kasserer brevet."
       }
     },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "Det Forgyldte Pengeskrin",
+      "close": "Luk banken",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Brugte bankpladser: {used} af {total}",
+      "empty": "Din bank er tom.",
+      "tooFar": "Du skal stå hos en skatmester for at se din bank.",
+      "buySlots": "Køb {count} pladser",
+      "buySlotsMaxed": "Fuldt udvidet",
+      "buyConfirm": "Køb {count} ekstra bankpladser for {price}?",
+      "buyConfirmAccept": "Køb",
+      "withdrawHint": "Klik for at tage ud",
+      "withdrawPartialHint": "Shift-klik for at tage et mindre antal ud",
+      "depositHint": "Klik for at indsætte",
+      "depositPartialHint": "Shift-klik for at indsætte et mindre antal",
+      "cannotDeposit": "Kan ikke lægges i banken",
+      "depositQuantityTitle": "Indsæt {item}",
+      "depositQuantityInput": "Antal at indsætte",
+      "depositQuantityConfirm": "Indsæt",
+      "withdrawQuantityTitle": "Tag {item} ud",
+      "withdrawQuantityInput": "Antal at tage ud",
+      "withdrawQuantityConfirm": "Tag ud",
+      "filterGroupAria": "Filtrér banken efter kategori",
+      "sortAria": "Sortér bankens genstande",
+      "searchAria": "Søg i bankens genstande efter navn",
+      "depositAll": "Indsæt alle materialer",
+      "depositAllDone": "Materialer indsat: {count}.",
+      "depositAllFull": "Materialer indsat: {count}. Banken er nu fuld.",
+      "depositAllNone": "Banken er fuld: intet indsat.",
+      "bonusTitle": "Bonuspladser",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Bekræftet e-mail",
+      "bonusSourceDiscord": "Discord forbundet",
+      "bonusSourceWallet": "Wallet forbundet",
+      "bonusSourceReferral": "Henviste venner",
+      "bonusAdvertEmail": "Bekræft din e-mail for at optjene 2 pladser.",
+      "bonusAdvertDiscord": "Forbind din Discord for at optjene 2 pladser.",
+      "bonusAdvertWallet": "Forbind en wallet for at optjene 2 pladser.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Invitér en ven: når din ven når niveau 10, optjener I hver især 2 pladser, op til 5 venner.",
+      "bonusSectionAria": "Bonuspladser i banken, og hvordan du optjener flere"
+    },
     "calendar": {
       "title": "Begivenhedskalender",
       "close": "Luk kalenderen",
@@ -2327,6 +2371,10 @@ export const da_DK: EnTranslations = {
       "vendorsBody": "Byer og udposter er fyldt med købmænd, hver med deres egen handel. Provianthandlere fører mad og drikke, våbensmede og rustningssmede bærer udstyr, og en kvartermester holder praktisk rejsegrej. Gå hen til en for at se, hvad de sælger.",
       "marksTitle": "En anden valuta: Delve-Mærker",
       "marksBody": "Mønter er ikke det eneste, du lægger til side. Delves udbetaler Delve-Mærker, en særskilt valuta, du kun bruger hos delve-vogteren, på ledsageropgraderinger og udstyr, du ikke finder andre steder. De blandes aldrig med dine mønter.",
+      "bankTitle": "Banken",
+      "bankBody": "Hver hjemmebase har en filial af Det Forgyldte Pengeskrin, rigets bankhus. Tal med skatmesteren der for at åbne din boks, en privat opbevaringsplads ud over dine tasker, som din karakter beholder livet ud. Hvad end du efterlader hos dem, venter i sikkerhed, uanset hvilken filial du besøger næste gang.",
+      "bankHow": "Med boksen åben klikker du på en genstand i dine tasker for at indsætte den, og klikker på den i boksen for at tage den tilbage. Boksen rummer kun varer, aldrig mønter, og opgavegenstande bliver hos dig. Når dine tasker fyldes op undervejs, fejer én knap alle dine håndværksmaterialer ind på én gang.",
+      "bankSlots": "En ny boks starter i det små og vokser med dig. Skatmesteren sælger flere pladser for mønter til stadigt stejlere priser, og at spille online giver bonusplads oveni, for ting som en bekræftet e-mail, forbundne konti og venner, du bringer ind i spillet.",
       "buyingTitle": "Køb og salg",
       "buyingBody": "Stil dig nær en købmand for at åbne deres vindue. Du kan købe alt, de har på lager, hvis du har råd, og sælge det meste af det, der er i dine tasker, for mønter. Hvis du sælger noget ved en fejl, holder en handlende på dine seneste salg, så du kan købe dem tilbage.",
       "junkTitle": "Rydde ud i skrammel",
@@ -7329,6 +7377,21 @@ export const da_DK: EnTranslations = {
         "name": "Auktionarius Voss",
         "title": "Vogter af Verdensmarkedet",
         "greeting": "Verdensmarkedet er også åbent her, {className}. Køb fra alle eventyrere i riget, eller læg dine egne varer frem."
+      },
+      "bursar_fernando": {
+        "name": "Skatmester Fernando",
+        "title": "Det Forgyldte Pengeskrin",
+        "greeting": "Velkommen til Det Forgyldte Pengeskrin. Dine varer hviler trygt bag vores låse."
+      },
+      "bursar_petra_vell": {
+        "name": "Skatmester Petra Vell",
+        "title": "Det Forgyldte Pengeskrin",
+        "greeting": "Det Forgyldte Pengeskrin fører rene regnskaber og endnu renere hvælv. Hvad skal vi opbevare for dig?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Skatmester Aldous Crane",
+        "title": "Det Forgyldte Pengeskrin",
+        "greeting": "Hver kasse, hvert skrin og hvert smykke er i sikkerhed hos Det Forgyldte Pengeskrin."
       },
       "brother_aldric_raid": {
         "name": "Broder Aldric",

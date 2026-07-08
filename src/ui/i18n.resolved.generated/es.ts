@@ -1307,6 +1307,50 @@ export const es: EnTranslations = {
         "takeParcelsFirst": "Saca los paquetes antes de desechar la carta."
       }
     },
+    "bank": {
+      "title": "Banco",
+      "subtitle": "El Arca Dorada",
+      "close": "Cerrar el banco",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Espacios de banco usados: {used} de {total}",
+      "empty": "Tu banco está vacío.",
+      "tooFar": "Debes estar junto a un banquero para ver tu banco.",
+      "buySlots": "Comprar {count} espacios",
+      "buySlotsMaxed": "Ampliado al máximo",
+      "buyConfirm": "¿Comprar {count} espacios de banco adicionales por {price}?",
+      "buyConfirmAccept": "Comprar",
+      "withdrawHint": "Clic para retirar",
+      "withdrawPartialHint": "Mayús+clic para retirar una cantidad parcial",
+      "depositHint": "Clic para depositar",
+      "depositPartialHint": "Mayús+clic para depositar una cantidad parcial",
+      "cannotDeposit": "No se puede guardar en el banco",
+      "depositQuantityTitle": "Depositar {item}",
+      "depositQuantityInput": "Cantidad a depositar",
+      "depositQuantityConfirm": "Depositar",
+      "withdrawQuantityTitle": "Retirar {item}",
+      "withdrawQuantityInput": "Cantidad a retirar",
+      "withdrawQuantityConfirm": "Retirar",
+      "filterGroupAria": "Filtrar el banco por categoría",
+      "sortAria": "Ordenar los objetos del banco",
+      "searchAria": "Buscar objetos del banco por nombre",
+      "depositAll": "Depositar todos los materiales",
+      "depositAllDone": "Materiales depositados: {count}.",
+      "depositAllFull": "Materiales depositados: {count}. El banco está ahora lleno.",
+      "depositAllNone": "Banco lleno: no se depositó nada.",
+      "bonusTitle": "Espacios extra",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Correo verificado",
+      "bonusSourceDiscord": "Discord vinculado",
+      "bonusSourceWallet": "Cartera vinculada",
+      "bonusSourceReferral": "Amigos invitados",
+      "bonusAdvertEmail": "Verifica tu correo para ganar 2 espacios.",
+      "bonusAdvertDiscord": "Vincula tu Discord para ganar 2 espacios.",
+      "bonusAdvertWallet": "Vincula una cartera para ganar 2 espacios.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Invita a un amigo: cuando alcance el nivel 10, cada uno gana 2 espacios, hasta 5 amigos.",
+      "bonusSectionAria": "Espacios de banco extra y cómo ganar más"
+    },
     "calendar": {
       "title": "Calendario de Eventos",
       "close": "Cerrar calendario",
@@ -2327,6 +2371,10 @@ export const es: EnTranslations = {
       "vendorsBody": "Pueblos y puestos de avanzada están salpicados de mercaderes, cada uno con su propio oficio. Los abastecedores tienen comida y bebida, los herreros y armeros llevan equipo, y un intendente guarda enseres prácticos de viaje. Acércate a uno para ver lo que vende.",
       "marksTitle": "Una segunda moneda: Marcas de Expedición",
       "marksBody": "El dinero no es lo único que guardas. Las expediciones pagan Marcas de Expedición, una moneda aparte que solo gastas con el guardián de expediciones, en mejoras para tu compañera y equipo que no encontrarás en otro sitio. Nunca se mezclan con tu dinero.",
+      "bankTitle": "El banco",
+      "bankBody": "Cada pueblo principal mantiene una sucursal del Arca Dorada, la casa de banca del reino. Habla allí con el tesorero para abrir tu bóveda, una reserva privada de espacio más allá de tus bolsas que tu personaje conserva de por vida. Lo que dejes en sus manos espera a salvo, sea cual sea la sucursal que visites la próxima vez.",
+      "bankHow": "Con la bóveda abierta, haz clic en un objeto de tus bolsas para depositarlo y haz clic en él dentro de la bóveda para recuperarlo. La bóveda solo guarda bienes, nunca monedas, y los objetos de misión se quedan contigo. Cuando tus bolsas se llenan a mitad de viaje, un solo botón mete de una vez todos tus materiales de artesanía.",
+      "bankSlots": "Una bóveda recién abierta empieza pequeña y crece contigo. El tesorero vende espacios adicionales por monedas a precios cada vez más altos, y jugar en línea suma espacio extra por cosas como un correo verificado, cuentas vinculadas y amigos que traes al juego.",
       "buyingTitle": "Comprar y vender",
       "buyingBody": "Acércate a un mercader para abrir su ventana. Puedes comprar cualquier cosa de las que tenga en stock si te la puedes permitir, y vender la mayor parte de lo que llevas en las bolsas a cambio de monedas. Si vendes algo por error, un vendedor te guardará tus ventas recientes para que puedas recomprarlas.",
       "junkTitle": "Despejar la chatarra",
@@ -7329,6 +7377,21 @@ export const es: EnTranslations = {
         "name": "Subastador Voss",
         "title": "Guardián del Mercado Mundial",
         "greeting": "El Mercado Mundial también está abierto aquí, {className}. Compra a cualquier aventurero del reino o pon a la venta tus propias mercancías."
+      },
+      "bursar_fernando": {
+        "name": "Tesorero Fernando",
+        "title": "El Arca Dorada",
+        "greeting": "Te damos la bienvenida al Arca Dorada. Tus bienes descansan seguros tras nuestras cerraduras."
+      },
+      "bursar_petra_vell": {
+        "name": "Tesorera Petra Vell",
+        "title": "El Arca Dorada",
+        "greeting": "El Arca Dorada lleva registros limpios y bóvedas aún más limpias. ¿Qué guardamos para ti?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Tesorero Aldous Crane",
+        "title": "El Arca Dorada",
+        "greeting": "Cada cajón, cofre y baratija está a salvo en el Arca Dorada."
       },
       "brother_aldric_raid": {
         "name": "Hermano Aldric",

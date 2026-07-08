@@ -159,6 +159,11 @@ export interface SimContextPrimitives {
   // read-only view (never reassigned by the readout).
   readonly devCommands: boolean;
   readonly marketListings: MarketListing[];
+  // Bank system: the live array of every `banker: true` NPC id, seeded by
+  // the Sim ctor NPC loop. bank.ts reads it to gate deposit/withdraw/buy-slots on
+  // standing near a banker. Sim-owned, mutated only at construction (push), never
+  // reassigned, so a live read-only view like `marketListings`.
+  readonly bankerIds: number[];
   // The Vale Cup boarball state (social/vale_cup.ts): ONE holder object on Sim
   // (queues/deserters/botPids mutated in place, the match slot reassigned INSIDE
   // the holder), so a read-only live view suffices. Consumed by the vale_cup
@@ -775,6 +780,9 @@ export function createSimContext(host: SimContextHost): SimContext {
     },
     get marketListings() {
       return host.marketListings;
+    },
+    get bankerIds() {
+      return host.bankerIds;
     },
     get vcup() {
       return host.vcup;

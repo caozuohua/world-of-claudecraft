@@ -1307,6 +1307,50 @@ export const fr_FR: EnTranslations = {
         "takeParcelsFirst": "Retirez les colis avant de jeter la lettre."
       }
     },
+    "bank": {
+      "title": "Banque",
+      "subtitle": "Le Coffre doré",
+      "close": "Fermer la banque",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Emplacements de banque utilisés : {used} sur {total}",
+      "empty": "Votre banque est vide.",
+      "tooFar": "Vous devez être auprès d'un banquier pour consulter votre banque.",
+      "buySlots": "Acheter {count} emplacements",
+      "buySlotsMaxed": "Capacité maximale",
+      "buyConfirm": "Acheter {count} emplacements de banque supplémentaires pour {price} ?",
+      "buyConfirmAccept": "Acheter",
+      "withdrawHint": "Cliquez pour retirer",
+      "withdrawPartialHint": "Maj-clic pour retirer une quantité partielle",
+      "depositHint": "Cliquez pour déposer",
+      "depositPartialHint": "Maj-clic pour déposer une quantité partielle",
+      "cannotDeposit": "Impossible à mettre en banque",
+      "depositQuantityTitle": "Déposer {item}",
+      "depositQuantityInput": "Quantité à déposer",
+      "depositQuantityConfirm": "Déposer",
+      "withdrawQuantityTitle": "Retirer {item}",
+      "withdrawQuantityInput": "Quantité à retirer",
+      "withdrawQuantityConfirm": "Retirer",
+      "filterGroupAria": "Filtrer la banque par catégorie",
+      "sortAria": "Trier les objets de la banque",
+      "searchAria": "Rechercher un objet de la banque par son nom",
+      "depositAll": "Déposer tous les matériaux",
+      "depositAllDone": "Matériaux déposés : {count}.",
+      "depositAllFull": "Matériaux déposés : {count}. La banque est maintenant pleine.",
+      "depositAllNone": "Banque pleine : rien n'a été déposé.",
+      "bonusTitle": "Emplacements bonus",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Adresse e-mail vérifiée",
+      "bonusSourceDiscord": "Discord lié",
+      "bonusSourceWallet": "Portefeuille lié",
+      "bonusSourceReferral": "Amis parrainés",
+      "bonusAdvertEmail": "Vérifiez votre adresse e-mail pour gagner 2 emplacements.",
+      "bonusAdvertDiscord": "Liez votre Discord pour gagner 2 emplacements.",
+      "bonusAdvertWallet": "Liez un portefeuille pour gagner 2 emplacements.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Invitez un ami : quand il atteint le niveau 10, vous gagnez chacun 2 emplacements, jusqu'à 5 amis.",
+      "bonusSectionAria": "Emplacements de banque bonus et comment en gagner d'autres"
+    },
     "calendar": {
       "title": "Calendrier des événements",
       "close": "Fermer le calendrier",
@@ -2327,6 +2371,10 @@ export const fr_FR: EnTranslations = {
       "vendorsBody": "Villes et avant-postes sont parsemés de marchands, chacun avec son propre commerce. Les intendants ont de quoi manger et boire, les forgerons et armuriers vendent de l'équipement, et un quartier-maître garde le matériel de voyage utile. Approchez-vous de l'un d'eux pour voir ce qu'il propose.",
       "marksTitle": "Une seconde monnaie : les Marques de plongée",
       "marksBody": "L'or n'est pas la seule chose que vous mettez de côté. Les plongées versent des Marques de plongée, une monnaie distincte que vous ne dépensez qu'auprès du gardien de plongée, pour les améliorations de votre compagne et un équipement introuvable ailleurs. Elles ne se mêlent jamais à votre or.",
+      "bankTitle": "La banque",
+      "bankBody": "Chaque ville principale abrite une succursale du Coffre doré, la maison de banque du royaume. Adressez-vous au trésorier sur place pour ouvrir votre chambre forte, une réserve privée au-delà de vos sacs que votre personnage conserve à vie. Tout ce que vous leur confiez attend en lieu sûr, quelle que soit la succursale où vous passerez ensuite.",
+      "bankHow": "Une fois la chambre forte ouverte, cliquez sur un objet dans vos sacs pour le déposer, et cliquez dessus dans la chambre forte pour le reprendre. La chambre forte n'accueille que des biens, jamais de pièces, et les objets de quête restent sur vous. Quand vos sacs débordent en pleine route, un seul bouton y range d'un coup tous vos matériaux d'artisanat.",
+      "bankSlots": "Une chambre forte neuve commence petite et grandit avec vous. Le trésorier vend des emplacements supplémentaires contre pièces, à des prix toujours plus élevés, et jouer en ligne rapporte de la place bonus en plus, par exemple pour une adresse e-mail vérifiée, des comptes liés ou des amis que vous amenez dans le jeu.",
       "buyingTitle": "Acheter et vendre",
       "buyingBody": "Tenez-vous près d'un marchand pour ouvrir sa fenêtre. Vous pouvez acheter tout ce qu'il vend si vous en avez les moyens, et revendre contre des pièces la plupart du contenu de vos sacs. Si vous vendez quelque chose par erreur, le marchand garde vos ventes récentes pour que vous puissiez les racheter.",
       "junkTitle": "Faire le tri du superflu",
@@ -7329,6 +7377,21 @@ export const fr_FR: EnTranslations = {
         "name": "Commissaire-priseur Voss",
         "title": "Gardien du Marché du monde",
         "greeting": "Le Marché du monde est ouvert ici aussi, {className}. Achetez auprès de chaque aventurier du royaume, ou proposez vos propres marchandises."
+      },
+      "bursar_fernando": {
+        "name": "Trésorier Fernando",
+        "title": "Le Coffre doré",
+        "greeting": "Bienvenue au Coffre doré. Vos biens reposent à l'abri derrière nos serrures."
+      },
+      "bursar_petra_vell": {
+        "name": "Trésorière Petra Vell",
+        "title": "Le Coffre doré",
+        "greeting": "Le Coffre doré tient des registres propres et des chambres fortes plus propres encore. Que pouvons-nous ranger pour vous ?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Trésorier Aldous Crane",
+        "title": "Le Coffre doré",
+        "greeting": "Chaque caisse, chaque coffret et chaque babiole est en sécurité au Coffre doré."
       },
       "brother_aldric_raid": {
         "name": "Frère Aldric",

@@ -404,6 +404,10 @@ export function interact(ctx: SimContext, pid?: number): void {
         pickUpObject(ctx, target.id, p.id);
         return;
       }
+      if (target.kind === 'npc' && ctx.bankerIds.includes(target.id)) {
+        ctx.emit({ type: 'bank', pid: p.id });
+        return;
+      }
       if (ctx.isQuestInteractionEntity(target)) {
         ctx.talkToNpc(target.id, p.id);
         return;
@@ -453,6 +457,10 @@ export function interact(ctx: SimContext, pid?: number): void {
     }
     if (tryStartNythraxisWardChannel(ctx, obj, p)) return;
     pickUpObject(ctx, obj.id, p.id);
+    return;
+  }
+  if (questEntity && ctx.bankerIds.includes(questEntity.id)) {
+    ctx.emit({ type: 'bank', pid: p.id });
     return;
   }
   if (questEntity) ctx.talkToNpc(questEntity.id, p.id);

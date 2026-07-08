@@ -5979,7 +5979,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'worldContent.dungeonInstanceBusy': 'Alle instanties van {name} zijn bezet. Probeer het zo weer.',
   'worldContent.dungeonPartyWarning':
     '{name} is bedoeld voor een volledige groep van {count}. Wees voorzichtig.',
-  // Aura effect tooltip summaries.
   'hudChrome.auraEffect.dot': 'Brengt elke {interval} s {value} {school}schade toe',
   'hudChrome.auraEffect.hot': 'Herstelt elke {interval} s {value} gezondheid',
   'hudChrome.auraEffect.absorb': 'Absorbeert {value} schade',
@@ -6297,7 +6296,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.nativeUpdate.notNow': 'Niet nu',
   'hudChrome.nativeUpdate.title': 'Update beschikbaar',
   'hudChrome.nativeUpdate.update': 'Bijwerken',
-  // Ravenpost authored letters
   'entities.letters.ravenpost_welcome.sender': 'De Ravenpost',
   'entities.letters.ravenpost_welcome.subject': 'De raven vliegen nu voor jou',
   'entities.letters.ravenpost_welcome.body':
@@ -6403,7 +6401,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'apiError.two_factor.setup_required': 'Stel eerst tweefactorauthenticatie in.',
   'apiError.validation.failed':
     'Sommige velden zijn ongeldig. Controleer het formulier en probeer het opnieuw.',
-  // Release v0.22.0 locale fill.
   'download.linuxCta': 'Downloaden voor Linux',
   'download.linuxHint':
     'AppImage: maak het uitvoerbaar en voer het vervolgens uit. Geen installatie nodig.',
@@ -6512,7 +6509,6 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.targetCycleShort': 'Doel',
   'hudChrome.options.mobileCameraJoystick': 'Camerajoystick',
   'hudChrome.options.mobileLeftHanded': 'Linkshandige indeling',
-  // Release v0.22.0 professions quest locale fill.
   'entities.quests.q_archetype_acceptance.title': 'Een ambacht dat u het uwe kunt noemen',
   'entities.quests.q_archetype_acceptance.text':
     'Elke ambachtsman van Eastbrook kiest uiteindelijk voor één ambacht dat hij zijn eigen ambacht noemt. Bewijs jezelf met één enkele daad, {playerName}, en geef je pad aan.',
@@ -6524,4 +6520,66 @@ export const nl_NL: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_make_amends.completion':
     'Wijzigingen aangebracht; er ligt een nieuw pad voor je open.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Boswolf gedood',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    'Elke kist, koffer en snuisterij is veilig bij de Vergulde Geldkist.',
+  'entities.npcs.bursar_aldous_crane.name': 'Thesaurier Aldous Crane',
+  'entities.npcs.bursar_aldous_crane.title': 'De Vergulde Geldkist',
+  'entities.npcs.bursar_fernando.greeting':
+    'Welkom bij de Vergulde Geldkist. Je goederen rusten veilig achter onze sloten.',
+  'entities.npcs.bursar_fernando.name': 'Thesaurier Fernando',
+  'entities.npcs.bursar_fernando.title': 'De Vergulde Geldkist',
+  'entities.npcs.bursar_petra_vell.greeting':
+    'De Vergulde Geldkist houdt schone grootboeken en nog schonere kluizen. Wat zullen we voor je opbergen?',
+  'entities.npcs.bursar_petra_vell.name': 'Thesaurier Petra Vell',
+  'entities.npcs.bursar_petra_vell.title': 'De Vergulde Geldkist',
+  'guide.economy.bankBody':
+    'Elke hoofdplaats heeft een filiaal van De Vergulde Geldkist, het bankhuis van het rijk. Spreek daar met de thesaurier om je kluis te openen: een eigen bergruimte naast je tassen die je personage levenslang behoudt. Wat je bij hen achterlaat, wacht veilig op je, welk filiaal je daarna ook bezoekt.',
+  'guide.economy.bankHow':
+    'Met de kluis open klik je op een voorwerp in je tassen om het te storten, en klik je erop in de kluis om het terug te nemen. De kluis bewaart alleen waren, nooit geld, en questvoorwerpen blijven bij je. Raken je tassen onderweg vol, dan veegt één knop al je ambachtsmaterialen in één keer naar binnen.',
+  'guide.economy.bankSlots':
+    'Een nieuwe kluis begint klein en groeit met je mee. De thesaurier verkoopt extra vakken voor geld tegen steeds hogere prijzen, en online spelen levert daarbovenop bonusruimte op, voor zaken als een geverifieerd e-mailadres, gekoppelde accounts en vrienden die je naar het spel brengt.',
+  'guide.economy.bankTitle': 'De bank',
+  'hudChrome.bank.bonusAdvertDiscord': 'Koppel je Discord om 2 vakken te verdienen.',
+  'hudChrome.bank.bonusAdvertEmail': 'Verifieer je e-mailadres om 2 vakken te verdienen.',
+  'hudChrome.bank.bonusAdvertWallet': 'Koppel een portemonnee om 2 vakken te verdienen.',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusReferralExplainer':
+    'Nodig een vriend uit: wanneer die niveau 10 bereikt, verdienen jullie allebei 2 vakken, tot 5 vrienden.',
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
+  'hudChrome.bank.bonusSectionAria': 'Bonusbankvakken en hoe je er meer verdient',
+  'hudChrome.bank.bonusSourceDiscord': 'Discord gekoppeld',
+  'hudChrome.bank.bonusSourceEmail': 'E-mailadres geverifieerd',
+  'hudChrome.bank.bonusSourceReferral': 'Aangebrachte vrienden',
+  'hudChrome.bank.bonusSourceWallet': 'Portemonnee gekoppeld',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusTitle': 'Bonusvakken',
+  'hudChrome.bank.buyConfirm': '{count} extra bankvakken kopen voor {price}?',
+  'hudChrome.bank.buyConfirmAccept': 'Kopen',
+  'hudChrome.bank.buySlots': 'Koop {count} vakken',
+  'hudChrome.bank.buySlotsMaxed': 'Volledig uitgebreid',
+  'hudChrome.bank.cannotDeposit': 'Kan niet in de bank',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': 'Bankvakken gebruikt: {used} van {total}',
+  'hudChrome.bank.close': 'Bank sluiten',
+  'hudChrome.bank.depositAll': 'Alle materialen storten',
+  'hudChrome.bank.depositAllDone': 'Materialen gestort: {count}.',
+  'hudChrome.bank.depositAllFull': 'Materialen gestort: {count}. De bank is nu vol.',
+  'hudChrome.bank.depositAllNone': 'Bank vol: niets gestort.',
+  'hudChrome.bank.depositHint': 'Klik om te storten',
+  'hudChrome.bank.depositPartialHint': 'Shift-klik om een deel te storten',
+  'hudChrome.bank.depositQuantityConfirm': 'Storten',
+  'hudChrome.bank.depositQuantityInput': 'Aantal om te storten',
+  'hudChrome.bank.depositQuantityTitle': '{item} storten',
+  'hudChrome.bank.empty': 'Je bank is leeg.',
+  'hudChrome.bank.filterGroupAria': 'Bank filteren op categorie',
+  'hudChrome.bank.searchAria': 'Bankvoorwerpen zoeken op naam',
+  'hudChrome.bank.sortAria': 'Bankvoorwerpen sorteren',
+  'hudChrome.bank.subtitle': 'De Vergulde Geldkist',
+  'hudChrome.bank.title': 'Bank',
+  'hudChrome.bank.tooFar': 'Je moet bij een bankier zijn om je bank te bekijken.',
+  'hudChrome.bank.withdrawHint': 'Klik om op te nemen',
+  'hudChrome.bank.withdrawPartialHint': 'Shift-klik om een deel op te nemen',
+  'hudChrome.bank.withdrawQuantityConfirm': 'Opnemen',
+  'hudChrome.bank.withdrawQuantityInput': 'Aantal om op te nemen',
+  'hudChrome.bank.withdrawQuantityTitle': '{item} opnemen',
 };

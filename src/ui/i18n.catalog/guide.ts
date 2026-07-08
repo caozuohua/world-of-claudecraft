@@ -1212,6 +1212,15 @@ export const guideStrings = {
     marksBody:
       'Coin is not the only thing you bank. Delves pay out Delve Marks, a separate currency you spend only at the delve keeper, on companion upgrades and gear you will not find elsewhere. They never mix with your coin.',
 
+    // The personal bank: The Gilded Strongbox branches, deposits, and growing the vault.
+    bankTitle: 'The bank',
+    bankBody:
+      'Every hub town keeps a branch of The Gilded Strongbox, the banking house of the realm. Speak to the bursar there to open your vault, a private store of room beyond your bags that your character keeps for life. Whatever you leave with them waits safely, whichever branch you visit next.',
+    bankHow:
+      'With the vault open, click an item in your bags to deposit it and click it in the vault to take it back. The vault holds goods only, never coin, and quest items stay with you. When your bags fill up mid-journey, one button sweeps all your crafting materials in at once.',
+    bankSlots:
+      'A fresh vault starts small and grows with you. The bursar sells further slots for coin at ever-steeper prices, and playing online earns bonus room on top, for things like a verified email, linked accounts, and friends you bring into the game.',
+
     // Buying and selling at a vendor.
     buyingTitle: 'Buying and selling',
     buyingBody:

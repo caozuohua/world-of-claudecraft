@@ -1307,6 +1307,50 @@ export const nl_NL: EnTranslations = {
         "takeParcelsFirst": "Haal de pakketten eruit voordat je de brief weggooit."
       }
     },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "De Vergulde Geldkist",
+      "close": "Bank sluiten",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Bankvakken gebruikt: {used} van {total}",
+      "empty": "Je bank is leeg.",
+      "tooFar": "Je moet bij een bankier zijn om je bank te bekijken.",
+      "buySlots": "Koop {count} vakken",
+      "buySlotsMaxed": "Volledig uitgebreid",
+      "buyConfirm": "{count} extra bankvakken kopen voor {price}?",
+      "buyConfirmAccept": "Kopen",
+      "withdrawHint": "Klik om op te nemen",
+      "withdrawPartialHint": "Shift-klik om een deel op te nemen",
+      "depositHint": "Klik om te storten",
+      "depositPartialHint": "Shift-klik om een deel te storten",
+      "cannotDeposit": "Kan niet in de bank",
+      "depositQuantityTitle": "{item} storten",
+      "depositQuantityInput": "Aantal om te storten",
+      "depositQuantityConfirm": "Storten",
+      "withdrawQuantityTitle": "{item} opnemen",
+      "withdrawQuantityInput": "Aantal om op te nemen",
+      "withdrawQuantityConfirm": "Opnemen",
+      "filterGroupAria": "Bank filteren op categorie",
+      "sortAria": "Bankvoorwerpen sorteren",
+      "searchAria": "Bankvoorwerpen zoeken op naam",
+      "depositAll": "Alle materialen storten",
+      "depositAllDone": "Materialen gestort: {count}.",
+      "depositAllFull": "Materialen gestort: {count}. De bank is nu vol.",
+      "depositAllNone": "Bank vol: niets gestort.",
+      "bonusTitle": "Bonusvakken",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "E-mailadres geverifieerd",
+      "bonusSourceDiscord": "Discord gekoppeld",
+      "bonusSourceWallet": "Portemonnee gekoppeld",
+      "bonusSourceReferral": "Aangebrachte vrienden",
+      "bonusAdvertEmail": "Verifieer je e-mailadres om 2 vakken te verdienen.",
+      "bonusAdvertDiscord": "Koppel je Discord om 2 vakken te verdienen.",
+      "bonusAdvertWallet": "Koppel een portemonnee om 2 vakken te verdienen.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Nodig een vriend uit: wanneer die niveau 10 bereikt, verdienen jullie allebei 2 vakken, tot 5 vrienden.",
+      "bonusSectionAria": "Bonusbankvakken en hoe je er meer verdient"
+    },
     "calendar": {
       "title": "Evenementenkalender",
       "close": "Kalender sluiten",
@@ -2327,6 +2371,10 @@ export const nl_NL: EnTranslations = {
       "vendorsBody": "Steden en buitenposten zijn bezaaid met handelaren, elk met hun eigen vak. Proviandeurs hebben eten en drinken, wapensmeden en pantsersmeden voeren uitrusting, en een kwartiermeester houdt praktische reisuitrusting bij. Loop er een tegemoet om te zien wat ze verkopen.",
       "marksTitle": "Een tweede valuta: Delve-Tekens",
       "marksBody": "Munten zijn niet het enige dat je opspaart. Delves keren Delve-Tekens uit, een aparte valuta die je alleen bij de delvebewaarder uitgeeft, aan metgezelupgrades en uitrusting die je nergens anders vindt. Ze vermengen zich nooit met je munten.",
+      "bankTitle": "De bank",
+      "bankBody": "Elke hoofdplaats heeft een filiaal van De Vergulde Geldkist, het bankhuis van het rijk. Spreek daar met de thesaurier om je kluis te openen: een eigen bergruimte naast je tassen die je personage levenslang behoudt. Wat je bij hen achterlaat, wacht veilig op je, welk filiaal je daarna ook bezoekt.",
+      "bankHow": "Met de kluis open klik je op een voorwerp in je tassen om het te storten, en klik je erop in de kluis om het terug te nemen. De kluis bewaart alleen waren, nooit geld, en questvoorwerpen blijven bij je. Raken je tassen onderweg vol, dan veegt één knop al je ambachtsmaterialen in één keer naar binnen.",
+      "bankSlots": "Een nieuwe kluis begint klein en groeit met je mee. De thesaurier verkoopt extra vakken voor geld tegen steeds hogere prijzen, en online spelen levert daarbovenop bonusruimte op, voor zaken als een geverifieerd e-mailadres, gekoppelde accounts en vrienden die je naar het spel brengt.",
       "buyingTitle": "Kopen en verkopen",
       "buyingBody": "Ga bij een handelaar staan om hun venster te openen. Je kunt alles kopen wat ze op voorraad hebben als je het kunt betalen, en het meeste uit je tassen verkopen voor munten. Als je per ongeluk iets verkoopt, houdt een verkoper je recente verkopen vast zodat je ze kunt terugkopen.",
       "junkTitle": "Rommel opruimen",
@@ -7329,6 +7377,21 @@ export const nl_NL: EnTranslations = {
         "name": "Veilingmeester Voss",
         "title": "Hoeder van de Wereldmarkt",
         "greeting": "De Wereldmarkt is hier ook geopend, {className}. Koop van elke avonturier in het rijk, of stal je eigen waren uit."
+      },
+      "bursar_fernando": {
+        "name": "Thesaurier Fernando",
+        "title": "De Vergulde Geldkist",
+        "greeting": "Welkom bij de Vergulde Geldkist. Je goederen rusten veilig achter onze sloten."
+      },
+      "bursar_petra_vell": {
+        "name": "Thesaurier Petra Vell",
+        "title": "De Vergulde Geldkist",
+        "greeting": "De Vergulde Geldkist houdt schone grootboeken en nog schonere kluizen. Wat zullen we voor je opbergen?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Thesaurier Aldous Crane",
+        "title": "De Vergulde Geldkist",
+        "greeting": "Elke kist, koffer en snuisterij is veilig bij de Vergulde Geldkist."
       },
       "brother_aldric_raid": {
         "name": "Broeder Aldric",

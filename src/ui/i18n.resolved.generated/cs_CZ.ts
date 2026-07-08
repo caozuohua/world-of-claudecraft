@@ -1307,6 +1307,50 @@ export const cs_CZ: EnTranslations = {
         "takeParcelsFirst": "Před zahozením dopisu nejdřív vyzvedni balíky."
       }
     },
+    "bank": {
+      "title": "Banka",
+      "subtitle": "Pozlacená truhlice",
+      "close": "Zavřít banku",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Použité sloty banky: {used} z {total}",
+      "empty": "Tvoje banka je prázdná.",
+      "tooFar": "Svou banku si prohlédneš jen u bankéře.",
+      "buySlots": "Koupit {count} slotů",
+      "buySlotsMaxed": "Plně rozšířeno",
+      "buyConfirm": "Koupit {count} dalších slotů banky za {price}?",
+      "buyConfirmAccept": "Koupit",
+      "withdrawHint": "Kliknutím vybereš",
+      "withdrawPartialHint": "Shift + kliknutí vybere jen část množství",
+      "depositHint": "Kliknutím uložíš",
+      "depositPartialHint": "Shift + kliknutí uloží jen část množství",
+      "cannotDeposit": "Nelze uložit do banky",
+      "depositQuantityTitle": "Uložit {item}",
+      "depositQuantityInput": "Množství k uložení",
+      "depositQuantityConfirm": "Uložit",
+      "withdrawQuantityTitle": "Vybrat {item}",
+      "withdrawQuantityInput": "Množství k výběru",
+      "withdrawQuantityConfirm": "Vybrat",
+      "filterGroupAria": "Filtrovat banku podle kategorie",
+      "sortAria": "Seřadit předměty v bance",
+      "searchAria": "Hledat předměty v bance podle názvu",
+      "depositAll": "Uložit všechny materiály",
+      "depositAllDone": "Uloženo materiálů: {count}.",
+      "depositAllFull": "Uloženo materiálů: {count}. Banka je teď plná.",
+      "depositAllNone": "Banka je plná: nic nebylo uloženo.",
+      "bonusTitle": "Bonusové sloty",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Ověřený e-mail",
+      "bonusSourceDiscord": "Propojený Discord",
+      "bonusSourceWallet": "Propojená peněženka",
+      "bonusSourceReferral": "Pozvaní přátelé",
+      "bonusAdvertEmail": "Ověř svůj e-mail a získej 2 sloty.",
+      "bonusAdvertDiscord": "Propoj svůj Discord a získej 2 sloty.",
+      "bonusAdvertWallet": "Propoj peněženku a získej 2 sloty.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Pozvi přítele: až dosáhne úrovně 10, získáte oba po 2 slotech, nejvýše za 5 přátel.",
+      "bonusSectionAria": "Bonusové sloty banky a jak získat další"
+    },
     "calendar": {
       "title": "Kalendář událostí",
       "close": "Zavřít kalendář",
@@ -2327,6 +2371,10 @@ export const cs_CZ: EnTranslations = {
       "vendorsBody": "Města a výspy jsou poseté obchodníky, každý má vlastní řemeslo. Zásobovači drží jídlo a pití, zbrojíři a zbraňoví kováři výbavu a intendant praktický cestovní kit. Přistup k některému a uvidíš, co prodává.",
       "marksTitle": "Druhá měna: Známky výprav",
       "marksBody": "Mince nejsou jediné, co ukládáš. Výpravy vyplácejí Známky výprav, samostatnou měnu, kterou utrácíš jen u správce výprav za vylepšení společníka a výbavu, kterou jinde nenajdeš. Nikdy se nemíchají s mincemi.",
+      "bankTitle": "Banka",
+      "bankBody": "Každé větší město si drží pobočku Pozlacené truhlice, bankovního domu celé říše. Promluv tam s pokladníkem a otevři si trezor, soukromý úložný prostor nad rámec batohů, který tvé postavě zůstane na celý život. Cokoli u nich necháš, čeká v bezpečí, ať příště zavítáš do kterékoli pobočky.",
+      "bankHow": "Když máš trezor otevřený, klikni na předmět v batozích a uložíš ho; kliknutím na něj v trezoru si ho vezmeš zpět. Trezor pojme jen zboží, nikdy mince, a úkolové předměty zůstávají u tebe. Když se ti batohy zaplní uprostřed cesty, jedno tlačítko smete všechny tvé řemeslné materiály dovnitř najednou.",
+      "bankSlots": "Nový trezor je zpočátku malý a roste s tebou. Pokladník prodává další sloty za mince, za stále strmější ceny, a hraní online k tomu přináší bonusový prostor navíc, třeba za ověřený e-mail, propojené účty a přátele, které do hry přivedeš.",
       "buyingTitle": "Nákup a prodej",
       "buyingBody": "Postav se blízko obchodníka a otevři jeho okno. Můžeš koupit cokoli má skladem, pokud na to máš, a prodat většinu věcí z batohů za mince. Když něco prodáš omylem, prodejce podrží nedávné prodeje, abys je mohl koupit zpět.",
       "junkTitle": "Vyklízení harampádí",
@@ -7329,6 +7377,21 @@ export const cs_CZ: EnTranslations = {
         "name": "Dražitel Voss",
         "title": "Správce Světového trhu",
         "greeting": "Světový trh je otevřený i tady, {className}. Nakupuj od každého dobrodruha ve světě, nebo vystav vlastní zboží."
+      },
+      "bursar_fernando": {
+        "name": "Pokladník Fernando",
+        "title": "Pozlacená truhlice",
+        "greeting": "Vítej v Pozlacené truhlici. Tvé zboží odpočívá v bezpečí za našimi zámky."
+      },
+      "bursar_petra_vell": {
+        "name": "Pokladní Petra Vell",
+        "title": "Pozlacená truhlice",
+        "greeting": "Pozlacená truhlice vede čisté účetní knihy a ještě čistší trezory. Co ti máme uschovat?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Pokladník Aldous Crane",
+        "title": "Pozlacená truhlice",
+        "greeting": "Každá bedna, truhlička i cetka je u Pozlacené truhlice v bezpečí."
       },
       "brother_aldric_raid": {
         "name": "Bratr Aldric",

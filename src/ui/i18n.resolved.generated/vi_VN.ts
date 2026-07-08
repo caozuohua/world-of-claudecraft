@@ -1307,6 +1307,50 @@ export const vi_VN: EnTranslations = {
         "takeParcelsFirst": "Hãy lấy bưu kiện ra trước khi bỏ lá thư."
       }
     },
+    "bank": {
+      "title": "Ngân Hàng",
+      "subtitle": "Két Sắt Mạ Vàng",
+      "close": "Đóng ngân hàng",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Ô ngân hàng đã dùng: {used} trên {total}",
+      "empty": "Ngân hàng của bạn đang trống.",
+      "tooFar": "Bạn phải ở chỗ nhân viên ngân hàng mới xem được ngân hàng của mình.",
+      "buySlots": "Mua {count} ô",
+      "buySlotsMaxed": "Đã mở rộng tối đa",
+      "buyConfirm": "Mua thêm {count} ô ngân hàng với giá {price}?",
+      "buyConfirmAccept": "Mua",
+      "withdrawHint": "Nhấp để rút ra",
+      "withdrawPartialHint": "Shift-click để rút ra một phần",
+      "depositHint": "Nhấp để gửi vào",
+      "depositPartialHint": "Shift-click để gửi vào một phần",
+      "cannotDeposit": "Không thể gửi vào ngân hàng",
+      "depositQuantityTitle": "Gửi {item}",
+      "depositQuantityInput": "Số lượng cần gửi",
+      "depositQuantityConfirm": "Gửi Vào",
+      "withdrawQuantityTitle": "Rút {item}",
+      "withdrawQuantityInput": "Số lượng cần rút",
+      "withdrawQuantityConfirm": "Rút Ra",
+      "filterGroupAria": "Lọc ngân hàng theo danh mục",
+      "sortAria": "Sắp xếp vật phẩm ngân hàng",
+      "searchAria": "Tìm vật phẩm ngân hàng theo tên",
+      "depositAll": "Gửi tất cả nguyên liệu",
+      "depositAllDone": "Nguyên liệu đã gửi: {count}.",
+      "depositAllFull": "Nguyên liệu đã gửi: {count}. Ngân hàng hiện đã đầy.",
+      "depositAllNone": "Ngân hàng đầy: không gửi được gì.",
+      "bonusTitle": "Ô Thưởng",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Email đã xác minh",
+      "bonusSourceDiscord": "Đã liên kết Discord",
+      "bonusSourceWallet": "Đã liên kết ví",
+      "bonusSourceReferral": "Bạn bè được giới thiệu",
+      "bonusAdvertEmail": "Xác minh email của bạn để nhận 2 ô.",
+      "bonusAdvertDiscord": "Liên kết Discord của bạn để nhận 2 ô.",
+      "bonusAdvertWallet": "Liên kết một ví để nhận 2 ô.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Mời một người bạn: khi họ đạt cấp 10, cả bạn lẫn họ mỗi người nhận 2 ô, tối đa 5 người bạn.",
+      "bonusSectionAria": "Ô ngân hàng thưởng và cách kiếm thêm"
+    },
     "calendar": {
       "title": "Lịch Sự Kiện",
       "close": "Đóng lịch",
@@ -2327,6 +2371,10 @@ export const vi_VN: EnTranslations = {
       "vendorsBody": "Các thị trấn và tiền đồn rải rác những thương nhân, mỗi người có mặt hàng riêng. Người tiếp tế bán đồ ăn thức uống, thợ rèn vũ khí và thợ giáp bán trang bị, và một quản nhu giữ những vật dụng đi đường thiết thực. Hãy bước đến một người để xem họ bán gì.",
       "marksTitle": "Một loại tiền tệ thứ hai: Huy Hiệu Hang Sâu",
       "marksBody": "Tiền vàng không phải thứ duy nhất bạn cất giữ. Hang sâu trả Huy Hiệu Hang Sâu, một loại tiền tệ riêng mà bạn chỉ tiêu ở chỗ người giữ hang sâu, vào việc nâng cấp đồng hành và trang bị bạn không tìm thấy ở nơi khác. Chúng không bao giờ lẫn với tiền vàng của bạn.",
+      "bankTitle": "Ngân Hàng",
+      "bankBody": "Mỗi thị trấn trung tâm đều có một chi nhánh của Két Sắt Mạ Vàng, ngân hiệu của cả vương quốc. Hãy nói chuyện với thủ quỹ ở đó để mở kho két của bạn, một khoang chứa riêng ngoài túi đồ mà nhân vật của bạn giữ trọn đời. Bất cứ thứ gì bạn gửi lại đều chờ bạn an toàn, dù lần sau bạn ghé chi nhánh nào.",
+      "bankHow": "Khi kho két đang mở, nhấp một vật phẩm trong túi để gửi vào và nhấp nó trong kho két để lấy lại. Kho két chỉ giữ hàng hóa, không bao giờ giữ tiền, và vật phẩm nhiệm vụ luôn ở lại bên bạn. Khi túi đầy giữa chuyến đi, một nút bấm sẽ quét toàn bộ nguyên liệu chế tác của bạn vào cùng một lúc.",
+      "bankSlots": "Một kho két mới mở khởi đầu nhỏ bé và lớn dần cùng bạn. Thủ quỹ bán thêm ô với giá tiền vàng ngày một đắt hơn, và chơi trực tuyến còn mang lại chỗ chứa thưởng thêm, cho những việc như xác minh email, liên kết tài khoản, và những người bạn mà bạn đưa vào trò chơi.",
       "buyingTitle": "Mua và bán",
       "buyingBody": "Đứng gần một thương nhân để mở cửa sổ của họ. Bạn có thể mua bất cứ thứ gì họ bán nếu đủ tiền, và bán hầu hết những gì trong túi để lấy bạc. Nếu bạn lỡ tay bán nhầm thứ gì đó, người bán sẽ giữ lại những món bạn vừa bán để bạn mua lại.",
       "junkTitle": "Dọn dẹp đồ tạp",
@@ -7329,6 +7377,21 @@ export const vi_VN: EnTranslations = {
         "name": "Người Đấu Giá Voss",
         "title": "Người Giữ World Market",
         "greeting": "World Market cũng mở cửa ở đây, {className}. Hãy mua từ mọi nhà thám hiểm trong vương quốc, hoặc bày bán hàng hóa của riêng ngươi."
+      },
+      "bursar_fernando": {
+        "name": "Thủ Quỹ Fernando",
+        "title": "Két Sắt Mạ Vàng",
+        "greeting": "Chào mừng đến với Két Sắt Mạ Vàng. Hàng hóa của ngươi nằm yên an toàn sau những ổ khóa của chúng tôi."
+      },
+      "bursar_petra_vell": {
+        "name": "Thủ Quỹ Petra Vell",
+        "title": "Két Sắt Mạ Vàng",
+        "greeting": "Két Sắt Mạ Vàng giữ sổ sách sạch sẽ và những kho két còn sạch sẽ hơn. Chúng tôi cất giữ gì cho ngươi đây?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Thủ Quỹ Aldous Crane",
+        "title": "Két Sắt Mạ Vàng",
+        "greeting": "Mọi thùng hàng, rương tiền, và món trang sức đều an toàn trong tay Két Sắt Mạ Vàng."
       },
       "brother_aldric_raid": {
         "name": "Tu Huynh Aldric",

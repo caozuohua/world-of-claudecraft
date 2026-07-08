@@ -5947,7 +5947,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Wszystkie instancje lokacji {name} są zajęte. Spróbuj ponownie za chwilę.',
   'worldContent.dungeonPartyWarning':
     'Lokacja {name} jest przeznaczona dla pełnej drużyny liczącej {count}. Zachowaj ostrożność.',
-  // Aura effect tooltip summaries.
   'hudChrome.auraEffect.dot': 'Zadaje {value} obrażeń od {school} co {interval} s',
   'hudChrome.auraEffect.hot': 'Przywraca {value} zdrowia co {interval} s',
   'hudChrome.auraEffect.absorb': 'Pochłania {value} obrażeń',
@@ -6264,7 +6263,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.nativeUpdate.notNow': 'Nie teraz',
   'hudChrome.nativeUpdate.title': 'Dostępna aktualizacja',
   'hudChrome.nativeUpdate.update': 'Aktualizuj',
-  // Ravenpost authored letters
   'entities.letters.ravenpost_welcome.sender': 'Krucza Poczta',
   'entities.letters.ravenpost_welcome.subject': 'Kruki latają teraz dla ciebie',
   'entities.letters.ravenpost_welcome.body':
@@ -6354,7 +6352,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
     'Najpierw rozpocznij konfigurację uwierzytelniania dwuskładnikowego.',
   'apiError.validation.failed':
     'Niektóre pola są nieprawidłowe. Sprawdź formularz i spróbuj ponownie.',
-  // Release v0.22.0 locale fill.
   'download.linuxCta': 'Pobierz dla Linuksa',
   'download.linuxHint':
     'AppImage: uczyń go wykonywalnym, a następnie uruchom. Nie wymaga instalacji.',
@@ -6465,7 +6462,6 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mobile.targetCycleShort': 'Cel',
   'hudChrome.options.mobileCameraJoystick': 'Joystick aparatu',
   'hudChrome.options.mobileLeftHanded': 'Układ leworęczny',
-  // Release v0.22.0 professions quest locale fill.
   'entities.quests.q_archetype_acceptance.title': 'Rzemiosło, które możesz nazwać własnym',
   'entities.quests.q_archetype_acceptance.text':
     'Każdy rzemieślnik z Eastbrook ostatecznie decyduje się na jedno rzemiosło, które nazywa swoim własnym. Wykaż się jednym czynem, {playerName}, i zadeklaruj swoją ścieżkę.',
@@ -6478,4 +6474,66 @@ export const pl_PL: Partial<Record<TranslationKey, string>> = {
   'entities.quests.q_prof_make_amends.completion':
     'Poprawki dokonane; otwiera się przed tobą nowa droga.',
   'entities.quests.q_prof_make_amends.objectives.0.label': 'Leśny Wilk zabity',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    'Każda skrzynia, kufer i błyskotka są bezpieczne w Złoconej Szkatule.',
+  'entities.npcs.bursar_aldous_crane.name': 'Skarbnik Aldous Crane',
+  'entities.npcs.bursar_aldous_crane.title': 'Złocona Szkatuła',
+  'entities.npcs.bursar_fernando.greeting':
+    'Witaj w Złoconej Szkatule. Twoje dobra spoczywają bezpiecznie za naszymi zamkami.',
+  'entities.npcs.bursar_fernando.name': 'Skarbnik Fernando',
+  'entities.npcs.bursar_fernando.title': 'Złocona Szkatuła',
+  'entities.npcs.bursar_petra_vell.greeting':
+    'Złocona Szkatuła prowadzi czyste księgi i jeszcze czystsze skarbce. Co mamy dla ciebie przechować?',
+  'entities.npcs.bursar_petra_vell.name': 'Skarbniczka Petra Vell',
+  'entities.npcs.bursar_petra_vell.title': 'Złocona Szkatuła',
+  'guide.economy.bankBody':
+    'W każdym głównym mieście działa oddział Złoconej Szkatuły, domu bankowego królestwa. Porozmawiaj z tamtejszym skarbnikiem, aby otworzyć swój skarbiec, prywatny schowek poza torbami, który twoja postać zachowuje na całe życie. Cokolwiek tam zostawisz, czeka bezpiecznie, niezależnie od tego, który oddział odwiedzisz następnym razem.',
+  'guide.economy.bankHow':
+    'Przy otwartym skarbcu kliknij przedmiot w torbach, aby go zdeponować, i kliknij go w skarbcu, aby zabrać z powrotem. Skarbiec przechowuje wyłącznie dobra, nigdy monety, a przedmioty zadań zostają przy tobie. Gdy torby zapełnią ci się w połowie drogi, jeden przycisk zgarnia do środka wszystkie materiały rzemieślnicze naraz.',
+  'guide.economy.bankSlots':
+    'Świeży skarbiec zaczyna skromnie i rośnie razem z tobą. Skarbnik sprzedaje kolejne miejsca za monety po coraz wyższych cenach, a granie online przynosi na dodatek premiowe miejsca, na przykład za zweryfikowany e-mail, połączone konta i przyjaciół, których przyprowadzisz do gry.',
+  'guide.economy.bankTitle': 'Bank',
+  'hudChrome.bank.bonusAdvertDiscord': 'Połącz swój Discord, aby zdobyć 2 miejsca.',
+  'hudChrome.bank.bonusAdvertEmail': 'Zweryfikuj swój e-mail, aby zdobyć 2 miejsca.',
+  'hudChrome.bank.bonusAdvertWallet': 'Połącz portfel, aby zdobyć 2 miejsca.',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusReferralExplainer':
+    'Zaproś przyjaciela: gdy osiągnie 10. poziom, oboje zdobywacie po 2 miejsca, maksymalnie za 5 przyjaciół.',
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
+  'hudChrome.bank.bonusSectionAria': 'Premiowe miejsca w banku i jak zdobyć ich więcej',
+  'hudChrome.bank.bonusSourceDiscord': 'Połączony Discord',
+  'hudChrome.bank.bonusSourceEmail': 'Zweryfikowany e-mail',
+  'hudChrome.bank.bonusSourceReferral': 'Zaproszeni przyjaciele',
+  'hudChrome.bank.bonusSourceWallet': 'Połączony portfel',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusTitle': 'Miejsca premiowe',
+  'hudChrome.bank.buyConfirm': 'Kupić {count} dodatkowych miejsc w banku za {price}?',
+  'hudChrome.bank.buyConfirmAccept': 'Kup',
+  'hudChrome.bank.buySlots': 'Kup {count} miejsc',
+  'hudChrome.bank.buySlotsMaxed': 'W pełni rozszerzony',
+  'hudChrome.bank.cannotDeposit': 'Nie można zdeponować',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': 'Zajęte miejsca w banku: {used} z {total}',
+  'hudChrome.bank.close': 'Zamknij bank',
+  'hudChrome.bank.depositAll': 'Zdeponuj wszystkie materiały',
+  'hudChrome.bank.depositAllDone': 'Zdeponowane materiały: {count}.',
+  'hudChrome.bank.depositAllFull': 'Zdeponowane materiały: {count}. Bank jest teraz pełny.',
+  'hudChrome.bank.depositAllNone': 'Bank pełny: niczego nie zdeponowano.',
+  'hudChrome.bank.depositHint': 'Kliknij, aby zdeponować',
+  'hudChrome.bank.depositPartialHint': 'Kliknij z Shiftem, aby zdeponować część',
+  'hudChrome.bank.depositQuantityConfirm': 'Zdeponuj',
+  'hudChrome.bank.depositQuantityInput': 'Liczba do zdeponowania',
+  'hudChrome.bank.depositQuantityTitle': 'Zdeponuj: {item}',
+  'hudChrome.bank.empty': 'Twój bank jest pusty.',
+  'hudChrome.bank.filterGroupAria': 'Filtruj bank według kategorii',
+  'hudChrome.bank.searchAria': 'Szukaj przedmiotów w banku po nazwie',
+  'hudChrome.bank.sortAria': 'Sortuj przedmioty w banku',
+  'hudChrome.bank.subtitle': 'Złocona Szkatuła',
+  'hudChrome.bank.title': 'Bank',
+  'hudChrome.bank.tooFar': 'Musisz być przy bankierze, aby zajrzeć do swojego banku.',
+  'hudChrome.bank.withdrawHint': 'Kliknij, aby wyjąć',
+  'hudChrome.bank.withdrawPartialHint': 'Kliknij z Shiftem, aby wyjąć część',
+  'hudChrome.bank.withdrawQuantityConfirm': 'Wyjmij',
+  'hudChrome.bank.withdrawQuantityInput': 'Liczba do wyjęcia',
+  'hudChrome.bank.withdrawQuantityTitle': 'Wyjmij: {item}',
 };

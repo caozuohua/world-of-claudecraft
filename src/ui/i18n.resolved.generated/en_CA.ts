@@ -1307,6 +1307,50 @@ export const en_CA: EnTranslations = {
         "takeParcelsFirst": "Take the parcels out before discarding the letter."
       }
     },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "The Gilded Strongbox",
+      "close": "Close bank",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Bank slots used: {used} of {total}",
+      "empty": "Your bank is empty.",
+      "tooFar": "You must be at a banker to view your bank.",
+      "buySlots": "Buy {count} slots",
+      "buySlotsMaxed": "Fully expanded",
+      "buyConfirm": "Purchase {count} additional bank slots for {price}?",
+      "buyConfirmAccept": "Purchase",
+      "withdrawHint": "Click to withdraw",
+      "withdrawPartialHint": "Shift-click to withdraw a partial amount",
+      "depositHint": "Click to deposit",
+      "depositPartialHint": "Shift-click to deposit a partial amount",
+      "cannotDeposit": "Cannot be banked",
+      "depositQuantityTitle": "Deposit {item}",
+      "depositQuantityInput": "Quantity to deposit",
+      "depositQuantityConfirm": "Deposit",
+      "withdrawQuantityTitle": "Withdraw {item}",
+      "withdrawQuantityInput": "Quantity to withdraw",
+      "withdrawQuantityConfirm": "Withdraw",
+      "filterGroupAria": "Filter bank by category",
+      "sortAria": "Sort bank items",
+      "searchAria": "Search bank items by name",
+      "depositAll": "Deposit all materials",
+      "depositAllDone": "Materials deposited: {count}.",
+      "depositAllFull": "Materials deposited: {count}. Bank now full.",
+      "depositAllNone": "Bank full: nothing deposited.",
+      "bonusTitle": "Bonus slots",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Verified email",
+      "bonusSourceDiscord": "Discord linked",
+      "bonusSourceWallet": "Wallet linked",
+      "bonusSourceReferral": "Referred friends",
+      "bonusAdvertEmail": "Verify your email to earn 2 slots.",
+      "bonusAdvertDiscord": "Link your Discord to earn 2 slots.",
+      "bonusAdvertWallet": "Link a wallet to earn 2 slots.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Invite a friend: when they reach level 10 you each earn 2 slots, up to 5 friends.",
+      "bonusSectionAria": "Bonus bank slots and how to earn more"
+    },
     "calendar": {
       "title": "Event Calendar",
       "close": "Close calendar",
@@ -2327,6 +2371,10 @@ export const en_CA: EnTranslations = {
       "vendorsBody": "Towns and outposts are dotted with merchants, each with their own trade. Provisioners stock food and drink, weaponsmiths and armorers carry gear, and a quartermaster keeps practical travel kit. Walk up to one to see what they sell.",
       "marksTitle": "A second currency: Delve Marks",
       "marksBody": "Coin is not the only thing you bank. Delves pay out Delve Marks, a separate currency you spend only at the delve keeper, on companion upgrades and gear you will not find elsewhere. They never mix with your coin.",
+      "bankTitle": "The bank",
+      "bankBody": "Every hub town keeps a branch of The Gilded Strongbox, the banking house of the realm. Speak to the bursar there to open your vault, a private store of room beyond your bags that your character keeps for life. Whatever you leave with them waits safely, whichever branch you visit next.",
+      "bankHow": "With the vault open, click an item in your bags to deposit it and click it in the vault to take it back. The vault holds goods only, never coin, and quest items stay with you. When your bags fill up mid-journey, one button sweeps all your crafting materials in at once.",
+      "bankSlots": "A fresh vault starts small and grows with you. The bursar sells further slots for coin at ever-steeper prices, and playing online earns bonus room on top, for things like a verified email, linked accounts, and friends you bring into the game.",
       "buyingTitle": "Buying and selling",
       "buyingBody": "Stand near a merchant to open their window. You can buy anything they stock if you can afford it, and sell most of what is in your bags for coin. If you sell something by mistake, a vendor will hold your recent sales so you can buy them back.",
       "junkTitle": "Clearing out junk",
@@ -7329,6 +7377,21 @@ export const en_CA: EnTranslations = {
         "name": "Auctioneer Voss",
         "title": "Keeper of the World Market",
         "greeting": "The World Market is open here too, {className}. Buy from every adventurer in the realm, or set out your own wares."
+      },
+      "bursar_fernando": {
+        "name": "Bursar Fernando",
+        "title": "The Gilded Strongbox",
+        "greeting": "Welcome to the Gilded Strongbox. Your goods rest safe behind our locks."
+      },
+      "bursar_petra_vell": {
+        "name": "Bursar Petra Vell",
+        "title": "The Gilded Strongbox",
+        "greeting": "The Gilded Strongbox keeps clean ledgers and cleaner vaults. What shall we stow for you?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Bursar Aldous Crane",
+        "title": "The Gilded Strongbox",
+        "greeting": "Every crate, coffer, and trinket is safe with the Gilded Strongbox."
       },
       "brother_aldric_raid": {
         "name": "Brother Aldric",

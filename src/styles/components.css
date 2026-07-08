@@ -3207,6 +3207,274 @@
     background: radial-gradient(circle at 35% 30%, #e8a87a, #8b4513);
   }
 
+  /* ---------- bank ---------- */
+  /* The Gilded Strongbox: a cold pooled deposit box, a desktop companion of the bags
+     window (docked side by side under body.bank-open). The slot grid mirrors the bag
+     grid, styled from the same tokens with parallel .bank-* classes; quality drives
+     the cell border via the painter-set --bank-slot-quality custom property. */
+  #bank-window {
+    width: 420px;
+    max-height: calc(var(--app-vh, 100vh) * 0.72 / var(--window-scale) - 24px);
+    flex-direction: column;
+  }
+  #bank-window .panel-title {
+    flex: none;
+  }
+  .bank-capacity {
+    flex: none;
+    margin-bottom: 6px;
+    color: var(--gold-dim);
+    font-family: var(--title-font);
+    font-size: 12px;
+    text-align: right;
+  }
+  /* Search/category/sort toolbar. It reuses the bags filter-bar classes
+     (.bag-filter-bar/.bag-chips/.bag-chip/.bag-tools/.bag-search/.bag-sort), so most
+     styling carries over; only the flex-none pin (so the toolbar never stretches in the
+     column), the deposit-all action button, and the transient status line are bank
+     specific. */
+  #bank-window .bag-filter-bar {
+    flex: none;
+  }
+  .bank-deposit-all {
+    flex: none;
+    font-family: var(--ui-font);
+    font-size: 12px;
+    padding: 4px 9px;
+    border-radius: 4px;
+    border: 1px solid #6a5320;
+    background: linear-gradient(#8a6a26, #5a4413 55%, #473409);
+    color: #ffe6a8;
+    cursor: var(--cursor-point);
+    white-space: nowrap;
+  }
+  .bank-deposit-all:hover:not(:disabled) {
+    filter: brightness(1.12);
+  }
+  .bank-deposit-all:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+  .bank-deposit-all:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 1px;
+  }
+  body.mobile-touch .bank-deposit-all {
+    min-height: 40px;
+  }
+  /* Transient deposit-all summary: a polite aria-live line just under the toolbar. */
+  .bank-status {
+    flex: none;
+    margin: 0 0 6px;
+    padding: 4px 7px;
+    border-radius: 4px;
+    border: 1px solid #463a1c;
+    background: #1c1812;
+    color: var(--gold-dim);
+    font-family: var(--ui-font);
+    font-size: 12px;
+  }
+  /* The shared scroll region: the cell grid plus the bonus breakdown as its tail.
+     At a 360px-tall phone the rigid chrome (title, capacity, toolbar, buy row)
+     leaves under one cell row of flex space, so a fixed footer below the buy row
+     either crushed the grid or clipped itself (found live in QA); scrolling
+     one region reaches both. The two-row floor (2 x 40px cells + gap + padding)
+     keeps the region usable before the window itself would overflow. */
+  .bank-scroll {
+    flex: 1 1 auto;
+    min-height: 92px;
+    overflow-y: auto;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  .bank-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+    gap: 4px;
+    padding: 2px;
+    align-content: start;
+  }
+  .bank-item {
+    position: relative;
+    aspect-ratio: 1;
+    /* SC 2.5.8: the 42px column floor keeps every cell >= 40x40 on touch too. */
+    min-width: 0;
+    min-height: 40px;
+    padding: 0;
+    border: 1px solid #4a3d26;
+    border-radius: 5px;
+    cursor: var(--cursor-point);
+    background: linear-gradient(160deg, #17130c, #0c0a07);
+    box-shadow: inset 0 1px 4px #000c;
+    color: inherit;
+    font-family: var(--ui-font);
+  }
+  .bank-item:hover {
+    filter: brightness(1.25);
+  }
+  .bank-item .item-icon {
+    position: absolute;
+    inset: 2px;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    border: 0;
+    border-radius: 4px;
+  }
+  /* the cell owns the quality border; a soft outer glow from the same quality color
+     (set by the painter from the shared QUALITY_COLOR map) lifts rare+ */
+  .bank-item[class*=" q-"] {
+    box-shadow:
+      inset 0 1px 4px #000c,
+      0 0 5px color-mix(in srgb, var(--bank-slot-quality, transparent) 45%, transparent);
+  }
+  /* classic look: poor/common cells keep the neutral socket border */
+  .bank-item.q-poor,
+  .bank-item.q-common {
+    border-color: #4a3d26 !important;
+    box-shadow: inset 0 1px 4px #000c;
+  }
+  .bank-count {
+    position: absolute;
+    right: 2px;
+    bottom: 1px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-shadow:
+      0 1px 2px #000,
+      0 0 3px #000;
+    pointer-events: none;
+  }
+  .bank-item.empty {
+    cursor: default;
+    background: #0b0906;
+    border-color: #2f281a;
+    box-shadow: inset 0 2px 6px #000d;
+  }
+  .bank-empty {
+    grid-column: 1 / -1;
+    padding: 12px 5px;
+    font-size: 12px;
+    color: #887c5c;
+    text-align: center;
+  }
+  .bank-buy-row {
+    flex: none;
+    margin-top: 8px;
+    padding-top: 7px;
+    border-top: 1px solid #463a1c;
+    display: flex;
+    justify-content: center;
+  }
+  .bank-buy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 40px;
+    padding: 8px;
+    border: 1px solid #6a5320;
+    border-radius: 4px;
+    cursor: var(--cursor-point);
+    background: linear-gradient(#8a6a26, #5a4413 55%, #473409);
+    color: #ffe6a8;
+    font-family: var(--title-font);
+    font-size: 12px;
+  }
+  .bank-buy-btn:hover {
+    filter: brightness(1.12);
+  }
+  /* Steady tokenized focus ring on both keyboard-focusable bank controls (the
+     .bag-item precedent; also in base.css's shared ring list). */
+  .bank-item:focus-visible,
+  .bank-buy-btn:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 1px;
+  }
+  .bank-buy-maxed {
+    padding: 8px;
+    color: #c8b888;
+    font-family: var(--title-font);
+    font-size: 12px;
+  }
+  /* Bonus-slot breakdown footer (online only): a compact non-interactive
+     text block advertising the account-link and referral bonuses, riding as the TAIL
+     of the .bank-scroll region (scrolling past the last cells reaches it on every
+     viewport; a rigid below-the-buy-row footer clipped at 360px-tall phones). Tokens
+     only (no hex): borders are a translucent gold-dim mix, text uses the muted token. */
+  .bank-bonus {
+    margin-top: 8px;
+    padding-top: 7px;
+    border-top: 1px solid color-mix(in srgb, var(--gold-dim) 35%, transparent);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .bank-bonus-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    font-family: var(--title-font);
+    font-size: 12px;
+    color: var(--gold-dim);
+  }
+  .bank-bonus-total {
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .bank-bonus-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1px 8px;
+    font-family: var(--ui-font);
+    font-size: 11px;
+    color: var(--color-text-muted);
+  }
+  .bank-bonus-label {
+    flex: 1 1 auto;
+  }
+  .bank-bonus-status {
+    flex: 0 0 auto;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .bank-bonus-row.earned .bank-bonus-status {
+    font-weight: 700;
+    color: var(--gold-dim);
+  }
+  .bank-bonus-detail {
+    flex-basis: 100%;
+    opacity: 0.8;
+  }
+  /* Desktop side-by-side docking: the bank sits left of centre, the bags companion
+     right of centre, symmetric about the page centre. Scoped under body.bank-open so
+     nothing else moves; the .vendor-open rules stay untouched. --bank-dock-gap lives
+     on body.bank-open so BOTH sibling windows inherit it. */
+  body.bank-open {
+    --bank-dock-gap: 8px;
+  }
+  body.bank-open #bank-window {
+    left: 50%;
+    top: calc(var(--app-vh, 100vh) * 0.1);
+    right: auto;
+    bottom: auto;
+    transform: translateX(calc(-100% - var(--bank-dock-gap)));
+  }
+  body.bank-open #bags {
+    left: 50%;
+    top: calc(var(--app-vh, 100vh) * 0.1);
+    right: auto;
+    bottom: auto;
+    width: 320px;
+    max-height: calc(var(--app-vh, 100vh) * 0.72 / var(--window-scale) - 24px);
+    transform: translateX(var(--bank-dock-gap));
+  }
+
   /* ---------- social ---------- */
   /* social: friends / guild / ignore */
   #social-window {

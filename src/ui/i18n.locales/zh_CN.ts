@@ -32,10 +32,8 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.toLabel': '收件人',
   'itemUi.kind.bag': '背包',
   'itemUi.tooltip.bagSlots': '{slots} 格背包',
-  // Guild roster last-seen (M16 non-Latin fill)
   'hudChrome.social.lastSeen': '最后在线: {when}',
   'hudChrome.social.lastSeenNever': '从未',
-  // Daily rewards (M16 non-Latin fill)
   'hudChrome.dailyRewards.title': '每日奖励',
   'hudChrome.dailyRewards.close': '关闭每日奖励',
   'hudChrome.dailyRewards.loading': '正在加载每日奖励...',
@@ -233,7 +231,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.options.interfaceModeTouch': '触控',
   'hudChrome.options.interfaceModeNote':
     '自动会根据你的设备选择桌面或触控操作。选择桌面可强制使用键盘和鼠标（适合带键盘的平板），选择触控则使用屏幕上的操作控件。',
-  // Character-sheet stat tooltips (hudChrome.statInfo.*).
   'hudChrome.statInfo.fromYour': '来自你的 {value} 点{stat}：',
   'hudChrome.statInfo.names.spellPower': '法术强度',
   'hudChrome.statInfo.names.critRating': '暴击等级',
@@ -3172,7 +3169,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'news.prerelease': '预发布',
   'news.viewOnGithub': '在 GitHub 上查看',
   'wiki.cta': '浏览百科指南',
-  // --- qol-changes: character profile, attack-move, login/create labels ---
   'character.portraitAlt': '{name}的头像',
   'character.viewProfile': '查看资料',
   'character.profile': '角色资料',
@@ -3187,7 +3183,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'auth.chromaOption': '配色 {n}',
   'auth.noAccountPrompt': '初来乍到？',
   'auth.haveAccountPrompt': '已有账号？',
-
   'entities.items.conjured_bread.name': '魔法燕麦饼',
   'entities.items.conjured_bread2.name': '魔法黑面包',
   'entities.items.conjured_bread3.name': '魔法蜜糕',
@@ -3254,7 +3249,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.items.elderwood_log.name': '古老接骨木原木',
   'entities.items.goldleaf_herb.name': '金叶草',
   'entities.items.sunpetal_herb.name': '阳瓣草',
-  // v0.10.0 release fill (Fiesta / skin-select / NPC voices / chat channels / Brightwood Glade)
   'hud.core.chatChannels.add': '添加聊天频道',
   'hud.core.chatChannels.addTitle': '添加频道',
   'hud.core.chatChannels.close': '关闭{channel}标签',
@@ -3499,7 +3493,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.controller.resetButtons': '重置按键布局',
   'hudChrome.controller.menuAction': '游戏菜单',
   'hudChrome.controller.help': '左摇杆移动，右摇杆控制镜头。打开窗口即可使用屏幕指针。',
-  // New-adventurer tutorial (PR #729)
   'hud.tutorial.title': '新冒险者',
   'hud.tutorial.stepLabel': '第 {current} 步，共 {total} 步',
   'hud.tutorial.skip': '跳过教程',
@@ -3634,11 +3627,9 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.account.exportBtn': '下载我的数据',
   'hudChrome.account.exportDone': '你的数据已下载。我们已向你发送确认邮件。',
   'hudChrome.account.exportFailed': '无法导出你的数据。请稍后重试。',
-  // On-screen quest tracker (hudChrome.questTracker.*): collapsed count badge + header toggle hover hint.
   'hudChrome.questTracker.count': '（{count}）',
   'hudChrome.questTracker.collapseHint': '收起任务追踪器',
   'hudChrome.questTracker.expandHint': '展开任务追踪器',
-  // Modular bag filtering controls (hudChrome.bags.*).
   'hudChrome.bags.cannotDestroy': '该物品无法销毁。',
   'hudChrome.bags.rightClickDestroy': '右键单击以销毁',
   'hudChrome.bags.filterGroupAria': '按类别筛选背包',
@@ -3659,7 +3650,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.bags.backpack': '背包',
   'hudChrome.bags.socketEmpty': '空背包栏位',
   'hudChrome.bags.unequipHint': '点击移除此背包',
-  // Guide (/guide) localization.
   'guide.brand': 'World of ClaudeCraft',
   'guide.brandShort': 'ClaudeCraft',
   'guide.tagline': '一款可在浏览器中免费畅玩的经典风格 MMO。',
@@ -4012,7 +4002,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'guide.notFound.title': '我们找不到该页面',
   'guide.notFound.body': '你寻找的页面不存在,或者可能已被移动。',
   'guide.notFound.home': '返回概览',
-  // Guide (/guide) localization.
   'guide.bestiary.heading': '怪物图鉴',
   'guide.bestiary.intro':
     '世界中的各类生物，按种族分门别类。这些是你在野外会遇到的敌人。最致命之物则未列于此，潜伏在地下城的门后。',
@@ -4298,7 +4287,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
     '三片区域，自南向北，每一片的等级都更高一级。跟着任务线走，这片土地便会带你从山谷一路抵达群峰。',
   'guide.worldPage.places': '值得一看的地点',
   'guide.worldPage.residents': '你将遇见的人',
-  // guide.* enrichment fill (lore, gear, social, stats, economy, progression)
   'guide.arenaPage.powerupsBody':
     '激战正酣时，发光的能量球还会落入竞技场，谁先抢到便归谁。它们刻意夸张到极致，且只持续片刻：极速恶魔让你瞬间快得令人目眩，巨像将你膨胀成步履蹒跚的庞然大物，月靴带来低重力的弹跳腾跃，狂战士则让你猛然涌起一股暴怒。',
   'guide.arenaPage.powerupsTitle': '竞技场中的强化道具',
@@ -4640,7 +4628,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'guide.worldPage.gladeTitle': '宁静一隅：明木林地',
   'guide.worldPage.gladeBody':
     'the Vale 里的故事并不全都关于亡者。北方有一片阳光照耀的林地，名为 Brightwood Glade，自有它更为温和的节奏：尽是安静的小径，以及枝叶下斑驳的光影。它是你所追寻的踪迹之外一段柔和的对照，若道路给你余裕闲逛，很值得去看一看。',
-  // APM telemetry label from release/v0.14.0
   'hudChrome.perf.labels.apm': 'APM',
   'entities.zones.eastbrook_vale.pois.9.label': '明木林地',
   'entities.items.reliquary_plate_chest.name': '圣物库守卫锁甲',
@@ -4997,7 +4984,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.itemProc.hot': '绽放{name}，一种持续治疗效果，在{duration}秒内恢复{total}点生命',
   'hudChrome.itemSet.bonusLine': '({pieces}) {bonus}',
   'hudChrome.abilityScaling.bonus': '(+{value})',
-  // Discord integration (two-way login, rewards, relay, in-game flair).
   'hudChrome.discord.close': '关闭',
   'hudChrome.discord.keybind': 'Discord 面板',
   'hudChrome.discord.disabled': 'Discord 集成当前不可用。',
@@ -5122,7 +5108,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.crafting.craftedToast': '已制作:{name}',
   'hudChrome.crafting.insufficientMaterials': '你没有足够的材料。',
   'hudChrome.crafting.unknownRecipe': '该配方不存在。',
-  // Developer badge (M16 non-Latin fills).
   'hudChrome.devBadge.title': '开发者',
   'hudChrome.devBadge.tiers.tinkerer': '修补匠',
   'hudChrome.devBadge.tiers.artificer': '工巧师',
@@ -5160,7 +5145,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'desktop.crash.reload': '重新加载',
   'desktop.crash.quit': '退出',
   'desktop.crash.fatalBody': 'World of ClaudeCraft 遇到意外错误，需要关闭。',
-  // Map editor (/editor), added with the editor catalog domain.
   'editor.appTitle': '地图编辑器',
   'editor.docTitle': '地图编辑器 - World of ClaudeCraft',
   'editor.untitledMap': '未命名地图',
@@ -5666,7 +5650,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'guide.professions.archetypeIdentityTitle': '你的命途意味着什么',
   'guide.professions.archetypeIdentityBody':
     '你当前的命途，是关于你的角色在这个世界中是谁的一种宣告，会体现在他人与世界如何称呼你之中。它所附带的具体奖励与认可仍在完善之中；请随着系统的完善持续关注。',
-  // apiError.* server error-code catalog (M16 non-Latin fill, Phase 22)
   'apiError.validation.failed': '部分字段无效。请检查表单后重试。',
   'apiError.json.malformed': '无法读取该请求。请重试。',
   'apiError.body.too_large': '该请求过大。请减少数据后重试。',
@@ -5726,7 +5709,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'apiError.discord.swag_claimed': '你已经领取过此奖励。',
   'apiError.discord.swag_tier': '达到更高段位即可领取。',
   'apiError.discord.swag_points': '积分不足。',
-  // The Ravenpost mailbox (M16 non-Latin fill)
   'hudChrome.mailbox.title': '邮箱',
   'hudChrome.mailbox.subtitle': '渡鸦邮驿',
   'hudChrome.mailbox.close': '关闭邮箱',
@@ -5769,7 +5751,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.mailbox.result.letterGone': '那封信已不在你的邮箱里。',
   'hudChrome.mailbox.result.takeParcelsFirst': '请先取出包裹再丢弃信件。',
   'worldContent.mailboxName': '邮箱',
-  // Ravenpost authored letters (M16 non-Latin fill)
   'entities.letters.ravenpost_welcome.sender': '渡鸦邮驿',
   'entities.letters.ravenpost_welcome.subject': '渡鸦如今为你飞翔',
   'entities.letters.ravenpost_welcome.body':
@@ -5786,7 +5767,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.letters.letter_q_hollow.subject': '你在黑暗中所做的一切',
   'entities.letters.letter_q_hollow.body':
     '很少有人会知道那处洼地里埋葬着什么，愿意相信的人更少。但我知道，而且我不会忘记。\n\n愿你的道路常明。\n- 奥德里克修士',
-  // Event calendar (M16 non-Latin fill)
   'hudChrome.calendar.title': '活动日历',
   'hudChrome.calendar.close': '关闭日历',
   'hudChrome.calendar.keybindLabel': '活动日历',
@@ -5842,13 +5822,11 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.archetypeTitle.enchanting': '附魔师',
   'hudChrome.archetypeTitle.tailoring': '裁缝',
   'hudChrome.archetypeTitle.leatherworking': '制皮师',
-  // Release v0.22.0 locale fill.
   'hudChrome.crafting.reagentLine': '{name}: {have}/{required}',
   'hudChrome.crafting.comboRequirementUnmet': '你没有达到该配方所需组合的两项制造技能等级。',
   'hudChrome.crafting.notAtHub': '必须达到所需等级并位于制作站，才能制作该物品。',
   'hudChrome.mobile.actionPageIndicator': '第{page}页',
   'hudChrome.mobile.spellbookPageLabel': '页{page}',
-  // The Vale Cup boarball minigame (docs/prd/vale-cup.md).
   'hudChrome.keybinds.valecup': '溪谷杯',
   'hudChrome.vcup.title': '溪谷杯',
   'hudChrome.vcup.close': '关闭溪谷杯窗口',
@@ -6004,7 +5982,6 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.groundskeeper_bram.greeting':
     '休战约定在母猪场依然有效，{className}：只许用脚和肩膀。想为铜奶桶一战吗？',
   'entities.zones.eastbrook_vale.pois.10.label': '母猪场',
-  // The Vale Cup sport kit ability names + descriptions.
   'entities.abilities.sport_kick.name': '踢球',
   'entities.abilities.sport_kick.description': '沿地面把球踢向瞄准点。',
   'entities.abilities.sport_shoot.name': '射门',
@@ -6026,4 +6003,65 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'entities.abilities.sport_shoulder.description': '一记符合丰收休战规矩的肩撞，把对手撞得摔离球。',
   'entities.abilities.sport_second_wind.name': '重振旗鼓',
   'entities.abilities.sport_second_wind.description': '找回状态：移动速度提高50%，持续4秒。',
+  'entities.npcs.bursar_fernando.name': '司库费尔南多',
+  'entities.npcs.bursar_fernando.title': '镀金保险箱',
+  'entities.npcs.bursar_fernando.greeting': '欢迎来到镀金保险箱。你的财物在我们的锁后安然无恙。',
+  'entities.npcs.bursar_petra_vell.name': '司库佩特拉·维尔',
+  'entities.npcs.bursar_petra_vell.title': '镀金保险箱',
+  'entities.npcs.bursar_petra_vell.greeting':
+    '镀金保险箱账目清晰，金库更是一尘不染。想让我们为你存放些什么？',
+  'entities.npcs.bursar_aldous_crane.name': '司库奥尔多斯·克莱恩',
+  'entities.npcs.bursar_aldous_crane.title': '镀金保险箱',
+  'entities.npcs.bursar_aldous_crane.greeting':
+    '每一只木箱、每一个钱柜、每一件饰物，交给镀金保险箱都万无一失。',
+  'guide.economy.bankBody':
+    '每座主城都设有镀金保险箱的分号，它是这片大陆的银行商号。与那里的司库交谈即可打开你的保险库：一处背包之外的私人储物空间，伴随角色终身。无论你下次造访哪家分号，寄存的物品都会安然等候。',
+  'guide.economy.bankHow':
+    '保险库打开后，点击背包中的物品即可存入，点击保险库中的物品即可取回。保险库只存放物品，不存放钱币，任务物品也会留在你身上。旅途中背包装满时，还有一个按钮可将全部制造材料一键存入。',
+  'guide.economy.bankSlots':
+    '新开的保险库空间不大，但会随你一同成长。司库出售更多格位，价格逐级走高；在线游玩还能获得额外空间，例如验证邮箱、关联账号，以及引荐好友加入游戏。',
+  'guide.economy.bankTitle': '银行',
+  'hudChrome.bank.title': '银行',
+  'hudChrome.bank.subtitle': '镀金保险箱',
+  'hudChrome.bank.close': '关闭银行',
+  'hudChrome.bank.capacity': '{used}/{total}',
+  'hudChrome.bank.capacityAria': '银行格已用：{used}/{total}',
+  'hudChrome.bank.empty': '你的银行是空的。',
+  'hudChrome.bank.tooFar': '你必须站在银行家旁才能查看银行。',
+  'hudChrome.bank.buySlots': '购买 {count} 个格子',
+  'hudChrome.bank.buySlotsMaxed': '已完全扩展',
+  'hudChrome.bank.buyConfirm': '花费 {price} 购买 {count} 个额外的银行格子吗？',
+  'hudChrome.bank.buyConfirmAccept': '购买',
+  'hudChrome.bank.withdrawHint': '点击取出',
+  'hudChrome.bank.withdrawPartialHint': 'Shift+点击取出部分数量',
+  'hudChrome.bank.depositHint': '点击存入',
+  'hudChrome.bank.depositPartialHint': 'Shift+点击存入部分数量',
+  'hudChrome.bank.cannotDeposit': '无法存入银行',
+  'hudChrome.bank.depositQuantityTitle': '存入 {item}',
+  'hudChrome.bank.depositQuantityInput': '要存入的数量',
+  'hudChrome.bank.depositQuantityConfirm': '存入',
+  'hudChrome.bank.withdrawQuantityTitle': '取出 {item}',
+  'hudChrome.bank.withdrawQuantityInput': '要取出的数量',
+  'hudChrome.bank.withdrawQuantityConfirm': '取出',
+  'hudChrome.bank.filterGroupAria': '按类别筛选银行',
+  'hudChrome.bank.sortAria': '排序银行物品',
+  'hudChrome.bank.searchAria': '按名称搜索银行物品',
+  'hudChrome.bank.depositAll': '存入所有材料',
+  'hudChrome.bank.depositAllDone': '已存入材料：{count}。',
+  'hudChrome.bank.depositAllFull': '已存入材料：{count}。银行已满。',
+  'hudChrome.bank.depositAllNone': '银行已满：未存入任何物品。',
+  'hudChrome.bank.bonusTitle': '奖励格子',
+  'hudChrome.bank.bonusEarned': '+{count}',
+  'hudChrome.bank.bonusStatusEarned': '+{count}',
+  'hudChrome.bank.bonusSourceEmail': '已验证邮箱',
+  'hudChrome.bank.bonusSourceDiscord': '已绑定 Discord',
+  'hudChrome.bank.bonusSourceWallet': '已绑定钱包',
+  'hudChrome.bank.bonusSourceReferral': '已推荐的好友',
+  'hudChrome.bank.bonusAdvertEmail': '验证邮箱可获得 2 个格子。',
+  'hudChrome.bank.bonusAdvertDiscord': '绑定 Discord 可获得 2 个格子。',
+  'hudChrome.bank.bonusAdvertWallet': '绑定钱包可获得 2 个格子。',
+  'hudChrome.bank.bonusReferralProgress': '{count}/{cap}',
+  'hudChrome.bank.bonusReferralExplainer':
+    '邀请好友：当好友升到 10 级，你们各获得 2 个格子，最多 5 位好友。',
+  'hudChrome.bank.bonusSectionAria': '奖励银行格子及获取方式',
 };

@@ -1307,6 +1307,50 @@ export const tr_TR: EnTranslations = {
         "takeParcelsFirst": "Mektubu atmadan önce paketleri çıkar."
       }
     },
+    "bank": {
+      "title": "Banka",
+      "subtitle": "Yaldızlı Kasa",
+      "close": "Bankayı kapat",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Kullanılan banka yuvaları: {used} / {total}",
+      "empty": "Bankan boş.",
+      "tooFar": "Bankanı görmek için bir bankacının yanında olmalısın.",
+      "buySlots": "{count} yuva satın al",
+      "buySlotsMaxed": "Tamamen genişletildi",
+      "buyConfirm": "{price} karşılığında {count} ek banka yuvası satın alınsın mı?",
+      "buyConfirmAccept": "Satın Al",
+      "withdrawHint": "Çekmek için tıkla",
+      "withdrawPartialHint": "Bir kısmını çekmek için Shift ile tıkla",
+      "depositHint": "Yatırmak için tıkla",
+      "depositPartialHint": "Bir kısmını yatırmak için Shift ile tıkla",
+      "cannotDeposit": "Bankaya konulamaz",
+      "depositQuantityTitle": "{item} yatır",
+      "depositQuantityInput": "Yatırılacak miktar",
+      "depositQuantityConfirm": "Yatır",
+      "withdrawQuantityTitle": "{item} çek",
+      "withdrawQuantityInput": "Çekilecek miktar",
+      "withdrawQuantityConfirm": "Çek",
+      "filterGroupAria": "Bankayı kategoriye göre filtrele",
+      "sortAria": "Banka eşyalarını sırala",
+      "searchAria": "Banka eşyalarını ada göre ara",
+      "depositAll": "Tüm malzemeleri yatır",
+      "depositAllDone": "Yatırılan malzeme: {count}.",
+      "depositAllFull": "Yatırılan malzeme: {count}. Banka artık dolu.",
+      "depositAllNone": "Banka dolu: hiçbir şey yatırılmadı.",
+      "bonusTitle": "Bonus yuvalar",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Doğrulanmış e-posta",
+      "bonusSourceDiscord": "Discord bağlandı",
+      "bonusSourceWallet": "Cüzdan bağlandı",
+      "bonusSourceReferral": "Davet edilen arkadaşlar",
+      "bonusAdvertEmail": "2 yuva kazanmak için e-postanı doğrula.",
+      "bonusAdvertDiscord": "2 yuva kazanmak için Discord hesabını bağla.",
+      "bonusAdvertWallet": "2 yuva kazanmak için bir cüzdan bağla.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Bir arkadaşını davet et: arkadaşın 10. seviyeye ulaştığında ikiniz de 2 yuva kazanırsınız (en fazla 5 arkadaş).",
+      "bonusSectionAria": "Bonus banka yuvaları ve daha fazlasını kazanmanın yolları"
+    },
     "calendar": {
       "title": "Etkinlik Takvimi",
       "close": "Takvimi kapat",
@@ -2327,6 +2371,10 @@ export const tr_TR: EnTranslations = {
       "vendorsBody": "Kasabalar ve karakollar, her biri kendi alanında uzman tüccarlarla doludur. Erzakçılar yiyecek ve içecek satar, silah ustaları ve zırhçılar teçhizat taşır ve bir levazımcı pratik yolculuk gereçleri bulundurur. Ne sattıklarını görmek için birinin yanına gidin.",
       "marksTitle": "İkinci bir para birimi: Mağara Nişanları",
       "marksBody": "Biriktirdiğiniz tek şey para değildir. Mağara seferleri, yalnızca mağara seferi bekçisinde yoldaş geliştirmelerine ve başka yerde bulamayacağınız teçhizata harcadığınız ayrı bir para birimi olan Mağara Nişanları öder. Asla paranıza karışmazlar.",
+      "bankTitle": "Banka",
+      "bankBody": "Her merkez kasabada diyarın bankacılık müessesesi olan Yaldızlı Kasa'nın bir şubesi bulunur. Oradaki veznedarla konuşarak kasanı aç: çantalarının ötesinde, karakterinin ömür boyu elinde tuttuğu özel bir depo. Oraya bıraktığın her şey, bir sonraki sefer hangi şubeye uğrarsan uğra, güvenle bekler.",
+      "bankHow": "Kasan açıkken, çantandaki bir eşyaya tıklayarak onu yatır; kasadaki eşyaya tıklayarak geri al. Kasa yalnızca eşya tutar, asla para tutmaz; görev eşyaları da sende kalır. Yol ortasında çantaların dolduğunda, tek bir düğme bütün zanaat malzemelerini bir seferde içeri süpürür.",
+      "bankSlots": "Yeni açılmış bir kasa küçük başlar ve seninle birlikte büyür. Veznedar, giderek artan fiyatlarla para karşılığında ek yuvalar satar; çevrimiçi oynamak ise bunun üzerine bonus yer kazandırır: doğrulanmış bir e-posta, bağlanmış hesaplar ve oyuna getirdiğin arkadaşlar gibi şeyler için.",
       "buyingTitle": "Alım ve satım",
       "buyingBody": "Penceresini açmak için bir tüccarın yanında durun. Paranız yeterse stoklarındaki her şeyi satın alabilir ve çantanızdakilerin çoğunu altın karşılığında satabilirsiniz. Yanlışlıkla bir şey satarsanız, satıcı son satışlarınızı tutar ve onları geri satın alabilirsiniz.",
       "junkTitle": "Hurdaları temizleme",
@@ -7329,6 +7377,21 @@ export const tr_TR: EnTranslations = {
         "name": "Mezatçı Voss",
         "title": "World Market Bekçisi",
         "greeting": "World Market burada da açık, {className}. Diyardaki her maceracıdan alışveriş yap ya da kendi mallarını sergile."
+      },
+      "bursar_fernando": {
+        "name": "Veznedar Fernando",
+        "title": "Yaldızlı Kasa",
+        "greeting": "Yaldızlı Kasa'ya hoş geldin. Malların kilitlerimizin ardında güvenle durur."
+      },
+      "bursar_petra_vell": {
+        "name": "Veznedar Petra Vell",
+        "title": "Yaldızlı Kasa",
+        "greeting": "Yaldızlı Kasa'nın defterleri temiz, kasaları daha da temizdir. Senin için ne saklayalım?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Veznedar Aldous Crane",
+        "title": "Yaldızlı Kasa",
+        "greeting": "Her sandık, her çekmece, her biblo Yaldızlı Kasa'da güvendedir."
       },
       "brother_aldric_raid": {
         "name": "Birader Aldric",

@@ -1307,6 +1307,50 @@ export const ja_JP: EnTranslations = {
         "takeParcelsFirst": "手紙を捨てる前に小包を取り出してください。"
       }
     },
+    "bank": {
+      "title": "銀行",
+      "subtitle": "金張りの金庫",
+      "close": "銀行を閉じる",
+      "capacity": "{used}/{total}",
+      "capacityAria": "使用中の銀行スロット: {total}個中{used}個",
+      "empty": "銀行は空です。",
+      "tooFar": "銀行を利用するには銀行員のそばにいる必要があります。",
+      "buySlots": "スロットを{count}個購入",
+      "buySlotsMaxed": "完全に拡張済み",
+      "buyConfirm": "{price}で銀行スロットを追加で{count}個購入しますか？",
+      "buyConfirmAccept": "購入",
+      "withdrawHint": "クリックで引き出す",
+      "withdrawPartialHint": "Shift+クリックで一部だけ引き出す",
+      "depositHint": "クリックで預ける",
+      "depositPartialHint": "Shift+クリックで一部だけ預ける",
+      "cannotDeposit": "銀行に預けられません",
+      "depositQuantityTitle": "{item}を預ける",
+      "depositQuantityInput": "預ける数量",
+      "depositQuantityConfirm": "預ける",
+      "withdrawQuantityTitle": "{item}を引き出す",
+      "withdrawQuantityInput": "引き出す数量",
+      "withdrawQuantityConfirm": "引き出す",
+      "filterGroupAria": "銀行をカテゴリーで絞り込む",
+      "sortAria": "銀行のアイテムを並べ替える",
+      "searchAria": "名前で銀行のアイテムを検索",
+      "depositAll": "すべての素材を預ける",
+      "depositAllDone": "素材を預けました：{count}。",
+      "depositAllFull": "素材を預けました：{count}。銀行がいっぱいになりました。",
+      "depositAllNone": "銀行がいっぱいです：何も預けられませんでした。",
+      "bonusTitle": "ボーナススロット",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "メール認証済み",
+      "bonusSourceDiscord": "Discord連携済み",
+      "bonusSourceWallet": "ウォレット連携済み",
+      "bonusSourceReferral": "招待した友達",
+      "bonusAdvertEmail": "メールを認証すると2スロット獲得できます。",
+      "bonusAdvertDiscord": "Discordを連携すると2スロット獲得できます。",
+      "bonusAdvertWallet": "ウォレットを連携すると2スロット獲得できます。",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "友達を招待しましょう：友達がレベル10に達すると、お互いに2スロット獲得できます。友達は最大5人までです。",
+      "bonusSectionAria": "ボーナス銀行スロットと獲得方法"
+    },
     "calendar": {
       "title": "イベントカレンダー",
       "close": "カレンダーを閉じる",
@@ -2327,6 +2371,10 @@ export const ja_JP: EnTranslations = {
       "vendorsBody": "町や前哨地には商人が点在し、それぞれ専門の商いを持っています。糧食商は食べ物と飲み物を、武器鍛冶や防具師は装備を、需品係は実用的な旅の道具を取り揃えています。歩み寄れば、その品揃えを見られます。",
       "marksTitle": "もう一つの通貨: デルヴの刻印",
       "marksBody": "貯められるのは所持金だけではありません。デルヴではデルヴの刻印が手に入ります。これはデルヴの番人のもとでのみ使える別建ての通貨で、仲間の強化や、ほかでは手に入らない装備に充てられます。所持金と混ざることはありません。",
+      "bankTitle": "銀行",
+      "bankBody": "各拠点の町には、この地の銀行商会である金張りの金庫の支店があります。そこの出納官に話しかけると自分の金庫が開きます。バッグとは別の私的な収納で、キャラクターが生涯持ち続けるものです。預けた品は、次にどの支店を訪れてもそのまま安全に待っています。",
+      "bankHow": "金庫を開いた状態でバッグの品をクリックすると預けられ、金庫の品をクリックすると引き出せます。金庫に入るのは品物だけで、コインは預けられず、クエストアイテムも手元に残ります。旅の途中でバッグがいっぱいになったら、製作素材をまとめて預けるボタンもあります。",
+      "bankSlots": "作りたての金庫は小さめですが、あなたとともに広がっていきます。出納官は追加の枠をコインで販売しており、値段は段階ごとに上がります。さらにオンラインでのプレイなら、メール認証やアカウント連携、友人の紹介などでボーナスの空きも手に入ります。",
       "buyingTitle": "売買",
       "buyingBody": "商人のそばに立つと、その取引窓が開きます。お金が足りれば品揃えのどれでも買え、バッグの中のほとんどのものをコインに換えて売れます。間違って何かを売ってしまっても、商人は最近の売却品を取り置いてくれるので、買い戻すことができます。",
       "junkTitle": "がらくたの整理",
@@ -7329,6 +7377,21 @@ export const ja_JP: EnTranslations = {
         "name": "競売人ヴォス",
         "title": "世界市場の守り手",
         "greeting": "世界市場はここでも利用できます、{className}。王国中の冒険者から買うことも、自分の品を売ることもできます。"
+      },
+      "bursar_fernando": {
+        "name": "出納官フェルナンド",
+        "title": "金張りの金庫",
+        "greeting": "金張りの金庫へようこそ。あなたの品々は我々の錠の内で安全に保管されます。"
+      },
+      "bursar_petra_vell": {
+        "name": "出納官ペトラ・ヴェル",
+        "title": "金張りの金庫",
+        "greeting": "金張りの金庫は帳簿も金庫室も清く保っています。何をお預かりしましょうか？"
+      },
+      "bursar_aldous_crane": {
+        "name": "出納官アルダス・クレイン",
+        "title": "金張りの金庫",
+        "greeting": "どんな木箱も、金櫃も、装身具も、金張りの金庫にお預けいただければ安全です。"
       },
       "brother_aldric_raid": {
         "name": "アルドリック修道士",

@@ -1307,6 +1307,50 @@ export const id_ID: EnTranslations = {
         "takeParcelsFirst": "Keluarkan bingkisannya dulu sebelum membuang surat itu."
       }
     },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "Brankas Bersepuh Emas",
+      "close": "Tutup bank",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Slot bank terpakai: {used} dari {total}",
+      "empty": "Bankmu kosong.",
+      "tooFar": "Kamu harus berada di dekat bankir untuk melihat bankmu.",
+      "buySlots": "Beli {count} slot",
+      "buySlotsMaxed": "Sudah diperluas penuh",
+      "buyConfirm": "Beli {count} slot bank tambahan seharga {price}?",
+      "buyConfirmAccept": "Beli",
+      "withdrawHint": "Klik untuk menarik",
+      "withdrawPartialHint": "Shift-klik untuk menarik sebagian",
+      "depositHint": "Klik untuk menyetor",
+      "depositPartialHint": "Shift-klik untuk menyetor sebagian",
+      "cannotDeposit": "Tidak dapat disimpan di bank",
+      "depositQuantityTitle": "Setor {item}",
+      "depositQuantityInput": "Jumlah yang disetor",
+      "depositQuantityConfirm": "Setor",
+      "withdrawQuantityTitle": "Tarik {item}",
+      "withdrawQuantityInput": "Jumlah yang ditarik",
+      "withdrawQuantityConfirm": "Tarik",
+      "filterGroupAria": "Saring bank menurut kategori",
+      "sortAria": "Urutkan barang bank",
+      "searchAria": "Cari barang bank menurut nama",
+      "depositAll": "Setor semua bahan",
+      "depositAllDone": "Bahan disetor: {count}.",
+      "depositAllFull": "Bahan disetor: {count}. Bank kini penuh.",
+      "depositAllNone": "Bank penuh: tidak ada yang disetor.",
+      "bonusTitle": "Slot bonus",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Email terverifikasi",
+      "bonusSourceDiscord": "Discord tertaut",
+      "bonusSourceWallet": "Dompet tertaut",
+      "bonusSourceReferral": "Teman yang dirujuk",
+      "bonusAdvertEmail": "Verifikasi emailmu untuk mendapat 2 slot.",
+      "bonusAdvertDiscord": "Tautkan Discord-mu untuk mendapat 2 slot.",
+      "bonusAdvertWallet": "Tautkan dompet untuk mendapat 2 slot.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Undang seorang teman: saat ia mencapai level 10, kalian masing-masing mendapat 2 slot, hingga 5 teman.",
+      "bonusSectionAria": "Slot bank bonus dan cara mendapat lebih banyak"
+    },
     "calendar": {
       "title": "Kalender Acara",
       "close": "Tutup kalender",
@@ -2327,6 +2371,10 @@ export const id_ID: EnTranslations = {
       "vendorsBody": "Kota dan pos terdepan bertaburan pedagang, masing-masing dengan dagangannya sendiri. Penyedia perbekalan menjual makanan dan minuman, pandai senjata dan pembuat zirah menjajakan perlengkapan, dan seorang juru bekal menyimpan perlengkapan perjalanan yang praktis. Hampirilah salah satunya untuk melihat apa yang mereka jual.",
       "marksTitle": "Mata uang kedua: Tanda Delve",
       "marksBody": "Koin bukan satu-satunya yang kamu simpan. Delve membayar Tanda Delve, mata uang terpisah yang hanya kamu belanjakan di penjaga delve, untuk peningkatan pendamping dan perlengkapan yang tak akan kamu temukan di tempat lain. Tanda ini tak pernah bercampur dengan koinmu.",
+      "bankTitle": "Bank",
+      "bankBody": "Setiap kota pusat memiliki cabang Brankas Bersepuh Emas, rumah perbankan realm ini. Bicaralah dengan bendahara di sana untuk membuka lemari besimu, ruang simpanan pribadi di luar tasmu yang dimiliki karaktermu seumur hidup. Apa pun yang kamu titipkan pada mereka menunggu dengan aman, di cabang mana pun yang kamu kunjungi berikutnya.",
+      "bankHow": "Saat lemari besi terbuka, klik sebuah barang di tasmu untuk menyetorkannya dan klik barang itu di lemari besi untuk mengambilnya kembali. Lemari besi hanya menampung barang, tidak pernah koin, dan barang misi tetap bersamamu. Saat tasmu penuh di tengah perjalanan, satu tombol menyapu semua bahan kerajinanmu masuk sekaligus.",
+      "bankSlots": "Lemari besi yang baru mulai dari ukuran kecil dan tumbuh bersamamu. Bendahara menjual slot tambahan dengan koin pada harga yang kian menanjak, dan bermain online memberi ruang bonus di atasnya, untuk hal-hal seperti email terverifikasi, akun tertaut, dan teman yang kamu ajak masuk ke dalam permainan.",
       "buyingTitle": "Membeli dan menjual",
       "buyingBody": "Berdirilah di dekat seorang pedagang untuk membuka jendelanya. Kamu bisa membeli apa pun yang mereka jual jika kamu mampu, dan menjual sebagian besar isi tasmu untuk koin. Jika kamu menjual sesuatu secara tidak sengaja, penjaja akan menyimpan penjualan terakhirmu agar kamu bisa membelinya kembali.",
       "junkTitle": "Membereskan barang rongsokan",
@@ -7329,6 +7377,21 @@ export const id_ID: EnTranslations = {
         "name": "Pelelang Voss",
         "title": "Penjaga World Market",
         "greeting": "World Market juga buka di sini, {className}. Belilah dari setiap petualang di alam ini, atau gelarlah daganganmu sendiri."
+      },
+      "bursar_fernando": {
+        "name": "Bendahara Fernando",
+        "title": "Brankas Bersepuh Emas",
+        "greeting": "Selamat datang di Brankas Bersepuh Emas. Barang-barangmu tersimpan aman di balik kunci-kunci kami."
+      },
+      "bursar_petra_vell": {
+        "name": "Bendahara Petra Vell",
+        "title": "Brankas Bersepuh Emas",
+        "greeting": "Brankas Bersepuh Emas menjaga buku kas yang bersih dan lemari besi yang lebih bersih lagi. Apa yang hendak kami simpankan untukmu?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Bendahara Aldous Crane",
+        "title": "Brankas Bersepuh Emas",
+        "greeting": "Setiap peti, kotak harta, dan pernak-pernik aman bersama Brankas Bersepuh Emas."
       },
       "brother_aldric_raid": {
         "name": "Bruder Aldric",

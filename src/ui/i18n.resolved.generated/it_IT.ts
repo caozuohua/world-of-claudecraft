@@ -1307,6 +1307,50 @@ export const it_IT: EnTranslations = {
         "takeParcelsFirst": "Ritira i pacchi prima di scartare la lettera."
       }
     },
+    "bank": {
+      "title": "Banca",
+      "subtitle": "Il Forziere Dorato",
+      "close": "Chiudi la banca",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Spazi della banca usati: {used} di {total}",
+      "empty": "La tua banca è vuota.",
+      "tooFar": "Devi essere da un banchiere per consultare la tua banca.",
+      "buySlots": "Compra {count} spazi",
+      "buySlotsMaxed": "Ampliata al massimo",
+      "buyConfirm": "Acquistare {count} spazi aggiuntivi della banca per {price}?",
+      "buyConfirmAccept": "Acquista",
+      "withdrawHint": "Clicca per ritirare",
+      "withdrawPartialHint": "Maiusc + clic per ritirare una quantità parziale",
+      "depositHint": "Clicca per depositare",
+      "depositPartialHint": "Maiusc + clic per depositare una quantità parziale",
+      "cannotDeposit": "Non depositabile in banca",
+      "depositQuantityTitle": "Deposita {item}",
+      "depositQuantityInput": "Quantità da depositare",
+      "depositQuantityConfirm": "Deposita",
+      "withdrawQuantityTitle": "Ritira {item}",
+      "withdrawQuantityInput": "Quantità da ritirare",
+      "withdrawQuantityConfirm": "Ritira",
+      "filterGroupAria": "Filtra la banca per categoria",
+      "sortAria": "Ordina gli oggetti della banca",
+      "searchAria": "Cerca gli oggetti della banca per nome",
+      "depositAll": "Deposita tutti i materiali",
+      "depositAllDone": "Materiali depositati: {count}.",
+      "depositAllFull": "Materiali depositati: {count}. Ora la banca è piena.",
+      "depositAllNone": "Banca piena: non è stato depositato nulla.",
+      "bonusTitle": "Spazi bonus",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Email verificata",
+      "bonusSourceDiscord": "Discord collegato",
+      "bonusSourceWallet": "Portafoglio collegato",
+      "bonusSourceReferral": "Amici invitati",
+      "bonusAdvertEmail": "Verifica la tua email per guadagnare 2 spazi.",
+      "bonusAdvertDiscord": "Collega il tuo Discord per guadagnare 2 spazi.",
+      "bonusAdvertWallet": "Collega un portafoglio per guadagnare 2 spazi.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Invita un amico: quando raggiunge il livello 10 guadagnate 2 spazi ciascuno, fino a 5 amici.",
+      "bonusSectionAria": "Spazi bonus della banca e come guadagnarne altri"
+    },
     "calendar": {
       "title": "Calendario degli Eventi",
       "close": "Chiudi calendario",
@@ -2327,6 +2371,10 @@ export const it_IT: EnTranslations = {
       "vendorsBody": "Città e avamposti sono disseminati di mercanti, ognuno con il proprio commercio. I provvigionieri tengono cibo e bevande, armaioli e fabbri portano equipaggiamento, e un quartiermastro tiene attrezzatura pratica da viaggio. Avvicinati a uno per vedere cosa vende.",
       "marksTitle": "Una seconda valuta: i Sigilli d'Incursione",
       "marksBody": "Le monete non sono l'unica cosa che metti da parte. Le incursioni pagano in Sigilli d'Incursione, una valuta separata che spendi solo dal custode delle incursioni, in potenziamenti per la compagna ed equipaggiamento che non troverai altrove. Non si mescolano mai con le tue monete.",
+      "bankTitle": "La banca",
+      "bankBody": "Ogni città principale ospita una filiale del Forziere Dorato, la casa bancaria del reame. Parla con l'economo del posto per aprire il tuo caveau, una riserva privata di spazio oltre le tue borse che il tuo personaggio conserva per tutta la vita. Qualunque cosa lasci in custodia ti aspetta al sicuro, quale che sia la filiale che visiterai la prossima volta.",
+      "bankHow": "Con il caveau aperto, clicca un oggetto nelle borse per depositarlo e cliccalo nel caveau per riprenderlo. Il caveau custodisce solo beni, mai monete, e gli oggetti missione restano con te. Quando le borse si riempiono a metà viaggio, un solo pulsante vi riversa in una volta sola tutti i tuoi materiali da artigianato.",
+      "bankSlots": "Un caveau nuovo parte piccolo e cresce con te. L'economo vende altri spazi in cambio di monete a prezzi sempre più ripidi, e giocare online frutta spazio bonus in aggiunta, per cose come un'email verificata, gli account collegati e gli amici che porti nel gioco.",
       "buyingTitle": "Comprare e vendere",
       "buyingBody": "Avvicinati a un mercante per aprire la sua finestra. Puoi comprare qualunque cosa abbia in vendita, se te la puoi permettere, e vendere gran parte di ciò che hai nelle borse in cambio di monete. Se vendi qualcosa per errore, un venditore ti terrà da parte le tue vendite recenti così potrai riacquistarle.",
       "junkTitle": "Liberarsi delle cianfrusaglie",
@@ -7329,6 +7377,21 @@ export const it_IT: EnTranslations = {
         "name": "Banditore Voss",
         "title": "Custode del World Market",
         "greeting": "Il World Market e aperto anche qui, {className}. Compra da ogni avventuriero del reame, o metti in vendita le tue merci."
+      },
+      "bursar_fernando": {
+        "name": "Economo Fernando",
+        "title": "Il Forziere Dorato",
+        "greeting": "Ti diamo il benvenuto al Forziere Dorato. I tuoi beni riposano al sicuro dietro le nostre serrature."
+      },
+      "bursar_petra_vell": {
+        "name": "Economa Petra Vell",
+        "title": "Il Forziere Dorato",
+        "greeting": "Il Forziere Dorato tiene registri puliti e caveau ancora più puliti. Cosa possiamo custodire per te?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Economo Aldous Crane",
+        "title": "Il Forziere Dorato",
+        "greeting": "Ogni cassa, scrigno e ninnolo è al sicuro presso il Forziere Dorato."
       },
       "brother_aldric_raid": {
         "name": "Fratello Aldric",

@@ -1104,6 +1104,17 @@ export const ZONE3_NPCS: Record<string, NpcDef> = {
     greeting:
       'The World Market is open here too, $C. Buy from every adventurer in the realm, or set out your own wares.',
   },
+  bursar_aldous_crane: {
+    id: 'bursar_aldous_crane',
+    name: 'Bursar Aldous Crane',
+    title: 'The Gilded Strongbox',
+    pos: { x: -12, z: 663 },
+    facing: Math.PI / 2,
+    color: 0xc9a227,
+    questIds: [],
+    banker: true,
+    greeting: 'Every crate, coffer, and trinket is safe with the Gilded Strongbox.',
+  },
 };
 
 // ---------------------------------------------------------------------------

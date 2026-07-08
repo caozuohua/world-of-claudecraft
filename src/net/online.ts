@@ -53,6 +53,7 @@ import {
 import {
   type AccountCosmetics,
   type ArenaInfo,
+  type BankInfo,
   type CharacterSearchResult,
   type ClientCommand,
   type CraftResultView,
@@ -980,6 +981,10 @@ export class ClientWorld implements IWorld {
   // snapshot self (`s.mail` / `s.mailU`, delta-omitted). ---
   mailInfo: MailInfo | null = null;
   mailUnread = 0;
+  // --- IWorldBank: personal-bank contents view, mirrored from the snapshot self
+  // (`s.bank`, delta-omitted). Null away from a banker (proximity-gated by the
+  // server), so it only rides the wire while the player stands at a bursar. ---
+  bankInfo: BankInfo | null = null;
   // --- IWorldDelves: active delve run + companion + marks/upgrades + daily, all
   // mirrored from the snapshot self (delta-omitted). lockpickState is the exception:
   // it has NO snapshot field and is rebuilt from the lockpick* events by the private
@@ -1866,6 +1871,10 @@ export class ClientWorld implements IWorld {
       if (s.market !== undefined) this.marketInfo = s.market;
       if (s.mail !== undefined) this.mailInfo = s.mail;
       if (s.mailU !== undefined) this.mailUnread = s.mailU ?? 0;
+      // `bank` is delta-omitted when unchanged (an omitted key means unchanged, NOT
+      // "no bank"); away from a banker the server encodes it as null. Never default
+      // to null/empty on omission, that would wipe an open bank window's mirror.
+      if (s.bank !== undefined) this.bankInfo = s.bank;
       if (s.lroll !== undefined) this.lootRollPrompts = s.lroll ?? [];
       if (s.drun !== undefined) this.delveRun = s.drun;
       if (s.dcompanion !== undefined) this.companionState = s.dcompanion;
@@ -2430,6 +2439,20 @@ export class ClientWorld implements IWorld {
   }
   mailMarkRead(mailId: number): void {
     this.cmd({ cmd: 'mail_read', id: mailId });
+  }
+  // --- IWorldBank: personal-bank deposit/withdraw/buy-slots (snake_case wire
+  // strings). bankInfo is a snapshot read (the mirror field above); the server
+  // re-validates banker proximity, capacity, and quest-item rules on every send. The
+  // slotIndex rides as `slot` and the optional partial count as `count`, matching the
+  // castAbilityBySlot/discard wire idiom. ---
+  bankDeposit(slotIndex: number, count?: number): void {
+    this.cmd({ cmd: 'bank_deposit', slot: slotIndex, ...(count !== undefined ? { count } : {}) });
+  }
+  bankWithdraw(slotIndex: number, count?: number): void {
+    this.cmd({ cmd: 'bank_withdraw', slot: slotIndex, ...(count !== undefined ? { count } : {}) });
+  }
+  bankBuySlots(): void {
+    this.cmd({ cmd: 'bank_buy_slots' });
   }
   // --- IWorldDungeons: dungeon enter/leave sends + the raid-lockout countdown read.
   // selfLockouts mirrors the snapshot `s.lockouts`; raidLockouts derives the live
