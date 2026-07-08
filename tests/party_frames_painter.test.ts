@@ -350,7 +350,14 @@ describe('PartyFramesPainter: keyed pool over the elided writers', () => {
     );
   });
 
-  const rows = () => container.childNodes.filter((c) => c.tagName === 'DIV');
+  // The member rows nest one level down in the .party-rows wrapper now (the container's
+  // only DIV child is the wrapper itself). Resolve the wrapper, then its member-row DIVs.
+  const wrapperOf = () =>
+    container.childNodes.find((c) => String(c.className).includes('party-rows'));
+  const rows = () => {
+    const w = wrapperOf();
+    return w ? w.childNodes.filter((c) => c.tagName === 'DIV') : [];
+  };
 
   it('attaches click/contextmenu/keydown ONCE per pooled row across rebuilds (no dup listeners)', () => {
     painter.sync([member({ pid: 2, name: 'Alice' })], 1, false);
@@ -416,8 +423,8 @@ describe('PartyFramesPainter: keyed pool over the elided writers', () => {
   it('orders rows in member order with the leave button last', () => {
     painter.sync([member({ pid: 2 }), member({ pid: 3 }), member({ pid: 4 })], 1, false);
     const kids = container.childNodes;
-    expect(kids.filter((c) => c.tagName === 'DIV')).toHaveLength(3);
-    expect(kids[kids.length - 1].tagName).toBe('BUTTON'); // leave button last
+    expect(rows()).toHaveLength(3); // three member rows inside the wrapper
+    expect(kids[kids.length - 1].tagName).toBe('BUTTON'); // leave button last (container child)
   });
 
   it('reconciles DOM order on reorder + partial-membership churn, reusing the SAME nodes, leave last', () => {
@@ -625,13 +632,36 @@ describe('PartyFramesPainter: keyed pool over the elided writers', () => {
     expect(toggles).toBe(1);
   });
 
-  it('keeps the chip first even after a member sync (chip, then rows, leave last)', () => {
+  it('keeps the chip first even after a member sync (chip, then rows wrapper, leave last)', () => {
     painter.setCollapse(true, true, false, false);
     painter.sync([member({ pid: 2 }), member({ pid: 3 })], 1, false);
     const kids = container.childNodes;
     expect(kids[0].id).toBe(chipId);
-    expect(kids.filter((c) => c.tagName === 'DIV')).toHaveLength(2);
+    expect(rows()).toHaveLength(2); // the two member rows live inside the wrapper
     expect(kids[kids.length - 1].tagName).toBe('BUTTON'); // leave last
+  });
+
+  it('F1: an expanded party seats the chip alone on its line, no member frame beside it', () => {
+    // The pre-restructure grid put the chip in column 1 and auto-flowed a member frame
+    // into the cell beside it (column 2 row 1). With the rows nested in the .party-rows
+    // wrapper, the chip is a lone container child: its ONLY direct-child siblings are the
+    // wrapper and the Leave button, and every member frame sits INSIDE the wrapper.
+    painter.setCollapse(true, true, false, false); // mobile, expanded
+    painter.sync([member({ pid: 2 }), member({ pid: 3 }), member({ pid: 4 })], 1, false);
+    const kids = container.childNodes;
+    expect(kids[0].id).toBe(chipId); // chip first
+    const wrap = wrapperOf() as FakeEl;
+    expect(wrap).toBeTruthy();
+    // No member frame is a DIRECT child of the container (none flows beside the chip).
+    expect(container.childNodes.some((c) => String(c.className).includes('party-frame'))).toBe(
+      false,
+    );
+    // All three member rows nest inside the wrapper; the chip is not among them.
+    expect(rows()).toHaveLength(3);
+    expect(wrap.childNodes.some((c) => c.id === chipId)).toBe(false);
+    // Leave button is the container's last child, after the rows wrapper.
+    expect(kids[kids.length - 1].tagName).toBe('BUTTON');
+    expect(container.childNodes.indexOf(wrap)).toBeLessThan(kids.length - 1);
   });
 
   it('yields entirely while mobile chat is open: chip removed, no expanded class', () => {

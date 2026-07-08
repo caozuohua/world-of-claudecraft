@@ -13,11 +13,15 @@
 //
 // Reconcile: departed pids detach to a free list (their listeners intact for reuse),
 // kept pids update in place, new pids take a free row or build one. The rows are
-// re-appended in member order with the leave button last (and, on mobile, the collapse
-// chip first). The mobile row-styling rules key on .party-frame:first-of-type /
-// :not(:first-of-type) rather than :first-child, so the chip sitting first does not
-// steal the top member row's rounded corners; appendChild moves a node without dropping
-// its keyboard focus or its listeners.
+// re-parented in member order into a persistent .party-rows WRAPPER (their own element,
+// one level under #party-frames), and the container's own direct children are ordered
+// chip (mobile only), wrapper, master-loot control, leave button. The wrapper is what
+// lets the mobile chip sit alone on its own line: with the rows nested inside it, no
+// member frame can auto-flow beside the chip (the container's mobile column stacks chip,
+// wrapper, and Leave; the 2-column double-stack lives on the wrapper). The mobile
+// row-styling rules key on .party-frame:first-of-type / :not(:first-of-type), which now
+// resolve within the wrapper (only member rows live there); appendChild/insertBefore
+// move a node without dropping its keyboard focus or its listeners.
 
 import { formatNumber, t } from './i18n';
 import type { PainterHostWriters } from './painter_host';
@@ -26,6 +30,7 @@ import { partyChipState } from './party_collapse';
 import {
   createLeaveButton,
   createPartyRow,
+  createPartyRowsWrapper,
   PARTY_CREST_KEY_PREFIX,
   PARTY_LEADER_GLYPH,
   type PartyRow,
@@ -87,6 +92,14 @@ export class PartyFramesPainter {
   // Detached rows kept for reuse (recycling a departed row to a new pid). The row's
   // listeners stay attached and read the live slot, so a recycled row is safe.
   private readonly free: PartyRow[] = [];
+  // The member-rows wrapper: every pooled row nests one level under #party-frames inside
+  // this element, so the chip, the rows, the master-loot control, and Leave stack as a
+  // simple column (the chip alone on its own line). On mobile the wrapper carries the
+  // 2-column auto-flow grid the container used to; on desktop it is display:contents
+  // (transparent), so the rows lay out in the #party-frames flex column exactly as before.
+  // Built lazily on the first sync, then kept in the DOM (detached only by clear(), where
+  // it is retained for reuse); reconcileOrder re-parents rows into it without node churn.
+  private rowsWrapper: HTMLElement | null = null;
   private leaveBtn: HTMLButtonElement | null = null;
   // The mobile collapse chip, built lazily on the first mobile update and then kept
   // in the DOM (first child of the container) while in a party on mobile. Off mobile
@@ -230,15 +243,38 @@ export class PartyFramesPainter {
     this.writers.setText(leave, this.deps.leaveLabel());
   }
 
-  // Walk the desired child sequence (the member rows in order, then the leave
-  // button) against the container's current children, moving a node into place ONLY
-  // when it is not already there. The standard keyed-list reconcile: O(N) compares
-  // and exactly as many insertBefore moves as nodes that actually changed position
-  // (zero when nothing moved). Departed rows were already detached in sync() and
-  // new / recycled rows are detached, so every move here is a deliberate (re)insert
-  // that restores member order; an unchanged order touches the DOM not at all. This
-  // is the pooled-node ordering discipline the auras and FCT pools reuse.
+  private ensureRowsWrapper(): HTMLElement {
+    if (!this.rowsWrapper) this.rowsWrapper = createPartyRowsWrapper(this.doc);
+    return this.rowsWrapper;
+  }
+
+  // Walk the desired child sequence against the current children, moving a node into
+  // place ONLY when it is not already there. The standard keyed-list reconcile: O(N)
+  // compares and exactly as many insertBefore moves as nodes that actually changed
+  // position (zero when nothing moved). Departed rows were already detached in sync()
+  // and new / recycled rows are detached, so every move here is a deliberate (re)insert
+  // that restores member order; an unchanged order touches the DOM not at all. This is
+  // the pooled-node ordering discipline the auras and FCT pools reuse.
+  //
+  // Two passes: (1) order the member rows INSIDE the rows wrapper (their own element,
+  // so no member frame ever flows beside the container-level chip), then (2) order the
+  // container's own direct children: the mobile chip first (when present, the collapse
+  // header above the stack), the rows wrapper, the leader-only master-loot control, and
+  // the leave button last. On desktop the chip is null and the wrapper is
+  // display:contents, so the sequence renders as wrapper's rows, [master], leave, exactly
+  // the pre-wrapper order. A steady-state rebuild moves nothing in EITHER pass.
   private reconcileOrder(rows: PartyRow[], leave: HTMLButtonElement): void {
+    const wrapper = this.ensureRowsWrapper();
+    let rowRef: ChildNode | null = wrapper.firstChild;
+    const placeRow = (node: ChildNode): void => {
+      if (node === rowRef) {
+        rowRef = rowRef.nextSibling;
+      } else {
+        wrapper.insertBefore(node, rowRef);
+      }
+    };
+    for (const row of rows) placeRow(row.el);
+
     let ref: ChildNode | null = this.container.firstChild;
     const place = (node: ChildNode): void => {
       if (node === ref) {
@@ -247,10 +283,8 @@ export class PartyFramesPainter {
         this.container.insertBefore(node, ref);
       }
     };
-    // The mobile chip stays first (it is the collapse header above the stack); on
-    // desktop it is null, so the row order is exactly as before.
     if (this.chip && this.chip.el.parentNode === this.container) place(this.chip.el);
-    for (const row of rows) place(row.el);
+    place(wrapper);
     if (this.masterControl) place(this.masterControl);
     place(leave);
   }
@@ -288,6 +322,10 @@ export class PartyFramesPainter {
     this.leaveBtn?.remove();
     this.masterControl?.remove();
     this.masterControl = null;
+    // Detach the (now empty) rows wrapper too, so a no-party container is truly empty and
+    // not a lone wrapper box; the detached wrapper node is kept for reuse when a party
+    // re-forms (the pooled rows are re-parented back into it by reconcileOrder).
+    this.rowsWrapper?.remove();
     // Drop the chip and its container state classes: leaving a party must not leave a
     // stray chip or a lingering .party-expanded that would style a future desktop
     // stack. The chip node is kept for reuse if a party re-forms on mobile.

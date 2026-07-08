@@ -33,9 +33,13 @@ function read(relPath: string): string {
 // (the old id-then-class regex would have silently missed it).
 function windowIdsFromHtml(html: string): string[] {
   const ids: string[] = [];
-  // Every opening tag's inner attribute text (between `<tag` and the closing `>`),
-  // skipping close tags and comments (both start with `</` / `<!` which the class
-  // excludes). A tag's attributes never contain a raw '>', so [^>]* is safe here.
+  // Every opening tag's inner attribute text (between `<tag` and the closing `>`). The
+  // `<[a-z]` start skips a close tag's `</` and a comment's OWN `<!--` delimiter, but it
+  // does NOT strip HTML comments: a `.window` tag written literally inside `<!-- ... -->`
+  // would still be scraped here. That is acceptable because the failure direction is loud
+  // (a scraped window with no mobile rule and no exception FAILS the coverage assertion),
+  // so a commented-out window can never SILENTLY pass; it just needs an exception entry.
+  // A tag's attributes never contain a raw '>', so [^>]* is safe here.
   for (const tag of html.matchAll(/<[a-z][a-z0-9]*\s+([^>]*?)\/?>/gi)) {
     const attrs = tag[1];
     const idMatch = attrs.match(/\bid="([a-z0-9-]+)"/);

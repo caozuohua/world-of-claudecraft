@@ -435,23 +435,40 @@ describe('client HTML shell', () => {
     }
     // Hidden by default EVERYWHERE via a base rule (so it is not a stray button on
     // desktop, which has no mobile-touch-scoped rule to hide it), then revealed only
-    // under body.mobile-touch.mobile-chat-open (a later @layer wins there).
+    // under body.mobile-touch.mobile-chat-open.mobile-keyboard-open (a later @layer wins
+    // there): the chevron shows ONLY while there is a keyboard to hide, never as a dead
+    // control after it has dropped the keyboard.
     expect(hudCss).toContain('#chat-dismiss {\n    display: none;\n  }');
     expect(hudMobileCss).toContain('body.mobile-touch #chat-dismiss {\n    display: none;');
     const openRule =
-      hudMobileCss.match(/body\.mobile-touch\.mobile-chat-open #chat-dismiss \{([^}]*)\}/)?.[1] ??
-      '';
+      hudMobileCss.match(
+        /body\.mobile-touch\.mobile-chat-open\.mobile-keyboard-open #chat-dismiss \{([^}]*)\}/,
+      )?.[1] ?? '';
     expect(openRule).toMatch(/width:\s*40px/);
     expect(openRule).toMatch(/height:\s*40px/);
+    expect(openRule).toMatch(/display:\s*inline-flex/);
     // The dismiss blur does NOT close chat: the pure seam differentiates it from the
     // close path (recover only when the composer is already hidden).
     expect(mainTs).toContain(
       'if (shouldRecoverOnComposerBlur(chatInput.style.display)) recoverFromMobileKeyboard();',
     );
+    // The wiring pins BOTH the lookup (the literal id string, so a getElementById typo
+    // cannot silently pass) and the blur-only apply.
+    expect(mainTs).toContain("document.getElementById('chat-dismiss')");
     expect(mainTs).toContain('if (effect.blurComposer) chatInput.blur();');
     // Chat surfaces stay full-contrast while open (the idle fade never dims the log/composer).
     expect(hudMobileCss).toContain(
       'body.mobile-touch.mobile-chat-open #chatlog-wrap,\n  body.mobile-touch.mobile-chat-open #chatlog-tabs,\n  body.mobile-touch.mobile-chat-open #chat-input,\n  body.mobile-touch.mobile-chat-open #mobile-chat {\n    opacity: 1;',
+    );
+    // The Chat button is itself #mobile-combat-controls .mobile-btn, so its full-contrast
+    // pin must OUT-SPECIFY the idle fade. The fade carries ONE id (#mobile-combat-controls);
+    // the pin carries TWO (#mobile-combat-controls #mobile-chat), so opacity 1 wins while
+    // chat is open even though .mobile-chrome-idle stays armed during a keyboard reply.
+    expect(hudMobileCss).toContain(
+      'body.mobile-touch.mobile-chrome-idle #mobile-combat-controls .mobile-btn,',
+    );
+    expect(hudMobileCss).toContain(
+      'body.mobile-touch.mobile-chat-open #mobile-combat-controls #mobile-chat {\n    opacity: 1;',
     );
   });
 
@@ -1112,9 +1129,23 @@ describe('client HTML shell', () => {
     expect(hudMobileCss).toContain(
       'body.mobile-touch #party-frames .party-frame:not(:first-of-type) {\n    margin-top: -1px;',
     );
-    expect(hudMobileCss).toContain(
-      'body.mobile-touch #party-frames #party-leave {\n    grid-column: 1;\n    grid-row: 3;\n    justify-self: start;\n    width: auto;\n    min-width: 0;\n    min-height: 40px;',
+    // F1: the container is a simple flex column now (chip, rows wrapper, master-loot,
+    // leave), so the leave button carries no grid placement and no member frame can
+    // auto-flow beside the chip.
+    expect(hudMobileCss).toMatch(
+      /body\.mobile-touch #party-frames \{[^}]*display: flex;[^}]*flex-direction: column;/,
     );
+    expect(hudMobileCss).toContain(
+      'body.mobile-touch #party-frames #party-leave {\n    width: auto;\n    min-width: 0;\n    min-height: 40px;',
+    );
+    expect(hudMobileCss).not.toMatch(/#party-leave \{\n {4}grid-column/);
+    // The double-stack grid the container used to carry moved to the .party-rows WRAPPER;
+    // on desktop the wrapper is transparent (display: contents), so the desktop stack is
+    // unchanged. Both pins guard the two-arm structure.
+    expect(hudMobileCss).toContain(
+      'body.mobile-touch #party-frames .party-rows {\n    display: grid;\n    grid-auto-flow: column;\n    grid-template-rows: repeat(2, auto);',
+    );
+    expect(hudCss).toContain('#party-frames .party-rows {\n    display: contents;\n  }');
     expect(hudMobileCss).toContain(
       'body.mobile-touch #party-frames .party-frame {\n      width: calc(100px * var(--mobile-chrome-scale, 1));\n      min-height: 40px;',
     );
@@ -1791,9 +1822,7 @@ describe('client HTML shell', () => {
     // The compact minimap shrink keeps the arc's vertical budget on a
     // 360px-tall phone holding (the daily-chest rail was folded into the
     // mobile More tray, issue #1577, so it no longer needs a coupled offset).
-    expect(hudMobileCss).toContain(
-      'transform: scale(calc(0.44 * var(--mobile-chrome-scale, 1)));',
-    );
+    expect(hudMobileCss).toContain('transform: scale(calc(0.44 * var(--mobile-chrome-scale, 1)));');
   });
 
   it('gates the camera joystick behind its opt-in setting (swipe-look is the primary camera)', () => {

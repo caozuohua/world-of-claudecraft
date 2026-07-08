@@ -469,18 +469,31 @@ async function readPartyChipState(page) {
   });
 }
 
-// Tap the party chip via a real click (the chip's own listener toggles collapse). The
-// HUD picks up the persisted flip on its next update; nudge one update + settle.
+// Tap the party chip via a HIT-TESTED coordinate tap, NOT a bare chip.click(): a
+// chip.click() dispatches straight to the element and bypasses hit-testing, so an overlay
+// sitting over the chip would go unnoticed. Here we hit-test the chip's centre with
+// elementFromPoint and only tap when the chip (or one of its children) is the TOPMOST
+// element there; an overlay covering the chip would be topmost instead, so this returns
+// false and the expand assertion that follows fails (the class of bug the check guards). A
+// raw CDP touch tap does not synthesize a click in this headless env, so we click the
+// hit-tested topmost node (a click on the chip's label / chevron child bubbles to the
+// chip's own click listener). The HUD picks up the persisted flip on its next update.
 async function tapPartyChip(page) {
-  const clicked = await page.evaluate(() => {
+  const tapped = await page.evaluate(() => {
     const chip = document.getElementById('party-chip');
     if (!chip) return false;
-    chip.click();
+    const r = chip.getBoundingClientRect();
+    if (r.width === 0 && r.height === 0) return false;
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    const top = document.elementFromPoint(cx, cy);
+    if (!top || (top !== chip && !chip.contains(top))) return false; // covered by an overlay
+    top.click();
     window.__game.hud?.update?.(0.05);
     return true;
   });
   await sleep(200);
-  return clicked;
+  return tapped;
 }
 
 // Drive the real mobile chat toggle by dispatching TOUCH pointer events on the Chat
@@ -562,10 +575,14 @@ async function readChatBoxes(page) {
 // Simulate the on-screen keyboard rising: the same body class + viewport var the real
 // keyboard_viewport applier sets off visualViewport (the proven PR #1578 pattern), so
 // the composer + dismiss chevron take their keyboard-open seats without a real keyboard.
+// The var is written INLINE ON BODY exactly as keyboard_viewport_applier.ts writes it
+// (doc.body.style.setProperty, re-run on every resize). Writing it on documentElement
+// instead would be SHADOWED by body's own value for #chat-input / #chat-dismiss (both
+// descendants of body), so the docked keyboard seats would never engage in the audit.
 async function simulateKeyboardOpen(page, visibleVh) {
   await page.evaluate((vh) => {
     document.body.classList.add('mobile-keyboard-open');
-    document.documentElement.style.setProperty('--mobile-keyboard-visible-vh', `${vh}px`);
+    document.body.style.setProperty('--mobile-keyboard-visible-vh', `${vh}px`);
   }, visibleVh);
   await sleep(120);
 }
@@ -573,7 +590,7 @@ async function simulateKeyboardOpen(page, visibleVh) {
 async function simulateKeyboardClose(page) {
   await page.evaluate(() => {
     document.body.classList.remove('mobile-keyboard-open');
-    document.documentElement.style.removeProperty('--mobile-keyboard-visible-vh');
+    document.body.style.removeProperty('--mobile-keyboard-visible-vh');
   });
   await sleep(120);
 }
@@ -652,6 +669,13 @@ try {
   if (!debuffOk) fail('pass A setup: debuff aura was not applied to the player');
   if (!metersOpen) fail('pass A setup: #meters-window did not open (hud.toggleMeters)');
 
+  // F6: hard AGGREGATE floor for the mobile-chat cycle. Per-profile chat failures degrade
+  // to a NOTE (the synthetic pointer tap can miss on a single flaky profile), but a TOTAL
+  // mobile-chat-tap regression (chat never opens/yields/closes anywhere) must NOT exit 0.
+  // Count the profiles where the full open -> yield -> close -> restore cycle actually ran,
+  // and fail() below if that count is zero.
+  let chatCyclesCompleted = 0;
+
   for (const prof of PROFILES) {
     await flipViewport(page, media, prof.w, prof.h, prof.dsf, prof.tier);
     const targetId = await forceTarget(page);
@@ -674,6 +698,14 @@ try {
     // frames to stop moving and #party-frames to gain .below-target (bounded).
     const settle = await settleFrames(page, { expectTarget: targetId !== null });
     if (!settle.settled) note(`${prof.name}: ${settle.note}`);
+
+    // Forming a party as leader auto-opens the Loot Settings window (once, on becoming
+    // leader), which sits over the top-left and COVERS the collapse chip. A real player
+    // would close it before tapping the chip; close it here (targeted, so the measured
+    // #meters-window stays open) so the chip is genuinely tap-reachable. Without this the
+    // hit-tested chip tap correctly refuses to tap the covered chip and the expand fails.
+    await page.evaluate(() => window.__game.hud?.closeLootSettings?.());
+    await sleep(120);
 
     // ---- Mobile party-collapse chip: collapsed by default -> expand -> collapse. ----
     // (1) COLLAPSED (the default): only the compact chip shows; the member rows are
@@ -710,6 +742,62 @@ try {
     }
     // Re-settle the now-expanded stack before the existing overlap measurements below.
     await settleFrames(page, { expectTarget: targetId !== null });
+
+    // F1: PER-ROW chip clearance. The pairwise sweep below EXEMPTS the chip-vs-#party-frames
+    // pair (nested parent/child), which would otherwise mask a member frame flowing beside
+    // or under the collapse chip (the pre-restructure grid bug: a member auto-flowed into the
+    // grid cell next to the chip). So measure the chip against EACH member frame's own box:
+    // every frame must clear the chip by >= the interactive gap (both are tap targets).
+    const chipRows = await page.evaluate(() => {
+      const box = (el) => {
+        if (!el) return null;
+        const s = getComputedStyle(el);
+        if (s.display === 'none' || s.visibility === 'hidden') return null;
+        const r = el.getBoundingClientRect();
+        if (r.width === 0 && r.height === 0) return null;
+        return {
+          left: r.left,
+          top: r.top,
+          right: r.right,
+          bottom: r.bottom,
+          w: r.width,
+          h: r.height,
+        };
+      };
+      const chip = box(document.getElementById('party-chip'));
+      const frames = [...document.querySelectorAll('#party-frames .party-frame')]
+        .map(box)
+        .filter(Boolean);
+      return { chip, frames };
+    });
+    if (chipRows.chip && chipRows.frames.length) {
+      chipRows.frames.forEach((fr, i) => {
+        const gap = controlGap('party-chip', chipRows.chip, 'party-frame', fr, CIRCLE_IDS);
+        if (gap < MIN_GAP_INTERACTIVE) {
+          fail(
+            `${prof.name}: party chip vs member frame #${i} gap ${gap.toFixed(1)}px < ` +
+              `${MIN_GAP_INTERACTIVE}px (a member frame flows beside/under the collapse chip)`,
+          );
+        }
+      });
+    } else {
+      note(
+        `${prof.name}: chip-vs-frame rows not measurable ` +
+          `(chip=${!!chipRows.chip}, frames=${chipRows.frames.length})`,
+      );
+    }
+
+    // Re-open the Loot Settings window before the pairwise measurement, restoring the
+    // ORIGINAL measurement context: a leader in a party has a .window open, which sets
+    // body.mobile-window-open and hides #mobile-autorun (it is a movement satellite the HUD
+    // hides whenever a window is up). We only closed it above so the chip was tap-reachable;
+    // measuring the pairwise gaps with autorun visible would surface a pre-existing
+    // meters/party-vs-autorun overlap that never occurs in real play (autorun is hidden
+    // while a window is open). Re-opening (non-explicit, so it closes nothing else) keeps
+    // the chip's own box measurable through the occlusion. Closed again before the recollapse
+    // tap below.
+    await page.evaluate(() => window.__game.hud?.openLootSettings?.(false));
+    await sleep(150);
 
     const allIds = [...CHROME_IDS, ...CONTROL_IDS];
     const g = await collectRects(page, allIds);
@@ -824,6 +912,10 @@ try {
     }
 
     // (3) COLLAPSE again via a real tap; assert the member stack hides (chip-only).
+    // Close the Loot Settings window again first so the hit-tested tap reaches the chip
+    // (it was re-opened for the pairwise measurement above).
+    await page.evaluate(() => window.__game.hud?.closeLootSettings?.());
+    await sleep(120);
     await tapPartyChip(page);
     const recollapsed = await readPartyChipState(page);
     if (recollapsed.expanded || recollapsed.firstFrame) {
@@ -961,9 +1053,20 @@ try {
           `${prof.name}: party stack over-restored (expanded) after chat closed (pref was collapsed)`,
         );
       }
+      // The full open -> yield -> close -> restore cycle ran on this profile (F6 floor).
+      chatCyclesCompleted++;
     }
 
     console.log(`checked ${prof.name} (${prof.w}x${prof.h}, target=${targetId})`);
+  }
+
+  // F6 aggregate floor: chat must have completed a full cycle on at least one profile.
+  // Per-profile misses are tolerated (noted) above, but a total regression fails hard.
+  if (chatCyclesCompleted === 0) {
+    fail(
+      'mobile chat cycle never completed on ANY profile (open/yield/close/restore) ' +
+        '-- a total mobile-chat-tap regression',
+    );
   }
 
   // ---- Chat keyboard-dismiss: drop the keyboard WITHOUT closing chat. ----
@@ -978,10 +1081,36 @@ try {
   if (!dismissOpened) {
     note('chat keyboard-dismiss: chat did not open; NOT COVERED');
   } else {
-    // Focus the composer + raise the simulated keyboard (visible area shrinks to ~180px).
+    // Focus the composer, capture its RESTING seat, then raise the simulated keyboard
+    // (visible area shrinks to ~180px).
     await page.evaluate(() => document.getElementById('chat-input')?.focus());
-    await simulateKeyboardOpen(page, 180);
+    const restingChat = await readChatBoxes(page);
+    const KBD_VH = 180;
+    await simulateKeyboardOpen(page, KBD_VH);
     const beforeDismiss = await readChatBoxes(page);
+    // F5: the composer must actually DOCK above the keyboard when it opens, which only
+    // happens if the simulated --mobile-keyboard-visible-vh lands on the SAME element the
+    // real applier writes (body). Its docked bottom sits at the keyboard's top edge
+    // (viewport bottom - visibleVh), i.e. measured from the top rect.bottom ~= visibleVh.
+    // If the var were shadowed off body (the pre-fix bug), the seat would fall back to
+    // 100vh and the composer would sit at rect.bottom ~= 8, at the very bottom UNDER the
+    // keyboard. Require it both moved from its resting seat AND docked at the keyboard line.
+    if (restingChat.input && beforeDismiss.input) {
+      const moved = Math.abs(beforeDismiss.input.top - restingChat.input.top) > 20;
+      const docked = beforeDismiss.input.bottom <= KBD_VH + 2;
+      if (!moved || !docked) {
+        fail(
+          `chat keyboard-dismiss: composer did not dock above the keyboard on open ` +
+            `(resting top=${restingChat.input.top.toFixed(1)}, open top=${beforeDismiss.input.top.toFixed(1)}, ` +
+            `open bottom=${beforeDismiss.input.bottom.toFixed(1)} vs visibleVh=${KBD_VH}); ` +
+            `--mobile-keyboard-visible-vh is likely shadowed off body`,
+        );
+      }
+    } else {
+      note(
+        'chat keyboard-dismiss: composer not measurable before/after keyboard open (docking check skipped)',
+      );
+    }
     if (!beforeDismiss.dismiss) {
       fail('chat keyboard-dismiss: #chat-dismiss chevron not visible while chat open');
     } else if (
@@ -1024,13 +1153,25 @@ try {
     await sleep(120);
     await page.screenshot({ path: `${SHOT_DIR}/passA_chat_keyboard_dismiss_844.png` });
     console.log('chat keyboard-dismiss: ok (chat open, composer unfocused, at rest)');
-    // Close chat to leave a clean state for Pass B.
+    // Close chat to leave a clean state for Pass B. bindChatButton (mobile_controls.ts)
+    // listens on pointerdown/pointerup, NOT click, so a bare #mobile-chat.click() is a
+    // NO-OP that would leave chat OPEN and run all of Pass B under the chat overlay. Drive
+    // the real pointer tap (toggleMobileChat), then force the chat/keyboard classes off if
+    // the tap missed (the force-remove fallback the chat-yield section uses above).
+    if (await page.evaluate(() => document.body.classList.contains('mobile-chat-open'))) {
+      await toggleMobileChat(page);
+      await sleep(150);
+    }
     await page.evaluate(() => {
-      if (document.body.classList.contains('mobile-chat-open')) {
-        document.getElementById('mobile-chat')?.click();
-      }
+      document.body.classList.remove(
+        'mobile-chat-open',
+        'mobile-chat-reply',
+        'mobile-keyboard-open',
+      );
+      document.body.style.removeProperty('--mobile-keyboard-visible-vh');
+      window.__game.hud?.update?.(0.05);
     });
-    await sleep(150);
+    await sleep(120);
   }
 
   // Close the meters overlay before Pass B: it is a toggled panel (not a .window),

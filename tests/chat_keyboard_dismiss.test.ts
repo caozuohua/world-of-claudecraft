@@ -33,11 +33,13 @@ describe('keyboardDismissEffect (the dismiss chevron intent)', () => {
     expect(keyboardDismissEffect()).toEqual({ blurComposer: true, closeChat: false });
   });
 
-  it('is a pure constant (Enter/Escape/toggle close paths are unaffected by this seam)', () => {
-    // The dismiss effect is input-free and stable: this module owns ONLY the dismiss
-    // decision. Enter-send, Escape-close, and the chat toggle keep their own main.ts
-    // paths (each still routes through closeChat, which hides then blurs, so
-    // shouldRecoverOnComposerBlur('none') is true for them: proven above).
-    expect(keyboardDismissEffect()).toEqual(keyboardDismissEffect());
+  it('is a pure constant (input-free: this module owns ONLY the dismiss decision)', () => {
+    // The dismiss effect is input-free and stable. main.ts applies ONLY effect.blurComposer
+    // at the chevron's click (it never reads effect.closeChat); the Enter-send, Escape-close,
+    // and chat-toggle paths keep their own closeChat calls, which hide then blur, so
+    // shouldRecoverOnComposerBlur('none') is true for them (proven above). The value pin at
+    // the top of this describe is the real guard; a self-equal comparison would pass for
+    // ANY constant, so it is deliberately omitted here.
+    expect(keyboardDismissEffect().blurComposer).toBe(true);
   });
 });

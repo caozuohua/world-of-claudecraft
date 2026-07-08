@@ -32,6 +32,13 @@ const throwingStorage = {
 };
 
 describe('party collapse persistence (default collapsed)', () => {
+  it('pins the exact localStorage key (a rename would silently drop every stored choice)', () => {
+    // A literal pin, not just the imported constant: renaming PARTY_COLLAPSE_STORE_KEY
+    // keeps the rest of this suite green (it uses the import) while orphaning every
+    // player's persisted collapse preference. Pin the on-disk string.
+    expect(PARTY_COLLAPSE_STORE_KEY).toBe('woc_party_collapsed');
+  });
+
   it('defaults to collapsed when the key is unset (never toggled)', () => {
     expect(loadPartyCollapsed(fakeStorage())).toBe(true);
   });

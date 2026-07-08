@@ -196,10 +196,12 @@ describe('tier player-frame nudges are landscape-gated (hud.mobile.css)', () => 
   // the frame in browser portrait. Pin both rules inside an
   // `@media (orientation: landscape)` block. Raw-text scan on purpose: the flat
   // rule scan above unwraps only the outer @layer, not nested @media blocks.
+  // Strip CSS comments first (like the coverage test next door) so a stray `{`/`}` or a
+  // `@media` word inside a comment cannot throw off the brace-depth scan below.
   const css = readFileSync(
     fileURLToPath(new URL('../src/styles/hud.mobile.css', import.meta.url)),
     'utf8',
-  );
+  ).replace(/\/\*[\s\S]*?\*\//g, '');
 
   // Enumerate every @media block with its prelude text and body brace range, matched
   // by a brace-depth scan from each @media's opening brace to its balanced close.

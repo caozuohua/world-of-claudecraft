@@ -3787,6 +3787,15 @@
     gap: 6px;
     z-index: 5;
   }
+  /* The painter nests the member rows one level down in a .party-rows wrapper (so the
+     mobile collapse chip can sit alone on its own line). On desktop the wrapper is
+     transparent (display: contents), so the rows lay out as direct flex items of
+     #party-frames exactly as before the wrapper existed: the flex column gap and every
+     .party-frame rule apply unchanged. Mobile re-declares the wrapper as its own
+     2-column grid (hud.mobile.css). */
+  #party-frames .party-rows {
+    display: contents;
+  }
   #party-frames.below-target {
     top: 96px;
   }
