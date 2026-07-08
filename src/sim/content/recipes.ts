@@ -4,11 +4,13 @@
 // not logic): the resolution logic lives in ../professions/crafting.ts behind
 // the SimContext seam.
 //
-// Scope: COMMON TIER ONLY. Every recipe below has skillReq 0 (the free floor:
-// a common-tier recipe is craftable with zero craft skill, gated only by
-// having the materials). Higher-tier gating (P4), the wheel (P5), and
-// archetype-exclusive combos (P8) build on this path later; itemLevelBudget is
-// carried now so those follow-ups have a stable field to read.
+// Scope: COMMON_RECIPES all carry skillReq 0 (the free floor: a common-tier
+// recipe is craftable with zero craft skill, gated only by having the
+// materials). The file has since grown past that floor: TOOL_RECIPES
+// (skillReq 75/150, station-bound at the level-20 hub) and COMBO_RECIPES
+// (skillReq 25, the #1132 dual-craft gate) sit alongside it. There is still
+// no skillReq admission gate anywhere: crafting.ts reads skillReq only for
+// skill-gain scaling, and itemLevelBudget feeds the #1301 gold sink.
 //
 // Inputs are existing harvested-material item ids from the gathering content
 // (src/sim/professions/gathering.ts NODE_HARVEST_TABLE): bone_fragments
@@ -108,10 +110,11 @@ export const COMMON_RECIPES: ProfessionRecipeRecord[] = [
 // crafting action exists to consume them. Kept out of COMMON_RECIPES (whose
 // module doc and tests fix skillReq at 0 for every entry): these carry a
 // non-zero skillReq the way itemLevelBudget was already carried on the
-// common-tier recipes above, i.e. a stable field for the #1128 mastery-gating
-// follow-up to enforce. resolveCraft does not yet read skillReq (that gate is
-// #1128's job), so these are craftable today purely on having the reagents,
-// same as any common recipe, until #1128 lands.
+// common-tier recipes above. resolveCraft reads skillReq only to scale
+// skill gain (#1128's soft tier mastery: full at/above capability, reduced
+// one tier under, zero two-plus under, and zero above the #1129 archetype
+// ceiling), never as an admission gate: these are craftable on having the
+// reagents and standing at the hub station, same as any common recipe.
 //
 // requiresHubStation (issue #1297): every recipe below is also station-bound,
 // gated on presence at the level-20 crafting hub (content/professions.ts

@@ -11,7 +11,11 @@ import {
   CRAFT_THROTTLE_WINDOW_SECONDS,
 } from '../src/sim/content/professions';
 import { COMMON_RECIPES } from '../src/sim/content/recipes';
-import { isRecipeKnown, resolveCraftForRecipe } from '../src/sim/professions/crafting';
+import {
+  acquireRecipeForRecipe,
+  isRecipeKnown,
+  resolveCraftForRecipe,
+} from '../src/sim/professions/crafting';
 import { isSalvageable, resolveSalvage, salvageYield } from '../src/sim/professions/salvage';
 import type { ProfessionRecipeRecord } from '../src/sim/professions/types';
 import { Sim } from '../src/sim/sim';
@@ -71,6 +75,18 @@ describe('#1299 recipe acquisition', () => {
     expect(result.reason).toBe('already_known');
   });
 
+  it('acquiring from a source the recipe does not list is denied as wrong_source, learning nothing', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    const meta = (sim as any).players.get(pid);
+    // GATED_RECIPE lists only 'trainer'; a drop can never teach it.
+    const result = acquireRecipeForRecipe(sim.ctx, pid, GATED_RECIPE, 'drop');
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe('wrong_source');
+    expect(meta.knownRecipes.size).toBe(0);
+    expect(isRecipeKnown(meta, GATED_RECIPE)).toBe(false);
+  });
+
   it('acquiring from the correct source marks the recipe known, and it persists across a reload', () => {
     const sim = makeSim();
     const pid = sim.playerId;
@@ -78,12 +94,21 @@ describe('#1299 recipe acquisition', () => {
     expect(meta).toBeTruthy();
     if (!meta) return;
     expect(isRecipeKnown(meta, GATED_RECIPE)).toBe(false);
-    meta.knownRecipes.add(GATED_RECIPE.id);
+    // Drive the REAL success arm (via the ForRecipe split, since no content
+    // recipe carries an acquisition list yet), not a direct Set mutation.
+    const learned = acquireRecipeForRecipe(sim.ctx, pid, GATED_RECIPE, 'trainer');
+    expect(learned.ok).toBe(true);
+    expect(learned.reason).toBeUndefined();
     meta.copper = 1000;
     expect(isRecipeKnown(meta, GATED_RECIPE)).toBe(true);
     grantItem(sim, 'bone_fragments', 5, pid);
     const result = resolveCraftForRecipe(sim.ctx, pid, GATED_RECIPE);
     expect(result.ok).toBe(true);
+
+    // Learning twice is denied as already_known.
+    const again = acquireRecipeForRecipe(sim.ctx, pid, GATED_RECIPE, 'trainer');
+    expect(again.ok).toBe(false);
+    expect(again.reason).toBe('already_known');
 
     // Persistence round-trip: serialize then reload into a fresh Sim.
     const saved = sim.serializeCharacter(pid);
@@ -130,7 +155,9 @@ describe('#1300 salvage/disenchant', () => {
     expect(sim.countItem('eastbrook_arming_sword', pid)).toBe(1);
     const result = resolveSalvage(sim.ctx, pid, 'eastbrook_arming_sword');
     expect(result.ok).toBe(true);
-    expect(result.materialItemId).toBeTruthy();
+    // Pinned literal: a common-quality piece salvages into bone_fragments per
+    // SALVAGE_MATERIAL_BY_QUALITY, so a remap cannot pass silently.
+    expect(result.materialItemId).toBe('bone_fragments');
     expect(result.count).toBeGreaterThan(0);
     expect(sim.countItem('eastbrook_arming_sword', pid)).toBe(0);
     if (result.materialItemId) {
@@ -151,7 +178,10 @@ describe('#1300 salvage/disenchant', () => {
       { id: 'b', name: 'b', sellValue: 0, quality: 'legendary', kind: 'weapon' } as never,
       makeSim().ctx.rng,
     );
-    expect(high).toBeGreaterThanOrEqual(low);
+    // With the bonus draws identical, the yields differ by exactly the quality
+    // term: legendary (index 4) minus common (index 0). A strict delta, not
+    // >=, so dropping or neutering the rarity term cannot pass.
+    expect(high - low).toBe(4);
   });
 });
 
@@ -206,6 +236,9 @@ describe('#1301 gold sink and output throttle', () => {
       else expect(result.reason).toBe('throttled');
     }
     expect(successCount).toBe(CRAFT_THROTTLE_MAX_PER_WINDOW);
+    // The gold sink charges SUCCESSFUL crafts only: the 5 throttled denials
+    // above must not have drained a copper (fee = budget 10 * rate 2 = 20).
+    expect(meta.copper).toBe(1_000_000 - CRAFT_THROTTLE_MAX_PER_WINDOW * 20);
   });
 
   it('the throttle window resets after CRAFT_THROTTLE_WINDOW_SECONDS of sim time', () => {

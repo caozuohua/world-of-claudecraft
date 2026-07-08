@@ -18,6 +18,10 @@ function makeSim(seed = 42) {
 // exercising the #1149/#1205 active-specialty gate itself.
 describe('battlefieldExperienceTrickle (#1149, self-observation)', () => {
   it('grants the trickle to the signer craft when the observer is the signer and rarity is rare+', () => {
+    // Pinned to a literal so a re-tune of the trickle amount cannot pass
+    // silently (every other assertion in this file compares against the
+    // imported constant, which alone would never redden on a value change).
+    expect(BATTLEFIELD_XP_TRICKLE).toBe(0.25);
     const skills = emptyCraftSkills();
     const amount = battlefieldExperienceTrickle(skills, {
       itemId: 'minor_healing_potion', // recipe_minor_healing_potion -> alchemy

@@ -13,9 +13,11 @@
 // empowered past rare. Both start unset (null). Which of the two ring-adjacent
 // neighbors becomes the pair is not yet a player choice (the acceptance quest
 // is a content stub, like the rest of this module); acceptArchetypeQuest/
-// switchArchetype default it to the first neighbor deterministically. A real
-// quest choosing the neighbor, and #1293's later hobby-flip, are both future
-// content work over this same state shape.
+// switchArchetype default it deterministically via defaultPairedMajor below,
+// preferring the neighbor a content combo recipe already pairs the craft with
+// so no attunement choice strands its own themed combo. A real quest choosing
+// the neighbor, and #1293's later hobby-flip, are both future content work
+// over this same state shape.
 //
 // The active archetype is set for the first time by a zone-1 acceptance lore quest,
 // and can only be changed afterward by first completing a repeatable, escalating
@@ -38,6 +40,7 @@
 // server, and in the headless RL env unchanged.
 
 import { adjacentCrafts, CRAFT_RING, oppositeCraft } from '../content/professions';
+import { COMBO_RECIPES } from '../content/recipes';
 import type { SimContext } from '../sim_context';
 import { type CraftSkills, tierCapability } from './wheel';
 
@@ -110,11 +113,32 @@ function isAdjacent(a: string, b: string): boolean {
   return adjacentCrafts(a).some((craft) => craft.id === b);
 }
 
-/** The deterministic default second major for a primary craft: its first
- *  ring-adjacent neighbor. See the module comment: which neighbor becomes the
- *  pair is not yet a player choice. */
+/** The ring-adjacent craft paired with `craftId` in a content combo recipe
+ *  (content/recipes.ts COMBO_RECIPES), or null when no combo names it. Every
+ *  combo pair is ring-adjacent by content contract (see meetsComboRequirement
+ *  in crafting.ts), and no craft appears in more than one combo pair today. */
+function comboPartnerOf(craftId: string): string | null {
+  for (const recipe of COMBO_RECIPES) {
+    const combo = recipe.comboRequirement;
+    if (!combo) continue;
+    if (combo.craftA === craftId) return combo.craftB;
+    if (combo.craftB === craftId) return combo.craftA;
+  }
+  return null;
+}
+
+/** The deterministic default second major for a primary craft. See the module
+ *  comment: which neighbor becomes the pair is not yet a player choice, so
+ *  this prefers the neighbor a content combo recipe already commits the craft
+ *  to (the design doc's own canonical adjacencies: armorcrafting with
+ *  weaponcrafting, alchemy with engineering), so attuning EITHER side of a
+ *  combo never strands that combo behind the common ceiling; a craft with no
+ *  content combo defaults to its first ring-adjacent neighbor. */
 function defaultPairedMajor(activeArchetype: string): string {
-  return adjacentCrafts(activeArchetype)[0].id;
+  const neighbors = adjacentCrafts(activeArchetype);
+  const partner = comboPartnerOf(activeArchetype);
+  const match = neighbors.find((craft) => craft.id === partner);
+  return (match ?? neighbors[0]).id;
 }
 
 // Escalation formula for the repeatable "make amends" quest: a modest linear

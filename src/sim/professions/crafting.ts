@@ -8,9 +8,13 @@
 // and grants a flat point of craft skill (see wheel.ts: additive-only,
 // free-floor).
 //
-// Scope: COMMON TIER ONLY (skillReq 0 on every recipe in content/recipes.ts).
-// Higher-tier gating, the wheel, and archetype-exclusive combos are later
-// issues; this module resolves exactly the common-tier path end to end.
+// Scope: originally the common-tier path only; the module now also resolves
+// the higher-tier content that landed on it (content/recipes.ts TOOL_RECIPES
+// at skillReq 75/150, COMBO_RECIPES at skillReq 25), the #1132 combo gate,
+// the #1129 archetype empowerment ceiling, the #1299 acquisition gate, and
+// the #1301 gold sink + output throttle. There is still NO skillReq
+// admission gate: any known recipe is attemptable on materials alone, and
+// tier only shapes skill-gain scaling and (via the ceiling) output quality.
 //
 // #1149 (Battlefield Experience) attribution: a crafted output that rolls
 // rare-or-better is stamped with its crafter's name via ctx.addItemInstance,
@@ -76,6 +80,7 @@ import {
   type CraftSkills,
   gainCraftSkill,
   materialCostMultiplier,
+  tierCapability,
   tierForSkill,
   tierProgressMultiplier,
 } from './wheel';
@@ -142,6 +147,21 @@ export function acquireRecipe(
 ): AcquireRecipeResult {
   const recipe = recipeById(recipeId);
   if (!recipe) return { ok: false, recipeId, reason: 'unknown_recipe' };
+  return acquireRecipeForRecipe(ctx, pid, recipe, source);
+}
+
+/** Acquire one already-resolved recipe record from one source. Exported
+ *  separately from `acquireRecipe` (mirroring the resolveCraft /
+ *  resolveCraftForRecipe split above) so tests can exercise the success and
+ *  wrong_source arms against a synthetic gated recipe without needing an
+ *  acquisition-gated entry in `content/recipes.ts` (none exists yet). */
+export function acquireRecipeForRecipe(
+  ctx: SimContext,
+  pid: number,
+  recipe: ProfessionRecipeRecord,
+  source: 'trainer' | 'drop' | 'quest',
+): AcquireRecipeResult {
+  const recipeId = recipe.id;
   const meta = ctx.players.get(pid);
   if (!meta) return { ok: false, recipeId, reason: 'unknown_recipe' };
   if (isRecipeKnown(meta, recipe)) return { ok: false, recipeId, reason: 'already_known' };
@@ -237,8 +257,10 @@ export function hasRecipeMaterials(
  *  (the uncapped-to-rare pre-archetype state) so existing raw-skills callers
  *  keep working unchanged. Every `COMBO_RECIPES` pair in content/recipes.ts
  *  is ring-adjacent (content/professions.ts `adjacentCrafts`), i.e. exactly
- *  the shape of a player's two majors, so an attuned specialist's own pair
- *  always qualifies (both sides unlimited via `pairedMajor`). */
+ *  the shape of a player's two majors, so a specialist attuned to that pair
+ *  qualifies (both sides unlimited via `pairedMajor`); the stubbed default
+ *  pair (archetype.ts `defaultPairedMajor`) prefers a craft's content-combo
+ *  partner precisely so attuning either side of a combo never strands it. */
 export function meetsComboRequirement(
   skills: CraftSkills,
   recipe: ProfessionRecipeRecord,
@@ -352,31 +374,25 @@ export function resolveCraftForRecipe(
     ctx.addItem(recipe.resultItemId, recipe.resultCount, pid);
   }
   if (meta) {
-    // #1129/#1148 review: a recipe whose tier is ABOVE this craft's archetype
-    // ceiling must grant zero progress, full stop, never the ordinary
-    // diminishing-returns treatment. Before this guard, capping the CAPABILITY
-    // fed to tierProgressMultiplier (via craftCeiling) only capped the CAP,
-    // never the climb: tiersBelow (cappedCapability - recipeTier) went
-    // negative whenever recipeTier exceeded the cap, and the formula reads
-    // any non-positive tiersBelow as "at or above capability", granting FULL
-    // progress. This is the one case raw-skill callers never hit (a raw-skill
-    // capability can never be exceeded by a recipe tier the player can
-    // already attempt), so tierProgressMultiplier itself is untouched;
-    // recipeTier > capabilityTier is guarded here instead. Below the ceiling,
-    // the ordinary curve (full at/above, reduced one tier under, zero two-plus
-    // under) applies unchanged, now measured against the CEILINGED capability
-    // so a dormant/hobby craft's climb still stops exactly at its cap.
-    const capabilityTier = craftCeiling(
-      meta.craftSkills,
-      meta.archetype.activeArchetype,
-      meta.archetype.pairedMajor,
-      recipe.professionId,
-    );
+    // #1129/#1148 review: a recipe whose tier is ABOVE this craft's ARCHETYPE
+    // ceiling (ceilingTier, the same archetypeCeilingFor value the quality
+    // clamp reads above) must grant zero progress, full stop, never the
+    // ordinary diminishing-returns treatment: that is what makes a dormant or
+    // hobby craft's climb actually stop at its cap. The guard deliberately
+    // compares against the archetype ceiling ALONE, never craftCeiling's
+    // min-with-raw-capability: there is NO skillReq admission gate on
+    // crafting (content/recipes.ts documents that resolveCraft does not read
+    // skillReq), so a recipe tier above the player's RAW capability is the
+    // ordinary, doc-confirmed climb ("full at or above capability: this is
+    // how capability advances in the first place", wheel.ts) and must keep
+    // granting full progress exactly as base did. Below or at the ceiling,
+    // the ordinary curve (full at/above raw capability, reduced one tier
+    // under, zero two-plus under) applies unchanged off raw capability.
     const recipeTier = tierForSkill(recipe.skillReq);
     const multiplier =
-      recipeTier > 0 && recipeTier > capabilityTier
+      recipeTier > ceilingTier
         ? 0
-        : tierProgressMultiplier(capabilityTier, recipeTier);
+        : tierProgressMultiplier(tierCapability(meta.craftSkills, recipe.professionId), recipeTier);
     gainCraftSkill(meta.craftSkills, recipe.professionId, CRAFT_SKILL_GAIN * multiplier);
     meta.craftThrottle.count += 1;
   }

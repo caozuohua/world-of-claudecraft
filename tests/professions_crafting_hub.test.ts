@@ -7,7 +7,7 @@ import {
   CRAFTING_HUB_STATIONS,
   CRAFTING_HUB_ZONE_ID,
 } from '../src/sim/content/professions';
-import { recipeById, TOOL_RECIPES } from '../src/sim/content/recipes';
+import { COMBO_RECIPES, COMMON_RECIPES, TOOL_RECIPES } from '../src/sim/content/recipes';
 import { resolveCraft } from '../src/sim/professions/crafting';
 import {
   canUseCraftingHubStation,
@@ -59,8 +59,12 @@ describe('crafting hub content (#1297)', () => {
     for (const recipe of TOOL_RECIPES) {
       expect(recipe.requiresHubStation).toBe(true);
     }
-    expect(recipeById('recipe_eastbrook_arming_sword')!.requiresHubStation).toBeUndefined();
-    expect(recipeById('recipe_ironbound_warplate_helm')!.requiresHubStation).toBeUndefined();
+    // The negative arm iterates BOTH full lists, not exemplars: a stray
+    // requiresHubStation on any starter recipe would gate low-level crafting
+    // on a level-20 hub.
+    for (const recipe of [...COMMON_RECIPES, ...COMBO_RECIPES]) {
+      expect(recipe.requiresHubStation, `${recipe.id} must stay field-craftable`).toBeUndefined();
+    }
   });
 });
 
