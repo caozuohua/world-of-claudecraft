@@ -403,6 +403,7 @@ const HEAVY_SELF_EVENTS = new Set<string>([
   'levelup',
   'virtualLevelUp',
   'milestoneUnlocked',
+  'deedUnlocked', // the earned map + stat block ride the heavy-gated deeds/dstats keys
   'questAccepted',
   'questProgress',
   'questReady',
@@ -680,6 +681,7 @@ function identityFields(e: Entity): Record<string, unknown> {
   if (e.devMergedPrs) out.dvc = e.devMergedPrs; // merged-PR count, for inspect/card
   if (e.githubLogin) out.dgl = e.githubLogin; // GitHub login (inspect readout + profile link)
   if (e.guild) out.gd = e.guild;
+  if (e.title) out.title = e.title; // Book of Deeds active title (a deed id; the client localizes)
   if (e.dungeonId) out.dgn = e.dungeonId;
   if (e.objectItemId) out.obj = e.objectItemId;
   if (e.scale !== 1) out.sc = e.scale;
@@ -3571,6 +3573,14 @@ export class GameServer {
         recordBankOp('buy_slots', session, before, sim.bankInfoFor(pid));
         break;
       }
+      // Book of Deeds: select/clear the displayed title. The sim validator
+      // owns every rule (deed earned + title reward; null clears; invalid
+      // input is a silent no-op); the server only shape-checks the payload.
+      case 'deed_set_title':
+        if (msg.deedId === null || typeof msg.deedId === 'string') {
+          sim.setActiveTitle(msg.deedId, pid);
+        }
+        break;
       // dev/ops commands, only when ALLOW_DEV_COMMANDS=1 (never in production)
       case 'dev_level': {
         if (process.env.ALLOW_DEV_COMMANDS === '1' && typeof msg.level === 'number') {
@@ -4070,6 +4080,11 @@ export class GameServer {
     // shape used by the `/dev gather` chat cheat and existing consumers. Wire
     // key `gprof`; see TERSE_TO_IWORLD/ALL_DELTA_KEYS in tests/snapshots.test.ts.
     maybe('gprof', this.sim.gatheringProficiencyFor(anchorSession.pid));
+    // Book of Deeds: the Renown total and the selected title id, cheap
+    // scalars diffed per tick (grants land from sim sites that never mark
+    // this session dirty, and the title echo must not wait on the heavy gate).
+    maybe('renown', meta.renown);
+    maybe('atitle', meta.activeTitle);
     // Heavy, rarely-changing fields: building + stringifying these every tick for
     // every player is the dominant avoidable broadcast cost. Skip them unless a
     // heavy command/event marked this session dirty, or its staggered safety
@@ -4091,6 +4106,22 @@ export class GameServer {
       maybe('qlog', [...meta.questLog.values()]);
       maybe('qdone', [...meta.questsDone]);
       maybe('milestones', [...meta.unlockedMilestones]);
+      // Book of Deeds: the earned map (deed id -> utcDay) and the COMPLETE
+      // lifetime stat block. Maps and Sets do not survive JSON.stringify, so
+      // both wire as plain objects/arrays and ClientWorld rebuilds the Map
+      // and both Sets on apply. Heavy-gated: deedUnlocked is a
+      // HEAVY_SELF_EVENTS member, so an unlock re-diffs on the next snapshot.
+      // DELIBERATE freshness floor: a stat bump that crosses no unlock
+      // threshold re-wires only on the staggered safety refresh (<=2s), never
+      // per increment; flushing per kill would re-serialize every heavy field
+      // each combat tick, the exact cost this gate exists to avoid.
+      maybe('deeds', Object.fromEntries(meta.deedsEarned));
+      maybe('dstats', {
+        counters: meta.deedStats.counters,
+        itemsDiscovered: [...meta.deedStats.itemsDiscovered],
+        visited: [...meta.deedStats.visited],
+        dungeonClears: meta.deedStats.dungeonClears,
+      });
       // talents/spec/loadouts: the client recomputes its known abilities from this.
       maybe('tal', {
         alloc: meta.talents,

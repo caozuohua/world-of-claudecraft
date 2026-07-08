@@ -448,7 +448,11 @@ describe('persistence', () => {
     markVisited(sim.ctx, meta, 'poi:eastbrook_vale:Eastbrook');
     markItemDiscovered(sim.ctx, meta, 'glimmerfin_koi');
     meta.deedStats.dungeonClears['hollow_crypt:heroic'] = 2;
-    meta.activeTitle = 'prog_veteran';
+    // The load path re-applies the saved title through the setter validator,
+    // so the fixture earns the deed before selecting it (a bare field poke
+    // would load as untitled by design).
+    grantDeed(sim.ctx, meta, 'prog_veteran');
+    sim.setActiveTitle('prog_veteran');
     sim.tick();
     const state = sim.serializeCharacter(sim.playerId)!;
     const sim2 = makeSim();
@@ -857,5 +861,84 @@ describe('site wiring (real modules, not direct bumps)', () => {
     expect(sim.players.get(b)!.deedStats.counters.partiesJoined).toBe(1);
     sim.tick();
     expect(sim.players.get(b)!.deedsEarned.has('soc_first_party')).toBe(true);
+  });
+});
+
+describe('active title selection (setActiveTitle)', () => {
+  it('accepts an earned title-reward deed and stamps meta AND entity together', () => {
+    const sim = makeSim();
+    const { meta, e } = primary(sim);
+    grantDeed(sim.ctx, meta, 'prog_veteran'); // reward: title "Veteran"
+    sim.setActiveTitle('prog_veteran');
+    // both read paths agree within the same tick: no tick() between set and read
+    expect(meta.activeTitle).toBe('prog_veteran');
+    expect(e.title).toBe('prog_veteran');
+  });
+
+  it('silently rejects an unearned deed, an earned rewardless deed, an earned border deed, and an unknown id', () => {
+    const sim = makeSim();
+    const { meta, e } = primary(sim);
+    grantDeed(sim.ctx, meta, 'prog_veteran');
+    sim.setActiveTitle('prog_veteran');
+
+    // unearned title deed (prog_champion is a real title deed, not earned here)
+    sim.setActiveTitle('prog_champion');
+    expect(meta.activeTitle).toBe('prog_veteran'); // prior selection untouched
+    expect(e.title).toBe('prog_veteran');
+
+    // earned, but carries no reward at all
+    grantDeed(sim.ctx, meta, 'prog_first_steps');
+    sim.setActiveTitle('prog_first_steps');
+    expect(meta.activeTitle).toBe('prog_veteran');
+
+    // earned, but the reward is a border, not a title
+    grantDeed(sim.ctx, meta, 'prog_prestige_10');
+    sim.setActiveTitle('prog_prestige_10');
+    expect(meta.activeTitle).toBe('prog_veteran');
+
+    // unknown/deleted id
+    sim.setActiveTitle('prog_not_a_deed');
+    expect(meta.activeTitle).toBe('prog_veteran');
+    expect(e.title).toBe('prog_veteran');
+  });
+
+  it('null clears both the meta field and the entity wire field', () => {
+    const sim = makeSim();
+    const { meta, e } = primary(sim);
+    grantDeed(sim.ctx, meta, 'prog_veteran');
+    sim.setActiveTitle('prog_veteran');
+    sim.setActiveTitle(null);
+    expect(meta.activeTitle).toBeNull();
+    expect(e.title).toBeNull();
+  });
+
+  it('a saved title round-trips through save/load onto meta and the spawned entity', () => {
+    const sim = makeSim();
+    const { meta } = primary(sim);
+    grantDeed(sim.ctx, meta, 'prog_veteran');
+    sim.setActiveTitle('prog_veteran');
+    const state = sim.serializeCharacter(sim.playerId)!;
+    expect(state.activeTitle).toBe('prog_veteran');
+
+    const sim2 = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const pid = sim2.addPlayer('warrior', 'Loaded', { state });
+    expect(sim2.players.get(pid)!.activeTitle).toBe('prog_veteran');
+    expect(sim2.entities.get(pid)!.title).toBe('prog_veteran');
+  });
+
+  it('a stale saved title (earned record lost) loads as untitled instead of dangling', () => {
+    const sim = makeSim();
+    const { meta } = primary(sim);
+    // A NON-milestone title deed: a milestone id would re-enter the earned map
+    // through the legacy unlockedMilestones union and defeat the staleness.
+    grantDeed(sim.ctx, meta, 'dgn_korzul_flawless'); // title "Wyrmfeller", manual trigger
+    sim.setActiveTitle('dgn_korzul_flawless');
+    const state = sim.serializeCharacter(sim.playerId)!;
+    const tampered: CharacterState = { ...state, deeds: {} }; // the earned record vanished
+
+    const sim2 = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+    const pid = sim2.addPlayer('warrior', 'Stale', { state: tampered });
+    expect(sim2.players.get(pid)!.activeTitle).toBeNull();
+    expect(sim2.entities.get(pid)!.title).toBeNull();
   });
 });

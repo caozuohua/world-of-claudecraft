@@ -1914,9 +1914,17 @@ export class Sim {
         if (typeof day === 'string') meta.deedsEarned.set(deedId, day);
       }
       meta.deedStats = restoreDeedStats(s.deedStats);
-      meta.activeTitle = typeof s.activeTitle === 'string' ? s.activeTitle : null;
       deedsMod.unionLegacyMilestones(meta);
       deedsMod.recomputeRenown(meta);
+      // The saved title re-applies through the same validator the setter
+      // command uses (meta starts untitled), so a stale id from a content
+      // change loads as no title instead of riding the entity wire as a
+      // dangling reference. Stamps the entity `title` field alongside.
+      deedsMod.setActiveTitle(
+        meta,
+        player,
+        typeof s.activeTitle === 'string' ? s.activeTitle : null,
+      );
     }
 
     // Host-stamped bank bonus slots (see the opt doc above). Applied on BOTH the
@@ -2523,6 +2531,25 @@ export class Sim {
   }
   get questsDone(): Set<string> {
     return this.primary.questsDone;
+  }
+  // --- IWorldDeeds: the Book of Deeds read surface + title selection. The
+  // reads expose the live per-player state (the questLog precedent above);
+  // the facet types them Readonly so no seam consumer mutates them. ---
+  get deedsEarned(): ReadonlyMap<string, string> {
+    return this.primary.deedsEarned;
+  }
+  get deedStats(): Readonly<DeedStats> {
+    return this.primary.deedStats;
+  }
+  get renown(): number {
+    return this.primary.renown;
+  }
+  get activeTitle(): string | null {
+    return this.primary.activeTitle;
+  }
+  setActiveTitle(deedId: string | null, pid?: number): void {
+    const r = this.resolve(pid);
+    if (r) deedsMod.setActiveTitle(r.meta, r.e, deedId);
   }
   raidLockouts(): import('../world_api').RaidLockout[] {
     const now = this.lockoutNowMs();

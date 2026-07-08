@@ -1697,6 +1697,11 @@ export interface Entity {
   name: string;
   level: number;
   guild: string;
+  // Book of Deeds display title: a deed id (never display text), null/absent
+  // for untitled players and every mob/npc. Written by the sim title setter
+  // (src/sim/deeds.ts setActiveTitle) and player spawn from persisted state;
+  // rides the identity wire only when non-null.
+  title?: string | null;
   pos: Vec3;
   prevPos: Vec3; // for render interpolation
   facing: number; // radians, 0 = +Z

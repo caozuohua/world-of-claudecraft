@@ -407,6 +407,23 @@ export function grantDeed(
   return true;
 }
 
+/** Select (or clear, with null) the displayed title: the ONE validator both
+ *  worlds reach (the Sim method offline, the server dispatch online). A
+ *  non-null id is accepted only when the player has EARNED the deed and its
+ *  reward is a title; invalid input is a SILENT no-op (defensive against
+ *  stale clients: no error event, no player text). On accept the meta field
+ *  and the entity wire field are written together, so both read paths agree
+ *  within the same tick. */
+export function setActiveTitle(meta: PlayerMeta, e: Entity, deedId: string | null): void {
+  if (deedId !== null) {
+    if (typeof deedId !== 'string') return;
+    if (!meta.deedsEarned.has(deedId)) return;
+    if (DEEDS[deedId]?.reward?.kind !== 'title') return;
+  }
+  meta.activeTitle = deedId;
+  e.title = deedId;
+}
+
 // ---------------------------------------------------------------------------
 // Trigger evaluation
 // ---------------------------------------------------------------------------

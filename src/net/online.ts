@@ -23,6 +23,7 @@ import {
 import { resolveSportKit } from '../sim/content/vale_cup';
 import { ALL_RECIPES, abilitiesKnownAt, CLASSES, NPCS, resolveDelveShopOffers } from '../sim/data';
 import { deadTargetSelectable } from '../sim/dead_target';
+import { freshDeedStats } from '../sim/deeds';
 import { LEADERBOARD_PAGE_SIZE } from '../sim/leaderboard_page';
 import type { Ante, PickAction } from '../sim/lockpick';
 import type { MarketQuery } from '../sim/market_query';
@@ -32,6 +33,7 @@ import type { MaterialRarity } from '../sim/professions/gathering';
 import { emptyCraftSkills } from '../sim/professions/wheel';
 import { computeQuestState, type ResolvedAbility } from '../sim/sim';
 import {
+  type DeedStats,
   type DungeonDifficulty,
   type Entity,
   type EquipSlot,
@@ -905,6 +907,7 @@ function blankEntity(id: number): Entity {
     mainhandItemId: null,
     equippedItems: {},
     guild: '',
+    title: null,
   };
 }
 
@@ -987,6 +990,15 @@ export class ClientWorld implements IWorld {
   // (`s.bank`, delta-omitted). Null away from a banker (proximity-gated by the
   // server), so it only rides the wire while the player stands at a bursar. ---
   bankInfo: BankInfo | null = null;
+  // --- IWorldDeeds: the Book of Deeds self mirror, from the snapshot self
+  // (`s.deeds`/`s.dstats` heavy-gated, `s.renown`/`s.atitle` per-tick diffed).
+  // PRESENTATION-ONLY EVENTS: `deedUnlocked` rides the events queue for HUD
+  // toasts and must NEVER mutate these mirrors; snapshot state is the single
+  // authority, so reconnects and missed event frames cannot drift them. ---
+  deedsEarned = new Map<string, string>();
+  deedStats: DeedStats = freshDeedStats();
+  renown = 0;
+  activeTitle: string | null = null;
   // --- IWorldDelves: active delve run + companion + marks/upgrades + daily, all
   // mirrored from the snapshot self (delta-omitted). lockpickState is the exception:
   // it has NO snapshot field and is rebuilt from the lockpick* events by the private
@@ -1550,6 +1562,7 @@ export class ClientWorld implements IWorld {
         e.dungeonId = w.dgn ?? null;
         e.objectItemId = w.obj ?? null;
         e.guild = w.gd ?? '';
+        e.title = w.title ?? null; // Book of Deeds active title (a deed id)
         if (e.kind === 'npc') {
           const def = NPCS[e.templateId];
           e.questIds = def ? [...def.questIds] : [];
@@ -1879,6 +1892,23 @@ export class ClientWorld implements IWorld {
       // "no bank"); away from a banker the server encodes it as null. Never default
       // to null/empty on omission, that would wipe an open bank window's mirror.
       if (s.bank !== undefined) this.bankInfo = s.bank;
+      // --- IWorldDeeds self-decode: `deeds`/`dstats` are heavy-gated,
+      // `renown`/`atitle` per-tick diffed (all four delta-omitted: a missing
+      // key keeps the prior mirror). The wire carries plain objects/arrays
+      // (Maps and Sets do not survive JSON.stringify), so the earned Map and
+      // both stat Sets rebuild here. `deedUnlocked` events are presentation
+      // only and never touch these mirrors. ---
+      if (s.deeds !== undefined) this.deedsEarned = new Map(Object.entries(s.deeds ?? {}));
+      if (s.dstats !== undefined && s.dstats) {
+        this.deedStats = {
+          counters: { ...freshDeedStats().counters, ...(s.dstats.counters ?? {}) },
+          itemsDiscovered: new Set(s.dstats.itemsDiscovered ?? []),
+          visited: new Set(s.dstats.visited ?? []),
+          dungeonClears: s.dstats.dungeonClears ?? {},
+        };
+      }
+      if (s.renown !== undefined) this.renown = s.renown ?? 0;
+      if (s.atitle !== undefined) this.activeTitle = s.atitle ?? null;
       if (s.lroll !== undefined) this.lootRollPrompts = s.lroll ?? [];
       if (s.lrollg !== undefined) this.lootRollGroup = s.lrollg ?? [];
       if (s.drun !== undefined) this.delveRun = s.drun;
@@ -2461,6 +2491,12 @@ export class ClientWorld implements IWorld {
   }
   bankBuySlots(): void {
     this.cmd({ cmd: 'bank_buy_slots' });
+  }
+  // --- IWorldDeeds: title selection. No optimistic local write (the bank
+  // precedent): the mirror updates from the `atitle` snapshot echo once the
+  // sim validator accepts, so a rejected send leaves the client untouched. ---
+  setActiveTitle(deedId: string | null): void {
+    this.cmd({ cmd: 'deed_set_title', deedId });
   }
   // --- IWorldDungeons: dungeon enter/leave sends + the raid-lockout countdown read.
   // selfLockouts mirrors the snapshot `s.lockouts`; raidLockouts derives the live
