@@ -92,8 +92,13 @@ export function bindTouchDoubleTap(
     if (e.pointerType !== 'touch' || e.pointerId !== downId) return;
     downId = null;
     // A finger that slid past the slop is a drag (a frame move), not a tap: it
-    // neither fires the double-tap nor primes one.
-    if (Math.hypot(e.clientX - downX, e.clientY - downY) > TAP_SLOP_PX) return;
+    // neither fires the double-tap, nor primes one, nor keeps an earlier tap
+    // primed (tap, drag, tap is two separate interactions, not a double-tap
+    // sandwiching a drag).
+    if (Math.hypot(e.clientX - downX, e.clientY - downY) > TAP_SLOP_PX) {
+      lastTapAt = 0;
+      return;
+    }
     const now = Date.now();
     if (lastTapAt > 0 && now - lastTapAt <= windowMs) {
       lastTapAt = 0;

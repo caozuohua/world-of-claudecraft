@@ -5866,6 +5866,10 @@ export class Hud {
     const pet = this.ownPet();
     // Value-diffed body-class flag the mobile top-band layout reads (see field doc):
     // toggled only on a real transition so the per-frame path stays write-free.
+    // Deliberately toggled on EVERY host, not just touch: only body.mobile-touch
+    // CSS consumes it, and an always-true flag survives a desktop-to-touch flip
+    // mid-session where a mobile-gated toggle would leave it stale until the
+    // pet's presence next changed.
     const petPresent = !!pet && !pet.dead;
     if (petPresent !== this.lastPetPresent) {
       this.lastPetPresent = petPresent;

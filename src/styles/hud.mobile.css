@@ -1109,12 +1109,16 @@
   body.mobile-touch #mobile-extra-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-rows: calc(36px * var(--mobile-chrome-scale, 1));
+    /* No chrome-scale here: the More tray is a TRANSIENT modal, not persistent
+       chrome, so shrinking it frees no world view; and its pills already sit
+       under the 40px floor (36px), so scaling them 0.85x only worsened the tap
+       targets the chrome-scale token promises never to push below the floor. */
+    grid-auto-rows: 36px;
     gap: 6px;
   }
   body.mobile-touch #mobile-extra-controls .mobile-btn {
     width: 100%;
-    height: calc(36px * var(--mobile-chrome-scale, 1));
+    height: 36px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -3431,9 +3435,11 @@
     }
     body.mobile-touch #mobile-extra-grid {
       /* 4 columns in landscape too (issue 1577 round 2 (4)), matching the base
-         tier so each More-tray pill stays narrow on a wide landscape phone. */
+         tier so each More-tray pill stays narrow on a wide landscape phone.
+         No chrome-scale on the rows (see the base-tier rule): transient modal,
+         already under the 40px floor. */
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      grid-auto-rows: calc(34px * var(--mobile-chrome-scale, 1));
+      grid-auto-rows: 34px;
       gap: 5px;
     }
     /* The base rule's min(46vw, 330px) square map, vertically centered at 46%,
@@ -3453,7 +3459,7 @@
     }
     body.mobile-touch #mobile-extra-controls .mobile-btn {
       width: 100%;
-      height: calc(34px * var(--mobile-chrome-scale, 1));
+      height: 34px;
       font-size: 13px;
       padding: 0 7px;
       border-radius: 17px;

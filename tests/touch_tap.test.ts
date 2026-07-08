@@ -176,6 +176,26 @@ describe('bindTouchDoubleTap', () => {
     vi.useRealTimers();
   });
 
+  it('a drag also un-primes an earlier tap (tap, drag, tap is not a double-tap)', () => {
+    vi.useFakeTimers();
+    const el = fakeButton();
+    const cb = vi.fn();
+    bindTouchDoubleTap(el, cb);
+    tap(el, 1);
+    vi.advanceTimersByTime(50);
+    // A drag between the two taps: the pair must not read as a double-tap.
+    el.dispatch('pointerdown', touch(2, 100, 100));
+    el.dispatch('pointerup', touch(2, 100 + TAP_SLOP_PX + 1, 100));
+    vi.advanceTimersByTime(50);
+    tap(el, 3);
+    expect(cb).not.toHaveBeenCalled();
+    // The post-drag tap primed a fresh pair, so a prompt follow-up still fires.
+    vi.advanceTimersByTime(50);
+    tap(el, 4);
+    expect(cb).toHaveBeenCalledTimes(1);
+    vi.useRealTimers();
+  });
+
   it('requires two taps: a lone tap never fires', () => {
     const el = fakeButton();
     const cb = vi.fn();
