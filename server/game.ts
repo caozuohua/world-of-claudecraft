@@ -4235,9 +4235,10 @@ export class GameServer {
         if (!s) continue;
         const match = this.sim.vcupMatchOf(ev.pid);
         if (!match || !match.rated) continue;
+        if (!ev.won) continue;
         void dailyRewardService
           .recordValeCupResult(s.accountId, {
-            won: ev.won,
+            won: true,
             bracket: match.bracket,
             matchId: match.id,
           })
@@ -4245,7 +4246,6 @@ export class GameServer {
             if (points > 0) this.sendDailyRewardPointsGained(s, points);
           })
           .catch((err) => console.error('daily reward vale cup task failed:', err));
-        if (!ev.won) continue;
         // One card per decided match: every winner's vcupResult lands on the
         // same tick and the match-id dedupe key collapses them, so the first
         // one enumerates the whole winning side (linked teammates get tagged
