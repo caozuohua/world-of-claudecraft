@@ -426,7 +426,7 @@ describe('bank_window: the bags companion repaints when a bank op moves items or
     // The nudge sits INSIDE the sends-guard block: a no-op click (nothing fit, the
     // bank-full arm) moved nothing and must not repaint the bags.
     expect(body).toMatch(
-      /if \(plan\.sends\.length > 0\) \{[\s\S]*?this\.deps\.onInventoryChanged\(\);[\s\S]*?\n    \}/,
+      /if \(plan\.sends\.length > 0\) \{[\s\S]*?this\.deps\.onInventoryChanged\(\);[\s\S]*?\n {4}\}/,
     );
   });
 
@@ -507,14 +507,42 @@ describe('bank_window: mobile pairing (hud.mobile.css)', () => {
     expect(components).toMatch(/\.bank-buy-btn \{[^}]*min-height: 40px/);
     expect(components).toMatch(/body\.mobile-touch \.bank-deposit-all \{\s*min-height: 40px;/);
     // ...and prove no mobile bank rule introduces a sub-40 min tap dimension.
+    // .bank-scroll is exempt: it is the grid's scroll CONTAINER, not a tap target,
+    // and its min-height is the short-viewport layout budget (the grid-floor yield
+    // that keeps the buy row visible, pinned below); its cells keep the .bank-item
+    // floor pinned above.
     const bankMobileRules = [
       ...mobileCss.matchAll(/(?:#bank-window|\.bank-[\w-]*)[^{}]*\{[^}]*\}/g),
     ]
       .map((m) => m[0])
+      .filter((rule) => !rule.slice(0, rule.indexOf('{')).includes('.bank-scroll'))
       .join('\n');
     for (const m of bankMobileRules.matchAll(/min-(?:height|width):\s*(\d+)px/g)) {
       expect(Number(m[1])).toBeGreaterThanOrEqual(40);
     }
+  });
+
+  it('yields the grid floor on short landscape phones so the buy row stays visible', () => {
+    // At phone heights the pairing box (viewport minus the 10px top inset and the
+    // 72px tray reservation) cannot hold the full-toolbar chrome, the two-row
+    // .bank-scroll floor (components.css), AND the buy row; without this media
+    // block the transactional buy row clips below the window edge whenever the
+    // vault has items (the toolbar only mounts on a non-empty vault, so an
+    // empty-vault walkthrough never sees it). The scroll region yields to one
+    // cell row, and to a sliver while the transient deposit-all status line
+    // shows. Behavioral oracle: scripts/bank_mobile_buyrow_check.mjs (live
+    // geometry at 740x360 / 844x390 / 915x412, needs npm run dev).
+    const start = mobileCss.indexOf('@media (max-height: 480px)');
+    expect(start).toBeGreaterThan(0);
+    expect(mobileCss).toMatch(
+      /@media \(max-height: 480px\) \{\s*body\.mobile-touch #bank-window \.bank-scroll \{\s*min-height: 44px;/,
+    );
+    expect(mobileCss).toMatch(
+      /body\.mobile-touch #bank-window:has\(\.bank-status\) \.bank-scroll \{\s*min-height: 13px;/,
+    );
+    expect(mobileCss).toMatch(
+      /body\.mobile-touch #bank-window \.bank-buy-row \{\s*margin-top: 4px;/,
+    );
   });
 
   it('exempts the bank cluster from the window-cascade position bake (mirrors the vendor guard)', () => {
