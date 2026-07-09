@@ -55,6 +55,16 @@ describe('painter hygiene', () => {
     }
   });
 
+  it('reads neither the FPS governor nor the graphics tier (fairness oracle)', () => {
+    // The deed UI is cosmetic, player-chosen information: it must never vary
+    // with the graphics tier, so no painter may grow a governor or static-
+    // preset read (the tier tests scan hud.ts, not these modules).
+    for (const src of [painter, tracker]) {
+      expect(src).not.toMatch(/governor/);
+      expect(src).not.toMatch(/ui_effects_profile|fxTier|data-fx-level/);
+    }
+  });
+
   it('never renders bare English (textContent/aria always via t())', () => {
     for (const src of [painter, tracker]) {
       expect(src).not.toMatch(/textContent = '/);
