@@ -16,6 +16,7 @@
 
 import type { DeedDef, DeedStats, DeedTrigger } from '../sim/types';
 import type { DeedsRarity } from '../world_api';
+import { DEED_IMAGE_IDS } from './deed_image_ids';
 
 /** Watchlist cap: at most this many deeds pinned to the HUD tracker. */
 export const DEED_WATCH_CAP = 5;
@@ -72,10 +73,15 @@ export const DEED_BESPOKE_CRESTS: ReadonlySet<string> = new Set([
   'exp_world_traveler',
 ]);
 
-/** Crest icon id for a deed: bespoke `deed_<id>` when highlighted, else the
- *  display category base `deed_cat_<category>`. */
+/** Crest icon id for a deed: `deed_<id>` when the deed has committed painted art
+ *  (DEED_IMAGE_IDS) OR a bespoke procedural recipe (DEED_BESPOKE_CRESTS), else the
+ *  display category base `deed_cat_<category>`. The image branch in icons.ts outranks the
+ *  bespoke recipe for the same id; the recipes stay as the forward-compat fallback tier
+ *  (an artless bespoke deed still lands on deed_<id>, never the base crest). */
 export function deedCrestId(id: string, category: string): string {
-  return DEED_BESPOKE_CRESTS.has(id) ? `deed_${id}` : `deed_cat_${deedDisplayCategory(category)}`;
+  return DEED_IMAGE_IDS.has(id) || DEED_BESPOKE_CRESTS.has(id)
+    ? `deed_${id}`
+    : `deed_cat_${deedDisplayCategory(category)}`;
 }
 
 export interface DeedProgress {

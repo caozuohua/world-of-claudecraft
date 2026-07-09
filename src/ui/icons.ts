@@ -9,6 +9,7 @@
 // has a proper icon. Results are cached as data URLs.
 
 import { ABILITIES, ITEMS } from '../sim/data';
+import { DEED_IMAGE_IDS } from './deed_image_ids';
 import { ITEM_WEAPON_VARIANTS } from './weapon_variants';
 
 export type IconKind = 'ability' | 'item' | 'aura' | 'crest';
@@ -3638,6 +3639,21 @@ export function itemImageUrl(id: string): string | null {
   return ITEM_IMAGE_IDS.has(id) ? `${ITEM_ICON_DIR}/${id}.webp` : null;
 }
 
+// Book of Deeds crest ids are shaped `deed_<deedId>` (deeds_view.ts deedCrestId). Those whose
+// deed ships committed painted art (public/ui/deeds/<deedId>.webp, listed in DEED_IMAGE_IDS)
+// resolve to that static WebP. Mirrors itemImageUrl. The `deed_cat_<category>` base crests and
+// every non-deed crest id (class crests, talent crests) prefix-strip to something not in the set,
+// so they return null and fall through to their procedural recipe: a missing image never breaks
+// a consumer.
+const DEED_ICON_DIR = '/ui/deeds';
+const DEED_CREST_PREFIX = 'deed_';
+/** Static URL of a deed crest's painted art, or null when the crest id has no committed image. */
+export function deedImageUrl(crestId: string): string | null {
+  if (!crestId.startsWith(DEED_CREST_PREFIX)) return null;
+  const deedId = crestId.slice(DEED_CREST_PREFIX.length);
+  return DEED_IMAGE_IDS.has(deedId) ? `${DEED_ICON_DIR}/${deedId}.webp` : null;
+}
+
 const urlCache = new Map<string, string>();
 const warnedIds = new Set<string>();
 
@@ -3706,6 +3722,16 @@ export function iconDataUrl(kind: IconKind, id: string, size: number = DEFAULT_I
   // for generic aura_<kind> ids, so those still fall through to the procedural recipe.
   if (kind === 'ability' || kind === 'aura') {
     const img = abilityImageUrl(id);
+    if (img) return img;
+  }
+  // Deed crests with committed painted art short-circuit to the static WebP. A URL-only path is
+  // sufficient: deed crests are only ever drawn into the Book of Deeds window <img> tags (cards
+  // and the recent strip) through this function, never through the synchronous iconCanvas path
+  // (that is class-crest portraits only, unit_portrait_painter.ts), so no canvas is needed. Every
+  // other crest id (class/talent crests, the deed_cat_* bases, bespoke procedural recipes) returns
+  // null here and falls through to the composited canvas below.
+  if (kind === 'crest') {
+    const img = deedImageUrl(id);
     if (img) return img;
   }
   const key = `${kind}|${id}|${size}`;

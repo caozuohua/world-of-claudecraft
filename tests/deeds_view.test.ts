@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { DEED_ORDER, DEEDS } from '../src/sim/data';
 import { freshDeedStats } from '../src/sim/deeds';
 import type { DeedDef, DeedStats, DeedTrigger } from '../src/sim/types';
+import { DEED_IMAGE_IDS } from '../src/ui/deed_image_ids';
 import {
   buildDeedsView,
   buildDeedTrackerViewInto,
@@ -206,8 +207,28 @@ describe('deedProgress', () => {
 // ---------------------------------------------------------------------------
 
 describe('crest resolution', () => {
-  it('resolves bespoke first, else the display-category base crest', () => {
-    expect(deedCrestId('prog_veteran', 'progression')).toBe('deed_prog_veteran');
+  it('resolves the image branch first, then the bespoke recipe, then the base crest', () => {
+    // Tier 1 (art): any deed with committed art resolves to deed_<id>, including a
+    // non-bespoke one (the image branch outranks the base crest). Derived from the
+    // live set so the assertion never hardcodes which id happens to ship art.
+    const artBacked = [...DEED_IMAGE_IDS].find((id) => !DEED_BESPOKE_CRESTS.has(id));
+    expect(artBacked, 'expected at least one art-backed non-bespoke deed').toBeDefined();
+    if (artBacked)
+      expect(deedCrestId(artBacked, DEEDS[artBacked].category)).toBe(`deed_${artBacked}`);
+    // Tier 2 (bespoke recipe): a bespoke id resolves to deed_<id> regardless of art, the
+    // forward-compat fallback tier (an artless bespoke deed still lands on deed_<id>). NOTE:
+    // all 21 bespoke ids currently also ship art, so this loop passes via the tier-1 art arm;
+    // the bespoke `|| DEED_BESPOKE_CRESTS.has(id)` arm is behaviorally subsumed today and cannot
+    // be pinned independently by a behavior test (deedCrestId reads the module-level set, so no
+    // synthetic artless-bespoke id can be injected). It is kept for the future artless-bespoke case.
+    for (const id of DEED_BESPOKE_CRESTS) {
+      expect(deedCrestId(id, DEEDS[id].category)).toBe(`deed_${id}`);
+    }
+    // Tier 3 (neither): an id with no art and no bespoke recipe falls to the display
+    // category base crest. cmb_counter is synthetic (never a real deed), so this arm
+    // stays stable even if the maintainer later ships more art.
+    expect(DEED_IMAGE_IDS.has('cmb_counter')).toBe(false);
+    expect(DEED_BESPOKE_CRESTS.has('cmb_counter')).toBe(false);
     expect(deedCrestId('cmb_counter', 'combat')).toBe('deed_cat_combat');
     expect(deedCrestId('hid_x', 'hidden')).toBe('deed_cat_feat');
     expect(deedCrestId('totally_unknown', 'no_such_category')).toBe('deed_cat_feat');
