@@ -349,10 +349,20 @@ describe('chrome keys and CSS floors', () => {
   });
 
   it('keeps the 40px touch floor on every deeds tap target', () => {
-    expect(components).toMatch(/body\.mobile-touch \.deed-watch \{\s*min-height: 40px;/);
-    expect(components).toMatch(/body\.mobile-touch \.deed-filter-chip \{\s*min-height: 40px;/);
-    expect(components).toMatch(/body\.mobile-touch \.deed-title-option \{\s*min-height: 40px;/);
-    expect(components).toMatch(/body\.mobile-touch \.deeds-cat \{\s*min-height: 40px;/);
+    // Both dimensions: a short label (the All filter chip) renders under 40px
+    // wide without the explicit width floor.
+    expect(components).toMatch(
+      /body\.mobile-touch \.deed-watch \{\s*min-width: 40px;\s*min-height: 40px;/,
+    );
+    expect(components).toMatch(
+      /body\.mobile-touch \.deed-filter-chip \{\s*min-width: 40px;\s*min-height: 40px;/,
+    );
+    expect(components).toMatch(
+      /body\.mobile-touch \.deed-title-option \{\s*min-width: 40px;\s*min-height: 40px;/,
+    );
+    expect(components).toMatch(
+      /body\.mobile-touch \.deeds-cat \{\s*min-width: 40px;\s*min-height: 40px;/,
+    );
     expect(hudCss).toMatch(
       /@media \(pointer: coarse\) \{\s*#deed-tracker \.dt-header \{\s*min-height: 40px;/,
     );

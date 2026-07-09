@@ -3733,6 +3733,7 @@
     border-radius: 0 0 4px 4px;
   }
   body.mobile-touch .deeds-cat {
+    min-width: 40px;
     min-height: 40px;
   }
   .deeds-scroll {
@@ -3883,6 +3884,7 @@
     background: #241c0c;
   }
   body.mobile-touch .deed-watch {
+    min-width: 40px;
     min-height: 40px;
   }
   .deeds-empty {
@@ -3922,6 +3924,7 @@
     outline-offset: 1px;
   }
   body.mobile-touch .deed-title-option {
+    min-width: 40px;
     min-height: 40px;
   }
   .deeds-filterbar {
@@ -3955,6 +3958,7 @@
     outline-offset: 1px;
   }
   body.mobile-touch .deed-filter-chip {
+    min-width: 40px;
     min-height: 40px;
   }
   /* Character-sheet active-title line + earned deed-border badges (the
