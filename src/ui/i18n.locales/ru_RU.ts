@@ -6707,4 +6707,5 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.lbTitleCol': 'Звание',
   'hudChrome.deeds.lbSelf': 'Ваше место: {rank}, лучшие {percent} процентов',
   'hudChrome.deeds.lbEmpty': 'В рейтинге пока нет летописцев.',
+  'hudChrome.deeds.broadcastsLabel': 'Делиться деяниями с гильдией и друзьями',
 };

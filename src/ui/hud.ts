@@ -428,6 +428,14 @@ export interface OptionsHooks {
   // bag footer and player card reflect on-chain token changes. No-op when the wallet
   // feature is off or no wallet is connected/linked.
   refreshWocBalance(): void;
+  // Account deed-broadcast opt-out seam (accounts.deed_broadcasts): whether a
+  // marquee deed unlock fans out to guildmates and followers. main.ts wires the
+  // REST read/write pair ONLINE ONLY; the options row renders only when the
+  // seam is present (offline characters have no account, so no row).
+  deedBroadcasts?: {
+    get(): Promise<boolean>;
+    set(enabled: boolean): Promise<boolean>;
+  };
   perfOverlay: PerfOverlayHooks;
   // UI theming seam — main.ts owns the ThemeStore + live CSS-variable apply.
   theme: ThemeHooks;
@@ -9571,16 +9579,20 @@ export class Hud {
       this.log(t('hudChrome.deeds.unlockedTitleHint', { title: deedTitleText(id) }), '#ffd100');
     }
     if (plan.bannerId !== null) {
-      this.showBanner(t('hudChrome.deeds.unlockedBanner', { name: deedName(plan.bannerId) }));
+      const bannerText = t('hudChrome.deeds.unlockedBanner', { name: deedName(plan.bannerId) });
+      this.showBanner(bannerText);
+      // The banner div carries no live semantics and the chat log is
+      // deliberately aria-live off, so the polite #combat-live region is what
+      // a screen reader hears (the throttled self-note precedent above).
+      this.combatAnnouncer.push(bannerText, performance.now());
     }
     if (plan.playSound) audio.levelUp();
     if (plan.retroCount > 0) {
-      this.log(
-        t('hudChrome.deeds.retroSummary', {
-          count: formatNumber(plan.retroCount, { maximumFractionDigits: 0 }),
-        }),
-        '#ffd100',
-      );
+      const retroText = t('hudChrome.deeds.retroSummary', {
+        count: formatNumber(plan.retroCount, { maximumFractionDigits: 0 }),
+      });
+      this.log(retroText, '#ffd100');
+      this.combatAnnouncer.push(retroText, performance.now());
     }
   }
 

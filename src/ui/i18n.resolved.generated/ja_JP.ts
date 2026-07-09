@@ -1530,7 +1530,8 @@ export const ja_JP: EnTranslations = {
       "lbDeedsCol": "功績",
       "lbTitleCol": "称号",
       "lbSelf": "あなたの順位：{rank} 位（上位 {percent}%）",
-      "lbEmpty": "ランク入りした年代記作家はまだいません。"
+      "lbEmpty": "ランク入りした年代記作家はまだいません。",
+      "broadcastsLabel": "功績の達成をギルドとフレンドに共有する"
     }
   },
   "apiError": {

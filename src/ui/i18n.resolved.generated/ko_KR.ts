@@ -1530,7 +1530,8 @@ export const ko_KR: EnTranslations = {
       "lbDeedsCol": "업적",
       "lbTitleCol": "칭호",
       "lbSelf": "내 순위: {rank}위, 상위 {percent}%",
-      "lbEmpty": "아직 순위에 오른 연대기 작가가 없습니다."
+      "lbEmpty": "아직 순위에 오른 연대기 작가가 없습니다.",
+      "broadcastsLabel": "업적 달성을 길드와 친구에게 공유"
     }
   },
   "apiError": {

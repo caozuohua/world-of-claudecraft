@@ -1530,7 +1530,8 @@ export const id_ID: EnTranslations = {
       "lbDeedsCol": "Deeds",
       "lbTitleCol": "Title",
       "lbSelf": "Your standing: rank {rank}, top {percent} percent",
-      "lbEmpty": "No ranked chroniclers yet."
+      "lbEmpty": "No ranked chroniclers yet.",
+      "broadcastsLabel": "Share deed unlocks with guild and friends"
     }
   },
   "apiError": {

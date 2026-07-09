@@ -439,6 +439,20 @@ export class Api {
     await this.post('/api/account/deactivate', { username, password });
   }
 
+  // The account's deed-broadcast setting (accounts.deed_broadcasts): whether a
+  // marquee unlock fans out to guildmates and followers. Read/write pair for
+  // the options toggle; both need the signed-in bearer. A malformed read body
+  // conservatively reads as enabled (the column default).
+  async deedBroadcasts(): Promise<boolean> {
+    const data = await this.get('/api/deeds/broadcasts');
+    return data.enabled !== false;
+  }
+
+  async setDeedBroadcasts(enabled: boolean): Promise<boolean> {
+    const data = await this.post('/api/deeds/broadcasts', { enabled });
+    return data.enabled === true;
+  }
+
   // Request a verified email change: server mails a confirm link to the new
   // address and a notice to the old one. The address only changes on verify.
   async changeEmail(password: string, newEmail: string): Promise<void> {

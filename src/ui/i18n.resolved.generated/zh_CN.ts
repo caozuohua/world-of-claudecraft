@@ -1530,7 +1530,8 @@ export const zh_CN: EnTranslations = {
       "lbDeedsCol": "功绩",
       "lbTitleCol": "头衔",
       "lbSelf": "你的排名：第 {rank} 名，位居前 {percent}%",
-      "lbEmpty": "暂无上榜的编年史家。"
+      "lbEmpty": "暂无上榜的编年史家。",
+      "broadcastsLabel": "与公会和好友分享功绩达成"
     }
   },
   "apiError": {

@@ -6580,4 +6580,5 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.lbTitleCol': '称号',
   'hudChrome.deeds.lbSelf': 'あなたの順位：{rank} 位（上位 {percent}%）',
   'hudChrome.deeds.lbEmpty': 'ランク入りした年代記作家はまだいません。',
+  'hudChrome.deeds.broadcastsLabel': '功績の達成をギルドとフレンドに共有する',
 };

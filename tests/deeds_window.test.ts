@@ -128,10 +128,26 @@ describe('hud wiring', () => {
     expect(body).toContain('if (plan.bannerId !== null)');
     expect(body).toContain('if (plan.playSound) audio.levelUp();');
     expect(body).toMatch(
-      /if \(plan\.retroCount > 0\) \{\s*this\.log\(\s*t\('hudChrome\.deeds\.retroSummary'/,
+      /if \(plan\.retroCount > 0\) \{\s*const retroText = t\('hudChrome\.deeds\.retroSummary'/,
     );
     expect(body.match(/showBanner/g)?.length).toBe(1);
     expect(body.match(/audio\.levelUp/g)?.length).toBe(1);
+  });
+
+  it('announces the unlock and the retro summary through the polite #combat-live region', () => {
+    // The banner div carries no live semantics and the chat log is aria-live
+    // off, so BOTH earned-moment texts route through the throttled combat
+    // announcer (once for the coalesced banner line, once for retro).
+    const start = hud.indexOf('private handleDeedUnlocks(');
+    const body = hud.slice(start, hud.indexOf('log(text: string', start));
+    expect(body).toContain('this.combatAnnouncer.push(bannerText, performance.now());');
+    expect(body).toContain('this.combatAnnouncer.push(retroText, performance.now());');
+    expect(body.match(/combatAnnouncer\.push/g)?.length).toBe(2);
+  });
+
+  it('marks the watch toggle state and names the recent-strip crests', () => {
+    expect(painter).toContain('aria-pressed="${entry.watched}"');
+    expect(painter).toMatch(/deed-crest-mini[^>]*alt="\$\{esc\(deedName\(r\.id\)\)\}"/);
   });
 
   it('diverts chronicler interacts through the sim then opens the Chronicles section', () => {
@@ -273,7 +289,9 @@ describe('keybind dispatch chain', () => {
 
 describe('renderer celebration + nameplate title', () => {
   it('fires one festival-gold burst for a fresh unlock and nothing for retro', () => {
-    expect(rendererSrc).toMatch(/case 'deedUnlocked': \{[\s\S]{0,400}?if \(ev\.retro\) break;/);
+    expect(rendererSrc).toMatch(
+      /case 'deedUnlocked': \{[\s\S]{0,500}?if \(ev\.retro \|\| this\.reducedMotion\(\)\) break;/,
+    );
     expect(rendererSrc).toMatch(
       /this\.vfx\.fireworkBurst\(this\.tmpV, FESTIVAL_GOLD_COLORS, 46, 1\.1\);/,
     );

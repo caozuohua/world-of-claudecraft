@@ -6569,4 +6569,5 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.lbTitleCol': '칭호',
   'hudChrome.deeds.lbSelf': '내 순위: {rank}위, 상위 {percent}%',
   'hudChrome.deeds.lbEmpty': '아직 순위에 오른 연대기 작가가 없습니다.',
+  'hudChrome.deeds.broadcastsLabel': '업적 달성을 길드와 친구에게 공유',
 };

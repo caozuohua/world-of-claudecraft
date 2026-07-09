@@ -6244,4 +6244,5 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.lbTitleCol': '头衔',
   'hudChrome.deeds.lbSelf': '你的排名：第 {rank} 名，位居前 {percent}%',
   'hudChrome.deeds.lbEmpty': '暂无上榜的编年史家。',
+  'hudChrome.deeds.broadcastsLabel': '与公会和好友分享功绩达成',
 };

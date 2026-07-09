@@ -9,7 +9,7 @@
 // for either path, by design.
 
 import type { DeedsRarity } from '../src/world_api';
-import { setDeedBroadcasts } from './deeds_db';
+import { getDeedBroadcasts, setDeedBroadcasts } from './deeds_db';
 import { ctxAccountId } from './http/context';
 import { withBody } from './http/middleware/body';
 import { requireAccount } from './http/middleware/require_account';
@@ -66,6 +66,16 @@ async function rarityHandler(ctx: Ctx): Promise<void> {
 }
 
 /**
+ * GET /api/deeds/broadcasts: the account's current marquee-unlock broadcast
+ * setting, `{ enabled }`, so the options toggle renders the persisted state
+ * before the first write. Read-tier bearer (the steam status shape); a
+ * missing row reads as the column default TRUE.
+ */
+async function broadcastsReadHandler(ctx: Ctx): Promise<void> {
+  json(ctx.res, 200, { enabled: await getDeedBroadcasts(ctxAccountId(ctx)) });
+}
+
+/**
  * POST /api/deeds/broadcasts { enabled: boolean }: set the account's
  * marquee-unlock broadcast opt-out (accounts.deed_broadcasts). The flag only
  * gates the guild/friend fan-out; unlocks themselves are never affected.
@@ -84,6 +94,8 @@ async function broadcastsHandler(ctx: Ctx): Promise<void> {
 
 /** The mutation-tier bearer gate the toggle route mounts. */
 const activeAccount = requireAccount({ scope: 'active' });
+/** Read-tier bearer gate for the settings read (the steam status shape). */
+const readAccount = requireAccount({ scope: 'read' });
 
 export const routes: RouteDef[] = [
   {
@@ -91,6 +103,13 @@ export const routes: RouteDef[] = [
     path: '/api/deeds/rarity',
     surface: 'api',
     handler: rarityHandler,
+  },
+  {
+    method: 'GET',
+    path: '/api/deeds/broadcasts',
+    surface: 'api',
+    middleware: [readAccount],
+    handler: broadcastsReadHandler,
   },
   {
     method: 'POST',

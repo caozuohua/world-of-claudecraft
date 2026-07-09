@@ -845,6 +845,16 @@ export const SURFACE_INVENTORY: readonly SurfaceRoute[] = [
   },
   {
     dispatcher: DISPATCH.mainApi,
+    method: 'GET',
+    path: '/api/deeds/broadcasts',
+    handler: 'server/deeds.ts broadcastsReadHandler (registry-only RouteDef)',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.bearer,
+    limiter: null,
+    requireOwnedExpected: null,
+  },
+  {
+    dispatcher: DISPATCH.mainApi,
     method: 'POST',
     path: '/api/deeds/broadcasts',
     handler: 'server/deeds.ts broadcastsHandler (registry-only RouteDef)',

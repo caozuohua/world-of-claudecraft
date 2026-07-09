@@ -1824,5 +1824,8 @@ export const hudChromeStrings = {
     lbTitleCol: 'Title',
     lbSelf: 'Your standing: rank {rank}, top {percent} percent',
     lbEmpty: 'No ranked chroniclers yet.',
+    // The options-window account row (accounts.deed_broadcasts): whether a
+    // marquee unlock is shared with guildmates and followers.
+    broadcastsLabel: 'Share deed unlocks with guild and friends',
   },
 };

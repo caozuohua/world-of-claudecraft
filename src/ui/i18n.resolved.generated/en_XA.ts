@@ -1530,7 +1530,8 @@ export const en_XA: EnTranslations = {
       "lbDeedsCol": "[Ðééðš]",
       "lbTitleCol": "[Ţíţļé]",
       "lbSelf": "[Ýóúŕ šţáñðíñĝ: ŕáñķ {rank}, ţóþ {percent} þéŕçéñţ]",
-      "lbEmpty": "[Ñó ŕáñķéð çĥŕóñíçļéŕš ýéţ.]"
+      "lbEmpty": "[Ñó ŕáñķéð çĥŕóñíçļéŕš ýéţ.]",
+      "broadcastsLabel": "[Šĥáŕé ðééð úñļóçķš ŵíţĥ ĝúíļð áñð ƒŕíéñðš]"
     }
   },
   "apiError": {

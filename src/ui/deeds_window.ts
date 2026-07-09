@@ -270,7 +270,10 @@ export class DeedsWindow {
       const crests = s.recent
         .map(
           (r) =>
-            `<img class="deed-crest deed-crest-mini" src="${iconDataUrl('crest', r.crestId, DEED_CREST_SIZE)}" alt="" title="${esc(deedName(r.id))}">`,
+            // alt carries the deed name: the strip has no adjacent visible
+            // text, so an empty alt would hide the recent unlocks entirely
+            // from the accessibility tree.
+            `<img class="deed-crest deed-crest-mini" src="${iconDataUrl('crest', r.crestId, DEED_CREST_SIZE)}" alt="${esc(deedName(r.id))}" title="${esc(deedName(r.id))}">`,
         )
         .join('');
       html += `<div class="deeds-recent"><span class="deeds-strip-label">${esc(t('hudChrome.deeds.recentLabel'))}</span>${crests}</div>`;
@@ -390,7 +393,7 @@ export class DeedsWindow {
       const fullNote = atCap
         ? ` disabled title="${esc(t('hudChrome.deeds.watchFull', { cap: this.fmt(DEED_WATCH_CAP) }))}"`
         : '';
-      foot += `<button type="button" class="deed-watch${entry.watched ? ' watching' : ''}" data-watch="${esc(entry.id)}" aria-label="${esc(aria)}"${fullNote}>${esc(label)}</button>`;
+      foot += `<button type="button" class="deed-watch${entry.watched ? ' watching' : ''}" data-watch="${esc(entry.id)}" aria-pressed="${entry.watched}" aria-label="${esc(aria)}"${fullNote}>${esc(label)}</button>`;
     }
     if (foot !== '') foot = `<div class="deed-foot">${foot}</div>`;
     return (

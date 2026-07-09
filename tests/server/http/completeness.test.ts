@@ -290,11 +290,12 @@ describe('registry completeness: migrated baseline (public reads + auth + charac
     { method: 'GET', path: '/api/daily-rewards' },
     { method: 'POST', path: '/api/daily-rewards/spin' },
     { method: 'GET', path: '/api/daily-rewards/history' },
-    // The deeds pair (server/deeds.ts): registry-only routes born AFTER the
+    // The deeds family (server/deeds.ts): registry-only routes born AFTER the
     // migration, per the new-route rule (a NEW endpoint is a RouteDef module,
     // never an inline ladder arm), so they have no legacy twin to retain; the
     // REGISTRY_ONLY_PATHS branch below asserts the router-owned-only shape.
     { method: 'GET', path: '/api/deeds/rarity' },
+    { method: 'GET', path: '/api/deeds/broadcasts' },
     { method: 'POST', path: '/api/deeds/broadcasts' },
     // The Steam link trio (server/steam/routes.ts): registry-only like the
     // deeds pair, env-gated dark until STEAM_ENABLED=1.

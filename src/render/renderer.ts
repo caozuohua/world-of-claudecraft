@@ -2984,8 +2984,10 @@ export class Renderer {
         // Book of Deeds earned moment: one festival-gold shell just above the
         // player's head (the hud pid gate already dropped other players'
         // copies). Retro back-credits (the on-join catch-up) draw nothing;
-        // the HUD folds them into a single summary line.
-        if (ev.retro) break;
+        // the HUD folds them into a single summary line. A reduced-motion
+        // player skips the burst too: it is a sudden personal flash at the
+        // camera's focus, and the banner plus gold log line carry the moment.
+        if (ev.retro || this.reducedMotion()) break;
         const v = this.views.get(this.sim.playerId);
         if (!v) break;
         const p = this.sim.player;

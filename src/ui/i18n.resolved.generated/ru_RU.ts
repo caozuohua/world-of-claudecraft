@@ -1530,7 +1530,8 @@ export const ru_RU: EnTranslations = {
       "lbDeedsCol": "Деяния",
       "lbTitleCol": "Звание",
       "lbSelf": "Ваше место: {rank}, лучшие {percent} процентов",
-      "lbEmpty": "В рейтинге пока нет летописцев."
+      "lbEmpty": "В рейтинге пока нет летописцев.",
+      "broadcastsLabel": "Делиться деяниями с гильдией и друзьями"
     }
   },
   "apiError": {

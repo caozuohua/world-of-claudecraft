@@ -7,9 +7,10 @@ process.env.DATABASE_URL ||= 'postgres://test:test@127.0.0.1:5433/wocc_deeds_uni
 import type * as http from 'node:http';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-// The toggle handler writes through the deeds SQL boundary; mock it so no test
-// reaches the pool-less test db.
+// The toggle handlers read/write through the deeds SQL boundary; mock it so no
+// test reaches the pool-less test db.
 vi.mock('../../server/deeds_db', () => ({
+  getDeedBroadcasts: vi.fn(async () => true),
   setDeedBroadcasts: vi.fn(async () => {}),
   recentDeedsForCharacter: vi.fn(async () => []),
 }));
@@ -17,7 +18,7 @@ vi.mock('../../server/deeds_db', () => ({
 import { characterSheet, SHEET_RECENT_DEEDS } from '../../server/character_sheet';
 import { type CharacterRow, SCHEMA } from '../../server/db';
 import { configureDeedsRuntime, resetDeedsRuntimeForTests, routes } from '../../server/deeds';
-import { setDeedBroadcasts } from '../../server/deeds_db';
+import { getDeedBroadcasts, setDeedBroadcasts } from '../../server/deeds_db';
 import {
   PUBLIC_READ_MAX_PER_MINUTE,
   publicReadRateLimited,
@@ -28,6 +29,7 @@ import type { DeedsRarity } from '../../src/world_api';
 import { type FakeRes, fakeCtx, makeReq } from './helpers';
 
 const setFlagMock = vi.mocked(setDeedBroadcasts);
+const getFlagMock = vi.mocked(getDeedBroadcasts);
 
 /** Read a handler's response off the fakeCtx's FakeRes. */
 function captured(res: http.ServerResponse): { status: number; body: unknown } {
@@ -35,10 +37,11 @@ function captured(res: http.ServerResponse): { status: number; body: unknown } {
   return { status: fake.statusCode, body: fake.body ? JSON.parse(fake.body) : undefined };
 }
 
-/** Grab a registered handler by its route path. */
-function handlerFor(path: string) {
-  const route = routes.find((r) => r.path === path);
-  if (!route) throw new Error(`no route registered for ${path}`);
+/** Grab a registered handler by its route path (+ method where the settings
+ *  read and write share one path). */
+function handlerFor(path: string, method = path === '/api/deeds/broadcasts' ? 'POST' : 'GET') {
+  const route = routes.find((r) => r.path === path && r.method === method);
+  if (!route) throw new Error(`no route registered for ${method} ${path}`);
   return route.handler;
 }
 
@@ -46,6 +49,8 @@ afterEach(() => {
   resetDeedsRuntimeForTests();
   resetPublicReadRateLimits();
   setFlagMock.mockClear();
+  getFlagMock.mockClear();
+  getFlagMock.mockImplementation(async () => true);
   vi.restoreAllMocks();
 });
 
@@ -54,17 +59,20 @@ afterEach(() => {
 // ---------------------------------------------------------------------------
 
 describe('deeds route table', () => {
-  it('registers exactly the rarity read and the broadcasts toggle', () => {
-    expect(routes).toHaveLength(2);
+  it('registers exactly the rarity read and the broadcasts read/write pair', () => {
+    expect(routes).toHaveLength(3);
     const rarity = routes.find((r) => r.path === '/api/deeds/rarity');
     expect(rarity?.method).toBe('GET');
     expect(rarity?.surface).toBe('api');
     expect(rarity?.middleware).toBeUndefined(); // anonymous; the budget guard is in-handler
-    const toggle = routes.find((r) => r.path === '/api/deeds/broadcasts');
-    expect(toggle?.method).toBe('POST');
+    const read = routes.find((r) => r.path === '/api/deeds/broadcasts' && r.method === 'GET');
+    expect(read?.surface).toBe('api');
+    // The read-tier bearer gate alone (no body parser on a GET); the gate 401s
+    // an anonymous request before the handler ever runs.
+    expect(read?.middleware).toHaveLength(1);
+    const toggle = routes.find((r) => r.path === '/api/deeds/broadcasts' && r.method === 'POST');
     expect(toggle?.surface).toBe('api');
-    // The bearer gate + body parser; the gate 401s an anonymous request before
-    // the handler ever runs.
+    // The mutation bearer gate + body parser.
     expect(toggle?.middleware).toHaveLength(2);
   });
 });
@@ -102,6 +110,33 @@ describe('rarity handler', () => {
     await expect(handlerFor('/api/deeds/rarity')(ctx)).rejects.toThrow(
       /deeds runtime is not configured/,
     );
+  });
+});
+
+// ---------------------------------------------------------------------------
+// GET /api/deeds/broadcasts
+// ---------------------------------------------------------------------------
+
+describe('broadcasts read handler', () => {
+  it('serves the AUTHENTICATED account flag, both values', async () => {
+    for (const enabled of [true, false]) {
+      getFlagMock.mockImplementation(async () => enabled);
+      const ctx = fakeCtx({
+        method: 'GET',
+        url: '/api/deeds/broadcasts',
+        account: { accountId: 7, scope: 'read' },
+      });
+      await handlerFor('/api/deeds/broadcasts', 'GET')(ctx);
+      expect(captured(ctx.res)).toEqual({ status: 200, body: { enabled } });
+      expect(getFlagMock).toHaveBeenLastCalledWith(7);
+    }
+    expect(setFlagMock).not.toHaveBeenCalled();
+  });
+
+  it('throws (and never reads) on a ctx with no authenticated account', async () => {
+    const ctx = fakeCtx({ method: 'GET', url: '/api/deeds/broadcasts' });
+    await expect(handlerFor('/api/deeds/broadcasts', 'GET')(ctx)).rejects.toThrow();
+    expect(getFlagMock).not.toHaveBeenCalled();
   });
 });
 
