@@ -269,9 +269,26 @@ export function themeCssVars(knobs: ThemeKnobs): Record<string, string> {
   // making every one of them vary correctly per preset through main.ts's
   // existing generic applyTheme loop.
   const panelL0Bg = rgba(panel, 0.86);
-  const urgencyWarn = ensureReadable(BASE_URGENCY_WARN, panel, MIN_LARGE_CONTRAST);
-  const urgencyDanger = ensureReadable(BASE_URGENCY_DANGER, panel, MIN_LARGE_CONTRAST);
-  const notifyCritical = ensureReadable(BASE_NOTIFY_CRITICAL, panel, MIN_TEXT_CONTRAST);
+  // Like colorGold above, the severity colours are double-guarded against BOTH
+  // the panel and its edge: --panel-edge is the solid base of the L2/modal
+  // surfaces this token group defines, so a critical notification on a modal
+  // must clear its floor there too (on the light Parchment panel the
+  // single-guarded values pass the panel but fail the darker edge band).
+  const urgencyWarn = ensureReadable(
+    ensureReadable(BASE_URGENCY_WARN, panel, MIN_LARGE_CONTRAST),
+    panelEdge,
+    MIN_LARGE_CONTRAST,
+  );
+  const urgencyDanger = ensureReadable(
+    ensureReadable(BASE_URGENCY_DANGER, panel, MIN_LARGE_CONTRAST),
+    panelEdge,
+    MIN_LARGE_CONTRAST,
+  );
+  const notifyCritical = ensureReadable(
+    ensureReadable(BASE_NOTIFY_CRITICAL, panel, MIN_TEXT_CONTRAST),
+    panelEdge,
+    MIN_TEXT_CONTRAST,
+  );
   return {
     '--gold': accent,
     '--gold-dim': accentDim,
