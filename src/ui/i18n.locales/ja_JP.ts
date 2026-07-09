@@ -6516,4 +6516,9 @@ export const ja_JP: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': '称号',
   'hudChrome.deeds.charTitleNone': '称号未選択',
   'hudChrome.deeds.charOpenBook': '功績の書',
+  'hudChrome.deeds.lbTab': '名声',
+  'hudChrome.deeds.lbDeedsCol': '功績',
+  'hudChrome.deeds.lbTitleCol': '称号',
+  'hudChrome.deeds.lbSelf': 'あなたの順位：{rank} 位（上位 {percent}%）',
+  'hudChrome.deeds.lbEmpty': 'ランク入りした年代記作家はまだいません。',
 };

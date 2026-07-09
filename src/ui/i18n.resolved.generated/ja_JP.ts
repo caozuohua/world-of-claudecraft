@@ -1516,7 +1516,12 @@ export const ja_JP: EnTranslations = {
       "expandHint": "功績トラッカーを展開",
       "charTitleLabel": "称号",
       "charTitleNone": "称号未選択",
-      "charOpenBook": "功績の書"
+      "charOpenBook": "功績の書",
+      "lbTab": "名声",
+      "lbDeedsCol": "功績",
+      "lbTitleCol": "称号",
+      "lbSelf": "あなたの順位：{rank} 位（上位 {percent}%）",
+      "lbEmpty": "ランク入りした年代記作家はまだいません。"
     }
   },
   "apiError": {

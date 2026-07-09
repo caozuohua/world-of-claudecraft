@@ -113,13 +113,15 @@ describe('leaderboard_window: no magic values (DOM painter)', () => {
 });
 
 describe('leaderboard_window: guild board tab (Players / Guilds)', () => {
-  it('renders a role=tablist with all three board tabs', () => {
+  it('renders a role=tablist with every board tab', () => {
     expect(code).toContain('role="tablist"');
     // biome-ignore lint/suspicious/noTemplateCurlyInString: asserting the painter source literally contains this template expression
     expect(code).toContain('data-leaderboard-tab="${board}"');
     expect(code).toContain("tab('players', t('hudChrome.leaderboard.tabPlayers'))");
     expect(code).toContain("tab('guilds', t('hudChrome.leaderboard.tabGuilds'))");
+    expect(code).toContain("tab('deeds', t('hudChrome.deeds.lbTab'))");
     expect(code).toContain("tab('devs', t('hudChrome.leaderboard.tabDevs'))");
+    expect(code).toContain("tab('daily', t('hudChrome.dailyRewards.leaderboard'))");
   });
 
   it('marks the active tab with aria-selected for screen readers', () => {
@@ -198,6 +200,53 @@ describe('leaderboard_window: developers board tab', () => {
   it('falls back off the devs board if the preference turns off while it is selected', () => {
     expect(code).toContain(
       "if (this.board === 'devs' && !this.deps.showDevBadges()) this.board = 'players';",
+    );
+  });
+});
+
+describe('leaderboard_window: Renown (deeds) board tab', () => {
+  it('drives the Renown board from the pure view core', () => {
+    expect(code).toContain('buildDeedsLeaderboardView(');
+  });
+
+  it('awaits the Renown board through the IWorld seam, not a concrete world', () => {
+    expect(code).toContain('world.deedsLeaderboard(this.page, LEADERBOARD_PAGE_SIZE)');
+  });
+
+  it('passes the viewer character name so their display row can be flagged', () => {
+    expect(code).toContain('viewerName: world.player.name');
+  });
+
+  it('keeps its own page state so the tab pages independently', () => {
+    expect(code).toContain('private deedsPage = 0;');
+    expect(code).toContain("if (this.board === 'deeds') return this.deedsPage;");
+  });
+
+  it('localizes the row title through deed_i18n (the core hands over a deed id)', () => {
+    expect(code).toContain('deedTitleText(r.title)');
+  });
+
+  it('escapes the server-supplied name, realm, and resolved title text', () => {
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: asserting the painter source literally contains this template expression
+    expect(code).toContain('${esc(r.realm)}');
+    // biome-ignore lint/suspicious/noTemplateCurlyInString: asserting the painter source literally contains this template expression
+    expect(code).toContain('${esc(titleText)}');
+    expect(code).not.toMatch(/\$\{r\.realm\}/);
+    expect(code).not.toMatch(/\$\{titleText\}/);
+  });
+
+  it('renders the localized self standing line only when the server resolved one', () => {
+    expect(code).toContain("t('hudChrome.deeds.lbSelf'");
+    expect(code).toMatch(/deedsSelfHtml\([\s\S]{0,220}if \(!self\) return '';/);
+  });
+
+  it('renders the localized Renown-tab empty state', () => {
+    expect(code).toContain("t('hudChrome.deeds.lbEmpty')");
+  });
+
+  it('guards against painting the Renown board into a window closed mid-fetch', () => {
+    expect(code).toMatch(
+      /renderDeedsBoard\([\s\S]{0,500}if \(el\.style\.display !== 'block'\) return;/,
     );
   });
 });

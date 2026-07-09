@@ -1516,7 +1516,12 @@ export const zh_TW: EnTranslations = {
       "expandHint": "展開功績追蹤器",
       "charTitleLabel": "頭銜",
       "charTitleNone": "未選擇頭銜",
-      "charOpenBook": "功績之書"
+      "charOpenBook": "功績之書",
+      "lbTab": "名望",
+      "lbDeedsCol": "功績",
+      "lbTitleCol": "頭銜",
+      "lbSelf": "你的排名：第 {rank} 名，位居前 {percent}%",
+      "lbEmpty": "尚無上榜的編年史家。"
     }
   },
   "apiError": {

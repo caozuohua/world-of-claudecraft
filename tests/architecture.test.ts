@@ -165,6 +165,7 @@ const UI_PURE_CORES = [
   'src/ui/leaderboard_view.ts',
   'src/ui/guild_leaderboard_view.ts',
   'src/ui/dev_leaderboard_view.ts',
+  'src/ui/deeds_leaderboard_view.ts',
   'src/ui/daily_rewards_view.ts',
   'src/ui/deeds_view.ts',
   'src/ui/spellbook_view.ts',

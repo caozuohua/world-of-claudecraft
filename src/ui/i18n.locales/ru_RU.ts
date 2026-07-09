@@ -6643,4 +6643,9 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': 'Звание',
   'hudChrome.deeds.charTitleNone': 'Звание не выбрано',
   'hudChrome.deeds.charOpenBook': 'Книга деяний',
+  'hudChrome.deeds.lbTab': 'Известность',
+  'hudChrome.deeds.lbDeedsCol': 'Деяния',
+  'hudChrome.deeds.lbTitleCol': 'Звание',
+  'hudChrome.deeds.lbSelf': 'Ваше место: {rank}, лучшие {percent} процентов',
+  'hudChrome.deeds.lbEmpty': 'В рейтинге пока нет летописцев.',
 };

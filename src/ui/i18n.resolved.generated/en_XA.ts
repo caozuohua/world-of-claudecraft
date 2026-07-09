@@ -1516,7 +1516,12 @@ export const en_XA: EnTranslations = {
       "expandHint": "[Éẋþáñð ðééð ţŕáçķéŕ]",
       "charTitleLabel": "[Ţíţļé]",
       "charTitleNone": "[Ñó ţíţļé çĥóšéñ]",
-      "charOpenBook": "[Ɓóóķ óƒ Ðééðš]"
+      "charOpenBook": "[Ɓóóķ óƒ Ðééðš]",
+      "lbTab": "[Ŕéñóŵñ]",
+      "lbDeedsCol": "[Ðééðš]",
+      "lbTitleCol": "[Ţíţļé]",
+      "lbSelf": "[Ýóúŕ šţáñðíñĝ: ŕáñķ {rank}, ţóþ {percent} þéŕçéñţ]",
+      "lbEmpty": "[Ñó ŕáñķéð çĥŕóñíçļéŕš ýéţ.]"
     }
   },
   "apiError": {

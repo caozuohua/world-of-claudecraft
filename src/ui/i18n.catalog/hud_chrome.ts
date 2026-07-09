@@ -1800,5 +1800,14 @@ export const hudChromeStrings = {
     charTitleLabel: 'Title',
     charTitleNone: 'No title chosen',
     charOpenBook: 'Book of Deeds',
+    // The Renown tab of the high-score window: tab label, the deeds-board
+    // column headers (rank/name reuse the shared game.leaderboard.* headers,
+    // the Renown column reuses renownLabel above), the viewer's standing
+    // line, and the empty-board state.
+    lbTab: 'Renown',
+    lbDeedsCol: 'Deeds',
+    lbTitleCol: 'Title',
+    lbSelf: 'Your standing: rank {rank}, top {percent} percent',
+    lbEmpty: 'No ranked chroniclers yet.',
   },
 };

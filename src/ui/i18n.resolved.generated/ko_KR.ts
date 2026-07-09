@@ -1516,7 +1516,12 @@ export const ko_KR: EnTranslations = {
       "expandHint": "업적 추적기 펼치기",
       "charTitleLabel": "칭호",
       "charTitleNone": "선택한 칭호 없음",
-      "charOpenBook": "업적의 서"
+      "charOpenBook": "업적의 서",
+      "lbTab": "명성",
+      "lbDeedsCol": "업적",
+      "lbTitleCol": "칭호",
+      "lbSelf": "내 순위: {rank}위, 상위 {percent}%",
+      "lbEmpty": "아직 순위에 오른 연대기 작가가 없습니다."
     }
   },
   "apiError": {

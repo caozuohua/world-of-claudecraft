@@ -1516,7 +1516,12 @@ export const vi_VN: EnTranslations = {
       "expandHint": "Expand deed tracker",
       "charTitleLabel": "Title",
       "charTitleNone": "No title chosen",
-      "charOpenBook": "Book of Deeds"
+      "charOpenBook": "Book of Deeds",
+      "lbTab": "Renown",
+      "lbDeedsCol": "Deeds",
+      "lbTitleCol": "Title",
+      "lbSelf": "Your standing: rank {rank}, top {percent} percent",
+      "lbEmpty": "No ranked chroniclers yet."
     }
   },
   "apiError": {

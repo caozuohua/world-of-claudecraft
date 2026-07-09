@@ -1516,7 +1516,12 @@ export const ru_RU: EnTranslations = {
       "expandHint": "Развернуть список деяний",
       "charTitleLabel": "Звание",
       "charTitleNone": "Звание не выбрано",
-      "charOpenBook": "Книга деяний"
+      "charOpenBook": "Книга деяний",
+      "lbTab": "Известность",
+      "lbDeedsCol": "Деяния",
+      "lbTitleCol": "Звание",
+      "lbSelf": "Ваше место: {rank}, лучшие {percent} процентов",
+      "lbEmpty": "В рейтинге пока нет летописцев."
     }
   },
   "apiError": {

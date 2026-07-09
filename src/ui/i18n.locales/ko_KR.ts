@@ -6505,4 +6505,9 @@ export const ko_KR: Partial<Record<TranslationKey, string>> = {
   'hudChrome.deeds.charTitleLabel': '칭호',
   'hudChrome.deeds.charTitleNone': '선택한 칭호 없음',
   'hudChrome.deeds.charOpenBook': '업적의 서',
+  'hudChrome.deeds.lbTab': '명성',
+  'hudChrome.deeds.lbDeedsCol': '업적',
+  'hudChrome.deeds.lbTitleCol': '칭호',
+  'hudChrome.deeds.lbSelf': '내 순위: {rank}위, 상위 {percent}%',
+  'hudChrome.deeds.lbEmpty': '아직 순위에 오른 연대기 작가가 없습니다.',
 };
