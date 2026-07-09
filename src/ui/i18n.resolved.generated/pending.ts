@@ -10,27 +10,57 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
   "es_ES": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
   "fr_FR": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
   "fr_CA": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
   "en_CA": [],
   "it_IT": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
   "de_DE": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
@@ -47,6 +77,11 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.itemHeroicTag"
   ],
   "pt_BR": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
@@ -54,34 +89,74 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.itemHeroicTag"
   ],
   "cs_CZ": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
   "nl_NL": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
   "pl_PL": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
   "id_ID": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
   "tr_TR": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
   "sv_SE": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
   "vi_VN": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ],
   "da_DK": [
+    "entities.items.chunk_of_ore.name",
+    "entities.quests.q_prof_intro.completion",
+    "entities.quests.q_prof_intro.objectives.0.label",
+    "entities.quests.q_prof_intro.text",
+    "entities.quests.q_prof_intro.title",
     "hudChrome.itemHeroicTag",
     "hudChrome.itemSoulbound"
   ]
