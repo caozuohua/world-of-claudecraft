@@ -4213,6 +4213,7 @@ export const vi_VN: EnTranslations = {
       "mobileSocial": "Xã Hội",
       "mobileArena": "Đấu Trường",
       "mobileMenu": "Menu",
+      "mobileSettings": "Cài Đặt",
       "mobileUse": "Dùng",
       "mobileMeters": "Đồng Hồ",
       "mobileMap": "Bản Đồ",

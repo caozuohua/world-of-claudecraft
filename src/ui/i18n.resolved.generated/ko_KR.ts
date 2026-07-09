@@ -4213,6 +4213,7 @@ export const ko_KR: EnTranslations = {
       "mobileSocial": "소셜",
       "mobileArena": "투기장",
       "mobileMenu": "메뉴",
+      "mobileSettings": "설정",
       "mobileUse": "사용",
       "mobileMeters": "미터",
       "mobileMap": "지도",

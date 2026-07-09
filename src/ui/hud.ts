@@ -286,11 +286,6 @@ import { lowHealthVignette } from './low_health';
 import { lowResourceView } from './low_resource';
 import { mailIndicatorView } from './mailbox_view';
 import { MailboxWindow } from './mailbox_window';
-import {
-  mapQuestListView,
-  parseUntrackedQuests,
-  serializeUntrackedQuests,
-} from './map_quest_list_view';
 import { type MapRegion, mapCanvasHeight, paintTerrainRows } from './map_terrain';
 import { MapWindowPainter } from './map_window_painter';
 import {
@@ -377,7 +372,7 @@ import { localizeTalentTitle, roleLabel, tTalent } from './talent_i18n';
 import { TalentsWindow } from './talents_window';
 import type { PresetId, ThemeKnob, ThemeState } from './theme';
 import { TOOLTIP_PEEK_MS, TouchPeekGuard } from './touch_peek';
-import { bindTouchDoubleTap, bindTouchTap } from './touch_tap';
+import { bindTouchDoubleTap, bindTouchTap, CLICK_SUPPRESS_MS, TAP_SLOP_PX } from './touch_tap';
 import { buildTownFocusView, stepTownFocus } from './town_focus_view';
 import { renderTownFocusWindow } from './town_focus_window';
 import { TutorialOverlay } from './tutorial';
@@ -491,6 +486,7 @@ const PLAYER_PORTRAIT_KEY = 'player';
 // a NON-held tap (touch / gamepad / a mouse click on the slot) fires at.
 const SHOOT_CHARGE_MS = 850;
 const SHOOT_TAP_CHARGE = 0.6;
+const MOBILE_CONTEXT_LONG_PRESS_MS = 650;
 // Vale Cup walk-up "theatre": the anchored kickoff/goal/save/golden/end/countdown
 // banners + crowd fx. Played only when the emitting match's pitch is within
 // VCUP_THEATRE_RADIUS of the local player (the Sowfield you walked up to, or your
@@ -512,11 +508,15 @@ const VCUP_THEATRE_RADIUS = 200;
 // paint carries no bare literal at the call site.
 const BOSS_SKULL_GLYPH = '☠';
 const COMBO_PIP_COUNT = 5;
-// The mob-hover tooltip's fixed bottom-right slot (the WoW default GameTooltip
-// corner), in author-space px: the right margin clears the sidebar icon rail,
-// the bottom margin the community-links row, both fixed right-edge chrome.
+// The mob-hover tooltip's fixed desktop bottom-right slot (the WoW default
+// GameTooltip corner), in author-space px: the right margin clears the sidebar
+// icon rail, the bottom margin the community-links row, both fixed right-edge
+// chrome. Touch uses the slot immediately left of the minimap instead so it does
+// not cover the bottom action controls.
 const MOB_TOOLTIP_MARGIN_RIGHT = 56;
 const MOB_TOOLTIP_MARGIN_BOTTOM = 60;
+const MOB_TOOLTIP_MOBILE_MINIMAP_GAP = 8;
+const MOB_TOOLTIP_MOBILE_EDGE_GAP = 8;
 // The descriptor for a hidden target frame (no target, or a targeted world object).
 // unitFrameView reads only `present` when hiding, so the rest are no-op defaults; a
 // shared const avoids allocating a fresh descriptor for every hidden frame.
@@ -699,6 +699,10 @@ const CHAT_ACTIVE_TAB_KEY = 'woc_chat_active_tab';
 // Persisted chat-window geometry (drag position + resize size). Desktop only —
 // the mobile layout owns its own placement and ignores this.
 const CHAT_GEOMETRY_KEY = 'woc_chat_geometry';
+// Persisted MOBILE chat panel size: the panel's bottom inset in px, dragged via the
+// bottom resize handle. CSS clamps it to a valid range for the live viewport, so a value
+// saved in one orientation stays safe in another (never an off-screen / tiny panel).
+const MOBILE_CHAT_BOTTOM_KEY = 'woc_mobile_chat_bottom';
 // Persisted top-left for each movable unit frame (MovableFrame in movable_frame.ts).
 const TARGET_FRAME_POS_KEY = 'woc_target_frame_pos';
 const PLAYER_FRAME_POS_KEY = 'woc_player_frame_pos';
@@ -1241,14 +1245,6 @@ export class Hud {
   // The quest-giver glyphs of the last overworld map paint, for the hover
   // tooltip's hit-test (quest names + level requirements). Empty in delve mode.
   private mapNpcMarkers: MapNpcMarker[] = [];
-  // The map's quest side list: quests the player untracked (their blue areas
-  // are hidden), lazily loaded per character; and the render-skip signature so
-  // the 4Hz map cadence rebuilds the list DOM only when it actually changed.
-  private mapUntrackedQuests: Set<string> | null = null;
-  private mapQuestListSig = '';
-  // Whether the map's quest dropdown is unfolded (session-only; reopening the
-  // map keeps the last choice, a fresh session starts folded to a clean map).
-  private mapQuestsOpen = false;
   private windowDrag: {
     el: HTMLElement;
     pointerId: number;
@@ -1269,6 +1265,9 @@ export class Hud {
         startH: number;
       }
     | null = null;
+  // Mobile chat resize gesture (drag the bottom handle to set the panel's bottom inset).
+  private mobileChatResize: { pointerId: number; startY: number; startBottom: number } | null =
+    null;
   // Movable unit frames (the shared MovableFrame controller, movable_frame.ts):
   // the target frame and the player frame each get a corner move/lock button, a
   // pointer drag, and a persisted top-left. Constructed once in initFrameMovers.
@@ -1351,6 +1350,7 @@ export class Hud {
     this.emoteWheelSlots = this.loadEmoteWheelSlots();
     this.loadSlotMap();
     this.buildActionBar();
+    this.initMailIndicator();
     this.refreshKeybindLabels();
     this.buildXpTicks();
     document.addEventListener('woc:languagechange', () => this.refreshLocalizedDynamicUi());
@@ -1457,13 +1457,20 @@ export class Hud {
     this.clockEl = $('#minimap-clock');
     // raid-lockout badge on the minimap rim: a lock icon whose hover/tap panel
     // lists the player's raid lockouts (the unlock countdown). Always visible;
-    // it lights up (.locked) while any raid is on cooldown. attachTooltip already
-    // handles desktop hover, mobile tap, and keyboard focus uniformly.
+    // it lights up (.locked) while any raid is on cooldown. attachTooltip handles
+    // desktop hover, mobile long-press, and keyboard focus; mobile tap below opens
+    // the same panel immediately because the badge has no primary action.
     this.raidLockoutEl = document.getElementById('raid-lockout');
     if (this.raidLockoutEl) {
       this.raidLockoutEl.innerHTML = svgIcon('lock');
       this.raidLockoutEl.hidden = false;
       this.attachTooltip(this.raidLockoutEl, () => this.raidLockoutPanelView());
+      this.raidLockoutEl.addEventListener('click', (ev) => {
+        if (!document.body.classList.contains('mobile-touch')) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.showRaidLockoutTooltip();
+      });
     }
     const dailyRewardsButton = document.getElementById(
       'daily-rewards-button',
@@ -1527,9 +1534,13 @@ export class Hud {
       const pe = ev as PointerEvent;
       this.openTargetFrameMenuAt(pe.clientX, pe.clientY);
     });
+    this.bindMobileFrameLongPress($('#target-frame'), (x, y) => this.openTargetFrameMenuAt(x, y));
     $('#player-frame').addEventListener('contextmenu', (ev) => {
       ev.preventDefault();
       this.openSelfContextMenu((ev as MouseEvent).clientX, (ev as MouseEvent).clientY);
+    });
+    this.bindMobileFrameLongPress($('#player-frame'), (x, y) => this.openSelfContextMenu(x, y), {
+      ignoreSelector: 'button, #buff-bar, #debuff-bar',
     });
     $('#mm-char').addEventListener('click', () => this.toggleChar());
     $('#mm-spell').addEventListener('click', () => this.toggleSpellbook());
@@ -1598,6 +1609,7 @@ export class Hud {
     $('#mm-map').addEventListener('click', () => this.toggleMap());
     $('#map-close').addEventListener('click', () => {
       $('#map-window').style.display = 'none';
+      this.hideTooltip(); // a touch marker tip can outlive the window otherwise
     });
     const mapCanvas = $('#map-canvas') as unknown as HTMLCanvasElement;
     mapCanvas.addEventListener(
@@ -1640,83 +1652,71 @@ export class Hud {
     };
     mapCanvas.addEventListener('pointerup', endDrag);
     mapCanvas.addEventListener('pointercancel', endDrag);
-    // Hovering the map shows context tooltips (mouse only: touch pans the map,
-    // no hover). Priority: a quest-giver glyph ('!'/'?', quest names + level
-    // requirements) sits ON TOP of the blobs, so it wins; otherwise a
-    // quest-objective area shows its objectives with live tracker progress.
-    // Both hit-tests run against the markers of the last paint, scaled from
-    // CSS px to the canvas backing space the model projects into.
+    // The map reveals a marker's quest text as a tooltip: on desktop it follows
+    // the mouse (hover); on touch there is no hover, so a TAP on a marker shows it
+    // (a press that moves beyond the tolerance is a pan, not a tap). Priority: a
+    // quest-giver glyph ('!'/'?', quest names + level requirements) sits ON TOP of
+    // the blobs, so it wins; otherwise a quest-objective area shows its objectives
+    // with live tracker progress. Both hit-tests run against the markers of the
+    // last paint, scaled from CSS px to the canvas backing space the model projects
+    // into.
+    const TAP_MOVE_TOLERANCE_PX = 10;
     let mapAreaTipShown = false;
+    let mapTapStart: { x: number; y: number } | null = null;
     const hideMapAreaTip = (): void => {
       if (!mapAreaTipShown) return;
       mapAreaTipShown = false;
       this.hideTooltip();
     };
-    mapCanvas.addEventListener('pointermove', (ev) => {
-      if (
-        ev.pointerType !== 'mouse' ||
-        this.mapDrag ||
-        (this.mapQuestAreas.length === 0 && this.mapNpcMarkers.length === 0)
-      ) {
-        hideMapAreaTip();
-        return;
-      }
+    // Paint the shared #tooltip for the marker under a client-space point and
+    // report whether one was shown (the attachTooltip idiom: map into author
+    // space, then clamp the tooltip box against the viewport).
+    const showMapTipAt = (clientX: number, clientY: number): boolean => {
+      if (this.mapQuestAreas.length === 0 && this.mapNpcMarkers.length === 0) return false;
       const rect = mapCanvas.getBoundingClientRect();
-      const cx = ((ev.clientX - rect.left) * mapCanvas.width) / rect.width;
-      const cy = ((ev.clientY - rect.top) * mapCanvas.height) / rect.height;
+      const cx = ((clientX - rect.left) * mapCanvas.width) / rect.width;
+      const cy = ((clientY - rect.top) * mapCanvas.height) / rect.height;
       const glyph = npcMarkerAt(this.mapNpcMarkers, cx, cy);
       const html = glyph
         ? this.questGiverTooltipHtml(glyph)
         : this.questAreaTooltipHtml(questAreaObjectivesAt(this.mapQuestAreas, cx, cy));
-      if (!html) {
+      if (!html) return false;
+      // Same as desktop hover: paint the tip at the pointer (a tap on touch, the
+      // cursor on mouse). paintTooltipAt clamps the box on-screen either way.
+      this.paintTooltipAt(html, clientX, clientY);
+      mapAreaTipShown = true;
+      return true;
+    };
+    mapCanvas.addEventListener('pointermove', (ev) => {
+      if (ev.pointerType !== 'mouse' || this.mapDrag) {
         hideMapAreaTip();
         return;
       }
-      // Paint the shared #tooltip beside the cursor (the attachTooltip
-      // mousemove idiom: map visual-space x/y into author space, then clamp
-      // the author-space tooltip box against the viewport).
-      this.tooltipEl.innerHTML = html;
-      this.tooltipEl.style.display = 'block';
-      const z = getUiScale();
-      const tw = this.tooltipEl.offsetWidth;
-      const th = this.tooltipEl.offsetHeight;
-      this.tooltipEl.style.left = `${Math.max(8, Math.min(window.innerWidth / z - tw - 8, ev.clientX / z + 14))}px`;
-      this.tooltipEl.style.top = `${Math.max(8, ev.clientY / z - th - 10)}px`;
-      mapAreaTipShown = true;
+      if (!showMapTipAt(ev.clientX, ev.clientY)) hideMapAreaTip();
     });
-    mapCanvas.addEventListener('pointerleave', hideMapAreaTip);
-    mapCanvas.addEventListener('pointerdown', hideMapAreaTip);
-    // The map's quest dropdown: the "Quests" button unfolds/folds the list.
-    $('#map-quests-toggle').addEventListener('click', () => {
-      this.mapQuestsOpen = !this.mapQuestsOpen;
-      this.mapQuestListSig = ''; // force the list render to re-apply visibility
-      this.updateMapWindow();
+    // Mouse only: a touch pointer fires pointerleave the instant the finger lifts
+    // (and again when a zoomed-in drag releases its pointer capture), which would
+    // wipe the tip the tap just opened. Touch dismisses via the next pointerdown.
+    mapCanvas.addEventListener('pointerleave', (ev) => {
+      if (ev.pointerType === 'mouse') hideMapAreaTip();
     });
-    // The map's quest side list: one delegated click listener toggles a
-    // quest's tracking (whether its blue areas + numbered badge paint).
-    $('#map-quests').addEventListener('click', (ev) => {
-      const btn = (ev.target as HTMLElement).closest<HTMLElement>('.mapq-track');
-      const questId = btn?.dataset.quest;
-      if (!questId) return;
-      const untracked = this.untrackedQuestSet();
-      if (untracked.has(questId)) untracked.delete(questId);
-      else untracked.add(questId);
-      try {
-        localStorage.setItem(this.mapUntrackedKey(), serializeUntrackedQuests(untracked));
-      } catch {
-        /* storage unavailable */
-      }
-      // The rebuild below replaces #map-quests's children, destroying a focused
-      // track button; restore focus to the same quest's rebuilt button so keyboard
-      // toggling stays in place and the flipped aria-pressed is announced (the
-      // toggleQuestTrackerCollapsed refocus idiom).
-      const refocus = document.activeElement === btn;
-      this.updateMapWindow();
-      if (refocus)
-        $('#map-quests')
-          .querySelector<HTMLElement>(`.mapq-track[data-quest="${CSS.escape(questId)}"]`)
-          ?.focus();
+    // A new press clears any open tip; for touch, remember where it started so the
+    // release can tell a stationary marker tap from a pan.
+    mapCanvas.addEventListener('pointerdown', (ev) => {
+      hideMapAreaTip();
+      mapTapStart = ev.pointerType === 'mouse' ? null : { x: ev.clientX, y: ev.clientY };
     });
+    // A stationary touch release reveals the marker under the finger. iOS can raise
+    // pointercancel (not pointerup) for a tap it briefly mistook for a gesture, so
+    // both end the tap; a release that moved past the tolerance was a pan.
+    const endMapTap = (ev: PointerEvent): void => {
+      if (ev.pointerType === 'mouse' || !mapTapStart) return;
+      const moved = Math.hypot(ev.clientX - mapTapStart.x, ev.clientY - mapTapStart.y);
+      mapTapStart = null;
+      if (moved <= TAP_MOVE_TOLERANCE_PX) showMapTipAt(ev.clientX, ev.clientY);
+    };
+    mapCanvas.addEventListener('pointerup', endMapTap);
+    mapCanvas.addEventListener('pointercancel', endMapTap);
     $('#mm-bag').addEventListener('click', () => this.toggleBags());
     // Drop an equipped piece dragged out of the paperdoll onto the bags window.
     const bagsEl = $('#bags');
@@ -2114,6 +2114,20 @@ export class Hud {
     requestAnimationFrame(clamp);
   }
 
+  private centerPopupInViewport(el: HTMLElement, margin = 10): void {
+    const z = getUiScale();
+    const vw = window.innerWidth / z;
+    const vh = window.innerHeight / z;
+    const rect = el.getBoundingClientRect();
+    const width = Math.min(rect.width / z, vw - margin * 2);
+    const height = Math.min(rect.height / z, vh - margin * 2);
+    el.style.left = `${Math.max(margin, (vw - width) / 2)}px`;
+    el.style.top = `${Math.max(margin, (vh - height) / 2)}px`;
+    el.style.right = 'auto';
+    el.style.bottom = 'auto';
+    el.style.transform = 'none';
+  }
+
   private topmostOpenWindow(): HTMLElement | null {
     return (
       [...document.querySelectorAll<HTMLElement>('.window.panel')]
@@ -2301,6 +2315,36 @@ export class Hud {
     grip.setAttribute('aria-hidden', 'true');
     frame.appendChild(grip);
 
+    // Mobile-only resize handle: a BODY-LEVEL bar pinned by CSS to the open panel's bottom
+    // edge (it shares the panel's --mobile-chat-bottom var, so they move together) with a
+    // very high z-index so nothing can overlay it, and touch-action:none so a drag on it is
+    // a RESIZE, not a page scroll. Dragging it sets --mobile-chat-bottom (clamped by CSS).
+    // It is a direct child of body (not #ui / the wrap) so its z-index is not capped by an
+    // ancestor stacking context. Hidden on desktop via CSS.
+    const resizeHandle = document.createElement('div');
+    resizeHandle.className = 'chat-mobile-resize';
+    resizeHandle.title = t('hudChrome.chatWindow.resize');
+    resizeHandle.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(resizeHandle);
+    resizeHandle.addEventListener('pointerdown', (ev) =>
+      this.onMobileChatResizeStart(ev, resizeHandle),
+    );
+    resizeHandle.addEventListener('pointermove', (ev) => this.onMobileChatResizeMove(ev));
+    const endMobileResize = (ev: PointerEvent) => this.onMobileChatResizeEnd(ev);
+    resizeHandle.addEventListener('pointerup', endMobileResize);
+    resizeHandle.addEventListener('pointercancel', endMobileResize);
+    try {
+      const savedBottom = localStorage.getItem(MOBILE_CHAT_BOTTOM_KEY);
+      if (savedBottom) {
+        // Clamp on restore so a value saved from a larger viewport (or an earlier build)
+        // cannot land out of range and make the first drag feel dead.
+        const clamped = this.clampMobileChatBottom(Number.parseInt(savedBottom, 10) || 52);
+        document.documentElement.style.setProperty('--mobile-chat-bottom', `${clamped}px`);
+      }
+    } catch {
+      /* storage unavailable */
+    }
+
     // touch-action lives in CSS now: `none` on desktop so a touch-drag on the empty
     // strip moves the chat box (the move gesture is desktop-only, see
     // onChatBoxMoveStart), and `pan-x` on mobile so overflowed tabs can be swiped
@@ -2410,6 +2454,57 @@ export class Hud {
     this.chatBoxGesture = null;
     document.body.classList.remove('chat-box-dragging');
     this.persistChatBoxGeometry();
+  }
+
+  // Clamp the panel's bottom inset to the same range the CSS clamp uses (12px .. viewport
+  // minus a reserved top band), so the stored value never drifts out of range. If it did,
+  // the CSS clamps it for display but a drag starting from the out-of-range raw value would
+  // not move the (already-clamped) panel until the raw crossed back in, which reads as a
+  // dead drag. Clamping in JS too keeps the drag responsive from the first pixel.
+  private clampMobileChatBottom(v: number): number {
+    const hi = Math.max(12, window.innerHeight - 320);
+    return Math.min(hi, Math.max(12, v));
+  }
+
+  // Mobile chat resize: drag the bottom handle to set --mobile-chat-bottom (the panel's
+  // bottom inset). Dragging DOWN lowers the inset (taller panel); UP raises it (shorter).
+  // The handle has touch-action:none and captures the pointer, so the drag is a resize (not
+  // a scroll) and follows the finger.
+  private onMobileChatResizeStart(ev: PointerEvent, handle: HTMLElement): void {
+    if (!this.isMobileLayout()) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    const raw = document.documentElement.style.getPropertyValue('--mobile-chat-bottom');
+    const startBottom = this.clampMobileChatBottom(raw ? Number.parseInt(raw, 10) || 52 : 52);
+    this.mobileChatResize = { pointerId: ev.pointerId, startY: ev.clientY, startBottom };
+    document.body.classList.add('chat-box-dragging');
+    try {
+      handle.setPointerCapture?.(ev.pointerId);
+    } catch {
+      /* synthetic pointer */
+    }
+  }
+
+  private onMobileChatResizeMove(ev: PointerEvent): void {
+    const g = this.mobileChatResize;
+    if (!g || g.pointerId !== ev.pointerId) return;
+    ev.preventDefault();
+    // Finger moving down (clientY grows) shrinks the bottom inset so the panel grows down.
+    const bottom = this.clampMobileChatBottom(g.startBottom - (ev.clientY - g.startY));
+    document.documentElement.style.setProperty('--mobile-chat-bottom', `${Math.round(bottom)}px`);
+  }
+
+  private onMobileChatResizeEnd(ev: PointerEvent): void {
+    const g = this.mobileChatResize;
+    if (!g || g.pointerId !== ev.pointerId) return;
+    this.mobileChatResize = null;
+    document.body.classList.remove('chat-box-dragging');
+    const bottom = document.documentElement.style.getPropertyValue('--mobile-chat-bottom');
+    try {
+      if (bottom) localStorage.setItem(MOBILE_CHAT_BOTTOM_KEY, bottom.trim());
+    } catch {
+      /* storage unavailable */
+    }
   }
 
   private applyChatBoxGeometry(): void {
@@ -3988,9 +4083,75 @@ export class Hud {
     });
   }
 
+  private bindMobileFrameLongPress(
+    el: HTMLElement,
+    onLongPress: (x: number, y: number) => void,
+    opts: { ignoreSelector?: string } = {},
+  ): void {
+    let timer: number | undefined;
+    let downId: number | null = null;
+    let downX = 0;
+    let downY = 0;
+    let suppressUntil = 0;
+    const clear = () => {
+      if (timer !== undefined) window.clearTimeout(timer);
+      timer = undefined;
+      downId = null;
+    };
+    el.addEventListener('pointerdown', (ev) => {
+      if (ev.pointerType !== 'touch' || !this.isMobileLayout()) return;
+      const target = ev.target as HTMLElement | null;
+      if (opts.ignoreSelector && target?.closest(opts.ignoreSelector)) return;
+      clear();
+      downId = ev.pointerId;
+      downX = ev.clientX;
+      downY = ev.clientY;
+      timer = window.setTimeout(() => {
+        timer = undefined;
+        suppressUntil = Date.now() + CLICK_SUPPRESS_MS;
+        onLongPress(downX, downY);
+      }, MOBILE_CONTEXT_LONG_PRESS_MS);
+    });
+    el.addEventListener('pointermove', (ev) => {
+      if (ev.pointerType !== 'touch' || ev.pointerId !== downId) return;
+      if (Math.hypot(ev.clientX - downX, ev.clientY - downY) > TAP_SLOP_PX) clear();
+    });
+    el.addEventListener('pointerup', (ev) => {
+      if (ev.pointerId === downId) clear();
+    });
+    el.addEventListener('pointercancel', (ev) => {
+      if (ev.pointerId === downId) clear();
+    });
+    el.addEventListener(
+      'click',
+      (ev) => {
+        if (Date.now() > suppressUntil) return;
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+      },
+      true,
+    );
+    el.addEventListener(
+      'contextmenu',
+      (ev) => {
+        if (!this.isMobileLayout() || Date.now() > suppressUntil) return;
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+      },
+      true,
+    );
+  }
+
   hideTooltip(): void {
     this.tooltipEl.style.display = 'none';
     this.tooltipEl.classList.remove('mob-tooltip');
+  }
+
+  private showRaidLockoutTooltip(): void {
+    const el = this.raidLockoutEl;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    this.paintTooltipAt(this.raidLockoutPanelView(), rect.right, rect.top + rect.height / 2);
   }
 
   // Paints the shared #tooltip box at a screen point, used by attachTooltip's
@@ -4014,12 +4175,12 @@ export class Hud {
     return { w: tw, h: th };
   }
 
-  // Anchors the mob-hover tooltip to the viewport's bottom-right corner (the WoW
-  // default GameTooltip slot) instead of the cursor. Bottom-anchored, so a taller
-  // tooltip (quest lines) grows UPWARD from the same baseline. Deliberately NOT
-  // tied to the player frame: that frame is player-movable (MovableFrame), and an
-  // anchor riding it wanders wherever the frame was dragged. The margins clear
-  // the fixed right-edge chrome (the sidebar icon rail and the community row).
+  // Anchors the mob-hover tooltip to a fixed viewport corner instead of the
+  // cursor. Desktop keeps the WoW default bottom-right slot; touch moves to the
+  // left of the minimap so selected enemy info does not cover the bottom action
+  // controls.
+  // Deliberately NOT tied to the player frame: that frame is player-movable
+  // (MovableFrame), and an anchor riding it wanders wherever the frame was dragged.
   private paintMobTooltipBottomRight(html: string): void {
     this.tooltipEl.classList.add('mob-tooltip');
     this.tooltipEl.innerHTML = html;
@@ -4027,8 +4188,21 @@ export class Hud {
     const z = getUiScale();
     const tw = this.tooltipEl.offsetWidth,
       th = this.tooltipEl.offsetHeight;
-    const left = Math.max(8, window.innerWidth / z - tw - MOB_TOOLTIP_MARGIN_RIGHT);
-    const top = Math.max(8, window.innerHeight / z - th - MOB_TOOLTIP_MARGIN_BOTTOM);
+    const isMobileTouch = document.body.classList.contains('mobile-touch');
+    const minimapRect = isMobileTouch
+      ? (document.getElementById('minimap-wrap')?.getBoundingClientRect() ?? null)
+      : null;
+    const left =
+      minimapRect !== null
+        ? Math.max(
+            MOB_TOOLTIP_MOBILE_EDGE_GAP,
+            minimapRect.left / z - tw - MOB_TOOLTIP_MOBILE_MINIMAP_GAP,
+          )
+        : Math.max(8, window.innerWidth / z - tw - MOB_TOOLTIP_MARGIN_RIGHT);
+    const top =
+      minimapRect !== null
+        ? Math.max(MOB_TOOLTIP_MOBILE_EDGE_GAP, minimapRect.top / z)
+        : Math.max(8, window.innerHeight / z - th - MOB_TOOLTIP_MARGIN_BOTTOM);
     this.tooltipEl.style.left = `${left}px`;
     this.tooltipEl.style.top = `${top}px`;
   }
@@ -6891,6 +7065,22 @@ export class Hud {
     if (slowHud) this.updateMailIndicator();
   }
 
+  private initMailIndicator(): void {
+    const el = $('#mail-indicator') as HTMLButtonElement;
+    this.mailIndicatorEl = el;
+    el.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.openMailbox();
+    });
+    el.addEventListener('keydown', (ev) => {
+      if (ev.key !== 'Enter' && ev.key !== ' ') return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.openMailbox();
+    });
+  }
+
   // The envelope indicator by the minimap: visible while unread letters wait.
   // Slow-band, value-diffed writes only (mailUnread changes rarely).
   private updateMailIndicator(): void {
@@ -7356,10 +7546,8 @@ export class Hud {
     });
     el.appendChild(btn);
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeLoot());
-    el.style.left = `${Math.max(10, (window.innerWidth - 230) / 2)}px`;
-    el.style.top = `${Math.max(10, (window.innerHeight - 220) / 2)}px`;
-    el.style.transform = 'none';
     el.style.display = 'block';
+    this.centerPopupInViewport(el);
   }
 
   private bindLockpickKeys(): void {
@@ -7938,6 +8126,7 @@ export class Hud {
     const el = $('#map-window');
     if (el.style.display === 'block') {
       el.style.display = 'none';
+      this.hideTooltip(); // a touch marker tip can outlive the window otherwise
       return;
     }
     this.closeOtherWindows('#map-window');
@@ -7977,7 +8166,6 @@ export class Hud {
       // title is drawn on-canvas, since the world map has no DOM zone label).
       this.mapQuestAreas = [];
       this.mapNpcMarkers = [];
-      this.hideMapQuestList();
       this.delvePainter.paintWorldMapDelve(ctx, this.sim, S);
       const run = this.sim.delveRun;
       const area = run ? delveDisplayName(run.delveId) : '';
@@ -7998,90 +8186,12 @@ export class Hud {
       canvasSize: S,
       zoom: this.mapZoom,
       center: this.mapCenter,
-      untrackedQuestIds: this.untrackedQuestSet(),
     });
     this.mapView = result.view;
     this.mapQuestAreas = result.questAreas;
     this.mapNpcMarkers = result.npcs;
     if (!this.mapDrag) canvas.style.cursor = result.cursor;
-    this.renderMapQuestList();
     this.setText(summaryEl, t('hud.core.mapSummary', { zone: zoneDisplayName(zone.id) }));
-  }
-
-  // ---- the map's numbered quest side list (track/untrack the blue areas) ----
-
-  private mapUntrackedKey(): string {
-    return `woc_map_untracked_${this.sim.cfg.playerClass}_${this.sim.player.name}`;
-  }
-
-  private untrackedQuestSet(): Set<string> {
-    if (!this.mapUntrackedQuests) {
-      let raw: string | null = null;
-      try {
-        raw = localStorage.getItem(this.mapUntrackedKey());
-      } catch {
-        /* storage unavailable */
-      }
-      this.mapUntrackedQuests = parseUntrackedQuests(raw);
-    }
-    return this.mapUntrackedQuests;
-  }
-
-  private hideMapQuestList(): void {
-    if (this.mapQuestListSig === '') return;
-    this.mapQuestListSig = '';
-    const el = $('#map-quests');
-    el.classList.remove('on');
-    el.replaceChildren();
-    ($('#map-quests-toggle') as unknown as HTMLButtonElement).hidden = true;
-  }
-
-  // Rebuild the dropdown only when its content actually changed (the map
-  // repaints on the 4Hz cadence; the signature keeps the DOM quiet between
-  // real changes and covers a language switch via the current language salt).
-  // The "Quests" toggle button shows whenever the log has quests; the list
-  // itself only while the dropdown is unfolded.
-  private renderMapQuestList(): void {
-    const entries = mapQuestListView(this.sim.questLog, this.untrackedQuestSet());
-    if (entries.length === 0) {
-      this.hideMapQuestList();
-      return;
-    }
-    const sig = `${getLanguage()}|${this.mapQuestsOpen ? 1 : 0}|${entries
-      .map((e) => `${e.questId}:${e.number}:${e.ready ? 1 : 0}:${e.tracked ? 1 : 0}`)
-      .join('|')}`;
-    if (sig === this.mapQuestListSig) return;
-    this.mapQuestListSig = sig;
-    const toggle = $('#map-quests-toggle') as unknown as HTMLButtonElement;
-    toggle.hidden = false;
-    toggle.setAttribute('aria-expanded', this.mapQuestsOpen ? 'true' : 'false');
-    // U+25BE down / U+25B8 right triangle, the tracker header's chevron pair
-    toggle.textContent = `${this.mapQuestsOpen ? '▾' : '▸'} ${t('questUi.tracker.title')}`;
-    const listEl = $('#map-quests');
-    if (!this.mapQuestsOpen) {
-      listEl.classList.remove('on');
-      listEl.replaceChildren();
-      return;
-    }
-    const check = String.fromCharCode(0x2713); // escaped so no literal glyph in source
-    let html = `<div class="mapq-head">${esc(t('questUi.tracker.title'))}</div>`;
-    for (const e of entries) {
-      const title = questTitle(e.questId);
-      const label = t(e.tracked ? 'questUi.tracker.hideFromMap' : 'questUi.tracker.showOnMap', {
-        name: title,
-      });
-      html +=
-        `<div class="mapq-row${e.tracked ? '' : ' untracked'}">` +
-        `<span class="mapq-num">${esc(this.questNumber(e.number))}</span>` +
-        `<span class="mapq-title">${esc(title)}</span>` +
-        (e.ready
-          ? `<span class="mapq-complete">${esc(t('questUi.tracker.complete'))}</span>`
-          : '') +
-        `<button type="button" class="mapq-track" data-quest="${esc(e.questId)}" aria-pressed="${e.tracked}" title="${esc(label)}" aria-label="${esc(label)}">${e.tracked ? check : ''}</button>` +
-        `</div>`;
-    }
-    listEl.innerHTML = html;
-    listEl.classList.add('on');
   }
 
   // Tooltip body for a hovered quest-giver glyph on the world map: each quest
@@ -11150,9 +11260,13 @@ export class Hud {
       });
     }
     el.querySelector('[data-close]')?.addEventListener('click', () => this.closeLoot());
-    this.placePopupAt(el, screenX - 115, screenY - 30, 260, 280, 10, 10);
-    el.style.transform = 'none'; // loot pops at the cursor, not the centred slot
     el.style.display = 'block';
+    if (document.body.classList.contains('mobile-touch')) {
+      this.centerPopupInViewport(el);
+    } else {
+      this.placePopupAt(el, screenX - 115, screenY - 30, 260, 280, 10, 10);
+      el.style.transform = 'none'; // loot pops at the cursor, not the centred slot
+    }
   }
 
   closeLoot(): void {
@@ -13197,9 +13311,11 @@ export class Hud {
     html += `<div class="ctx-item" data-act="close">${esc(t('hud.chat.context.cancel'))}</div>`;
     el.innerHTML = html;
     hydratePortraits(el);
-    el.style.left = `${Math.min(window.innerWidth - 170, x)}px`;
-    el.style.top = `${Math.min(window.innerHeight - 160, y)}px`;
     el.style.display = 'block';
+    const ctxItemCount = (html.match(/class="ctx-item"/g) ?? []).length;
+    const ctxReserveBottom = 80 + ctxItemCount * (this.isMobileLayout() ? 44 : 28);
+    this.placePopupAt(el, x, y, 170, ctxReserveBottom);
+    this.keepPopupOnScreen(el);
     this.bindContextMenuActions((act) => {
       if (act === 'convert-raid') {
         this.sim.convertPartyToRaid();

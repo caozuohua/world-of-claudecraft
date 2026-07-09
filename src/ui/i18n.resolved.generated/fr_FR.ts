@@ -4213,6 +4213,7 @@ export const fr_FR: EnTranslations = {
       "mobileSocial": "Relations",
       "mobileArena": "Arène",
       "mobileMenu": "Menu",
+      "mobileSettings": "Paramètres",
       "mobileUse": "Utiliser",
       "mobileMeters": "Compteurs",
       "mobileMap": "Carte",

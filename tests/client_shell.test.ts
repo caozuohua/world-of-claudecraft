@@ -433,29 +433,21 @@ describe('client HTML shell', () => {
         /id="chat-dismiss"[^>]*data-i18n-aria="hudChrome\.mobile\.hideKeyboard"/,
       );
     }
-    // Hidden by default EVERYWHERE via a base rule (so it is not a stray button on
-    // desktop, which has no mobile-touch-scoped rule to hide it), then revealed only
-    // under body.mobile-touch.mobile-chat-open.mobile-keyboard-open (a later @layer wins
-    // there): the chevron shows ONLY while there is a keyboard to hide, never as a dead
-    // control after it has dropped the keyboard.
+    // Hidden by default (desktop) AND hidden on mobile in the current model: the OS
+    // keyboard's own hide key returns to the read view and the Chat icon closes the panel,
+    // so there is no in-app chevron shown (no mobile show rule reveals it).
     expect(hudCss).toContain('#chat-dismiss {\n    display: none;\n  }');
     expect(hudMobileCss).toContain('body.mobile-touch #chat-dismiss {\n    display: none;');
-    const openRule =
-      hudMobileCss.match(
-        /body\.mobile-touch\.mobile-chat-open\.mobile-keyboard-open #chat-dismiss \{([^}]*)\}/,
-      )?.[1] ?? '';
-    expect(openRule).toMatch(/width:\s*40px/);
-    expect(openRule).toMatch(/height:\s*40px/);
-    expect(openRule).toMatch(/display:\s*inline-flex/);
-    // The dismiss blur does NOT close chat: the pure seam differentiates it from the
-    // close path (recover only when the composer is already hidden).
+    expect(hudMobileCss).not.toMatch(/#chat-dismiss \{[^}]*display:\s*inline-flex/);
+    // Dismissing the keyboard KEEPS chat open in the read view: the composer's blur handler
+    // recovers the viewport ONLY on the close path (composer already hidden), never on a
+    // still-shown-composer blur. Only the Chat button closes chat.
     expect(mainTs).toContain(
       'if (shouldRecoverOnComposerBlur(chatInput.style.display)) recoverFromMobileKeyboard();',
     );
-    // The wiring pins BOTH the lookup (the literal id string, so a getElementById typo
-    // cannot silently pass) and the blur-only apply.
+    // The chevron (kept wired for parity) blurs the composer to drop the keyboard, not close.
     expect(mainTs).toContain("document.getElementById('chat-dismiss')");
-    expect(mainTs).toContain('if (effect.blurComposer) chatInput.blur();');
+    expect(mainTs).toContain("chatDismiss?.addEventListener('click', () => chatInput.blur());");
     // Chat surfaces stay full-contrast while open (the idle fade never dims the log/composer).
     expect(hudMobileCss).toContain(
       'body.mobile-touch.mobile-chat-open #chatlog-wrap,\n  body.mobile-touch.mobile-chat-open #chatlog-tabs,\n  body.mobile-touch.mobile-chat-open #chat-input,\n  body.mobile-touch.mobile-chat-open #mobile-chat {\n    opacity: 1;',
@@ -472,62 +464,36 @@ describe('client HTML shell', () => {
     );
   });
 
-  it('docks the keyboard-open chat as a non-overlapping column that reserves the composer', () => {
-    // Real-device chat-overlap fix: while the on-screen keyboard is up the chat log used to
-    // overflow DOWN into the composer (the log's lower lines rendered under the typed text).
-    // The wrap is now a flex COLUMN with a DEFINITE height that reserves the docked composer:
-    // it subtracts the top inset and a 126px composer reservation (the 110px autosize cap
-    // CHAT_INPUT_MAX_H + 8px gap + 8px dock) from the visible-above-keyboard height, so the
-    // log frame can only fill the space ABOVE the composer, never over it, even when a long
-    // multi-line draft grows the composer to its cap.
+  it('fills the keyboard-open chat as a flex column above the keyboard (composer is a flow item)', () => {
+    // While the keyboard is up the whole panel (composer bar + tabs + log) re-lays as a flex
+    // column filling the space ABOVE the keyboard: the log frame flexes to fill, and the
+    // composer is a FLOW item at the top of the panel (from the open rule), not a separately
+    // docked bar, so no composer reservation is needed.
     const wrapRule =
       hudMobileCss.match(
         /body\.mobile-touch\.mobile-keyboard-open\.mobile-chat-open #chatlog-wrap \{([^}]*)\}/,
       )?.[1] ?? '';
-    expect(wrapRule).toMatch(/display:\s*flex/);
-    expect(wrapRule).toMatch(/flex-direction:\s*column/);
-    // The height RESERVES the composer: visible-vh minus the top inset minus the 126px
-    // composer box. The literal 126px reservation is load-bearing (a regression that drops it
-    // re-introduces the overlap), so pin it alongside the var.
+    // Definite height: the visible-above-keyboard band minus the top inset minus an 8px gap.
+    expect(wrapRule).toMatch(/top:\s*max\(6px, env\(safe-area-inset-top\)\)/);
     expect(wrapRule).toMatch(/var\(--mobile-keyboard-visible-vh, 100vh\)/);
-    // Whitespace-tolerant: biome breaks the long calc across lines.
-    expect(wrapRule).toMatch(/-\s+126px/);
-    // The log frame FLEXES to fill only the tabs-to-composer gap (not height:100%, the old bug
-    // that made the frame overflow past the wrap by the tab strip's height).
+    expect(wrapRule).toMatch(/-\s+8px/);
+    // No composer reservation any more (the composer is a flow item, not a docked bar).
+    expect(wrapRule).not.toMatch(/--mobile-composer-h/);
+    // The composer is a flow item in the panel (from the open rule), not absolutely docked.
+    const openInputRule =
+      hudMobileCss.match(/body\.mobile-touch\.mobile-chat-open #chat-input \{([^}]*)\}/)?.[1] ?? '';
+    expect(openInputRule).toMatch(/position:\s*static/);
+    expect(openInputRule).toMatch(/order:\s*-1/);
+    // The log frame fills the rest of the panel (from the open rule); not height:100%.
     const frameRule =
-      hudMobileCss.match(
-        /body\.mobile-touch\.mobile-keyboard-open\.mobile-chat-open #chatlog-frame \{([^}]*)\}/,
-      )?.[1] ?? '';
+      hudMobileCss.match(/body\.mobile-touch\.mobile-chat-open #chatlog-frame \{([^}]*)\}/)?.[1] ??
+      '';
     expect(frameRule).toMatch(/flex:\s*1 1 auto/);
-    expect(frameRule).toMatch(/min-height:\s*0/);
     expect(frameRule).not.toMatch(/height:\s*100%/);
-    // The tab strip keeps its natural height at the top of the column (never shrunk).
-    const tabsRule =
-      hudMobileCss.match(
-        /body\.mobile-touch\.mobile-keyboard-open\.mobile-chat-open #chatlog-tabs \{([^}]*)\}/,
-      )?.[1] ?? '';
-    expect(tabsRule).toMatch(/flex:\s*0 0 auto/);
-    // The composer still docks just above the keyboard's top edge.
-    const inputRule =
-      hudMobileCss.match(
-        /body\.mobile-touch\.mobile-keyboard-open\.mobile-chat-open #chat-input \{([^}]*)\}/,
-      )?.[1] ?? '';
-    expect(inputRule).toMatch(
-      /bottom:\s*calc\(100vh - var\(--mobile-keyboard-visible-vh, 100vh\) \+ 8px\)/,
-    );
-    // The low-priority Chat/Social/More trio yields while the keyboard is up so the docked tab
-    // strip owns a clean top-left (fairness-neutral menu chrome, restored on keyboard dismiss).
+    // The low-priority Chat/Social/More trio yields while the keyboard is up (fairness-neutral
+    // menu chrome, restored on keyboard dismiss).
     expect(hudMobileCss).toMatch(
       /body\.mobile-touch\.mobile-keyboard-open\.mobile-chat-open #mobile-combat-controls \{\s*display:\s*none;/,
-    );
-    // The dismiss chevron is CENTERED in the 84px reply composer's row (an attached part of the
-    // composer, not a corner button): base dock (+8px) plus (84 - 40) / 2 = 22px => +30px.
-    const chevronReplyRule =
-      hudMobileCss.match(
-        /body\.mobile-touch\.mobile-chat-open\.mobile-chat-reply\.mobile-keyboard-open #chat-dismiss \{([^}]*)\}/,
-      )?.[1] ?? '';
-    expect(chevronReplyRule).toMatch(
-      /bottom:\s*calc\(100vh - var\(--mobile-keyboard-visible-vh, 100vh\) \+ 30px\)/,
     );
   });
 
@@ -1623,7 +1589,7 @@ describe('client HTML shell', () => {
     expect(marketWindowTs).not.toContain('<select data-market-filter=');
   });
 
-  it('keeps Chat, Social and More alone at top-left, away from both thumb clusters', () => {
+  it('keeps the mobile bar (Chat, Social, Quests, Settings, More) alone at top-left, away from both thumb clusters', () => {
     for (const [name, entry] of [
       ['index.html', html],
       ['play.html', playHtml],
@@ -1635,37 +1601,51 @@ describe('client HTML shell', () => {
       const primaryButtons = [...combatControls.matchAll(/<button class="mobile-btn"/g)];
       const chat = combatControls.indexOf('id="mobile-chat"');
       const social = combatControls.indexOf('id="mobile-social"');
+      const quest = combatControls.indexOf('id="mobile-quest"');
+      const settings = combatControls.indexOf('id="mobile-menu"');
       const more = combatControls.indexOf('id="mobile-more"');
-      // Chat/Social/More are deliberately the ONLY top-left buttons:
-      // everything a thumb needs mid-fight lives in the two bottom corner
-      // clusters, so the trio is hard to fat-finger but still one reach away.
-      expect(primaryButtons, name).toHaveLength(3);
+      // The mobile bar is deliberately the ONLY top-left cluster: everything a
+      // thumb needs mid-fight lives in the two bottom corner clusters, so the row
+      // is hard to fat-finger but still one reach away. Order: Chat, Social,
+      // Quests, Settings, More.
+      expect(primaryButtons, name).toHaveLength(5);
       expect(chat, name).toBeGreaterThanOrEqual(0);
       expect(social, name).toBeGreaterThan(chat);
-      expect(more, name).toBeGreaterThan(social);
-      // Social (Friends & Guild) was promoted OUT of the More tray to the top
-      // cluster; it must not reappear in the tray grid.
+      expect(quest, name).toBeGreaterThan(social);
+      expect(settings, name).toBeGreaterThan(quest);
+      expect(more, name).toBeGreaterThan(settings);
+      // Social (Friends & Guild), Quests and Settings live in the bar, promoted
+      // OUT of the More tray; none may reappear in the tray grid.
       const tray = entry.slice(
         entry.indexOf('<div id="mobile-extra-grid">'),
         entry.indexOf('<div id="mobile-window-backdrop"'),
       );
       expect(tray, name).not.toContain('id="mobile-social"');
+      expect(tray, name).not.toContain('id="mobile-quest"');
+      expect(tray, name).not.toContain('id="mobile-menu"');
       // No bottom-centre Target button: the one targeting helper on touch is
       // the Target swap button inside the action ring (#mobile-target-cycle),
       // never a third centre button (the old #mobile-target design).
       expect(entry, name).not.toContain('id="mobile-target"');
       expect(entry, name).not.toContain('data-i18n="hud.core.mobileTarget"');
     }
-    expect(hudMobileCss).toContain('grid-template-columns: repeat(3, 58px);');
-    expect(hudMobileCss).toContain('grid-template-columns: repeat(3, 54px);');
-    expect(hudMobileCss).toContain('grid-template-columns: repeat(3, 42px);');
-    // Top-LEFT anchor: the trio's 54px row clears the target-frame seat below
-    // it (top + 72px) and leaves the top-centre band to the pet bar.
+    expect(hudMobileCss).toContain('grid-template-columns: repeat(5, 58px);');
+    expect(hudMobileCss).toContain('grid-template-columns: repeat(5, 54px);');
+    expect(hudMobileCss).toContain('grid-template-columns: repeat(5, 42px);');
+    // The #mobile-consumables chip docks just PAST the bar, so its left offset must
+    // track the bar's 5-column scaled width in each orientation (base 5x58+4x12=338,
+    // portrait 5x42+4x6=234, landscape 5x54+4x10=310). Pinned so a future bar-width
+    // change updates both and the chip never slides back under the buttons.
+    expect(hudMobileCss).toContain('338px *'); // base consumables dock offset
+    expect(hudMobileCss).toContain('+ 234px * var(--btn-scale, 1) + 8px)'); // portrait dock
+    expect(hudMobileCss).toContain('310px *'); // landscape consumables dock offset
+    // Top-LEFT anchor: the bar's single 54px row clears the target-frame seat
+    // below it (top + 72px) and leaves the top-centre band to the pet bar.
     expect(hudMobileCss).toContain(
       'position: absolute;\n    left: max(12px, env(safe-area-inset-left));\n    top: max(8px, env(safe-area-inset-top));',
     );
     expect(hudMobileCss).toContain(
-      'top: max(6px, env(safe-area-inset-top));\n      grid-template-columns: repeat(3, 54px);',
+      'top: max(6px, env(safe-area-inset-top));\n      grid-template-columns: repeat(5, 54px);',
     );
     expect(hudMobileCss).toContain(
       'pointer-events: auto;\n    align-items: start;\n    z-index: 30;',
@@ -1886,7 +1866,8 @@ describe('client HTML shell', () => {
     // The compact minimap shrink keeps the arc's vertical budget on a
     // 360px-tall phone holding (the daily-chest rail was folded into the
     // mobile More tray, issue #1577, so it no longer needs a coupled offset).
-    expect(hudMobileCss).toContain('transform: scale(calc(0.44 * var(--mobile-chrome-scale, 1)));');
+    // PR #1674 relaxed the shrink from 0.44 to 0.57 for minimap legibility.
+    expect(hudMobileCss).toContain('transform: scale(calc(0.57 * var(--mobile-chrome-scale, 1)));');
   });
 
   it('gates the camera joystick behind its opt-in setting (swipe-look is the primary camera)', () => {

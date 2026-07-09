@@ -306,7 +306,7 @@ export const en: EnTranslations = {
       "chat": "Skip to Chat"
     },
     "mobile": {
-      "autorun": "Autorun",
+      "autorun": "Auto",
       "jump": "Jump",
       "leaderboard": "Ranks",
       "dailyRewards": "Rewards",
@@ -4213,6 +4213,7 @@ export const en: EnTranslations = {
       "mobileSocial": "Social",
       "mobileArena": "Arena",
       "mobileMenu": "Menu",
+      "mobileSettings": "Settings",
       "mobileUse": "Interact",
       "mobileMeters": "Meters",
       "mobileMap": "Map",

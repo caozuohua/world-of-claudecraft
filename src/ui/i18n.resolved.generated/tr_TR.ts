@@ -4213,6 +4213,7 @@ export const tr_TR: EnTranslations = {
       "mobileSocial": "Sosyal",
       "mobileArena": "Arena",
       "mobileMenu": "Menü",
+      "mobileSettings": "Ayarlar",
       "mobileUse": "Kullan",
       "mobileMeters": "Ölçerler",
       "mobileMap": "Harita",
