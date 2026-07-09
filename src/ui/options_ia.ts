@@ -600,11 +600,14 @@ export const OVERVIEW_QUICK_ACTIONS: readonly QuickAction[] = [
     sprintTier: 'required',
     env: { onlineOnly: true },
   },
+  // Log out is reachable in BOTH modes: offline it runs location.reload() back to
+  // the title screen (a meaningful action), so it carries no online gate. The
+  // painter renders it unconditionally and the P5 mobile back-stack shell consumes
+  // this list, so the marker and the shipped behavior stay in agreement.
   {
     id: 'logout',
     labelKey: 'hud.options.logout',
     sprintTier: 'required',
-    env: { onlineOnly: true },
   },
   { id: 'resetAll', labelKey: 'hud.options.resetToDefaults', sprintTier: 'required' },
 ];

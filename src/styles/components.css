@@ -8836,5 +8836,13 @@
     .tab[aria-selected="true"] {
       border-bottom-color: Highlight;
     }
+    /* The selected segment conveys selection by gold fill + dark text, both of
+       which the forced palette drops; an inset system-colour outline keeps it
+       visually distinct for sighted users (aria-checked already exposes it to AT).
+       outline (not border) so there is zero layout shift inside the .opt-seg. */
+    .opt-seg-btn.is-selected {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
   }
 }

@@ -148,6 +148,18 @@ describe('options_window: changeLanguage hardening (PR #730 preserved)', () => {
     expect(lang).toContain('.catch(');
     expect(lang).toContain('.finally(');
   });
+
+  // Restored coverage (P2 review item 1): a successful language switch re-renders
+  // the detail pane in place and returns focus to the language dropdown, so the
+  // relocalized picker stays keyboard-navigable.
+  it('re-renders the detail pane and refocuses the picker on a successful switch', () => {
+    const lang = painter.slice(
+      painter.indexOf('private languageRow'),
+      painter.indexOf('private themeRow'),
+    );
+    expect(lang).toContain('this.renderDetail();');
+    expect(lang).toContain("'.set-lang-select .ui-dd-btn'");
+  });
 });
 
 describe('options_window: theme custom-color grid preserved under Interface', () => {
@@ -182,6 +194,23 @@ describe('options_window: keybind rebind dispatch (unchanged until P4)', () => {
     expect(painter).toContain('hooks.captureKey((code)');
     expect(painter).toContain('this.deps.keybinds().bind(actionId, index, code)');
     expect(painter).toContain('this.deps.refreshKeybindLabels()');
+  });
+
+  // Restored coverage (P2 review item 1): each controller per-button remap listbox
+  // carries its physical button glyph as its accessible name.
+  it('names each gamepad-remap listbox with its button glyph', () => {
+    const controller = painter.slice(painter.indexOf('private renderControllerButtons'));
+    const body = controller.slice(0, controller.indexOf('\n  private '));
+    expect(body).toContain('ariaLabel: buttonLabel');
+  });
+});
+
+describe('options_window: forced-colors selection cue (P2 review item 5)', () => {
+  const components = readFileSync(new URL('../src/styles/components.css', import.meta.url), 'utf8');
+  it('gives the selected segment a system-colour outline under forced-colors', () => {
+    const forced = components.slice(components.indexOf('@media (forced-colors: active)'));
+    const block = forced.slice(0, forced.indexOf('\n  }\n}'));
+    expect(block).toMatch(/\.opt-seg-btn\.is-selected \{\s*outline: 2px solid Highlight;/);
   });
 });
 

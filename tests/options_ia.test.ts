@@ -142,10 +142,14 @@ describe('options_ia: Overview pins + quick actions', () => {
     expect(OVERVIEW_PINS.filter((p) => p.nonSettingsHome && p.key)).toEqual([]);
   });
 
-  it('marks the online-only quick actions as online-only', () => {
+  it('gates only Report a Bug online; logout stays reachable in both modes', () => {
     const byId = new Map(OVERVIEW_QUICK_ACTIONS.map((a) => [a.id, a]));
-    expect(byId.get('logout')?.env?.onlineOnly, 'logout online-only').toBe(true);
+    // Report a Bug needs an authoritative server, so it is the one online-only action.
     expect(byId.get('reportBug')?.env?.onlineOnly, 'bug report online-only').toBe(true);
+    // Log out is reachable OFFLINE too (it reloads to the title screen), so the IA
+    // data must NOT mark it online-only: the painter renders it unconditionally and
+    // the P5 mobile shell consumes this list, so the marker and behavior must agree.
+    expect(byId.get('logout')?.env?.onlineOnly, 'logout reachable offline').toBeUndefined();
     // Resume + reset-all are always available (no online gate).
     expect(byId.get('resume')?.env?.onlineOnly).toBeUndefined();
     expect(byId.get('resetAll')?.env?.onlineOnly).toBeUndefined();
