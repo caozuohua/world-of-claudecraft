@@ -41,7 +41,7 @@ export const ACTION_BAR_SLOTS = 23;
 // 'Shift+Digit1'..'Shift+Digit0' as secondaries so the whole page is reachable
 // without a numpad. Shift+<digit> is a DISTINCT edge chord from the bare <digit>
 // (edge actions match the full combo), so it never evicts an action-bar primary.
-// (The user asked for Shift+1-5; extended uniformly to all ten so the secondary
+// (The Shift chords cover all ten digits, not just a subset, so the secondary
 // page has no dead keys.) SLOTS_PER_ACTION = 2 fits each row exactly.
 const SLOT_DEFAULTS: string[][] = [
   ['Digit1'],

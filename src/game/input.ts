@@ -1,6 +1,7 @@
-// Default (Mouse Camera off): classic-MMO-style — WASD + A/D keyboard turn, Q/E strafe,
+// Default (Mouse Camera off): classic-MMO-style: WASD + A/D keyboard turn (strafe is
+// unbound by default and rebindable; Q/E belong to the action bar, slots 11 and 12),
 // left-drag orbits, right-drag mouselooks, both buttons run forward.
-// Optional Mouse Camera (on): OSRS-style — WASD is camera-relative, A/D strafe,
+// Optional Mouse Camera (on): OSRS-style: WASD is camera-relative, A/D strafe,
 // mouse drag rotates the orbit (no pointer lock), no keyboard turn.
 // Shared: space jump, wheel zoom, Tab target, rebindable action bar, R autorun.
 

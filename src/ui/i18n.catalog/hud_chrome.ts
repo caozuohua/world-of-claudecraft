@@ -662,8 +662,8 @@ export const hudChromeStrings = {
     // architecture, owned as data by options_ia.ts. Rail-group headers plus the
     // per-category NAME (only where no existing category key is reused) and the
     // one-line muted SUBHEAD. All wordy prose, so the five non-Latin fills
-    // (zh_CN/zh_TW/ja_JP/ko_KR/ru_RU) land in this same change (M16). Not rendered
-    // yet: P2 wires the rail/detail chrome onto options_ia.
+    // (zh_CN/zh_TW/ja_JP/ko_KR/ru_RU) landed with the keys (M16). Rendered by
+    // options_window.ts: the rail groups/tabs and the per-category detail heads.
     ia: {
       railDisplay: 'Display',
       railInput: 'Input',
