@@ -2468,6 +2468,70 @@
     }
   }
 
+  /* ---------- character + talents + crafting AAA frame ---------- */
+  /* The three heavy management windows (#char-window, #talents-window,
+     #crafting-window) adopt the shared .window-frame chrome (vendor_window.ts is
+     the committed reference). Unlike the vendor's bounded flex column, these keep
+     their legacy display:block root-scroll model: hud.ts reads
+     `style.display === 'block'` to detect each window's open state, so the block
+     value must survive. The frame mounts on an INNER container, so the shared
+     roots stay pristine `.window.panel` and their id-scoped viewport clamp +
+     resize grip + mobile inset rules keep matching. Tokens only. */
+  #char-window:has(> .window-frame),
+  #talents-window:has(> .window-frame),
+  #crafting-window:has(> .window-frame) {
+    /* Neutralize the legacy .panel chrome while a frame is mounted; the inner
+       .window-frame draws its own border, edge line, and background. */
+    padding: 0;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    box-shadow: none;
+    /* The generic .window:has(> .window-frame) rule sets overflow:hidden for the
+       flex-column windows; these stay block-scrolled, so restore the root scroll
+       (bounded by the shared .window max-height) so tall content stays reachable. */
+    overflow-y: auto;
+  }
+  /* Fill the root when it is explicitly sized taller than its content (a resize):
+     with no fill the transparent root would show the world through the gap. Inert
+     (resolves to 0) while the root height stays content-driven. */
+  #char-window > .window-frame,
+  #talents-window > .window-frame,
+  #crafting-window > .window-frame {
+    min-height: 100%;
+  }
+  /* Pin the titlebar while the root scrolls (fixed-header AAA chrome). */
+  #char-window > .window-frame .window-titlebar,
+  #talents-window > .window-frame .window-titlebar,
+  #crafting-window > .window-frame .window-titlebar {
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    background: var(--panel-l1-bg);
+  }
+  /* Character: the class identity strip (portrait + name + subtitles) was the
+     sticky .panel-title header; now the first body row under the frame titlebar. */
+  #char-window .window-body > .char-identity {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+  }
+  /* Talents: the class-name subtitle (was the header's colored suffix) leads the
+     body under the frame's static "Talents" title. */
+  #talents-window .window-body > .tal-classname {
+    font-size: var(--text-xs);
+    margin: 0 2px var(--spacing-xs);
+  }
+  /* Crafting: the recipe rows adopt the shared .vendor-row / .item-cell grammar
+     (styled in the vendor AAA section above); the reagent requirement line rides
+     inside the row name as a muted sub-line (was the legacy .vi-sub). */
+  #crafting-window .window-body .vendor-row .craft-reagents {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
   /* ---------- modals and dropdown ---------- */
   /* in-app input modal field (Save / Import / Export, replaces window.prompt) */
   .cd-field {

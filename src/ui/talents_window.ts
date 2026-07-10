@@ -32,7 +32,6 @@ import {
 } from '../sim/content/talents';
 import { ABILITIES } from '../sim/data';
 import { MAX_LEVEL, type PlayerClass } from '../sim/types';
-import { markDialogRoot } from './dialog_root';
 import { classDisplayName, tEntity } from './entity_i18n';
 import { esc } from './esc';
 import { t } from './i18n';
@@ -42,7 +41,8 @@ import { roleLabel, tTalent } from './talent_i18n';
 import { talentChoiceIconDataUrl, talentNodeIconDataUrl } from './talent_icons';
 import { talentTreeFitScale } from './talent_tree_fit';
 import { buildTalentsView, type TalentsView, type TalentTreeVM } from './talents_view';
-import { svgIcon } from './ui_icons';
+import { renderWindowFrame, type WindowFrameParts } from './window_frame';
+import type { WindowFrameDescriptor } from './window_frame_view';
 
 /**
  * Hud-supplied glue. attachTooltip comes from the shared PainterHostPresentation
@@ -126,6 +126,21 @@ function signatureName(abilityId: string): string {
     : abilityId;
 }
 
+// The talents window is a closable, footer-less frame: the class-name subtitle,
+// the class/spec tab rail, the tree canvas, and the staged-edit build footer all
+// render as sections of one scrollable body. The staged-edit actions stay inside
+// the body (NOT lifted to the frame's sticky .window-footer): the two build cards
+// plus the loadout dropdown are a rich multi-action block, not a single trailing
+// action, and their apply/revert semantics + the tree fit measurements are
+// preserved byte-identically by leaving them where they are. Title + close reuse
+// the existing game.talents.* keys (no new i18n). The frame IS the dialog (role +
+// aria-labelledby on the inner mount), so the module drops markDialogRoot.
+const TALENTS_FRAME: WindowFrameDescriptor = {
+  id: 'talents-window',
+  titleKey: 'game.talents.title',
+  closeLabelKey: 'game.talents.close',
+};
+
 export class TalentsWindow {
   private tab: 'class' | 'spec' = 'class';
   // The element to refocus when the window closes (WCAG 2.2 AA focus return).
@@ -152,27 +167,43 @@ export class TalentsWindow {
     this.deps.restoreFocus(target);
   }
 
+  /**
+   * Stamp the shared window frame cold at first open, then reuse it. The frame
+   * mounts on an INNER container (never on the shared #talents-window root), so
+   * the root stays a pristine `.window.panel`: the id-scoped viewport clamp, the
+   * resize grip, and the mobile inset rule the tree-fit measurements read all keep
+   * matching it. An intact mounted frame (its body present) is the reuse marker;
+   * only the body repaints per render.
+   */
+  private ensureFrame(el: HTMLElement): WindowFrameParts {
+    const mounted = el.querySelector<HTMLElement>(':scope > .window-frame');
+    const body = mounted?.querySelector<HTMLElement>('.window-body');
+    if (mounted && body) return { root: mounted, body, footer: null, tabButtons: [] };
+    const mount = document.createElement('div');
+    const parts = renderWindowFrame(mount, TALENTS_FRAME, { onClose: () => this.close() });
+    el.replaceChildren(mount);
+    return parts;
+  }
+
   render(): void {
     const el = this.deps.root();
     // Early-return when hidden AND no staged buffer (nothing to repaint).
     if (el.style.display !== 'block' && this.deps.getStage() === null) return;
-    // WCAG 2.2 AA: name the focus-trapped root so AT users entering the trap
-    // land on a labeled dialog, not an anonymous group. innerHTML below replaces the
-    // children, not these own-element attributes, so setting them once per render is
-    // idempotent and covers both the coming-soon and the populated branch.
-    markDialogRoot(el, { label: t('game.talents.title') });
+    // The shared frame carries the dialog role + aria-labelledby (its "Talents"
+    // title); the body repaints below. The close routes to this.close() via the
+    // frame's onClose, wired once when the frame is stamped cold.
+    const { body } = this.ensureFrame(el);
     const cls = this.deps.playerClass();
-    // A real <button> close (was a non-focusable <span>): keyboard-reachable and named,
-    // matching the sibling cold windows. focusFirst skips [data-close] on open.
-    const close = `<button type="button" class="x-btn" data-close aria-label="${esc(t('game.talents.close'))}">${svgIcon('close')}</button>`;
+    // The class-name accent (was the header's colored suffix) leads the body under
+    // the frame's static title; the color stays TAL_COLOR.classAccent (no raw hex).
+    const classAccent = `<div class="tal-classname" style="color:${TAL_COLOR.classAccent}">${esc(classDisplayName(cls))}</div>`;
     if (!talentsFor(cls)) {
-      el.innerHTML =
-        `<div class="panel-title"><span>${t('game.talents.title')} <span style="color:${TAL_COLOR.classAccent};font-size:11px">${esc(classDisplayName(cls))}</span></span>${close}</div>` +
+      body.innerHTML =
+        classAccent +
         `<div class="tal-empty tal-coming-soon" data-talents-coming-soon>` +
         `<b>${t('game.talents.comingSoonTitle')}</b>` +
         `<span>${t('game.talents.comingSoonBody')}</span>` +
         `</div>`;
-      el.querySelector('[data-close]')?.addEventListener('click', () => this.close());
       return;
     }
     // Create-on-first-open: ensure the staged buffer exists, seeded from the live build.
@@ -184,8 +215,8 @@ export class TalentsWindow {
     const total = this.deps.totalPoints();
     const view = buildTalentsView(stage, cls, total);
 
-    el.innerHTML =
-      `<div class="panel-title"><span>${t('game.talents.title')} <span style="color:${TAL_COLOR.classAccent};font-size:11px">${esc(classDisplayName(cls))}</span></span>${close}</div>` +
+    body.innerHTML =
+      classAccent +
       `<div class="tal-head"><span>${t('game.talents.available')}: <b>${view.available}</b> / ${view.total}</span><span>${t('game.talents.spent')}: <b>${view.spent}</b></span></div>` +
       `<div class="tal-help">${esc(t('game.talents.pointSource').replace('{first}', String(FIRST_TALENT_LEVEL)).replace('{cap}', String(MAX_LEVEL)))}</div>` +
       `<div class="tal-tabs" role="tablist" aria-label="${esc(t('game.talents.title'))}">` +
@@ -199,9 +230,9 @@ export class TalentsWindow {
       this.render();
     };
     // WAI-ARIA tabs: roving arrow navigation (Left/Right/Home/End) plus Enter/Space.
-    // switchTab re-renders the window; the root persists, so focus the freshly active
+    // switchTab re-renders the window; the frame persists, so focus the freshly active
     // tab afterward to keep the roving-tabindex focus on the selected tab.
-    const tabs = Array.from(el.querySelectorAll<HTMLElement>('.tal-tab'));
+    const tabs = Array.from(body.querySelectorAll<HTMLElement>('.tal-tab'));
     tabs.forEach((tab, i) => {
       tab.addEventListener('click', () => switchTab(tab));
       tab.addEventListener('keydown', (e) => {
@@ -212,25 +243,24 @@ export class TalentsWindow {
           const target = tabs[next];
           if (target && target !== tab) {
             switchTab(target);
-            (el.querySelector('.tal-tab.active') as HTMLElement | null)?.focus();
+            (this.deps.root().querySelector('.tal-tab.active') as HTMLElement | null)?.focus();
           }
           return;
         }
         this.keyboardActivate(ke, () => switchTab(tab));
       });
     });
-    el.querySelector('[data-close]')?.addEventListener('click', () => this.close());
 
-    const body = el.querySelector('#tal-body') as HTMLElement;
+    const treeBody = body.querySelector('#tal-body') as HTMLElement;
     if (this.tab === 'class') {
       const tree = document.createElement('div');
       tree.className = 'tal-tree';
-      body.appendChild(tree);
+      treeBody.appendChild(tree);
       this.paintTree(tree, view.classTree, stage);
     } else {
-      this.paintSpecTab(body, view, stage);
+      this.paintSpecTab(treeBody, view, stage);
     }
-    this.wireFooter(el, stage, total);
+    this.wireFooter(body, stage, total);
   }
 
   private paintSpecTab(body: HTMLElement, view: TalentsView, stage: TalentAllocation): void {
