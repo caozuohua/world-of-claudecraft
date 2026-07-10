@@ -82,6 +82,13 @@ import {
 import { charselectPrimaryAction } from './net/charselect_action';
 import { createNativeAttestationProof } from './net/native_attestation';
 import {
+  createNativeDiscordProof,
+  installNativeDiscordUrlHandler,
+  type NativeDiscordResult,
+  openNativeDiscordOAuth,
+  takeNativeDiscordVerifier,
+} from './net/native_discord';
+import {
   Api,
   ApiError,
   type CharacterSummary,
@@ -5626,9 +5633,8 @@ function flashWalletError(message: string): void {
 // Refreshed after login: ask the server which wallet (if any) this account has
 // linked, so the button can show the verified ✓ state.
 // ── Discord login/onboarding ─────────────────────────────────────────────────
-// Discord UI is on unless the native app build disables it.
-const DISCORD_BUILD_ENABLED =
-  !NATIVE_APP && String(import.meta.env.VITE_DISCORD_DISABLED ?? '').trim() !== '1';
+// Discord UI is available on web and native unless explicitly disabled at build time.
+const DISCORD_BUILD_ENABLED = String(import.meta.env.VITE_DISCORD_DISABLED ?? '').trim() !== '1';
 // Community links for the mobile More tray. The invite mirrors the hardcoded
 // invite on the shells' community links and is the fallback when the server-fed
 // discordInviteUrl() is not known yet (logged out, offline).
@@ -5650,6 +5656,19 @@ function startDiscordOAuth(mode: 'login' | 'link'): void {
     } catch {
       /* storage disabled */
     }
+    if (NATIVE_APP) {
+      void createNativeDiscordProof()
+        .then(async ({ verifier, challenge }) => {
+          const attestation = await createNativeAttestationProof(api.base, 'discord');
+          const { url } = await api.discordStart('login', true, challenge, attestation);
+          await openNativeDiscordOAuth(url, verifier);
+        })
+        .catch((err) => {
+          console.error('[discord] could not start native oauth', err);
+          flashDiscordError();
+        });
+      return;
+    }
     // LOGIN from the auth screen: a FULL-PAGE redirect, not a popup. The popup's
     // window.opener is severed by the cross-origin hop to Discord (COOP), so the
     // result never returns; a same-tab redirect always lands the callback, which
@@ -5661,6 +5680,19 @@ function startDiscordOAuth(mode: 'login' | 'link'): void {
       })
       .catch((err) => {
         console.error('[discord] could not start oauth', err);
+        flashDiscordError();
+      });
+    return;
+  }
+  if (NATIVE_APP) {
+    void createNativeDiscordProof()
+      .then(async ({ verifier, challenge }) => {
+        const attestation = await createNativeAttestationProof(api.base, 'discord');
+        const { url } = await api.discordStart('link', true, challenge, attestation);
+        await openNativeDiscordOAuth(url, verifier);
+      })
+      .catch((err) => {
+        console.error('[discord] could not start native oauth', err);
         flashDiscordError();
       });
     return;
@@ -5679,6 +5711,52 @@ function startDiscordOAuth(mode: 'login' | 'link'): void {
       popup?.close();
       flashDiscordError();
     });
+}
+
+async function handleNativeDiscordResult(result: NativeDiscordResult): Promise<void> {
+  if (!result.ok) {
+    flashDiscordError();
+    return;
+  }
+  if (result.mode === 'link') {
+    takeNativeDiscordVerifier();
+    await refreshDiscordStatus();
+    return;
+  }
+  if (!result.code) {
+    flashDiscordError();
+    return;
+  }
+  const verifier = takeNativeDiscordVerifier();
+  if (!verifier) {
+    flashDiscordError();
+    return;
+  }
+  try {
+    const exchange = await api.exchangeNativeDiscordCode(result.code, verifier);
+    if (exchange.choose && exchange.linkToken) {
+      localStorage.setItem(
+        'woc_discord_choice',
+        JSON.stringify({
+          linkToken: exchange.linkToken,
+          username: exchange.username,
+          ts: Date.now(),
+        }),
+      );
+    } else {
+      api.saveSession();
+    }
+    window.location.reload();
+  } catch (err) {
+    console.error('[discord] could not exchange native login code', err);
+    flashDiscordError();
+  }
+}
+
+if (NATIVE_APP && DISCORD_BUILD_ENABLED) {
+  void installNativeDiscordUrlHandler(handleNativeDiscordResult).catch((err) => {
+    console.error('[discord] could not install native url handler', err);
+  });
 }
 
 // Popup bounce-page result (link mode; login uses a full redirect). Same-origin only.
@@ -5907,8 +5985,8 @@ function updateDiscordCtaBanner(): void {
 
 // Show the Discord entry in the mobile "More" tray. Mobile has no keyboard, so
 // the U-key panel toggle is unreachable there; this button is the touch path to
-// Discord. Hidden only when the client build disables Discord entirely (native
-// app / VITE_DISCORD_DISABLED); what a tap opens is decided per-tap in
+// Discord. Hidden only when the client build disables Discord entirely through
+// VITE_DISCORD_DISABLED; what a tap opens is decided per-tap in
 // openDiscordEntry, so the entry works logged-out and offline too.
 function syncDiscordMobileEntry(): void {
   const btn = document.getElementById('mobile-discord');

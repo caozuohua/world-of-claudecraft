@@ -115,6 +115,7 @@ import {
   handleDiscordStart,
   handleDiscordStatus,
   handleDiscordUnlink,
+  handleNativeDiscordExchange,
 } from './discord';
 import { pruneDiscordOAuthStates, pruneDiscordPendingLogins } from './discord_db';
 import { emailAccountCreated } from './email';
@@ -1613,10 +1614,10 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
     // web-login guard, which is login/register-only). Mutations go through
     // bearerActiveAccount; the dedicated Discord rate-limit bucket guards them.
     if (req.method === 'POST' && url === '/api/auth/discord/start') {
-      const mode =
-        new URL(req.url ?? '/', 'http://localhost').searchParams.get('mode') === 'link'
-          ? 'link'
-          : 'login';
+      const discordStartUrl = new URL(req.url ?? '/', 'http://localhost');
+      const mode = discordStartUrl.searchParams.get('mode') === 'link' ? 'link' : 'login';
+      const native = discordStartUrl.searchParams.get('native') === '1';
+      const nativeChallenge = discordStartUrl.searchParams.get('challenge') ?? undefined;
       let accountId: number | null = null;
       if (mode === 'link') {
         accountId = await bearerActiveAccount(req, res);
@@ -1624,10 +1625,17 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
       }
       if (!discordRateLimited(req, accountId ?? 0).allowed)
         return json(res, 429, { error: 'rate limited' });
-      return handleDiscordStart(req, res, { mode, accountId });
+      const body = native ? await readBody(req) : {};
+      return handleDiscordStart(req, res, {
+        mode,
+        accountId,
+        native,
+        nativeChallenge,
+        nativeAttestation: body.nativeAttestation,
+      });
     }
     if (req.method === 'GET' && url === '/api/auth/discord/callback') {
-      return handleDiscordCallback(req, res);
+      return handleDiscordCallback(req, res, (ip) => liveGame().isIpBlocked(ip));
     }
     // First-time-login chooser endpoints. Unauthenticated like /callback: the
     // authorization is the single-use pending-login token (minted only after a
@@ -1638,6 +1646,9 @@ async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): P
     }
     if (req.method === 'POST' && url === '/api/auth/discord/login/link') {
       return handleDiscordLoginLink(req, res, (ip) => liveGame().isIpBlocked(ip));
+    }
+    if (req.method === 'POST' && url === '/api/auth/discord/native/exchange') {
+      return handleNativeDiscordExchange(req, res);
     }
     if (req.method === 'GET' && url === '/api/discord') {
       const accountId = await bearerActiveAccount(req, res);

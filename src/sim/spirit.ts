@@ -173,6 +173,14 @@ export function resurrectOnInstanceReentry(
   ctx.emit({ type: 'respawn', pid: meta.entityId });
 }
 
+export function revivePlayerAt(ctx: SimContext, pid: number, pos: Vec3, hpFrac = 1): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  const wasDead = r.e.dead || r.e.ghost;
+  reviveAt(ctx, r.meta, r.e, pos, hpFrac, false);
+  if (wasDead) ctx.emit({ type: 'respawn', pid: r.meta.entityId });
+}
+
 // Whether a Spirit Healer NPC stands within reach of the spirit.
 function spiritHealerInRange(ctx: SimContext, p: Entity): boolean {
   for (const e of ctx.entities.values()) {

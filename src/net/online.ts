@@ -619,8 +619,31 @@ export class Api {
   // ── Discord link/login + status ────────────────────────────────────────────
   // Returns the discord.com authorize URL the browser navigates to (login = new
   // session, link = attach to the current account).
-  async discordStart(mode: 'login' | 'link'): Promise<{ url: string }> {
-    return this.post(`/api/auth/discord/start?mode=${mode}`, {});
+  async discordStart(
+    mode: 'login' | 'link',
+    native = false,
+    challenge = '',
+    nativeAttestation: unknown = undefined,
+  ): Promise<{ url: string }> {
+    const nativeQuery = native ? `&native=1&challenge=${encodeURIComponent(challenge)}` : '';
+    return this.post(`/api/auth/discord/start?mode=${mode}${nativeQuery}`, { nativeAttestation });
+  }
+
+  async exchangeNativeDiscordCode(
+    code: string,
+    verifier: string,
+  ): Promise<{ choose: boolean; linkToken: string; username: string }> {
+    const data = await this.post('/api/auth/discord/native/exchange', { code, verifier });
+    if (data.choose === true) {
+      return {
+        choose: true,
+        linkToken: typeof data.linkToken === 'string' ? data.linkToken : '',
+        username: typeof data.username === 'string' ? data.username : '',
+      };
+    }
+    this.token = data.token;
+    this.username = data.username;
+    return { choose: false, linkToken: '', username: this.username ?? '' };
   }
 
   // First-time Discord login chooser: create a brand-new account for the verified

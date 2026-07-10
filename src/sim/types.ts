@@ -1890,6 +1890,10 @@ export interface Entity {
   /** GM character: invulnerable (dealDamage no-ops). Server-set from the
    *  characters.is_gm column; never user-settable. */
   gm?: boolean;
+  /** Moderation-jailed player: prisoners are mutually hostile (the jail brawl,
+   *  see isHostileTo). Server-set via setJailed on jail/unjail and at join
+   *  restore; never true offline, never user-settable. */
+  jailed?: boolean;
   /** True for a mob spawned BY a delve affix (e.g. Restless Graves' Raised
    *  Bonewalker). Affix re-trigger checks exclude these so an affix-spawned mob's
    *  own death can never re-trigger the same affix (would otherwise chain forever). */

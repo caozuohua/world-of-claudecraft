@@ -109,6 +109,7 @@ export const API_CONTENT_TYPE: Readonly<Record<string, ContentTypeClass>> = {
   '/api/auth/discord/callback': HTML,
   '/api/auth/discord/login/new': PROBLEM_JSON,
   '/api/auth/discord/login/link': PROBLEM_JSON,
+  '/api/auth/discord/native/exchange': PROBLEM_JSON,
   '/api/discord': PROBLEM_JSON,
   '/api/auth/github/start': PROBLEM_JSON,
   '/api/auth/github/callback': HTML,

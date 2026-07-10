@@ -727,6 +727,16 @@ export const SURFACE_INVENTORY: readonly SurfaceRoute[] = [
   },
   {
     dispatcher: DISPATCH.mainApi,
+    method: 'POST',
+    path: '/api/auth/discord/native/exchange',
+    handler: 'handleApi arm: /api/auth/discord/native/exchange (handleNativeDiscordExchange)',
+    contentType: PROBLEM_JSON,
+    authScope: AUTH_SCOPE.public,
+    limiter: 'discordRateLimited',
+    requireOwnedExpected: null,
+  },
+  {
+    dispatcher: DISPATCH.mainApi,
     method: 'GET',
     path: '/api/discord',
     handler: 'handleApi arm: /api/discord (GET, handleDiscordStatus)',

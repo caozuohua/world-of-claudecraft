@@ -148,6 +148,7 @@ import { formatMoney } from './format_money';
 import * as interaction from './interaction';
 import { meetsLevelRequirement } from './item_level_req';
 import * as items from './items';
+import type { JailState } from './jail';
 import {
   type DevLeaderboardPage,
   type GuildLeaderboardPage,
@@ -265,6 +266,7 @@ import {
   releasePlayerSpirit,
   resurrectAtCorpse,
   resurrectAtSpiritHealer,
+  revivePlayerAt,
   spawnOverworldSpiritHealers,
 } from './spirit';
 import {
@@ -1061,6 +1063,7 @@ export interface CharacterState {
   // The Keeper's Toll (Resurrection Sickness) remaining seconds (JSONB; optional/null when
   // none). Persisted so the penalty cannot be shed by logging out and back in.
   resSickness?: number | null;
+  jail?: JailState;
   skin?: number; // appearance index (JSONB; optional so pre-skin saves load as 0)
   skinCatalog?: SkinCatalog;
   // Pending skin-select event rank (JSONB; optional so older saves load as null).
@@ -3058,6 +3061,14 @@ export class Sim {
   setGm(pid?: number, enabled = true): void {
     const r = this.resolve(pid);
     if (r) r.e.gm = enabled;
+  }
+
+  // Mark a player as moderation-jailed: prisoners are mutually hostile (the
+  // jail brawl arm in isHostileTo). Server-side only: set on jail/unjail and
+  // at join restore; the offline Sim never calls it.
+  setJailed(enabled: boolean, pid?: number): void {
+    const r = this.resolve(pid);
+    if (r) r.e.jailed = enabled;
   }
 
   // Dev/test convenience: jump a player to a level (learns abilities, recalcs stats).
@@ -5604,6 +5615,10 @@ export class Sim {
     resurrectAtSpiritHealer(this.ctx, pid);
   }
 
+  revivePlayerAt(pid: number, pos: Vec3, hpFrac = 1): void {
+    revivePlayerAt(this.ctx, pid, pos, hpFrac);
+  }
+
   // chatAllowed / handleDevChat / whisperMessageForName / resolveWhisperTarget
   // moved to social/chat.ts (G2). The chat() router below dispatches to them via
   // chatMod.*(this.ctx, ...); they had no callers outside chat().
@@ -5669,6 +5684,18 @@ export class Sim {
       ) {
         return true;
       }
+      // The jail brawl: prisoners are hostile to each other, always (pets
+      // resolve to their owner via pvpController above, so a prisoner's pet
+      // fights too). A visiting moderator is never jailed, so no prisoner
+      // action can ever target them; GM invulnerability (dealDamage) is the
+      // backstop. isFriendlyTo mirrors this, so prisoners cannot cross-heal.
+      if (attackerPlayer.jailed && target.jailed) return true;
+      // One-way warden arm: a GM (the visiting moderator; enterJailVisit sets
+      // the flag) MAY strike prisoners. Deliberately asymmetric: the reverse
+      // direction stays non-hostile, and any reflected/proc damage still
+      // bounces off GM invulnerability. Audited punishment stays /kill; this
+      // is for roughing up the cellblock.
+      if (attackerPlayer.gm && target.jailed) return true;
       // The Vale Cup: opposing fighters are hostile only while play is live so
       // the harvest-truce Shoulder can land on them (targeting also opens during
       // the countdown via targeting.ts; damage between seated fighters is
