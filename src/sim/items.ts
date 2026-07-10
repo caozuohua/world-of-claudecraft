@@ -21,6 +21,7 @@ import { ITEMS } from './data';
 import { recalcPlayerStats } from './entity';
 import {
   canDualWield,
+  canDualWieldTwoHand,
   canEquipItem,
   canEquipItemInSlot,
   resolveEquipSlot,
@@ -62,16 +63,22 @@ function desiredEquipSlot(
     return resolveEquipSlot(def, meta.equipment);
   if (def.kind !== 'weapon') return resolveEquipSlot(def, meta.equipment);
   const hand = weaponHand(def);
-  if (hand === 'mainhand' || hand === 'twohand') return 'mainhand';
+  if (hand === 'mainhand') return 'mainhand';
+  // A two-hander heads to the mainhand unless the wielder dual-wields
+  // two-handers (Titan's Grip: Fury), where it routes like a one-hander.
+  if (hand === 'twohand' && !canDualWieldTwoHand(meta.cls, spec)) return 'mainhand';
   if (!meta.equipment.mainhand) return 'mainhand';
   if (!shouldAutoRouteToOffhand(meta, spec)) return 'mainhand';
+  // A 2H mainhand blocks offhand routing for ordinary dual-wielders only:
+  // under Titan's Grip a weapon may sit beside it.
+  const tg = canDualWieldTwoHand(meta.cls, spec);
   if (
     canDualWield(meta.cls, spec) &&
     canEquipItemInSlot(meta.cls, def, 'offhand', spec) &&
     !meta.equipment.offhand
   ) {
     const mainhand = meta.equipment.mainhand ? ITEMS[meta.equipment.mainhand] : undefined;
-    if (mainhand?.kind !== 'weapon' || weaponHand(mainhand) !== 'twohand') return 'offhand';
+    if (tg || mainhand?.kind !== 'weapon' || weaponHand(mainhand) !== 'twohand') return 'offhand';
   }
   if (
     canDualWield(meta.cls, spec) &&
@@ -79,7 +86,7 @@ function desiredEquipSlot(
     meta.equipment.offhand
   ) {
     const offhand = ITEMS[meta.equipment.offhand];
-    if (!offhand || offhand.kind !== 'weapon' || weaponHand(offhand) !== 'twohand')
+    if (tg || !offhand || offhand.kind !== 'weapon' || weaponHand(offhand) !== 'twohand')
       return 'offhand';
   }
   return 'mainhand';
@@ -144,14 +151,20 @@ export function equipItem(ctx: SimContext, itemId: string, pid?: number): void {
   // coexist (shield block or a dual-wield swing would stack with the two-hand
   // mastery). Equipping into the offhand while wielding a 2H displaces the 2H to
   // the bags, and equipping a 2H displaces the offhand piece, the classic swap in
-  // both directions. With no bag room for the displaced piece the equip is
+  // both directions. The one exemption is Titan's Grip (canDualWieldTwoHand):
+  // weapon-beside-2H is that spec's whole point, so only shields/held offhands
+  // still displace. With no bag room for the displaced piece the equip is
   // refused, mirroring unequipItem (nothing is ever force-dropped).
   let displacedSlot: EquipSlot | null = null;
   if (slot === 'offhand') {
     const mh = meta.equipment.mainhand ? ITEMS[meta.equipment.mainhand] : undefined;
-    if (mh?.kind === 'weapon' && weaponHand(mh) === 'twohand') displacedSlot = 'mainhand';
+    const tgPair = def.kind === 'weapon' && canDualWieldTwoHand(meta.cls, spec);
+    if (mh?.kind === 'weapon' && weaponHand(mh) === 'twohand' && !tgPair)
+      displacedSlot = 'mainhand';
   } else if (slot === 'mainhand' && def.kind === 'weapon' && weaponHand(def) === 'twohand') {
-    if (meta.equipment.offhand) displacedSlot = 'offhand';
+    const oh = meta.equipment.offhand ? ITEMS[meta.equipment.offhand] : undefined;
+    const tgPair = oh?.kind === 'weapon' && canDualWieldTwoHand(meta.cls, spec);
+    if (meta.equipment.offhand && !tgPair) displacedSlot = 'offhand';
   }
   const displacedId = displacedSlot ? meta.equipment[displacedSlot] : undefined;
   if (displacedSlot && displacedId) {

@@ -355,14 +355,15 @@ export class CharacterVisual {
     this.playOneShot(name, this.def.attackTimeScale ?? 1.3);
   }
 
-  /** 'twohand' when the mainhand is a two-handed weapon, 'dualwield' when both
-   *  hands hold weapons; null keeps the generic attack rotation. */
+  /** 'dualwield' when both hands hold weapons (checked first: a Titan's Grip
+   *  pair must read as two one-hand swings, never the two-handed overhead),
+   *  'twohand' for a lone two-handed mainhand; null keeps the rotation. */
   private weaponSwingStyle(): 'twohand' | 'dualwield' | null {
     const mh = this.mainhandItemId ? ITEMS[this.mainhandItemId] : undefined;
     if (mh?.kind !== 'weapon') return null;
-    if (weaponHand(mh) === 'twohand') return 'twohand';
     const oh = this.offhandItemId ? ITEMS[this.offhandItemId] : undefined;
-    return oh?.kind === 'weapon' ? 'dualwield' : null;
+    if (oh?.kind === 'weapon') return 'dualwield';
+    return weaponHand(mh) === 'twohand' ? 'twohand' : null;
   }
 
   /** Instant whirlwind (Bladed Gyre): swing the blades fast while the body does

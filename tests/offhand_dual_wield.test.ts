@@ -220,3 +220,71 @@ describe('two-hander hand exclusivity', () => {
     expect(sim.countItem('eastbrook_greatsword')).toBe(1); // still in the bags
   });
 });
+
+// Titan's Grip (owner decision 2026-07-10): Fury, and only Fury, dual-wields
+// two-handers, one per weapon slot. Shields still never sit beside a 2H.
+describe("Titan's Grip: Fury dual-wields two-handers", () => {
+  function furyWarrior(): Sim {
+    const sim = new Sim({ seed: 7, playerClass: 'warrior', autoEquip: true });
+    sim.setPlayerLevel(10);
+    expect(sim.setSpec('fury')).toBe(true);
+    requirePlayerMeta(sim, sim.player.id).autoEquip = false;
+    return sim;
+  }
+
+  function furyWithTwoGreatswords(): Sim {
+    const sim = furyWarrior();
+    sim.addItem('eastbrook_greatsword', 2);
+    // First 2H fills the offhand (the dual-wield weapon-first routing, same as
+    // a one-hander); the second goes to the freed mainhand.
+    sim.equipItem('eastbrook_greatsword');
+    expect(sim.equipment.offhand).toBe('eastbrook_greatsword');
+    sim.unequipItem('mainhand');
+    sim.equipItem('eastbrook_greatsword');
+    expect(sim.equipment.mainhand).toBe('eastbrook_greatsword');
+    expect(sim.equipment.offhand).toBe('eastbrook_greatsword');
+    return sim;
+  }
+
+  it('a Fury warrior equips a two-hander in EACH weapon slot and dual-wields them', () => {
+    const sim = furyWithTwoGreatswords();
+    expect(sim.player.dualWielding).toBe(true);
+  });
+
+  it("a Titan's Grip pair swings BOTH hands over auto-attack", () => {
+    const sim = furyWithTwoGreatswords() as TestSim;
+    const p = sim.player;
+    const meta = requirePlayerMeta(sim, p.id);
+    const dummy = spawnDummy(sim, p);
+    const events = capture(sim);
+    p.autoAttack = true;
+    p.swingTimer = 0;
+    p.offhandSwingTimer = 0;
+    updatePlayerAutoAttack(sim.ctx, p, meta);
+    const swings = events.filter(
+      (e) => e.type === 'damage' && e.sourceId === p.id && e.targetId === dummy.id,
+    );
+    expect(swings).toHaveLength(2);
+  });
+
+  it('a non-Fury warrior can NOT hold a second two-hander (it swaps the mainhand)', () => {
+    const sim = new Sim({ seed: 7, playerClass: 'warrior', autoEquip: true });
+    requirePlayerMeta(sim, sim.player.id).autoEquip = false;
+    sim.addItem('eastbrook_greatsword', 2);
+    sim.equipItem('eastbrook_greatsword'); // displaces the shield, takes mainhand
+    expect(sim.equipment.mainhand).toBe('eastbrook_greatsword');
+    expect(sim.equipment.offhand).toBeUndefined();
+    sim.equipItem('eastbrook_greatsword'); // the second one just swaps mainhand
+    expect(sim.equipment.mainhand).toBe('eastbrook_greatsword');
+    expect(sim.equipment.offhand).toBeUndefined();
+    expect(sim.countItem('eastbrook_greatsword')).toBe(1); // the swapped-out copy
+  });
+
+  it("equipping a shield over a Titan's Grip pair benches BOTH greatswords", () => {
+    const sim = furyWithTwoGreatswords();
+    sim.equipItem('eastbrook_buckler');
+    expect(sim.equipment.offhand).toBe('eastbrook_buckler');
+    expect(sim.equipment.mainhand).toBeUndefined(); // never shield + 2H
+    expect(sim.countItem('eastbrook_greatsword')).toBe(2); // both in the bags
+  });
+});
