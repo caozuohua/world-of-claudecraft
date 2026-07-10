@@ -47,6 +47,7 @@ import {
   validateAllocation,
 } from '../content/talents';
 import { recalcPlayerStats } from '../entity';
+import { revalidateOffhandForSpec } from '../items';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import type { Entity } from '../types';
@@ -112,6 +113,11 @@ export function applyTalentAllocation(
   }
   r.meta.talents = sanitized;
   recomputeTalents(ctx, r.meta);
+  // A committed spec can make a held offhand illegal (a Titan's Grip two-hander,
+  // or a Fury dual-wield one-hander, under a spec that allows neither): bench it
+  // so the spec boundary never persists a state the equip path refuses. No-op
+  // when the offhand stays legal (a plain point-tree edit, or a shield).
+  revalidateOffhandForSpec(ctx, pid);
   ctx.emit({ type: 'log', pid: r.e.id, text: 'Talents updated.', color: '#ffd100' });
   return true;
 }

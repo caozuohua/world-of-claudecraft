@@ -235,16 +235,28 @@ describe("Titan's Grip: Fury dual-wields two-handers", () => {
   function furyWithTwoGreatswords(): Sim {
     const sim = furyWarrior();
     sim.addItem('eastbrook_greatsword', 2);
-    // First 2H fills the offhand (the dual-wield weapon-first routing, same as
-    // a one-hander); the second goes to the freed mainhand.
+    // The natural two-click flow (no unequip workaround): the first greatsword
+    // fills the mainhand (the strong hand, benching the starting shield), the
+    // second then routes to the offhand since the mainhand now holds a 2H.
     sim.equipItem('eastbrook_greatsword');
-    expect(sim.equipment.offhand).toBe('eastbrook_greatsword');
-    sim.unequipItem('mainhand');
+    expect(sim.equipment.mainhand).toBe('eastbrook_greatsword');
+    expect(sim.equipment.offhand).toBeUndefined();
     sim.equipItem('eastbrook_greatsword');
     expect(sim.equipment.mainhand).toBe('eastbrook_greatsword');
     expect(sim.equipment.offhand).toBe('eastbrook_greatsword');
     return sim;
   }
+
+  it('a lone greatsword routes to the mainhand (the strong hand), not the offhand', () => {
+    const sim = furyWarrior();
+    // The fresh kit is a one-hander (worn_sword) in the mainhand, so the routing
+    // choice is real: the greatsword must not slip into the half-damage offhand.
+    expect(sim.equipment.mainhand).toBe('worn_sword');
+    sim.addItem('eastbrook_greatsword', 1);
+    sim.equipItem('eastbrook_greatsword');
+    expect(sim.equipment.mainhand).toBe('eastbrook_greatsword'); // strong hand, not offhand
+    expect(sim.equipment.offhand).toBeUndefined();
+  });
 
   it('a Fury warrior equips a two-hander in EACH weapon slot and dual-wields them', () => {
     const sim = furyWithTwoGreatswords();
@@ -286,5 +298,27 @@ describe("Titan's Grip: Fury dual-wields two-handers", () => {
     expect(sim.equipment.offhand).toBe('eastbrook_buckler');
     expect(sim.equipment.mainhand).toBeUndefined(); // never shield + 2H
     expect(sim.countItem('eastbrook_greatsword')).toBe(2); // both in the bags
+  });
+
+  it('switching Fury to Arms benches the now-illegal offhand two-hander', () => {
+    const sim = furyWithTwoGreatswords();
+    expect(sim.equipment.offhand).toBe('eastbrook_greatsword');
+    expect(sim.setSpec('arms')).toBe(true);
+    // Arms cannot dual-wield two-handers: the offhand piece must go to the bags,
+    // never persist a state the equip path refuses to create.
+    expect(sim.equipment.offhand).toBeUndefined();
+    expect(sim.equipment.mainhand).toBe('eastbrook_greatsword'); // the mainhand 2H is fine for Arms
+    expect(sim.countItem('eastbrook_greatsword')).toBe(1); // benched, not destroyed
+  });
+
+  it('switching Fury (dual one-handers) to Prot benches the offhand weapon', () => {
+    const sim = furyWarrior();
+    sim.addItem('redbrook_blade', 2);
+    sim.equipItem('redbrook_blade'); // mainhand (starting worn_sword swapped out... actually offhand-routed)
+    sim.equipItem('redbrook_blade');
+    expect(sim.equipment.offhand).toBe('redbrook_blade'); // dual-wielding one-handers
+    expect(sim.setSpec('prot')).toBe(true);
+    // Prot cannot dual-wield: the offhand one-hander is benched.
+    expect(sim.equipment.offhand).toBeUndefined();
   });
 });

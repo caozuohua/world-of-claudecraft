@@ -64,13 +64,23 @@ function desiredEquipSlot(
   if (def.kind !== 'weapon') return resolveEquipSlot(def, meta.equipment);
   const hand = weaponHand(def);
   if (hand === 'mainhand') return 'mainhand';
-  // A two-hander heads to the mainhand unless the wielder dual-wields
-  // two-handers (Titan's Grip: Fury), where it routes like a one-hander.
-  if (hand === 'twohand' && !canDualWieldTwoHand(meta.cls, spec)) return 'mainhand';
+  if (hand === 'twohand') {
+    // A two-hander goes to the mainhand (the strong hand) unless the wielder
+    // dual-wields two-handers (Titan's Grip: Fury). Even then it fills the
+    // mainhand FIRST and only routes to the offhand once the mainhand already
+    // holds a two-hander, so a looted greatsword upgrades the mainhand instead
+    // of landing in the weak (half-damage) offhand. (review round 2, item 6)
+    if (!canDualWieldTwoHand(meta.cls, spec)) return 'mainhand';
+    const mh = meta.equipment.mainhand ? ITEMS[meta.equipment.mainhand] : undefined;
+    if (mh?.kind === 'weapon' && weaponHand(mh) === 'twohand' && !meta.equipment.offhand)
+      return 'offhand';
+    return 'mainhand';
+  }
+  // One-handers below.
   if (!meta.equipment.mainhand) return 'mainhand';
   if (!shouldAutoRouteToOffhand(meta, spec)) return 'mainhand';
   // A 2H mainhand blocks offhand routing for ordinary dual-wielders only:
-  // under Titan's Grip a weapon may sit beside it.
+  // under Titan's Grip a one-hander may sit beside a two-handed mainhand.
   const tg = canDualWieldTwoHand(meta.cls, spec);
   if (
     canDualWield(meta.cls, spec) &&
@@ -212,6 +222,35 @@ export function unequipItem(ctx: SimContext, slot: EquipSlot, pid?: number): boo
     pid: meta.entityId,
   });
   return true;
+}
+
+// A spec change is the one place equipment legality can shift without an equip
+// action: a Fury Titan's Grip pair (a two-hander in the offhand), or a Fury pair
+// of one-handers, becomes illegal the moment the player commits to Arms/Prot
+// (canDualWieldTwoHand / canDualWield both go false). The equip boundary already
+// refuses to CREATE such a state; this benches an offhand the new spec can no
+// longer hold. Uncapped return to bags (like the grant hub, never capacity-
+// capped) so a respec can never destroy gear even with full bags. Shields and
+// held-offhands stay: canEquipItemInSlot admits them for any class.
+export function revalidateOffhandForSpec(ctx: SimContext, pid?: number): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  const { meta, e: p } = r;
+  const offId = meta.equipment.offhand;
+  if (!offId) return;
+  const def = ITEMS[offId];
+  if (!def) return;
+  const spec = ctx.playerMods(meta).spec;
+  if (canEquipItemInSlot(meta.cls, def, 'offhand', spec)) return;
+  delete meta.equipment.offhand;
+  addItemSilent(offId, 1, meta);
+  recalcPlayerStats(p, meta.cls, meta.equipment, ctx.playerMods(meta));
+  ctx.emit({
+    type: 'log',
+    text: `Unequipped ${def.name}.`,
+    color: '#8f8',
+    pid: meta.entityId,
+  });
 }
 
 export function useItem(ctx: SimContext, itemId: string, pid?: number): ItemUseResult | undefined {
