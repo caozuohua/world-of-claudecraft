@@ -226,18 +226,20 @@ describe('Settings', () => {
     expect(s.set('actionButtonScale', 1.1)).toBe(1.1);
   });
 
-  it('action button scale spans the widened 0 to 200 percent band (default 100%)', () => {
+  it('action button scale spans the widened 25 to 200 percent band (default 100%)', () => {
     // Live user feedback (PR #1736): the old 0.8-1.3 band was too narrow. The
-    // spell/action button size must reach 0% (hidden, recoverable from the
-    // unscaled settings menu) through 200%, with a 100% default. def stays 1 so
-    // no stored value migrates when the band widens.
-    expect(SETTING_RANGES.actionButtonScale).toEqual({ min: 0, max: 2, def: 1 });
+    // spell/action button size must reach 200% with a 100% default. The lower
+    // edge is a 25% floor, not 0: a 0 scale collapsed the whole button cluster
+    // to nothing and soft-locked the player, so 25% is the smallest usable size.
+    // def stays 1 so no stored value migrates when the band widens.
+    expect(SETTING_RANGES.actionButtonScale).toEqual({ min: 0.25, max: 2, def: 1 });
     const s = new Settings();
     // The new extremes are reachable and clamp exactly at the widened edges.
-    expect(s.set('actionButtonScale', 0)).toBe(0);
+    expect(s.set('actionButtonScale', 0.25)).toBe(0.25);
     expect(s.set('actionButtonScale', 2)).toBe(2);
     expect(s.set('actionButtonScale', 3)).toBe(2); // above-max clamps down to 2
-    expect(s.set('actionButtonScale', -1)).toBe(0); // below-min clamps up to 0
+    expect(s.set('actionButtonScale', 0)).toBe(0.25); // below-floor clamps up to 25%
+    expect(s.set('actionButtonScale', -1)).toBe(0.25); // below-min clamps up to the floor
     expect(s.set('actionButtonScale', 0.5)).toBe(0.5); // a mid-band 50% value survives
   });
 
