@@ -1156,6 +1156,57 @@ describe('i18n Localization Key Coverage', () => {
     setLanguage('en');
   });
 
+  // Deed names and reward titles that legitimately equal English in a locale,
+  // recorded as deliberate cross-language cognates (Veteran, Champion, Paragon,
+  // and Gladiator are those languages' own words; Marginalia is Latin; nl keeps
+  // the poker term Full House). This list IS the recording mechanism: a deed
+  // name or title that matches English WITHOUT a row here is an accidental
+  // leak at the release gate. Dialect locales list their rendered result
+  // (es_ES and fr_CA resolve through their base tables plus overrides).
+  const deedCognateAllowlist: Record<string, readonly string[]> = {
+    es: ['soc_market_magnate.title'],
+    es_ES: ['soc_market_magnate.title'],
+    fr_FR: ['prog_champion.name', 'prog_champion.title', 'dlv_lore_journal.name'],
+    fr_CA: ['prog_champion.name', 'prog_champion.title', 'dlv_lore_journal.name'],
+    it_IT: ['soc_market_magnate.title'],
+    de_DE: [
+      'prog_veteran.name',
+      'prog_veteran.title',
+      'prog_champion.name',
+      'prog_champion.title',
+      'prog_paragon.name',
+      'prog_paragon.title',
+      'pvp_arena_1v1_1900.name',
+      'pvp_arena_1v1_1900.title',
+    ],
+    pt_BR: ['prog_paragon.name', 'prog_paragon.title'],
+    nl_NL: [
+      'dlv_lore_journal.name',
+      'pvp_arena_1v1_1900.name',
+      'pvp_arena_1v1_1900.title',
+      'soc_full_house.name',
+    ],
+    pl_PL: ['dlv_lore_journal.name', 'pvp_arena_1v1_1900.name', 'pvp_arena_1v1_1900.title'],
+    id_ID: [
+      'prog_veteran.name',
+      'prog_veteran.title',
+      'pvp_arena_1v1_1900.name',
+      'pvp_arena_1v1_1900.title',
+    ],
+    sv_SE: [
+      'prog_veteran.name',
+      'prog_veteran.title',
+      'pvp_arena_1v1_1900.name',
+      'pvp_arena_1v1_1900.title',
+    ],
+    da_DK: [
+      'prog_veteran.name',
+      'prog_veteran.title',
+      'pvp_arena_1v1_1900.name',
+      'pvp_arena_1v1_1900.title',
+    ],
+  };
+
   it('should provide deed content translations for every supported locale', () => {
     const deedEntries = deedTranslationManifest();
     expect(deedEntries.length).toBe(Object.keys(DEEDS).length * 2 + 19);
@@ -1177,6 +1228,22 @@ describe('i18n Localization Key Coverage', () => {
           expect(
             copiedEnglishComparable(rendered),
             `${lang}.${entry.id}.desc should not copy canonical English deed prose`,
+          ).not.toBe(copiedEnglishComparable(entry.source));
+        }
+        // Deed NAMES and reward TITLES must not leak English either. A value may
+        // legitimately equal English only as a deliberate cross-language cognate
+        // recorded in deedCognateAllowlist above; a match WITHOUT such a row is
+        // an accidental leak (e.g. a new deed the locale tables do not yet cover).
+        if (
+          RELEASE_TIER &&
+          lang !== 'en' &&
+          lang !== 'en_CA' &&
+          entry.field !== 'desc' &&
+          !(deedCognateAllowlist[lang] ?? []).includes(`${entry.id}.${entry.field}`)
+        ) {
+          expect(
+            copiedEnglishComparable(rendered),
+            `${lang}.${entry.id}.${entry.field} leaks English with no deedCognateAllowlist row`,
           ).not.toBe(copiedEnglishComparable(entry.source));
         }
       }
