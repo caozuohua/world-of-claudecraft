@@ -367,7 +367,10 @@ export interface SimContextCallbacks {
   // professions/enchanting.ts instead of countFungibleItem/removeFungibleItem
   // so crafted single-copy rares remain disenchantable/enchantable.
   countEnchantableItem(itemId: string, pid?: number): number;
-  removeEnchantableItem(itemId: string, count: number, pid?: number): void;
+  // Returns the consumed slots' `instance` payloads (removeItem's contract),
+  // so applyEnchant can merge a crafted copy's signer/rolled.quality into the
+  // freshly-enchanted instance instead of dropping them.
+  removeEnchantableItem(itemId: string, count: number, pid?: number): ItemInstancePayload[];
   completeQuestForDev(questId: string, pid?: number): boolean;
   completeCurrentQuestsForDev(pid?: number): number;
 

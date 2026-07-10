@@ -5209,10 +5209,15 @@ export class Sim {
   // Removal counterpart to countEnchantableItem above: prefers plain fungible
   // stacks (matching removeFungibleItem's ordering within that subset) and only
   // reaches for an instanced-but-unenchanted copy once no fungible copy is left.
-  // Never removes a copy that already carries rolled.stats.
-  removeEnchantableItem(itemId: string, count: number, pid?: number): void {
+  // Never removes a copy that already carries rolled.stats. Returns the
+  // `instance` payload of every instanced slot actually consumed (matching
+  // removeItem's return contract) so a caller applying an enchant can merge a
+  // crafted copy's signer/rolled.quality into the freshly-enchanted instance
+  // instead of silently dropping them (#1712 round-3 review).
+  removeEnchantableItem(itemId: string, count: number, pid?: number): ItemInstancePayload[] {
+    const consumedInstances: ItemInstancePayload[] = [];
     const r = this.resolve(pid);
-    if (!r) return;
+    if (!r) return consumedInstances;
     const { meta } = r;
     // Pass 1: plain fungible stacks only, same order removeFungibleItem uses.
     for (let i = meta.inventory.length - 1; i >= 0 && count > 0; i--) {
@@ -5227,12 +5232,14 @@ export class Sim {
     for (let i = meta.inventory.length - 1; i >= 0 && count > 0; i--) {
       const s = meta.inventory[i];
       if (s.itemId !== itemId || !s.instance || s.instance.rolled?.stats) continue;
+      consumedInstances.push(s.instance);
       const take = Math.min(s.count, count);
       s.count -= take;
       count -= take;
       if (s.count <= 0) meta.inventory.splice(i, 1);
     }
     this.ctx.onInventoryChangedForQuests(meta);
+    return consumedInstances;
   }
 
   // True when `count` copies of the item fit the player's pooled bag budget

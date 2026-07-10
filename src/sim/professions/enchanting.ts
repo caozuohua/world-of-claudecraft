@@ -35,7 +35,7 @@ import { ENCHANTS } from '../content/enchants';
 import { ITEMS } from '../data';
 import type { Rng } from '../rng';
 import type { SimContext } from '../sim_context';
-import type { ItemDef } from '../types';
+import { cloneItemInstancePayload, type ItemDef, type ItemInstancePayload } from '../types';
 
 const QUALITY_ORDER: readonly NonNullable<ItemDef['quality']>[] = [
   'poor',
@@ -142,7 +142,12 @@ export interface ApplyEnchantResult {
  *  an already-enchanted copy of the same item is never silently overwritten)
  *  and every reagent, then grants a freshly-instanced copy carrying the
  *  enchant's stat bonus (ctx.addItemInstance): equipping THAT copy is what
- *  carries the bonus into recalcPlayerStats (see items.ts equipItem). */
+ *  carries the bonus into recalcPlayerStats (see items.ts equipItem). If the
+ *  consumed copy was itself instanced (a crafted rare+ piece carrying a
+ *  signer/rolled.quality payload), that payload is merged into the new
+ *  instance rather than dropped, so enchanting a crafted item does not erase
+ *  its crafter attribution (battlefield_xp.ts) or rolled.quality (#1712
+ *  round-3 review). */
 export function resolveApplyEnchant(
   ctx: SimContext,
   pid: number,
@@ -164,9 +169,13 @@ export function resolveApplyEnchant(
       return { ok: false, itemId, enchantId, reason: 'insufficient_materials' };
     }
   }
-  ctx.removeEnchantableItem(itemId, 1, pid);
+  const [consumed] = ctx.removeEnchantableItem(itemId, 1, pid);
   for (const reagent of enchant.reagents) ctx.removeItem(reagent.itemId, reagent.count, pid);
-  ctx.addItemInstance(itemId, { rolled: { stats: { ...enchant.statBonus } } }, pid);
+  const merged: ItemInstancePayload = consumed
+    ? cloneItemInstancePayload(consumed)
+    : ({} as ItemInstancePayload);
+  merged.rolled = { ...merged.rolled, stats: { ...enchant.statBonus } };
+  ctx.addItemInstance(itemId, merged, pid);
   return { ok: true, itemId, enchantId };
 }
 

@@ -261,6 +261,35 @@ describe('applyEnchant', () => {
     expect(second.reason).toBe('not_held');
   });
 
+  // Regression for review #1712 round-3: enchanting a crafted rare+ instanced
+  // copy used to consume it and grant a fresh instance carrying ONLY
+  // rolled.stats, silently erasing the crafter's signer and rolled.quality
+  // (killing battlefield_xp.ts attribution and crafting.ts's
+  // hasSelfSignedInstance check). The signer and rolled.quality must survive
+  // alongside the new stat bonus.
+  it('enchanting a crafted instanced copy preserves its signer and rolled.quality', () => {
+    const sim = makeSim();
+    const pid = sim.playerId;
+    sim.ctx.addItemInstance(
+      'moggers_copper_cudgel',
+      { signer: 'Tester', rolled: { quality: 'rare' } },
+      pid,
+    );
+    sim.addItem('arcane_dust', 5, pid);
+    const result = resolveApplyEnchant(
+      sim.ctx,
+      pid,
+      'moggers_copper_cudgel',
+      'enchant_weapon_might',
+    );
+    expect(result.ok).toBe(true);
+    const meta = sim.ctx.resolve(pid)?.meta;
+    const slot = meta?.inventory.find((s) => s.itemId === 'moggers_copper_cudgel');
+    expect(slot?.instance?.signer).toBe('Tester');
+    expect(slot?.instance?.rolled?.quality).toBe('rare');
+    expect(slot?.instance?.rolled?.stats).toBeDefined();
+  });
+
   it('the applyEnchant command entry point resolves the caller and stashes the result', () => {
     const sim = makeSim();
     const pid = sim.playerId;
