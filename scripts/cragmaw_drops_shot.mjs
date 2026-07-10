@@ -56,7 +56,9 @@ const info = await page.evaluate(() => {
   document.querySelector('#bags').style.display = 'none';
   g.hud.toggleBags();
   g.hud.renderBags();
-  const rows = [...document.querySelectorAll('#bags .item-cell')].map((r) => (r.getAttribute('aria-label') || '').trim());
+  const rows = [...document.querySelectorAll('#bags .item-cell')].map((r) =>
+    (r.getAttribute('aria-label') || '').trim(),
+  );
   return { rows };
 });
 console.log('bag rows:', JSON.stringify(info.rows));
