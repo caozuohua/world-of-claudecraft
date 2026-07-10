@@ -1993,7 +1993,9 @@ describe('client HTML shell', () => {
     // Hud still owns resetActiveFormBarToDefault + the form-bar predicate it wires.
     expect(spellbookWindowTs).toContain('data-reset-bar');
     expect(spellbookWindowTs).toContain("t('abilityUi.spellbook.resetBar')");
-    expect(spellbookWindowTs).toContain('const resetBtnHtml = view.hasFormBars');
+    // The reset button now lives in the shared window-frame footer, gated on the
+    // form-bars flag (was an inline resetBtnHtml const in the pre-frame chrome).
+    expect(spellbookWindowTs).toContain('if (view.hasFormBars)');
     expect(hudTs).toContain('resetFormBar: () => this.resetActiveFormBarToDefault()');
     expect(componentsCss).toContain('.spellbook-reset {');
     expect(hudMobileCss).toContain('body.mobile-touch #spellbook .spellbook-reset {');

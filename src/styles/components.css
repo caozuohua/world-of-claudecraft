@@ -3686,7 +3686,8 @@
      .window:has(> .window-frame) rule (flex-direction:column; overflow:hidden)
      bounds the frame as a height-clamped flex column; closed windows keep
      display:none. */
-  #quest-log-window:has(> .window-frame) {
+  #quest-log-window:has(> .window-frame),
+  #spellbook:has(> .window-frame) {
     padding: 0;
     background: transparent;
     border: 0;
@@ -3712,6 +3713,20 @@
   }
   #quest-log-window .window-footer .btn {
     min-width: 0;
+  }
+
+  /* Spellbook: the class kit list fills the scrolling body; the reset-bar action
+     (form-bar classes only) sits in the footer, which collapses when empty so
+     single-bar classes show no bare sticky bar. Drag-to-actionbar rows keep the
+     existing .spell-row grammar from the spellbook section. */
+  #spellbook .window-body .spell-list {
+    min-height: 0;
+  }
+  #spellbook .window-footer:empty {
+    display: none;
+  }
+  #spellbook .window-footer .spellbook-reset {
+    white-space: nowrap;
   }
 
   /* ---------- social ---------- */
