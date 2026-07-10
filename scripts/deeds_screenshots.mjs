@@ -294,9 +294,18 @@ await flipViewport(1600, 900, 1, false);
 const bursar = await goTo('bursar_fernando', -3, 3.5);
 check(!!bursar, 'bursar found in the live world');
 await sleep(1500);
-await clickNpc(bursar.id);
-await sleep(1500);
-await escapeUntilClear();
+// The projected click can land a hair off while the camera settles, so
+// retry the talk until the deed lands (the Saul streak below does the same).
+for (let attempt = 0; attempt < 3; attempt++) {
+  await clickNpc(bursar.id);
+  await sleep(1500);
+  await escapeUntilClear();
+  const earned = await evr(() => {
+    const sim = window.__game.world;
+    return sim.players.get(sim.playerId)?.deedsEarned.has('soc_meet_bursar') ?? false;
+  });
+  if (earned) break;
+}
 check(
   await evr(() => {
     const sim = window.__game.world;
@@ -561,7 +570,9 @@ for (const tier of TIERS) {
         const r = document.querySelector('#mobile-chat')?.getBoundingClientRect();
         return r && r.width > 0 ? { x: r.x + r.width / 2, y: r.y + r.height / 2 } : null;
       });
-      if (pt) await page.mouse.click(pt.x, pt.y);
+      // Touchscreen, not mouse: under touch emulation the mouse path never
+      // reaches the button's pointer handlers.
+      if (pt) await page.touchscreen.tap(pt.x, pt.y);
       await sleep(900);
     };
     await tapChatButton();
