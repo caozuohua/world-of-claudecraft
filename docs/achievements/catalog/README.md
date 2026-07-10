@@ -477,3 +477,35 @@ at b08b1bebd plus the two fix commits it produced (b88576f95, 832ba54de).
       (JAILED_BLOCKED_COMMANDS in server/game.ts covering arena, Vale Cup,
       dungeon, crypt, delve, and duel commands); no sim file carries a jail
       gate. Location note only; the lockout itself re-verified complete.
+
+## Assembly resolutions, closing QA (2026-07-10)
+
+The final QA session of the polish round. Its pre-work merge (done ahead of
+the session, recorded in the working log) brought the one release merge that
+landed after the b08b1bebd tree; the register below closes it, freezing the
+catalog against the branch's final tree. Tree audited: feature/achievements
+at 7d7d52c9b.
+
+29. The v0.24.0 ready-check merge (ee0d8ab5c, release tip 4cbd550e4) is
+    judged and closed: ZERO deeds added, removed, or edited. The
+    second-parent enumeration shows exactly five upstream commits: PR #1716
+    (raid and party ready check, /ready), PR #1758 (default-skin preview
+    render fix: merge 282dd40b9 plus 38f961535 and its test 07f312491), and
+    the package-lock picomatch sync 0717ebe44. Judgments, each verified in
+    code: the ready check ships no deed under rule 6 (answering a prompt is
+    attendance, not an outcome; a respond-N-times deed would reward button
+    clicking and be farmable in a party of alts) and it writes no persisted
+    state (ReadyCheck in src/sim/types.ts is Sim-internal session state
+    keyed by party id, a responses map with a sim-clock deadline; no
+    PlayerMeta, CharacterState, or deedStats surface exists to trigger on);
+    the skin-preview fix is render-only and the lockfile sync is tooling
+    (the resolution 23 QoL class). The deed accounting hooks in
+    combat/damage.ts and the whole of src/sim/content/deeds.ts are
+    byte-untouched by the delta (diff-tree verified). Live set re-verified
+    by scripted recount at this tree: 192 deeds with the resolution 14
+    category split, 2,365 Renown, scale-only renown values, 19 titles, 3
+    borders, 72 Steam entries; every DEED_ORDER position unchanged. The
+    merge's only i18n footprint is the 60 release-owned
+    hudChrome.readyCheck pending rows (4 keys x 15 locales, the five
+    non-Latin locales arrived filled per M16), upstream release-fill
+    territory outside the deeds scope.
