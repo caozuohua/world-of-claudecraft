@@ -83,4 +83,7 @@ clean, progress.md row 13Q written.
 ## End of session
 
 Update progress.md row 13Q. Name the next file:
-`docs/achievements/phase-14-translations.md`.
+`docs/achievements/phase-14-catalog-recheck.md`. (The next file was
+`phase-14-translations.md` when this session ran; the maintainer then
+inserted the catalog recheck and wiki audit sessions, renumbering
+translations to 16.)

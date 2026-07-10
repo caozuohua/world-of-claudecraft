@@ -1,100 +1,83 @@
-# 14 QA: the fills hold, and the packet closes
+# 14 QA: the recheck missed nothing in the range
 
 STATUS: NOT STARTED
 
 Read `docs/achievements/overview.md` first (authoritative), then the 14
-implement file and its progress.md row. This is the FINAL session of the
-polish round: it verifies the translation fill, runs the whole-feature
-closing sweep, and executes the packet cleanup decision as its exit step.
-House rules: no em/en dashes or emojis in anything you WRITE this session
-(translated corpus conventions are exempt per the 14 spec); no
-"phase"/packet wording in anything that ships.
+implement file and its progress.md row. This session verifies the recheck
+with fresh eyes; its center of gravity is RANGE COMPLETENESS, because a
+recheck's failure mode is silence (a system nobody judged), not a bad block.
+House rules: no em/en dashes or emojis anywhere; no "phase"/packet wording in
+anything that ships; English-only i18n, pending rows expected.
 
 ## 0. Orient
 
-Read the 14 session summary, the per-family reviewer verdicts, and the diff
-shape (overlays, deed_i18n, glossary, generated artifacts, baseline).
+Read the 14 session summary in progress.md, the new resolutions entry in
+`catalog/README.md`, and the diff since the 13Q closing sha.
 
 ## 1. Re-run acceptance (all of it, from a clean tree)
 
 Every command in the 14 Acceptance section verbatim, real exit codes,
 `npm run gate` UNPIPED.
 
-## 2. Fill integrity audit (the load-bearing check)
+## 2. Range-completeness audit (the load-bearing check)
 
-- Deeds-owned pending rows: zero in all locales (fresh worklist run).
-- Placeholder integrity across the WHOLE fill: script a token check (every
-  {token} in each English value appears exactly once in each locale value,
-  and no locale value introduces a token English lacks). Zero exceptions.
-- Coverage manifest full for every locale; sample 10 deed ids per script
-  family and eyeball name/desc/title presence and plausibility.
-- The five Zenzie re-fills correct (native readers unavailable; verify the
-  old transliteration is GONE and the new value contains the locale's
-  Zenzie form).
-- Non-deeds pending rows unchanged in count AND content vs the round base.
-- Same-commit discipline: the commit graph shows regen + sha256 baseline
-  inside the fill commits, never trailing.
+- INDEPENDENTLY re-derive the audit range: `git log --merges` from the 09
+  baseline (db71dad6d) to HEAD, then the content-affecting file inventory of
+  that range. Do this from scratch; do not start from the 14 session's list.
+- For every system or content record in the derived inventory: find its deed,
+  its written rejection, or its deferral recheck in the resolutions entries.
+  Anything with none of the three is a finding.
+- Verify each rejection's REASON against the tree (a rejection citing absent
+  wiring must grep clean; one citing rule 6 must actually be
+  attendance-shaped).
+- Re-verify the standing deferrals live: enchanting/salvage wiring still
+  absent (or correctly transcribed if it landed), recipes for
+  jewelcrafting/inscription, the account-level lane.
 
-## 3. Browser verification
+## 3. Fidelity audit (only if 14 transcribed anything)
 
-Beyond the 14 matrix (ja/de/ru), run TWO more locales (pick zh_TW and pl_PL)
-through the Book, tracker, titled chat, wiki page, Renown tab. Then the
-regression direction: en still renders everything (a fill typo can shadow
-the base); switch locales live with the Book OPEN (the language-switch
-rebuild path must not throw).
+- Scripted recount of deeds.ts vs the new resolutions totals, exact.
+- Every new block transcribed 1:1; zero invented, zero silently dropped.
+- Every pre-existing DEED_ORDER id byte-identical in place (diff the
+  extracted order against the pre-14 sha).
+- New grant sites driven by hand through the public Sim entry points
+  (outcome-not-attempt, literal thresholds, retro behavior); at least two
+  mutations redded and restored byte-clean.
+- Icon-brief lines exist for exactly the new ids; Steam map pins updated and
+  under the cap.
 
-## 4. Whole-round closing sweep (the feature is DONE after this)
+## 4. i18n and wiki mechanics
 
-- `npm run gate` UNPIPED on the final tree, recorded.
-- The full offline walkthrough once more at 1600x900 and 844x390: window,
-  icons, titles pane, unlock moment, tracker, chroniclers (Zenzie by name),
-  titled chat, player card.
-- Confirm every maintainer flag accumulated in progress.md rows 9 to 14 is
-  itemized in ONE "flags for the maintainer" list in this row's notes (icon
-  brief for new deeds, deferred surfaces, remaining non-deeds pending count,
-  anything else the rounds recorded).
+- No locale overlay touched; deed_i18n manifest covers any new ids
+  automatically (confirm by count, not assumption).
+- `npm run wiki:content` diffless on the committed tree; new public deeds
+  appear, hidden additions do not.
+- If any English key changed, the sha256 baseline moved in the SAME commit
+  (check the commit graph).
 
 ## 5. Reviewer dispatch
 
-- qa-checklist over the whole polish round (rows 9 to 14 diffs union) at
-  whole-feature depth.
-- test-coverage-auditor if any test changed since its last pass.
+Read the 14 reviewer verdicts and resolve anything open. Dispatch a fresh
+qa-checklist over the 14 diff if 14 amended after its own dispatch, or if 14
+was docs-only and its reviewer coverage was thin.
 
 ## 6. Adversarial what-is-missing pass
 
-- Grep the tree for any leftover English in a non-en overlay deeds section.
-- Any surface added in 09 to 13 whose key was born AFTER the 14 worklist
-  pull (the classic gap: verify the final worklist run post-dates the last
-  code commit)?
-- Does anything in the round contradict overview decisions 1 to 9? (Walk
-  them one by one; decision 8 is retired by design this round.)
-
-## Exit step: packet cleanup (execute LAST, after everything above is green)
-
-The maintainer's standing instruction: keep what helps future AI sessions,
-delete what does not. The locked decision for this round:
-
-- KEEP: `overview.md` (canonical names + decisions), `catalog/` (the living
-  authoring source of truth, including new-deeds-icon-brief.md until the
-  maintainer commissions the art), `progress.md` (the dense history),
-  `screenshots/` (the evidence set).
-- DELETE: `phase-09-*.md` through `phase-14-*.md` (twelve files; their
-  knowledge lives in progress.md notes and the durable docs/design/deeds.md;
-  git history preserves the specs).
-- Before deleting, update progress.md rows 14 and 14Q and the footer so the
-  table is complete and self-explanatory WITHOUT the files it references.
-- Commit the deletion as `chore(docs): remove internal working notes` with
-  explicit paths (the same shape the first round used).
+- Did any merge land BETWEEN the 14 session's pre-work merge and this
+  session? If yes, extend the range audit over it now (this QA absorbs it or
+  records it for a follow-up recheck; never leave it unjudged).
+- Could two deeds now pay for one action outside the accepted subset-nesting
+  pattern?
+- Does the zero-additions verdict (if 14 concluded that) survive your own
+  independent read of the range?
 
 ## Exit criteria
 
-Acceptance green from clean tree, fill integrity clean, browser passes
-recorded, the closing sweep green, the maintainer flag list written, the
-cleanup commit landed, progress.md rows 14 and 14Q final.
+Acceptance green from a clean tree, range completeness proven independently,
+fidelity audit clean (or vacuously so), mutations redded where code landed,
+progress.md row 14Q written.
 
 ## End of session
 
-The polish round is complete. Name no next file; the final message reports
-the feature state, the maintainer flag list, and the remaining non-deeds
-pending count, and reminds that the branch stays LOCAL ONLY until the
-maintainer calls for the PR.
+Update progress.md row 14Q. Name the next file:
+`docs/achievements/phase-15-wiki-audit.md`.

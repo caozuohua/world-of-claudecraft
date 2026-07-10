@@ -7,7 +7,7 @@ files. Cleanup policy (revised 2026-07-09 by maintainer instruction): the durabl
 parts (this overview, catalog/, progress.md, screenshots/) are KEPT as the record
 that helps future sessions; only the per-session working files are deleted at the
 end of a round (the first round's went in commit 5f373ddca; the polish round's go
-in the phase-14-qa exit step).
+in the phase-16-qa exit step).
 
 How to use this packet: execute the files in order, one session per file, following
 the strict cadence: implement file, then its dedicated QA file, then the next
@@ -246,10 +246,15 @@ db71dad6d).
 | phase-11-title-surfaces.md | Titles in chat (id on the wire, pattern key), target frame, player card + OG page, guild roster, friends, XP board, profile page; desktop and mobile fit | cross-platform-sync, architecture-reviewer, test-coverage-auditor, qa-checklist |
 | phase-12-chroniclers.md | Rename Thornpeak chronicler to Zenzie (id retained), shared mage look with distinct tints, spread placements, catalog doc sync | architecture-reviewer, qa-checklist |
 | phase-13-docs-screenshots.md | README + CLAUDE.md touchpoints, docs/design/deeds.md, the content-flow rule (every new conquerable content ships its deeds), screenshot evidence matrix into the packet | qa-checklist |
-| phase-14-translations.md | Full deeds-scope release fill: overlays + DEED_LOCALES across all 21 locales, glossary extension, Zenzie stale-fill fixes; non-deeds pending untouched | qa-checklist, per-family spot reviewers |
+| phase-14-catalog-recheck.md | Second catalog re-review vs everything merged during the polish round (enchanting, jail, heroic marks, playtime, auth plumbing); every in-range system gets a deed or a written rejection; deferral rechecks; zero additions is a legitimate outcome | architecture-reviewer, test-coverage-auditor |
+| phase-15-wiki-audit.md | Whole-wiki deeds audit against the final catalog and feature set: set equality, spoiler safety re-proven from scratch, feature-currency prose, cross-page sweep with recorded judgments; last English before the freeze | qa-checklist |
+| phase-16-translations.md | Full deeds-scope release fill: overlays + DEED_LOCALES across all 21 locales, glossary extension, Zenzie stale-fill fixes; non-deeds pending untouched | qa-checklist, per-family spot reviewers |
 
 Sequencing rationale: the catalog freezes first so the icon brief reaches the
 maintainer early and later sessions build on final content; icons and titles
-are independent; docs and screenshots capture the finished visuals;
-translations run absolutely last, after English freezes. The polish round's
-first session file is `docs/achievements/phase-09-catalog-refresh.md`.
+are independent; docs and screenshots capture the finished visuals; the
+recheck (14) re-freezes the catalog against everything the round's release
+merges brought in, the wiki audit (15) then freezes the guide prose against
+that final catalog, and translations run absolutely last, after English
+freezes. The polish round's first session file is
+`docs/achievements/phase-09-catalog-refresh.md`.

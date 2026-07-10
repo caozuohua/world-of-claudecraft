@@ -1,4 +1,4 @@
-# 14: Every deeds string in every supported language
+# 16: Every deeds string in every supported language
 
 STATUS: NOT STARTED
 
@@ -38,12 +38,12 @@ to 13 added keys):
 4. `apiError.deeds.*`.
 5. `hudChrome.steam.*` (the deeds-feature Steam card keys; the five
    non-Latin wordy fills exist, the Latin locales are pending).
-6. Every key sessions 09 to 13 added (the chat titled-name pattern key, any
+6. Every key sessions 09 to 15 added (the chat titled-name pattern key, any
    new guide prose, any new chrome): pull the live list from the worklist,
    never from this file.
 7. `DEED_LOCALES` in `src/ui/deed_i18n.ts`: per locale, a table keyed by
    deed id with `name`, `desc`, and (where the deed rewards one) `title`,
-   for the FULL catalog including the 09 additions. This is the big block
+   for the FULL catalog including the 09 and 14 additions. This is the big block
    (~190+ deeds x 3 fields x 21 locales) and it is INVISIBLE to the pending
    counter; the deed_i18n coverage manifest is the completeness oracle.
 
@@ -101,7 +101,7 @@ English exists; re-verify with a grep before trusting it).
 ## Out of scope
 
 - Non-deeds pending rows (report the remaining total instead).
-- Any English rewording (English froze at 13; if a fill exposes a bad
+- Any English rewording (English froze at 15; if a fill exposes a bad
   English source string, flag it, do not fix it here).
 - Admin dashboard keys unless a deeds key exists there (audit says none;
   verify).
@@ -115,7 +115,7 @@ English exists; re-verify with a grep before trusting it).
 4. Regen + re-baseline same commit; equivalence test green.
 5. Verification matrix below; biome on touched files; `npm run gate`
    UNPIPED.
-6. Update progress.md row 14; commit.
+6. Update progress.md row 16; commit.
 
 ## Acceptance (all must pass)
 
@@ -154,5 +154,5 @@ English exists; re-verify with a grep before trusting it).
 
 ## End of session
 
-Update progress.md row 14. Name the next file:
-`docs/achievements/phase-14-qa.md`.
+Update progress.md row 16. Name the next file:
+`docs/achievements/phase-16-qa.md`.
