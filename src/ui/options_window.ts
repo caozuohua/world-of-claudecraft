@@ -385,6 +385,9 @@ export class OptionsWindow {
    *  the footer legend strip (which appears only while a pad is connected). */
   refreshControllerLabels(): void {
     if (!this.isOpen) return;
+    // The pad map (and thus the Controller duplicate aggregate) can change on
+    // connect/disconnect, so refresh the rail dot alongside the pane.
+    this.renderRail();
     if (this.activeCategory === 'controller' && this.subView === 'none') this.renderDetail();
     const footer = this.deps.root().querySelector<HTMLElement>('.window-footer');
     if (footer) this.renderFooter(footer);
@@ -915,6 +918,9 @@ export class OptionsWindow {
     this.announce(
       t('hudChrome.options.keybindCleared', { action: this.actionDisplayName(action, action) }),
     );
+    // Clearing a slot can leave the action unbound (a new conflict), so refresh the
+    // rail dot + the pane banner, not just the detail.
+    this.renderRail();
     this.renderDetail();
     // The repaint detached the focused cap; re-home focus onto the rebuilt cap so
     // the controller cursor survives and the next verb keeps working.
@@ -2014,6 +2020,7 @@ export class OptionsWindow {
       this.evictedRows = [];
       this.keybindNote = t('hud.options.keybindReset');
       this.deps.refreshKeybindLabels();
+      this.renderRail(); // reset restores the default (strafe-unbound) conflict state
       this.renderDetail();
     });
     parent.appendChild(reset);
@@ -2078,8 +2085,12 @@ export class OptionsWindow {
         }
         this.deps.refreshKeybindLabels();
       }
-      if (this.isOpen && this.activeCategory === 'keybinds' && this.subView === 'none')
+      if (this.isOpen && this.activeCategory === 'keybinds' && this.subView === 'none') {
+        // A steal/unbind changes the aggregate, so refresh the rail dot too (not just
+        // the detail), or the rail could contradict the pane's banner.
+        this.renderRail();
         this.renderDetail();
+      }
     });
   }
 
@@ -2125,6 +2136,7 @@ export class OptionsWindow {
     for (const { button, action } of entries) {
       const buttonLabel = gamepadButtonLabel(button, kind);
       const { row, control } = this.optRow(buttonLabel);
+      row.dataset.button = String(button);
       const dup = dupByAction.get(action);
       if (dup) {
         const others = dup.labels.filter((_, i) => dup.buttons[i] !== button);
@@ -2135,7 +2147,17 @@ export class OptionsWindow {
       const dd = this.deps.buildDropdown(
         opts,
         action,
-        (v) => hooks.gamepad.bind(button, v),
+        (v) => {
+          hooks.gamepad.bind(button, v);
+          // Re-render so a duplicate created by THIS remap surfaces its chip live
+          // (and the rail dot updates), then re-home focus to the remapped dropdown.
+          this.renderRail();
+          this.renderDetail();
+          this.deps
+            .root()
+            .querySelector<HTMLElement>(`.opt-row[data-button="${button}"] .ui-dd-btn`)
+            ?.focus();
+        },
         undefined,
         {
           ariaLabel: buttonLabel,
@@ -2150,6 +2172,7 @@ export class OptionsWindow {
     reset.addEventListener('click', () => {
       audio.click();
       hooks.gamepad.reset();
+      this.renderRail(); // reset clears duplicates, so refresh the rail dot too
       this.renderDetail();
     });
     parent.appendChild(reset);

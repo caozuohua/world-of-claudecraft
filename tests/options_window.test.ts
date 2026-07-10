@@ -337,10 +337,31 @@ describe('options_window: conflict surfacing (P4)', () => {
     expect(body).toContain('dup.labels.filter((_, i) => dup.buttons[i] !== button)');
     expect(body).toContain("el('span', 'ui-badge badge-warning opt-dup-chip')");
     expect(body).toContain("t('hudChrome.controller.duplicate', { buttons:");
+    // A duplicate created by THIS remap surfaces its chip live (re-render + refocus).
+    expect(body).toContain('hooks.gamepad.bind(button, v);');
+    expect(body).toContain('.opt-row[data-button="${button}"] .ui-dd-btn');
     // Reset + pad connect/disconnect still re-render the pane (preserved).
     expect(body).toContain('hooks.gamepad.reset();');
     const refresh = painter.slice(painter.indexOf('refreshControllerLabels(): void'));
     expect(refresh.slice(0, refresh.indexOf('\n  //'))).toContain('this.renderDetail()');
+  });
+
+  it('refreshes the rail dot (not just the detail) on every conflict-changing mutation', () => {
+    // A stale rail dot that contradicts the pane banner is the bug this guards: each
+    // in-pane keybind/controller mutation must re-render the RAIL as well.
+    // Rebind/evict callback:
+    const begin = painter.slice(painter.indexOf('private beginCapture'));
+    expect(begin.slice(0, begin.indexOf('\n  // ----'))).toContain('this.renderRail();');
+    // Delete/Backspace + controller X clear:
+    const clear = painter.slice(painter.indexOf('private clearFocusedKeybind'));
+    expect(clear.slice(0, clear.indexOf('\n  /** RT/LT'))).toContain('this.renderRail();');
+    // Keybind reset, controller reset + remap, and pad connect/disconnect:
+    expect(painter).toContain(
+      'this.renderRail(); // reset restores the default (strafe-unbound) conflict state',
+    );
+    expect(painter).toContain('this.renderRail(); // reset clears duplicates');
+    const refresh = painter.slice(painter.indexOf('refreshControllerLabels(): void'));
+    expect(refresh.slice(0, refresh.indexOf('const footer'))).toContain('this.renderRail();');
   });
 });
 
