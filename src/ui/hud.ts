@@ -1938,6 +1938,12 @@ export class Hud {
 
   private isWindowVisible(el: HTMLElement): boolean {
     if (el.id === 'social-window') return el.classList.contains('open');
+    // The mobile More tray is a class-driven modal (body.mobile-more-open): it
+    // stays display:flex and hides via visibility/opacity for its fade, so a
+    // computed-display test would read it as permanently open. Report its real
+    // open state from the body class, mirroring the social-window case above.
+    if (el.id === 'mobile-extra-controls')
+      return document.body.classList.contains('mobile-more-open');
     if (el.hidden || el.hasAttribute('hidden')) return false;
     return getComputedStyle(el).display !== 'none';
   }
@@ -2270,6 +2276,17 @@ export class Hud {
         break;
       case 'emote-editor':
         this.closeEmoteEditor();
+        break;
+      case 'mobile-extra-controls':
+        // The More tray is class-driven (body.mobile-more-open), NOT inline
+        // display: setting el.style.display='none' here would stamp an inline
+        // rule that permanently outranks the stylesheet and the tray could never
+        // reopen. Close it the way its own controls do (the tap-outside handler
+        // + the X + mobile_controls.closeMoreModal all remove these three).
+        document.body.classList.remove('mobile-more-open');
+        document.getElementById('mobile-controls')?.classList.remove('expanded');
+        document.getElementById('mobile-more')?.classList.remove('active');
+        this.hideTooltip();
         break;
       default:
         el.style.display = 'none';

@@ -1164,7 +1164,14 @@
     top: 50%;
     bottom: auto;
     transform: translate(-50%, -50%);
-    display: none;
+    /* Shown as a flex column (the framed-window layout) so the closed/open state
+       is driven by opacity + visibility (the transition below), NOT display: a
+       `display: none` base can never be revealed by the open rule, which only
+       flips opacity/visibility, so the More tray stayed invisible on tap. Closed
+       state (the :not(.mobile-more-open) rule up top) hides it via
+       visibility:hidden + opacity:0 + pointer-events:none. */
+    display: flex;
+    flex-direction: column;
     width: min(560px, calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right)));
     --window-pad: 0px;
     padding: 0;
