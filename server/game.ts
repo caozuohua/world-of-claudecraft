@@ -3414,6 +3414,9 @@ export class GameServer {
       case 'paccept':
         sim.partyAccept(pid);
         break;
+      case 'readyrespond':
+        sim.readyCheckRespond(msg.ready === true, pid);
+        break;
       case 'pdecline':
         sim.partyDecline(pid);
         break;
