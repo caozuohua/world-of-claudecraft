@@ -4973,6 +4973,8 @@ export const ja_JP: EnTranslations = {
       "buybackTitle": "買い戻し",
       "buybackEmpty": "アイテムなし",
       "buybackAria": "{item}を{price}で買い戻す",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "ランダムな性能は買い戻しでは戻せません。",
       "sellQuantityTitle": "{item}を売却",
       "sellQuantityInput": "売却する数量",
       "sellQuantityConfirm": "売却",

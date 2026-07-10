@@ -4973,6 +4973,8 @@ export const en_XA: EnTranslations = {
       "buybackTitle": "[Ɓúýƀáçķ]",
       "buybackEmpty": "[Ñó íţéɱš]",
       "buybackAria": "[Ɓúý ƀáçķ {item} ƒóŕ {price}]",
+      "sellItemAria": "[Šéļļ {item} ƒóŕ {price}]",
+      "sellRolledWarning": "[Ŕóļļéð šţáţš çáññóţ ƀé ŕéçóʋéŕéð ƀý ƀúýƀáçķ.]",
       "sellQuantityTitle": "[Šéļļ {item}]",
       "sellQuantityInput": "[Ɋúáñţíţý ţó šéļļ]",
       "sellQuantityConfirm": "[Šéļļ]",

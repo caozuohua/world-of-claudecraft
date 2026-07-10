@@ -86,7 +86,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "es_ES": [
     "entities.items.chunk_of_ore.name",
@@ -165,7 +167,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "fr_FR": [
     "entities.items.chunk_of_ore.name",
@@ -244,7 +248,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "fr_CA": [
     "entities.items.chunk_of_ore.name",
@@ -323,7 +329,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "en_CA": [],
   "it_IT": [
@@ -403,7 +411,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "de_DE": [
     "entities.items.chunk_of_ore.name",
@@ -482,7 +492,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "zh_CN": [
     "hudChrome.options.done",
@@ -493,7 +505,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.chat",
     "hudChrome.options.sec.feel",
     "hudChrome.options.sec.look",
-    "hudChrome.options.sec.view"
+    "hudChrome.options.sec.view",
+    "itemUi.vendor.sellItemAria"
   ],
   "zh_TW": [
     "hudChrome.options.done",
@@ -504,7 +517,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.chat",
     "hudChrome.options.sec.feel",
     "hudChrome.options.sec.look",
-    "hudChrome.options.sec.view"
+    "hudChrome.options.sec.view",
+    "itemUi.vendor.sellItemAria"
   ],
   "ko_KR": [
     "hudChrome.options.done",
@@ -515,7 +529,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.chat",
     "hudChrome.options.sec.feel",
     "hudChrome.options.sec.look",
-    "hudChrome.options.sec.view"
+    "hudChrome.options.sec.view",
+    "itemUi.vendor.sellItemAria"
   ],
   "ja_JP": [
     "hudChrome.options.done",
@@ -526,7 +541,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.chat",
     "hudChrome.options.sec.feel",
     "hudChrome.options.sec.look",
-    "hudChrome.options.sec.view"
+    "hudChrome.options.sec.view",
+    "itemUi.vendor.sellItemAria"
   ],
   "pt_BR": [
     "entities.items.chunk_of_ore.name",
@@ -605,7 +621,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "ru_RU": [
     "hudChrome.options.done",
@@ -616,7 +634,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.chat",
     "hudChrome.options.sec.feel",
     "hudChrome.options.sec.look",
-    "hudChrome.options.sec.view"
+    "hudChrome.options.sec.view",
+    "itemUi.vendor.sellItemAria"
   ],
   "cs_CZ": [
     "entities.items.chunk_of_ore.name",
@@ -695,7 +714,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "nl_NL": [
     "entities.items.chunk_of_ore.name",
@@ -774,7 +795,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "pl_PL": [
     "entities.items.chunk_of_ore.name",
@@ -853,7 +876,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "id_ID": [
     "entities.items.chunk_of_ore.name",
@@ -932,7 +957,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "tr_TR": [
     "entities.items.chunk_of_ore.name",
@@ -1011,7 +1038,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "sv_SE": [
     "entities.items.chunk_of_ore.name",
@@ -1090,7 +1119,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "vi_VN": [
     "entities.items.chunk_of_ore.name",
@@ -1169,7 +1200,9 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ],
   "da_DK": [
     "entities.items.chunk_of_ore.name",
@@ -1248,6 +1281,8 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.options.sec.toggles",
     "hudChrome.options.sec.unitFrames",
     "hudChrome.options.sec.view",
-    "hudChrome.options.sec.volume"
+    "hudChrome.options.sec.volume",
+    "itemUi.vendor.sellItemAria",
+    "itemUi.vendor.sellRolledWarning"
   ]
 };

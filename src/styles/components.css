@@ -3079,6 +3079,49 @@
     }
   }
 
+  /* ---------- shop parity: standalone tabbed vendor + heroic grip ---------- */
+  /* Market-parity redesign (traders work like the Merchant): the copper vendor is
+     now a standalone Browse / Sell / Buyback tabbed window that no longer
+     force-docks Bags. hud.openVendor stopped setting body.vendor-open, so the
+     display can no longer key on it; show the window whenever its copper frame is
+     mounted. closeVendor's inline display:none still wins over this while closed,
+     and the heroic tenant mounts a .heroic-shop wrapper (not a direct-child
+     .window-frame), so this never matches it (shared-root tenant isolation holds).
+     The older body.vendor-open display + mobile 50/50 dock rules stay in the sheet
+     but never fire now, so they no longer reserve the docked half on mobile. */
+  #vendor-window:has(> .window-frame) {
+    display: flex;
+  }
+  /* The bulk sell-junk action moved from the (now removed) sticky footer into the
+     Sell tab body; keep it full-width with the label/proceeds split like a footer
+     action, with room below before the sellable rows. */
+  .window-frame .vendor-sell {
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+  }
+  /* Heroic Quartermaster resize grip: its frame nests one level under .heroic-shop,
+     so the shared `.window.window-resizable > .window-frame` grip (a direct-child
+     selector) cannot reach it, and the "bottom right especially" grip was missing.
+     Restate the SAME token grip on the two-level heroic chain so the marks shop
+     shows the visible SE grip exactly like the copper vendor and the Market.
+     Hidden under body.mobile-touch (the corner band still resizes there). */
+  .window.window-resizable > .heroic-shop > .window-frame {
+    background-image:
+      repeating-linear-gradient(135deg, transparent 0 3px, var(--gold-dim) 3px 4px),
+      var(--panel-l1-bg);
+    background-size:
+      12px 12px,
+      auto;
+    background-position:
+      right 3px bottom 3px,
+      0 0;
+    background-repeat: no-repeat, no-repeat;
+  }
+  body.mobile-touch .window.window-resizable > .heroic-shop > .window-frame {
+    background-image: var(--panel-l1-bg);
+  }
+
   /* ---------- bags + bank AAA frame ---------- */
   /* Batch 1 of the all-windows AAA pass: the bags (#bags) and bank (#bank-window)
      grids adopt the shared .window-frame chrome (window_frame.ts) plus the

@@ -4973,6 +4973,8 @@ export const sv_SE: EnTranslations = {
       "buybackTitle": "Återköp",
       "buybackEmpty": "Inga föremål",
       "buybackAria": "Köp tillbaka {item} för {price}",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "Rolled stats cannot be recovered by buyback.",
       "sellQuantityTitle": "Sälj {item}",
       "sellQuantityInput": "Antal att sälja",
       "sellQuantityConfirm": "Sälj",

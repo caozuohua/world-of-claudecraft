@@ -4973,6 +4973,8 @@ export const ko_KR: EnTranslations = {
       "buybackTitle": "되사기",
       "buybackEmpty": "물품 없음",
       "buybackAria": "{item}을(를) {price}에 되사기",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "무작위 능력치는 되사기로 되돌릴 수 없습니다.",
       "sellQuantityTitle": "{item} 판매",
       "sellQuantityInput": "판매할 수량",
       "sellQuantityConfirm": "판매",

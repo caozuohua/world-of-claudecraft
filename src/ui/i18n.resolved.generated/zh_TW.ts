@@ -4973,6 +4973,8 @@ export const zh_TW: EnTranslations = {
       "buybackTitle": "買回",
       "buybackEmpty": "沒有物品",
       "buybackAria": "以 {price} 買回 {item}",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "隨機屬性無法透過買回找回。",
       "sellQuantityTitle": "出售 {item}",
       "sellQuantityInput": "要出售的數量",
       "sellQuantityConfirm": "出售",

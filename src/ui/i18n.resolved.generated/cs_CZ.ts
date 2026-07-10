@@ -4973,6 +4973,8 @@ export const cs_CZ: EnTranslations = {
       "buybackTitle": "Zpětný odkup",
       "buybackEmpty": "Žádné předměty",
       "buybackAria": "Odkoupit zpět {item} za {price}",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "Rolled stats cannot be recovered by buyback.",
       "sellQuantityTitle": "Prodat {item}",
       "sellQuantityInput": "Množství k prodeji",
       "sellQuantityConfirm": "Prodat",

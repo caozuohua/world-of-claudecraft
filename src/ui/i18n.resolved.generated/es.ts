@@ -4973,6 +4973,8 @@ export const es: EnTranslations = {
       "buybackTitle": "Recomprar",
       "buybackEmpty": "Sin objetos",
       "buybackAria": "Recomprar {item} por {price}",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "Rolled stats cannot be recovered by buyback.",
       "sellQuantityTitle": "Vender {item}",
       "sellQuantityInput": "Cantidad a vender",
       "sellQuantityConfirm": "Vender",

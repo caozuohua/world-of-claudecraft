@@ -4973,6 +4973,8 @@ export const ru_RU: EnTranslations = {
       "buybackTitle": "Выкуп",
       "buybackEmpty": "Нет предметов",
       "buybackAria": "Выкупить {item} за {price}",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "Случайные характеристики нельзя вернуть выкупом.",
       "sellQuantityTitle": "Продать {item}",
       "sellQuantityInput": "Количество для продажи",
       "sellQuantityConfirm": "Продать",

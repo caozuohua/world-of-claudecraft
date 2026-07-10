@@ -4973,6 +4973,8 @@ export const id_ID: EnTranslations = {
       "buybackTitle": "Beli Kembali",
       "buybackEmpty": "Tidak ada barang",
       "buybackAria": "Beli kembali {item} seharga {price}",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "Rolled stats cannot be recovered by buyback.",
       "sellQuantityTitle": "Jual {item}",
       "sellQuantityInput": "Jumlah yang dijual",
       "sellQuantityConfirm": "Jual",

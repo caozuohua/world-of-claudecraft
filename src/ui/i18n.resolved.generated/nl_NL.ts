@@ -4973,6 +4973,8 @@ export const nl_NL: EnTranslations = {
       "buybackTitle": "Terugkopen",
       "buybackEmpty": "Geen voorwerpen",
       "buybackAria": "Koop {item} terug voor {price}",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "Rolled stats cannot be recovered by buyback.",
       "sellQuantityTitle": "{item} verkopen",
       "sellQuantityInput": "Aantal te verkopen",
       "sellQuantityConfirm": "Verkopen",
