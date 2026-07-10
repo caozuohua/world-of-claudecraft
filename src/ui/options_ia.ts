@@ -182,7 +182,10 @@ export type SprintTier = 'required' | 'migrated' | 'conditional';
 /** The control kind. The first six reuse the options_view discriminator set;
  *  `language` and `themePreset` are the two non-settings rows (they write the
  *  i18n language / theme.ts store, not a settings.ts key), modeled the way
- *  options_view renders them today: bespoke, kept OUT of the settings-key count. */
+ *  options_view renders them today: bespoke, kept OUT of the settings-key count.
+ *  `chatTimestamps` (show on/off) and `chatClock` (12h/24h) are hud-owned state
+ *  (localStorage via the OptionsHooks chat accessors), likewise bespoke and
+ *  keyless. */
 export type RowControl =
   | 'slider'
   | 'toggle'
@@ -191,7 +194,9 @@ export type RowControl =
   | 'note'
   | 'musicToggle'
   | 'language'
-  | 'themePreset';
+  | 'themePreset'
+  | 'chatTimestamps'
+  | 'chatClock';
 
 export interface OptionRow {
   control: RowControl;
@@ -386,12 +391,21 @@ export const CATEGORY_SECTIONS: Record<CategoryId, Section[]> = {
         slider('chatFontScale', 'hud.options.chatFontScale', 'required'),
         slider('chatOpacity', 'hud.options.chatOpacity', 'required'),
         boolToggle('compactChat', 'hud.options.compactChat', 'required'),
-        // NOTE: chat timestamps (show + 12h/24h) are deliberately OMITTED. Their
-        // on/off + clock state is owned by hud.ts (localStorage), not a plain
-        // read/write store on chat_timestamp.ts (which exposes only formatting
-        // helpers). Per spec 12a CONDITIONAL, a row modeled here would not be "a
-        // plain descriptor referencing that store's read/write surface", so it is
-        // deferred (see the task report).
+        // Chat timestamps (show + 12h/24h): hud-owned localStorage state applied
+        // per chat line, reached through the OptionsHooks chat accessors rather
+        // than a settings.ts key, so both rows are bespoke keyless controls the
+        // painter renders itself (like language / themePreset). Without them a
+        // player who ever enabled timestamps had NO surface to turn them off.
+        {
+          control: 'chatTimestamps',
+          labelKey: 'hudChrome.chatTimestamps.show',
+          sprintTier: 'conditional',
+        },
+        {
+          control: 'chatClock',
+          labelKey: 'hudChrome.chatTimestamps.format',
+          sprintTier: 'conditional',
+        },
       ],
     },
     {

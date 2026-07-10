@@ -43,7 +43,7 @@ import {
 } from '../game/settings';
 import type { IWorld } from '../world_api';
 import { appVersionInfo } from './app_version';
-import type { ChatClock } from './chat_timestamp';
+import { CHAT_CLOCKS, type ChatClock } from './chat_timestamp';
 import { esc } from './esc';
 import { FOCUSABLE_SELECTOR } from './focus_manager';
 import type { BugReportHooks, OptionsHooks } from './hud';
@@ -51,6 +51,7 @@ import {
   formatNumber,
   getLanguage,
   isSupportedLanguage,
+  languageTag,
   type SupportedLanguage,
   supportedLanguages,
   t,
@@ -104,7 +105,7 @@ import {
   type BoolToggleControl,
   boolToggleNextValue,
   buildBugReportInfo,
-  buildControlFromRow,
+  buildEnvGatedControl,
   type ChoiceControl,
   categoryChangedCount,
   categoryResetKeys,
@@ -342,6 +343,12 @@ export class OptionsWindow {
   // The layout the last render painted, so a live resize/rotate only re-renders
   // when it crosses the rail <-> back-stack boundary (a cold, boundary-only cost).
   private lastRenderMode: 'desktop' | MobileSettingsMode | null = null;
+  // Watches body.mobile-touch while the menu is open (X2): an OS-driven interface
+  // flip (rotation across the touch threshold, a pointer change) toggles the class
+  // with no resize event, which used to strand mismatched chrome (frame titlebar /
+  // footer hidden while the desktop two-pane stayed mounted, or double chrome on
+  // the reverse flip). Attached on open, disconnected on close.
+  private bodyClassObserver: MutationObserver | null = null;
 
   constructor(private readonly deps: OptionsWindowDeps) {
     // Re-render when a live resize/rotate crosses the touch rail<->back-stack
@@ -407,6 +414,32 @@ export class OptionsWindow {
     if (!this.isOpen) return;
     if (this.renderMode() === this.lastRenderMode) return;
     this.render();
+  }
+
+  /** Watch the body class the mode derivation reads (mobile-touch) while the menu
+   *  is open (X2). The resize listener only covers width changes; an OS-driven
+   *  interface flip (rotation across the touch threshold, an input-pointer change)
+   *  toggles body.mobile-touch WITHOUT a resize, leaving the open menu in the
+   *  wrong chrome. Re-render only when the derived render mode actually changed
+   *  (idempotent for the Interface Mode row, whose own rerender already ran). */
+  private observeInterfaceModeFlips(): void {
+    if (typeof MutationObserver === 'undefined' || typeof document === 'undefined') return;
+    if (this.bodyClassObserver) return;
+    this.bodyClassObserver = new MutationObserver(() => {
+      if (!this.isOpen) return;
+      if (this.renderMode() === this.lastRenderMode) return;
+      this.render();
+    });
+    this.bodyClassObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+  }
+
+  /** Stop watching body class flips (the menu is closed; see observeInterfaceModeFlips). */
+  private unobserveInterfaceModeFlips(): void {
+    this.bodyClassObserver?.disconnect();
+    this.bodyClassObserver = null;
   }
 
   /** Mirror the top of the mobile back-stack onto activeCategory/subView so the
@@ -542,16 +575,25 @@ export class OptionsWindow {
     this.deps.options()?.perfOverlay.setPlacement(false);
     this.render();
     this.deps.root().style.display = 'flex';
-    // Spec section 5: the menu opens with focus ON the Overview rail tab. This also
-    // seeds the controller path: hud routes pad menu verbs to this window only while
-    // focus is inside it, so without this a fresh open would strand a pad user.
-    this.deps.focusFirstInteractive(this.deps.root(), '.opt-tab.is-active');
+    // A live interface-mode flip while open must re-render the matching chrome (X2).
+    this.observeInterfaceModeFlips();
+    // Spec section 5: the menu opens with focus ON the Overview rail tab. The
+    // narrow back-stack shell mounts no rail tab (and its frame X is display:none),
+    // so it seeds the landing's search field, falling back to the first category
+    // row (F3). This also seeds the controller path: hud routes pad menu verbs to
+    // this window only while focus is inside it, so without this a fresh open
+    // would strand a pad user.
+    const preferred = this.backStackActive()
+      ? '.opt-mshell-search .search-input, .opt-mshell-cat'
+      : '.opt-tab.is-active';
+    this.deps.focusFirstInteractive(this.deps.root(), preferred);
     music.pauseForMenu();
     audio.click();
   }
 
   close(): void {
     this.deps.root().style.display = 'none';
+    this.unobserveInterfaceModeFlips();
     // Disarm any in-flight rebind capture so a stale callback can never fire after
     // the menu is gone (input's captureCb is cleared by the canceller).
     this.cancelCapture();
@@ -691,6 +733,19 @@ export class OptionsWindow {
     return this.deps.root().querySelector<HTMLElement>('.opt-detail-inner') as HTMLElement;
   }
 
+  /** The active scrollable content pane: the desktop / wide-rail '.opt-detail', or
+   *  the narrow shell's '.opt-mshell-content' page (C2). Every controller verb
+   *  that walks or scrolls the pane (D-pad row focus, LT/RT paging, the focusin
+   *  row cursor) resolves through this, so the verbs the footer legend advertises
+   *  work on the back-stack shell too, where no '.opt-detail' exists. */
+  private detailScrollEl(): HTMLElement | null {
+    const root = this.deps.root();
+    return (
+      root.querySelector<HTMLElement>('.opt-detail') ??
+      root.querySelector<HTMLElement>('.opt-mshell-content')
+    );
+  }
+
   private buildSearchStrip(): HTMLElement {
     const strip = el('div', 'opt-search');
     const field = el('div', 'search-field');
@@ -783,7 +838,7 @@ export class OptionsWindow {
     const active = this.activeCategory === tab.id && this.subView === 'none';
     btn.classList.toggle('is-active', active);
     btn.setAttribute('aria-selected', String(active));
-    btn.tabIndex = active ? 0 : -1;
+    btn.tabIndex = this.railTabStop(tab.id, active) ? 0 : -1;
     btn.title = name;
     const icon = el('span', 'opt-tab-icon');
     icon.innerHTML = svgIcon(railIcon(tab.iconSlug));
@@ -847,14 +902,22 @@ export class OptionsWindow {
     }
   }
 
+  /** The rail's roving tabindex stop for a category tab. Normally the active tab;
+   *  during a pushed sub-view (bug report) NO tab is active, which would strip the
+   *  rail of every Tab stop (F2), so the sub-view's home category keeps the stop. */
+  private railTabStop(id: CategoryId, active: boolean): boolean {
+    return active || (this.subView !== 'none' && this.activeCategory === id);
+  }
+
   /** Update the rail tabs' active state IN PLACE (no rebuild), so an arrow-roved or
    *  Ctrl+Tab-switched tab keeps its focus and the trap is never dropped. */
   private syncRailActive(): void {
     for (const tab of this.railEl().querySelectorAll<HTMLElement>('[role="tab"]')) {
-      const active = tab.dataset.category === this.activeCategory && this.subView === 'none';
+      const id = tab.dataset.category as CategoryId | undefined;
+      const active = id === this.activeCategory && this.subView === 'none';
       tab.classList.toggle('is-active', active);
       tab.setAttribute('aria-selected', String(active));
-      tab.tabIndex = active ? 0 : -1;
+      tab.tabIndex = id !== undefined && this.railTabStop(id, active) ? 0 : -1;
     }
   }
 
@@ -950,7 +1013,7 @@ export class OptionsWindow {
   /** The authoritative .is-active-row cursor: set on focusin (so it lights for
    *  keyboard, programmatic, AND controller focus, never :focus-visible-derived). */
   private markActiveRow(target: EventTarget | null): void {
-    const scope = this.deps.root().querySelector<HTMLElement>('.opt-detail');
+    const scope = this.detailScrollEl();
     if (!scope) return;
     for (const r of scope.querySelectorAll<HTMLElement>('.is-active-row'))
       r.classList.remove('is-active-row');
@@ -1101,9 +1164,10 @@ export class OptionsWindow {
   }
 
   /** The detail pane's focusable controls in document order (the trap's set, so a
-   *  roving radiogroup counts once), for controller row-focus stepping. */
+   *  roving radiogroup counts once), for controller row-focus stepping. Resolves
+   *  the shell content pane too (C2), so D-pad row focus works on the back-stack. */
   private detailFocusables(): HTMLElement[] {
-    const scope = this.deps.root().querySelector<HTMLElement>('.opt-detail');
+    const scope = this.detailScrollEl();
     if (!scope) return [];
     return [...scope.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)].filter(
       (elm) => elm.getClientRects().length > 0,
@@ -1202,9 +1266,10 @@ export class OptionsWindow {
       ?.focus();
   }
 
-  /** RT/LT: page-scroll the detail pane (RT = down, LT = up). */
+  /** RT/LT: page-scroll the detail pane (RT = down, LT = up). Resolves the shell
+   *  content pane too (C2), so paging works on the back-stack. */
   private pageScrollDetail(dir: -1 | 1): void {
-    const scroll = this.deps.root().querySelector<HTMLElement>('.opt-detail');
+    const scroll = this.detailScrollEl();
     if (!scroll) return;
     scroll.scrollTop += dir * scroll.clientHeight * PAGE_SCROLL_FRACTION;
   }
@@ -1321,10 +1386,20 @@ export class OptionsWindow {
             shown++;
             continue;
           }
-          const control = buildControlFromRow(source, row);
+          if (row.control === 'chatTimestamps') {
+            this.chatTimestampsRow(secEl);
+            shown++;
+            continue;
+          }
+          if (row.control === 'chatClock') {
+            this.chatClockRow(secEl);
+            shown++;
+            continue;
+          }
+          // The shared env-gated binder (S1): the native-shell graphicsPreset cap
+          // and the env-hidden rows apply here exactly as on the pin/search paths.
+          const control = buildEnvGatedControl(source, row, this.renderEnv());
           if (!control) continue;
-          if (control.control === 'choice' && row.key === 'graphicsPreset' && isNativeAppShell())
-            control.options = control.options.filter((o) => o.value <= 3);
           this.applyControls(secEl, [control], hooks, () => this.render());
           shown++;
         }
@@ -1426,6 +1501,7 @@ export class OptionsWindow {
       hooks.onSettingChange(key, sliderDispatchValue(slider.value));
       syncReadout();
       paintFill();
+      this.syncChangedBadges();
     };
     if (c.commitOnChange) {
       slider.addEventListener('input', () => {
@@ -1458,6 +1534,7 @@ export class OptionsWindow {
       audio.click();
       hooks.onSettingChange(key, toggleNextValue(hooks.settings.get(key)));
       sync();
+      this.syncChangedBadges();
     });
     control.appendChild(toggle);
     parent.appendChild(row);
@@ -1484,6 +1561,7 @@ export class OptionsWindow {
         hooks.settings.set(key, boolToggleNextValue(hooks.settings.get(key))),
       );
       sync();
+      this.syncChangedBadges();
     });
     control.appendChild(toggle);
     parent.appendChild(row);
@@ -1504,13 +1582,29 @@ export class OptionsWindow {
     seg.setAttribute('aria-label', label);
     const sync = () => {
       const current = Math.round(hooks.settings.get(key));
-      for (const btn of seg.querySelectorAll<HTMLButtonElement>('button[data-value]')) {
+      const radios = [...seg.querySelectorAll<HTMLButtonElement>('button[data-value]')];
+      let anySelected = false;
+      for (const btn of radios) {
         const selected = Number(btn.dataset.value) === current;
+        if (selected) anySelected = true;
         btn.classList.toggle('is-selected', selected);
         btn.setAttribute('aria-checked', String(selected));
         // Roving tabindex: the selected radio is the group's single Tab stop
         // (selection-follows-focus), so the radiogroup is one stop, not one per option.
         btn.tabIndex = selected ? 0 : -1;
+      }
+      // F2: a stored value outside the option set (clickToMoveButton stored 1 with
+      // options {0,2}; graphicsPreset stored 4/5 under the native-shell cap) would
+      // leave the radiogroup with ZERO Tab stops, so it could never be corrected
+      // from the UI. The nearest-value radio keeps the stop (unchecked).
+      if (!anySelected && radios.length > 0) {
+        const nearest = radios.reduce((best, btn) =>
+          Math.abs(Number(btn.dataset.value) - current) <
+          Math.abs(Number(best.dataset.value) - current)
+            ? btn
+            : best,
+        );
+        nearest.tabIndex = 0;
       }
     };
     for (const option of c.options) {
@@ -1526,6 +1620,7 @@ export class OptionsWindow {
         if (RELOAD_KEYS.has(c.key)) this.reloadPending = true;
         hooks.onSettingChange(key, option.value);
         sync();
+        this.syncChangedBadges();
         onChange?.();
       });
       seg.appendChild(btn);
@@ -1602,10 +1697,84 @@ export class OptionsWindow {
       } else {
         const r = SETTING_RANGES[key as NumericSettingKey];
         if (!r) continue;
+        // N3: a reset that actually changes a reload-required graphics key must
+        // arm the reload alert exactly like a direct choice click does (the
+        // scoped / per-row / Y-reset paths all converge here).
+        if (RELOAD_KEYS.has(key) && hooks.settings.get(key as NumericSettingKey) !== r.def)
+          this.reloadPending = true;
         hooks.settings.set(key as NumericSettingKey, r.def);
         hooks.onSettingChange(key as keyof GameSettings, r.def);
       }
     }
+  }
+
+  // -------------------------------------------------------------------------
+  // Changed-from-defaults surfaces: cheap in-place sync after a single commit
+  // (S3). A switch flip must update the rail count badges, the category head's
+  // scoped Reset, and the Overview changed summary WITHOUT a pane repaint, so
+  // the control being adjusted never loses focus mid-interaction.
+  // -------------------------------------------------------------------------
+
+  private syncChangedBadges(): void {
+    const hooks = this.deps.options();
+    if (!hooks) return;
+    const rail = this.railElOrNull();
+    if (rail) {
+      for (const tab of rail.querySelectorAll<HTMLElement>('[role="tab"]')) {
+        const id = tab.dataset.category as CategoryId | undefined;
+        if (id)
+          this.syncTabCount(
+            tab,
+            categoryChangedCount(id, (key) => this.isChanged(hooks, key)),
+          );
+      }
+    }
+    this.syncCategoryHead();
+    const summary = this.deps.root().querySelector<HTMLElement>('.opt-status-changed');
+    if (summary) {
+      summary.textContent = t('hudChrome.options.changedSummary', {
+        count: formatNumber(
+          totalChangedCount((key) => this.isChanged(hooks, key)),
+          { maximumFractionDigits: 0 },
+        ),
+      });
+    }
+  }
+
+  /** Update (create / remove) one rail tab's changed-count badge in place. */
+  private syncTabCount(tab: HTMLElement, count: number): void {
+    let badge = tab.querySelector<HTMLElement>('.opt-tab-count');
+    if (count <= 0) {
+      badge?.remove();
+      return;
+    }
+    if (!badge) {
+      badge = el('span', 'opt-tab-count');
+      tab.appendChild(badge);
+    }
+    const n = formatNumber(count, { maximumFractionDigits: 0 });
+    badge.textContent = n;
+    badge.setAttribute('aria-label', t('hudChrome.options.changed', { count: n }));
+  }
+
+  /** Swap the mounted category head for a freshly painted one (same painter, so
+   *  the DOM stays byte-identical per state), which shows/hides the scoped Reset
+   *  as the category diverges/converges. Focus lives on the adjusted control, a
+   *  sibling subtree, so the swap never churns it. */
+  private syncCategoryHead(): void {
+    if (this.subView !== 'none' || this.activeCategory === 'overview') return;
+    if (this.searchQuery.trim() && this.searchScope === 'all') return; // global results pane
+    const cat = CATEGORIES.find((c) => c.id === this.activeCategory);
+    if (!cat) return;
+    const head = this.deps.root().querySelector<HTMLElement>('.opt-cat-head');
+    if (!head) return;
+    const mounted = head.parentElement?.classList.contains('opt-section-head')
+      ? (head.parentElement as HTMLElement)
+      : head;
+    const tmp = document.createElement('div');
+    this.categoryHead(tmp, cat.id, cat.nameKey);
+    const fresh = tmp.firstElementChild;
+    if (fresh) mounted.replaceWith(fresh);
   }
 
   // -------------------------------------------------------------------------
@@ -1638,8 +1807,14 @@ export class OptionsWindow {
           })
           .then((ok) => {
             if (ok) {
-              if (this.isOpen && this.activeCategory === 'interface' && this.subView === 'none') {
-                this.renderDetail();
+              // The whole chrome carries t() text (rail, footer, search strip,
+              // shell header), so a successful flip re-renders EVERYTHING (L2):
+              // the old detail-only path left the rest in the previous language,
+              // and a switch from an Overview pin or a search result re-rendered
+              // nothing at all. Focus returns to the language control wherever
+              // it now renders.
+              if (this.isOpen) {
+                this.render();
                 this.deps.focusFirstInteractive(this.deps.root(), '.set-lang-select .ui-dd-btn');
               }
             } else {
@@ -1723,6 +1898,70 @@ export class OptionsWindow {
       grid.appendChild(knobRow);
     }
     parent.appendChild(grid);
+  }
+
+  /** Chat timestamps on/off (S2): hud-owned localStorage state applied per chat
+   *  line, reached through the deps chat accessors rather than a settings key, so
+   *  it renders bespoke (like language / theme) with the standard switch grammar. */
+  private chatTimestampsRow(parent: HTMLElement): void {
+    const label = t('hudChrome.chatTimestamps.show');
+    const { row, control } = this.optRow(label);
+    const toggle = el('button', 'opt-switch');
+    toggle.type = 'button';
+    toggle.setAttribute('role', 'switch');
+    const sync = () => {
+      toggle.setAttribute('aria-checked', String(this.deps.getChatTimestamps()));
+      toggle.setAttribute('aria-label', label);
+    };
+    sync();
+    toggle.addEventListener('click', () => {
+      audio.click();
+      this.deps.setChatTimestamps(!this.deps.getChatTimestamps());
+      sync();
+    });
+    control.appendChild(toggle);
+    parent.appendChild(row);
+  }
+
+  /** Chat timestamp clock format, 12h/24h (S2): the standard segmented radiogroup
+   *  over the hud-owned ChatClock store (see chatTimestampsRow). */
+  private chatClockRow(parent: HTMLElement): void {
+    const label = t('hudChrome.chatTimestamps.format');
+    const { row, control } = this.optRow(label);
+    const clockLabelKeys: Record<ChatClock, TranslationKey> = {
+      '12h': 'hudChrome.chatTimestamps.clock12h',
+      '24h': 'hudChrome.chatTimestamps.clock24h',
+    };
+    const seg = el('div', 'opt-seg');
+    seg.setAttribute('role', 'radiogroup');
+    seg.setAttribute('aria-label', label);
+    const sync = () => {
+      const current = this.deps.getChatClock();
+      for (const btn of seg.querySelectorAll<HTMLButtonElement>('button[data-clock]')) {
+        const selected = btn.dataset.clock === current;
+        btn.classList.toggle('is-selected', selected);
+        btn.setAttribute('aria-checked', String(selected));
+        btn.tabIndex = selected ? 0 : -1;
+      }
+    };
+    for (const clock of CHAT_CLOCKS) {
+      const optionLabel = t(clockLabelKeys[clock]);
+      const btn = el('button', 'opt-seg-btn');
+      btn.type = 'button';
+      btn.setAttribute('role', 'radio');
+      btn.dataset.clock = clock;
+      btn.textContent = optionLabel;
+      btn.setAttribute('aria-label', optionLabel);
+      btn.addEventListener('click', () => {
+        audio.click();
+        this.deps.setChatClock(clock);
+        sync();
+      });
+      seg.appendChild(btn);
+    }
+    control.appendChild(seg);
+    parent.appendChild(row);
+    sync();
   }
 
   private renderGraphicsReload(parent: HTMLElement): void {
@@ -1836,8 +2075,13 @@ export class OptionsWindow {
       } else if (pin.key && hooks && source) {
         const homeRow = settingRow(pin.key);
         if (!homeRow) continue;
-        const control = buildControlFromRow(source, homeRow);
-        if (control) this.applyControls(pinsSection, [control], hooks, () => this.render());
+        // The shared env-gated binder (S1): a pin is a MIRROR of its home row, so
+        // the same gating applies: the nativeShellHidden interfaceMode pin drops
+        // under the native shell (crumb included), and the graphicsPreset pin
+        // carries the same capped option set as its home.
+        const control = buildEnvGatedControl(source, homeRow, this.renderEnv());
+        if (!control) continue;
+        this.applyControls(pinsSection, [control], hooks, () => this.render());
       }
       const crumb = el('div', 'opt-pin-home');
       const home = CATEGORIES.find((c) => c.id === pin.homeCategory);
@@ -1860,6 +2104,8 @@ export class OptionsWindow {
       ? t('hudChrome.options.modeOnline')
       : t('hudChrome.options.modeOffline');
     const changed = document.createElement('span');
+    // Classed so the post-commit badge sync (S3) can refresh it in place.
+    changed.className = 'opt-status-changed';
     const n = hooks ? totalChangedCount((key) => this.isChanged(hooks, key)) : 0;
     changed.textContent = t('hudChrome.options.changedSummary', {
       count: formatNumber(n, { maximumFractionDigits: 0 }),
@@ -2012,9 +2258,8 @@ export class OptionsWindow {
       bug.textContent = t('hudChrome.bugReport.menuButton');
       bug.addEventListener('click', () => {
         audio.click();
-        this.activeCategory = 'system';
-        this.subView = 'bugreport';
-        this.render();
+        // N4: one entry point; openBugReport owns the shell/desktop routing.
+        this.openBugReport();
       });
       right.appendChild(bug);
     }
@@ -2071,6 +2316,17 @@ export class OptionsWindow {
 
   private confirmResetAll(): void {
     const doReset = () => {
+      // N3: arm the reload alert when the reset-all will change any
+      // reload-required graphics key (isChanged = the reset will move it).
+      const hooks = this.deps.options();
+      if (hooks) {
+        for (const key of RELOAD_KEYS) {
+          if (this.isChanged(hooks, key)) {
+            this.reloadPending = true;
+            break;
+          }
+        }
+      }
       this.deps.options()?.settings.reset();
       const all = this.deps.options()?.settings.all();
       if (all)
@@ -2157,7 +2413,9 @@ export class OptionsWindow {
       for (const m of rows) {
         const row = settingRow(m.settingKey);
         if (!row) continue;
-        const control = buildControlFromRow(source, row);
+        // The shared env-gated binder (S1): a searched row is editable in place,
+        // so the native-shell graphicsPreset cap must hold here too.
+        const control = buildEnvGatedControl(source, row, env);
         if (control) this.applyControls(group, [control], hooks, () => this.render());
       }
       for (const ns of nsRows) {
@@ -2228,8 +2486,31 @@ export class OptionsWindow {
     );
   }
 
+  /** Display name for a bind action id when only the id is at hand (the conflict
+   *  aggregate). Falls back to the registry's label, the same fallback the bind
+   *  table rows use, never the raw action id (N5). */
+  private actionLabelOf(actionId: string): string {
+    return this.actionDisplayName(
+      actionId,
+      BIND_ACTIONS.find((a) => a.id === actionId)?.label ?? actionId,
+    );
+  }
+
+  /** Join localized fragments with the active locale's list punctuation (N5),
+   *  never a hardcoded '; '. */
+  private formatList(items: string[]): string {
+    return new Intl.ListFormat(languageTag(getLanguage()), {
+      style: 'long',
+      type: 'conjunction',
+    }).format(items);
+  }
+
   /** The VISIBLE keyboard bind rows adapted for keybind_conflicts (the pure core
-   *  wants only shown rows: Attack Move is omitted while its setting is off). */
+   *  wants only shown rows: Attack Move is omitted while its setting is off).
+   *  intentionalUnbound is sourced from the DEFAULT layout (K1): an action that
+   *  ships with zero default codes (strafeLeft/strafeRight) is expected to sit
+   *  unbound, so a fresh or reset profile never opens in the warning state; a row
+   *  whose default was bound and which the player cleared still counts. */
   private keyboardConflictRows(): KeyboardBindRow[] {
     const attackMoveOn = !!this.deps.options()?.settings.get('attackMove');
     const kb = this.deps.keybinds();
@@ -2238,6 +2519,7 @@ export class OptionsWindow {
       category: a.category,
       codes: [kb.codeAt(a.id, 0), kb.codeAt(a.id, 1)],
       allowShared: a.allowShared,
+      intentionalUnbound: a.defaults.length === 0,
     }));
   }
 
@@ -2268,11 +2550,11 @@ export class OptionsWindow {
     if (conflicts.unbound.length > 0) {
       const banner = el('div', 'error-banner');
       const text = document.createElement('span');
-      text.textContent = conflicts.unbound
-        .map((id) =>
-          t('hudChrome.options.keybindUnbound', { action: this.actionDisplayName(id, id) }),
-        )
-        .join('; ');
+      text.textContent = this.formatList(
+        conflicts.unbound.map((id) =>
+          t('hudChrome.options.keybindUnbound', { action: this.actionLabelOf(id) }),
+        ),
+      );
       banner.appendChild(text);
       parent.appendChild(banner);
     }
@@ -2365,7 +2647,7 @@ export class OptionsWindow {
       this.evictedRows = [];
       this.keybindNote = t('hud.options.keybindReset');
       this.deps.refreshKeybindLabels();
-      this.renderRail(); // reset restores the default (strafe-unbound) conflict state
+      this.renderRail(); // reset restores the warning-free default layout (clears any dot)
       this.renderDetail();
     });
     parent.appendChild(reset);

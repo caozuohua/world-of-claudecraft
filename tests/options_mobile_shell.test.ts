@@ -45,6 +45,14 @@ describe('options_mobile_shell: painter chrome', () => {
     expect(painter).toContain('deps.appendSearchResults(lower)');
   });
 
+  it('marks its close / back / Done controls data-close for the focus trap (F3)', () => {
+    // focus-first on open skips [data-close] dismiss affordances (and preferred-
+    // close flows target them), so the shell chrome must carry the marker like
+    // the shared frame X does: close, back chevron, and the sticky Done button.
+    const marks = painter.match(/setAttribute\('data-close', ''\)/g) ?? [];
+    expect(marks).toHaveLength(3);
+  });
+
   it('carries no literal hex color in TS (tokens/stylesheet only)', () => {
     const hex = painter.match(/#[0-9a-fA-F]{3,8}\b/g) ?? [];
     expect(hex, `hex colors must move to tokens/CSS: ${hex.join(', ')}`).toEqual([]);

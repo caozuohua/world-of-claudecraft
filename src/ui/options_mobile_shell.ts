@@ -79,6 +79,10 @@ function el<K extends keyof HTMLElementTagNameMap>(
 function closeButton(deps: MobileShellDeps): HTMLButtonElement {
   const btn = el('button', 'window-close opt-mshell-close');
   btn.type = 'button';
+  // data-close: the focus trap's open-focus skips dismiss affordances and its
+  // preferred-close flows target them (focus_manager focusFirst), so the shell's
+  // own chrome must carry the marker the shared frame X does.
+  btn.setAttribute('data-close', '');
   btn.setAttribute('aria-label', t('hud.options.returnToGame'));
   btn.innerHTML = svgIcon('close');
   btn.addEventListener('click', () => deps.onClose());
@@ -88,6 +92,8 @@ function closeButton(deps: MobileShellDeps): HTMLButtonElement {
 function backButton(deps: MobileShellDeps): HTMLButtonElement {
   const btn = el('button', 'window-close opt-mshell-back');
   btn.type = 'button';
+  // A dismiss affordance like the close X: skipped by focus-first on open.
+  btn.setAttribute('data-close', '');
   btn.setAttribute('aria-label', t('hud.options.back'));
   btn.innerHTML = svgIcon('prev');
   btn.addEventListener('click', () => deps.onBack());
@@ -230,6 +236,9 @@ export function renderMobileShell(
   if (legend) bar.appendChild(legend);
   const done = el('button', 'btn is-primary opt-mshell-done');
   done.type = 'button';
+  // A dismiss affordance: focus-first on open must land on the landing content
+  // (search / first category row), never the sticky Done bar.
+  done.setAttribute('data-close', '');
   done.textContent = t('hudChrome.options.done');
   const doneLabel: TranslationKey = 'hudChrome.options.done';
   done.setAttribute('aria-label', t(doneLabel));

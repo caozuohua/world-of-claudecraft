@@ -82,9 +82,12 @@ describe('options_window: always opens on Overview (never last-visited)', () => 
   it('opens with focus ON the Overview rail tab (spec section 5; seeds controller routing)', () => {
     const toggle = painter.slice(painter.indexOf('toggle(): void {'));
     const body = toggle.slice(0, toggle.indexOf('\n  }\n'));
-    expect(body).toContain(
-      "this.deps.focusFirstInteractive(this.deps.root(), '.opt-tab.is-active')",
-    );
+    // Desktop / wide rail: the active Overview tab. Narrow back-stack shell (F3):
+    // no rail tab exists (and the frame X is display:none), so the landing's
+    // search field, falling back to the first category row, seeds focus instead.
+    expect(body).toContain("? '.opt-mshell-search .search-input, .opt-mshell-cat'");
+    expect(body).toContain(": '.opt-tab.is-active'");
+    expect(body).toContain('this.deps.focusFirstInteractive(this.deps.root(), preferred)');
   });
 });
 
@@ -136,8 +139,14 @@ describe('options_window: control-primitive dispatch wiring', () => {
     expect(painter).toContain('hooks.onSettingChange(key, option.value)');
   });
 
-  it('binds each row through the shared options_view builder (no forked logic)', () => {
-    expect(painter).toContain('buildControlFromRow(source, row)');
+  it('binds each row through the shared env-gated options_view builder (no forked logic)', () => {
+    // The ONE cap/env gating path (S1): detail pane, Overview pins, and global
+    // search all bind through buildEnvGatedControl, never the raw builder (which
+    // would bypass the native-shell preset cap and the env-hidden rows).
+    expect(painter).toContain('buildEnvGatedControl(source, row, this.renderEnv())');
+    expect(painter).toContain('buildEnvGatedControl(source, homeRow, this.renderEnv())');
+    expect(painter).toContain('buildEnvGatedControl(source, row, env)');
+    expect(painter).not.toContain('buildControlFromRow(');
   });
 });
 
@@ -157,15 +166,19 @@ describe('options_window: changeLanguage hardening (PR #730 preserved)', () => {
     expect(lang).toContain('.finally(');
   });
 
-  // Restored coverage (P2 review item 1): a successful language switch re-renders
-  // the detail pane in place and returns focus to the language dropdown, so the
-  // relocalized picker stays keyboard-navigable.
-  it('re-renders the detail pane and refocuses the picker on a successful switch', () => {
+  // L2: a successful language switch re-renders the WHOLE window (rail, footer,
+  // search strip, shell chrome all carry t() text), not just an interface detail
+  // pane, and it does so whenever the window is open (a switch from an Overview
+  // pin or a search result previously re-rendered nothing). Focus returns to the
+  // language dropdown so the relocalized picker stays keyboard-navigable.
+  it('re-renders the full window and refocuses the picker on a successful switch', () => {
     const lang = painter.slice(
       painter.indexOf('private languageRow'),
       painter.indexOf('private themeRow'),
     );
-    expect(lang).toContain('this.renderDetail();');
+    expect(lang).toContain('if (this.isOpen) {');
+    expect(lang).toContain('this.render();');
+    expect(lang).not.toContain("this.activeCategory === 'interface'");
     expect(lang).toContain("'.set-lang-select .ui-dd-btn'");
   });
 });
@@ -357,7 +370,7 @@ describe('options_window: conflict surfacing (P4)', () => {
     expect(clear.slice(0, clear.indexOf('\n  /** RT/LT'))).toContain('this.renderRail();');
     // Keybind reset, controller reset + remap, and pad connect/disconnect:
     expect(painter).toContain(
-      'this.renderRail(); // reset restores the default (strafe-unbound) conflict state',
+      'this.renderRail(); // reset restores the warning-free default layout (clears any dot)',
     );
     expect(painter).toContain('this.renderRail(); // reset clears duplicates');
     const refresh = painter.slice(painter.indexOf('refreshControllerLabels(): void'));
@@ -449,7 +462,7 @@ describe('options_window: keyboard navigation (P3)', () => {
 
   it('auto-activation re-renders the DETAIL only (the rail tab element survives)', () => {
     const set = painter.slice(painter.indexOf('private setActiveCategory'));
-    const body = set.slice(0, set.indexOf('\n  /** Update the rail'));
+    const body = set.slice(0, set.indexOf('\n  /** The rail'));
     // The preserve path updates the rail in place + repaints the detail, never render().
     expect(body).toContain('if (opts.preserveRailFocus) {');
     expect(body).toContain('this.syncRailActive();');
@@ -459,7 +472,10 @@ describe('options_window: keyboard navigation (P3)', () => {
     const syncBody = sync.slice(0, sync.indexOf('\n  /**'));
     expect(syncBody).toContain("tab.classList.toggle('is-active', active)");
     expect(syncBody).not.toContain('replaceChildren');
-    expect(syncBody).toContain('tab.tabIndex = active ? 0 : -1');
+    // Roving stop via railTabStop (F2: during a sub-view the home category keeps
+    // the rail's single Tab stop instead of the rail dropping to zero stops).
+    expect(syncBody).toContain('this.railTabStop(id, active) ? 0 : -1');
+    expect(painter).toContain('private railTabStop(id: CategoryId, active: boolean): boolean');
   });
 
   it('cycles categories with Ctrl+Tab / Ctrl+Shift+Tab from the body', () => {
@@ -716,6 +732,111 @@ describe('options_window: settings shows the running version (#1541 preserved)',
     expect(painter).toContain("import { appVersionInfo } from './app_version'");
     expect(painter).toContain('appVersionInfo()');
     expect(painter).toContain("t('hudChrome.options.version', { version, build })");
+  });
+});
+
+describe('options_window: reviewed-findings regression pins (F2/C2/S2/S3/N3/N4/N5/X2/K1)', () => {
+  it('a choice row keeps one Tab stop when the stored value matches no option (F2)', () => {
+    // clickToMoveButton stored 1 with options {0,2}, or graphicsPreset stored 4/5
+    // under the native-shell cap: zero selected radios must not mean zero Tab stops.
+    const choice = painter.slice(painter.indexOf('private settingChoice'));
+    const body = choice.slice(0, choice.indexOf('\n  private noteRow'));
+    expect(body).toContain('if (!anySelected && radios.length > 0) {');
+    expect(body).toContain('nearest.tabIndex = 0;');
+  });
+
+  it('controller verbs resolve the shell content pane too (C2)', () => {
+    const helper = painter.slice(painter.indexOf('private detailScrollEl'));
+    const helperBody = helper.slice(0, helper.indexOf('\n  private buildSearchStrip'));
+    expect(helperBody).toContain(".querySelector<HTMLElement>('.opt-detail')");
+    expect(helperBody).toContain(".querySelector<HTMLElement>('.opt-mshell-content')");
+    // D-pad row focus, LT/RT paging, and the focusin row cursor all resolve
+    // through the helper, so the legend-advertised verbs work on the back-stack.
+    const focusables = painter.slice(painter.indexOf('private detailFocusables'));
+    expect(focusables.slice(0, focusables.indexOf('\n  /** LB/RB'))).toContain(
+      'this.detailScrollEl()',
+    );
+    const page = painter.slice(painter.indexOf('private pageScrollDetail'));
+    expect(page.slice(0, page.indexOf('\n  private announce'))).toContain('this.detailScrollEl()');
+    const mark = painter.slice(painter.indexOf('private markActiveRow'));
+    expect(mark.slice(0, mark.indexOf('\n  /**'))).toContain('this.detailScrollEl()');
+  });
+
+  it('renders the chat-timestamp rows from the deps chat accessors (S2)', () => {
+    expect(painter).toContain('private chatTimestampsRow(');
+    expect(painter).toContain('private chatClockRow(');
+    // The write path is the already-plumbed hud state, not a settings key.
+    expect(painter).toContain('this.deps.setChatTimestamps(!this.deps.getChatTimestamps())');
+    expect(painter).toContain('this.deps.setChatClock(clock)');
+    expect(painter).toContain("t('hudChrome.chatTimestamps.show')");
+    expect(painter).toContain("t('hudChrome.chatTimestamps.format')");
+    // Dispatched from the shared detail path like the language / theme rows.
+    expect(painter).toContain("if (row.control === 'chatTimestamps') {");
+    expect(painter).toContain("if (row.control === 'chatClock') {");
+  });
+
+  it('syncs the rail badges / head reset / Overview summary in place after each commit (S3)', () => {
+    expect(painter).toContain('private syncChangedBadges(): void {');
+    // Called from all four commit handlers (slider, toggle, boolToggle, choice).
+    const calls = painter.match(/this\.syncChangedBadges\(\);/g) ?? [];
+    expect(calls.length).toBeGreaterThanOrEqual(4);
+    expect(painter).toContain('private syncTabCount(');
+    expect(painter).toContain('private syncCategoryHead(): void {');
+    // The Overview summary carries a class the sync can find in place.
+    expect(painter).toContain("changed.className = 'opt-status-changed'");
+  });
+
+  it('arms reloadPending on every reset path that changes a reload key (N3)', () => {
+    const reset = painter.slice(painter.indexOf('private resetKeys'));
+    const body = reset.slice(0, reset.indexOf('\n  // ----'));
+    expect(body).toContain('RELOAD_KEYS.has(key)');
+    expect(body).toContain('this.reloadPending = true;');
+    const all = painter.slice(painter.indexOf('private confirmResetAll'));
+    const allBody = all.slice(0, all.indexOf('\n  // ----'));
+    expect(allBody).toContain('for (const key of RELOAD_KEYS)');
+    expect(allBody).toContain('this.reloadPending = true;');
+  });
+
+  it('the footer bug button routes through openBugReport (N4, no duplicated inline flow)', () => {
+    const footer = painter.slice(painter.indexOf('private renderFooter'));
+    const body = footer.slice(0, footer.indexOf('\n  /** The controller'));
+    expect(body).toContain('this.openBugReport();');
+    expect(body).not.toContain("this.subView = 'bugreport'");
+  });
+
+  it('joins the unbound banner with Intl.ListFormat and a registry-label fallback (N5)', () => {
+    expect(painter).toContain('new Intl.ListFormat(languageTag(getLanguage())');
+    expect(painter).toContain('private actionLabelOf(actionId: string): string');
+    const table = painter.slice(painter.indexOf('private renderKeybindTable'));
+    const body = table.slice(0, table.indexOf('\n  /** Cancel'));
+    expect(body).toContain('this.formatList(');
+    expect(body).toContain('this.actionLabelOf(id)');
+    expect(body).not.toContain(".join('; ')");
+  });
+
+  it('re-renders on a live body.mobile-touch flip while open (X2)', () => {
+    expect(painter).toContain('private observeInterfaceModeFlips(): void {');
+    expect(painter).toContain("attributeFilter: ['class']");
+    // Attach on open, disconnect on close; render only on an actual mode change.
+    const toggle = painter.slice(painter.indexOf('toggle(): void {'));
+    expect(toggle.slice(0, toggle.indexOf('\n  }\n'))).toContain(
+      'this.observeInterfaceModeFlips();',
+    );
+    const close = painter.slice(painter.indexOf('close(): void {'));
+    expect(close.slice(0, close.indexOf('\n  }\n'))).toContain(
+      'this.unobserveInterfaceModeFlips();',
+    );
+    const observe = painter.slice(painter.indexOf('private observeInterfaceModeFlips'));
+    expect(observe.slice(0, observe.indexOf('\n  /** Stop'))).toContain(
+      'if (this.renderMode() === this.lastRenderMode) return;',
+    );
+  });
+
+  it('sources intentionalUnbound from the DEFAULT layout for the conflict aggregate (K1)', () => {
+    const rows = painter.slice(painter.indexOf('private keyboardConflictRows'));
+    expect(rows.slice(0, rows.indexOf('\n  /** The controller bind rows'))).toContain(
+      'intentionalUnbound: a.defaults.length === 0',
+    );
   });
 });
 
