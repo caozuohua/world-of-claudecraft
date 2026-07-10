@@ -3426,6 +3426,7 @@
     align-items: end;
   }
   body.native-app.mobile-touch[data-start-panel="login-panel"] #login-panel .auth-title,
+  body.native-app.mobile-touch[data-start-panel="login-panel"] #login-panel #btn-login-apple,
   body.native-app.mobile-touch[data-start-panel="login-panel"] #login-panel #btn-login-discord,
   body.native-app.mobile-touch[data-start-panel="login-panel"] #login-panel #auth-or-divider,
   body.native-app.mobile-touch[data-start-panel="login-panel"] #login-panel #cf-turnstile-container,
@@ -3472,6 +3473,7 @@
     align-items: end;
   }
   body.mobile-touch[data-start-panel="login-panel"] #login-panel .auth-title,
+  body.mobile-touch[data-start-panel="login-panel"] #login-panel #btn-login-apple,
   body.mobile-touch[data-start-panel="login-panel"] #login-panel #btn-login-discord,
   body.mobile-touch[data-start-panel="login-panel"] #login-panel #auth-or-divider,
   body.mobile-touch[data-start-panel="login-panel"] #login-panel #cf-turnstile-container,

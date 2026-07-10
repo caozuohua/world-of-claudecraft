@@ -1069,6 +1069,10 @@ export const ru_RU: EnTranslations = {
       "spawn": "{name} поднимается над Терновыми высотами!"
     },
     "auth": {
+      "appleLoginCta": "Продолжить с Apple",
+      "appleError": "Не удалось войти через Apple. Попробуйте ещё раз.",
+      "appleChoiceIntro": "Создайте новую учётную запись или привяжите Apple к существующей.",
+      "appleChoiceExpired": "Вход через Apple истёк. Войдите через Apple ещё раз.",
       "forgotPrompt": "Забыли пароль?",
       "forgotTitle": "Сброс пароля",
       "forgotHint": "Введите имя пользователя, и мы отправим ссылку для сброса на указанный адрес электронной почты.",

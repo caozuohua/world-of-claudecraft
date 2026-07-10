@@ -1069,6 +1069,10 @@ export const pt_BR: EnTranslations = {
       "spawn": "{name} ergue-se sobre as Alturas de Thornpeak!"
     },
     "auth": {
+      "appleLoginCta": "Continue with Apple",
+      "appleError": "Could not sign in with Apple. Please try again.",
+      "appleChoiceIntro": "Create a new account, or link Apple to one you already have.",
+      "appleChoiceExpired": "That Apple sign-in expired. Please sign in with Apple again.",
       "forgotPrompt": "Esqueceu a senha?",
       "forgotTitle": "Redefinir sua senha",
       "forgotHint": "Digite seu nome de usuário e enviaremos um link de redefinição para o e-mail cadastrado.",
