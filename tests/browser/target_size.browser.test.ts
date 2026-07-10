@@ -92,24 +92,34 @@ describe('mobile target-size: in-game touch controls are >=40x40 in landscape', 
     expectAtLeastFloor(toggle, 'compact #mobile-action-page-toggle');
   });
 
-  it('the left utility cluster (Autorun/Jump), the Chat/More pair, and the menu collapse handle', () => {
+  it('the left utility cluster (Autorun/Jump), the expanded menu grid, and the collapse handle', () => {
     const cluster = el('div', { id: 'mobile-utility-cluster' });
     const autorun = el('button', { id: 'mobile-autorun', class: 'mobile-btn' });
     const jump = el('button', { id: 'mobile-jump', class: 'mobile-btn' });
     cluster.append(autorun, jump);
     const combat = el('div', { id: 'mobile-combat-controls' });
-    const chat = el('button', { id: 'mobile-chat', class: 'mobile-btn' });
-    const more = el('button', { id: 'mobile-more', class: 'mobile-btn' });
-    // The always-visible collapse handle sits before the button grid; it is a 40px
-    // chip that must hold the floor even while the cluster is collapsed (no
-    // mobile-menu-open here, its default state).
+    // The collapse handle is the always-visible 40px chip; it must hold the floor
+    // even collapsed (its default). The five menu buttons live INSIDE the
+    // #mobile-combat-buttons grid, where their width comes from the constrained
+    // 5-column track under the band's 0.85 chrome-scale (NOT the base .mobile-btn
+    // 58x54), so they must be measured there, expanded, or the real shrink is
+    // missed. body.mobile-menu-open reveals the grid (visibility:visible).
     const handle = el('button', { id: 'mobile-menu-collapse-toggle' });
-    combat.append(handle, chat, more);
+    const buttons = el('div', { id: 'mobile-combat-buttons' });
+    const chat = el('button', { id: 'mobile-chat', class: 'mobile-btn' });
+    const social = el('button', { id: 'mobile-social', class: 'mobile-btn' });
+    const quest = el('button', { id: 'mobile-quest', class: 'mobile-btn' });
+    const menu = el('button', { id: 'mobile-menu', class: 'mobile-btn' });
+    const more = el('button', { id: 'mobile-more', class: 'mobile-btn' });
+    buttons.append(chat, social, quest, menu, more);
+    combat.append(handle, buttons);
     document.body.append(cluster, combat);
+    document.body.classList.add('mobile-menu-open');
     expectAtLeastFloor(autorun, '#mobile-autorun');
     expectAtLeastFloor(jump, '#mobile-jump');
-    expectAtLeastFloor(chat, '#mobile-chat');
-    expectAtLeastFloor(more, '#mobile-more');
+    expectAtLeastFloor(chat, '#mobile-combat-buttons #mobile-chat');
+    expectAtLeastFloor(menu, '#mobile-combat-buttons #mobile-menu');
+    expectAtLeastFloor(more, '#mobile-combat-buttons #mobile-more');
     expectAtLeastFloor(handle, '#mobile-menu-collapse-toggle');
   });
 

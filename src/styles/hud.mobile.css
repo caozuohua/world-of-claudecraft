@@ -3651,13 +3651,17 @@
     }
     body.mobile-touch #mobile-combat-buttons {
       --mobile-menu-row-w: calc(310px - 40px - 8px);
-      gap: 10px;
+      /* 6px, not 10: the band carries the 0.85 chrome-scale, so a 10px internal gap
+         shrank each of the five grid buttons to ~38px rendered, under the 40px touch
+         floor. Tightening the gap widens each button to ~40px ((262 - 4*6)/5 * 0.85)
+         while the band width (310px) and the consumables dock stay fixed. */
+      gap: 6px;
     }
     body.mobile-touch #mobile-menu-collapse-toggle {
       height: 48px;
     }
-    /* Landscape bar is 5x54px + 4x10px gaps = 310px wide; keep the chip docked
-       just past it on the same compressed top line. */
+    /* Landscape band stays 310px wide (40px handle + 8px gap + 262px button grid);
+       keep the chip docked just past it on the same compressed top line. */
     body.mobile-touch #mobile-consumables {
       left: calc(
         max(12px, env(safe-area-inset-left)) +
