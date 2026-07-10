@@ -3147,6 +3147,13 @@
   }
   body.mobile-touch .window.window-resizable > .heroic-shop > .window-frame {
     background-image: var(--panel-l1-bg);
+    /* Same single-layer collapse as the shared grip override below (see the
+       body.mobile-touch .window.window-resizable > .window-frame rule): the
+       grip layer's 12px/bottom-right/no-repeat lists must be reset with it or
+       the heroic shop panel paints as a 12x12 dot on touch. */
+    background-size: auto;
+    background-position: 0 0;
+    background-repeat: repeat;
   }
 
   /* ---------- bags + bank AAA frame ---------- */
@@ -8856,6 +8863,15 @@
   }
   body.mobile-touch .window.window-resizable > .window-frame {
     background-image: var(--panel-l1-bg);
+    /* Dropping the grip layer collapses the image list to ONE layer, so the
+       per-layer size/position/repeat lists above MUST be reset with it: CSS
+       truncates the excess list values, and the leftovers (12px 12px, bottom
+       right, no-repeat) would apply to the panel gradient itself, painting the
+       whole panel as a single 12x12 dot and letting the 3D world show through
+       every resizable framed window on touch (live bug, PR #1736 round 3). */
+    background-size: auto;
+    background-position: 0 0;
+    background-repeat: repeat;
   }
   /* Move / resize / viewport-fit parity with the World Market for every
      grammar-built window: the host .window (shown as display:flex, the Market

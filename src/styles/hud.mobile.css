@@ -4255,6 +4255,16 @@
   body.mobile-touch .window-footer .btn {
     width: 100%;
   }
+  /* Never-see-through floor: on touch every framed window is a full or
+     near-fullscreen sheet over the live 3D world, so the frame rides the solid
+     L2 base UNDER its L1 gradient (the tokens.css L2 doctrine: a modal surface
+     never composites the world through it). background-color is immune to the
+     background-size truncation that blanked the gradient (the grip-layer bug in
+     components.css), so this also backstops any future layered-background slip.
+     Generalizes the #options-menu-only fix that predated the bug's diagnosis. */
+  body.mobile-touch .window-frame {
+    background-color: var(--color-panel-l2-base);
+  }
 
   /* ---------- dedicated mobile settings shell (spec section 9 v1.1) ---------- */
   /* Under body.mobile-touch the Esc menu renders the full-screen back-stack shell
