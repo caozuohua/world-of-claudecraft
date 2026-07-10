@@ -31,7 +31,11 @@ Every command in the 16 Acceptance section verbatim, real exit codes,
 - The five Zenzie re-fills correct (native readers unavailable; verify the
   old transliteration is GONE and the new value contains the locale's
   Zenzie form).
-- Non-deeds pending rows unchanged in count AND content vs the round base.
+- Non-deeds pending rows unchanged in count AND content vs the round base,
+  PLUS exactly the 60 release-owned rows the post-fill v0.24.0 merge
+  ee0d8ab5c brought in (hudChrome.readyCheck.{prompt,ready,notReady,result}
+  x 15 locales, PR #1716): expected non-deeds total 681 = 621 + 60,
+  deeds-owned still zero.
 - Same-commit discipline: the commit graph shows regen + sha256 baseline
   inside the fill commits, never trailing.
 
@@ -65,7 +69,10 @@ rebuild path must not throw).
 - Grep the tree for any leftover English in a non-en overlay deeds section.
 - Any surface added in 09 to 15 whose key was born AFTER the 16 worklist
   pull (the classic gap: verify the final worklist run post-dates the last
-  code commit)?
+  code commit)? Note: the v0.24.0 merge ee0d8ab5c post-dates the 16
+  worklist pull by design; the fresh run in step 2 surfaces exactly the 60
+  release-owned hudChrome.readyCheck rows, which are upstream release-fill
+  territory, not 09 to 15 stragglers.
 - Does anything in the round contradict overview decisions 1 to 9? (Walk
   them one by one; decision 8 is retired by design this round.)
 
