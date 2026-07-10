@@ -604,7 +604,15 @@ export class OptionsWindow {
   }
 
   private railEl(): HTMLElement {
-    return this.deps.root().querySelector<HTMLElement>('.opt-rail') as HTMLElement;
+    return this.railElOrNull() as HTMLElement;
+  }
+
+  /** The category rail element, or null when it is not mounted. The mobile
+   *  back-stack shell (spec section 9) renders no rail, so every rail-dependent
+   *  path must tolerate its absence: a paired gamepad polls LB/RB regardless of
+   *  platform, so an unguarded railEl() there would deref null in the frame loop. */
+  private railElOrNull(): HTMLElement | null {
+    return this.deps.root().querySelector<HTMLElement>('.opt-rail');
   }
 
   private detailEl(): HTMLElement {
@@ -789,7 +797,9 @@ export class OptionsWindow {
   /** The visible rail category ids, in rail order (Overview + the env-visible group
    *  tabs), read from the rendered rail so keyboard + controller cycling match it. */
   private visibleCategoryIds(): CategoryId[] {
-    return [...this.railEl().querySelectorAll<HTMLElement>('[role="tab"]')]
+    const rail = this.railElOrNull();
+    if (!rail) return []; // the mobile shell has no rail (spec section 9): nothing to cycle
+    return [...rail.querySelectorAll<HTMLElement>('[role="tab"]')]
       .map((t) => t.dataset.category as CategoryId | undefined)
       .filter((id): id is CategoryId => !!id);
   }
@@ -822,6 +832,9 @@ export class OptionsWindow {
   /** Ctrl+Tab / Ctrl+Shift+Tab cycle categories from anywhere in the body. */
   private onBodyKeydown(e: KeyboardEvent): void {
     if (e.key !== 'Tab' || !e.ctrlKey) return;
+    // No rail on the mobile back-stack shell (spec section 9): category cycling is
+    // inert, so leave Ctrl+Tab alone rather than deref the null rail.
+    if (this.mobileActive() || !this.railElOrNull()) return;
     e.preventDefault();
     const visible = this.visibleCategoryIds();
     const current = visible.indexOf(this.activeCategory);
@@ -959,6 +972,10 @@ export class OptionsWindow {
     switch (fi) {
       case 'categoryPrev':
       case 'categoryNext':
+        // The mobile back-stack shell renders no rail (spec section 9 wires only
+        // B/back there), so LB/RB category cycling is inert and must not deref the
+        // null rail from the frame loop.
+        if (this.mobileActive() || !this.railElOrNull()) return;
         this.cycleCategory(fi === 'categoryNext' ? 1 : -1);
         return;
       case 'rowPrev':
@@ -1019,6 +1036,7 @@ export class OptionsWindow {
   /** LB/RB: cycle to the previous/next visible category (from anywhere), then land
    *  focus on the new pane's first row so D-pad Up/Down keeps working. */
   private cycleCategory(dir: -1 | 1): void {
+    if (this.mobileActive() || !this.railElOrNull()) return; // no rail to cycle (mobile shell)
     const visible = this.visibleCategoryIds();
     const current = visible.indexOf(this.activeCategory);
     if (current < 0) return;
