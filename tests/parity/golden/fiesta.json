@@ -30,7 +30,7 @@
       "tick": 25,
       "time": 1.25,
       "nextId": 412,
-      "state": "e613d3ec",
+      "state": "ca5fe110",
       "events": "9bae7dad",
       "rng": {
         "draws": 0,
@@ -41,7 +41,7 @@
       "tick": 50,
       "time": 2.5,
       "nextId": 412,
-      "state": "8977a18e",
+      "state": "e31fea8a",
       "events": "b46d41a9",
       "rng": {
         "draws": 36,
@@ -52,7 +52,7 @@
       "tick": 75,
       "time": 3.75,
       "nextId": 412,
-      "state": "4ee1c500",
+      "state": "1f13cf14",
       "events": "3a440865",
       "rng": {
         "draws": 120,
@@ -63,7 +63,7 @@
       "tick": 100,
       "time": 5,
       "nextId": 412,
-      "state": "91041536",
+      "state": "abadcf12",
       "events": "8025fc6d",
       "rng": {
         "draws": 230,
@@ -74,7 +74,7 @@
       "tick": 125,
       "time": 6.25,
       "nextId": 412,
-      "state": "c2391a8a",
+      "state": "72f58f98",
       "events": "b509200e",
       "rng": {
         "draws": 384,
@@ -85,7 +85,7 @@
       "tick": 150,
       "time": 7.5,
       "nextId": 412,
-      "state": "1185ffae",
+      "state": "07028bac",
       "events": "741638a5",
       "rng": {
         "draws": 543,
@@ -96,7 +96,7 @@
       "tick": 163,
       "time": 8.15,
       "nextId": 412,
-      "state": "34f06f45",
+      "state": "7e137afb",
       "events": "ba8c5aac",
       "rng": {
         "draws": 608,
@@ -139,6 +139,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -203,6 +204,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {
@@ -272,6 +274,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_dagger"
           },
+          "equipmentInstance": {},
           "fiestaAugments": [
             "aug_fleetfoot"
           ],
@@ -339,6 +342,7 @@
             "chest": "footpad_jerkin",
             "mainhand": "rusty_hatchet"
           },
+          "equipmentInstance": {},
           "fiestaRestore": {
             "level": 1,
             "talents": {

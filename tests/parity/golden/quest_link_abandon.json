@@ -29,7 +29,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 410,
-      "state": "244ff789",
+      "state": "852b4665",
       "events": "ba54c9ea",
       "rng": {
         "draws": 0,
@@ -70,6 +70,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -120,6 +121,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -247,7 +249,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 410,
-      "state": "244ff789",
+      "state": "852b4665",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -288,6 +290,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -338,6 +341,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -465,7 +469,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 410,
-      "state": "f5d23003",
+      "state": "70f72ea9",
       "events": "460de361",
       "rng": {
         "draws": 0,
@@ -508,6 +512,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -560,6 +565,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -687,7 +693,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 410,
-      "state": "412ba60f",
+      "state": "918da515",
       "events": "e8ec1d46",
       "rng": {
         "draws": 0,
@@ -730,6 +736,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -782,6 +789,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -921,7 +929,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 410,
-      "state": "f5d23003",
+      "state": "70f72ea9",
       "events": "b75a4382",
       "rng": {
         "draws": 0,
@@ -964,6 +972,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1016,6 +1025,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1143,7 +1153,7 @@
       "tick": 2,
       "time": 0.1,
       "nextId": 410,
-      "state": "7e97799b",
+      "state": "360d38d3",
       "events": "fcbbd0a2",
       "rng": {
         "draws": 0,
@@ -1192,6 +1202,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1251,6 +1262,7 @@
             "chest": "apprentice_robe",
             "mainhand": "gnarled_staff"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [

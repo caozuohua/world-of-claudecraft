@@ -17,7 +17,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 409,
-      "state": "cdf622b8",
+      "state": "6bd4c62d",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -59,6 +59,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -132,7 +133,7 @@
       "tick": 20,
       "time": 1,
       "nextId": 409,
-      "state": "bc25d11e",
+      "state": "b16fde4b",
       "events": "977a17cf",
       "rng": {
         "draws": 0,
@@ -143,7 +144,7 @@
       "tick": 40,
       "time": 2,
       "nextId": 409,
-      "state": "1c75fbca",
+      "state": "8fb1f70b",
       "events": "741638a5",
       "rng": {
         "draws": 0,
@@ -154,7 +155,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 409,
-      "state": "48b8352e",
+      "state": "102eadbd",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -165,7 +166,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 409,
-      "state": "48b8352e",
+      "state": "102eadbd",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -216,6 +217,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -291,7 +293,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 409,
-      "state": "52dfc1bd",
+      "state": "8ba00720",
       "events": "7fd0fd5c",
       "rng": {
         "draws": 75,
@@ -344,6 +346,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -421,7 +424,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 409,
-      "state": "2975eec2",
+      "state": "1a5c02cd",
       "events": "9e92923f",
       "rng": {
         "draws": 75,
@@ -475,6 +478,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -552,7 +556,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 409,
-      "state": "56d6b91e",
+      "state": "017080c5",
       "events": "2896a35f",
       "rng": {
         "draws": 75,
@@ -606,6 +610,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -683,7 +688,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 409,
-      "state": "b9b69c5d",
+      "state": "54b10f12",
       "events": "41ed0fe7",
       "rng": {
         "draws": 75,
@@ -737,6 +742,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -814,7 +820,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 409,
-      "state": "b9b69c5d",
+      "state": "54b10f12",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -868,6 +874,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -945,7 +952,7 @@
       "tick": 60,
       "time": 3,
       "nextId": 409,
-      "state": "b9b69c5d",
+      "state": "54b10f12",
       "events": "741638a5",
       "rng": {
         "draws": 75,
@@ -999,6 +1006,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [

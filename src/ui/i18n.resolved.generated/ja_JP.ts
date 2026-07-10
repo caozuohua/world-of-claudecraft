@@ -5992,6 +5992,15 @@ export const ja_JP: EnTranslations = {
       "linen_scrap": {
         "name": "リネンの切れ端"
       },
+      "arcane_dust": {
+        "name": "秘術の粉塵"
+      },
+      "arcane_essence": {
+        "name": "秘術の精髄"
+      },
+      "arcane_shard": {
+        "name": "秘術のかけら"
+      },
       "fen_muster_order": {
         "name": "フェンブリッジ召集令"
       },

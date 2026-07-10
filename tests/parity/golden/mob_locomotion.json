@@ -32,7 +32,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 410,
-      "state": "79edc803",
+      "state": "b8305938",
       "events": "575f6f37",
       "rng": {
         "draws": 4,
@@ -75,6 +75,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -194,7 +195,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 411,
-      "state": "581eba12",
+      "state": "cadde567",
       "events": "53b783b5",
       "rng": {
         "draws": 8,
@@ -237,6 +238,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -411,7 +413,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 412,
-      "state": "ef09f3a4",
+      "state": "018661c1",
       "events": "1ea98466",
       "rng": {
         "draws": 13,
@@ -454,6 +456,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -684,7 +687,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 413,
-      "state": "469e2262",
+      "state": "4aa0bdb7",
       "events": "741638a5",
       "rng": {
         "draws": 15,
@@ -727,6 +730,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1005,7 +1009,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 414,
-      "state": "621e0a22",
+      "state": "8ebdfa77",
       "events": "741638a5",
       "rng": {
         "draws": 16,
@@ -1048,6 +1052,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1368,7 +1373,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 415,
-      "state": "72fb9297",
+      "state": "86296864",
       "events": "b6662ce6",
       "rng": {
         "draws": 16,
@@ -1411,6 +1416,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -1776,7 +1782,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 415,
-      "state": "48e3e040",
+      "state": "c3c2c925",
       "events": "741638a5",
       "rng": {
         "draws": 16,
@@ -1819,6 +1825,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [
@@ -2185,7 +2192,7 @@
       "tick": 0,
       "time": 0,
       "nextId": 415,
-      "state": "48e3e040",
+      "state": "c3c2c925",
       "events": "741638a5",
       "rng": {
         "draws": 16,
@@ -2228,6 +2235,7 @@
             "chest": "recruit_tunic",
             "mainhand": "worn_sword"
           },
+          "equipmentInstance": {},
           "gatheringProficiency": {},
           "heroicDaily": {},
           "inventory": [

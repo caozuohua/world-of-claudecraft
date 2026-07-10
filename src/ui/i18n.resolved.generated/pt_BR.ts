@@ -5992,6 +5992,15 @@ export const pt_BR: EnTranslations = {
       "linen_scrap": {
         "name": "Retalho de linho"
       },
+      "arcane_dust": {
+        "name": "Arcane Dust"
+      },
+      "arcane_essence": {
+        "name": "Arcane Essence"
+      },
+      "arcane_shard": {
+        "name": "Arcane Shard"
+      },
       "fen_muster_order": {
         "name": "Ordem de convocação de Fenbridge"
       },

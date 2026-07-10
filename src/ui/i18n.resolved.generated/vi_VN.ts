@@ -5992,6 +5992,15 @@ export const vi_VN: EnTranslations = {
       "linen_scrap": {
         "name": "Mảnh Vải Lanh"
       },
+      "arcane_dust": {
+        "name": "Bụi Bí Thuật"
+      },
+      "arcane_essence": {
+        "name": "Tinh Chất Bí Thuật"
+      },
+      "arcane_shard": {
+        "name": "Mảnh Bí Thuật"
+      },
       "fen_muster_order": {
         "name": "Lệnh Tập Hợp Fenbridge"
       },

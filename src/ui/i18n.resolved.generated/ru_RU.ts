@@ -5992,6 +5992,15 @@ export const ru_RU: EnTranslations = {
       "linen_scrap": {
         "name": "Лоскут льна"
       },
+      "arcane_dust": {
+        "name": "Тайная пыль"
+      },
+      "arcane_essence": {
+        "name": "Тайная эссенция"
+      },
+      "arcane_shard": {
+        "name": "Тайный осколок"
+      },
       "fen_muster_order": {
         "name": "Приказ о сборе в Фенбридже"
       },

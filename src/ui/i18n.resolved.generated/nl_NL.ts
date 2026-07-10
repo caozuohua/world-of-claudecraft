@@ -5992,6 +5992,15 @@ export const nl_NL: EnTranslations = {
       "linen_scrap": {
         "name": "Linnen Lap"
       },
+      "arcane_dust": {
+        "name": "Arcaan stof"
+      },
+      "arcane_essence": {
+        "name": "Arcane essentie"
+      },
+      "arcane_shard": {
+        "name": "Arcane scherf"
+      },
       "fen_muster_order": {
         "name": "Veenbrug-Mobilisatiebevel"
       },

@@ -5992,6 +5992,15 @@ export const da_DK: EnTranslations = {
       "linen_scrap": {
         "name": "Lærredslap"
       },
+      "arcane_dust": {
+        "name": "Arkanstøv"
+      },
+      "arcane_essence": {
+        "name": "Arkanessens"
+      },
+      "arcane_shard": {
+        "name": "Arkanskår"
+      },
       "fen_muster_order": {
         "name": "Kærbro Mønstringsordre"
       },

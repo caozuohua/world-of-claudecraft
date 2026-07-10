@@ -5992,6 +5992,15 @@ export const id_ID: EnTranslations = {
       "linen_scrap": {
         "name": "Potongan Linen"
       },
+      "arcane_dust": {
+        "name": "Debu Arkana"
+      },
+      "arcane_essence": {
+        "name": "Esensi Arkana"
+      },
+      "arcane_shard": {
+        "name": "Pecahan Arkana"
+      },
       "fen_muster_order": {
         "name": "Perintah Mobilisasi Fenbridge"
       },

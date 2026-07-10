@@ -5992,6 +5992,15 @@ export const ko_KR: EnTranslations = {
       "linen_scrap": {
         "name": "아마포 조각"
       },
+      "arcane_dust": {
+        "name": "비전 가루"
+      },
+      "arcane_essence": {
+        "name": "비전 정수"
+      },
+      "arcane_shard": {
+        "name": "비전 파편"
+      },
       "fen_muster_order": {
         "name": "펜브리지 소집 명령서"
       },

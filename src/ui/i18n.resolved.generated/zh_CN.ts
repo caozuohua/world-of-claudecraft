@@ -5992,6 +5992,15 @@ export const zh_CN: EnTranslations = {
       "linen_scrap": {
         "name": "亚麻碎布"
       },
+      "arcane_dust": {
+        "name": "奥术之尘"
+      },
+      "arcane_essence": {
+        "name": "奥术精华"
+      },
+      "arcane_shard": {
+        "name": "奥术碎片"
+      },
       "fen_muster_order": {
         "name": "芬桥集结令"
       },

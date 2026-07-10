@@ -5992,6 +5992,15 @@ export const tr_TR: EnTranslations = {
       "linen_scrap": {
         "name": "Keten Parçası"
       },
+      "arcane_dust": {
+        "name": "Ezoterik Toz"
+      },
+      "arcane_essence": {
+        "name": "Ezoterik Öz"
+      },
+      "arcane_shard": {
+        "name": "Ezoterik Kırıntı"
+      },
       "fen_muster_order": {
         "name": "Fenbridge Seferberlik Emri"
       },
