@@ -1796,6 +1796,7 @@ export const id_ID: EnTranslations = {
       "primary": "Bagian panduan",
       "topics": "Topik",
       "onThisPage": "Di halaman ini",
+      "sidebarLabel": "Guide topics",
       "backToGame": "Kembali ke permainan"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const id_ID: EnTranslations = {
       "github": "Sumber di GitHub",
       "discord": "Gabung Discord",
       "communityWiki": "Wiki Komunitas",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Play and community links"
     },
     "language": {
       "label": "Bahasa",
@@ -1837,7 +1839,9 @@ export const id_ID: EnTranslations = {
       "typeCreature": "Makhluk",
       "typeDungeon": "Dungeon",
       "typeDelve": "Delve",
-      "typeTerm": "Istilah"
+      "typeTerm": "Istilah",
+      "typeAbility": "Ability",
+      "typeDeed": "Deed"
     },
     "home": {
       "eyebrow": "MMO browser bergaya klasik",

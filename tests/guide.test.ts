@@ -31,6 +31,7 @@ import {
 } from '../src/guide/routes';
 import { DEEDS } from '../src/sim/content/deeds';
 import { CAMPS, MOBS } from '../src/sim/data';
+import { DEED_IMAGE_IDS } from '../src/ui/deed_image_ids';
 import { setLanguage, t } from '../src/ui/i18n';
 
 const repoRoot = fileURLToPath(new URL('..', import.meta.url));
@@ -483,6 +484,9 @@ describe('Guide deeds spoiler safety', () => {
       'feat',
       'rewardTitle',
       'rewardBorder',
+      // The painted-crest URL for art-backed deeds. Computed after the hidden filter and
+      // pointing only at /ui/deeds art the game client already ships publicly.
+      'crest',
     ]);
     for (const gd of GUIDE_DEEDS) {
       expect('trigger' in gd, `deed "${gd.id}" leaked its trigger`).toBe(false);
@@ -491,6 +495,20 @@ describe('Guide deeds spoiler safety', () => {
         expect(allowedFields.has(k), `deed "${gd.id}" emitted unexpected field "${k}"`).toBe(true);
       }
     }
+  });
+
+  it('bakes a crest URL for exactly the art-backed public deeds', () => {
+    for (const gd of GUIDE_DEEDS) {
+      if (DEED_IMAGE_IDS.has(gd.id)) {
+        expect(gd.crest, `art-backed deed "${gd.id}" is missing its crest`).toBe(
+          `/ui/deeds/${gd.id}.webp`,
+        );
+      } else {
+        expect(gd.crest, `artless deed "${gd.id}" grew a crest`).toBeUndefined();
+      }
+    }
+    // The ledger actually lights up: a meaningful share of the roll carries art.
+    expect(GUIDE_DEEDS.filter((d) => d.crest).length).toBeGreaterThan(100);
   });
 
   it("bakes no deed's desc text into the generated source, hidden or not", () => {

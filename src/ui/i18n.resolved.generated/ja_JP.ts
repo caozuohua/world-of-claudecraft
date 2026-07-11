@@ -1796,6 +1796,7 @@ export const ja_JP: EnTranslations = {
       "primary": "ガイドのセクション",
       "topics": "トピック",
       "onThisPage": "このページの内容",
+      "sidebarLabel": "Guide topics",
       "backToGame": "ゲームに戻る"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const ja_JP: EnTranslations = {
       "github": "GitHubのソース",
       "discord": "Discordに参加",
       "communityWiki": "コミュニティWiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Play and community links"
     },
     "language": {
       "label": "言語",
@@ -1837,7 +1839,9 @@ export const ja_JP: EnTranslations = {
       "typeCreature": "クリーチャー",
       "typeDungeon": "ダンジョン",
       "typeDelve": "デルヴ",
-      "typeTerm": "用語"
+      "typeTerm": "用語",
+      "typeAbility": "Ability",
+      "typeDeed": "Deed"
     },
     "home": {
       "eyebrow": "クラシックスタイルのブラウザMMO",

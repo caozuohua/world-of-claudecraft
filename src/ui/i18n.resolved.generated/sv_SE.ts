@@ -1796,6 +1796,7 @@ export const sv_SE: EnTranslations = {
       "primary": "Guideavsnitt",
       "topics": "Ämnen",
       "onThisPage": "På den här sidan",
+      "sidebarLabel": "Guide topics",
       "backToGame": "Tillbaka till spelet"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const sv_SE: EnTranslations = {
       "github": "Källkod på GitHub",
       "discord": "Gå med i Discord",
       "communityWiki": "Community-wiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Play and community links"
     },
     "language": {
       "label": "Språk",
@@ -1837,7 +1839,9 @@ export const sv_SE: EnTranslations = {
       "typeCreature": "Varelser",
       "typeDungeon": "Fängelsehåla",
       "typeDelve": "Delve",
-      "typeTerm": "Term"
+      "typeTerm": "Term",
+      "typeAbility": "Ability",
+      "typeDeed": "Deed"
     },
     "home": {
       "eyebrow": "Klassiskt MMO i webbläsaren",

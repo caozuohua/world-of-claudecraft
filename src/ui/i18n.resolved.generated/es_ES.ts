@@ -1796,6 +1796,7 @@ export const es_ES: EnTranslations = {
       "primary": "Secciones de la guía",
       "topics": "Temas",
       "onThisPage": "En esta página",
+      "sidebarLabel": "Guide topics",
       "backToGame": "Volver al juego"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const es_ES: EnTranslations = {
       "github": "Código en GitHub",
       "discord": "Únete al Discord",
       "communityWiki": "Wiki de la comunidad",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Play and community links"
     },
     "language": {
       "label": "Idioma",
@@ -1837,7 +1839,9 @@ export const es_ES: EnTranslations = {
       "typeCreature": "Criaturas",
       "typeDungeon": "Mazmorra",
       "typeDelve": "Expedición",
-      "typeTerm": "Término"
+      "typeTerm": "Término",
+      "typeAbility": "Ability",
+      "typeDeed": "Deed"
     },
     "home": {
       "eyebrow": "MMO de navegador de estilo clásico",

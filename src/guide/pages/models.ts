@@ -217,7 +217,8 @@ export const models: GuidePage = {
         const name = btn.dataset.name ?? '';
         if (caption) caption.textContent = name;
         showPoster(btn.dataset.still);
-        if (poster) poster.alt = btn.dataset.still && name ? t('guide.viewer.posterAlt', { name }) : '';
+        if (poster)
+          poster.alt = btn.dataset.still && name ? t('guide.viewer.posterAlt', { name }) : '';
       };
       const onPick = (e: Event): void => {
         const btn = (e.target as HTMLElement).closest<HTMLElement>('.guide-gallery-opt');

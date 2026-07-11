@@ -1796,6 +1796,7 @@ export const nl_NL: EnTranslations = {
       "primary": "Gidssecties",
       "topics": "Onderwerpen",
       "onThisPage": "Op deze pagina",
+      "sidebarLabel": "Guide topics",
       "backToGame": "Terug naar het spel"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const nl_NL: EnTranslations = {
       "github": "Broncode op GitHub",
       "discord": "Word lid van de Discord",
       "communityWiki": "Community-wiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Play and community links"
     },
     "language": {
       "label": "Taal",
@@ -1837,7 +1839,9 @@ export const nl_NL: EnTranslations = {
       "typeCreature": "Wezens",
       "typeDungeon": "Dungeon",
       "typeDelve": "Delve",
-      "typeTerm": "Term"
+      "typeTerm": "Term",
+      "typeAbility": "Ability",
+      "typeDeed": "Deed"
     },
     "home": {
       "eyebrow": "Klassieke MMO in je browser",

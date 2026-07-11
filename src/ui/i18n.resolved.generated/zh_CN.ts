@@ -1796,6 +1796,7 @@ export const zh_CN: EnTranslations = {
       "primary": "指南板块",
       "topics": "主题",
       "onThisPage": "本页内容",
+      "sidebarLabel": "Guide topics",
       "backToGame": "返回游戏"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const zh_CN: EnTranslations = {
       "github": "GitHub 上的源代码",
       "discord": "加入 Discord",
       "communityWiki": "社区维基",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Play and community links"
     },
     "language": {
       "label": "语言",
@@ -1837,7 +1839,9 @@ export const zh_CN: EnTranslations = {
       "typeCreature": "生物",
       "typeDungeon": "地下城",
       "typeDelve": "探秘",
-      "typeTerm": "术语"
+      "typeTerm": "术语",
+      "typeAbility": "Ability",
+      "typeDeed": "Deed"
     },
     "home": {
       "eyebrow": "经典风格浏览器 MMO",

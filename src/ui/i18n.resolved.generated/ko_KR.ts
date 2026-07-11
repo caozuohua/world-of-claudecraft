@@ -1796,6 +1796,7 @@ export const ko_KR: EnTranslations = {
       "primary": "가이드 항목",
       "topics": "주제",
       "onThisPage": "이 페이지에서",
+      "sidebarLabel": "Guide topics",
       "backToGame": "게임으로 돌아가기"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const ko_KR: EnTranslations = {
       "github": "GitHub 소스 코드",
       "discord": "Discord 참여하기",
       "communityWiki": "커뮤니티 위키",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Play and community links"
     },
     "language": {
       "label": "언어",
@@ -1837,7 +1839,9 @@ export const ko_KR: EnTranslations = {
       "typeCreature": "생명체",
       "typeDungeon": "던전",
       "typeDelve": "탐굴",
-      "typeTerm": "용어"
+      "typeTerm": "용어",
+      "typeAbility": "Ability",
+      "typeDeed": "Deed"
     },
     "home": {
       "eyebrow": "클래식 스타일 브라우저 MMO",

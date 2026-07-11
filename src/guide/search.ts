@@ -8,6 +8,7 @@ import { esc } from '../ui/esc';
 import { type TranslationKey, t } from '../ui/i18n';
 import {
   GUIDE_CLASSES,
+  GUIDE_DEEDS,
   GUIDE_DELVES,
   GUIDE_DUNGEONS,
   GUIDE_FAMILIES,
@@ -23,7 +24,7 @@ interface SearchEntry {
   haystack: string;
 }
 
-const MAX_RESULTS = 8;
+const MAX_RESULTS = 10;
 
 function buildIndex(): SearchEntry[] {
   const entries: SearchEntry[] = [];
@@ -36,12 +37,18 @@ function buildIndex(): SearchEntry[] {
     add(t(r.navKey), t('guide.search.typePage'), hrefFor(r.sub));
   }
   for (const c of GUIDE_CLASSES) {
+    const cls = t(`classes.${c.id}` as TranslationKey);
     add(
-      t(`classes.${c.id}` as TranslationKey),
+      cls,
       t('guide.search.typeClass'),
       hrefFor(`classes/${c.id}`),
       `${c.roles.join(' ')} ${c.resource}`,
     );
+    // Signature abilities land on the class page that showcases them; ability names are
+    // English proper nouns from the sim, like class and creature names.
+    for (const a of c.signatureAbilities) {
+      add(a.name, t('guide.search.typeAbility'), hrefFor(`classes/${c.id}`), cls);
+    }
   }
   for (const z of GUIDE_ZONES) {
     add(z.name, t('guide.search.typeZone'), `${hrefFor('world')}#zone-${z.biome}`);
@@ -65,6 +72,11 @@ function buildIndex(): SearchEntry[] {
   }
   for (const g of GLOSSARY_TERMS) {
     add(t(g.term), t('guide.search.typeTerm'), `${hrefFor('reference/glossary')}#term-${g.slug}`);
+  }
+  // Public deed names (hidden deeds never reach GUIDE_DEEDS), deep-linked to their
+  // category's section of the full roll.
+  for (const d of GUIDE_DEEDS) {
+    add(d.name, t('guide.search.typeDeed'), `${hrefFor('deeds')}#deed-cat-${d.category}`);
   }
   return entries;
 }
@@ -158,11 +170,26 @@ export function mountSearch(root: HTMLElement, signal: AbortSignal): void {
       active = -1;
       return;
     }
-    panel.innerHTML = results
-      .map(
-        (r, i) =>
-          `<a class="guide-search-opt" role="option" id="gso-${i}" href="${esc(r.href)}" aria-selected="false" tabindex="-1"><span class="guide-search-opt-label">${highlightLabel(r.label, input.value)}</span><span class="guide-search-opt-type">${esc(r.type)}</span></a>`,
-      )
+    // Group by kind under small eyebrow headings, keeping the score order both across
+    // groups (a group sits where its best hit ranked) and within each group. Option ids
+    // stay sequential across groups so the combobox keyboard order is unchanged.
+    const groups = new Map<string, typeof results>();
+    for (const r of results) {
+      const g = groups.get(r.type);
+      if (g) g.push(r);
+      else groups.set(r.type, [r]);
+    }
+    let optId = 0;
+    panel.innerHTML = [...groups.entries()]
+      .map(([type, rs]) => {
+        const opts = rs
+          .map(
+            (r) =>
+              `<a class="guide-search-opt" role="option" id="gso-${optId++}" href="${esc(r.href)}" aria-selected="false" tabindex="-1"><span class="guide-search-opt-label">${highlightLabel(r.label, input.value)}</span></a>`,
+          )
+          .join('');
+        return `<div class="guide-search-group" role="group" aria-label="${esc(type)}"><div class="guide-search-group-h" aria-hidden="true">${esc(type)}</div>${opts}</div>`;
+      })
       .join('');
     panel.hidden = false;
     input.setAttribute('aria-expanded', 'true');

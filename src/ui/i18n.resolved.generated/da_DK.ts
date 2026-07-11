@@ -1796,6 +1796,7 @@ export const da_DK: EnTranslations = {
       "primary": "Guide-sektioner",
       "topics": "Emner",
       "onThisPage": "På denne side",
+      "sidebarLabel": "Guide topics",
       "backToGame": "Tilbage til spillet"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const da_DK: EnTranslations = {
       "github": "Kildekode på GitHub",
       "discord": "Bliv en del af Discord",
       "communityWiki": "Fællesskabswiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Play and community links"
     },
     "language": {
       "label": "Sprog",
@@ -1837,7 +1839,9 @@ export const da_DK: EnTranslations = {
       "typeCreature": "Væsner",
       "typeDungeon": "Fangekælder",
       "typeDelve": "Delve",
-      "typeTerm": "Begreb"
+      "typeTerm": "Begreb",
+      "typeAbility": "Ability",
+      "typeDeed": "Deed"
     },
     "home": {
       "eyebrow": "Klassisk browser-MMO",

@@ -1796,6 +1796,7 @@ export const cs_CZ: EnTranslations = {
       "primary": "Sekce průvodce",
       "topics": "Témata",
       "onThisPage": "Na této stránce",
+      "sidebarLabel": "Guide topics",
       "backToGame": "Zpět do hry"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const cs_CZ: EnTranslations = {
       "github": "Zdrojový kód na GitHubu",
       "discord": "Připojit se na Discord",
       "communityWiki": "Komunitní wiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Play and community links"
     },
     "language": {
       "label": "Jazyk",
@@ -1837,7 +1839,9 @@ export const cs_CZ: EnTranslations = {
       "typeCreature": "Bytosti",
       "typeDungeon": "Dungeon",
       "typeDelve": "Výprava",
-      "typeTerm": "Termín"
+      "typeTerm": "Termín",
+      "typeAbility": "Ability",
+      "typeDeed": "Deed"
     },
     "home": {
       "eyebrow": "Prohlížečové MMO v klasickém stylu",

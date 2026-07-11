@@ -1217,7 +1217,8 @@ body.guide-has-sidebar .guide-layout {
   margin-inline-start: var(--g-xs2);
   padding: var(--g-pad-pill-y) var(--g-pad-pill-x);
   border-radius: var(--g-radius-pill);
-  font-size: var(--g-text-3xs);
+  /* Informational, not decorative, so it keeps the 12px player-facing floor. */
+  font-size: var(--g-text-2xs);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1309,6 +1310,19 @@ body.guide-has-sidebar .guide-layout {
     linear-gradient(180deg, rgba(8, 8, 13, 0.5) 0%, rgba(8, 8, 13, 0.78) 62%, var(--g-bg) 100%),
     url("/loading-screen.jpg") center / cover no-repeat;
 }
+/* Portrait phones: the wide art's center crop is empty sky, so pull the framing toward
+   the foreground figures and trim the height so the CTAs sit near the art, not below a
+   dark void. */
+@media (max-width: 640px) {
+  .guide-hero {
+    min-height: min(62svh, 520px);
+  }
+  .guide-hero::before {
+    background-position:
+      center,
+      24% center;
+  }
+}
 .guide-hero-inner {
   max-width: var(--g-maxw-hero);
 }
@@ -1391,6 +1405,12 @@ body[data-guide-route="home"] .guide-main {
   font-family: var(--g-font-display);
   font-weight: 600;
   letter-spacing: 0.02em;
+}
+.guide-class-chip {
+  transition:
+    color var(--g-motion-fast),
+    border-color var(--g-motion-fast),
+    background var(--g-motion-fast);
 }
 .guide-class-chip:hover {
   border-color: var(--class-color, var(--g-gold));
@@ -2565,8 +2585,11 @@ a.guide-poi:hover {
   box-shadow: var(--g-shadow-cta);
   cursor: pointer;
 }
+/* The one gold button in the viewer hovers like every other solid CTA: the explicit
+   gradient lift, never filter:brightness (the documented CTA hover rule). */
 .guide-viewer-load:hover {
-  filter: brightness(1.06);
+  background: linear-gradient(180deg, var(--g-cta-hover-hi) 0%, var(--g-cta-hover-lo) 100%);
+  box-shadow: var(--g-shadow-cta-hover);
 }
 .guide-viewer-load:disabled {
   cursor: default;
@@ -3318,4 +3341,119 @@ a.guide-poi:hover {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* ============================================================ ceremony second pass
+   Anchor comfort, landing ceremony, ambient hero motion, unified hover physics, and
+   the illuminated deeds ledger. Presentation only, appended at equal specificity. */
+
+/* Every anchor target (TOC #sec-N, search deep links, cross-page hashes) clears the
+   sticky header instead of landing beneath it. */
+.guide-main [id] {
+  scroll-margin-block-start: calc(var(--g-header-h) + var(--g-md));
+}
+
+/* The class index cards join the tier-2 raised family: same surface, same lift. */
+.guide-class-card {
+  background: var(--g-surface-raised);
+  box-shadow: var(--g-keyline-top), var(--g-shadow-card);
+  transition:
+    transform var(--g-motion-fast),
+    border-color var(--g-motion-fast),
+    box-shadow var(--g-motion-fast);
+}
+.guide-class-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--g-keyline-top), var(--g-shadow-card-hover);
+}
+
+/* The remaining flat link surfaces ease like the rest of the site instead of snapping. */
+.guide-worldmap-zone,
+.guide-related-list a,
+.guide-side-link {
+  transition:
+    color var(--g-motion-fast),
+    border-color var(--g-motion-fast),
+    background var(--g-motion-fast);
+}
+
+/* WebKit keeps its legacy disclosure marker even off list-item display, which would
+   double up with the custom chevron. */
+.guide-faq-item summary,
+.guide-reveal summary {
+  list-style: none;
+}
+.guide-faq-item summary::-webkit-details-marker,
+.guide-reveal summary::-webkit-details-marker {
+  display: none;
+}
+
+/* The landing's centered section headings earn the same engraved rule-and-diamond the
+   article titles carry, and display type balance-wraps so a fluid clamp never rags into
+   a one-word orphan (harmless no-op where unsupported). */
+.guide-section-h::after {
+  content: "";
+  display: block;
+  height: 9px;
+  max-width: 280px;
+  margin: var(--g-sm2) auto 0;
+  background:
+    center / 9px 9px no-repeat
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Crect x='2.2' y='2.2' width='5.6' height='5.6' rx='0.8' transform='rotate(45 5 5)' fill='%23c8a838'/%3E%3C/svg%3E"),
+    center / 100% 1px no-repeat var(--g-ornament-line);
+}
+.guide-article h1,
+.guide-hero-title,
+.guide-section-h,
+.guide-dungeon-name {
+  text-wrap: balance;
+}
+
+/* Ambient hero drift: the classic MMO-site slow push-in on the backdrop layer. The
+   global reduced-motion override zeroes it. */
+@keyframes guide-hero-drift {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+.guide-hero::before {
+  animation: guide-hero-drift 36s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Cross-fade page morphs (View Transitions API): pace the default fade on the motion
+   tokens. Browsers without support ignore this; app.ts falls back to a plain swap. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--g-motion-med);
+}
+
+/* The full roll of deeds reads as an illuminated ledger: each art-backed deed carries
+   its painted crest beside the name. The flex lives on an inner wrap, never the cell,
+   so the table layout keeps real table-cell boxes. */
+.guide-deed-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--g-sm);
+}
+.guide-deed-crest {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--g-radius-sm);
+  box-shadow: 0 0 0 1px var(--g-border-soft);
+}
+
+/* Search results grouped by kind, each under a small eyebrow heading. */
+.guide-search-group-h {
+  margin: var(--g-sm) 0 var(--g-xs2);
+  padding-inline: var(--g-sm);
+  font-size: var(--g-text-2xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--g-text-muted);
 }

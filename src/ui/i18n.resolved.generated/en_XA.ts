@@ -1796,6 +1796,7 @@ export const en_XA: EnTranslations = {
       "primary": "[Ĝúíðé šéçţíóñš]",
       "topics": "[Ţóþíçš]",
       "onThisPage": "[Óñ ţĥíš þáĝé]",
+      "sidebarLabel": "[Ĝúíðé ţóþíçš]",
       "backToGame": "[Ɓáçķ ţó ţĥé ĝáɱé]"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const en_XA: EnTranslations = {
       "github": "[Šóúŕçé óñ ĜíţĤúƀ]",
       "discord": "[Ĵóíñ ţĥé Ðíšçóŕð]",
       "communityWiki": "[Çóɱɱúñíţý Ŵíķí]",
-      "rights": "[Ŵóŕļð óƒ ÇļáúðéÇŕáƒţ]"
+      "rights": "[Ŵóŕļð óƒ ÇļáúðéÇŕáƒţ]",
+      "linksLabel": "[Þļáý áñð çóɱɱúñíţý ļíñķš]"
     },
     "language": {
       "label": "[Ļáñĝúáĝé]",
@@ -1837,7 +1839,9 @@ export const en_XA: EnTranslations = {
       "typeCreature": "[Çŕéáţúŕéš]",
       "typeDungeon": "[Ðúñĝéóñ]",
       "typeDelve": "[Ðéļʋé]",
-      "typeTerm": "[Ţéŕɱ]"
+      "typeTerm": "[Ţéŕɱ]",
+      "typeAbility": "[Áƀíļíţý]",
+      "typeDeed": "[Ðééð]"
     },
     "home": {
       "eyebrow": "[Çļáššíç-šţýļé ƀŕóŵšéŕ ⱮⱮÓ]",

@@ -3,15 +3,20 @@
 // and focus in sync on every navigation and language switch.
 
 import {
-  ensureLocaleLoaded, getLanguage, setLanguage, languageTag, t,
-  type SupportedLanguage, type TranslationKey,
+  ensureLocaleLoaded,
+  getLanguage,
+  languageTag,
+  type SupportedLanguage,
+  setLanguage,
+  type TranslationKey,
+  t,
 } from '../ui/i18n';
 import { buildChrome, type GuideChrome } from './chrome';
-import { GuideRouter } from './router';
-import { matchRoute, type GuideRoute } from './routes';
-import { pageFor, placeholderHtml, notFoundHtml, type PageContext } from './pages';
-import { breadcrumbHtml, sequenceHtml, mountToc } from './nav_aids';
 import { applyRouteHead } from './head';
+import { breadcrumbHtml, mountToc, sequenceHtml } from './nav_aids';
+import { notFoundHtml, type PageContext, pageFor, placeholderHtml } from './pages';
+import { GuideRouter } from './router';
+import { type GuideRoute, matchRoute } from './routes';
 
 const RTL_LANGS = new Set(['ar', 'he', 'fa', 'ur']);
 function isRtl(tag: string): boolean {
@@ -62,6 +67,20 @@ export class GuideApp {
   }
 
   private navigate(pathname: string): void {
+    // Cross-fade client-side navigations through the View Transitions API where it
+    // exists. The initial render and reduced-motion readers get the plain swap, and
+    // the API falls back to it untransitioned everywhere else.
+    const swap = (): void => this.renderRoute(pathname);
+    const vt = (document as Partial<{ startViewTransition: (cb: () => void) => unknown }>)
+      .startViewTransition;
+    if (!this.firstNav && vt && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      vt.call(document, swap);
+    } else {
+      swap();
+    }
+  }
+
+  private renderRoute(pathname: string): void {
     // Tear down the previous page's listeners before swapping its DOM out.
     this.runPageCleanup();
     const match = matchRoute(pathname);
@@ -93,7 +112,8 @@ export class GuideApp {
       } else {
         const isDetail = params.length > 0;
         const leaf = dynamicTitle ?? t(route.navKey);
-        this.chrome.mainEl.innerHTML = breadcrumbHtml(route, isDetail, leaf) + pageHtml + sequenceHtml(route);
+        this.chrome.mainEl.innerHTML =
+          breadcrumbHtml(route, isDetail, leaf) + pageHtml + sequenceHtml(route);
       }
       if (page?.mount) this.addCleanup(page.mount(this.chrome.mainEl, ctx));
       if (!isHome) this.addCleanup(mountToc(this.chrome.mainEl));

@@ -1796,6 +1796,7 @@ export const ru_RU: EnTranslations = {
       "primary": "Разделы руководства",
       "topics": "Темы",
       "onThisPage": "На этой странице",
+      "sidebarLabel": "Guide topics",
       "backToGame": "Вернуться в игру"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const ru_RU: EnTranslations = {
       "github": "Исходный код на GitHub",
       "discord": "Присоединиться к Discord",
       "communityWiki": "Вики сообщества",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Play and community links"
     },
     "language": {
       "label": "Язык",
@@ -1837,7 +1839,9 @@ export const ru_RU: EnTranslations = {
       "typeCreature": "Существа",
       "typeDungeon": "Подземелье",
       "typeDelve": "Вылазка",
-      "typeTerm": "Термин"
+      "typeTerm": "Термин",
+      "typeAbility": "Ability",
+      "typeDeed": "Deed"
     },
     "home": {
       "eyebrow": "Классическая браузерная MMO",

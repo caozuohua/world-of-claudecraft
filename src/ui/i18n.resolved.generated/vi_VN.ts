@@ -1796,6 +1796,7 @@ export const vi_VN: EnTranslations = {
       "primary": "Các mục cẩm nang",
       "topics": "Chủ Đề",
       "onThisPage": "Trên trang này",
+      "sidebarLabel": "Guide topics",
       "backToGame": "Trở lại trò chơi"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const vi_VN: EnTranslations = {
       "github": "Mã nguồn trên GitHub",
       "discord": "Tham gia Discord",
       "communityWiki": "Wiki Cộng Đồng",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Play and community links"
     },
     "language": {
       "label": "Ngôn ngữ",
@@ -1837,7 +1839,9 @@ export const vi_VN: EnTranslations = {
       "typeCreature": "Sinh Vật",
       "typeDungeon": "Hầm Ngục",
       "typeDelve": "Hang Sâu",
-      "typeTerm": "Thuật Ngữ"
+      "typeTerm": "Thuật Ngữ",
+      "typeAbility": "Ability",
+      "typeDeed": "Deed"
     },
     "home": {
       "eyebrow": "MMO cổ điển trên trình duyệt",

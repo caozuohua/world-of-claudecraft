@@ -122,9 +122,9 @@ export function buildChrome(
       </div>
     </header>
     <div class="guide-layout">
-      <aside class="guide-sidebar" id="guide-sidebar" aria-label="${esc(t('guide.nav.onThisPage'))}" hidden>
+      <aside class="guide-sidebar" id="guide-sidebar" aria-label="${esc(t('guide.nav.sidebarLabel'))}" hidden>
         <button type="button" class="guide-topics-toggle" aria-expanded="false" aria-controls="guide-sidebar-nav">${esc(t('guide.nav.topics'))}<span class="guide-topics-current"></span></button>
-        <nav class="guide-sidebar-nav" id="guide-sidebar-nav" aria-label="${esc(t('guide.nav.primary'))}">
+        <nav class="guide-sidebar-nav" id="guide-sidebar-nav" aria-label="${esc(t('guide.nav.sidebarLabel'))}">
           ${sidebarHtml()}
         </nav>
       </aside>
@@ -133,7 +133,7 @@ export function buildChrome(
     <footer class="guide-footer">
       <div class="guide-footer-inner">
         <p class="guide-footer-blurb">${esc(t('guide.footer.blurb'))}</p>
-        <nav class="guide-footer-links" aria-label="${esc(t('guide.footer.rights'))}">
+        <nav class="guide-footer-links" aria-label="${esc(t('guide.footer.linksLabel'))}">
           <a class="guide-cta guide-cta-sm" href="/play">${esc(t('guide.footer.playNow'))}</a>
           <a href="https://github.com/levy-street/world-of-claudecraft" target="_blank" rel="noopener">${esc(t('guide.footer.github'))}</a>
           <a href="https://discord.gg/GjhnUsBtw" target="_blank" rel="noopener">${esc(t('guide.footer.discord'))}</a>

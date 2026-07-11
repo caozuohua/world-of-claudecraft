@@ -1796,6 +1796,7 @@ export const en: EnTranslations = {
       "primary": "Guide sections",
       "topics": "Topics",
       "onThisPage": "On this page",
+      "sidebarLabel": "Guide topics",
       "backToGame": "Back to the game"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const en: EnTranslations = {
       "github": "Source on GitHub",
       "discord": "Join the Discord",
       "communityWiki": "Community Wiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Play and community links"
     },
     "language": {
       "label": "Language",
@@ -1837,7 +1839,9 @@ export const en: EnTranslations = {
       "typeCreature": "Creatures",
       "typeDungeon": "Dungeon",
       "typeDelve": "Delve",
-      "typeTerm": "Term"
+      "typeTerm": "Term",
+      "typeAbility": "Ability",
+      "typeDeed": "Deed"
     },
     "home": {
       "eyebrow": "Classic-style browser MMO",

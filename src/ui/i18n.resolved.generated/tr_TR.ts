@@ -1796,6 +1796,7 @@ export const tr_TR: EnTranslations = {
       "primary": "Rehber bölümleri",
       "topics": "Konular",
       "onThisPage": "Bu sayfada",
+      "sidebarLabel": "Guide topics",
       "backToGame": "Oyuna dön"
     },
     "groups": {
@@ -1821,7 +1822,8 @@ export const tr_TR: EnTranslations = {
       "github": "GitHub'daki Kaynak",
       "discord": "Discord'a Katıl",
       "communityWiki": "Topluluk Wiki'si",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Play and community links"
     },
     "language": {
       "label": "Dil",
@@ -1837,7 +1839,9 @@ export const tr_TR: EnTranslations = {
       "typeCreature": "Yaratıklar",
       "typeDungeon": "Zindan",
       "typeDelve": "Mağara Seferi",
-      "typeTerm": "Terim"
+      "typeTerm": "Terim",
+      "typeAbility": "Ability",
+      "typeDeed": "Deed"
     },
     "home": {
       "eyebrow": "Klasik tarz tarayıcı MMO'su",

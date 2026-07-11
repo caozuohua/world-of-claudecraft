@@ -55,6 +55,9 @@ export const guideStrings = {
     primary: 'Guide sections',
     topics: 'Topics',
     onThisPage: 'On this page',
+    // Distinct landmark names: the topics sidebar must not share a label with the TOC
+    // ("On this page") or the header nav ("Guide sections").
+    sidebarLabel: 'Guide topics',
     backToGame: 'Back to the game',
   },
 
@@ -88,6 +91,7 @@ export const guideStrings = {
     discord: 'Join the Discord',
     communityWiki: 'Community Wiki',
     rights: 'World of ClaudeCraft',
+    linksLabel: 'Play and community links',
   },
 
   // Language picker.
@@ -108,6 +112,8 @@ export const guideStrings = {
     typeDungeon: 'Dungeon',
     typeDelve: 'Delve',
     typeTerm: 'Term',
+    typeAbility: 'Ability',
+    typeDeed: 'Deed',
   },
 
   // Home / overview landing.

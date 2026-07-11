@@ -57,7 +57,11 @@ function deedRow(d: GuideDeed): string {
       ? esc(t('guide.deedsPage.rewardBorder'))
       : '';
   return `<tr>
-        <td class="guide-deed-name">${esc(d.name)}</td>
+        <td class="guide-deed-name"><span class="guide-deed-name-wrap">${
+          d.crest
+            ? `<img class="guide-deed-crest" src="${esc(d.crest)}" alt="" width="28" height="28" loading="lazy" decoding="async" />`
+            : ''
+        }${esc(d.name)}</span></td>
         <td class="guide-deed-renown">${renownCell}</td>
         <td class="guide-deed-reward">${reward}</td>
       </tr>`;
@@ -72,7 +76,7 @@ function categorySection(cat: (typeof CATEGORY_ORDER)[number], list: GuideDeed[]
     label: t(CATEGORY_LABEL_KEYS[cat]),
     count: formatNumber(rows.length),
   });
-  return `<section class="guide-block guide-deed-cat">
+  return `<section class="guide-block guide-deed-cat" id="deed-cat-${esc(cat)}">
         <h3 class="guide-deed-cat-h">${esc(heading)}</h3>
         <div class="guide-table-scroll">
           <table class="guide-keytable guide-deed-table">
