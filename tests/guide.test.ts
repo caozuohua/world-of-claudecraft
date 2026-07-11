@@ -678,7 +678,7 @@ describe('Guide deeds cross-page surfaces', () => {
   it('lists the Book of Deeds bind on the controls page, matching the in-game default', () => {
     setLanguage('en');
     const deedsBind = BIND_ACTIONS.find((a) => a.id === 'deeds');
-    expect(deedsBind?.defaults).toEqual(['KeyZ']);
+    expect(deedsBind?.defaults).toEqual(['Shift+KeyZ']);
     expect(t('guide.controls.deeds')).toBe('Book of Deeds');
     const html = controlsPage.render({
       params: [],
@@ -686,7 +686,7 @@ describe('Guide deeds cross-page surfaces', () => {
       titleKey: 'guide.nav.controls',
     });
     // the key glyph and the label render inside one table row
-    expect(html).toContain('<kbd>Z</kbd></td><td>Book of Deeds</td>');
+    expect(html).toContain('<kbd>Shift+Z</kbd></td><td>Book of Deeds</td>');
   });
 
   it('cross-links the deeds catalog from the dungeons page', () => {

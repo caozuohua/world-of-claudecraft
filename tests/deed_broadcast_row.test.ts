@@ -11,8 +11,8 @@ import { buildDeedBroadcastRow, type DeedBroadcastSeam } from '../src/ui/options
 function mount(seam: DeedBroadcastSeam): { row: HTMLElement; toggle: HTMLButtonElement } {
   const parent = document.createElement('div');
   buildDeedBroadcastRow(parent, seam);
-  const row = parent.querySelector('.set-row') as HTMLElement;
-  const toggle = row.querySelector('button.set-toggle') as HTMLButtonElement;
+  const row = parent.querySelector('.opt-row') as HTMLElement;
+  const toggle = row.querySelector('button.opt-switch') as HTMLButtonElement;
   return { row, toggle };
 }
 
@@ -31,7 +31,7 @@ describe('deed broadcast row', () => {
       set: vi.fn(async (v: boolean) => v),
     };
     const { row, toggle } = mount(seam);
-    expect(row.querySelector('.set-name')?.textContent).toBe(
+    expect(row.querySelector('.opt-row-label')?.textContent).toBe(
       'Share deed unlocks with guild and friends',
     );
     expect(toggle.disabled).toBe(true);
@@ -40,8 +40,7 @@ describe('deed broadcast row', () => {
     await settled();
     expect(toggle.disabled).toBe(false);
     expect(toggle.getAttribute('aria-busy')).toBeNull();
-    expect(toggle.getAttribute('aria-pressed')).toBe('false');
-    expect(toggle.classList.contains('off')).toBe(true);
+    expect(toggle.getAttribute('aria-checked')).toBe('false');
     expect(seam.set).not.toHaveBeenCalled();
   });
 
@@ -49,16 +48,16 @@ describe('deed broadcast row', () => {
     const set = vi.fn(async (v: boolean) => v);
     const { toggle } = mount({ get: async () => true, set });
     await settled();
-    expect(toggle.getAttribute('aria-pressed')).toBe('true');
+    expect(toggle.getAttribute('aria-checked')).toBe('true');
     toggle.click();
     // Optimistic flip lands synchronously; the button locks while in flight.
-    expect(toggle.getAttribute('aria-pressed')).toBe('false');
+    expect(toggle.getAttribute('aria-checked')).toBe('false');
     expect(toggle.disabled).toBe(true);
     await settled();
     expect(set).toHaveBeenCalledTimes(1);
     expect(set).toHaveBeenCalledWith(false);
     expect(toggle.disabled).toBe(false);
-    expect(toggle.getAttribute('aria-pressed')).toBe('false');
+    expect(toggle.getAttribute('aria-checked')).toBe('false');
   });
 
   it('the server echo wins over the optimistic flip when they differ', async () => {
@@ -68,14 +67,14 @@ describe('deed broadcast row', () => {
     const set = vi.fn(async (): Promise<boolean> => false);
     const { toggle } = mount({ get: async () => false, set });
     await settled();
-    expect(toggle.getAttribute('aria-pressed')).toBe('false');
+    expect(toggle.getAttribute('aria-checked')).toBe('false');
     toggle.click();
     // Optimistic flip to true...
-    expect(toggle.getAttribute('aria-pressed')).toBe('true');
+    expect(toggle.getAttribute('aria-checked')).toBe('true');
     await settled();
     // ...but the echo said false, so false is what renders.
     expect(set).toHaveBeenCalledWith(true);
-    expect(toggle.getAttribute('aria-pressed')).toBe('false');
+    expect(toggle.getAttribute('aria-checked')).toBe('false');
     expect(toggle.disabled).toBe(false);
   });
 
@@ -86,9 +85,9 @@ describe('deed broadcast row', () => {
     const { toggle } = mount({ get: async () => true, set });
     await settled();
     toggle.click();
-    expect(toggle.getAttribute('aria-pressed')).toBe('false');
+    expect(toggle.getAttribute('aria-checked')).toBe('false');
     await settled();
-    expect(toggle.getAttribute('aria-pressed')).toBe('true');
+    expect(toggle.getAttribute('aria-checked')).toBe('true');
     expect(toggle.disabled).toBe(false);
   });
 
@@ -102,7 +101,7 @@ describe('deed broadcast row', () => {
     });
     await settled();
     expect(toggle.disabled).toBe(false);
-    expect(toggle.getAttribute('aria-pressed')).toBe('true');
+    expect(toggle.getAttribute('aria-checked')).toBe('true');
     toggle.click();
     await settled();
     expect(set).toHaveBeenCalledWith(false);

@@ -238,7 +238,8 @@ export const zh_CN: EnTranslations = {
         "eligible": "奖励已解锁。",
         "no_wallet": "请连接一个持有至少价值 $20 USD 的 WOC 的钱包。",
         "under_minimum": "钱包低于 $20 USD WOC 的最低要求。",
-        "price_unavailable": "WOC 价格不可用，奖励暂时锁定。"
+        "price_unavailable": "WOC 价格不可用，奖励暂时锁定。",
+        "banned": "您已被禁止参加每日奖励。原因：{reason}"
       }
     },
     "theme": {
@@ -320,6 +321,8 @@ export const zh_CN: EnTranslations = {
       "haptics": "震动反馈",
       "hapticsOff": "震动反馈：关",
       "toggleHaptics": "切换震动反馈",
+      "showMenuButtons": "显示菜单按钮",
+      "hideMenuButtons": "隐藏菜单按钮",
       "hotbarPage": "技能",
       "hotbarPageAria": "显示下一组技能",
       "actionRing": "战斗动作",
@@ -584,7 +587,84 @@ export const zh_CN: EnTranslations = {
       "showSecondaryActionBar": "显示副动作条",
       "showDailyRewardsChest": "显示每日奖励宝箱",
       "mobileCameraJoystick": "摄像机摇杆",
-      "mobileLeftHanded": "左手布局"
+      "mobileLeftHanded": "左手布局",
+      "ia": {
+        "railDisplay": "显示",
+        "railInput": "输入",
+        "railSystem": "系统",
+        "catOverviewName": "概览",
+        "catOverviewSub": "固定的常用项、快捷操作，以及已更改的内容。",
+        "catGraphicsSub": "画质、视野与世界画面。",
+        "catInterfaceSub": "界面缩放、面板、聊天与单位框体。",
+        "catAccessibilityName": "无障碍",
+        "catAccessibilitySub": "动态效果、对比度与内容舒适度。",
+        "catControlsName": "控制",
+        "catControlsSub": "镜头、移动、战斗与反馈。",
+        "catKeybindsSub": "为每个操作绑定按键。",
+        "catControllerSub": "手柄手感与按键布局。",
+        "catTouchName": "触控",
+        "catTouchSub": "屏幕摇杆、视角与按钮。",
+        "catAudioSub": "音量与声音开关。",
+        "catSystemName": "系统",
+        "catSystemSub": "性能、支持与关于。"
+      },
+      "done": "Done",
+      "resetAllTitle": "重置所有设置？",
+      "resetAllBody": "这会将每项设置恢复为默认值。此操作无法撤销。",
+      "searchPlaceholder": "搜索设置",
+      "searchScopeAll": "所有设置",
+      "searchScopeThis": "当前分区",
+      "searchEmpty": "没有符合搜索的设置。",
+      "searchGoTo": "Go to {category}",
+      "modeOnline": "在线",
+      "modeOffline": "离线",
+      "changed": "已更改 {count} 项",
+      "changedSummary": "已更改 {count} 项（相对默认）",
+      "legend": {
+        "category": "分类",
+        "navigate": "导航",
+        "select": "选择",
+        "back": "Back",
+        "reset": "重置",
+        "clear": "清除",
+        "page": "Page"
+      },
+      "keybindCleared": "已清除 {action}",
+      "keybindRebinding": "正在重绑定 {action}。请按一个键，或按 Esc 取消。",
+      "keybindEvicted": "已将 {key} 绑定到 {action}；已从 {evicted} 移除。",
+      "keybindTaken": "按键已移除",
+      "keybindUnbound": "{action} has no key",
+      "keybindModifierHint": "提示：你可以绑定组合键。按住 Shift、Ctrl 或 Alt 的同时按下某个键即可录制组合键（例如 Shift+1）。",
+      "conflictDot": "按键冲突",
+      "overviewConflictAlert": "部分按键绑定存在冲突或未绑定。",
+      "sec": {
+        "quality": "画质",
+        "view": "View",
+        "general": "通用",
+        "scaleText": "缩放与文字",
+        "panels": "面板",
+        "unitFrames": "单位框体",
+        "actionBars": "动作条",
+        "chat": "Chat",
+        "combatTooltips": "战斗与提示",
+        "hudExtras": "HUD 附加项",
+        "motionContrast": "动态与对比度",
+        "content": "内容",
+        "camera": "镜头",
+        "movement": "移动",
+        "combat": "战斗",
+        "feedback": "反馈",
+        "inputMode": "输入模式",
+        "feel": "Feel",
+        "sticks": "摇杆",
+        "look": "Look",
+        "buttons": "按钮",
+        "volume": "音量",
+        "toggles": "开关",
+        "performance": "性能",
+        "support": "支持",
+        "about": "关于"
+      }
     },
     "controller": {
       "title": "手柄",
@@ -596,7 +676,8 @@ export const zh_CN: EnTranslations = {
       "buttons": "按键布局",
       "resetButtons": "重置按键布局",
       "menuAction": "游戏菜单",
-      "help": "左摇杆移动，右摇杆控制镜头。打开窗口即可使用屏幕指针。"
+      "help": "左摇杆移动，右摇杆控制镜头。打开窗口即可使用屏幕指针。",
+      "duplicate": "也绑定到 {buttons}"
     },
     "perf": {
       "title": "性能监视器",
@@ -729,7 +810,11 @@ export const zh_CN: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "配置 {n}"
+      "defaultBuildName": "配置 {n}",
+      "choicesTab": "天赋选择",
+      "resetChoices": "重置选择",
+      "tierLevel": "等级 {n}",
+      "tierLevelLabel": "等级"
     },
     "tips": {
       "joinChannels": "提示：输入 /join world 或 /join lfg，与全服玩家聊天。"
@@ -5117,6 +5202,8 @@ export const zh_CN: EnTranslations = {
       "buybackTitle": "回购",
       "buybackEmpty": "没有物品",
       "buybackAria": "以 {price} 回购 {item}",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "随机属性无法通过回购找回。",
       "sellQuantityTitle": "出售 {item}",
       "sellQuantityInput": "要出售的数量",
       "sellQuantityConfirm": "出售",

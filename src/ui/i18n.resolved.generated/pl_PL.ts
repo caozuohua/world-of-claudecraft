@@ -238,7 +238,8 @@ export const pl_PL: EnTranslations = {
         "eligible": "Nagrody odblokowane.",
         "no_wallet": "Podłącz portfel z co najmniej 20 USD w WOC.",
         "under_minimum": "Portfel jest poniżej minimum 20 USD w WOC.",
-        "price_unavailable": "Cena WOC jest niedostępna, nagrody są tymczasowo zablokowane."
+        "price_unavailable": "Cena WOC jest niedostępna, nagrody są tymczasowo zablokowane.",
+        "banned": "You are banned from Daily Rewards. Reason: {reason}"
       }
     },
     "theme": {
@@ -320,6 +321,8 @@ export const pl_PL: EnTranslations = {
       "haptics": "Wibracje",
       "hapticsOff": "Wibracje wył.",
       "toggleHaptics": "Przełącz wibracje",
+      "showMenuButtons": "Show menu buttons",
+      "hideMenuButtons": "Hide menu buttons",
       "hotbarPage": "Umiejętności",
       "hotbarPageAria": "Pokaż następny zestaw umiejętności",
       "actionRing": "Działania bojowe",
@@ -584,7 +587,84 @@ export const pl_PL: EnTranslations = {
       "showSecondaryActionBar": "Pokaż dodatkowy pasek akcji",
       "showDailyRewardsChest": "Pokaż skrzynię codziennych nagród",
       "mobileCameraJoystick": "Joystick aparatu",
-      "mobileLeftHanded": "Układ leworęczny"
+      "mobileLeftHanded": "Układ leworęczny",
+      "ia": {
+        "railDisplay": "Display",
+        "railInput": "Input",
+        "railSystem": "System",
+        "catOverviewName": "Overview",
+        "catOverviewSub": "Pinned essentials, quick actions, and what changed.",
+        "catGraphicsSub": "Quality, view, and world visuals.",
+        "catInterfaceSub": "HUD scale, panels, chat, and unit frames.",
+        "catAccessibilityName": "Accessibility",
+        "catAccessibilitySub": "Motion, contrast, and content comfort.",
+        "catControlsName": "Controls",
+        "catControlsSub": "Camera, movement, combat, and feedback.",
+        "catKeybindsSub": "Bind keys for every action.",
+        "catControllerSub": "Gamepad feel and button layout.",
+        "catTouchName": "Touch",
+        "catTouchSub": "On-screen sticks, look, and buttons.",
+        "catAudioSub": "Volume and sound toggles.",
+        "catSystemName": "System",
+        "catSystemSub": "Performance, support, and about."
+      },
+      "done": "Done",
+      "resetAllTitle": "Reset all settings?",
+      "resetAllBody": "This restores every setting to its default. This cannot be undone.",
+      "searchPlaceholder": "Search settings",
+      "searchScopeAll": "All settings",
+      "searchScopeThis": "This section",
+      "searchEmpty": "No settings match your search.",
+      "searchGoTo": "Go to {category}",
+      "modeOnline": "Online",
+      "modeOffline": "Offline",
+      "changed": "{count} changed",
+      "changedSummary": "{count} changed from defaults",
+      "legend": {
+        "category": "Category",
+        "navigate": "Navigate",
+        "select": "Select",
+        "back": "Back",
+        "reset": "Reset",
+        "clear": "Clear",
+        "page": "Page"
+      },
+      "keybindCleared": "Cleared {action}",
+      "keybindRebinding": "Rebinding {action}. Press a key, or Escape to cancel.",
+      "keybindEvicted": "Bound {key} to {action}; removed from {evicted}",
+      "keybindTaken": "Key removed",
+      "keybindUnbound": "{action} has no key",
+      "keybindModifierHint": "Tip: you can bind modifier combinations. Hold Shift, Ctrl, or Alt while pressing a key to capture the combo (for example Shift+1).",
+      "conflictDot": "Binding conflict",
+      "overviewConflictAlert": "Some key bindings conflict or are unbound.",
+      "sec": {
+        "quality": "Quality",
+        "view": "View",
+        "general": "General",
+        "scaleText": "Scale and Text",
+        "panels": "Panels",
+        "unitFrames": "Unit Frames",
+        "actionBars": "Action Bars",
+        "chat": "Chat",
+        "combatTooltips": "Combat and Tooltips",
+        "hudExtras": "HUD Extras",
+        "motionContrast": "Motion and Contrast",
+        "content": "Content",
+        "camera": "Camera",
+        "movement": "Movement",
+        "combat": "Combat",
+        "feedback": "Feedback",
+        "inputMode": "Input Mode",
+        "feel": "Feel",
+        "sticks": "Sticks",
+        "look": "Look",
+        "buttons": "Buttons",
+        "volume": "Volume",
+        "toggles": "Toggles",
+        "performance": "Performance",
+        "support": "Support",
+        "about": "About"
+      }
     },
     "controller": {
       "title": "Kontroler",
@@ -596,7 +676,8 @@ export const pl_PL: EnTranslations = {
       "buttons": "Układ przycisków",
       "resetButtons": "Resetuj układ przycisków",
       "menuAction": "Menu gry",
-      "help": "Lewa gałka porusza, prawa gałka rozgląda. Otwórz okno, aby użyć wskaźnika ekranowego."
+      "help": "Lewa gałka porusza, prawa gałka rozgląda. Otwórz okno, aby użyć wskaźnika ekranowego.",
+      "duplicate": "Also bound to {buttons}"
     },
     "perf": {
       "title": "Nakładka wydajności",
@@ -729,7 +810,11 @@ export const pl_PL: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "Zestaw {n}"
+      "defaultBuildName": "Zestaw {n}",
+      "choicesTab": "Choices",
+      "resetChoices": "Reset choices",
+      "tierLevel": "Level {n}",
+      "tierLevelLabel": "Level"
     },
     "tips": {
       "joinChannels": "Wskazówka: wpisz /join world lub /join lfg, aby rozmawiać z graczami z całego świata."
@@ -5117,6 +5202,8 @@ export const pl_PL: EnTranslations = {
       "buybackTitle": "Odkup",
       "buybackEmpty": "Brak przedmiotów",
       "buybackAria": "Odkup {item} za {price}",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "Rolled stats cannot be recovered by buyback.",
       "sellQuantityTitle": "Sprzedaj {item}",
       "sellQuantityInput": "Ilość do sprzedania",
       "sellQuantityConfirm": "Sprzedaj",

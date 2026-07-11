@@ -238,7 +238,8 @@ export const en_XA: EnTranslations = {
         "eligible": "[Ŕéŵáŕðš úñļóçķéð.]",
         "no_wallet": "[Çóññéçţ á ŵáļļéţ ŵíţĥ áţ ļéášţ $20 ÚŠÐ íñ ŴÓÇ.]",
         "under_minimum": "[Ŵáļļéţ íš ƀéļóŵ ţĥé $20 ÚŠÐ ŴÓÇ ɱíñíɱúɱ.]",
-        "price_unavailable": "[ŴÓÇ þŕíçé íš úñáʋáíļáƀļé, ŕéŵáŕðš áŕé ţéɱþóŕáŕíļý ļóçķéð.]"
+        "price_unavailable": "[ŴÓÇ þŕíçé íš úñáʋáíļáƀļé, ŕéŵáŕðš áŕé ţéɱþóŕáŕíļý ļóçķéð.]",
+        "banned": "[Ýóú áŕé ƀáññéð ƒŕóɱ Ðáíļý Ŕéŵáŕðš. Ŕéášóñ: {reason}]"
       }
     },
     "theme": {
@@ -320,6 +321,8 @@ export const en_XA: EnTranslations = {
       "haptics": "[Ĥáþţíçš]",
       "hapticsOff": "[Ĥáþţíçš Óƒƒ]",
       "toggleHaptics": "[Ţóĝĝļé ĥáþţíçš]",
+      "showMenuButtons": "[Šĥóŵ ɱéñú ƀúţţóñš]",
+      "hideMenuButtons": "[Ĥíðé ɱéñú ƀúţţóñš]",
       "hotbarPage": "[Šķíļļš]",
       "hotbarPageAria": "[Šĥóŵ ñéẋţ šéţ óƒ šķíļļš]",
       "actionRing": "[Çóɱƀáţ áçţíóñš]",
@@ -584,7 +587,84 @@ export const en_XA: EnTranslations = {
       "showSecondaryActionBar": "[Šĥóŵ Šéçóñðáŕý Áçţíóñ Ɓáŕ]",
       "showDailyRewardsChest": "[Šĥóŵ Ðáíļý Ŕéŵáŕðš Çĥéšţ]",
       "mobileCameraJoystick": "[Çáɱéŕá ĵóýšţíçķ]",
-      "mobileLeftHanded": "[Ļéƒţ-ĥáñðéð ļáýóúţ]"
+      "mobileLeftHanded": "[Ļéƒţ-ĥáñðéð ļáýóúţ]",
+      "ia": {
+        "railDisplay": "[Ðíšþļáý]",
+        "railInput": "[Íñþúţ]",
+        "railSystem": "[Šýšţéɱ]",
+        "catOverviewName": "[Óʋéŕʋíéŵ]",
+        "catOverviewSub": "[Þíññéð éššéñţíáļš, ɋúíçķ áçţíóñš, áñð ŵĥáţ çĥáñĝéð.]",
+        "catGraphicsSub": "[Ɋúáļíţý, ʋíéŵ, áñð ŵóŕļð ʋíšúáļš.]",
+        "catInterfaceSub": "[ĤÚÐ šçáļé, þáñéļš, çĥáţ, áñð úñíţ ƒŕáɱéš.]",
+        "catAccessibilityName": "[Áççéššíƀíļíţý]",
+        "catAccessibilitySub": "[Ɱóţíóñ, çóñţŕášţ, áñð çóñţéñţ çóɱƒóŕţ.]",
+        "catControlsName": "[Çóñţŕóļš]",
+        "catControlsSub": "[Çáɱéŕá, ɱóʋéɱéñţ, çóɱƀáţ, áñð ƒééðƀáçķ.]",
+        "catKeybindsSub": "[Ɓíñð ķéýš ƒóŕ éʋéŕý áçţíóñ.]",
+        "catControllerSub": "[Ĝáɱéþáð ƒééļ áñð ƀúţţóñ ļáýóúţ.]",
+        "catTouchName": "[Ţóúçĥ]",
+        "catTouchSub": "[Óñ-šçŕééñ šţíçķš, ļóóķ, áñð ƀúţţóñš.]",
+        "catAudioSub": "[Ʋóļúɱé áñð šóúñð ţóĝĝļéš.]",
+        "catSystemName": "[Šýšţéɱ]",
+        "catSystemSub": "[Þéŕƒóŕɱáñçé, šúþþóŕţ, áñð áƀóúţ.]"
+      },
+      "done": "[Ðóñé]",
+      "resetAllTitle": "[Ŕéšéţ áļļ šéţţíñĝš?]",
+      "resetAllBody": "[Ţĥíš ŕéšţóŕéš éʋéŕý šéţţíñĝ ţó íţš ðéƒáúļţ. Ţĥíš çáññóţ ƀé úñðóñé.]",
+      "searchPlaceholder": "[Šéáŕçĥ šéţţíñĝš]",
+      "searchScopeAll": "[Áļļ šéţţíñĝš]",
+      "searchScopeThis": "[Ţĥíš šéçţíóñ]",
+      "searchEmpty": "[Ñó šéţţíñĝš ɱáţçĥ ýóúŕ šéáŕçĥ.]",
+      "searchGoTo": "[Ĝó ţó {category}]",
+      "modeOnline": "[Óñļíñé]",
+      "modeOffline": "[Óƒƒļíñé]",
+      "changed": "[{count} çĥáñĝéð]",
+      "changedSummary": "[{count} çĥáñĝéð ƒŕóɱ ðéƒáúļţš]",
+      "legend": {
+        "category": "[Çáţéĝóŕý]",
+        "navigate": "[Ñáʋíĝáţé]",
+        "select": "[Šéļéçţ]",
+        "back": "[Ɓáçķ]",
+        "reset": "[Ŕéšéţ]",
+        "clear": "[Çļéáŕ]",
+        "page": "[Þáĝé]"
+      },
+      "keybindCleared": "[Çļéáŕéð {action}]",
+      "keybindRebinding": "[Ŕéƀíñðíñĝ {action}. Þŕéšš á ķéý, óŕ Éšçáþé ţó çáñçéļ.]",
+      "keybindEvicted": "[Ɓóúñð {key} ţó {action}; ŕéɱóʋéð ƒŕóɱ {evicted}]",
+      "keybindTaken": "[Ķéý ŕéɱóʋéð]",
+      "keybindUnbound": "[{action} ĥáš ñó ķéý]",
+      "keybindModifierHint": "[Ţíþ: ýóú çáñ ƀíñð ɱóðíƒíéŕ çóɱƀíñáţíóñš. Ĥóļð Šĥíƒţ, Çţŕļ, óŕ Áļţ ŵĥíļé þŕéššíñĝ á ķéý ţó çáþţúŕé ţĥé çóɱƀó (ƒóŕ éẋáɱþļé Šĥíƒţ+1).]",
+      "conflictDot": "[Ɓíñðíñĝ çóñƒļíçţ]",
+      "overviewConflictAlert": "[Šóɱé ķéý ƀíñðíñĝš çóñƒļíçţ óŕ áŕé úñƀóúñð.]",
+      "sec": {
+        "quality": "[Ɋúáļíţý]",
+        "view": "[Ʋíéŵ]",
+        "general": "[Ĝéñéŕáļ]",
+        "scaleText": "[Šçáļé áñð Ţéẋţ]",
+        "panels": "[Þáñéļš]",
+        "unitFrames": "[Úñíţ Ƒŕáɱéš]",
+        "actionBars": "[Áçţíóñ Ɓáŕš]",
+        "chat": "[Çĥáţ]",
+        "combatTooltips": "[Çóɱƀáţ áñð Ţóóļţíþš]",
+        "hudExtras": "[ĤÚÐ Éẋţŕáš]",
+        "motionContrast": "[Ɱóţíóñ áñð Çóñţŕášţ]",
+        "content": "[Çóñţéñţ]",
+        "camera": "[Çáɱéŕá]",
+        "movement": "[Ɱóʋéɱéñţ]",
+        "combat": "[Çóɱƀáţ]",
+        "feedback": "[Ƒééðƀáçķ]",
+        "inputMode": "[Íñþúţ Ɱóðé]",
+        "feel": "[Ƒééļ]",
+        "sticks": "[Šţíçķš]",
+        "look": "[Ļóóķ]",
+        "buttons": "[Ɓúţţóñš]",
+        "volume": "[Ʋóļúɱé]",
+        "toggles": "[Ţóĝĝļéš]",
+        "performance": "[Þéŕƒóŕɱáñçé]",
+        "support": "[Šúþþóŕţ]",
+        "about": "[Áƀóúţ]"
+      }
     },
     "controller": {
       "title": "[Çóñţŕóļļéŕ]",
@@ -596,7 +676,8 @@ export const en_XA: EnTranslations = {
       "buttons": "[Ɓúţţóñ Ļáýóúţ]",
       "resetButtons": "[Ŕéšéţ Ɓúţţóñ Ļáýóúţ]",
       "menuAction": "[Ĝáɱé Ɱéñú]",
-      "help": "[Ļéƒţ šţíçķ ɱóʋéš, ŕíĝĥţ šţíçķ ļóóķš. Óþéñ á ŵíñðóŵ ţó úšé ţĥé óñ-šçŕééñ þóíñţéŕ.]"
+      "help": "[Ļéƒţ šţíçķ ɱóʋéš, ŕíĝĥţ šţíçķ ļóóķš. Óþéñ á ŵíñðóŵ ţó úšé ţĥé óñ-šçŕééñ þóíñţéŕ.]",
+      "duplicate": "[Áļšó ƀóúñð ţó {buttons}]"
     },
     "perf": {
       "title": "[Þéŕƒóŕɱáñçé Óʋéŕļáý]",
@@ -729,7 +810,11 @@ export const en_XA: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "[Ɓúíļð {n}]"
+      "defaultBuildName": "[Ɓúíļð {n}]",
+      "choicesTab": "[Çĥóíçéš]",
+      "resetChoices": "[Ŕéšéţ çĥóíçéš]",
+      "tierLevel": "[Ļéʋéļ {n}]",
+      "tierLevelLabel": "[Ļéʋéļ]"
     },
     "tips": {
       "joinChannels": "[Ţíþ: ţýþé /ĵóíñ ŵóŕļð óŕ /ĵóíñ ļƒĝ ţó çĥáţ ŵíţĥ þļáýéŕš áçŕóšš ţĥé ŵóŕļð.]"
@@ -1863,7 +1948,7 @@ export const en_XA: EnTranslations = {
       "valeCup": "[Ʋáļé Çúþ]",
       "calendar": "[Éʋéñţ Çáļéñðáŕ]",
       "discord": "[Ðíšçóŕð]",
-      "abilities": "[Úšé áçţíóñ ƀáŕ áƀíļíţíéš (ţĥé ñúɱƀéŕ ŕóŵ; á šéçóñð ƀáŕ šíţš óñ ţĥé ñúɱþáð)]",
+      "abilities": "[Úšé áçţíóñ ƀáŕ áƀíļíţíéš (ţĥé ñúɱƀéŕ ŕóŵ þļúš Ɋ áñð É; ţĥé šéçóñðáŕý ƀáŕ šíţš óñ ţĥé ñúɱþáð óŕ Šĥíƒţ+1 ţó Šĥíƒţ+0)]",
       "targetFriendly": "[Ţáŕĝéţ ñéáŕéšţ ƒŕíéñðļý]",
       "cycleFriendly": "[Çýçļé ƒŕíéñðļý ţáŕĝéţ]",
       "gameMenu": "[Óþéñ ĝáɱé ɱéñú áñð óþţíóñš]",
@@ -5117,6 +5202,8 @@ export const en_XA: EnTranslations = {
       "buybackTitle": "[Ɓúýƀáçķ]",
       "buybackEmpty": "[Ñó íţéɱš]",
       "buybackAria": "[Ɓúý ƀáçķ {item} ƒóŕ {price}]",
+      "sellItemAria": "[Šéļļ {item} ƒóŕ {price}]",
+      "sellRolledWarning": "[Ŕóļļéð šţáţš çáññóţ ƀé ŕéçóʋéŕéð ƀý ƀúýƀáçķ.]",
       "sellQuantityTitle": "[Šéļļ {item}]",
       "sellQuantityInput": "[Ɋúáñţíţý ţó šéļļ]",
       "sellQuantityConfirm": "[Šéļļ]",

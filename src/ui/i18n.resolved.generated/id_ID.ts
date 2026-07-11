@@ -238,7 +238,8 @@ export const id_ID: EnTranslations = {
         "eligible": "Hadiah terbuka.",
         "no_wallet": "Hubungkan dompet dengan setidaknya $20 USD dalam WOC.",
         "under_minimum": "Dompet di bawah batas minimum $20 USD WOC.",
-        "price_unavailable": "Harga WOC tidak tersedia, hadiah terkunci sementara."
+        "price_unavailable": "Harga WOC tidak tersedia, hadiah terkunci sementara.",
+        "banned": "You are banned from Daily Rewards. Reason: {reason}"
       }
     },
     "theme": {
@@ -320,6 +321,8 @@ export const id_ID: EnTranslations = {
       "haptics": "Haptik",
       "hapticsOff": "Haptik Nonaktif",
       "toggleHaptics": "Alihkan haptik",
+      "showMenuButtons": "Show menu buttons",
+      "hideMenuButtons": "Hide menu buttons",
       "hotbarPage": "Kemampuan",
       "hotbarPageAria": "Tampilkan rangkaian kemampuan berikutnya",
       "actionRing": "Aksi tempur",
@@ -584,7 +587,84 @@ export const id_ID: EnTranslations = {
       "showSecondaryActionBar": "Tampilkan Bilah Aksi Sekunder",
       "showDailyRewardsChest": "Tampilkan Peti Hadiah Harian",
       "mobileCameraJoystick": "Joystick kamera",
-      "mobileLeftHanded": "Tata letak kidal"
+      "mobileLeftHanded": "Tata letak kidal",
+      "ia": {
+        "railDisplay": "Display",
+        "railInput": "Input",
+        "railSystem": "System",
+        "catOverviewName": "Overview",
+        "catOverviewSub": "Pinned essentials, quick actions, and what changed.",
+        "catGraphicsSub": "Quality, view, and world visuals.",
+        "catInterfaceSub": "HUD scale, panels, chat, and unit frames.",
+        "catAccessibilityName": "Accessibility",
+        "catAccessibilitySub": "Motion, contrast, and content comfort.",
+        "catControlsName": "Controls",
+        "catControlsSub": "Camera, movement, combat, and feedback.",
+        "catKeybindsSub": "Bind keys for every action.",
+        "catControllerSub": "Gamepad feel and button layout.",
+        "catTouchName": "Touch",
+        "catTouchSub": "On-screen sticks, look, and buttons.",
+        "catAudioSub": "Volume and sound toggles.",
+        "catSystemName": "System",
+        "catSystemSub": "Performance, support, and about."
+      },
+      "done": "Done",
+      "resetAllTitle": "Reset all settings?",
+      "resetAllBody": "This restores every setting to its default. This cannot be undone.",
+      "searchPlaceholder": "Search settings",
+      "searchScopeAll": "All settings",
+      "searchScopeThis": "This section",
+      "searchEmpty": "No settings match your search.",
+      "searchGoTo": "Go to {category}",
+      "modeOnline": "Online",
+      "modeOffline": "Offline",
+      "changed": "{count} changed",
+      "changedSummary": "{count} changed from defaults",
+      "legend": {
+        "category": "Category",
+        "navigate": "Navigate",
+        "select": "Select",
+        "back": "Back",
+        "reset": "Reset",
+        "clear": "Clear",
+        "page": "Page"
+      },
+      "keybindCleared": "Cleared {action}",
+      "keybindRebinding": "Rebinding {action}. Press a key, or Escape to cancel.",
+      "keybindEvicted": "Bound {key} to {action}; removed from {evicted}",
+      "keybindTaken": "Key removed",
+      "keybindUnbound": "{action} has no key",
+      "keybindModifierHint": "Tip: you can bind modifier combinations. Hold Shift, Ctrl, or Alt while pressing a key to capture the combo (for example Shift+1).",
+      "conflictDot": "Binding conflict",
+      "overviewConflictAlert": "Some key bindings conflict or are unbound.",
+      "sec": {
+        "quality": "Quality",
+        "view": "View",
+        "general": "General",
+        "scaleText": "Scale and Text",
+        "panels": "Panels",
+        "unitFrames": "Unit Frames",
+        "actionBars": "Action Bars",
+        "chat": "Chat",
+        "combatTooltips": "Combat and Tooltips",
+        "hudExtras": "HUD Extras",
+        "motionContrast": "Motion and Contrast",
+        "content": "Content",
+        "camera": "Camera",
+        "movement": "Movement",
+        "combat": "Combat",
+        "feedback": "Feedback",
+        "inputMode": "Input Mode",
+        "feel": "Feel",
+        "sticks": "Sticks",
+        "look": "Look",
+        "buttons": "Buttons",
+        "volume": "Volume",
+        "toggles": "Toggles",
+        "performance": "Performance",
+        "support": "Support",
+        "about": "About"
+      }
     },
     "controller": {
       "title": "Kontroler",
@@ -596,7 +676,8 @@ export const id_ID: EnTranslations = {
       "buttons": "Tata Letak Tombol",
       "resetButtons": "Atur Ulang Tata Letak Tombol",
       "menuAction": "Menu Game",
-      "help": "Tuas kiri untuk bergerak, tuas kanan untuk melihat. Buka jendela untuk memakai penunjuk di layar."
+      "help": "Tuas kiri untuk bergerak, tuas kanan untuk melihat. Buka jendela untuk memakai penunjuk di layar.",
+      "duplicate": "Also bound to {buttons}"
     },
     "perf": {
       "title": "Lapisan Performa",
@@ -729,7 +810,11 @@ export const id_ID: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "Rakitan {n}"
+      "defaultBuildName": "Rakitan {n}",
+      "choicesTab": "Choices",
+      "resetChoices": "Reset choices",
+      "tierLevel": "Level {n}",
+      "tierLevelLabel": "Level"
     },
     "tips": {
       "joinChannels": "Tips: ketik /join world atau /join lfg untuk mengobrol dengan pemain di seluruh dunia."
@@ -5117,6 +5202,8 @@ export const id_ID: EnTranslations = {
       "buybackTitle": "Beli Kembali",
       "buybackEmpty": "Tidak ada barang",
       "buybackAria": "Beli kembali {item} seharga {price}",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "Rolled stats cannot be recovered by buyback.",
       "sellQuantityTitle": "Jual {item}",
       "sellQuantityInput": "Jumlah yang dijual",
       "sellQuantityConfirm": "Jual",

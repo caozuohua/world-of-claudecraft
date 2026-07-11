@@ -238,7 +238,8 @@ export const es_ES: EnTranslations = {
         "eligible": "Recompensas desbloqueadas.",
         "no_wallet": "Conecta una cartera con al menos $20 USD en WOC.",
         "under_minimum": "La cartera está por debajo del mínimo de $20 USD en WOC.",
-        "price_unavailable": "El precio de WOC no está disponible; las recompensas están bloqueadas temporalmente."
+        "price_unavailable": "El precio de WOC no está disponible; las recompensas están bloqueadas temporalmente.",
+        "banned": "You are banned from Daily Rewards. Reason: {reason}"
       }
     },
     "theme": {
@@ -320,6 +321,8 @@ export const es_ES: EnTranslations = {
       "haptics": "Vibración",
       "hapticsOff": "Vibración desactivada",
       "toggleHaptics": "Alternar vibración",
+      "showMenuButtons": "Show menu buttons",
+      "hideMenuButtons": "Hide menu buttons",
       "hotbarPage": "Habilidades",
       "hotbarPageAria": "Mostrar el siguiente conjunto de habilidades",
       "actionRing": "Acciones de combate",
@@ -584,7 +587,84 @@ export const es_ES: EnTranslations = {
       "showSecondaryActionBar": "Mostrar barra de acción secundaria",
       "showDailyRewardsChest": "Mostrar cofre de recompensas diarias",
       "mobileCameraJoystick": "Palanca de mando de la cámara",
-      "mobileLeftHanded": "Diseño para zurdos"
+      "mobileLeftHanded": "Diseño para zurdos",
+      "ia": {
+        "railDisplay": "Display",
+        "railInput": "Input",
+        "railSystem": "System",
+        "catOverviewName": "Overview",
+        "catOverviewSub": "Pinned essentials, quick actions, and what changed.",
+        "catGraphicsSub": "Quality, view, and world visuals.",
+        "catInterfaceSub": "HUD scale, panels, chat, and unit frames.",
+        "catAccessibilityName": "Accessibility",
+        "catAccessibilitySub": "Motion, contrast, and content comfort.",
+        "catControlsName": "Controls",
+        "catControlsSub": "Camera, movement, combat, and feedback.",
+        "catKeybindsSub": "Bind keys for every action.",
+        "catControllerSub": "Gamepad feel and button layout.",
+        "catTouchName": "Touch",
+        "catTouchSub": "On-screen sticks, look, and buttons.",
+        "catAudioSub": "Volume and sound toggles.",
+        "catSystemName": "System",
+        "catSystemSub": "Performance, support, and about."
+      },
+      "done": "Done",
+      "resetAllTitle": "Reset all settings?",
+      "resetAllBody": "This restores every setting to its default. This cannot be undone.",
+      "searchPlaceholder": "Search settings",
+      "searchScopeAll": "All settings",
+      "searchScopeThis": "This section",
+      "searchEmpty": "No settings match your search.",
+      "searchGoTo": "Go to {category}",
+      "modeOnline": "Online",
+      "modeOffline": "Offline",
+      "changed": "{count} changed",
+      "changedSummary": "{count} changed from defaults",
+      "legend": {
+        "category": "Category",
+        "navigate": "Navigate",
+        "select": "Select",
+        "back": "Back",
+        "reset": "Reset",
+        "clear": "Clear",
+        "page": "Page"
+      },
+      "keybindCleared": "Cleared {action}",
+      "keybindRebinding": "Rebinding {action}. Press a key, or Escape to cancel.",
+      "keybindEvicted": "Bound {key} to {action}; removed from {evicted}",
+      "keybindTaken": "Key removed",
+      "keybindUnbound": "{action} has no key",
+      "keybindModifierHint": "Tip: you can bind modifier combinations. Hold Shift, Ctrl, or Alt while pressing a key to capture the combo (for example Shift+1).",
+      "conflictDot": "Binding conflict",
+      "overviewConflictAlert": "Some key bindings conflict or are unbound.",
+      "sec": {
+        "quality": "Quality",
+        "view": "View",
+        "general": "General",
+        "scaleText": "Scale and Text",
+        "panels": "Panels",
+        "unitFrames": "Unit Frames",
+        "actionBars": "Action Bars",
+        "chat": "Chat",
+        "combatTooltips": "Combat and Tooltips",
+        "hudExtras": "HUD Extras",
+        "motionContrast": "Motion and Contrast",
+        "content": "Content",
+        "camera": "Camera",
+        "movement": "Movement",
+        "combat": "Combat",
+        "feedback": "Feedback",
+        "inputMode": "Input Mode",
+        "feel": "Feel",
+        "sticks": "Sticks",
+        "look": "Look",
+        "buttons": "Buttons",
+        "volume": "Volume",
+        "toggles": "Toggles",
+        "performance": "Performance",
+        "support": "Support",
+        "about": "About"
+      }
     },
     "controller": {
       "title": "Mando",
@@ -596,7 +676,8 @@ export const es_ES: EnTranslations = {
       "buttons": "Distribución de botones",
       "resetButtons": "Restablecer distribución de botones",
       "menuAction": "Menú del juego",
-      "help": "El stick izquierdo mueve, el derecho controla la cámara. Abre una ventana para usar el puntero en pantalla."
+      "help": "El stick izquierdo mueve, el derecho controla la cámara. Abre una ventana para usar el puntero en pantalla.",
+      "duplicate": "Also bound to {buttons}"
     },
     "perf": {
       "title": "Superposición de rendimiento",
@@ -729,7 +810,11 @@ export const es_ES: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "Configuración {n}"
+      "defaultBuildName": "Configuración {n}",
+      "choicesTab": "Choices",
+      "resetChoices": "Reset choices",
+      "tierLevel": "Level {n}",
+      "tierLevelLabel": "Level"
     },
     "tips": {
       "joinChannels": "Consejo: escribe /join world o /join lfg para chatear con jugadores de todas partes del mundo."
@@ -5117,6 +5202,8 @@ export const es_ES: EnTranslations = {
       "buybackTitle": "Recomprar",
       "buybackEmpty": "Sin objetos",
       "buybackAria": "Recomprar {item} por {price}",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "Rolled stats cannot be recovered by buyback.",
       "sellQuantityTitle": "Vender {item}",
       "sellQuantityInput": "Cantidad a vender",
       "sellQuantityConfirm": "Vender",

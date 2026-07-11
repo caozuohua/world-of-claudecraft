@@ -21,7 +21,10 @@ const GROUPS: Group[] = [
     heading: 'guide.controls.groupMovement',
     rows: [
       { keys: ['W', 'A', 'S', 'D'], label: 'controls.moveTurn' },
-      { keys: ['Q', 'E'], label: 'controls.strafe' },
+      // Strafe ships unbound by default (Q/E belong to the action bar, slots 11
+      // and 12); the key cell reuses the keybind pane's Unbound label, and the
+      // page intro already says every binding is rebindable in the options.
+      { keys: ['hud.options.unbound'], label: 'controls.strafe' },
       { keys: ['Space'], label: 'controls.jump' },
       { keys: ['R'], label: 'controls.autorun' },
     ],
@@ -33,7 +36,7 @@ const GROUPS: Group[] = [
       { keys: ['H'], label: 'guide.controls.targetFriendly' },
       { keys: ['J'], label: 'guide.controls.cycleFriendly' },
       { keys: ['F'], label: 'controls.interact' },
-      { keys: ['1', '0'], label: 'guide.controls.abilities' },
+      { keys: ['1', '0', 'Q', 'E'], label: 'guide.controls.abilities' },
     ],
   },
   {
@@ -46,7 +49,7 @@ const GROUPS: Group[] = [
       { keys: ['M'], label: 'controls.worldMap' },
       { keys: ['B'], label: 'controls.bags' },
       { keys: ['N'], label: 'guide.controls.talents' },
-      { keys: ['Z'], label: 'guide.controls.deeds' },
+      { keys: ['Shift+Z'], label: 'guide.controls.deeds' },
       { keys: ['T'], label: 'guide.controls.crafting' },
       { keys: ['O'], label: 'controls.friends' },
       { keys: ['G'], label: 'guide.controls.arena' },
@@ -55,6 +58,7 @@ const GROUPS: Group[] = [
       { keys: ['I'], label: 'guide.controls.calendar' },
       { keys: ['U'], label: 'guide.controls.discord' },
       { keys: ['V'], label: 'controls.nameplates' },
+      { keys: ['Z'], label: 'hud.keybinds.actions.meters' },
       { keys: ['X'], label: 'controls.emoteWheel' },
       { keys: ['Enter'], label: 'controls.chat' },
     ],

@@ -238,7 +238,8 @@ export const ru_RU: EnTranslations = {
         "eligible": "Награды открыты.",
         "no_wallet": "Подключите кошелек с не менее чем $20 USD в WOC.",
         "under_minimum": "Кошелек ниже минимума в $20 USD WOC.",
-        "price_unavailable": "Цена WOC недоступна, награды временно заблокированы."
+        "price_unavailable": "Цена WOC недоступна, награды временно заблокированы.",
+        "banned": "Вам запрещено участвовать в ежедневных наградах. Причина: {reason}"
       }
     },
     "theme": {
@@ -320,6 +321,8 @@ export const ru_RU: EnTranslations = {
       "haptics": "Вибрация",
       "hapticsOff": "Вибрация выкл.",
       "toggleHaptics": "Вкл/выкл вибрацию",
+      "showMenuButtons": "Показать кнопки меню",
+      "hideMenuButtons": "Скрыть кнопки меню",
       "hotbarPage": "Навыки",
       "hotbarPageAria": "Показать следующий набор навыков",
       "actionRing": "Боевые действия",
@@ -584,7 +587,84 @@ export const ru_RU: EnTranslations = {
       "showSecondaryActionBar": "Показывать вторичную панель действий",
       "showDailyRewardsChest": "Показывать сундук ежедневных наград",
       "mobileCameraJoystick": "Джойстик камеры",
-      "mobileLeftHanded": "Раскладка для левшей"
+      "mobileLeftHanded": "Раскладка для левшей",
+      "ia": {
+        "railDisplay": "Экран",
+        "railInput": "Ввод",
+        "railSystem": "Система",
+        "catOverviewName": "Обзор",
+        "catOverviewSub": "Закрепленные настройки, быстрые действия и что изменилось.",
+        "catGraphicsSub": "Качество, обзор и вид мира.",
+        "catInterfaceSub": "Масштаб интерфейса, панели, чат и рамки юнитов.",
+        "catAccessibilityName": "Доступность",
+        "catAccessibilitySub": "Анимация, контраст и комфорт контента.",
+        "catControlsName": "Управление",
+        "catControlsSub": "Камера, движение, бой и отклик.",
+        "catKeybindsSub": "Назначьте клавиши для всех действий.",
+        "catControllerSub": "Отклик геймпада и раскладка кнопок.",
+        "catTouchName": "Сенсор",
+        "catTouchSub": "Экранные стики, обзор и кнопки.",
+        "catAudioSub": "Громкость и переключатели звука.",
+        "catSystemName": "Система",
+        "catSystemSub": "Производительность, поддержка и о программе."
+      },
+      "done": "Done",
+      "resetAllTitle": "Сбросить все настройки?",
+      "resetAllBody": "Все настройки вернутся к значениям по умолчанию. Это действие нельзя отменить.",
+      "searchPlaceholder": "Поиск настроек",
+      "searchScopeAll": "Все настройки",
+      "searchScopeThis": "Этот раздел",
+      "searchEmpty": "Нет настроек, соответствующих запросу.",
+      "searchGoTo": "Go to {category}",
+      "modeOnline": "В сети",
+      "modeOffline": "Не в сети",
+      "changed": "Изменено: {count}",
+      "changedSummary": "Изменено относительно стандартных: {count}",
+      "legend": {
+        "category": "Категория",
+        "navigate": "Навигация",
+        "select": "Выбрать",
+        "back": "Back",
+        "reset": "Сброс",
+        "clear": "Очистить",
+        "page": "Page"
+      },
+      "keybindCleared": "Очищено: {action}",
+      "keybindRebinding": "Переназначение «{action}». Нажмите клавишу или Escape для отмены.",
+      "keybindEvicted": "{key} назначена на «{action}»; снята с «{evicted}».",
+      "keybindTaken": "Клавиша снята",
+      "keybindUnbound": "{action} has no key",
+      "keybindModifierHint": "Совет: можно назначать сочетания с модификатором. Удерживайте Shift, Ctrl или Alt и нажмите клавишу, чтобы записать сочетание (например, Shift+1).",
+      "conflictDot": "Конфликт клавиш",
+      "overviewConflictAlert": "Некоторые привязки клавиш конфликтуют или не назначены.",
+      "sec": {
+        "quality": "Качество",
+        "view": "View",
+        "general": "Основные",
+        "scaleText": "Масштаб и текст",
+        "panels": "Панели",
+        "unitFrames": "Рамки существ",
+        "actionBars": "Панели действий",
+        "chat": "Chat",
+        "combatTooltips": "Бой и подсказки",
+        "hudExtras": "Дополнения интерфейса",
+        "motionContrast": "Анимация и контраст",
+        "content": "Содержимое",
+        "camera": "Камера",
+        "movement": "Движение",
+        "combat": "Бой",
+        "feedback": "Отклик",
+        "inputMode": "Режим ввода",
+        "feel": "Feel",
+        "sticks": "Стики",
+        "look": "Look",
+        "buttons": "Кнопки",
+        "volume": "Громкость",
+        "toggles": "Переключатели",
+        "performance": "Производительность",
+        "support": "Поддержка",
+        "about": "О программе"
+      }
     },
     "controller": {
       "title": "Геймпад",
@@ -596,7 +676,8 @@ export const ru_RU: EnTranslations = {
       "buttons": "Раскладка кнопок",
       "resetButtons": "Сбросить раскладку кнопок",
       "menuAction": "Игровое меню",
-      "help": "Левый стик — движение, правый — камера. Откройте окно, чтобы использовать экранный указатель."
+      "help": "Левый стик отвечает за движение, правый наводит камеру. Откройте окно, чтобы использовать экранный указатель.",
+      "duplicate": "Также назначено на {buttons}"
     },
     "perf": {
       "title": "Оверлей производительности",
@@ -729,7 +810,11 @@ export const ru_RU: EnTranslations = {
       }
     },
     "talents": {
-      "defaultBuildName": "Билд {n}"
+      "defaultBuildName": "Билд {n}",
+      "choicesTab": "Выбор талантов",
+      "resetChoices": "Сбросить выбор",
+      "tierLevel": "Уровень {n}",
+      "tierLevelLabel": "Уровень"
     },
     "tips": {
       "joinChannels": "Совет: введите /join world или /join lfg, чтобы общаться с игроками по всему миру."
@@ -5117,6 +5202,8 @@ export const ru_RU: EnTranslations = {
       "buybackTitle": "Выкуп",
       "buybackEmpty": "Нет предметов",
       "buybackAria": "Выкупить {item} за {price}",
+      "sellItemAria": "Sell {item} for {price}",
+      "sellRolledWarning": "Случайные характеристики нельзя вернуть выкупом.",
       "sellQuantityTitle": "Продать {item}",
       "sellQuantityInput": "Количество для продажи",
       "sellQuantityConfirm": "Продать",

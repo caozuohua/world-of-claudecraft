@@ -2574,6 +2574,7 @@ export class Sim {
       eligibility: {
         eligible: false,
         reason: 'no_wallet',
+        banReason: null,
         walletPubkey: null,
         wocBalance: null,
         wocUsdPrice: null,

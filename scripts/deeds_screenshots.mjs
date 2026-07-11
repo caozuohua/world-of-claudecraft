@@ -93,14 +93,23 @@ async function evr(fn, ...args) {
 
 // Press a real key, verify with `expect`, and fall back to a window keydown
 // dispatch (some headless environments drop CDP key delivery entirely).
-async function pressKey(code, expect) {
+// A 'Shift+KeyX' chord holds Shift around the press on both paths.
+async function pressKey(combo, expect) {
+  const shifted = combo.startsWith('Shift+');
+  const code = shifted ? combo.slice('Shift+'.length) : combo;
+  if (shifted) await page.keyboard.down('Shift');
   await page.keyboard.press(code);
+  if (shifted) await page.keyboard.up('Shift');
   await sleep(700);
   if (await evr(expect)) return true;
-  await evr((c) => {
-    window.dispatchEvent(new KeyboardEvent('keydown', { code: c, bubbles: true }));
-    window.dispatchEvent(new KeyboardEvent('keyup', { code: c, bubbles: true }));
-  }, code);
+  await evr(
+    (c, s) => {
+      window.dispatchEvent(new KeyboardEvent('keydown', { code: c, shiftKey: s, bubbles: true }));
+      window.dispatchEvent(new KeyboardEvent('keyup', { code: c, shiftKey: s, bubbles: true }));
+    },
+    code,
+    shifted,
+  );
   await sleep(700);
   return evr(expect);
 }
@@ -354,7 +363,7 @@ await escapeUntilClear();
 // and the three chronicler portraits. Title equip comes first so every later
 // surface carries it.
 // ---------------------------------------------------------------------------
-check(await pressKey('KeyZ', deedsOpen), 'KeyZ opens the Book of Deeds');
+check(await pressKey('Shift+KeyZ', deedsOpen), 'Shift+KeyZ opens the Book of Deeds');
 await evr(() => {
   for (const b of document.querySelectorAll('#deeds-window [data-cat]')) {
     if (b.dataset.cat === 'titles') b.click();
@@ -461,7 +470,7 @@ for (const c of CHRONICLERS) {
 // keeps its earns, title, and watchlist across flips).
 // ---------------------------------------------------------------------------
 async function openBook(phone) {
-  if (!phone) return pressKey('KeyZ', deedsOpen);
+  if (!phone) return pressKey('Shift+KeyZ', deedsOpen);
   // Real mobile flow: the More tray's Deeds button (fixed elements have a
   // null offsetParent, so probe visibility via rects).
   await evr(() => document.querySelector('#mobile-more')?.click());
@@ -469,7 +478,7 @@ async function openBook(phone) {
   await evr(() => document.querySelector('#mobile-deeds')?.click());
   await sleep(900);
   if (await evr(deedsOpen)) return true;
-  return pressKey('KeyZ', deedsOpen);
+  return pressKey('Shift+KeyZ', deedsOpen);
 }
 
 async function surfacePass(vp, phone) {
