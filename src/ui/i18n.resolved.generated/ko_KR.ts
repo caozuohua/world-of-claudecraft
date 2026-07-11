@@ -2101,7 +2101,7 @@ export const ko_KR: EnTranslations = {
       "heroicTerm": "영웅",
       "heroicDef": "던전이나 공격대의 더 어려운 판으로, 장비를 갖춘 최종 단계 파티에 맞춰 조정되어 있습니다. 영웅 우두머리는 업그레이드된 전리품을 떨어뜨리고, 마지막 우두머리는 영웅의 징표를 내줍니다.",
       "lockoutTerm": "Lockout",
-      "lockoutDef": "A daily cap on the biggest repeatable rewards. Each heroic dungeon pays out one clear per day, the raid tracks normal and heroic separately, and looting a world boss starts yours. A run you cleared stays open to your own party.",
+      "lockoutDef": "A daily cap on the biggest repeatable rewards. Each heroic dungeon pays out one clear per day, the raid tracks normal and heroic separately, and looting a world boss starts yours. A cleared five-player run stays open to its own party; the locked raid door does not reopen until reset.",
       "restedTerm": "Rested",
       "restedDef": "Bonus experience your character banks while resting at an inn, out of combat. Your next kills earn extra experience until the pool runs dry.",
       "petBarTerm": "Pet bar",

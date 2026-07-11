@@ -2101,7 +2101,7 @@ export const it_IT: EnTranslations = {
       "heroicTerm": "Heroic",
       "heroicDef": "The harder version of a dungeon or the raid, tuned for geared endgame parties. Heroic bosses drop upgraded loot, and the final boss pays Heroic Marks.",
       "lockoutTerm": "Lockout",
-      "lockoutDef": "A daily cap on the biggest repeatable rewards. Each heroic dungeon pays out one clear per day, the raid tracks normal and heroic separately, and looting a world boss starts yours. A run you cleared stays open to your own party.",
+      "lockoutDef": "A daily cap on the biggest repeatable rewards. Each heroic dungeon pays out one clear per day, the raid tracks normal and heroic separately, and looting a world boss starts yours. A cleared five-player run stays open to its own party; the locked raid door does not reopen until reset.",
       "restedTerm": "Rested",
       "restedDef": "Bonus experience your character banks while resting at an inn, out of combat. Your next kills earn extra experience until the pool runs dry.",
       "petBarTerm": "Pet bar",

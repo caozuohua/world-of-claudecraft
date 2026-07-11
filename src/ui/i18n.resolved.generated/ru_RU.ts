@@ -2101,7 +2101,7 @@ export const ru_RU: EnTranslations = {
       "heroicTerm": "Героический",
       "heroicDef": "Более сложная версия подземелья или рейда, рассчитанная на снаряжённые группы максимального уровня. Героические боссы роняют улучшенную добычу, а последний босс платит Героическими знаками.",
       "lockoutTerm": "Lockout",
-      "lockoutDef": "A daily cap on the biggest repeatable rewards. Each heroic dungeon pays out one clear per day, the raid tracks normal and heroic separately, and looting a world boss starts yours. A run you cleared stays open to your own party.",
+      "lockoutDef": "A daily cap on the biggest repeatable rewards. Each heroic dungeon pays out one clear per day, the raid tracks normal and heroic separately, and looting a world boss starts yours. A cleared five-player run stays open to its own party; the locked raid door does not reopen until reset.",
       "restedTerm": "Rested",
       "restedDef": "Bonus experience your character banks while resting at an inn, out of combat. Your next kills earn extra experience until the pool runs dry.",
       "petBarTerm": "Pet bar",

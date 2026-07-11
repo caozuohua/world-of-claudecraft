@@ -3,6 +3,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import { assertFamiliesKnown } from '../scripts/wiki/family_guard.mjs';
 import { BIND_ACTIONS } from '../src/game/keybinds';
 import {
   GUIDE_CLASSES,
@@ -260,6 +261,7 @@ describe('Guide model viewer asset integrity', () => {
   it('resolves every class, warlock pet, and creature model key in GUIDE_MODELS', () => {
     const keys = new Set<string>();
     for (const c of GUIDE_CLASSES) if (c.model) keys.add(c.model);
+    for (const d of GUIDE_DRUID_FORMS) if (d.model) keys.add(d.model);
     for (const p of GUIDE_WARLOCK_PETS) if (p.model) keys.add(p.model);
     for (const f of GUIDE_FAMILIES) for (const c of f.creatures) if (c.model) keys.add(c.model);
     expect(keys.size).toBeGreaterThan(0);
@@ -379,7 +381,21 @@ describe('Guide bestiary spoiler safety', () => {
 // together, or this completeness gate and the published set silently diverge.
 describe('Guide bestiary completeness', () => {
   const published = new Set(GUIDE_FAMILIES.flatMap((f) => f.creatures.map((c) => c.templateId)));
-  const isFixture = (m: { dmgBase?: number; dmgPerLevel?: number }) => !m.dmgBase && !m.dmgPerLevel;
+  const isFixture = (m: { dummy?: boolean }) => !!m.dummy;
+
+  it('keys the fixture exclusion off the sim dummy flag (pinned to the training dummy)', () => {
+    // The generator excludes fixtures by the template's own dummy flag, so a zero-damage
+    // real creature (caster- or hazard-only) can never silently vanish from the bestiary.
+    expect(MOBS.training_dummy?.dummy).toBe(true);
+    expect(published.has('training_dummy')).toBe(false);
+  });
+
+  it('fails loudly on a family with no FAMILY_ORDER slot (the generator guard throws)', () => {
+    expect(() => assertFamiliesKnown({ beast: new Map() }, ['beast', 'spider'])).not.toThrow();
+    expect(() => assertFamiliesKnown({ gryphon: new Map() }, ['beast', 'spider'])).toThrow(
+      /gryphon/,
+    );
+  });
 
   it('publishes every camped, wild, non-fixture creature', () => {
     const missing: string[] = [];
@@ -612,6 +628,11 @@ describe('Guide deeds spoiler safety', () => {
     }
     // The first Chronicler is sanctioned flavor: the page names Saul.
     expect(t('guide.deedsPage.chroniclesBody' as never)).toContain('Saul');
+    // The Renown standings live on the Leaderboard's Renown tab, NOT in the Book of
+    // Deeds window; the corrected copy is pinned so the old misdirection cannot return.
+    expect(t('guide.deedsPage.standingsNote' as never)).toContain('Leaderboard');
+    expect(t('guide.deedsPage.standingsNote' as never)).not.toContain('Book of Deeds');
+    expect(t('guide.glossary.renownDef' as never)).toContain('Leaderboard');
     // The per-category heading is a translator-controlled format, not a hardcoded join.
     expect(t('guide.deedsPage.catHeading' as never, { label: 'Combat', count: '7' })).toBe(
       'Combat (7)',
@@ -811,5 +832,33 @@ describe('Guide model stills', () => {
     expect(orphans, `orphan stills with no figure (delete them): ${orphans.join(', ')}`).toEqual(
       [],
     );
+  });
+
+  it('publishes exactly the three named druid forms (the gallery label map mirrors this)', () => {
+    // models.ts labels forms through its FORM_NAME literal map; a fourth form added in
+    // the generator would silently render as "Druid Forms" unless this pin reds first.
+    expect(GUIDE_DRUID_FORMS.map((d) => d.id)).toEqual(['form_bear', 'form_cat', 'form_travel']);
+  });
+});
+
+// Content pins for corrections whose old, wrong copy every other gate would accept:
+// key resolution and render tests only prove a string exists, not that it is true.
+describe('Guide corrected-prose pins', () => {
+  it('names the graveyard keeper by its in-game name on every death surface', () => {
+    setLanguage('en');
+    expect(t('guide.glossary.spiritHealerTerm' as never)).toBe('The Pale Keeper');
+    for (const key of [
+      'guide.combat.deathBody',
+      'guide.howToPlay.deathBody',
+      'guide.wishPage.i2Body',
+    ]) {
+      expect(t(key as never), key).toContain('Pale Keeper');
+      expect(t(key as never), key).not.toContain('Spirit Healer');
+    }
+  });
+
+  it('keeps the delve death exception on the combat death rules', () => {
+    setLanguage('en');
+    expect(t('guide.combat.deathBody' as never)).toContain('Delves are the exception');
   });
 });

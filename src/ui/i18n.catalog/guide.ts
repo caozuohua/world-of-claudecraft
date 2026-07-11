@@ -54,9 +54,12 @@ export const guideStrings = {
     closeMenu: 'Close menu',
     primary: 'Guide sections',
     topics: 'Topics',
+    // Deprecated: the sidebar now uses sidebarLabel and the TOC renders guide.toc.heading,
+    // so this is referenced nowhere. Kept only so existing locale overlays stay valid;
+    // removing it plus its overlay rows is a maintainer chore.
     onThisPage: 'On this page',
     // Distinct landmark names: the topics sidebar must not share a label with the TOC
-    // ("On this page") or the header nav ("Guide sections").
+    // (guide.toc.heading, "On this page") or the header nav ("Guide sections").
     sidebarLabel: 'Guide topics',
     backToGame: 'Back to the game',
   },
@@ -178,7 +181,7 @@ export const guideStrings = {
       q1: 'Is it free to play?',
       a1: 'Yes. The whole game is free to the level cap, and it is open source on GitHub.',
       q2: 'Do I need a crypto wallet?',
-      a2: 'No. The game is fully playable without one. The optional community token unlocks cosmetic flair and the daily rewards board, and it never affects power.',
+      a2: 'No. The game is fully playable without one. The optional community token only adds cosmetic flair and a share of the daily rewards prize pool, and it never affects power.',
       q3: 'Can I play offline?',
       a3: 'Yes. There is an instant single-player mode in your browser, plus the shared online world.',
       q4: 'How long to reach max level?',
@@ -481,7 +484,7 @@ export const guideStrings = {
       'The harder version of a dungeon or the raid, tuned for geared endgame parties. Heroic bosses drop upgraded loot, and the final boss pays Heroic Marks.',
     lockoutTerm: 'Lockout',
     lockoutDef:
-      'A daily cap on the biggest repeatable rewards. Each heroic dungeon pays out one clear per day, the raid tracks normal and heroic separately, and looting a world boss starts yours. A run you cleared stays open to your own party.',
+      'A daily cap on the biggest repeatable rewards. Each heroic dungeon pays out one clear per day, the raid tracks normal and heroic separately, and looting a world boss starts yours. A cleared five-player run stays open to its own party; the locked raid door does not reopen until reset.',
     restedTerm: 'Rested',
     restedDef:
       'Bonus experience your character banks while resting at an inn, out of combat. Your next kills earn extra experience until the pool runs dry.',
@@ -517,7 +520,7 @@ export const guideStrings = {
     q1: 'Is it really free?',
     a1: 'Yes. The whole game is free to play to the level cap, and the source code is open on GitHub.',
     q2: 'Do I need a crypto wallet or any tokens?',
-    a2: 'No. The game is fully playable without one. The optional community token unlocks cosmetic flair and the daily rewards board with its own prize pool, and it never affects power or progression.',
+    a2: 'No. The game is fully playable without one. The optional community token only adds cosmetic flair and a share of the daily rewards prize pool, and it never affects power or progression.',
     q3: 'Can I play on my phone?',
     a3: 'Yes. The game runs in a mobile browser with touch controls, and there is a desktop launcher as well.',
     q4: 'Can I play offline or solo?',

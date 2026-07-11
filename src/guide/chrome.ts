@@ -122,7 +122,7 @@ export function buildChrome(
       </div>
     </header>
     <div class="guide-layout">
-      <aside class="guide-sidebar" id="guide-sidebar" aria-label="${esc(t('guide.nav.sidebarLabel'))}" hidden>
+      <aside class="guide-sidebar" id="guide-sidebar" hidden>
         <button type="button" class="guide-topics-toggle" aria-expanded="false" aria-controls="guide-sidebar-nav">${esc(t('guide.nav.topics'))}<span class="guide-topics-current"></span></button>
         <nav class="guide-sidebar-nav" id="guide-sidebar-nav" aria-label="${esc(t('guide.nav.sidebarLabel'))}">
           ${sidebarHtml()}

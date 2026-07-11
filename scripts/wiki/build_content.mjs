@@ -14,6 +14,7 @@
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import * as esbuild from 'esbuild';
+import { assertFamiliesKnown } from './family_guard.mjs';
 import { stillUrl } from './still_key.mjs';
 
 const root = process.cwd();
@@ -283,10 +284,7 @@ for (const [id, m] of Object.entries({
 }
 // A published creature whose family lacks an order slot would silently vanish from the
 // bestiary (the freshness test faithfully reproduces a buggy generator), so fail loudly.
-const unknownFamilies = Object.keys(famMap).filter((f) => !FAMILY_ORDER.includes(f));
-if (unknownFamilies.length) {
-  throw new Error(`bestiary family missing from FAMILY_ORDER: ${unknownFamilies.join(', ')}`);
-}
+assertFamiliesKnown(famMap, FAMILY_ORDER);
 const families = FAMILY_ORDER.filter((f) => famMap[f]).map((f) => ({
   family: f,
   creatures: [...famMap[f].values()].sort((a, b) => a.min - b.min || a.name.localeCompare(b.name)),

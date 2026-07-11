@@ -1695,11 +1695,16 @@ body[data-guide-route="home"] .guide-main {
   html {
     scroll-behavior: auto;
   }
-  * {
+  /* Pseudo-elements too: a bare * matches elements only, and the hero backdrop
+     drift animates ::before. The iteration cap parks infinite loops for good. */
+  *,
+  *::before,
+  *::after {
     transition-duration: 0.01ms !important;
     /* Delays too: the drawer's visibility handoff rides a transition-delay. */
     transition-delay: 0s !important;
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 
@@ -2470,13 +2475,6 @@ a.guide-poi:hover {
   font-weight: 600;
   min-width: 0;
   overflow-wrap: anywhere;
-}
-.guide-search-opt-type {
-  flex: none;
-  font-size: var(--g-text-2xs);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--g-text-muted);
 }
 .guide-search-empty {
   margin: 0;
@@ -3348,7 +3346,8 @@ a.guide-poi:hover {
    the illuminated deeds ledger. Presentation only, appended at equal specificity. */
 
 /* Every anchor target (TOC #sec-N, search deep links, cross-page hashes) clears the
-   sticky header instead of landing beneath it. */
+   sticky header instead of landing beneath it, the skip-link target included. */
+.guide-main[id],
 .guide-main [id] {
   scroll-margin-block-start: calc(var(--g-header-h) + var(--g-md));
 }
@@ -3424,11 +3423,16 @@ a.guide-poi:hover {
   will-change: transform;
 }
 
-/* Cross-fade page morphs (View Transitions API): pace the default fade on the motion
-   tokens. Browsers without support ignore this; app.ts falls back to a plain swap. */
+/* Cross-fade page morphs (View Transitions API). animation-duration takes a bare time
+   (the motion tokens carry an easing tail, which would invalidate to 0s here), so the
+   260ms medium beat is written out. The snapshot overlay also must not eat clicks.
+   Browsers without support ignore all of this; app.ts falls back to a plain swap. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: var(--g-motion-med);
+  animation-duration: 260ms;
+}
+::view-transition {
+  pointer-events: none;
 }
 
 /* The full roll of deeds reads as an illuminated ledger: each art-backed deed carries
@@ -3445,6 +3449,21 @@ a.guide-poi:hover {
   height: 28px;
   border-radius: var(--g-radius-sm);
   box-shadow: 0 0 0 1px var(--g-border-soft);
+}
+
+/* Screen-reader-only text (the .guide-search-label recipe, shared). Grouped search
+   options carry their kind this way: aria-activedescendant reads the option, not the
+   group label, so the kind must live inside the option text. */
+.guide-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Search results grouped by kind, each under a small eyebrow heading. */

@@ -17,7 +17,7 @@ import {
 import { GLOSSARY_TERMS } from './pages/glossary';
 import { GUIDE_ROUTES, hrefFor } from './routes';
 
-interface SearchEntry {
+export interface SearchEntry {
   label: string;
   type: string;
   href: string;
@@ -26,7 +26,8 @@ interface SearchEntry {
 
 const MAX_RESULTS = 10;
 
-function buildIndex(): SearchEntry[] {
+/** Exported for the node-level tests; the UI consumes it through mountSearch. */
+export function buildIndex(): SearchEntry[] {
   const entries: SearchEntry[] = [];
   const add = (label: string, type: string, href: string, extra = '') => {
     if (label) entries.push({ label, type, href, haystack: `${label} ${extra}`.toLowerCase() });
@@ -96,7 +97,8 @@ function scoreEntry(e: SearchEntry, tokens: string[]): number {
   return score;
 }
 
-function rank(index: SearchEntry[], query: string): SearchEntry[] {
+/** Exported for the node-level tests; the UI consumes it through mountSearch. */
+export function rank(index: SearchEntry[], query: string): SearchEntry[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
   const tokens = q.split(/\s+/).filter(Boolean);
@@ -121,6 +123,19 @@ function highlightLabel(label: string, query: string): string {
     .split(re)
     .map((part, i) => (i % 2 === 1 ? `<mark>${esc(part)}</mark>` : esc(part)))
     .join('');
+}
+
+// Ranked results grouped by their type, keeping the score order both across groups (a
+// group sits where its best hit ranked) and within each group. Pure over its input, so
+// the node tests exercise it directly.
+export function groupByType(results: SearchEntry[]): [string, SearchEntry[]][] {
+  const groups = new Map<string, SearchEntry[]>();
+  for (const r of results) {
+    const g = groups.get(r.type);
+    if (g) g.push(r);
+    else groups.set(r.type, [r]);
+  }
+  return [...groups.entries()];
 }
 
 /** Wire the header search combobox. Cleaned up via the chrome's AbortSignal. */
@@ -170,22 +185,15 @@ export function mountSearch(root: HTMLElement, signal: AbortSignal): void {
       active = -1;
       return;
     }
-    // Group by kind under small eyebrow headings, keeping the score order both across
-    // groups (a group sits where its best hit ranked) and within each group. Option ids
-    // stay sequential across groups so the combobox keyboard order is unchanged.
-    const groups = new Map<string, typeof results>();
-    for (const r of results) {
-      const g = groups.get(r.type);
-      if (g) g.push(r);
-      else groups.set(r.type, [r]);
-    }
+    // Group by kind under small eyebrow headings. Option ids stay sequential across
+    // groups so the combobox keyboard order is unchanged.
     let optId = 0;
-    panel.innerHTML = [...groups.entries()]
+    panel.innerHTML = groupByType(results)
       .map(([type, rs]) => {
         const opts = rs
           .map(
             (r) =>
-              `<a class="guide-search-opt" role="option" id="gso-${optId++}" href="${esc(r.href)}" aria-selected="false" tabindex="-1"><span class="guide-search-opt-label">${highlightLabel(r.label, input.value)}</span></a>`,
+              `<a class="guide-search-opt" role="option" id="gso-${optId++}" href="${esc(r.href)}" aria-selected="false" tabindex="-1"><span class="guide-search-opt-label">${highlightLabel(r.label, input.value)}</span><span class="guide-sr-only">, ${esc(r.type)}</span></a>`,
           )
           .join('');
         return `<div class="guide-search-group" role="group" aria-label="${esc(type)}"><div class="guide-search-group-h" aria-hidden="true">${esc(type)}</div>${opts}</div>`;

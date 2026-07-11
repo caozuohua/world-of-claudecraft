@@ -2101,7 +2101,7 @@ export const zh_TW: EnTranslations = {
       "heroicTerm": "英雄",
       "heroicDef": "地城或團隊副本的更高難度版本，為裝備精良的終局隊伍而調校。英雄首領會掉落升級版戰利品，最終首領還會給予英雄徽記。",
       "lockoutTerm": "Lockout",
-      "lockoutDef": "A daily cap on the biggest repeatable rewards. Each heroic dungeon pays out one clear per day, the raid tracks normal and heroic separately, and looting a world boss starts yours. A run you cleared stays open to your own party.",
+      "lockoutDef": "A daily cap on the biggest repeatable rewards. Each heroic dungeon pays out one clear per day, the raid tracks normal and heroic separately, and looting a world boss starts yours. A cleared five-player run stays open to its own party; the locked raid door does not reopen until reset.",
       "restedTerm": "Rested",
       "restedDef": "Bonus experience your character banks while resting at an inn, out of combat. Your next kills earn extra experience until the pool runs dry.",
       "petBarTerm": "Pet bar",
