@@ -238,7 +238,8 @@ export const zh_CN: EnTranslations = {
         "eligible": "奖励已解锁。",
         "no_wallet": "请连接一个持有至少价值 $20 USD 的 WOC 的钱包。",
         "under_minimum": "钱包低于 $20 USD WOC 的最低要求。",
-        "price_unavailable": "WOC 价格不可用，奖励暂时锁定。"
+        "price_unavailable": "WOC 价格不可用，奖励暂时锁定。",
+        "banned": "您已被禁止参加每日奖励。原因：{reason}"
       }
     },
     "theme": {

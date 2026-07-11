@@ -238,7 +238,8 @@ export const ja_JP: EnTranslations = {
         "eligible": "報酬が解放されました。",
         "no_wallet": "$20 USD 相当以上のWOCを保有するウォレットを接続してください。",
         "under_minimum": "ウォレットが最低額の $20 USD 相当のWOCを下回っています。",
-        "price_unavailable": "WOCの価格を取得できないため、報酬は一時的にロックされています。"
+        "price_unavailable": "WOCの価格を取得できないため、報酬は一時的にロックされています。",
+        "banned": "デイリー報酬への参加が禁止されています。理由: {reason}"
       }
     },
     "theme": {

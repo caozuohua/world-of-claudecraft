@@ -238,7 +238,8 @@ export const tr_TR: EnTranslations = {
         "eligible": "Ödüllerin kilidi açıldı.",
         "no_wallet": "En az 20 USD değerinde WOC bulunan bir cüzdan bağla.",
         "under_minimum": "Cüzdan, 20 USD değerindeki WOC alt sınırının altında.",
-        "price_unavailable": "WOC fiyatı alınamıyor, ödüller geçici olarak kilitli."
+        "price_unavailable": "WOC fiyatı alınamıyor, ödüller geçici olarak kilitli.",
+        "banned": "You are banned from Daily Rewards. Reason: {reason}"
       }
     },
     "theme": {

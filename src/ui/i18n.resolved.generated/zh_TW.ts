@@ -238,7 +238,8 @@ export const zh_TW: EnTranslations = {
         "eligible": "獎勵已解鎖。",
         "no_wallet": "請連接持有至少 $20 USD WOC 的錢包。",
         "under_minimum": "錢包低於 $20 USD 的 WOC 最低要求。",
-        "price_unavailable": "無法取得 WOC 價格，獎勵暫時鎖定。"
+        "price_unavailable": "無法取得 WOC 價格，獎勵暫時鎖定。",
+        "banned": "您已被禁止參加每日獎勵。原因：{reason}"
       }
     },
     "theme": {

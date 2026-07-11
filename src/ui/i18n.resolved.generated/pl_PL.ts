@@ -238,7 +238,8 @@ export const pl_PL: EnTranslations = {
         "eligible": "Nagrody odblokowane.",
         "no_wallet": "Podłącz portfel z co najmniej 20 USD w WOC.",
         "under_minimum": "Portfel jest poniżej minimum 20 USD w WOC.",
-        "price_unavailable": "Cena WOC jest niedostępna, nagrody są tymczasowo zablokowane."
+        "price_unavailable": "Cena WOC jest niedostępna, nagrody są tymczasowo zablokowane.",
+        "banned": "You are banned from Daily Rewards. Reason: {reason}"
       }
     },
     "theme": {

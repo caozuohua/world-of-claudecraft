@@ -100,6 +100,7 @@ export const zh_CN: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.reason.no_wallet': '请连接一个持有至少价值 $20 USD 的 WOC 的钱包。',
   'hudChrome.dailyRewards.reason.under_minimum': '钱包低于 $20 USD WOC 的最低要求。',
   'hudChrome.dailyRewards.reason.price_unavailable': 'WOC 价格不可用，奖励暂时锁定。',
+  'hudChrome.dailyRewards.reason.banned': '您已被禁止参加每日奖励。原因：{reason}',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': '正在观察 {name}',
   'hudChrome.readyCheck.prompt': '{name} 发起了准备确认。你准备好了吗？',

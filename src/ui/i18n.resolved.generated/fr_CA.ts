@@ -238,7 +238,8 @@ export const fr_CA: EnTranslations = {
         "eligible": "Récompenses débloquées.",
         "no_wallet": "Connectez un portefeuille contenant au moins 20 USD en WOC.",
         "under_minimum": "Le portefeuille est en dessous du minimum de 20 USD en WOC.",
-        "price_unavailable": "Le cours du WOC est indisponible, les récompenses sont temporairement verrouillées."
+        "price_unavailable": "Le cours du WOC est indisponible, les récompenses sont temporairement verrouillées.",
+        "banned": "You are banned from Daily Rewards. Reason: {reason}"
       }
     },
     "theme": {

@@ -238,7 +238,8 @@ export const ru_RU: EnTranslations = {
         "eligible": "Награды открыты.",
         "no_wallet": "Подключите кошелек с не менее чем $20 USD в WOC.",
         "under_minimum": "Кошелек ниже минимума в $20 USD WOC.",
-        "price_unavailable": "Цена WOC недоступна, награды временно заблокированы."
+        "price_unavailable": "Цена WOC недоступна, награды временно заблокированы.",
+        "banned": "Вам запрещено участвовать в ежедневных наградах. Причина: {reason}"
       }
     },
     "theme": {

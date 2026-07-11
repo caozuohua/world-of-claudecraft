@@ -238,7 +238,8 @@ export const en: EnTranslations = {
         "eligible": "Rewards unlocked.",
         "no_wallet": "Connect a wallet with at least $20 USD in WOC.",
         "under_minimum": "Wallet is below the $20 USD WOC minimum.",
-        "price_unavailable": "WOC price is unavailable, rewards are temporarily locked."
+        "price_unavailable": "WOC price is unavailable, rewards are temporarily locked.",
+        "banned": "You are banned from Daily Rewards. Reason: {reason}"
       }
     },
     "theme": {

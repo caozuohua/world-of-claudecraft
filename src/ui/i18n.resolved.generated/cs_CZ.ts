@@ -238,7 +238,8 @@ export const cs_CZ: EnTranslations = {
         "eligible": "Odměny odemčeny.",
         "no_wallet": "Připoj peněženku s alespoň 20 USD ve WOC.",
         "under_minimum": "Peněženka je pod minimem 20 USD ve WOC.",
-        "price_unavailable": "Cena WOC není dostupná, odměny jsou dočasně uzamčené."
+        "price_unavailable": "Cena WOC není dostupná, odměny jsou dočasně uzamčené.",
+        "banned": "You are banned from Daily Rewards. Reason: {reason}"
       }
     },
     "theme": {

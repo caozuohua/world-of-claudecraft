@@ -238,7 +238,8 @@ export const da_DK: EnTranslations = {
         "eligible": "Belønninger låst op.",
         "no_wallet": "Forbind en wallet med mindst 20 USD i WOC.",
         "under_minimum": "Wallet er under WOC-minimummet på 20 USD.",
-        "price_unavailable": "WOC-prisen er utilgængelig, belønninger er midlertidigt låst."
+        "price_unavailable": "WOC-prisen er utilgængelig, belønninger er midlertidigt låst.",
+        "banned": "You are banned from Daily Rewards. Reason: {reason}"
       }
     },
     "theme": {

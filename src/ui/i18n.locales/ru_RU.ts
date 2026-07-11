@@ -106,6 +106,8 @@ export const ru_RU: Partial<Record<TranslationKey, string>> = {
   'hudChrome.dailyRewards.reason.under_minimum': 'Кошелек ниже минимума в $20 USD WOC.',
   'hudChrome.dailyRewards.reason.price_unavailable':
     'Цена WOC недоступна, награды временно заблокированы.',
+  'hudChrome.dailyRewards.reason.banned':
+    'Вам запрещено участвовать в ежедневных наградах. Причина: {reason}',
   'hudChrome.keybinds.discord': 'Discord',
   'hudChrome.spectate.banner': 'Наблюдение за {name}',
   'hudChrome.readyCheck.prompt': '{name} начал проверку готовности. Вы готовы?',

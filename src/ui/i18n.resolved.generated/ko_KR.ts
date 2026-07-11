@@ -238,7 +238,8 @@ export const ko_KR: EnTranslations = {
         "eligible": "보상이 잠금 해제되었습니다.",
         "no_wallet": "$20 USD 상당 이상의 WOC를 보유한 지갑을 연결하세요.",
         "under_minimum": "지갑이 최소 $20 USD WOC 기준에 미치지 못합니다.",
-        "price_unavailable": "WOC 가격을 확인할 수 없어 보상이 일시적으로 잠겨 있습니다."
+        "price_unavailable": "WOC 가격을 확인할 수 없어 보상이 일시적으로 잠겨 있습니다.",
+        "banned": "일일 보상 참여가 금지되었습니다. 사유: {reason}"
       }
     },
     "theme": {

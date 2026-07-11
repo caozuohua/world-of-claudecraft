@@ -238,7 +238,8 @@ export const id_ID: EnTranslations = {
         "eligible": "Hadiah terbuka.",
         "no_wallet": "Hubungkan dompet dengan setidaknya $20 USD dalam WOC.",
         "under_minimum": "Dompet di bawah batas minimum $20 USD WOC.",
-        "price_unavailable": "Harga WOC tidak tersedia, hadiah terkunci sementara."
+        "price_unavailable": "Harga WOC tidak tersedia, hadiah terkunci sementara.",
+        "banned": "You are banned from Daily Rewards. Reason: {reason}"
       }
     },
     "theme": {
