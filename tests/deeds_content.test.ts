@@ -2,6 +2,7 @@
 // src/sim/content/deeds.ts resolves against the real content tables, and the
 // audited launch totals are pinned as LITERALS (update deliberately when the
 // catalog changes, never by copying the computed value back).
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -130,6 +131,39 @@ describe('audited launch totals (literals: update deliberately with the catalog)
 
   it('pins the launch era constant', () => {
     expect(DEEDS_ERA).toBe('first_era');
+  });
+});
+
+describe('frozen trigger + renown catalog (design rule 9: never retro-edit a trigger)', () => {
+  // A single digest over (id, trigger, renown) for every deed in authored order.
+  // The literal pins above cover only a handful of deeds; the other ~180 have no
+  // frozen trigger, so silently widening an existing deed's questIds/count,
+  // swapping its trigger kind, or nudging its renown keeps every targeted check
+  // green. This hash is the one guard that reds on ANY such edit to a SHIPPED
+  // deed, enforcing docs/design/deeds.md rule 9 (never retro-edit an existing
+  // trigger).
+  //
+  // Adding a NEW deed also shifts the hash (it appends a row): that is expected
+  // and acceptable, re-baseline in the SAME deliberate change. The point is that
+  // no edit to a shipped trigger or renown value slips through unnoticed.
+  //
+  // Regenerate after a DELIBERATE catalog change, then paste the printed hex
+  // into FROZEN_CATALOG_SHA256 below (run from the repo root):
+  //   npx tsx -e "import {DEED_ORDER,DEEDS} from './src/sim/data'; import {createHash} from 'node:crypto'; console.log(createHash('sha256').update(JSON.stringify(DEED_ORDER.map((id)=>[id,DEEDS[id].trigger,DEEDS[id].renown])),'utf8').digest('hex'))"
+  const FROZEN_CATALOG_SHA256 = '574764651ecf9705581112f928dd91986fd345f4694732fbf4007099c1714502';
+
+  it('every shipped deed keeps its trigger and renown unchanged', () => {
+    const canonical = JSON.stringify(
+      DEED_ORDER.map((id) => [id, DEEDS[id].trigger, DEEDS[id].renown]),
+    );
+    const actual = createHash('sha256').update(canonical, 'utf8').digest('hex');
+    expect(
+      actual,
+      'A shipped deed trigger or renown value changed (or a deed was added/removed). ' +
+        'Design rule 9 forbids retro-editing an existing trigger; adding a NEW deed is ' +
+        'allowed but re-baselines this hash. If the change is deliberate, regenerate ' +
+        'FROZEN_CATALOG_SHA256 with the one-liner in the comment above and commit it here.',
+    ).toBe(FROZEN_CATALOG_SHA256);
   });
 });
 

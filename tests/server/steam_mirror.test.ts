@@ -205,6 +205,10 @@ describe('delivery, dedupe, and the retry ladder', () => {
     onDeedRecorded(ACCOUNT_ID, MAPPED_DEED);
     await settle();
     expect(pushMock).toHaveBeenCalledTimes(MAX_PUSH_ATTEMPTS);
+    // The ladder shape below is a self-comparison against the constant, so pin
+    // the base magnitude to a literal: changing 1000 to 1 or 600000 (a broken
+    // backoff) would otherwise keep the ladder assertion green.
+    expect(PUSH_BACKOFF_BASE_MS).toBe(1000);
     expect(delayMock.mock.calls.map((c) => c[0])).toEqual([
       PUSH_BACKOFF_BASE_MS,
       PUSH_BACKOFF_BASE_MS * 2,
