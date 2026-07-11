@@ -179,6 +179,15 @@ For off-box safety, sync the directory to S3 occasionally:
   the canonical token mint and should only be overridden if that mint changes.
   Set `PUBLIC_ORIGIN` in single-realm production so shared player-card pages
   emit stable absolute Open Graph URLs.
+- **Steam link + achievement mirror**: players can link a Steam account so
+  their Book of Deeds achievements mirror to Steam (`server/steam/`). It is
+  **off until configured**: with `STEAM_ENABLED` unset, every `/api/steam`
+  route answers `steam.disabled`, the mirror is inert, and no client renders
+  link UI. To enable, set `STEAM_ENABLED=1` plus the Steamworks `STEAM_APP_ID`
+  and a publisher Web API key in `STEAM_WEB_API_KEY` (partner.steam-api.com)
+  in the server runtime env. The key is a secret: it must never appear in
+  logs or client code. Linking is a cosmetic mirror for deed achievements
+  only; login with Steam does not exist.
 - **Never** set `ALLOW_DEV_COMMANDS=1` in production: it enables the
   level/teleport cheats used by the test bots.
 - **Bot detector (implementation)**: the open-source tree ships with a no-op stub

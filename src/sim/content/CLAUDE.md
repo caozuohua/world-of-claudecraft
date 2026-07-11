@@ -107,8 +107,9 @@ guard `tests/localization_fixes.test.ts` enforces it):
 ## This data also feeds the public Guide/wiki
 The Guide at `/wiki` (`src/guide/`) is generated from THIS directory, so player-facing
 content you add here should reach it in the same change:
-- After adding or renaming a class, ability, talent, zone, dungeon, mob, or warlock pet,
-  run `npm run wiki:content` and commit the regenerated `src/guide/content.generated.ts`.
+- After adding or renaming a class, ability, talent, zone, dungeon, mob, warlock pet, or
+  deed, run `npm run wiki:content` and commit the regenerated
+  `src/guide/content.generated.ts`.
   It also runs in `pretest`/`build`, and `tests/guide.test.ts` fails CI if the committed
   file is stale, so a forgotten regen is caught.
 - A new (or retinted) creature/class/pet model also needs its still rendered: run

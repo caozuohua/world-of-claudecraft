@@ -187,7 +187,7 @@ Use the seams this repo already has, do not invent new ones:
   its own module behind the `SimContext` seam (`src/sim/sim_context.ts`), with backing
   state kept on `Sim` as a live `ctx` view, never a new method cluster on the `sim.ts`
   coordinator. See `src/sim/CLAUDE.md`.
-- New game content (mob/quest/item/ability/zone): a declarative record in
+- New game content (mob/quest/item/ability/zone/deed): a declarative record in
   `src/sim/content/`, merged by `data.ts`, never a content table inline in `sim.ts`.
   Player-facing content also feeds the `/wiki` guide: run `npm run wiki:content` (auto in
   `pretest`/`build`, freshness-gated by `tests/guide.test.ts`) and add any new `guide.*`

@@ -1,7 +1,8 @@
 # Asset Credits
 
 Bundled third-party art assets are CC0 (public domain dedication) except the
-three.js water normal maps (MIT) and the CraftPix skill-icon packs. The CraftPix
+three.js water normal maps (MIT), the guide webfonts (SIL OFL 1.1), and the
+CraftPix skill-icon packs. The CraftPix
 icon packs were **purchased by the Levy Street account (callum@levystreet.com)**
 and are used under the CraftPix premium royalty-free license. Attribution is
 provided as a courtesy.

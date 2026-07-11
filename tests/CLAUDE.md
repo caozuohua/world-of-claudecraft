@@ -3,7 +3,7 @@
 
 # tests/: Vitest suite
 
-Around 464 `*.test.ts` files. Tests import `src/sim/` and `server/` modules
+Around 1000 `*.test.ts` files. Tests import `src/sim/` and `server/` modules
 **directly** and exercise them **deterministically** in plain Node: no live
 server, browser, or Postgres for unit tests. Browser/E2E + screenshot tests live
 in `scripts/*.mjs` (need `npm run dev`/`server`), NOT here.
@@ -41,8 +41,8 @@ transport (see `social_system.test.ts`) rather than mocking.
 
 ## Coverage & guards
 One test area per subsystem (combat/AI, the 9 classes, progression/xp, talents, social/guilds,
-snapshots/bandwidth/interest, security/auth, keybinds/mobile, admin/moderation, i18n); `ls tests/`
-to find the file for an area.
+snapshots/bandwidth/interest, security/auth, keybinds/mobile, admin/moderation, deeds/steam,
+i18n); `ls tests/` to find the file for an area.
 `architecture.test.ts` is the `src/sim` purity backstop: it scans every sim file and fails on a
 render/ui/game/net/three import, a DOM global, or `Math.random`/`Date.now`/`performance.now`. Run
 it after any `src/sim/` change. It ALSO completeness-checks the UI/render pure cores, so a NEW pure

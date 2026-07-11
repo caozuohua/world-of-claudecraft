@@ -18,6 +18,7 @@ the doc's intent, not its line numbers.
 | `i18n-scaling/` | i18n architecture + workflow docs. `translation-workflow.md` is the canonical contributor/maintainer roles reference (root and `src/ui/CLAUDE.md` point here); `lazy-locales-and-contributor-workflow.md` is the lazy-locale/hygiene design package. |
 | `hud-ux-and-accessibility/` | Phased UX/accessibility program (brainstorm, phases, QA). |
 | `ui-architecture-hud-modularization/` | Phased HUD modularization refactor program. |
+| `achievements/` | Book of Deeds reference: system overview, the per-category deed catalog, UI screenshots. |
 | `release-notes/` | Per-version release notes. |
 | `screenshots/` | JPG/PNG assets embedded by docs and the repo-root `README.md` (see below). |
 | `*.md` (top level) | One-off reports (`hud-program-roadmap.md`, `hud-program-validation-report.md`, `performance-feel-audit.md`). |

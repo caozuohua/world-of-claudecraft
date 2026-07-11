@@ -73,8 +73,9 @@ newDispatcher, legacyDelegate)`; `setApiDispatchMode` recomputes all four. Under
 `createApiDispatcher` resolves the registry: a matched `RouteDef` runs the onion (`withErrors`,
 `withMetrics`, `withOriginCheck`, `withContentType`, the route middleware, then the handler); an
 UNMATCHED path (and HEAD) falls through to the per-path catch-all delegate, the old ladder handler
-for that prefix. Registered domains today: leaderboard, auth, characters, account, wallet, reports,
-discord, github, desktop-login, daily-rewards, maps, user-assets, admin, oauth, internal.
+for that prefix. Registered domains today: leaderboard, auth, apple-auth, characters, account,
+wallet, reports, discord, github, desktop-login, daily-rewards, maps, user-assets, admin, oauth,
+internal, deeds, steam.
 
 ## Dual-edit maintenance (until the ladder is deleted)
 A migrated route lives in BOTH the `RouteDef` table (here) and the legacy ladder (`main.ts`). Until

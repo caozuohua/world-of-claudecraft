@@ -247,7 +247,7 @@ Press `G` or the arena button to queue. Matchmaking teleports fighters into a pr
 | `Tab` | cycle nearest enemies. left-click to target, right-click to attack, loot, or talk |
 | `1`-`9`, `0`, `Q`, `E` | action bar (`-`/`=` as alternates; the secondary bar sits on the numpad or `Shift+1` to `Shift+0`) |
 | `F` | interact (loot a corpse, pick up an object, talk) |
-| `C` `P` `L` `M` `B` `G` | character, spellbook, quest log, world map, bags, arena |
+| `C` `P` `L` `M` `B` `G` `Shift+Z` | character, spellbook, quest log, world map, bags, arena, deeds |
 | `V` / `Z` / `R` / `Esc` | nameplates, damage meters, autorun, close windows or clear target |
 
 Touch controls (a movement stick, camera drag, and on-screen action buttons) come up automatically on mobile.
@@ -335,4 +335,4 @@ Contributions of every kind are welcome: code, translations, bug reports, and do
 
 The code is [MIT licensed](LICENSE), so fork it, remix it, and host your own world.
 
-The bundled third-party art assets (models, textures, HDRIs) keep their own licenses, all CC0 public domain except the MIT water normal maps, documented per pack in [CREDITS.md](CREDITS.md).
+The bundled third-party art assets (models, textures, HDRIs, fonts) keep their own licenses, mostly CC0 public domain, documented per pack in [CREDITS.md](CREDITS.md).

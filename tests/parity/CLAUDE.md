@@ -12,13 +12,13 @@ Per scenario, on a fixed tick cadence, each `Frame` pins:
 - **Every player's `PlayerMeta`** (`samplePlayerMeta`): xp/lifetimeXp/restedXp/
   prestige, copper, inventory/vendorBuyback, equipment, questLog/questsDone,
   counters, arena (1v1 + 2v2) standings, delve progression, talents/loadouts,
-  raidLockouts, fiesta state. Session/presentation/derived fields are excluded
-  (`META_EXCLUDE`).
+  raidLockouts, deeds (deedsEarned/deedStats/renown/activeTitle), fiesta state.
+  Session/presentation/derived fields are excluded (`META_EXCLUDE`).
 - **Every player + explicitly tracked mob/pet `Entity`** (`sampleEntity`): hp/pos/
   facing, resources, stats/weapon, auras, cooldowns, threat, ccDr, casting, combat,
   AI, loot, mob timers. Presentation/interpolation fields are excluded
   (`ENTITY_EXCLUDE`). We sample players + tracked ids only (NOT every world entity)
-  to keep goldens ~100 KB, not MB.
+  to keep each golden tens to a few hundred KB, not MB.
 - **The SimEvent stream**, folded per window into one `eventDigest` (emit order
   preserved, reordering events IS drift).
 - **The rng draw-order fingerprint**: a rolling FNV-1a over every `sim.rng` draw's
@@ -103,7 +103,7 @@ confirmed each):
 ```
 npx vitest run tests/parity                  # the gate (+ coverage + unit tests)
 UPDATE_PARITY=1 npx vitest run tests/parity  # mint/refresh goldens (deliberate, reviewable)
-du -sh tests/parity/golden                   # confirm ~100 KB, NOT MB
+du -sh tests/parity/golden                   # confirm a few MB, NOT tens of MB
 ```
 
 ## The rule

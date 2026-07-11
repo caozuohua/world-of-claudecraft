@@ -28,7 +28,9 @@ are the imported KayKit/Quaternius/Kenney models plus PBR/HDRI/sprite/audio asse
 | `env` | 8 HDRIs (`*_1k.hdr` + `*_2k.hdr`) for IBL/sky + 6 `*_backdrop(.webp/_4k.webp)` | RGBELoader / texture |
 | `vfx` | 16 particle sprites (`.png`) | texture |
 | `audio` | `main-theme.mp3` + `sfx/` (combat/ambient/footsteps…) + `voice/<npc>/` lines | `Audio()` / `src/game/voice_manifest.generated.ts` |
-| `ui` | `skills/<class>/` (WebP ability icons) + `cursors/` (PNG) + `emotes/` (PNG) + `weapons/` (JPG icons) | `<img>` / CSS cursor |
+| `ui` | `skills/<class>/` (WebP ability icons) + `deeds/` (192 WebP deed crests) + `cursors/` (PNG) + `emotes/` (PNG) + `weapons/` (JPG icons) | `<img>` / CSS cursor |
+| `fonts` | 22 self-hosted `.woff2` guide fonts (Alegreya, Alegreya Sans, Cinzel subsets) | CSS `@font-face` |
+| `guide-stills` | 46 model stills (`.webp`) for the `/wiki` guide, baked by `scripts/wiki/render_model_stills.mjs` | `<img>` |
 
 Top level also holds favicons/PWA icons, `manifest.webmanifest`, `robots.txt`,
 `sitemap.xml`, `loading-screen.jpg`, `home-bg.{mp4,png}`, logos, and the two
@@ -39,9 +41,10 @@ standalone localized HTML pages `server-unavailable.html` (offline page) and
 - **Runtime loading:** `src/render/assets/loader.ts` (`loadGltf` / HDR / texture,
   meshopt-decoded, promise-cached). URLs for `models/ textures/ env/ vfx/` resolve
   through `src/render/assets/media.ts` `assetUrl()`: logical path in **dev**
-  (`/models/...`), content-hashed path in **prod**. `audio/` and `ui/` are referenced
-  by **raw logical path** (`/audio/...`, `/ui/...`): NOT in the manifest, served
-  unhashed (`assetUrl()` also falls back to `/${logical}` for these).
+  (`/models/...`), content-hashed path in **prod**. `audio/`, `ui/`, `fonts/`, and
+  `guide-stills/` are referenced by **raw logical path** (`/audio/...`, `/ui/...`):
+  NOT in the manifest, served unhashed (`assetUrl()` also falls back to
+  `/${logical}` for these).
 - **Build:** `scripts/build_media_manifest.mjs` walks the `MEDIA_ROOTS`
   (`models/ textures/ env/ vfx/` only), content-hashes each file, writes
   `src/render/assets/manifest.generated.ts` (`generate`) and copies hashed files to
@@ -70,7 +73,8 @@ The inline set must match `supportedLanguages` exactly.
   uncompressed exports won't load, optimize via `scripts/assets/build_assets.mjs`.
 - Only `models/ textures/ env/ vfx/` are in the manifest. A new asset category
   needs adding to `MEDIA_ROOTS` in the manifest script, or it won't ship to prod.
-  (`audio/`/`ui/` are intentionally outside it, referenced by raw path.)
+  (`audio/`/`ui/`/`fonts/`/`guide-stills/` are intentionally outside it, referenced
+  by raw path.)
 - **Don't add large binaries casually**: raw source packs aren't committed; keep
   only shipped, optimized assets. New art/audio: add an attribution row to `CREDITS.md`.
 - **Class ability icons are WebP, committed directly** (`ui/skills/<class>/`): WebP is a fraction
@@ -80,8 +84,10 @@ The inline set must match `supportedLanguages` exactly.
   (`smartSubsample` on) and deletes the original. WebP is the source of truth, there is NO
   build-time conversion (the script is a pre-commit step; `tests/skill_icons.test.ts` fails if a
   non-webp image is committed under `ui/skills/`). This is the "keep only shipped, optimized
-  assets" rule above: the lossless source is not committed. Only `ui/skills/` is auto-converted and
-  gated; the existing `cursors/`/`emotes/` PNG and `weapons/` JPG icons are grandfathered. Prefer
+  assets" rule above: the lossless source is not committed. Only `ui/skills/` is auto-converted by
+  `assets:skills`; the Book of Deeds crests under `ui/deeds/` (192 icons) have their own ingest
+  (`scripts/convert_deed_icons_webp.mjs`) and gate (`tests/deed_icons.test.ts`); the existing
+  `cursors/`/`emotes/` PNG and `weapons/` JPG icons are grandfathered. Prefer
   WebP for any new icon art.
 - `src/game/voice_manifest.generated.ts` and `manifest.generated.ts` are generated;
   don't hand-edit (root invariant).

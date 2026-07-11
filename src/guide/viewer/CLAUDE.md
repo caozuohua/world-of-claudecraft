@@ -16,7 +16,7 @@ GLB, not the whole set.
 ## Data
 Model specs are baked by `scripts/wiki/build_content.mjs` from the renderer's `VisualDef`
 manifest into `GUIDE_MODELS` (`src/guide/content.generated.ts`), deduped by visual key.
-Each class/creature/pet carries a `model` (visual key) and optional `tint` (hex). Do not
+Each class/druid form/creature/pet carries a `model` (visual key) and optional `tint` (hex). Do not
 hand-edit the generated file; change the manifest or the generator and run `npm run
 wiki:content`.
 

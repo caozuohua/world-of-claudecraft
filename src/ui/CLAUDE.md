@@ -296,6 +296,12 @@ tint with vector `PRIMITIVES` and optional `FX`. Unknown ids fall back via
   webp or any non-webp image is committed. Only `ui/skills/` is auto-converted by `assets:skills`
   and gated by `tests/skill_icons.test.ts`; the existing weapon JPGs and cursor/emote PNGs are
   grandfathered. Prefer WebP for any new ability/skill art.
+  The Book of Deeds crest art mirrors this: the generated `DEED_IMAGE_IDS` set
+  (`deed_image_ids.ts`) maps a `deed_<deedId>` crest id to `/ui/deeds/<deedId>.webp` via
+  `deedImageUrl`, served for `kind:'crest'` (the deeds window; any other crest id still
+  composites its procedural recipe). Convert with `npm run assets:deeds`
+  (`scripts/convert_deed_icons_webp.mjs`); `tests/deed_icons.test.ts` gates the id list
+  against the committed webp files in both directions.
 
 ## Small modules (pure-core + thin-consumer pointers)
 Presentation/domain logic lifted out of `hud.ts` into a host-agnostic core a Vitest imports
@@ -320,14 +326,16 @@ directly, with a thin DOM/canvas consumer. Follow this shape for reusable/testab
   locale-aware search/category/sort that preserves live `slotIndex` values verbatim, so a
   filtered row still names the exact wire argument for deposit/withdraw.
 - **deeds_view.ts** / **deeds_window.ts** (+ **deed_tracker_painter.ts**,
-  **deeds_leaderboard_view.ts**, **deed_i18n.ts**, **deed_image_ids.ts**): the Book of
+  **deeds_leaderboard_view.ts**, **deed_i18n.ts**, **deed_i18n.newlocales.ts**,
+  **deed_image_ids.ts**): the Book of
   Deeds achievements window. The DOM-free core builds the category/entry model, search,
   progress fractions, crest-id resolution (art WebP via `deed_image_ids.ts`, else the
   procedural category crest), and the drain-batched unlock moment (banners coalesce,
   retro grants fold to one summary line); the painter is a cold window plus the
-  write-elided HUD watch tracker. `deed_i18n.ts` is the entity-style English table
-  (like `talent_i18n.ts`) that re-localizes deed names, titles, and broadcast lines
-  from ids; `deeds_leaderboard_view.ts` is the Renown-board tab's pure core.
+  write-elided HUD watch tracker. `deed_i18n.ts` re-localizes deed names, descriptions,
+  titles, and broadcast lines from ids (the `talent_i18n.ts` entity-style pattern; the
+  release-fill tables are `DEED_LOCALE_TABLES` in `deed_i18n.newlocales.ts`);
+  `deeds_leaderboard_view.ts` is the Renown-board tab's pure core.
 - **player_context_menu.ts**: pure `chatPlayerContextActions()` (whisper/invite/friend/ignore/
   report) for the right-click-player menu.
 - **auth_utils.ts**: login/char-select form helpers (password toggle, ARIA validity sync,

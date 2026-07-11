@@ -63,8 +63,10 @@ Loads the real CC0 GLBs / HDRIs / textures (`loader.ts` `loadGltf`/`loadHdr`/
 
 ## i18n: in-world floating labels are the only string surface here
 The renderer is geometry/shaders; the one player-text surface is the overhead
-**nameplate/label** path in `renderer.ts` (only `renderer.ts` imports i18n: `t`
-from `../ui/i18n`, `tEntity` from `../ui/entity_i18n`). Keep it keyed:
+**nameplate/label** path in `renderer.ts` + `nameplate_painter.ts` + the pure
+label resolver `entity_labels.ts` (the only
+i18n importers here: `t` from `../ui/i18n`, `tEntity` from `../ui/entity_i18n`,
+`deedTitleText` from `../ui/deed_i18n`). Keep it keyed:
 - **Entity names** (mob/npc/dungeon/ground-object/ability) localize via `tEntity({
   kind, id, field:'name' })`, never the raw English `e.name`/`e.templateId`.
 - **Templated labels** (corpse, dungeon-exit, emote, fishing cast) use `t()` keys.
@@ -72,6 +74,10 @@ from `../ui/i18n`, `tEntity` from `../ui/entity_i18n`). Keep it keyed:
   there, not inline here.
 - **Verbatim by design:** player names and owned-pet names (`e.name` when
   `e.ownerId !== null`) are proper nouns: splice them as-is, do not localize.
+- **Deed titles** (the subtitle under a player's name): the entity `title`
+  field is a deed id; `nameplate_painter.ts` resolves it via `deedTitleText`
+  (`../ui/deed_i18n`), diffed per language + deed id; an unknown id hides the
+  line.
 - `cast_bar.ts` stays i18n-free on purpose: it returns a stable discriminator
   (`label`/`fishing`) and the renderer resolves the visible text. Don't add `t()`
   there.

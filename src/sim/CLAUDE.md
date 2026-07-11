@@ -57,7 +57,7 @@ Each module owns the FUNCTIONS for one system; the backing STATE stays on `Sim` 
 
 | Module | Owns |
 |--------|------|
-| `combat/damage.ts` | `dealDamage`, `handleDeath`, `grantXp` (+ lifetime-XP, milestones) |
+| `combat/damage.ts` | `dealDamage`, `handleDeath`, `grantXp` (+ lifetime-XP; milestone unlocks absorbed into `deeds.ts`) |
 | `combat/heal.ts` | `applyHeal`, healing threat/taken-mult, hex/crit-vuln mults, heal-absorb |
 | `combat/auras.ts` + `combat/cc.ts` | per-tick auras/regen/timers, NPC aura cleanse; CC predicates (stun/root/silence/disarm/lockout/blind/tongues) |
 | `combat/casting_lifecycle.ts` | `updateCasting`, `castAbility(BySlot)`, `cancelCast`, `pushbackCast`, GCD/cost/cooldown |
@@ -136,7 +136,8 @@ remove the declaration AND its binding in the same change, then re-run the parit
 5. The `engagedPids` combat-flag pass (reads pet AND mob state after both update): this
    STAYS in the coordinator, never moves into a slice.
 6. End-of-tick system block, fixed order: duels, arena, trades/invites, loot rolls,
-   instances, delve runs, market, delayed-event drain.
+   instances, delve runs, market, delayed-event drain, then the deeds evaluator
+   (`updateDeeds`: zero rng, after the drain so it sees same-tick results).
 7. Grid re-bucketing LAST (`grid.refresh` / `playerGrid.refresh`), then drain + return
    the `SimEvent[]`.
 
