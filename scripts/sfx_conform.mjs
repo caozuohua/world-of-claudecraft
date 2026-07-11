@@ -22,7 +22,9 @@ const sfxDir = path.join(root, 'public/audio/sfx');
 const ffprobePath = ffprobeStatic.path;
 
 const TARGET_BITRATE = 192;
-const MIN_SOURCE_BITRATE = 128; // below this the source is too lossy to transcode — reject outright
+const MIN_SOURCE_BITRATE = 112; // below this the source is too lossy to transcode — reject outright
+                                // (128kbps ElevenLabs files can probe slightly low due to encoding
+                                // variance, so the floor sits well below 128 to avoid false rejects)
 const TARGET_SAMPLE_RATE = 44100;
 const DURATION_THRESHOLD = 1.0;
 const TARGET_PEAK_DBFS = -6;
@@ -106,7 +108,7 @@ for (const name of files) {
   // makes a larger file that sounds the same or worse. Reject and tell the contributor
   // to re-export from their DAW at a higher bitrate.
   if (bitrate < MIN_SOURCE_BITRATE) {
-    console.log(`  REJECT ${name}  [${bitrate}kbps source — minimum ${MIN_SOURCE_BITRATE}kbps required; re-export from your DAW]`);
+    console.log(`  REJECT ${name}  [${bitrate}kbps source — minimum ${MIN_SOURCE_BITRATE}kbps required; re-export at 128kbps or higher]`);
     rejected++;
     continue;
   }
