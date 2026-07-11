@@ -2790,16 +2790,22 @@ export class OptionsWindow {
   private renderControllerButtons(parent: HTMLElement): void {
     const hooks = this.deps.options();
     if (!hooks) return;
+    // One .opt-section wrapper like every table-driven section (and the Overview
+    // pins): the touch shell's 2-column layout is display:grid on .opt-section
+    // ITSELF, so remap rows appended straight to the detail pane could never
+    // become grid cells and the whole Button Layout stacked single-column.
+    const section = el('div', 'opt-section');
+    parent.appendChild(section);
     const head = el('div', 'opt-section-head');
     const title = document.createElement('span');
     title.textContent = t('hudChrome.controller.buttons');
     head.appendChild(title);
-    parent.appendChild(head);
+    section.appendChild(head);
     const entries = hooks.gamepad.entries();
     if (entries.length === 0) {
       const empty = el('div', 'opt-empty');
       empty.textContent = t('hudChrome.controller.help');
-      parent.appendChild(empty);
+      section.appendChild(empty);
       return;
     }
     const opts = this.gamepadActionOptions();
@@ -2840,7 +2846,7 @@ export class OptionsWindow {
         },
       );
       control.appendChild(dd);
-      parent.appendChild(row);
+      section.appendChild(row);
     }
     const reset = el('button', 'btn');
     reset.type = 'button';
@@ -2851,7 +2857,7 @@ export class OptionsWindow {
       this.renderRail(); // reset clears duplicates, so refresh the rail dot too
       this.renderDetail();
     });
-    parent.appendChild(reset);
+    section.appendChild(reset);
   }
 
   // -------------------------------------------------------------------------

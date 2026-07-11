@@ -6816,6 +6816,23 @@
     background: var(--color-primary);
     color: var(--color-bg-dark);
   }
+  /* Dropdown controls inside option rows (the controller remap rows, the
+     language picker): the trigger already wears the .window-frame .btn AAA
+     reset, but the flyout menu still wore the legacy hud skin (hard #1a140a,
+     gold border, 5px radius). Re-token it to the Codex panel grammar, matching
+     the .opt-switch / .opt-seg treatment above. Tokens only. */
+  #options-menu .ui-dd-menu {
+    background: var(--color-panel-l2-base);
+    border: 1px solid var(--panel-edge);
+    border-radius: var(--radius-sm);
+  }
+  #options-menu .ui-dd-item {
+    color: var(--color-text-light);
+    font-family: var(--font-ui);
+  }
+  #options-menu .ui-dd-item.sel {
+    color: var(--color-primary);
+  }
   /* Overview landing: quick actions, pin mirrors, the reload alert, status. */
   .opt-quick {
     display: flex;

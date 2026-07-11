@@ -4792,6 +4792,13 @@
   body.mobile-touch #options-menu .opt-mshell-content .opt-row-control {
     justify-content: flex-start;
   }
+  /* A dropdown control fills its stacked half-width cell (the controller remap
+     rows, the language picker): .ui-dd is inline-block sized by its 112px
+     trigger floor, which reads lost inside the roomy 2-col cells. The trigger
+     is already width:100% of .ui-dd, so widening the wrapper is enough. */
+  body.mobile-touch #options-menu .opt-mshell-content .opt-row-control .ui-dd {
+    width: 100%;
+  }
   /* Touch floors for the reused .opt-* controls inside the shell (spec section 9:
      48px rows, larger switch/segments, a 16px search input floor that does not
      depend on the pointer:coarse media query, so it holds under emulated capture). */

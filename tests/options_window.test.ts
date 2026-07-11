@@ -230,6 +230,22 @@ describe('options_window: Overview pins are one wrapper cell each', () => {
   });
 });
 
+describe('options_window: controller Button Layout joins the section grammar', () => {
+  // The remap rows used to append straight to the detail pane: the touch
+  // shell's 2-column layout is display:grid on .opt-section ITSELF, so rows
+  // outside a section could never become grid cells and the whole Button
+  // Layout stacked single-column (live maintainer feedback).
+  it('wraps the head, remap rows, and reset inside one .opt-section', () => {
+    const ctrl = painter.slice(painter.indexOf('private renderControllerButtons'));
+    const body = ctrl.slice(0, ctrl.indexOf('\n  private '));
+    expect(body).toContain("const section = el('div', 'opt-section');");
+    expect(body).toContain('section.appendChild(head)');
+    expect(body).toContain('section.appendChild(row)');
+    expect(body).toContain('section.appendChild(reset)');
+    expect(body).not.toContain('parent.appendChild(row)');
+  });
+});
+
 describe('options_window: renderDetail is back-stack shell safe', () => {
   // Shared row handlers (theme preset, Custom Colors reset, controller remap
   // rows, every rerender:true choice) call renderDetail() from shell pages,
