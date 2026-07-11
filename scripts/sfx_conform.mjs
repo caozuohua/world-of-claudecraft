@@ -11,23 +11,25 @@
 //   node scripts/sfx_conform.mjs --fix      # check and fix non-conforming files in place
 
 import { execFileSync, spawnSync } from 'node:child_process';
-import { readdirSync, renameSync } from 'node:fs';
+import { existsSync, readdirSync, renameSync, unlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import ffmpegPath from 'ffmpeg-static';
 import ffprobeStatic from 'ffprobe-static';
+import {
+  classify,
+  MIN_SOURCE_BITRATE,
+  TARGET_BITRATE,
+  TARGET_SAMPLE_RATE,
+  TARGET_PEAK_DBFS,
+  TARGET_LUFS,
+  DURATION_THRESHOLD,
+} from './sfx/sfx_conform_rules.mjs';
 
 const fix = process.argv.includes('--fix');
 const root = process.cwd();
 const sfxDir = path.join(root, 'public/audio/sfx');
 const ffprobePath = ffprobeStatic.path;
-
-const TARGET_BITRATE = 192;
-const MIN_SOURCE_BITRATE = 112; // below this the source is too lossy to transcode — reject outright
-                                // (128kbps ElevenLabs files can probe slightly low due to encoding
-                                // variance, so the floor sits well below 128 to avoid false rejects)
-const TARGET_SAMPLE_RATE = 44100;
-const DURATION_THRESHOLD = 1.0;
-const TARGET_PEAK_DBFS = -6;
 
 function ffprobe(file) {
   const out = execFileSync(ffprobePath, [
@@ -50,72 +52,104 @@ function getStats(file) {
 }
 
 // Returns the peak dBFS of a file using ffmpeg volumedetect.
-// volumedetect writes to stderr, so we use spawnSync to capture it.
+// Throws if the output cannot be parsed rather than silently returning 0.
 function getPeakDb(file) {
   const result = spawnSync(ffmpegPath, [
     '-hide_banner', '-i', file,
     '-af', 'volumedetect',
-    '-f', 'null', '/dev/null',
+    '-f', 'null', '-',
   ], { encoding: 'utf8' });
   const match = (result.stderr || '').match(/max_volume:\s*([-\d.]+)\s*dB/);
-  return match ? parseFloat(match[1]) : 0;
+  if (!match) throw new Error(`volumedetect parse failed for ${path.basename(file)}`);
+  return parseFloat(match[1]);
 }
 
-function conformPeak(file) {
-  const peakDb = getPeakDb(file);
+// Returns the integrated loudness in LUFS using ffmpeg ebur128.
+// Throws if the output cannot be parsed.
+function getLufs(file) {
+  const result = spawnSync(ffmpegPath, [
+    '-hide_banner', '-i', file,
+    '-af', 'ebur128=peak=true',
+    '-f', 'null', '-',
+  ], { encoding: 'utf8' });
+  const match = (result.stderr || '').match(/I:\s*([-\d.]+)\s*LUFS/);
+  if (!match) throw new Error(`ebur128 parse failed for ${path.basename(file)}`);
+  return parseFloat(match[1]);
+}
+
+// Temp files go to the system temp directory so a crashed run cannot leave
+// an orphan .tmp.mp3 inside the scanned sfxDir on the next run.
+function conformPeak(file, peakDb) {
   const adjustment = TARGET_PEAK_DBFS - peakDb;
-  const tmp = file + '.tmp.mp3';
-  execFileSync(ffmpegPath, [
-    '-hide_banner', '-loglevel', 'error',
-    '-y', '-i', file,
-    '-af', `volume=${adjustment}dB,aformat=sample_rates=${TARGET_SAMPLE_RATE}`,
-    '-ar', String(TARGET_SAMPLE_RATE),
-    '-b:a', `${TARGET_BITRATE}k`,
-    '-codec:a', 'libmp3lame',
-    tmp,
-  ]);
-  renameSync(tmp, file);
+  const tmp = path.join(tmpdir(), `sfx_conform_${path.basename(file)}`);
+  try {
+    execFileSync(ffmpegPath, [
+      '-hide_banner', '-loglevel', 'error',
+      '-y', '-i', file,
+      '-af', `volume=${adjustment}dB,aformat=sample_rates=${TARGET_SAMPLE_RATE}`,
+      '-ar', String(TARGET_SAMPLE_RATE),
+      '-b:a', `${TARGET_BITRATE}k`,
+      '-codec:a', 'libmp3lame',
+      tmp,
+    ]);
+    renameSync(tmp, file);
+  } finally {
+    try { unlinkSync(tmp); } catch { /* already renamed or never created */ }
+  }
 }
 
 function conformLufs(file) {
-  const tmp = file + '.tmp.mp3';
-  execFileSync(ffmpegPath, [
-    '-hide_banner', '-loglevel', 'error',
-    '-y', '-i', file,
-    '-af', `loudnorm=I=-14:LRA=7:TP=-1,aformat=sample_rates=${TARGET_SAMPLE_RATE}`,
-    '-ar', String(TARGET_SAMPLE_RATE),
-    '-b:a', `${TARGET_BITRATE}k`,
-    '-codec:a', 'libmp3lame',
-    tmp,
-  ]);
-  renameSync(tmp, file);
+  const tmp = path.join(tmpdir(), `sfx_conform_${path.basename(file)}`);
+  try {
+    execFileSync(ffmpegPath, [
+      '-hide_banner', '-loglevel', 'error',
+      '-y', '-i', file,
+      '-af', `loudnorm=I=-14:LRA=7:TP=-1,aformat=sample_rates=${TARGET_SAMPLE_RATE}`,
+      '-ar', String(TARGET_SAMPLE_RATE),
+      '-b:a', `${TARGET_BITRATE}k`,
+      '-codec:a', 'libmp3lame',
+      tmp,
+    ]);
+    renameSync(tmp, file);
+  } finally {
+    try { unlinkSync(tmp); } catch { /* already renamed or never created */ }
+  }
 }
 
-const files = readdirSync(sfxDir)
-  .filter(f => f.endsWith('.mp3'))
-  .sort();
+const files = existsSync(sfxDir)
+  ? readdirSync(sfxDir).filter(f => f.endsWith('.mp3')).sort()
+  : [];
 
 let issues = 0;
 let fixed = 0;
+let failures = 0;
 let rejected = 0;
 
 for (const name of files) {
   const file = path.join(sfxDir, name);
   const { duration, bitrate, sampleRate } = getStats(file);
 
-  // Source quality gate: below 128kbps the file is too lossy to transcode acceptably.
-  // Re-encoding low-bitrate MP3 to 192kbps does not recover lost quality — it just
-  // makes a larger file that sounds the same or worse. Reject and tell the contributor
-  // to re-export from their DAW at a higher bitrate.
-  if (bitrate < MIN_SOURCE_BITRATE) {
-    console.log(`  REJECT ${name}  [${bitrate}kbps source — minimum ${MIN_SOURCE_BITRATE}kbps required; re-export at 128kbps or higher]`);
+  // Source quality gate: re-encoding a low-bitrate MP3 to 192kbps does not recover
+  // lost quality; it produces a larger file that sounds the same or worse. The floor
+  // is 112kbps (not 128kbps) because ElevenLabs 128kbps exports can probe slightly
+  // low due to encoding variance, and we must not false-reject legitimate assets.
+  const preliminary = classify({ duration, bitrate, sampleRate });
+  if (preliminary.reject) {
+    console.log(`  REJECT ${name}  [${bitrate}kbps source, minimum ${MIN_SOURCE_BITRATE}kbps; re-export at 128kbps or higher]`);
     rejected++;
     continue;
   }
 
-  const problems = [];
-  if (bitrate < TARGET_BITRATE) problems.push(`${bitrate}kbps (want ${TARGET_BITRATE}kbps)`);
-  if (sampleRate !== TARGET_SAMPLE_RATE) problems.push(`${sampleRate}Hz (want ${TARGET_SAMPLE_RATE}Hz)`);
+  // Measure actual loudness so check mode catches loudness drift, not just bitrate/rate.
+  let peakDb = null;
+  let lufs = null;
+  if (preliminary.normBranch === 'peak') {
+    peakDb = getPeakDb(file);
+  } else {
+    lufs = getLufs(file);
+  }
+
+  const { problems, normBranch } = classify({ duration, bitrate, sampleRate, peakDb, lufs });
 
   if (problems.length === 0) {
     console.log(`  ok   ${name}`);
@@ -123,14 +157,13 @@ for (const name of files) {
   }
 
   issues++;
-  const short = duration < DURATION_THRESHOLD;
-  const normLabel = short ? `peak ${TARGET_PEAK_DBFS}dBFS` : '-14 LUFS';
+  const normLabel = normBranch === 'peak' ? `peak ${TARGET_PEAK_DBFS}dBFS` : '-14 LUFS';
 
   if (fix) {
-    process.stdout.write(`  fix  ${name}  [${problems.join(', ')}]  (${normLabel})… `);
+    process.stdout.write(`  fix  ${name}  [${problems.join(', ')}]  (${normLabel})... `);
     try {
-      if (short) {
-        conformPeak(file);
+      if (normBranch === 'peak') {
+        conformPeak(file, peakDb);
       } else {
         conformLufs(file);
       }
@@ -139,6 +172,7 @@ for (const name of files) {
     } catch (err) {
       console.log('FAILED');
       console.error(`       ${err.message}`);
+      failures++;
     }
   } else {
     console.log(`  FAIL ${name}  [${problems.join(', ')}]  (would apply ${normLabel})`);
@@ -154,4 +188,4 @@ if (fix) {
 } else if (issues > 0) {
   console.log(`${issues} file(s) out of spec. Run with --fix to conform them.`);
 }
-if (rejected > 0 || (!fix && issues > 0)) process.exit(1);
+if (failures > 0 || rejected > 0 || (!fix && issues > 0)) process.exit(1);
