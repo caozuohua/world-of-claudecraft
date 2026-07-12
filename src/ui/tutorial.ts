@@ -95,6 +95,8 @@ export class TutorialOverlay {
   private stepEl!: HTMLElement;
   private bodyEl!: HTMLElement;
   private progressEl!: HTMLElement;
+  private tipsWrapEl!: HTMLElement;
+  private tipsTitleEl!: HTMLElement;
   private tipsEl!: HTMLElement;
   private skipBtn!: HTMLButtonElement;
   private arrow: HTMLElement | null = null;
@@ -188,10 +190,6 @@ export class TutorialOverlay {
   // keybinds, which can change mid-session via the rebinding UI.
   private renderNextTips(keybinds: Keybinds): void {
     this.tipsEl.replaceChildren();
-    const titleLi = document.createElement('li');
-    titleLi.className = 'tut-next-tips-title';
-    titleLi.textContent = t('hudChrome.tutorial.nextTipsTitle');
-    this.tipsEl.appendChild(titleLi);
     for (const tip of TUTORIAL_NEXT_TIPS) {
       const key = keybinds.primaryLabel(tip.keybindId) || t('hud.options.unbound');
       const li = document.createElement('li');
@@ -228,16 +226,21 @@ export class TutorialOverlay {
     this.progressEl = document.createElement('div');
     this.progressEl.className = 'tut-progress';
 
+    this.tipsWrapEl = document.createElement('div');
+    this.tipsWrapEl.style.display = 'none';
+    this.tipsTitleEl = document.createElement('div');
+    this.tipsTitleEl.className = 'tut-next-tips-title';
+    this.tipsTitleEl.textContent = t('hudChrome.tutorial.nextTipsTitle');
     this.tipsEl = document.createElement('ul');
     this.tipsEl.className = 'tut-next-tips';
-    this.tipsEl.style.display = 'none';
+    this.tipsWrapEl.append(this.tipsTitleEl, this.tipsEl);
 
     this.skipBtn = document.createElement('button');
     this.skipBtn.className = 'tut-skip';
     this.skipBtn.type = 'button';
     this.skipBtn.addEventListener('click', () => this.finish());
 
-    root.append(header, this.bodyEl, this.progressEl, this.tipsEl, this.skipBtn);
+    root.append(header, this.bodyEl, this.progressEl, this.tipsWrapEl, this.skipBtn);
     ui.appendChild(root);
     this.root = root;
 
@@ -320,9 +323,9 @@ export class TutorialOverlay {
 
     if (this.step === 'done') {
       this.renderNextTips(keybinds);
-      this.tipsEl.style.display = '';
+      this.tipsWrapEl.style.display = '';
     } else {
-      this.tipsEl.style.display = 'none';
+      this.tipsWrapEl.style.display = 'none';
     }
 
     this.skipBtn.textContent =
