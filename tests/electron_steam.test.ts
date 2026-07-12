@@ -11,14 +11,18 @@ import {
   steamIntegrationEnabled,
 } from '../electron/steam.cjs';
 
-/** A fake steamworks.js whose init returns a client minting `bytes` tickets. */
+/** A fake steamworks.js whose init returns a client minting `bytes` tickets.
+ *  Every minted ticket carries its own cancel spy and is recorded in `tickets`
+ *  so the at-most-one-live-handle contract can be asserted per mint. */
 function fakeSteamworks(bytes: Buffer | null = Buffer.from([0xab, 0xcd])) {
-  const getAuthTicketForWebApi = vi.fn(async (_identity: string) => ({
-    getBytes: () => bytes,
-    cancel: () => {},
-  }));
+  const tickets: Array<{ getBytes: () => Buffer | null; cancel: ReturnType<typeof vi.fn> }> = [];
+  const getAuthTicketForWebApi = vi.fn(async (_identity: string) => {
+    const ticket = { getBytes: () => bytes, cancel: vi.fn() };
+    tickets.push(ticket);
+    return ticket;
+  });
   const init = vi.fn((_appId: number) => ({ auth: { getAuthTicketForWebApi } }));
-  return { module: { init }, init, getAuthTicketForWebApi };
+  return { module: { init }, init, getAuthTicketForWebApi, tickets };
 }
 
 describe('steamIntegrationEnabled', () => {
@@ -89,6 +93,8 @@ describe('createSteamShell', () => {
       isPackaged: true,
       requireSteamworks: () => fake.module,
     });
+    // The capability main.cjs exposes to the renderer (desktop-steam-capability).
+    expect(shell.enabled).toBe(true);
     await expect(shell.getLinkTicket()).resolves.toBe('deadbeef');
     await expect(shell.getLinkTicket()).resolves.toBe('deadbeef');
     expect(fake.init).toHaveBeenCalledTimes(1);
@@ -168,5 +174,68 @@ describe('createSteamShell', () => {
       requireSteamworks: () => ({ init: () => ({ auth: {} }) }),
     });
     await expect(noApi.getLinkTicket()).resolves.toBeNull();
+  });
+
+  it('a new mint cancels the superseded ticket, and only the superseded one', async () => {
+    const fake = fakeSteamworks();
+    const shell = createSteamShell({
+      distribution: 'steam',
+      env: {},
+      isPackaged: true,
+      requireSteamworks: () => fake.module,
+    });
+    // The live ticket is NOT cancelled while the server may still be
+    // verifying it (the shell never learns when that finishes).
+    await expect(shell.getLinkTicket()).resolves.toBe('abcd');
+    expect(fake.tickets[0].cancel).not.toHaveBeenCalled();
+    // The next click supersedes it: exactly the old handle is cancelled.
+    await expect(shell.getLinkTicket()).resolves.toBe('abcd');
+    expect(fake.tickets[0].cancel).toHaveBeenCalledTimes(1);
+    expect(fake.tickets[1].cancel).not.toHaveBeenCalled();
+  });
+
+  it('an empty ticket is cancelled on the spot (it never reaches the server)', async () => {
+    const fake = fakeSteamworks(Buffer.alloc(0));
+    const shell = createSteamShell({
+      distribution: 'steam',
+      env: {},
+      isPackaged: true,
+      requireSteamworks: () => fake.module,
+    });
+    await expect(shell.getLinkTicket()).resolves.toBeNull();
+    expect(fake.tickets[0].cancel).toHaveBeenCalledTimes(1);
+    // The dead handle is not retained: the next mint cancels nothing extra.
+    await expect(shell.getLinkTicket()).resolves.toBeNull();
+    expect(fake.tickets[0].cancel).toHaveBeenCalledTimes(1);
+    expect(fake.tickets[1].cancel).toHaveBeenCalledTimes(1);
+  });
+
+  it('a throwing or absent cancel never surfaces across IPC', async () => {
+    const fake = fakeSteamworks();
+    const shell = createSteamShell({
+      distribution: 'steam',
+      env: {},
+      isPackaged: true,
+      requireSteamworks: () => fake.module,
+    });
+    await expect(shell.getLinkTicket()).resolves.toBe('abcd');
+    fake.tickets[0].cancel.mockImplementation(() => {
+      throw new Error('cancel refused');
+    });
+    await expect(shell.getLinkTicket()).resolves.toBe('abcd');
+    expect(fake.tickets[0].cancel).toHaveBeenCalledTimes(1);
+    // A ticket without cancel (an older binding shape) is tolerated too.
+    const bare = createSteamShell({
+      distribution: 'steam',
+      env: {},
+      isPackaged: true,
+      requireSteamworks: () => ({
+        init: () => ({
+          auth: { getAuthTicketForWebApi: async () => ({ getBytes: () => Buffer.from([0x01]) }) },
+        }),
+      }),
+    });
+    await expect(bare.getLinkTicket()).resolves.toBe('01');
+    await expect(bare.getLinkTicket()).resolves.toBe('01');
   });
 });

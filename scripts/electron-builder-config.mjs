@@ -82,9 +82,10 @@ export function desktopBuilderConfig({
       ...(loginOrigin ? { loginOrigin } : {}),
       ...(crashSubmitUrl ? { crashSubmitUrl } : {}),
       // The Steamworks app id electron/steam.cjs initializes with; stamped
-      // for the steam channel only (website builds never touch Steam, and an
-      // absent stamp falls back to the Spacewar dev id there anyway).
-      ...(distribution === 'steam' && /^\d+$/.test(steamAppId) ? { steamAppId } : {}),
+      // for the steam channel only (website builds never touch Steam). The
+      // steam branch below refuses to build without a numeric id, so the
+      // stamp is unconditional here.
+      ...(distribution === 'steam' ? { steamAppId } : {}),
     },
   };
   if (distribution === 'website' && config.publish) {
@@ -123,6 +124,19 @@ export function desktopBuilderConfig({
     config.win = { ...(config.win ?? {}), azureSignOptions: azureSign };
   }
   if (distribution === 'steam') {
+    // A packaged depot cannot recover the app id from env (electron/steam.cjs
+    // closes that hatch), so a missing or garbage id would ship a depot that
+    // inits Steam with the Spacewar dev id (480) and mints link tickets the
+    // server rejects. That mistake must die at build time, not on players'
+    // machines; a deliberate Spacewar test depot passes WOC_STEAM_APP_ID=480
+    // explicitly. The unpackaged dev loop never runs this script.
+    if (!/^\d+$/.test(steamAppId)) {
+      throw new Error(
+        `steam channel builds need a numeric WOC_STEAM_APP_ID in the build env; got ` +
+          `"${steamAppId}". Without it the packaged depot would init Steam with the ` +
+          'Spacewar dev id (480) and link tickets would verify against the wrong app.',
+      );
+    }
     // steamworks.js is an optionalDependency, so a plain server/web install (or
     // a failed native prebuild) can drop it silently, and electron/steam.cjs
     // then degrades to null on every path. A depot packaged from such a tree

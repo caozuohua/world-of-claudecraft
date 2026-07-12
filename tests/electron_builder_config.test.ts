@@ -113,20 +113,25 @@ describe('desktopBuilderConfig', () => {
     }
     // Steam builds publish nothing, so the same origin does not throw there.
     expect(
-      desktopBuilderConfig({ base, distribution: 'steam', apiOrigin: 'localhost:8787' }).publish,
+      desktopBuilderConfig({
+        base,
+        distribution: 'steam',
+        apiOrigin: 'localhost:8787',
+        steamAppId: '480',
+      }).publish,
     ).toBeNull();
   });
 
   it('never mutates the base config object', () => {
     const before = JSON.stringify(base);
-    desktopBuilderConfig({ base, distribution: 'steam' });
+    desktopBuilderConfig({ base, distribution: 'steam', steamAppId: '480' });
     desktopBuilderConfig({ base, distribution: 'website', mode: 'pack' });
     expect(JSON.stringify(base)).toBe(before);
   });
 
   it('steam: nulls publish, stamps steam, targets dir layouts in release-steam', () => {
-    const config = desktopBuilderConfig({ base, distribution: 'steam' });
-    expect(config.extraMetadata.wocDesktop).toEqual({ distribution: 'steam' });
+    const config = desktopBuilderConfig({ base, distribution: 'steam', steamAppId: '480' });
+    expect(config.extraMetadata.wocDesktop).toEqual({ distribution: 'steam', steamAppId: '480' });
     expect(config.publish).toBeNull();
     // The update-track split never touches Steam: publish stays nulled and a
     // dev origin does not trip the production-channel guard.
@@ -134,6 +139,7 @@ describe('desktopBuilderConfig', () => {
       base,
       distribution: 'steam',
       apiOrigin: 'http://localhost:8787',
+      steamAppId: '480',
     });
     expect(devSteam.publish).toBeNull();
     expect(config.directories.output).toBe('release-steam');
@@ -145,7 +151,7 @@ describe('desktopBuilderConfig', () => {
   });
 
   it('steam: ships steamworks.js (files re-include + native dist asarUnpack); website does not', () => {
-    const steam = desktopBuilderConfig({ base, distribution: 'steam' });
+    const steam = desktopBuilderConfig({ base, distribution: 'steam', steamAppId: '480' });
     const steamFiles = steam.files ?? [];
     expect(steamFiles).toContain('node_modules/steamworks.js/**');
     expect(steam.asarUnpack).toContain('node_modules/steamworks.js/dist/**');
@@ -167,12 +173,18 @@ describe('desktopBuilderConfig', () => {
     // Steam (electron/steam.cjs degrades to null), so the steam channel must
     // refuse to build. The presence probe is injected, so this stays hermetic.
     expect(() =>
-      desktopBuilderConfig({ base, distribution: 'steam', steamworksInstalled: () => false }),
+      desktopBuilderConfig({
+        base,
+        distribution: 'steam',
+        steamAppId: '480',
+        steamworksInstalled: () => false,
+      }),
     ).toThrow(/steamworks\.js optional dependency/);
     // Present: the steam config derives as usual, native package re-included.
     const present = desktopBuilderConfig({
       base,
       distribution: 'steam',
+      steamAppId: '480',
       steamworksInstalled: () => true,
     });
     expect(present.publish).toBeNull();
@@ -184,22 +196,40 @@ describe('desktopBuilderConfig', () => {
     ).not.toThrow();
     // And an unprobed steam build (no injected check) is a pure derivation that
     // never touches the filesystem, so the config tests above stay valid.
-    expect(desktopBuilderConfig({ base, distribution: 'steam' }).publish).toBeNull();
+    expect(
+      desktopBuilderConfig({ base, distribution: 'steam', steamAppId: '480' }).publish,
+    ).toBeNull();
   });
 
-  it('stamps steamAppId for the steam channel only, digits only, when provided', () => {
+  it('steam: refuses a missing or non-numeric WOC_STEAM_APP_ID (no silent Spacewar depot)', () => {
+    // Without the id the packaged depot would init Steam with the Spacewar dev
+    // id (480) and every link ticket would verify against the wrong app; that
+    // mistake must die at build time, not on players' machines.
+    expect(() => desktopBuilderConfig({ base, distribution: 'steam' })).toThrow(/WOC_STEAM_APP_ID/);
+    expect(() => desktopBuilderConfig({ base, distribution: 'steam', steamAppId: '' })).toThrow(
+      /WOC_STEAM_APP_ID/,
+    );
+    expect(() => desktopBuilderConfig({ base, distribution: 'steam', steamAppId: 'abc' })).toThrow(
+      /WOC_STEAM_APP_ID/,
+    );
+    // Pack mode gets no exemption: a local steam pack wants the same guard (a
+    // deliberate Spacewar pack passes WOC_STEAM_APP_ID=480 explicitly).
+    expect(() => desktopBuilderConfig({ base, distribution: 'steam', mode: 'pack' })).toThrow(
+      /WOC_STEAM_APP_ID/,
+    );
+  });
+
+  it('stamps a numeric steamAppId for the steam channel; website never stamps', () => {
     const stamped = desktopBuilderConfig({ base, distribution: 'steam', steamAppId: '3140820' });
     expect(stamped.extraMetadata.wocDesktop.steamAppId).toBe('3140820');
-    const bare = desktopBuilderConfig({ base, distribution: 'steam' });
-    expect('steamAppId' in bare.extraMetadata.wocDesktop).toBe(false);
-    const garbage = desktopBuilderConfig({ base, distribution: 'steam', steamAppId: 'abc' });
-    expect('steamAppId' in garbage.extraMetadata.wocDesktop).toBe(false);
     const website = desktopBuilderConfig({
       base,
       distribution: 'website',
       steamAppId: '3140820',
     });
     expect('steamAppId' in website.extraMetadata.wocDesktop).toBe(false);
+    // The website channel needs no id at all.
+    expect(() => desktopBuilderConfig({ base, distribution: 'website' })).not.toThrow();
   });
 
   it('stamps the resolved web origins so a packaged build never reads them from runtime env', () => {
@@ -234,7 +264,12 @@ describe('desktopBuilderConfig', () => {
     expect(config.mac.target).toEqual(['dmg']);
     expect(config.win.target).toEqual(['nsis']);
     expect(config.linux.target).toEqual(['AppImage']);
-    const steamPack = desktopBuilderConfig({ base, distribution: 'steam', mode: 'pack' });
+    const steamPack = desktopBuilderConfig({
+      base,
+      distribution: 'steam',
+      mode: 'pack',
+      steamAppId: '480',
+    });
     expect(steamPack.mac.target).toEqual(['dir']);
   });
 

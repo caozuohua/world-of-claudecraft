@@ -69,6 +69,16 @@ function createSteamShell({
   const appId = resolveSteamAppId({ packagedMetadata, env, isPackaged });
   const loadSteamworks = requireSteamworks ?? (() => require('steamworks.js'));
   let client = null;
+  let lastTicket = null;
+
+  // Cancelling must never break the ticket path (the never-throws contract
+  // below): the handle may lack cancel() and cancel itself may throw; either
+  // way the worst outcome is one dangling handle until process exit.
+  function cancelQuietly(ticket) {
+    try {
+      ticket?.cancel?.();
+    } catch {}
+  }
 
   // Deliberately NOT latched on failure: init throws when Steam is not
   // running, and the player may start Steam and click Link again, so every
@@ -87,16 +97,28 @@ function createSteamShell({
   }
 
   // The hex form of a web-api auth ticket bound to the link identity, or null
-  // (integration off, Steam not running, or the ticket call failed). The
-  // ticket is deliberately never cancel()ed here: the server still has to
-  // verify it, and it dies with the Steam session anyway.
+  // (integration off, Steam not running, or the ticket call failed). Handles
+  // are kept to at most one live per session: the shell never learns when the
+  // server finishes verifying a ticket (the renderer POSTs it fire-and-forget),
+  // so the live handle cannot be cancelled eagerly; instead it is cancelled
+  // when the NEXT mint supersedes it, an empty-bytes ticket (never sent to the
+  // server) is cancelled on the spot, and the final handle dies with the Steam
+  // session at process exit.
   async function getLinkTicket() {
     try {
+      if (lastTicket) {
+        cancelQuietly(lastTicket);
+        lastTicket = null;
+      }
       const c = clientOrNull();
       if (!c || typeof c.auth?.getAuthTicketForWebApi !== 'function') return null;
       const ticket = await c.auth.getAuthTicketForWebApi(LINK_TICKET_IDENTITY);
       const bytes = typeof ticket?.getBytes === 'function' ? ticket.getBytes() : null;
-      if (!bytes || bytes.length === 0) return null;
+      if (!bytes || bytes.length === 0) {
+        cancelQuietly(ticket);
+        return null;
+      }
+      lastTicket = ticket;
       return Buffer.from(bytes).toString('hex');
     } catch (err) {
       // Never throw across IPC; a failed ticket is just "no ticket".

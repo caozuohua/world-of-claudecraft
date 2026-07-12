@@ -381,6 +381,15 @@ ipcMain.handle('desktop-steam-link-ticket', async (event) => {
   return await steamShell.getLinkTicket();
 });
 
+// Whether this shell can mint link tickets at all (steam distribution or the
+// unpackaged dev loop): the renderer hides the Link button when false instead
+// of offering a click whose ticket can never exist (website builds). Computed
+// without loading steamworks.js.
+ipcMain.handle('desktop-steam-capability', (event) => {
+  if (!trustedSender(event)) return false;
+  return steamShell.enabled;
+});
+
 ipcMain.handle('desktop-login-open-browser', (event) => {
   if (!trustedSender(event)) return null;
   openDesktopLogin();

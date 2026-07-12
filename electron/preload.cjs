@@ -103,6 +103,10 @@ contextBridge.exposeInMainWorld('wocDesktop', {
   // Steam is unavailable (website build, Steam not running, ticket failure).
   // The main-process handler never rejects; steam.cjs owns every failure arm.
   steamLinkTicket: () => ipcRenderer.invoke('desktop-steam-link-ticket'),
+  // Whether this shell can mint link tickets at all (false on packaged
+  // website builds): the renderer hides the Link button instead of offering
+  // a click whose ticket can never exist.
+  steamLinkSupported: () => ipcRenderer.invoke('desktop-steam-capability'),
   // Auto-update events (website distribution only; the channel is simply
   // silent on Steam/dev builds). Payloads are the whitelisted shapes built in
   // electron/update_events.cjs.

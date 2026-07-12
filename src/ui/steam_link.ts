@@ -1,5 +1,6 @@
 import type { Api } from '../net/online';
 import { DESKTOP_APP } from '../net/online';
+import type { DesktopBridge } from '../runtime';
 import { desktopBridge } from '../runtime';
 import { userFacingApiError } from './api_error_i18n';
 import { t } from './i18n';
@@ -29,6 +30,22 @@ function flashSteamStatus(message: string): void {
     statusEl.textContent = previousText;
     statusEl.hidden = previousHidden;
   }, 4000);
+}
+
+// Whether the shell can actually mint a link ticket. Method presence alone is
+// not capability: every Electron shell exposes steamLinkTicket, including
+// packaged website builds where a ticket can never exist, so the shell's real
+// answer (wocDesktop.steamLinkSupported) decides. Older shells predate the
+// probe; there the ticket method's presence stays the answer (the renderer is
+// served live, shells lag behind it).
+async function steamTicketCapability(bridge: DesktopBridge | null): Promise<boolean> {
+  if (typeof bridge?.steamLinkTicket !== 'function') return false;
+  if (typeof bridge.steamLinkSupported !== 'function') return true;
+  try {
+    return (await bridge.steamLinkSupported()) === true;
+  } catch {
+    return true;
+  }
 }
 
 export async function refreshSteamLinkStatus(api: Api): Promise<void> {
@@ -67,7 +84,7 @@ export async function refreshSteamLinkStatus(api: Api): Promise<void> {
     }
   }
   const bridge = DESKTOP_APP ? desktopBridge() : null;
-  const canMintTicket = typeof bridge?.steamLinkTicket === 'function';
+  const canMintTicket = await steamTicketCapability(bridge);
   const linkBtn = document.getElementById('btn-steam-link');
   if (linkBtn) linkBtn.hidden = linked || !canMintTicket;
   const unlinkBtn = document.getElementById('btn-steam-unlink');
@@ -77,6 +94,7 @@ export async function refreshSteamLinkStatus(api: Api): Promise<void> {
 async function startSteamLink(api: Api): Promise<void> {
   const bridge = DESKTOP_APP ? desktopBridge() : null;
   if (typeof bridge?.steamLinkTicket !== 'function') return;
+  if (!(await steamTicketCapability(bridge))) return;
   let ticket: string | null = null;
   try {
     ticket = await bridge.steamLinkTicket();

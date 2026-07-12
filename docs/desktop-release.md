@@ -310,9 +310,10 @@ and skips, by design.
 
 Build: `npm run electron:build:steam` on each OS runner (signing env still applies on
 mac; Steam mac builds must ALSO be Developer ID signed + notarized). Set
-`WOC_STEAM_APP_ID` in the build env so the stamp carries the real app id: without
-it a packaged depot build inits Steam with the Spacewar fallback id (480) and
-link tickets verify against the wrong app. Output layouts
+`WOC_STEAM_APP_ID` in the build env so the stamp carries the real app id: the build
+refuses to run without a numeric id, because a packaged depot without the stamp
+would init Steam with the Spacewar fallback id (480) and link tickets would verify
+against the wrong app. Output layouts
 in `release-steam/`:
 
 - `mac-universal/World of ClaudeCraft.app` (one universal .app)

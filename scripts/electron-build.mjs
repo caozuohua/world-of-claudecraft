@@ -109,7 +109,9 @@ const config = desktopBuilderConfig({
   // means "unset" (derive from the origin), hence || rather than ??.
   updateChannel: process.env.WOC_UPDATE_CHANNEL || null,
   // The real Steamworks app id for a depot build (stamped into wocDesktop for
-  // electron/steam.cjs); unset falls back to the Spacewar dev id at runtime.
+  // electron/steam.cjs). desktopBuilderConfig refuses a steam channel build
+  // without a numeric id, so a depot can never silently ship on the Spacewar
+  // dev id (480); website builds ignore it.
   steamAppId: process.env.WOC_STEAM_APP_ID || '',
   // steamworks.js is an optionalDependency, so guard the steam channel against a
   // tree where its native install silently failed: the depot would otherwise

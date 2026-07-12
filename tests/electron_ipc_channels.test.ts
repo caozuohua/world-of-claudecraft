@@ -26,6 +26,7 @@ describe('electron IPC channel contract (preload <-> main)', () => {
         'desktop-login-open-browser',
         'desktop-login-take-code',
         'desktop-set-strings',
+        'desktop-steam-capability',
         'desktop-steam-link-ticket',
         'desktop-update-install',
       ]),
@@ -80,6 +81,7 @@ describe('electron IPC channel contract (preload <-> main)', () => {
       'onUpdateEvent',
       'installUpdate',
       'steamLinkTicket',
+      'steamLinkSupported',
     ]) {
       expect(preload, `preload is missing bridge method ${method}`).toContain(`${method}:`);
     }

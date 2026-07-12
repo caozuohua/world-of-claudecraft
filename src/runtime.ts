@@ -80,6 +80,11 @@ export interface DesktopBridge {
   // unavailable (website build, Steam not running, ticket failure). Feature-
   // check before use like the other post-trio methods.
   steamLinkTicket?(): Promise<string | null>;
+  // Whether the shell can mint link tickets at all (false on packaged website
+  // builds, where every steamLinkTicket call answers null). Absent on older
+  // shells that predate the capability probe: fall back to steamLinkTicket
+  // presence there. Feature-check before use like the other post-trio methods.
+  steamLinkSupported?(): Promise<boolean>;
 }
 
 export function desktopBridge(): DesktopBridge | null {
