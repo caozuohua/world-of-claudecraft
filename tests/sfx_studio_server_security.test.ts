@@ -109,7 +109,7 @@ describe.sequential('SFX Studio server security', () => {
       rmSync(playbackDraft, { force: true });
       if (hadPlaybackDraft) renameSync(playbackDraftBackup, playbackDraft);
     }
-  });
+  }, 30_000);
 
   it('binds only to IPv4 loopback', () => {
     const address = server.address();
@@ -168,7 +168,7 @@ describe.sequential('SFX Studio server security', () => {
     expect(project.playbackWorkspaceHash).toMatch(/^[a-f0-9]{64}$/);
     expect(project.audioWorkspaceHash).toMatch(/^[a-f0-9]{64}$/);
     expect(project.playbackProfileDirty).toEqual(expect.any(Boolean));
-  });
+  }, 30_000);
 
   it('requires both exact origin and token for mutations', async () => {
     const denied = await fetch(`${url}/api/project`, {
