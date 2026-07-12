@@ -702,7 +702,7 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
     name: 'A Trade for Every Hand',
     giverNpcId: 'foreman_odell',
     turnInNpcId: 'foreman_odell',
-    text: "Every soul in Eastbrook works a trade besides the sword, $N. There's ore veins scattered round town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
+    text: "Every soul in Eastbrook works a trade besides the sword, $N. There's ore veins in the rocks around the Copper Dig, southwest of town, so go swing a pick and bring me 5 chunks. Mine them yourself, mind; I'll know the difference.",
     completionText:
       "See? Ore in your pack and callus on your hands. Keep at the mining, logging, and herb-picking as you travel the roads, and when you're back in town, mind the Town Focus board by the market and the crafting bench nearby. There's a fair trade waiting in all of it, if you want it.",
     objectives: [{ type: 'collect', itemId: 'chunk_of_ore', count: 5, label: 'Chunk of Ore' }],
