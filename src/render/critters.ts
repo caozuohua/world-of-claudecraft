@@ -177,6 +177,10 @@ export function buildCritters(seed: number): CritterField {
   const buildInstance = (species: Species): THREE.Object3D => {
     const loaded = loadedSpeciesGltf.get(species);
     if (loaded) {
+      // Unlike delve_props/mailbox, this is not Box3-normalized: it assumes each
+      // species GLB is authored at world scale with feet at the origin (baseY
+      // below is tuned for that). A re-export at a different scale or origin
+      // will silently sink or oversize the critter.
       const inst = loaded.clone(true);
       inst.traverse((child) => {
         if (child instanceof THREE.Mesh) child.castShadow = GFX.standardMaterials;

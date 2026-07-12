@@ -163,6 +163,10 @@ export function buildFish(seed: number): FishView {
 
   const buildBody = (): THREE.Object3D => {
     if (loadedFishGltf) {
+      // Not Box3-normalized: assumes the fish GLB is authored at world scale
+      // with its body centered at the origin, same assumption as critters.ts.
+      // A re-export at a different scale or origin will silently sink or
+      // oversize the fish.
       const inst = loadedFishGltf.clone(true);
       inst.traverse((child) => {
         if (child instanceof THREE.Mesh) child.castShadow = GFX.standardMaterials;
