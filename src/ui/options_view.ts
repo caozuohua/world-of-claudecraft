@@ -40,6 +40,11 @@ export interface SliderControl {
   /** Current value at build time; the painter re-reads the live value on input. */
   value: number;
   fmt: SliderFmt;
+  /** Commit the setting on release ('change') instead of live on every 'input'
+   *  tick. Set for uiScale, whose live rescale moves the slider under the cursor
+   *  mid-drag (issue 1558); dragging updates only the readout, not the setting.
+   *  Other sliders keep their intended live preview (volume, fov, frame scale). */
+  commitOnChange?: boolean;
 }
 
 export interface ToggleControl {
@@ -246,21 +251,18 @@ export function buildOptionsMenu(opts: { bugReportAvailable: boolean }): Options
  *  trailing graphics/reload notes + the reload button + footer as panel chrome. */
 export function buildGraphicsControls(s: OptionsSettingsSource, env: OptionsEnv): OptionsControl[] {
   const out: OptionsControl[] = [];
-  out.push(
-    choice(
-      s,
-      'graphicsPreset',
-      'hud.options.graphicsQuality',
-      [
-        { value: 1, labelKey: 'hud.options.graphicsPresetLow' },
-        { value: 2, labelKey: 'hud.options.graphicsPresetMedium' },
-        { value: 3, labelKey: 'hud.options.graphicsPresetHigh' },
-        { value: 4, labelKey: 'hud.options.graphicsPresetUltra' },
-        { value: 5, labelKey: 'hud.options.graphicsPresetAdvanced' },
-      ],
-      true,
-    ),
-  );
+  const graphicsPresetOptions: ChoiceOption[] = [
+    { value: 1, labelKey: 'hud.options.graphicsPresetLow' },
+    { value: 2, labelKey: 'hud.options.graphicsPresetMedium' },
+    { value: 3, labelKey: 'hud.options.graphicsPresetHigh' },
+  ];
+  if (!env.nativeShell) {
+    graphicsPresetOptions.push(
+      { value: 4, labelKey: 'hud.options.graphicsPresetUltra' },
+      { value: 5, labelKey: 'hud.options.graphicsPresetAdvanced' },
+    );
+  }
+  out.push(choice(s, 'graphicsPreset', 'hud.options.graphicsQuality', graphicsPresetOptions, true));
   // Advanced preset (5) reveals the four per-system low/high pickers.
   if (Math.round(s.num('graphicsPreset')) === 5) {
     out.push(choice(s, 'terrainDetail', 'hud.options.terrainDetail', lowHighOptions));
@@ -308,6 +310,12 @@ export function buildGraphicsControls(s: OptionsSettingsSource, env: OptionsEnv)
   if (env.touch) out.push(slider(s, 'actionButtonScale', 'hud.options.buttonSize'));
   if (env.touch) out.push(slider(s, 'joystickDeadzone', 'hud.options.joystickDeadzone'));
   if (env.touch) out.push(boolToggle(s, 'touchInvertLook', 'hud.options.invertLook'));
+  // Camera joystick is hidden/off by default (swipe-look is primary); left-handed
+  // layout already has a Key Bindings row (leftHandedTouch), but is surfaced here
+  // too since it is squarely a touch/graphics-panel concern for touch players.
+  if (env.touch)
+    out.push(boolToggle(s, 'mobileCameraJoystick', 'hudChrome.options.mobileCameraJoystick'));
+  if (env.touch) out.push(boolToggle(s, 'leftHandedTouch', 'hudChrome.options.mobileLeftHanded'));
   return out;
 }
 
@@ -354,7 +362,12 @@ export function buildControllerControls(s: OptionsSettingsSource): OptionsContro
 
 export function buildInterfaceControls(s: OptionsSettingsSource): OptionsControl[] {
   return [
-    slider(s, 'uiScale', 'hudChrome.options.uiScale'),
+    // uiScale commits on release: applying it live rescales the whole UI (the
+    // options window included), which shoves the slider under the cursor and makes
+    // the value hard to land (issue 1558).
+    { ...slider(s, 'uiScale', 'hudChrome.options.uiScale'), commitOnChange: true },
+    slider(s, 'playerFrameScale', 'hudChrome.options.playerFrameScale'),
+    slider(s, 'targetFrameScale', 'hudChrome.options.targetFrameScale'),
     slider(s, 'hudOpacity', 'hud.options.hudOpacity'),
     slider(s, 'tooltipScale', 'hud.options.tooltipScale'),
     slider(s, 'fctScale', 'hud.options.fctScale'),
@@ -366,8 +379,17 @@ export function buildInterfaceControls(s: OptionsSettingsSource): OptionsControl
     boolToggle(s, 'reduceMotion', 'hud.options.reduceMotion'),
     boolToggle(s, 'showWalletOnCharacterScreen', 'hudChrome.options.showWalletOnCharacterScreen'),
     boolToggle(s, 'showWalletOnPlayerCard', 'hudChrome.options.showWalletOnPlayerCard'),
+    boolToggle(s, 'showDevBadges', 'hudChrome.options.showDevBadges'),
+    boolToggle(s, 'showOwnNameplate', 'hudChrome.options.showOwnNameplate'),
     boolToggle(s, 'landingHighContrast', 'hudChrome.options.highContrastBackground'),
     boolToggle(s, 'invertLookY', 'hud.options.invertLookY'),
+    boolToggle(s, 'startAttackOnAbilityUse', 'hudChrome.options.startAttackOnAbility'),
+    boolToggle(s, 'walkByAutoloot', 'hudChrome.options.walkByAutoloot'),
+    boolToggle(s, 'groundReticle', 'hudChrome.options.groundReticle'),
+    boolToggle(s, 'aurasOnPlayerFrame', 'hudChrome.options.aurasOnPlayerFrame'),
+    boolToggle(s, 'showItemLevel', 'hudChrome.options.showItemLevel'),
+    boolToggle(s, 'showSecondaryActionBar', 'hudChrome.options.showSecondaryActionBar'),
+    boolToggle(s, 'showDailyRewardsChest', 'hudChrome.options.showDailyRewardsChest'),
   ];
 }
 

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { ClientWorld } from '../src/net/online';
 import { zoneAt } from '../src/sim/data';
+import { grantDeed } from '../src/sim/deeds';
+import { emitMobYell } from '../src/sim/mob/yells';
 import { Sim } from '../src/sim/sim';
 import type { SimContext } from '../src/sim/sim_context';
 import * as chatMod from '../src/sim/social/chat';
@@ -268,6 +270,65 @@ describe('chat channels', () => {
         text: 'Time played this session: 0s.',
       }),
     );
+  });
+
+  it('/playtime reports zero on a freshly joined character', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Aleph');
+    teleport(sim, a, 0, -40);
+    sim.tick();
+    sim.chat('/playtime', a);
+    const events = sim.tick();
+    expect(chatEvents(events)).toHaveLength(0);
+    expect(events).toContainEqual(
+      expect.objectContaining({
+        type: 'error',
+        pid: a,
+        text: 'Total time played: 0s.',
+      }),
+    );
+  });
+
+  it('/playtime accumulates as the sim advances, unlike /played it survives a relog', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Aleph');
+    teleport(sim, a, 0, -40);
+    // 20 ticks per sim-second; advance just over a minute of world time
+    for (let i = 0; i < 20 * 65; i++) sim.tick();
+
+    const state = sim.serializeCharacter(a);
+    expect(state?.totalPlayedSeconds).toBeGreaterThanOrEqual(64.9);
+
+    // Relog: a fresh Sim (server restart resets sim.time to 0) loading the saved state.
+    const sim2 = makeWorld();
+    const b = sim2.addPlayer('warrior', 'Aleph', { state: state! });
+    teleport(sim2, b, 0, -40);
+    sim2.tick();
+    sim2.chat('/playtime', b);
+    const events = sim2.tick();
+    expect(chatEvents(events)).toHaveLength(0);
+    const played = events.find(
+      (e): e is Extract<SimEvent, { type: 'error' }> =>
+        e.type === 'error' && e.text.startsWith('Total time played'),
+    );
+    // still reports the prior session's accumulated total, even though the new
+    // sim's clock (and this session's /played) has reset to zero.
+    expect(played?.text).toMatch(/^Total time played: 1m \d+s\.$/);
+
+    // Continuing to play in the new session keeps accumulating on top of that baseline.
+    for (let i = 0; i < 20 * 10; i++) sim2.tick();
+    sim2.chat('/playtime', b);
+    const events2 = sim2.tick();
+    const played2 = events2.find(
+      (e): e is Extract<SimEvent, { type: 'error' }> =>
+        e.type === 'error' && e.text.startsWith('Total time played'),
+    );
+    expect(played2?.text).toMatch(/^Total time played: 1m \d+s\.$/);
+    const secondsOf = (t: string) => {
+      const m = /(\d+)m (\d+)s/.exec(t)!;
+      return Number(m[1]) * 60 + Number(m[2]);
+    };
+    expect(secondsOf(played2!.text)).toBeGreaterThan(secondsOf(played!.text));
   });
 
   it("/where reports the caller's zone, level range, and coordinates", () => {
@@ -1059,14 +1120,24 @@ describe('chat module (direct, no Sim)', () => {
     const line = chatMod.inspectReadout(target, e);
     expect(line).toContain('Bet: Level 7');
     expect(line).toContain('50%');
-    expect(chatMod.helpLines().length).toBe(7);
+    // 8 lines: the 7 original groups plus the ignore/block line
+    expect(chatMod.helpLines().length).toBe(8);
+    expect(chatMod.helpLines().join('\n')).toContain('/ignore <name>');
   });
 
   it('handleDevChat: parses dev cheats; returns undefined for non-dev input', () => {
     const calls: any[] = [];
+    const purse = { copper: 0 };
     const ctx = {
       setPlayerLevel: (lvl: number, pid?: number) => calls.push(['level', lvl, pid]),
+      players: new Map([[1, purse]]),
       addItem: (id: string, n: number, pid?: number) => calls.push(['item', id, n, pid]),
+      completeQuestForDev: (questId: string, pid?: number) => calls.push(['quest', questId, pid]),
+      completeCurrentQuestsForDev: (pid?: number) => calls.push(['quests', pid]),
+      spawnDevBot: (name: string) => {
+        calls.push(['bot', name]);
+        return 7;
+      },
       emit: () => {},
       error: () => {},
       entities: new Map(),
@@ -1078,6 +1149,232 @@ describe('chat module (direct, no Sim)', () => {
     expect(calls).toContainEqual(['level', 5, 1]);
     expect(chatMod.handleDevChat(ctx, '/dev give wolf_fang 3', 1)).toBe(null);
     expect(calls).toContainEqual(['item', 'wolf_fang', 3, 1]);
+    expect(chatMod.handleDevChat(ctx, '/dev gold 250', 1)).toBe(null);
+    expect(purse.copper).toBe(250 * 10000);
+    expect(chatMod.handleDevChat(ctx, '/dev gold 9999999', 1)).toBe(null);
+    expect(purse.copper).toBe(250 * 10000 + 100000 * 10000); // clamped to 100000g
+    expect(chatMod.handleDevChat(ctx, '/dev quest q_wolves', 1)).toBe(null);
+    expect(calls).toContainEqual(['quest', 'q_wolves', 1]);
+    expect(chatMod.handleDevChat(ctx, '/dev quests', 1)).toBe(null);
+    expect(calls).toContainEqual(['quests', 1]);
+    expect(chatMod.handleDevChat(ctx, '/dev bot ASASAS', 1)).toBe(null);
+    expect(calls).toContainEqual(['bot', 'ASASAS']);
     expect(chatMod.handleDevChat(ctx, 'hello world', 1)).toBe(undefined);
+  });
+
+  it('a handled /dev command never falls through to the unknown-command error', () => {
+    // Repro for the live bug: /dev gold added the gold AND showed the red
+    // "Unknown command" toast, because chat()'s call site only returned early
+    // for a non-null SentChat while handleDevChat signals "handled" with null.
+    const sim = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true, devCommands: true });
+    const pid = sim.addPlayer('warrior', 'Cheater');
+    sim.drainEvents();
+    sim.chat('/dev gold 5', pid);
+    const events = sim.drainEvents();
+    const errors = events.filter((e: any) => e.type === 'error').map((e: any) => e.text);
+    expect(errors.filter((t: string) => t.startsWith('Unknown command'))).toEqual([]);
+    expect(sim.meta(pid)?.copper).toBe(5 * 10000);
+    expect(
+      events.some((e: any) => e.type === 'log' && e.text === '[dev] Added 5g to your purse.'),
+    ).toBe(true);
+  });
+
+  it('handleDevChat: the /dev help fallback advertises every dev subcommand', () => {
+    let help = '';
+    const ctx = {
+      error: (_pid: number, text: string) => {
+        help = text;
+      },
+    } as unknown as SimContext;
+    // A bare "/dev" matches no specific cheat and falls through to the usage line.
+    expect(chatMod.handleDevChat(ctx, '/dev', 1)).toBe(null);
+    // Every subcommand the parser accepts must be listed, so the help can never
+    // silently drift behind the commands again (the "/dev bot" omission this pins).
+    for (const cmd of ['level', 'tp', 'give', 'gold', 'quest', 'quests', 'bot'])
+      expect(help, `help omits /dev ${cmd}`).toContain(`/dev ${cmd}`);
+  });
+});
+
+describe('dev bot: a whisperable test dummy', () => {
+  it('spawnDevBot adds a unique dummy that a whisper auto-replies to', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Aleph');
+    const botPid = sim.spawnDevBot('ASASAS');
+    expect(botPid).toBeGreaterThanOrEqual(0);
+    const botMeta = sim.players.get(botPid)!;
+    expect(botMeta.name).toBe('ASASAS');
+    expect(botMeta.isDevBot).toBe(true);
+    // whisper resolution needs a unique name: a duplicate (any case) or blank is refused
+    expect(sim.spawnDevBot('asasas')).toBe(-1);
+    expect(sim.spawnDevBot('   ')).toBe(-1);
+
+    sim.chat('/w ASASAS hola', a);
+    const msgs = chatEvents(sim.tick());
+    // The bot gets NO recipient copy (no owning client; offline it would duplicate
+    // the sender's own line). Everything the human sees is addressed to Aleph.
+    expect(msgs.every((m) => m.pid === a)).toBe(true);
+    // exactly two lines: the sender echo, then the bot's auto-reply
+    const echo = msgs.find((m) => m.to === 'ASASAS')!;
+    expect(echo.channel).toBe('whisper');
+    expect(echo.from).toBe('Aleph');
+    expect(echo.text).toBe('hola');
+    const reply = msgs.find((m) => m.from === 'ASASAS')!;
+    expect(reply.channel).toBe('whisper');
+    expect(reply.text).toContain('hola');
+    expect(reply.to).toBeUndefined();
+    // Aleph can now /r the bot
+    expect(sim.players.get(a)!.lastWhisperFrom).toBe('ASASAS');
+  });
+
+  it('the /dev bot command spawns a bot only when dev commands are on', () => {
+    const on = new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true, devCommands: true });
+    const a = on.addPlayer('warrior', 'Aleph');
+    on.chat('/dev bot ASASAS', a);
+    on.tick();
+    expect([...on.players.values()].find((m) => m.name === 'ASASAS')?.isDevBot).toBe(true);
+
+    // with dev commands off, "/dev bot" is inert (never spawns a player)
+    const off = makeWorld();
+    const a2 = off.addPlayer('warrior', 'Aleph');
+    off.chat('/dev bot NOPE', a2);
+    off.tick();
+    expect([...off.players.values()].some((m) => m.name === 'NOPE')).toBe(false);
+  });
+});
+
+describe('/sit and /stand pose', () => {
+  it('/sit seats the player, moving clears it, and /stand stands back up', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Sitter');
+    teleport(sim, a, 0, -40);
+    const e = sim.entities.get(a)!;
+    sim.chat('/sit', a);
+    expect(e.sitting).toBe(true);
+    // Standing back up in place.
+    sim.chat('/stand', a);
+    expect(e.sitting).toBe(false);
+    // Sitting clears the instant you move (the movement path calls standUp).
+    sim.chat('/sit', a);
+    expect(e.sitting).toBe(true);
+    const meta = sim.players.get(a)!;
+    meta.moveInput = { ...meta.moveInput, forward: true };
+    sim.tick();
+    expect(e.sitting).toBe(false);
+  });
+
+  it('a dead player cannot sit', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Ghost');
+    const e = sim.entities.get(a)!;
+    e.dead = true;
+    sim.chat('/sit', a);
+    expect(e.sitting).toBe(false);
+  });
+});
+
+describe('chat speaker titles (Book of Deeds)', () => {
+  // A titled speaker's chat events carry `fromTitle`, the selected deed ID
+  // (never display text; the client localizes via deed_i18n). Untitled
+  // players omit the key entirely, and mob/boss yells never stamp one.
+  function titledSpeaker(sim: Sim, name = 'Aleph') {
+    const pid = sim.addPlayer('warrior', name);
+    const meta = sim.players.get(pid)!;
+    grantDeed(sim.ctx, meta, 'prog_veteran'); // reward: title "Veteran"
+    sim.setActiveTitle('prog_veteran', pid);
+    return pid;
+  }
+
+  it('stamps the deed id on every player channel a titled speaker uses', () => {
+    const sim = makeWorld();
+    const a = titledSpeaker(sim);
+    const b = sim.addPlayer('mage', 'Bet');
+    teleport(sim, a, 0, -40);
+    teleport(sim, b, 5, -40);
+    sim.tick();
+    sim.partyInvite(b, a);
+    sim.partyAccept(b);
+    sim.chat('/join world', a);
+    sim.tick();
+
+    const lines: [string, string][] = [
+      ['hello', 'say'],
+      ['/y over here', 'yell'],
+      ['/w bet psst', 'whisper'],
+      ['/p party up', 'party'],
+      ['/g to the world', 'general'],
+      ['/world anyone', 'world'],
+      ['/roll', 'roll'],
+      ['/wave', 'emote'],
+    ];
+    for (const [line, channel] of lines) {
+      sim.ctx.chatTokens.delete(a); // refill the throttle bucket between lines
+      sim.chat(line, a);
+      const msgs = chatEvents(sim.tick()).filter((m) => m.channel === channel);
+      expect(msgs.length, channel).toBeGreaterThan(0);
+      for (const m of msgs) {
+        expect(m.fromTitle, channel).toBe('prog_veteran');
+      }
+    }
+  });
+
+  it('omits the key entirely for an untitled speaker', () => {
+    const sim = makeWorld();
+    const a = sim.addPlayer('warrior', 'Aleph');
+    teleport(sim, a, 0, -40);
+    sim.tick();
+    sim.chat('untitled hello', a);
+    const msgs = chatEvents(sim.tick());
+    expect(msgs.length).toBeGreaterThan(0);
+    for (const m of msgs) {
+      expect('fromTitle' in m).toBe(false);
+    }
+  });
+
+  it('clearing the title back to null stops the stamp', () => {
+    const sim = makeWorld();
+    const a = titledSpeaker(sim);
+    teleport(sim, a, 0, -40);
+    sim.tick();
+    sim.setActiveTitle(null, a);
+    sim.chat('cleared', a);
+    const msgs = chatEvents(sim.tick());
+    expect(msgs.length).toBeGreaterThan(0);
+    for (const m of msgs) {
+      expect('fromTitle' in m).toBe(false);
+    }
+  });
+
+  it('a mob yell never carries a title, even with a titled player in range', () => {
+    const sim = makeWorld();
+    const a = titledSpeaker(sim);
+    teleport(sim, a, 0, -40);
+    sim.tick();
+    const mob = [...sim.entities.values()].find((e) => e.kind === 'mob' && !e.dead)!;
+    emitMobYell(sim.ctx, mob, 'Graaah!', 1e9);
+    const msgs = chatEvents(sim.tick()).filter((m) => m.from === mob.name);
+    expect(msgs.length).toBeGreaterThan(0);
+    for (const m of msgs) {
+      expect(m.channel).toBe('yell');
+      expect('fromTitle' in m).toBe(false);
+    }
+  });
+
+  it('the whisper sender echo keeps the SENDER title beside the recipient name', () => {
+    const sim = makeWorld();
+    const a = titledSpeaker(sim);
+    const b = sim.addPlayer('mage', 'Bet');
+    teleport(sim, a, 0, -40);
+    teleport(sim, b, 5, -40);
+    sim.tick();
+    sim.chat('/w bet psst', a);
+    const msgs = chatEvents(sim.tick());
+    const echo = msgs.find((m) => m.to === 'Bet')!;
+    // from stays the sender; the title is the sender's even on the echo whose
+    // DISPLAYED name is the recipient (the client's toWhisper arm must not
+    // decorate the recipient with it).
+    expect(echo.from).toBe('Aleph');
+    expect(echo.fromTitle).toBe('prog_veteran');
+    const toTarget = msgs.find((m) => m.pid === b)!;
+    expect(toTarget.fromTitle).toBe('prog_veteran');
   });
 });

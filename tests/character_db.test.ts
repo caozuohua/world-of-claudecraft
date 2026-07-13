@@ -13,8 +13,22 @@ vi.mock('pg', () => ({
 }));
 
 import {
-  createAccount, createCharacterCapped, deleteCharacter, grantAccountMechChroma, loadAccountCosmetics,
-  markAccountQuestComplete, openPlaySession, reclaimDeactivatedName, renameCharacter, revokeAccountMechChroma, touchLogin,
+  backfillAccountEmailIfEmpty,
+  bankBonusFactsForAccount,
+  createAccount,
+  createCharacterCapped,
+  deleteCharacter,
+  grantAccountMechChroma,
+  grantAccountWeaponSkins,
+  loadAccountCosmetics,
+  markAccountQuestComplete,
+  openPlaySession,
+  reclaimDeactivatedName,
+  renameCharacter,
+  revokeAccountMechChroma,
+  SCHEMA,
+  setAccountWeaponSkinLoadout,
+  touchLogin,
 } from '../server/db';
 import { REALM } from '../server/realm';
 
@@ -71,7 +85,18 @@ describe('renameCharacter', () => {
 
   it('returns the updated row on success and null when no row matched the gate', async () => {
     dbMock.query.mockResolvedValueOnce({
-      rows: [{ id: 42, account_id: 7, name: 'Newname', class: 'mage', level: 5, state: null, is_gm: false, force_rename: false }],
+      rows: [
+        {
+          id: 42,
+          account_id: 7,
+          name: 'Newname',
+          class: 'mage',
+          level: 5,
+          state: null,
+          is_gm: false,
+          force_rename: false,
+        },
+      ],
       rowCount: 1,
     } as any);
     expect((await renameCharacter(7, 42, 'Newname'))?.name).toBe('Newname');
@@ -91,7 +116,12 @@ describe('reclaimDeactivatedName', () => {
     dbMock.connect.mockResolvedValue(client as any);
     client.query
       .mockResolvedValueOnce({ rows: [], rowCount: 0 } as any) // BEGIN
-      .mockResolvedValueOnce({ rows: [{ id: 99, name: 'SturdyStubs', deactivated_at: '2026-01-01T00:00:00Z', banned_at: null }], rowCount: 1 } as any) // holder lookup
+      .mockResolvedValueOnce({
+        rows: [
+          { id: 99, name: 'SturdyStubs', deactivated_at: '2026-01-01T00:00:00Z', banned_at: null },
+        ],
+        rowCount: 1,
+      } as any) // holder lookup
       .mockResolvedValueOnce({ rows: [], rowCount: 0 } as any) // archive-name clash check: free
       .mockResolvedValueOnce({ rows: [], rowCount: 1 } as any) // UPDATE
       .mockResolvedValueOnce({ rows: [], rowCount: 0 } as any); // COMMIT
@@ -117,7 +147,10 @@ describe('reclaimDeactivatedName', () => {
     dbMock.connect.mockResolvedValue(client as any);
     client.query
       .mockResolvedValueOnce({ rows: [], rowCount: 0 } as any) // BEGIN
-      .mockResolvedValueOnce({ rows: [{ id: 99, name: 'SturdyStubs', deactivated_at: null, banned_at: null }], rowCount: 1 } as any)
+      .mockResolvedValueOnce({
+        rows: [{ id: 99, name: 'SturdyStubs', deactivated_at: null, banned_at: null }],
+        rowCount: 1,
+      } as any)
       .mockResolvedValueOnce({ rows: [], rowCount: 0 } as any); // ROLLBACK
 
     await expect(reclaimDeactivatedName('SturdyStubs')).resolves.toBe(false);
@@ -139,29 +172,43 @@ describe('reclaimDeactivatedName', () => {
     expect(client.query.mock.calls.map((c) => c[0])).not.toContain('COMMIT');
   });
 
-  it('leaves a banned account\'s name reserved even when the account is deactivated', async () => {
+  it("leaves a banned account's name reserved even when the account is deactivated", async () => {
     const client = clientStub();
     dbMock.connect.mockResolvedValue(client as any);
     client.query
       .mockResolvedValueOnce({ rows: [], rowCount: 0 } as any) // BEGIN
-      .mockResolvedValueOnce({ rows: [{ id: 99, name: 'SturdyStubs', deactivated_at: '2026-01-01T00:00:00Z', banned_at: '2026-01-01T00:00:00Z' }], rowCount: 1 } as any)
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            id: 99,
+            name: 'SturdyStubs',
+            deactivated_at: '2026-01-01T00:00:00Z',
+            banned_at: '2026-01-01T00:00:00Z',
+          },
+        ],
+        rowCount: 1,
+      } as any)
       .mockResolvedValueOnce({ rows: [], rowCount: 0 } as any); // ROLLBACK
 
     await expect(reclaimDeactivatedName('SturdyStubs')).resolves.toBe(false);
-    expect(client.query.mock.calls.map((c) => c[0]).some((s) => /UPDATE characters/i.test(s))).toBe(false);
+    expect(client.query.mock.calls.map((c) => c[0]).some((s) => /UPDATE characters/i.test(s))).toBe(
+      false,
+    );
   });
 });
 
 describe('account and session request metadata', () => {
   it('stores account creation IP and user agent when registering', async () => {
-    dbMock.query.mockResolvedValueOnce({ rows: [{ id: 7, username: 'alice', password_hash: 'hash' }] } as any);
+    dbMock.query.mockResolvedValueOnce({
+      rows: [{ id: 7, username: 'alice', password_hash: 'hash' }],
+    } as any);
 
     await createAccount('alice', 'hash', { ip: '203.0.113.4', userAgent: 'Mozilla/5.0' });
 
     const [sql, params] = dbMock.query.mock.calls[0];
     expect(sql).toMatch(/created_ip/);
     expect(sql).toMatch(/created_user_agent/);
-    expect(params).toEqual(['alice', 'hash', '203.0.113.4', 'Mozilla/5.0']);
+    expect(params).toEqual(['alice', 'hash', '203.0.113.4', 'Mozilla/5.0', true]);
   });
 
   it('updates last login IP and user agent when logging in', async () => {
@@ -173,6 +220,25 @@ describe('account and session request metadata', () => {
     expect(sql).toMatch(/last_login_ip/);
     expect(sql).toMatch(/last_login_user_agent/);
     expect(params).toEqual([7, '203.0.113.5', 'Mozilla/5.0']);
+  });
+
+  it('backfills a recovery email only for accounts that have none (Discord capture)', async () => {
+    dbMock.query.mockResolvedValueOnce({ rowCount: 1 } as any);
+    const filled = await backfillAccountEmailIfEmpty(7, 'from-discord@example.com', true);
+
+    const [sql, params] = dbMock.query.mock.calls[0];
+    // The guard is in the UPDATE (WHERE email IS NULL OR email = ''), never a
+    // read-then-write, and email_verified_at is stamped only when verified.
+    expect(sql).toMatch(/email IS NULL OR email = ''/);
+    expect(sql).toMatch(/email_verified_at = CASE WHEN/);
+    expect(params).toEqual([7, 'from-discord@example.com', true]);
+    expect(filled).toBe(true);
+  });
+
+  it('reports no backfill when the account already had a recovery email', async () => {
+    dbMock.query.mockResolvedValueOnce({ rowCount: 0 } as any);
+    const filled = await backfillAccountEmailIfEmpty(7, 'from-discord@example.com', false);
+    expect(filled).toBe(false);
   });
 
   it('stores play session IP and user agent when entering the world', async () => {
@@ -190,17 +256,21 @@ describe('account and session request metadata', () => {
 describe('account cosmetics', () => {
   it('loads normalized account cosmetic unlocks', async () => {
     dbMock.query.mockResolvedValueOnce({
-      rows: [{
-        cosmetics: {
-          completedQuestIds: ['q_aldrics_fallen_star', 4, 'q_aldrics_fallen_star'],
-          mechChromaIds: ['amber_crimson', null, 'onyx_gold'],
+      rows: [
+        {
+          cosmetics: {
+            completedQuestIds: ['q_aldrics_fallen_star', 4, 'q_aldrics_fallen_star'],
+            mechChromaIds: ['amber_crimson', null, 'onyx_gold'],
+          },
         },
-      }],
+      ],
     } as any);
 
     await expect(loadAccountCosmetics(7)).resolves.toEqual({
       completedQuestIds: ['q_aldrics_fallen_star'],
       mechChromaIds: ['amber_crimson', 'onyx_gold'],
+      weaponSkinIds: [],
+      weaponSkinLoadout: {},
     });
 
     expect(dbMock.query.mock.calls[0][0]).toContain('cosmetics');
@@ -208,46 +278,274 @@ describe('account cosmetics', () => {
   });
 
   it('persists account-wide quest completion without replacing existing cosmetic unlocks', async () => {
-    dbMock.query
-      .mockResolvedValueOnce({ rows: [{ cosmetics: { completedQuestIds: [], mechChromaIds: ['onyx_gold'] } }] } as any)
-      .mockResolvedValueOnce({ rows: [{ cosmetics: { completedQuestIds: ['q_aldrics_fallen_star'], mechChromaIds: ['onyx_gold'] } }] } as any);
+    dbMock.query.mockResolvedValueOnce({
+      rows: [
+        {
+          cosmetics: {
+            completedQuestIds: ['q_aldrics_fallen_star'],
+            mechChromaIds: ['onyx_gold'],
+          },
+        },
+      ],
+    } as any);
 
     await expect(markAccountQuestComplete(7, 'q_aldrics_fallen_star')).resolves.toEqual({
       completedQuestIds: ['q_aldrics_fallen_star'],
       mechChromaIds: ['onyx_gold'],
+      weaponSkinIds: [],
+      weaponSkinLoadout: {},
     });
 
-    const [sql, params] = dbMock.query.mock.calls[1];
+    expect(dbMock.query).toHaveBeenCalledTimes(1);
+    const [sql, params] = dbMock.query.mock.calls[0];
     expect(sql).toMatch(/UPDATE accounts/);
-    expect(sql).toMatch(/cosmetics/);
-    expect(params[0]).toBe(7);
-    expect(params[1]).toEqual({ completedQuestIds: ['q_aldrics_fallen_star'], mechChromaIds: ['onyx_gold'] });
+    expect(sql).toMatch(/jsonb_set/);
+    expect(sql).toMatch(/LEFT JOIN account_weapon_cosmetics/);
+    expect(params).toEqual([7, 'completedQuestIds', 'q_aldrics_fallen_star']);
   });
 
   it('persists mech chroma unlocks without replacing account quest lockouts', async () => {
-    dbMock.query
-      .mockResolvedValueOnce({ rows: [{ cosmetics: { completedQuestIds: ['q_aldrics_fallen_star'], mechChromaIds: [] } }] } as any)
-      .mockResolvedValueOnce({ rows: [{ cosmetics: { completedQuestIds: ['q_aldrics_fallen_star'], mechChromaIds: ['amber_crimson'] } }] } as any);
+    dbMock.query.mockResolvedValueOnce({
+      rows: [
+        {
+          cosmetics: {
+            completedQuestIds: ['q_aldrics_fallen_star'],
+            mechChromaIds: ['amber_crimson'],
+          },
+        },
+      ],
+    } as any);
 
     await expect(grantAccountMechChroma(7, 'amber_crimson')).resolves.toEqual({
       completedQuestIds: ['q_aldrics_fallen_star'],
       mechChromaIds: ['amber_crimson'],
+      weaponSkinIds: [],
+      weaponSkinLoadout: {},
     });
+
+    const [sql, params] = dbMock.query.mock.calls[0];
+    expect(sql).toMatch(/jsonb_set/);
+    expect(params).toEqual([7, 'mechChromaIds', 'amber_crimson']);
   });
 
   it('persists mech chroma removal without replacing account quest lockouts', async () => {
-    dbMock.query
-      .mockResolvedValueOnce({ rows: [{ cosmetics: { completedQuestIds: ['q_aldrics_fallen_star'], mechChromaIds: ['amber_crimson', 'onyx_gold'] } }] } as any)
-      .mockResolvedValueOnce({ rows: [{ cosmetics: { completedQuestIds: ['q_aldrics_fallen_star'], mechChromaIds: ['onyx_gold'] } }] } as any);
+    dbMock.query.mockResolvedValueOnce({
+      rows: [
+        {
+          cosmetics: {
+            completedQuestIds: ['q_aldrics_fallen_star'],
+            mechChromaIds: ['onyx_gold'],
+          },
+        },
+      ],
+    } as any);
 
     await expect(revokeAccountMechChroma(7, 'amber_crimson')).resolves.toEqual({
       completedQuestIds: ['q_aldrics_fallen_star'],
       mechChromaIds: ['onyx_gold'],
+      weaponSkinIds: [],
+      weaponSkinLoadout: {},
     });
 
-    const [sql, params] = dbMock.query.mock.calls[1];
+    const [sql, params] = dbMock.query.mock.calls[0];
     expect(sql).toMatch(/UPDATE accounts/);
-    expect(params[1]).toEqual({ completedQuestIds: ['q_aldrics_fallen_star'], mechChromaIds: ['onyx_gold'] });
+    expect(sql).toMatch(/jsonb_set/);
+    expect(params).toEqual([7, 'amber_crimson']);
+  });
+});
+
+describe('account weapon skin cosmetics', () => {
+  it('keeps paid weapon cosmetics in a dedicated rollback-safe table', async () => {
+    expect(SCHEMA).toMatch(/CREATE TABLE IF NOT EXISTS account_weapon_cosmetics/);
+    expect(SCHEMA).toMatch(/INSERT INTO account_weapon_cosmetics/);
+    expect(SCHEMA).toMatch(/ON CONFLICT \(account_id\) DO NOTHING/);
+
+    dbMock.query.mockResolvedValueOnce({
+      rows: [
+        {
+          cosmetics: {
+            completedQuestIds: ['q_aldrics_fallen_star'],
+            mechChromaIds: ['amber_crimson'],
+            // A stale legacy copy must not override the dedicated paid state.
+            weaponSkinIds: ['guildmark_arming_sword'],
+            weaponSkinLoadout: { sword: 'guildmark_arming_sword' },
+          },
+          weapon_skin_ids: ['ice_fang_sword'],
+          weapon_skin_loadout: { sword: 'ice_fang_sword' },
+        },
+      ],
+    } as any);
+
+    await expect(loadAccountCosmetics(7)).resolves.toEqual({
+      completedQuestIds: ['q_aldrics_fallen_star'],
+      mechChromaIds: ['amber_crimson'],
+      weaponSkinIds: ['ice_fang_sword'],
+      weaponSkinLoadout: { sword: 'ice_fang_sword' },
+    });
+
+    const [sql, params] = dbMock.query.mock.calls[0];
+    expect(sql).toMatch(/LEFT JOIN account_weapon_cosmetics/);
+    expect(params).toEqual([7]);
+  });
+
+  it('grants skins atomically in the dedicated table and returns the merged row', async () => {
+    dbMock.query.mockResolvedValueOnce({
+      rows: [
+        {
+          cosmetics: {
+            completedQuestIds: ['q_aldrics_fallen_star'],
+            mechChromaIds: [],
+          },
+          // Junk shapes in the dedicated JSONB normalize away on the way out.
+          weapon_skin_ids: ['ice_fang_sword', 4, 'ice_fang_sword'],
+          weapon_skin_loadout: { sword: 'ice_fang_sword', axe: 9 },
+        },
+      ],
+    } as any);
+
+    await expect(grantAccountWeaponSkins(7, ['ice_fang_sword'])).resolves.toEqual({
+      completedQuestIds: ['q_aldrics_fallen_star'],
+      mechChromaIds: [],
+      weaponSkinIds: ['ice_fang_sword'],
+      weaponSkinLoadout: { sword: 'ice_fang_sword' },
+    });
+
+    expect(dbMock.query).toHaveBeenCalledTimes(1);
+    const [sql, params] = dbMock.query.mock.calls[0];
+    expect(sql).toMatch(/INSERT INTO account_weapon_cosmetics/);
+    expect(sql).toMatch(/ON CONFLICT \(account_id\) DO UPDATE/);
+    expect(sql).toMatch(/RETURNING account_id, skin_ids, loadout/);
+    expect(params).toEqual([7, ['ice_fang_sword']]);
+  });
+
+  it('drops empty ids from the grant params (defensive filter)', async () => {
+    dbMock.query.mockResolvedValueOnce({ rows: [] } as any);
+
+    await grantAccountWeaponSkins(7, ['ice_fang_sword', '']);
+
+    expect(dbMock.query.mock.calls[0][1]).toEqual([7, ['ice_fang_sword']]);
+  });
+
+  it('replaces the dedicated loadout atomically with the JSON-encoded record', async () => {
+    dbMock.query.mockResolvedValueOnce({
+      rows: [
+        {
+          cosmetics: {
+            completedQuestIds: [],
+            mechChromaIds: [],
+          },
+          weapon_skin_ids: ['ice_fang_sword'],
+          weapon_skin_loadout: { sword: 'ice_fang_sword' },
+        },
+      ],
+    } as any);
+
+    await expect(setAccountWeaponSkinLoadout(7, { sword: 'ice_fang_sword' })).resolves.toEqual({
+      completedQuestIds: [],
+      mechChromaIds: [],
+      weaponSkinIds: ['ice_fang_sword'],
+      weaponSkinLoadout: { sword: 'ice_fang_sword' },
+    });
+
+    expect(dbMock.query).toHaveBeenCalledTimes(1);
+    const [sql, params] = dbMock.query.mock.calls[0];
+    expect(sql).toMatch(/INSERT INTO account_weapon_cosmetics/);
+    expect(sql).toMatch(/loadout = EXCLUDED\.loadout/);
+    expect(sql).toMatch(/RETURNING account_id, skin_ids, loadout/);
+    expect(params).toEqual([7, JSON.stringify({ sword: 'ice_fang_sword' })]);
+  });
+
+  it('normalizes a malformed RETURNING (no row) into the 4-field default shape', async () => {
+    const defaults = {
+      completedQuestIds: [],
+      mechChromaIds: [],
+      weaponSkinIds: [],
+      weaponSkinLoadout: {},
+    };
+
+    dbMock.query.mockResolvedValueOnce({ rows: [] } as any);
+    await expect(setAccountWeaponSkinLoadout(7, {})).resolves.toEqual(defaults);
+
+    dbMock.query.mockResolvedValueOnce({ rows: [] } as any);
+    await expect(grantAccountWeaponSkins(7, ['ice_fang_sword'])).resolves.toEqual(defaults);
+  });
+});
+
+describe('bankBonusFactsForAccount', () => {
+  // The bank bonus-slot facts read at every fresh join. One round trip, fully
+  // parameterized, with the RESOLVED criteria (verified email, level-10 referee), and
+  // NEVER a balance/holder/chain read for the wallet fact.
+  it('reads all four facts in one parameterized query carrying the load-bearing predicates', async () => {
+    dbMock.query.mockResolvedValueOnce({
+      rows: [
+        {
+          email_verified: true,
+          discord_linked: false,
+          wallet_linked: true,
+          qualified_referrals: 3,
+        },
+      ],
+    } as any);
+
+    const facts = await bankBonusFactsForAccount(7);
+
+    expect(dbMock.query).toHaveBeenCalledTimes(1);
+    const [sql, params] = dbMock.query.mock.calls[0];
+    // Bound to $1, never string-interpolated (an id spliced into the SQL would be an
+    // injection vector and would fail this pair of assertions).
+    expect(params).toEqual([7]);
+    expect(sql).toContain('$1');
+    expect(sql).not.toMatch(/id\s*=\s*7/);
+    // The verified-email criterion (never email-present) and the level-10 referee gate.
+    expect(sql).toMatch(/email_verified_at IS NOT NULL/i);
+    expect(sql).toMatch(/level\s*>=\s*10/);
+    // A link ROW is the whole proof for Discord/wallet; a referral row feeds the count.
+    expect(sql).toMatch(/discord_links/);
+    expect(sql).toMatch(/wallet_links/);
+    expect(sql).toMatch(/referrals/);
+    // The referral DIRECTION: count referrals this account MADE (referrer = $1) whose
+    // REFEREE owns the level-10 character. A swap would count referrals RECEIVED and
+    // grant the wrong bonus to every referrer while passing every other assertion.
+    expect(sql).toMatch(/referrer_account_id\s*=\s*\$1/);
+    expect(sql).toMatch(/c\.account_id\s*=\s*r\.referee_account_id/);
+    // Invariant: never a balance/holder-tier/chain read for the wallet fact.
+    expect(sql).not.toMatch(/balance|holder|pubkey|chain/i);
+    // Rows map straight onto the facts object.
+    expect(facts).toEqual({
+      emailVerified: true,
+      discordLinked: false,
+      walletLinked: true,
+      qualifiedReferrals: 3,
+    });
+  });
+
+  it('returns all-false/0 for a missing account (no row)', async () => {
+    dbMock.query.mockResolvedValueOnce({ rows: [] } as any);
+    await expect(bankBonusFactsForAccount(999)).resolves.toEqual({
+      emailVerified: false,
+      discordLinked: false,
+      walletLinked: false,
+      qualifiedReferrals: 0,
+    });
+  });
+
+  it('coerces db booleans and guards a null referral count into 0', async () => {
+    dbMock.query.mockResolvedValueOnce({
+      rows: [
+        {
+          email_verified: false,
+          discord_linked: true,
+          wallet_linked: false,
+          qualified_referrals: null,
+        },
+      ],
+    } as any);
+    await expect(bankBonusFactsForAccount(7)).resolves.toEqual({
+      emailVerified: false,
+      discordLinked: true,
+      walletLinked: false,
+      qualifiedReferrals: 0,
+    });
   });
 });
 
@@ -259,9 +557,21 @@ describe('createCharacterCapped', () => {
       .mockResolvedValueOnce({ rows: [], rowCount: 0 } as any) // BEGIN
       .mockResolvedValueOnce({ rows: [{ id: 7 }], rowCount: 1 } as any)
       .mockResolvedValueOnce({ rows: [{ n: 9 }], rowCount: 1 } as any)
-      .mockResolvedValueOnce({ rows: [{
-        id: 42, account_id: 7, name: 'Captest', class: 'mage', level: 1, state: null, is_gm: false, force_rename: false,
-      }], rowCount: 1 } as any)
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            id: 42,
+            account_id: 7,
+            name: 'Captest',
+            class: 'mage',
+            level: 1,
+            state: null,
+            is_gm: false,
+            force_rename: false,
+          },
+        ],
+        rowCount: 1,
+      } as any)
       .mockResolvedValueOnce({ rows: [], rowCount: 0 } as any); // COMMIT
 
     const row = await createCharacterCapped(7, 'Captest', 'mage', 10);

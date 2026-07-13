@@ -14,9 +14,9 @@
 // Sim (foreign quest/delve callers). The heal is a DIRECT hp mutation + heal/spellfx
 // emit (no aura). `src/sim`-pure: no DOM/Three/Math.random.
 
+import * as deedsMod from '../deeds';
 import type { SimContext } from '../sim_context';
 import {
-  angleTo,
   DELVE_COMPANION_HEAL_INTERVAL,
   DELVE_COMPANION_MAX_RANK,
   DT,
@@ -24,6 +24,7 @@ import {
   type Entity,
   MELEE_RANGE,
   PET_TELEPORT_DISTANCE,
+  steadyAngleTo,
 } from '../types';
 
 const DELVE_COMPANION_HEAL_RANGE = 22;
@@ -36,13 +37,56 @@ const DELVE_COMPANION_HEAL_PCT = [0, 0.06, 0.08, 0.1];
 
 export function updateDelveCompanion(ctx: SimContext, companion: Entity): void {
   const owner = companion.ownerId !== null ? ctx.entities.get(companion.ownerId) : null;
-  if (owner?.kind !== 'player' || owner.dead) {
+  if (owner?.kind !== 'player') {
     ctx.dropEntity(companion.id);
     return;
   }
   const run = ctx.delveRunForPlayer(owner.id);
   if (!run?.companion || run.companion.entityId !== companion.id) {
     ctx.dropEntity(companion.id);
+    return;
+  }
+  // Rank 3 boon (the board's "revives a fallen ally once per run"): the owner,
+  // or a dead party member in heal range, comes back at half health, mirroring
+  // the in-delve respawn refill. Checked before the dead-owner despawn so a
+  // solo owner's death can be caught. No rng draws; deterministic pick order
+  // (owner first, then party-member order).
+  const companionRank =
+    ctx.players.get(owner.id)?.companionUpgrades[run.companion.companionId] ?? 1;
+  if (companionRank >= DELVE_COMPANION_MAX_RANK && !run.companionReviveUsed) {
+    let fallen: Entity | null = owner.dead ? owner : null;
+    if (!fallen && run.partyKey) {
+      for (const pid of ctx.partyMembersForKey(run.partyKey)) {
+        const ally = ctx.entities.get(pid);
+        if (ally?.dead && dist2d(companion.pos, ally.pos) <= DELVE_COMPANION_HEAL_RANGE) {
+          fallen = ally;
+          break;
+        }
+      }
+    }
+    if (fallen) {
+      // Lives on the run (not the re-minted companion state) so leaving and
+      // re-entering mid-run cannot recharge the boon.
+      run.companionReviveUsed = true;
+      fallen.dead = false;
+      fallen.hp = Math.max(1, Math.round(fallen.maxHp * 0.5));
+      if (fallen.resourceType === 'mana')
+        fallen.resource = Math.max(fallen.resource, Math.round(fallen.maxResource * 0.5));
+      ctx.emit({ type: 'heal', targetId: fallen.id, amount: fallen.hp });
+      ctx.emit({
+        type: 'spellfx',
+        sourceId: companion.id,
+        targetId: fallen.id,
+        school: 'holy',
+        fx: 'tick',
+      });
+      ctx.maybeCompanionBark(run, owner.id, 'ally_revive');
+      // The rank 3 boon actually saved someone.
+      deedsMod.onCompanionReviveForDeeds(ctx, owner.id);
+    }
+  }
+  if (owner.dead) {
+    ctx.despawnDelveCompanion(run);
     return;
   }
   if (owner.inCombat) ctx.maybeCompanionBark(run, owner.id, 'combat_start');
@@ -85,7 +129,7 @@ export function updateDelveCompanion(ctx: SimContext, companion: Entity): void {
         );
       }
     } else {
-      companion.facing = angleTo(companion.pos, combatTarget.pos);
+      companion.facing = steadyAngleTo(companion.pos, combatTarget.pos, companion.facing);
       companion.swingTimer = (companion.swingTimer ?? 0) - DT;
       if (companion.swingTimer <= 0) {
         ctx.mobSwing(companion, combatTarget);

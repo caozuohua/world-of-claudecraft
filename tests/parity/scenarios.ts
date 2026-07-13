@@ -26,6 +26,7 @@ import { Sim } from '../../src/sim/sim';
 import { addThreat } from '../../src/sim/threat';
 import {
   type Aura,
+  CAST_QUEUE_WINDOW_SEC,
   DT,
   dist2d,
   type Entity,
@@ -34,6 +35,7 @@ import {
   NYTHRAXIS_ADD_ID,
   NYTHRAXIS_BOSS_ID,
   PRESTIGE_XP_PER_RANK,
+  SISTER_NHALIA_BOSS_ID,
   xpForLevel,
 } from '../../src/sim/types';
 import { terrainHeight } from '../../src/sim/world';
@@ -376,7 +378,7 @@ function mobSwingAffixes(): Scenario {
 }
 
 // Ranged pet spell path, BOTH callers of updateRangedPetAttack:
-//  - friendly arm (~8093): a ranged_dps pet (warlock_imp: petSpell Firebolt)
+//  - friendly arm (~8093): a ranged_dps pet (warlock_imp: petSpell Ashbolt)
 //    adopted onto the hunter.
 //  - hostile mob arm (~6776): a WILD warlock_imp (ownerId null) whose attack-state
 //    AI fires its petSpell at the player.
@@ -414,7 +416,7 @@ function hunterPet(): Scenario {
       rec.notes.hostileImpId = hostileImp.id;
       sim.targetEntity(target.id);
       sim.startAutoAttack();
-      rec.tick(120); // 6s: friendly Firebolt every 2s + hostile imp shoots the player
+      rec.tick(120); // 6s: friendly Ashbolt every 2s + hostile fire demon shoots the player
     },
   };
 }
@@ -496,9 +498,9 @@ function petAi(): Scenario {
       const p = sim.player as AnyEntity;
       beef(p);
 
-      // Imp (petRanged demon): pre-targeted on a beefed wolf inside bolt range so
+      // Emberkin (petRanged demon): pre-targeted on a beefed wolf inside bolt range so
       // updatePet runs the petRangedAttack arm (crit roll + AP-scaled fire damage).
-      const imp = spawnMob(sim, 'imp', 12, p.pos.x + 2, p.pos.y, p.pos.z);
+      const imp = spawnMob(sim, 'emberkin', 12, p.pos.x + 2, p.pos.y, p.pos.z);
       imp.ownerId = p.id;
       imp.hostile = false;
       imp.hp = imp.maxHp;
@@ -509,10 +511,10 @@ function petAi(): Scenario {
       imp.aggroTargetId = impTarget.id;
       rec.track(impTarget.id);
 
-      // Voidwalker (melee tank): NO pre-set target, so petPickTarget runs the
+      // Gloomshade (melee tank): NO pre-set target, so petPickTarget runs the
       // aggressive auto-pull to acquire a beefed wolf in range, then the melee arm
       // closes, auto-taunts the mob, and swings via mobSwing.
-      const tank = spawnMob(sim, 'voidwalker', 12, p.pos.x - 2, p.pos.y, p.pos.z);
+      const tank = spawnMob(sim, 'gloomshade', 12, p.pos.x - 2, p.pos.y, p.pos.z);
       tank.ownerId = p.id;
       tank.hostile = false;
       tank.hp = tank.maxHp;
@@ -557,10 +559,12 @@ function petAi(): Scenario {
 // on the pet so despawnPersistentPet's threat-scrub + retargetMob draws; then re-tames,
 // revives a dead pet, and a stow/restore round-trip (serializePet -> despawnPersistentPet
 // -> restorePet). A warlock summons a demon, channels Demon Heal (applyDemonHealTick:
-// heal2 + healingThreat), swaps demons (despawnPersistentPet + the "answers your summons"
-// vs "fades back into the void" branches), then stows a demon so despawnPet runs its
-// player-target + threat scrub (retargetMob draw). The despawn scrubs are the slice's
-// only rng draws, so the draw-order log pins them; the snapshots pin every state change.
+// heal2 + healingThreat), swaps demons (despawnPersistentPet + "answers your summons"),
+// then re-summons the SAME demon while it is alive (despawnPersistentPet + a fresh
+// full-health demon answers, rather than toggling off), then stows a demon so despawnPet
+// runs its player-target + threat scrub (retargetMob draw). The despawn scrubs are the
+// slice's only rng draws, so the draw-order log pins them; the snapshots pin every state
+// change.
 function petCommands(): Scenario {
   return {
     name: 'pet_commands',
@@ -650,7 +654,7 @@ function petCommands(): Scenario {
       warlock.resource = warlock.maxResource;
       rec.track(wpid);
 
-      (sim as any).summonPet(warlock, 'imp'); // createDemonPet -> "answers your summons"
+      (sim as any).summonPet(warlock, 'emberkin'); // createDemonPet -> "answers your summons"
       const imp = sim.petOf(wpid) as AnyEntity;
       rec.notes.impId = imp.id;
       rec.track(imp.id);
@@ -660,15 +664,18 @@ function petCommands(): Scenario {
       rec.tick(40); // applyDemonHealTick fires: heal2 + healingThreat
       rec.snapshot('demon-heal-tick');
 
-      (sim as any).summonPet(warlock, 'voidwalker'); // different template: despawnPersistentPet(imp) + "answers"
+      (sim as any).summonPet(warlock, 'gloomshade'); // different template: despawnPersistentPet(emberkin) + "answers"
       const vw = sim.petOf(wpid) as AnyEntity;
       rec.notes.voidId = vw.id;
       rec.track(vw.id);
-      (sim as any).summonPet(warlock, 'voidwalker'); // same template, alive: "fades back into the void" (no new pet)
-      rec.snapshot('demon-faded');
+      (sim as any).summonPet(warlock, 'gloomshade'); // same template, alive: dismissed + a fresh full-health demon answers
+      const vw2 = sim.petOf(wpid) as AnyEntity;
+      rec.notes.void2Id = vw2.id;
+      rec.track(vw2.id);
+      rec.snapshot('demon-resummoned');
 
       // despawnPet (demon hard despawn): re-summon, point a player target + mob threat at it, stow the demon.
-      (sim as any).summonPet(warlock, 'imp');
+      (sim as any).summonPet(warlock, 'emberkin');
       const imp2 = sim.petOf(wpid) as AnyEntity;
       rec.notes.imp2Id = imp2.id;
       rec.track(imp2.id);
@@ -1143,6 +1150,171 @@ function delveLockpickFail(): Scenario {
   };
 }
 
+// The Drowned Litany (second delve): heroic entry rolls a ruin affix, the choir
+// loft exercises the bell-rope F-pull (Bell Shock on live cantors mid-combat)
+// and the every-puzzle exit gate, then the apse runs the Sister Nhalia driver
+// through its shared-stream rng draws (Blackwater Mark target pick, Tolling
+// Bells volley offset + interval) plus both cantor phases and the Final Bell,
+// ending on the Drowned Reliquary Rite choose -> first playback pulses.
+function drownedLitany(): Scenario {
+  return {
+    name: 'drowned_litany',
+    coverage: [
+      'drowned_litany heroic run (ruin affix roll + module advance)',
+      'bell-rope pull -> Bell Shock on live cantors (delveInteract)',
+      'Sister Nhalia driver: Blackwater Mark + Tolling Bells volley rng draws',
+      'cantor phases + Final Bell + rite choose -> playback pulses',
+    ],
+    sampleEvery: 10,
+    build: () => new Sim({ seed: 3131, playerClass: 'warrior', autoEquip: true }),
+    drive(rec: Recorder) {
+      const sim = rec.sim as AnySim;
+      const def = DELVES.drowned_litany;
+      const heroic = def.tiers.find((t: any) => t.id === 'heroic');
+      sim.setPlayerLevel(heroic?.minPlayerLevel ?? def.minLevel);
+      const p = sim.player as AnyEntity;
+      beef(p);
+      teleport(sim, p, def.doorPos.x, def.doorPos.z);
+      sim.enterDelve('drowned_litany', 'heroic');
+      const run = sim.delveRunForPlayer(sim.playerId);
+      if (!run) {
+        rec.tick(2);
+        return;
+      }
+      run.bountiful = false; // pin against the rare coffer roll
+      rec.notes.affixes = [...run.affixes];
+      run.modules = ['litany_choir_loft', 'litany_apse'];
+      run.moduleIndex = 0;
+      (sim as any).spawnDelveModule(run);
+      // Open combat on a cantor so onBellRopePulled has a live, in-combat target.
+      const cantor = run.mobIds
+        .map((id: number) => sim.entities.get(id) as AnyEntity | undefined)
+        .find((m: AnyEntity | undefined) => m && !m.dead && m.templateId === 'drowned_cantor');
+      if (cantor) {
+        rec.track(cantor.id);
+        aggroOnto(cantor, p);
+        sim.dealDamage(p, cantor, 1, false, 'physical', null, 'hit', true);
+        rec.tick(2);
+      }
+      // Pull both ropes mid-combat: the deliberate F-pull path (delveInteract),
+      // Bell Shock lands on the cantor, and the rope template swaps to _pulled.
+      for (const oid of [...run.objectIds]) {
+        if (run.objectState[oid]?.kind !== 'bell_rope') continue;
+        const rope = sim.entities.get(oid) as AnyEntity | undefined;
+        if (!rope) continue;
+        // In-delve placement copies the object's pos: the teleport helper's
+        // terrainHeight y is the open-world surface, a lethal fall in here.
+        p.pos = { ...rope.pos };
+        p.prevPos = { ...p.pos };
+        sim.rebucket(p);
+        sim.delveInteract(oid);
+        rec.tick(1);
+      }
+      // Clear the room; with every rope pulled the exit opens and walking into
+      // the tombstone advances onto the apse finale.
+      for (const id of [...run.mobIds]) {
+        const m = sim.entities.get(id) as AnyEntity | undefined;
+        if (m) m.dead = true;
+      }
+      rec.tick(2);
+      const portal = [...sim.entities.values()].find(
+        (e: AnyEntity) => run.objectState[e.id]?.kind === 'module_exit',
+      ) as AnyEntity | undefined;
+      if (portal) {
+        p.pos = { ...portal.pos };
+        p.prevPos = { ...p.pos };
+        sim.rebucket(p);
+        rec.tick(3);
+      }
+      rec.snapshot('advanced-to-apse');
+      const boss = run.mobIds
+        .map((id: number) => sim.entities.get(id) as AnyEntity | undefined)
+        .find((m: AnyEntity | undefined) => m && m.templateId === SISTER_NHALIA_BOSS_ID);
+      if (boss) {
+        rec.track(boss.id);
+        p.pos = { x: boss.pos.x + 1.5, y: boss.pos.y, z: boss.pos.z };
+        p.prevPos = { ...p.pos };
+        sim.rebucket(p);
+        face(p, boss);
+        // Real engagement: the boss runs PROFILED mob combat, whose state machine
+        // manages its own aggro, so a synthetic aggroOnto does not stick. Auto-
+        // attacking keeps the pull live the whole window (threat + inCombat).
+        sim.targetEntity(boss.id);
+        addThreat(boss, p.id, 5000);
+        aggroOnto(boss, p);
+        sim.startAutoAttack();
+        // Past the 70% gate -> cantor phase 1 (shield adds), then ride out the
+        // 14s mark timer + ~12s first volley window on the driver's rng draws.
+        sim.dealDamage(
+          p,
+          boss,
+          Math.ceil(boss.hp - boss.maxHp * 0.65),
+          false,
+          'physical',
+          null,
+          'hit',
+          true,
+        );
+        for (let round = 0; round < 15; round++) {
+          rec.tick(20);
+          if (!boss.dead) face(p, boss);
+        }
+        rec.notes.marksSeen = (run.nhaliaBoss?.marks?.length ?? 0) as number;
+        rec.notes.bellsLive = run.mobIds.filter((id: number) => {
+          const m = sim.entities.get(id) as AnyEntity | undefined;
+          return m && !m.dead && m.templateId === 'tolling_bell';
+        }).length;
+        // Drop the shield adds, cross the 35% gate (phase 2), then the Final
+        // Bell at 10%, and finish the boss.
+        for (const id of [...run.mobIds]) {
+          const m = sim.entities.get(id) as AnyEntity | undefined;
+          if (m && !m.dead && m.templateId === 'drowned_cantor') lethal(sim, p, m);
+        }
+        rec.tick(20);
+        sim.dealDamage(
+          p,
+          boss,
+          Math.ceil(boss.hp - boss.maxHp * 0.3),
+          false,
+          'physical',
+          null,
+          'hit',
+          true,
+        );
+        rec.tick(40);
+        sim.dealDamage(
+          p,
+          boss,
+          Math.ceil(boss.hp - boss.maxHp * 0.08),
+          false,
+          'physical',
+          null,
+          'hit',
+          true,
+        );
+        rec.tick(40);
+        lethal(sim, p, boss);
+      }
+      rec.tick(6); // reliquary + shrines rise, rite awaits the intensity choice
+      const reliquary = [...run.objectIds]
+        .map((id: number) => sim.entities.get(id) as AnyEntity | undefined)
+        .find(
+          (o: AnyEntity | undefined) => o && run.objectState[o.id]?.kind === 'drowned_reliquary',
+        );
+      if (reliquary) {
+        p.pos = { x: reliquary.pos.x + 1, y: reliquary.pos.y, z: reliquary.pos.z };
+        p.prevPos = { ...p.pos };
+        sim.rebucket(p);
+        sim.delveInteract(reliquary.id); // -> delveRiteChoosePrompt (the popup cue)
+      }
+      sim.delveRiteChoose('easy');
+      rec.tick(90); // first playback pulses stream out
+      rec.snapshot('rite-started');
+      rec.tick(2);
+    },
+  };
+}
+
 // Party loot: a need/greed roll over a party-tagged corpse carrying a premium
 // item. Exercises lootCorpse -> lootRoll -> submitLootRoll resolution.
 function partyLoot(): Scenario {
@@ -1274,8 +1446,9 @@ function l1LootDistribution(): Scenario {
 // them through BOTH despawn branches (despawnTimer + the idle-despawn timer on a
 // DAMAGE_IDLE_DESPAWN mob) so the prologue collect-then-drop loop fires; schedules
 // three delayed events (due+fires, due+guard-fails-and-drops, future+stays-pending)
-// so emitDueDelayedEvents exercises every branch; then kills the player and releases
-// the spirit to the zone graveyard (full hp, auras + ccDr cleared, out of combat).
+// so emitDueDelayedEvents exercises every branch; then kills the player, releases the
+// spirit (rises as a ghost at the nearest graveyard), and resurrects at the Spirit
+// Healer (in place, with Resurrection Sickness at level 10).
 function entityRoster(): Scenario {
   return {
     name: 'entity_roster',
@@ -1283,7 +1456,7 @@ function entityRoster(): Scenario {
       'addEntity roster + spatial grids',
       'despawn prologue: despawnTimer + DAMAGE_IDLE_DESPAWN idle-despawn (collect-then-drop)',
       'emitDueDelayedEvents drain (fires / guard-drops / stays-pending)',
-      'releaseSpirit outdoor graveyard respawn (full hp, ~10966)',
+      'releaseSpirit ghost release + Spirit Healer resurrect (Resurrection Sickness)',
     ],
     sampleEvery: 2,
     build: () => new Sim({ seed: 1012, playerClass: 'warrior', autoEquip: true }),
@@ -1322,11 +1495,14 @@ function entityRoster(): Scenario {
       delayed.push({ at: sim.time + 100, event: { type: 'respawn', pid: p.id } });
       rec.tick(5); // both mobs despawn (0.1s) and the due delayed events resolve
       rec.snapshot('post-churn');
-      // (4) outdoor release-spirit -> zone graveyard at FULL hp.
+      // (4) outdoor release-spirit -> rise as a ghost at the nearest graveyard, then
+      // resurrect at the Spirit Healer (in place, with Resurrection Sickness at lvl 10).
       p.hp = 1;
       p.dead = true;
       sim.releaseSpirit();
-      rec.snapshot('graveyard-release');
+      rec.snapshot('ghost-release');
+      sim.resurrectAtSpiritHealer();
+      rec.snapshot('healer-resurrect');
       rec.tick(2);
     },
   };
@@ -2198,7 +2374,8 @@ function mobLocomotion(): Scenario {
 
       // Cowardly flee: a low-HP humanoid in melee panics once (maybeFlee at/under
       // FLEE_HP_THRESHOLD -> aiState 'flee'), then the flee arm runs it away. The
-      // 'attempts to flee!' emit + callForHelp stay on Sim; the flee arm draws no rng.
+      // 'attempts to flee!' emit stays on Sim; a fleeing mob no longer rallies
+      // allies (no social aggro), and the flee arm draws no rng.
       const coward = spawnMob(
         sim,
         'mogger_lackey',
@@ -2826,6 +3003,7 @@ function c4aCastingLifecycle(): Scenario {
     coverage: [
       'castAbility timed-cast START (mage fireball) + Math.max gcd arm',
       'updateCasting progress + finish -> applyAbility spell-hit roll (rng) -> runEffects',
+      'single-slot spell queue (#1360): tail-window press queues, fires on completion',
       'pushbackCast timed branch (+CAST_PUSHBACK_SEC) via dealDamage mid-cast',
       'updateCasting silence branch -> cancelCast (priest lesser_heal, holy)',
       'castAbility channel START (warlock drain_life): spend+arm at START',
@@ -2844,7 +3022,7 @@ function c4aCastingLifecycle(): Scenario {
       const eMage = sim.entities.get(mage) as AnyEntity;
       const ePriest = sim.entities.get(priest) as AnyEntity;
       const eWarlock = sim.entities.get(warlock) as AnyEntity;
-      // Level 12: fireball rank 3 (2.5s), lesser_heal rank 3 (2.0s, holy),
+      // Level 12: fireball rank 3 (3.0s), lesser_heal rank 3 (2.0s, holy),
       // drain_life rank 1 (5s channel / 5 ticks = 1s per tick). drain_life needs >=10.
       for (const pid of [mage, priest, warlock]) sim.setPlayerLevel(12, pid);
       teleport(sim, eMage, -3, -45);
@@ -2873,6 +3051,26 @@ function c4aCastingLifecycle(): Scenario {
       sim.dealDamage(mob, eMage, 40, false, 'physical', null, 'hit'); // pushbackCast timed branch
       rec.snapshot('mage-pushback');
       rec.tick(120); // let the 2.5s cast (+ pushback) finish -> applyAbility -> runEffects
+
+      // --- mage: spell queue (#1360): a press in the cast tail queues, fires on completion ---
+      eMage.resource = eMage.maxResource;
+      face(eMage, mob);
+      sim.castAbility('fireball', mage); // second timed-cast START (fresh cast, no pushback)
+      // drain to inside the queue window: tick one at a time (cast time varies by rank/level,
+      // so a hardcoded tick count would silently drift outside the window) until castRemaining
+      // is within CAST_QUEUE_WINDOW_SEC but the cast has not yet completed.
+      while (eMage.castRemaining > CAST_QUEUE_WINDOW_SEC) rec.tick(1);
+      if (!(eMage.castingAbility && eMage.castRemaining > 0)) {
+        throw new Error(
+          'c4a_casting_lifecycle: fireball cast completed before entering the queue window',
+        );
+      }
+      sim.castAbility('fireball', mage); // queues instead of erroring "You are busy."
+      if (eMage.queuedCastAbility !== 'fireball') {
+        throw new Error('c4a_casting_lifecycle: press inside the queue window did not queue');
+      }
+      rec.snapshot('mage-queued');
+      rec.tick(20); // finishes the in-flight cast (fires the queued one) and lets it progress
 
       // --- priest: timed self-heal start -> silence lands -> updateCasting cancel ---
       ePriest.hp = Math.max(1, ePriest.maxHp - 1000);
@@ -3250,11 +3448,11 @@ function c4bEffectDispatch(): Scenario {
       sim.castAbility('sinister_strike', rogue); // weaponStrike -> meleeSwing + awardCombo latch
       ready(eRogue);
       eRogue.comboPoints = 3;
-      eRogue.comboTargetId = mobR.id;
+      eRogue.comboUntil = sim.time + 30; // character-bound pool, kept alive through ready()
       sim.castAbility('eviscerate', rogue); // finisherDamage range-then-chance + combo reset
       ready(eRogue);
       eRogue.comboPoints = 2;
-      eRogue.comboTargetId = mobR.id;
+      eRogue.comboUntil = sim.time + 30;
       sim.castAbility('kidney_shot', rogue); // finisherStun + combo-spend reset
       rec.snapshot('rogue-combo-finishers');
 
@@ -3439,9 +3637,15 @@ function marketRoundTrip(): Scenario {
       rec.snapshot('listed');
 
       // 2) browse filter narrows to the wolf_fang listing, then clears.
-      sim.marketSearch('wolf', seller);
+      sim.marketSearch(
+        { search: 'wolf', itemType: 'all', subtype: 'all', rarity: 'all', page: 0 },
+        seller,
+      );
       rec.snapshot('searched');
-      sim.marketSearch('', seller);
+      sim.marketSearch(
+        { search: '', itemType: 'all', subtype: 'all', rarity: 'all', page: 0 },
+        seller,
+      );
       rec.snapshot('search-cleared');
 
       // 3) the buyer buys it: coin leaves the buyer, goods enter their bags, the
@@ -3486,7 +3690,7 @@ function inventoryVendor(): Scenario {
   return {
     name: 'inventory_vendor',
     coverage: [
-      'buyItem: meta.copper - buyValue + addItem at trader_wilkes (vendor proximity gate)',
+      'buyItem: meta.copper - buyValue*stackSize + addItem stack at trader_wilkes (vendor proximity gate)',
       'equipItem empty-slot equip + recalcPlayerStats',
       'equipItem same-slot SWAP: old piece returned to bags via addItemSilent + recalc',
       'unequipItem: piece back to bags, slot emptied, recalc',
@@ -3558,6 +3762,66 @@ function inventoryVendor(): Scenario {
       // 8) buy one back (copper spend + addItemSilent + onInventoryChangedForQuests).
       sim.buyBackItem('wolf_fang', buyer);
       rec.snapshot('bought-back');
+    },
+  };
+}
+
+// Personal bank: the per-character deposit box. A player stands at a
+// bursar and moves a stack in and out through the pooled deposit/withdraw commands,
+// then buys a slot expansion. Exercises every state transition the bank owns:
+//  - bankDeposit partial (a fraction of a fungible stack leaves the bags);
+//  - bankDeposit whole (the rest of the stack, merging into the bank slot);
+//  - bankWithdraw partial then whole (the mirror, gated by bag capacity);
+//  - bankBuySlots (copper - table price, purchasedSlots + 6).
+// The bank draws NO rng (it is pure pooled-list math), so the draw-order digest must
+// stay byte-identical; its behavior is pinned entirely through PlayerMeta (copper +
+// inventory + bank) and the emitted event stream. Modeled on market_round_trip.
+function bankRoundTrip(): Scenario {
+  return {
+    name: 'bank_round_trip',
+    coverage: [
+      'bankDeposit partial: a fraction of a fungible stack moves bags -> bank',
+      'bankDeposit whole: the remaining stack merges into the bank slot',
+      'bankWithdraw partial then whole: bank -> bags, gated by bag capacity',
+      'bankBuySlots: meta.copper - BANK_EXPANSION_PRICES[0] + purchasedSlots + 6',
+      'banker-proximity gate (nearBanker) satisfied by standing at a bursar',
+    ],
+    build: () => new Sim({ seed: 1024, playerClass: 'warrior', noPlayer: true }),
+    drive(rec: Recorder) {
+      const sim = rec.sim as AnySim;
+      const pid = sim.addPlayer('warrior', 'Vaultkeeper');
+      const meta = sim.players.get(pid) as any;
+      // Stand at a bursar so the nearBanker gate passes (dist2d check, matching x/z
+      // is enough). bankerIds is the Sim anchor list seeded by the ctor.
+      const banker = sim.entities.get(sim.bankerIds[0]) as AnyEntity;
+      teleport(sim, sim.entities.get(pid) as AnyEntity, banker.pos.x, banker.pos.z);
+      sim.addItem('wolf_fang', 5, pid);
+      meta.copper = 1000;
+      rec.notes.pid = pid;
+      rec.snapshot('bank-setup');
+
+      // 1) deposit a partial count: 2 of the 5-stack leaves the bags for the bank.
+      const depIdx = meta.inventory.findIndex((s: any) => s.itemId === 'wolf_fang');
+      sim.bankDeposit(depIdx, 2, pid);
+      rec.snapshot('deposited-partial');
+
+      // 2) deposit the whole remaining stack (3): merges into the bank's wolf_fang slot.
+      const depIdx2 = meta.inventory.findIndex((s: any) => s.itemId === 'wolf_fang');
+      sim.bankDeposit(depIdx2, undefined, pid);
+      rec.snapshot('deposited-whole');
+
+      // 3) withdraw a partial count (1) back into the bags.
+      sim.bankWithdraw(0, 1, pid);
+      rec.snapshot('withdrew-partial');
+
+      // 4) withdraw the whole remaining bank stack (4) back into the bags.
+      sim.bankWithdraw(0, undefined, pid);
+      rec.snapshot('withdrew-whole');
+
+      // 5) buy the first slot expansion: copper - 500, purchasedSlots 0 -> 6.
+      sim.bankBuySlots(pid);
+      rec.snapshot('bought-slots');
+      rec.tick(2);
     },
   };
 }
@@ -3761,6 +4025,7 @@ export const SCENARIOS: Scenario[] = [
   arena2v2Wipe(),
   delveLockpick(),
   delveLockpickFail(),
+  drownedLitany(),
   partyLoot(),
   partyRaid(),
   l1LootDistribution(),
@@ -3788,6 +4053,7 @@ export const SCENARIOS: Scenario[] = [
   c5AutoAttack(),
   marketRoundTrip(),
   inventoryVendor(),
+  bankRoundTrip(),
   g1bXpPrestige(),
   playerTrade(),
   chatSocial(),

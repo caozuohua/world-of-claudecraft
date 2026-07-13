@@ -38,8 +38,10 @@ import {
   talentPointsAtLevel,
 } from '../content/talents';
 import { abilitiesKnownAt, arenaOrigin } from '../data';
+import * as deedsMod from '../deeds';
 import { ARENA_SPAWNS_A_2v2, ARENA_SPAWNS_B_2v2 } from '../dungeon_layout';
 import { recalcPlayerStats } from '../entity';
+import { awardFiestaKillHonor } from '../pvp';
 import { Rng } from '../rng';
 import type { ArenaMatch, FiestaPowerup, FiestaState, PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
@@ -87,6 +89,7 @@ export function createFiestaState(ctx: SimContext): FiestaState {
     respawn: new Map(),
     deaths: new Map(),
     kills: new Map(),
+    honorKillsByPair: new Map(),
     streak: new Map(),
     lastKill: new Map(),
     pending: new Map(),
@@ -131,6 +134,10 @@ export function mergeAugmentMods(base: TalentModifiers, augIds: string[]): Talen
       s.staPct += e.staPct ?? 0;
       s.armorPct += e.armorPct ?? 0;
       s.maxHpPct += e.maxHpPct ?? 0;
+      s.strPct += e.strPct ?? 0;
+      s.agiPct += e.agiPct ?? 0;
+      s.intPct += e.intPct ?? 0;
+      s.spiPct += e.spiPct ?? 0;
     }
     if (eff.global) {
       const g = m.global,
@@ -139,6 +146,7 @@ export function mergeAugmentMods(base: TalentModifiers, augIds: string[]): Talen
       g.spellDmgPct += e.spellDmgPct ?? 0;
       g.healPct += e.healPct ?? 0;
       g.threatPct += e.threatPct ?? 0;
+      g.critVsRooted += e.critVsRooted ?? 0;
     }
     for (const am of eff.ability ?? []) {
       if (!m.abilities[am.ability]) {
@@ -148,6 +156,9 @@ export function mergeAugmentMods(base: TalentModifiers, augIds: string[]): Talen
           costPct: 0,
           cooldownPct: 0,
           castPct: 0,
+          buffPct: 0,
+          castWhileMoving: false,
+          addEffects: [],
         };
       }
       const cur = m.abilities[am.ability];
@@ -156,6 +167,9 @@ export function mergeAugmentMods(base: TalentModifiers, augIds: string[]): Talen
       cur.costPct += am.costPct ?? 0;
       cur.cooldownPct += am.cooldownPct ?? 0;
       cur.castPct += am.castPct ?? 0;
+      cur.buffPct += am.buffPct ?? 0;
+      if (am.castWhileMoving) cur.castWhileMoving = true;
+      if (am.addEffects) cur.addEffects.push(...am.addEffects);
     }
     if (eff.grant) m.grants.push({ ability: eff.grant.ability, rank: eff.grant.rank ?? 1 });
   }
@@ -178,7 +192,7 @@ export function fiestaApplyAugments(meta: PlayerMeta, e: Entity): void {
   meta.fiestaSpecial = sp;
   meta.known = abilitiesKnownAt(meta.cls, e.level, meta.fiestaMods);
   const frac = e.maxHp > 0 ? e.hp / e.maxHp : 1;
-  recalcPlayerStats(e, meta.cls, meta.equipment, meta.fiestaMods);
+  recalcPlayerStats(e, meta.cls, meta.equipment, meta.fiestaMods, meta.equipmentInstance);
   e.hp = e.dead ? 0 : Math.max(1, Math.round(e.maxHp * frac));
 }
 
@@ -196,7 +210,7 @@ export function clearFiestaAugments(meta: PlayerMeta, e: Entity): void {
   meta.fiestaMods = null;
   meta.fiestaSpecial = {};
   meta.known = abilitiesKnownAt(meta.cls, e.level, meta.talentMods);
-  recalcPlayerStats(e, meta.cls, meta.equipment, meta.talentMods);
+  recalcPlayerStats(e, meta.cls, meta.equipment, meta.talentMods, meta.equipmentInstance);
 }
 
 // Standardize a fighter to a balanced level-20 build for the bout. The
@@ -207,9 +221,10 @@ export function fiestaStandardize(ctx: SimContext, meta: PlayerMeta, e: Entity):
   meta.fiestaRestore = { level: e.level, xp: meta.xp, talents: cloneAllocation(meta.talents) };
   e.level = FIESTA_STANDARD_LEVEL;
   meta.talents = defaultBuild(meta.cls, talentPointsAtLevel(FIESTA_STANDARD_LEVEL));
-  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents);
+  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents, e.level);
   meta.known = abilitiesKnownAt(meta.cls, e.level, ctx.playerMods(meta));
-  recalcPlayerStats(e, meta.cls, meta.equipment, ctx.playerMods(meta));
+  meta.wireRev++; // talents/loadouts swapped for the bout, refresh the wire promptly
+  recalcPlayerStats(e, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
 }
 
 // Undo fiestaStandardize: restore the player's real level/xp/talents.
@@ -219,10 +234,11 @@ export function fiestaRestoreChar(meta: PlayerMeta, e: Entity): void {
   e.level = snap.level;
   meta.xp = snap.xp;
   meta.talents = snap.talents;
-  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents);
+  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents, e.level);
   meta.fiestaRestore = null;
   meta.known = abilitiesKnownAt(meta.cls, e.level, meta.talentMods);
-  recalcPlayerStats(e, meta.cls, meta.equipment, meta.talentMods);
+  meta.wireRev++; // real talents restored, refresh the wire promptly
+  recalcPlayerStats(e, meta.cls, meta.equipment, meta.talentMods, meta.equipmentInstance);
 }
 
 // Player command: lock in one of the augments currently on offer.
@@ -271,15 +287,21 @@ export function fiestaRespawnTime(deaths: number, elapsed: number): number {
 export function fiestaDownEntity(ctx: SimContext, e: Entity, killer: Entity | null): void {
   e.dead = true;
   e.hp = 0;
+  // Fiesta is a clean-slate minigame with its own timed revive: it intentionally strips
+  // ALL auras (including The Keeper's Toll), unlike the overworld/delve death paths.
   e.auras = [];
   e.ccDr.clear();
   e.castingAbility = null;
   e.castRemaining = 0;
+  e.castTargetId = null;
   e.channeling = false;
   e.autoAttack = false;
   e.queuedOnSwing = null;
+  delete e.queuedOnSwingFree;
+  e.queuedCastAbility = null;
+  e.queuedCastAim = null;
   e.comboPoints = 0;
-  e.comboTargetId = null;
+  e.comboUntil = -1;
   e.eating = null;
   e.drinking = null;
   e.sitting = false;
@@ -330,6 +352,9 @@ export function fiestaTakedown(
   else if (killerTeam === 'B') f.scoreB += points;
   if (killerMeta) killerMeta.counters.kills++;
   f.kills.set(killerPid, (f.kills.get(killerPid) ?? 0) + 1);
+  if (killerMeta && !match.practice && ctx.isArenaCrossTeam(match, killerPid, victim.id)) {
+    awardFiestaKillHonor(ctx, killerMeta, victim.id, f.honorKillsByPair);
+  }
 
   fiestaDown(ctx, match, victim, killerPid);
 
@@ -338,6 +363,13 @@ export function fiestaTakedown(
   f.lastKill.set(killerPid, now);
   const ks = (f.streak.get(killerPid) ?? 0) + 1;
   f.streak.set(killerPid, ks);
+  // Deed moments read the sim-side tallies, independent of the word-cue
+  // else-if chain below (which reports only the loudest cue).
+  deedsMod.onFiestaTakedownForDeeds(ctx, match, killerPid, {
+    rapid,
+    victimStreak,
+    killerKills: f.kills.get(killerPid) ?? 0,
+  });
   if (!f.firstBlood) {
     f.firstBlood = true;
     ctx.emit({ type: 'fiestaWord', flavor: 'firstblood', pid: killerPid });
@@ -554,7 +586,7 @@ export function fiestaSpawnPowerup(match: ArenaMatch): void {
 
 export function fiestaGrabPowerup(
   ctx: SimContext,
-  _match: ArenaMatch,
+  match: ArenaMatch,
   e: Entity,
   p: FiestaPowerup,
 ): void {
@@ -583,4 +615,5 @@ export function fiestaGrabPowerup(
     glow: def.glow,
     duration: def.duration,
   });
+  deedsMod.onFiestaPowerupForDeeds(ctx, match, e.id, def.id);
 }

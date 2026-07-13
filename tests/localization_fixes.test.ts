@@ -3,8 +3,10 @@ import * as path from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { resolveReportTarget } from '../server/report_target';
 import { DICT as adminDICT, classLabel, setAdminLanguage } from '../src/admin/i18n';
+import { DELVE_MOBS } from '../src/sim/content/delves/mobs';
 import { ABILITIES } from '../src/sim/data';
 import {
+  cs_CZ,
   da_DK,
   de_DE,
   en,
@@ -62,6 +64,7 @@ const locales: Record<string, any> = {
   ja_JP,
   pt_BR,
   ru_RU,
+  cs_CZ,
   nl_NL,
   pl_PL,
   id_ID,
@@ -476,7 +479,7 @@ describe('S1: sim event-text pipeline is localized in every locale', () => {
     'Talents updated.',
     'Talents reset.',
     'You cannot equip that.',
-    'Equipped Worn Shortsword.',
+    'Equipped Pitted Shortsword.',
     'You quaff Minor Healing Potion.',
     'No fish are biting.',
     'You sit down to eat.',
@@ -500,12 +503,13 @@ describe('S1: sim event-text pipeline is localized in every locale', () => {
     'You have prestiged! Prestige Rank 2.',
     'You dismiss Forest Wolf.',
     'Forest Wolf is now your loyal companion.',
+    'Rex could not be restored and has been lost.',
     'Forest Wolf dies.',
     'Forest Wolf becomes enraged!',
     'Forest Wolf calls for aid!',
     'Discarded Linen Scrap.',
     'Discarded Linen Scrap x3.',
-    'Aki wins Worn Shortsword (87)',
+    'Aki wins Pitted Shortsword (87)',
     'Aki leaves the party.',
     'Aki has left the party.',
     'Aki has been removed from the party.',
@@ -529,7 +533,7 @@ describe('S1: sim event-text pipeline is localized in every locale', () => {
 
   it('localizes embedded item and mob names inside sim text', () => {
     setLanguage('de_DE');
-    expect(localizeSimText('Equipped Worn Shortsword.')).not.toContain('Worn Shortsword');
+    expect(localizeSimText('Equipped Pitted Shortsword.')).not.toContain('Pitted Shortsword');
     expect(localizeSimText('Forest Wolf dies.')).not.toContain('Forest Wolf');
     setLanguage('en');
   });
@@ -539,6 +543,58 @@ describe('S1: sim event-text pipeline is localized in every locale', () => {
     expect(localizeSimAuraName('Tamed')).not.toBeNull();
     expect(localizeSimAuraName('Tamed')).not.toBe('Tamed');
     expect(localizeSimAuraName('not-an-aura')).toBeNull();
+    setLanguage('en');
+  });
+
+  it('every delve mob aura-emitting proc name resolves through the aura matcher', () => {
+    // These five template fields all push a named, player-visible aura (a channel
+    // line, a player debuff, or a target-frame buff). A name with no matcher row
+    // renders raw English in every non-English locale: the exact Litany Pulse /
+    // Web Snare / Silt Hide / Frenzy drift class, which occurred four ways in one
+    // delve. Scan the content records so a rename on either side reddens this.
+    setLanguage('zh_CN');
+    const names: string[] = [];
+    for (const tmpl of Object.values(DELVE_MOBS)) {
+      for (const proc of [
+        tmpl.mendAlly,
+        tmpl.chillOnHit,
+        tmpl.stoneskin,
+        tmpl.wardAllies,
+        tmpl.frenzyOnHit,
+      ]) {
+        if (proc?.name) names.push(proc.name);
+      }
+    }
+    // Pin the scan itself: if a field is renamed in the template type, the scan
+    // silently goes blind without these.
+    expect(names).toContain('Litany Pulse');
+    expect(names).toContain('Web Snare');
+    expect(names).toContain('Silt Hide');
+    expect(names).toContain('Feeding Frenzy');
+    for (const name of names) {
+      expect(localizeSimAuraName(name), `no aura matcher row for '${name}'`).not.toBeNull();
+    }
+    // De-aliasing: Silt Hide and Silt Ward are distinct auras with distinct keys.
+    expect(localizeSimAuraName('Silt Hide')).not.toBe(localizeSimAuraName('Silt Ward'));
+    setLanguage('en');
+  });
+
+  it('helper-returned pet error strings resolve through the matcher (the S3 scanner cannot see them)', () => {
+    // noPetError (src/sim/pet/pet_commands.ts) builds its string inside a ternary,
+    // and the delve arm 'Pets are not allowed inside the delves.' is a literal in
+    // the HELPER, never a direct ctx.error(...) argument. The S3 emit scanner only
+    // enumerates literals at the emit call site, so it is structurally blind to
+    // these: pin them here explicitly so a future delve pet-error added the same
+    // way still needs a matcher row.
+    setLanguage('es');
+    for (const emitted of [
+      'You have no pet.',
+      'You have no living pet.',
+      'You have no living demon.',
+      'Pets are not allowed inside the delves.',
+    ]) {
+      expect(localizeSimText(emitted), `no sim matcher row for '${emitted}'`).not.toBe(emitted);
+    }
     setLanguage('en');
   });
 });
@@ -752,6 +808,8 @@ function scanEmitCandidates(simSrc: string, serverSrc: string): Cand[] {
   }
   const s2 = new RegExp(`sendChatNotice\\([^,]+,\\s*${lit}`, 'g');
   for (const m of serverSrc.matchAll(s2)) cands.push({ type: 'error', tmpl: unq(m[1]) });
+  const s3 = new RegExp(`sendSystemNotice\\([^,]+,\\s*${lit}`, 'g');
+  for (const m of serverSrc.matchAll(s3)) cands.push({ type: 'log', tmpl: unq(m[1]) });
   const seen = new Set<string>();
   return cands.filter((c) => {
     const k = `${c.type} ${c.tmpl}`;
@@ -817,8 +875,13 @@ describe('S3: every sim.ts emit is recognized (drift guard)', () => {
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/mob/lifecycle.ts'), 'utf8'),
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/pet/pet_commands.ts'), 'utf8'),
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/instances/dungeons.ts'), 'utf8'),
+    fs.readFileSync(path.resolve(process.cwd(), 'src/sim/instances/heroic_vendor.ts'), 'utf8'),
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/delves/runs.ts'), 'utf8'),
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/delves/lockpick_controller.ts'), 'utf8'),
+    // DL1: Drowned Litany boss/rite/rooms emit surfaces.
+    fs.readFileSync(path.resolve(process.cwd(), 'src/sim/delves/drowned_litany_boss.ts'), 'utf8'),
+    fs.readFileSync(path.resolve(process.cwd(), 'src/sim/delves/drowned_litany_rite.ts'), 'utf8'),
+    fs.readFileSync(path.resolve(process.cwd(), 'src/sim/delves/drowned_litany_rooms.ts'), 'utf8'),
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/market.ts'), 'utf8'),
     // W2: the inventory/vendor command bodies (equip/use/discard + buy/sell/buyback).
     // The "Discarded"/"Equipped"/"Unequipped"/"You sit down to eat|drink"/"You quaff"/
@@ -836,6 +899,19 @@ describe('S3: every sim.ts emit is recognized (drift guard)', () => {
     // the "<name> awakens!" summon log; the boss yells are variable-routed chat, not
     // scanned). Literals are byte-identical after the move so their matchers are unchanged.
     fs.readFileSync(path.resolve(process.cwd(), 'src/sim/encounters/nythraxis.ts'), 'utf8'),
+    // H1 (#1141): the interaction command bodies (corpse harvest + loot/pickup). The two
+    // corpse-harvest deny strings ("That corpse has nothing to harvest." / "This corpse
+    // has already been harvested.") have their ONLY emitter occurrences here; the file's
+    // OTHER emits (too-far, bags-full, dead, no-permission) are byte-identical to
+    // literals in already-scanned files, so only a rewording of THIS file's sites was
+    // invisible to the guard before this entry.
+    fs.readFileSync(path.resolve(process.cwd(), 'src/sim/interaction.ts'), 'utf8'),
+    // #1121: per-player node harvest command denials (dead gate, unknown node,
+    // range, respawn timer, bag-full pre-check).
+    fs.readFileSync(path.resolve(process.cwd(), 'src/sim/professions/gathering.ts'), 'utf8'),
+    // Bank system: the pooled bank deposit/withdraw/buy-slots command bodies
+    // emit the quest-item/full/afford/max-slots refusals + the purchase notice.
+    fs.readFileSync(path.resolve(process.cwd(), 'src/sim/bank.ts'), 'utf8'),
     socialSrc,
   ].join('\n');
   // Hardened S3: also scan the authoritative server's player-facing emits. The
@@ -989,11 +1065,11 @@ describe('S3: every sim.ts emit is recognized (drift guard)', () => {
     expect(leaks, 'unregistered sim emit strings (add a key/RULE to sim_i18n.ts)').toEqual([]);
   });
 
-  // RELEASE TIER: the same coverage across all 14 locales, and where a real matcher
+  // RELEASE TIER: the same coverage across all 21 locales, and where a real matcher
   // resolves the string, its localized form is not raw English in any translated
   // locale (no silently-shipped English).
   it.runIf(RELEASE_TIER)(
-    's3_localized: every emit is recognized in all 14 locales and not left English where a matcher resolves it',
+    's3_localized: every emit is recognized in all 21 locales and not left English where a matcher resolves it',
     () => {
       const cands = candidateStrings();
       expect(cands.length, 'sanity: should enumerate many emit sites').toBeGreaterThan(80);
@@ -1019,7 +1095,7 @@ describe('S3: every sim.ts emit is recognized (drift guard)', () => {
 
 // Regression for the S3 hardening: prove the scanner ENUMERATES each emit form it was
 // hardened to cover, by feeding it synthetic source. If a future refactor drops one of
-// the regexes (s1/s1t/s2/nr/ert/e3), the matching assertion bites - so the drift guard
+// the regexes (s1/s1t/s2/s3/nr/ert/e3), the matching assertion bites - so the drift guard
 // cannot silently lose coverage of a whole emit shape.
 describe('S3 scanner enumerates each hardened emit form (regression)', () => {
   const synthSim = [
@@ -1041,6 +1117,7 @@ describe('S3 scanner enumerates each hardened emit form (regression)', () => {
     "this.send({ type: 'error', text: 'SYNTH_SERVER_INLINE' });", // s1
     "this.send({ type: 'log', text: flag ? 'SYNTH_SRV_TERN_A' : 'SYNTH_SRV_TERN_B' });", // s1t
     "sendChatNotice(session, 'SYNTH_CHATNOTICE');", // s2
+    "sendSystemNotice(session, 'SYNTH_SYSNOTICE');", // s3
   ].join('\n');
 
   // [label, expected type, expected tmpl] - every entry must be enumerated.
@@ -1061,6 +1138,7 @@ describe('S3 scanner enumerates each hardened emit form (regression)', () => {
     ['server ternary text, branch A (s1t)', 'log', 'SYNTH_SRV_TERN_A'],
     ['server ternary text, branch B (s1t)', 'log', 'SYNTH_SRV_TERN_B'],
     ['server sendChatNotice (s2)', 'error', 'SYNTH_CHATNOTICE'],
+    ['server sendSystemNotice (s3)', 'log', 'SYNTH_SYSNOTICE'],
   ];
 
   it('every hardened emit form is enumerated by scanEmitCandidates()', () => {

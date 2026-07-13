@@ -10,6 +10,7 @@
 // numbers; they never walk the tree. See docs/prd/talents-and-specializations.md.
 // ---------------------------------------------------------------------------
 
+import type { AbilityEffect } from '../types';
 import { MAX_LEVEL, type PlayerClass } from '../types';
 import {
   DRUID_TALENTS,
@@ -44,6 +45,13 @@ export interface StatModEffect {
   staPct?: number;
   armorPct?: number;
   maxHpPct?: number;
+  // Primary-attribute multipliers (0.10 = +10%). Applied to the fully-summed attribute
+  // (base + per-level + gear + auras + flat talent bonuses) in recalcPlayerStats, so a
+  // capstone can promise "+10% Agility" instead of a flat amount.
+  strPct?: number;
+  agiPct?: number;
+  intPct?: number;
+  spiPct?: number;
 }
 
 // Per-ability combat modifier. Baked into the resolved ability's effects/cost/
@@ -55,6 +63,9 @@ export interface AbilityModEffect {
   costPct?: number; // -0.20 = 20% cheaper
   cooldownPct?: number; // -0.50 = half cooldown
   castPct?: number; // -0.50 = half cast time
+  buffPct?: number; // +0.20 = +20% to this ability's selfBuff/buffTarget value (e.g. Improved Devotion Aura)
+  castWhileMoving?: boolean; // the cast/channel survives the caster's own movement (Firestarter)
+  addEffects?: AbilityEffect[];
 }
 
 // Mastery-style global multipliers, applied to whole damage/heal schools when
@@ -63,7 +74,26 @@ export interface GlobalModEffect {
   meleeDmgPct?: number; // physical ability damage
   spellDmgPct?: number; // magic ability damage
   healPct?: number; // healing done
+  dotDmgPct?: number; // damage-over-time effects
+  hotHealPct?: number; // heal-over-time effects
+  absorbPct?: number; // absorb shield strength
+  meleeHastePct?: number; // passive melee attack haste
+  petDmgPct?: number; // owner's passive pet damage
+  petDmgSharePct?: number; // incoming damage redirected to a living pet
   threatPct?: number; // bonus threat (tank role)
+  // Extra critical-strike damage (0.5 = +50%), split by OUTPUT CHANNEL so a spec mastery
+  // only strengthens the crits it is meant to: a Fire/Destruction mastery boosts SPELL
+  // crits, an Arms/Subtlety mastery boosts PHYSICAL crits, and a Holy paladin mastery
+  // boosts HEAL crits, never the others. Added to the matching base crit multiplier
+  // (spell 1.5, physical 2.0, heal 1.5). Baked onto the paired Entity.critDmg*Bonus in
+  // recalcPlayerStats.
+  critDmgSpellPct?: number;
+  critDmgPhysPct?: number;
+  critDmgHealPct?: number;
+  // Passive spell haste from a spec mastery (0.1 = +10%). Folds into Entity.spellHaste, so
+  // it shortens every cast and the cast-time tooltips reflect it live.
+  spellHastePct?: number;
+  critVsRooted?: number; // additive spell crit chance against rooted targets
 }
 
 export interface TalentEffect {
@@ -138,6 +168,7 @@ export interface SavedLoadout {
 }
 
 export const MAX_LOADOUTS = 10;
+export const SAVED_LOADOUT_BAR_SLOTS = 22;
 
 export interface ResolvedAbilityMod {
   dmgPct: number;
@@ -145,6 +176,9 @@ export interface ResolvedAbilityMod {
   costPct: number;
   cooldownPct: number;
   castPct: number;
+  buffPct: number;
+  castWhileMoving: boolean;
+  addEffects: AbilityEffect[];
 }
 
 // The flat precomputed struct read by the hot paths.
@@ -203,7 +237,7 @@ export function pointsSpent(alloc: TalentAllocation): number {
   return n;
 }
 
-function pointsSpentInTree(ct: ClassTalents, alloc: TalentAllocation, tree: TalentTree): number {
+function _pointsSpentInTree(ct: ClassTalents, alloc: TalentAllocation, tree: TalentTree): number {
   const idx = nodeIndex(ct);
   let n = 0;
   for (const id in alloc.ranks) {
@@ -420,6 +454,67 @@ export function dormantNodes(cls: PlayerClass, alloc: TalentAllocation): Set<str
   return out;
 }
 
+// Repair a persisted allocation so it satisfies the current rules and budget
+// (load-time revalidation). A stored build replays verbatim on load and is fed
+// straight to computeTalentModifiers, which trusts the apply-time gate; but the
+// load path never ran validateAllocation, so a stale, level-downed, or tampered
+// save could grant over-budget / prereq-broken / gated stats and abilities.
+//
+// This rebuilds the allocation deterministically: walk the tree top-down (class
+// tree first, then the chosen spec, in row/col order (the same order defaultBuild
+// uses), refilling each node up to its persisted rank but never past a point where
+// validateAllocation would reject the build. Because prereqs and pointsGates only
+// reference rows above, a top-down fill satisfies them by construction, and the
+// running budget check clamps the total to availablePoints. On an already-valid,
+// in-budget allocation this is the identity (every persisted rank validates at each
+// step), so honest saves load byte-identically and the parity gate is unaffected.
+export function repairAllocation(
+  cls: PlayerClass,
+  alloc: TalentAllocation,
+  availablePoints: number,
+): TalentAllocation {
+  const ct = talentsFor(cls);
+  if (!ct) return emptyAllocation();
+  // A spec needs a known id AND at least one talent point available; below
+  // FIRST_TALENT_LEVEL (availablePoints === 0) a spec is illegal (it would still
+  // grant the signature ability + mastery passive), matching the apply-time gate.
+  const spec =
+    alloc.spec !== null && availablePoints > 0 && ct.specs.some((s) => s.id === alloc.spec)
+      ? alloc.spec
+      : null;
+  const out: TalentAllocation = { spec, ranks: {}, choices: {} };
+  const order = [...ct.nodes].sort((a, b) => {
+    if (a.tree !== b.tree) return a.tree === 'class' ? -1 : 1;
+    return a.row - b.row || a.col - b.col;
+  });
+  for (const node of order) {
+    if (node.tree === 'spec' && node.specId !== spec) continue;
+    const want = Math.floor(alloc.ranks[node.id] ?? 0);
+    if (want <= 0) continue;
+    if (node.kind === 'choice') {
+      const chosen = alloc.choices[node.id];
+      if (!node.choices?.some((c) => c.id === chosen)) continue;
+      out.choices[node.id] = chosen;
+      out.ranks[node.id] = 1;
+      if (!validateAllocation(cls, out, availablePoints).ok) {
+        delete out.ranks[node.id];
+        delete out.choices[node.id];
+      }
+      continue;
+    }
+    const max = Math.min(want, node.maxRank);
+    for (let target = 1; target <= max; target++) {
+      out.ranks[node.id] = target;
+      if (!validateAllocation(cls, out, availablePoints).ok) {
+        if (target === 1) delete out.ranks[node.id];
+        else out.ranks[node.id] = target - 1;
+        break;
+      }
+    }
+  }
+  return out;
+}
+
 // ---------------------------------------------------------------------------
 // Precompute (the heart of the architecture). Walk the allocation ONCE and fold
 // every chosen node/spec into a flat TalentModifiers struct.
@@ -440,13 +535,42 @@ function zeroStats(): Required<StatModEffect> {
     staPct: 0,
     armorPct: 0,
     maxHpPct: 0,
+    strPct: 0,
+    agiPct: 0,
+    intPct: 0,
+    spiPct: 0,
   };
 }
 function zeroGlobal(): Required<GlobalModEffect> {
-  return { meleeDmgPct: 0, spellDmgPct: 0, healPct: 0, threatPct: 0 };
+  return {
+    meleeDmgPct: 0,
+    spellDmgPct: 0,
+    healPct: 0,
+    dotDmgPct: 0,
+    hotHealPct: 0,
+    absorbPct: 0,
+    meleeHastePct: 0,
+    petDmgPct: 0,
+    petDmgSharePct: 0,
+    threatPct: 0,
+    critDmgSpellPct: 0,
+    critDmgPhysPct: 0,
+    critDmgHealPct: 0,
+    spellHastePct: 0,
+    critVsRooted: 0,
+  };
 }
 function zeroAbilityMod(): ResolvedAbilityMod {
-  return { dmgPct: 0, flatDmg: 0, costPct: 0, cooldownPct: 0, castPct: 0 };
+  return {
+    dmgPct: 0,
+    flatDmg: 0,
+    costPct: 0,
+    cooldownPct: 0,
+    castPct: 0,
+    buffPct: 0,
+    castWhileMoving: false,
+    addEffects: [],
+  };
 }
 
 export function emptyModifiers(): TalentModifiers {
@@ -478,6 +602,10 @@ function accumulate(mods: TalentModifiers, eff: TalentEffect | undefined, mult: 
     s.staPct += (e.staPct ?? 0) * mult;
     s.armorPct += (e.armorPct ?? 0) * mult;
     s.maxHpPct += (e.maxHpPct ?? 0) * mult;
+    s.strPct += (e.strPct ?? 0) * mult;
+    s.agiPct += (e.agiPct ?? 0) * mult;
+    s.intPct += (e.intPct ?? 0) * mult;
+    s.spiPct += (e.spiPct ?? 0) * mult;
   }
   if (eff.global) {
     const g = mods.global,
@@ -485,7 +613,18 @@ function accumulate(mods: TalentModifiers, eff: TalentEffect | undefined, mult: 
     g.meleeDmgPct += (e.meleeDmgPct ?? 0) * mult;
     g.spellDmgPct += (e.spellDmgPct ?? 0) * mult;
     g.healPct += (e.healPct ?? 0) * mult;
+    g.dotDmgPct += (e.dotDmgPct ?? 0) * mult;
+    g.hotHealPct += (e.hotHealPct ?? 0) * mult;
+    g.absorbPct += (e.absorbPct ?? 0) * mult;
+    g.meleeHastePct += (e.meleeHastePct ?? 0) * mult;
+    g.petDmgPct += (e.petDmgPct ?? 0) * mult;
+    g.petDmgSharePct += (e.petDmgSharePct ?? 0) * mult;
     g.threatPct += (e.threatPct ?? 0) * mult;
+    g.critDmgSpellPct += (e.critDmgSpellPct ?? 0) * mult;
+    g.critDmgPhysPct += (e.critDmgPhysPct ?? 0) * mult;
+    g.critDmgHealPct += (e.critDmgHealPct ?? 0) * mult;
+    g.spellHastePct += (e.spellHastePct ?? 0) * mult;
+    g.critVsRooted += (e.critVsRooted ?? 0) * mult;
   }
   for (const am of eff.ability ?? []) {
     let cur = mods.abilities[am.ability];
@@ -498,6 +637,10 @@ function accumulate(mods: TalentModifiers, eff: TalentEffect | undefined, mult: 
     cur.costPct += (am.costPct ?? 0) * mult;
     cur.cooldownPct += (am.cooldownPct ?? 0) * mult;
     cur.castPct += (am.castPct ?? 0) * mult;
+    cur.buffPct += (am.buffPct ?? 0) * mult;
+    if (am.castWhileMoving) cur.castWhileMoving = true;
+    // Added effects are rank-1 semantics, not multiplied by talent rank.
+    if (am.addEffects) cur.addEffects.push(...am.addEffects);
   }
   if (eff.grant) mods.grants.push({ ability: eff.grant.ability, rank: eff.grant.rank ?? 1 });
 }
@@ -550,7 +693,11 @@ export function defaultBuild(cls: PlayerClass, points: number): TalentAllocation
   return alloc;
 }
 
-export function computeTalentModifiers(cls: PlayerClass, alloc: TalentAllocation): TalentModifiers {
+export function computeTalentModifiers(
+  cls: PlayerClass,
+  alloc: TalentAllocation,
+  level = MAX_LEVEL,
+): TalentModifiers {
   const mods = emptyModifiers();
   const ct = talentsFor(cls);
   if (!ct) return mods;
@@ -561,7 +708,7 @@ export function computeTalentModifiers(cls: PlayerClass, alloc: TalentAllocation
     mods.spec = spec.id;
     mods.role = spec.role;
     mods.grants.push({ ability: spec.signature, rank: 1 }); // signature ability
-    accumulate(mods, spec.mastery.effect, 1); // Mastery passive
+    accumulate(mods, spec.mastery.effect, Math.min(1, level / 20)); // Mastery passive
   }
 
   for (const id in alloc.ranks) {

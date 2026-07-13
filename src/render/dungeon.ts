@@ -15,6 +15,8 @@ import * as THREE from 'three';
 import type { GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { instanceOrigin } from '../sim/data';
+import type { DelveModuleId } from '../sim/delve_layout';
+import { isLitanyModuleId } from '../sim/delve_litany_layout';
 import {
   ARENA_LAYOUT,
   CRYPT_LAYOUT,
@@ -30,7 +32,17 @@ import {
   TOMB_HD,
   type WallStub,
 } from '../sim/dungeon_layout';
+import { polygonContainsPoint, polygonXAtZ } from '../sim/geometry2d';
 import { loadGltf, releaseGltf } from './assets/loader';
+import { registerPreload } from './assets/preload';
+import {
+  placeLitanyMarshDressing,
+  placeMarshBlackwaterPools,
+  placeMarshClutter,
+  placeMarshDryIslands,
+  placeMarshTombs,
+  placeMarshWallDressing,
+} from './delve_marsh_dressing';
 import { sharedUniforms } from './gfx';
 import { radialGlowTexture } from './textures';
 
@@ -58,15 +70,22 @@ export type DungeonInteriorVariant =
   | 'delve_ossuary'
   | 'delve_bell'
   | 'delve_hall'
-  | 'delve_finale';
+  | 'delve_finale'
+  // Drowned Litany marsh delve sub-themes (share the delve crypt-stone base via
+  // isDelveVariant, but light with a sickly bog-green torch tint; the trash
+  // rooms route through the ossuary dressing path, the apse through the finale).
+  | 'delve_marsh'
+  | 'delve_marsh_apse';
 
-/** True for any Collapsed Reliquary delve module variant. */
+/** True for any delve module variant (Collapsed Reliquary or Drowned Litany). */
 export function isDelveVariant(variant: DungeonInteriorVariant): boolean {
   return (
     variant === 'delve_ossuary' ||
     variant === 'delve_bell' ||
     variant === 'delve_hall' ||
-    variant === 'delve_finale'
+    variant === 'delve_finale' ||
+    variant === 'delve_marsh' ||
+    variant === 'delve_marsh_apse'
   );
 }
 type Variant = DungeonInteriorVariant;
@@ -78,6 +97,9 @@ export function dungeonDaisHasRaisedPlatform(variant: DungeonInteriorVariant): b
   if (variant === 'arena' || variant === 'nythraxis') return false;
   if (variant === 'delve_ossuary' || variant === 'delve_bell' || variant === 'delve_hall')
     return false;
+  // marsh trash rooms are flat fighting floors like the other delve trash; the
+  // marsh apse keeps a raised boss stage like delve_finale.
+  if (variant === 'delve_marsh') return false;
   return true;
 }
 
@@ -102,7 +124,22 @@ const TORCH_COLORS: Record<Variant, TorchColors> = {
   delve_hall: { flame: 0xff7a3c, emissive: 0xcc3a14, light: 0xff6a3c },
   // the bell-buried boss chamber burns hotter: brighter ember over the arena
   delve_finale: { flame: 0xffa24a, emissive: 0xe04a18, light: 0xff7a3c },
+  // the Drowned Litany burns with sickly bog-light: cold green marsh-gas flames
+  // over wet stone, clearly distinct from the reliquary ember-orange.
+  delve_marsh: { flame: 0x6abf6a, emissive: 0x2f6f2f, light: 0x6aff8c },
+  // the drowned apse burns brighter and colder: a cyan corpse-glow over the stage
+  delve_marsh_apse: { flame: 0x7fe6c0, emissive: 0x2f8f6f, light: 0x6affb0 },
 };
+
+// The Drowned Litany reuses the same KayKit crypt-stone wall/floor/pillar kit as
+// every other interior, so without a tint it would just read as a recolored
+// crypt. These multiply the shared pack material toward wet mossy stone (walls,
+// pillars) and dark peat/mud (floors) for delve_marsh / delve_marsh_apse only;
+// tuned pale enough that the bog-green torchlight (TORCH_COLORS.delve_marsh*)
+// still reads clearly against them. See marshMaterial() for how the tint is
+// applied to a clone of the shared pack material, never the source itself.
+const MARSH_WALL_TINT = 0x5a6a52;
+const MARSH_FLOOR_TINT = 0x3c3830;
 
 // The Drowned Temple is flooded — a translucent, self-animating water sheet
 // (driven by the shared uTime so it needs no per-frame plumbing) with cheap
@@ -117,8 +154,10 @@ const TEMPLE_WATER_VERT = /* glsl */ `
     pos.y += sin(uTime * 1.3 + pos.x * 0.5) * 0.02 + sin(uTime * 0.9 + pos.z * 0.42) * 0.02;
     vec4 wp = modelMatrix * vec4(pos, 1.0);
     vWPos = wp.xyz;
-    vec4 mv = viewMatrix * wp;
-    gl_Position = projectionMatrix * mv;
+    // Name this mvPosition: the fog_vertex chunk reads mvPosition for vFogDepth,
+    // so a different name fails to compile once USE_FOG is defined (outdoor fog).
+    vec4 mvPosition = viewMatrix * wp;
+    gl_Position = projectionMatrix * mvPosition;
     #include <fog_vertex>
   }
 `;
@@ -290,6 +329,31 @@ export function ensureDungeonAssets(): Promise<void> {
   return dungeonAssetsPromise;
 }
 
+// Kit-pack modules loaded on demand by scenes outside the dungeon interiors
+// (the jail). They land in the same moduleAssets/material registry, so
+// buildDungeonPropMesh serves them once resolved.
+const extraModulePromises = new Map<string, Promise<void>>();
+
+export function loadKitModules(names: readonly string[]): Promise<void> {
+  return Promise.all(
+    names.map((name) => {
+      let task = extraModulePromises.get(name);
+      if (!task) {
+        task = loadModuleAsset(name, 'kit');
+        extraModulePromises.set(name, task);
+      }
+      return task;
+    }),
+  ).then(() => undefined);
+}
+
+// Fold the dungeon GLBs into the boot preload (like terrain/foliage/props/sky)
+// instead of fetching them lazily on first dungeon approach. Without this the
+// kit + Halloween-bits modules stream in (and their shaders compile) the moment
+// the camera nears a dungeon door, which is the on-approach freeze at the Fallen
+// Chapel. assetsReady() now genuinely covers everything buildInterior needs.
+if (typeof window !== 'undefined') registerPreload(ensureDungeonAssets());
+
 // ---------------------------------------------------------------------------
 // Deterministic placement helpers
 // ---------------------------------------------------------------------------
@@ -418,6 +482,9 @@ const RECEIVER_KINDS = new Set([
   'floor_tile_grate',
   'floor_foundation_allsides',
 ]);
+// Wall + pillar kinds only, for the delve_marsh wet-stone tint (marshMaterial):
+// excludes banners/torches/props so the tint stays scoped to structural stone.
+const WALL_PILLAR_KINDS = new Set([...ARENA_WALL_CASTER_KINDS, 'pillar', 'pillar_decorated']);
 
 // ---------------------------------------------------------------------------
 
@@ -531,6 +598,11 @@ export class DungeonInteriors {
   private glowDecalMats = new Map<number, THREE.MeshBasicMaterial>();
   private flameGeo: THREE.BufferGeometry | null = null;
   private packMats = new Map<Pack, THREE.Material>();
+  // delve_marsh / delve_marsh_apse wall+pillar and floor tints: clones of
+  // packMats keyed by pack, built once and reused for every marsh room this
+  // instance draws (see marshMaterial). Never touched by any other variant.
+  private marshWallMats = new Map<Pack, THREE.Material>();
+  private marshFloorMats = new Map<Pack, THREE.Material>();
   private waterMat: THREE.ShaderMaterial | null = null;
   private arenaHideables: ArenaHideable[] = [];
 
@@ -541,11 +613,68 @@ export class DungeonInteriors {
     private fireLights: THREE.PointLight[],
   ) {}
 
+  // Instantiate every distinct interior material once so the startup prewarm's
+  // compile step links their shader programs up front. Without this the kit /
+  // Halloween-bits pack materials, the Drowned Temple water shader and the
+  // additive torch-glow decal all compile on first dungeon entry (a freeze).
+  // It builds the materials on THIS instance, so the live buildInterior() reuses
+  // the already-linked programs (Three dedupes by program-cache key regardless).
+  // Cheap by design: one instanced mesh per pack plus two small decals, not a
+  // full interior. Caller adds the returned group to the scene before the
+  // compile pass and removes it afterwards.
+  async buildPrewarmGroup(): Promise<THREE.Group> {
+    await ensureDungeonAssets();
+    const group = new THREE.Group();
+    group.name = 'dungeon-material-prewarm';
+    let kitGeo: THREE.BufferGeometry | null = null;
+    let bitsGeo: THREE.BufferGeometry | null = null;
+    for (const asset of moduleAssets.values()) {
+      if (asset.pack === 'kit') kitGeo ??= asset.geo;
+      else if (asset.pack === 'bits') bitsGeo ??= asset.geo;
+      if (kitGeo && bitsGeo) break;
+    }
+    const identity = new THREE.Matrix4();
+    const addPack = (geo: THREE.BufferGeometry | null, pack: Pack): void => {
+      if (!geo) return;
+      const mesh = new THREE.InstancedMesh(geo, this.material(pack), 1);
+      mesh.setMatrixAt(0, identity);
+      mesh.instanceMatrix.needsUpdate = true;
+      mesh.castShadow = false;
+      mesh.receiveShadow = false;
+      mesh.frustumCulled = false;
+      group.add(mesh);
+    };
+    addPack(kitGeo, 'kit');
+    addPack(bitsGeo, 'bits');
+    // Drowned Temple flood water (the one bespoke interior shader).
+    const water = new THREE.Mesh(
+      new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2),
+      this.templeWaterMaterial(),
+    );
+    water.frustumCulled = false;
+    group.add(water);
+    // Torch-glow decal: one MeshBasic program shared by every variant's colour.
+    this.addTorchGlow(group, 0, 0, TORCH_COLORS.crypt.light);
+    return group;
+  }
+
   async buildInterior(
     interior: string,
     ox: number,
     oz: number,
-    opts?: { layout?: DungeonLayout; variant?: Variant },
+    opts?: {
+      layout?: DungeonLayout;
+      variant?: Variant;
+      hazards?: Array<{
+        x: number;
+        z: number;
+        r: number;
+        rx?: number;
+        rz?: number;
+        tier?: 'shallow' | 'deep';
+      }>;
+      moduleId?: DelveModuleId;
+    },
   ): Promise<void> {
     await ensureDungeonAssets();
     // Delve modules pass an explicit per-module layout so render geometry matches
@@ -580,8 +709,25 @@ export class DungeonInteriors {
       this.placeFloodwater(group, layout);
       this.placeAquaticDressing(group, layout);
     }
+    if (opts?.hazards?.length) {
+      if (variant === 'delve_marsh' || variant === 'delve_marsh_apse') {
+        placeMarshBlackwaterPools(group, opts.hazards, (x, z, color, y, scale) =>
+          this.addTorchGlow(group, x, z, color, y, scale),
+        );
+      } else {
+        this.placeBlackwaterPools(group, opts.hazards);
+      }
+    }
+    if (variant === 'delve_marsh' || variant === 'delve_marsh_apse') {
+      if (opts?.moduleId && isLitanyModuleId(opts.moduleId)) {
+        // Dry islands render ON TOP of the pool overlays so the sim's
+        // dry-ground exemption is readable (safe ground must not read lethal).
+        placeMarshDryIslands(group, opts.moduleId);
+        placeLitanyMarshDressing(p, group, opts.moduleId, layout, variant);
+      }
+    }
 
-    this.emit(group, p);
+    this.emit(group, p, variant);
     if (arenaWalls) {
       for (const wall of arenaWalls.all) this.emitArenaHideable(group, wall);
     }
@@ -639,6 +785,45 @@ export class DungeonInteriors {
       this.addTorchGlow(group, 0, z, 0x37e6cf, 0.24, 1.4);
     }
     this.addTorchGlow(group, layout.dais.x, layout.dais.z, 0x37e6cf, 0.74, 2.0);
+  }
+
+  // The Drowned Litany's static Blackwater hazards: a dark, near-opaque pool with
+  // a sickly bog-green rim glow at each zone, so the damage area reads clearly at a
+  // glance (the sim deals damage to players standing inside, see runs.ts). Drawn in
+  // instance-local coords; the group is positioned at the module origin like the
+  // rest of the interior.
+  private placeBlackwaterPools(
+    group: THREE.Group,
+    hazards: Array<{ x: number; z: number; r: number }>,
+  ): void {
+    for (const h of hazards) {
+      const pool = new THREE.Mesh(
+        new THREE.CircleGeometry(h.r, 28).rotateX(-Math.PI / 2).translate(h.x, 0.12, h.z),
+        new THREE.MeshBasicMaterial({
+          color: 0x0a1a12,
+          transparent: true,
+          opacity: 0.82,
+          depthWrite: false,
+        }),
+      );
+      pool.renderOrder = 1; // floats over the floor tiles
+      group.add(pool);
+      // Bog-green rim so the edge of the hazard is unmistakable.
+      const rim = new THREE.Mesh(
+        new THREE.RingGeometry(h.r * 0.82, h.r, 32).rotateX(-Math.PI / 2).translate(h.x, 0.14, h.z),
+        new THREE.MeshBasicMaterial({
+          color: 0x3fae5a,
+          transparent: true,
+          opacity: 0.5,
+          side: THREE.DoubleSide,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+        }),
+      );
+      rim.renderOrder = 2;
+      group.add(rim);
+      this.addTorchGlow(group, h.x, h.z, 0x2f8f4f, 0.3, h.r * 0.6);
+    }
   }
 
   private placeAquaticDressing(group: THREE.Group, layout: DungeonLayout): void {
@@ -747,7 +932,31 @@ export class DungeonInteriors {
     return mat;
   }
 
-  private emit(group: THREE.Group, p: Placements): void {
+  // delve_marsh / delve_marsh_apse only: a tinted clone of the shared pack
+  // material (never the source, never this.material(pack)'s own instance) so
+  // the Drowned Litany's wall/pillar/floor stone reads as wet mossy rock and
+  // dark peat instead of the same crypt-stone grey every other interior uses.
+  // Cached per pack + surface (wall vs floor), built once per DungeonInteriors
+  // instance and reused for every marsh room, never cloned per room or mesh.
+  private marshMaterial(pack: Pack, surface: 'wall' | 'floor'): THREE.Material {
+    const cache = surface === 'wall' ? this.marshWallMats : this.marshFloorMats;
+    let mat = cache.get(pack);
+    if (mat) return mat;
+    // this.material(pack) is itself already a clone of the immutable GLB cache
+    // source (see material() above); clone again so the marsh tint never
+    // mutates the shared pack material every other variant instances from.
+    const base = this.material(pack).clone() as
+      | THREE.MeshLambertMaterial
+      | THREE.MeshStandardMaterial;
+    base.color.multiply(new THREE.Color(surface === 'wall' ? MARSH_WALL_TINT : MARSH_FLOOR_TINT));
+    if (base instanceof THREE.MeshStandardMaterial) base.roughness = Math.max(base.roughness, 0.92);
+    mat = base;
+    cache.set(pack, mat);
+    return mat;
+  }
+
+  private emit(group: THREE.Group, p: Placements, variant: Variant): void {
+    const isMarsh = variant === 'delve_marsh' || variant === 'delve_marsh_apse';
     for (const [kind, mats] of p.byKind) {
       const asset = moduleAssets.get(kind);
       if (!asset) {
@@ -755,7 +964,13 @@ export class DungeonInteriors {
         console.warn(`dungeon: unknown module kind '${kind}'`);
         continue;
       }
-      const mesh = new THREE.InstancedMesh(asset.geo, this.material(asset.pack), mats.length);
+      // Marsh wall/pillar/floor stone gets a wet-mossy / peat tint (see
+      // marshMaterial); every other kind (banners, torches, props) and every
+      // other variant keep the plain shared pack material unchanged.
+      let mat = this.material(asset.pack);
+      if (isMarsh && WALL_PILLAR_KINDS.has(kind)) mat = this.marshMaterial(asset.pack, 'wall');
+      else if (isMarsh && RECEIVER_KINDS.has(kind)) mat = this.marshMaterial(asset.pack, 'floor');
+      const mesh = new THREE.InstancedMesh(asset.geo, mat, mats.length);
       for (let i = 0; i < mats.length; i++) mesh.setMatrixAt(i, mats[i]);
       mesh.instanceMatrix.needsUpdate = true;
       mesh.computeBoundingSphere();
@@ -957,19 +1172,28 @@ export class DungeonInteriors {
     // Default the floor to the inner wall face so wider rooms (delve |x|=25)
     // are not left with a bare strip between the aisle floor and the side walls.
     const floorHalfX = layout.floorHalfX ?? (layout.wallX ?? DUNGEON_WALL_X) - 1;
+    const poly = layout.shellPolygon;
     for (let z = layout.zMin - 2; z <= layout.zMax + 2; z += FLOOR_CELL) {
       for (let x = -floorHalfX; x <= floorHalfX; x += FLOOR_CELL) {
+        // Polygon shell: mask the rectangular grid down to the authored room
+        // outline (same grid stepping and tile-kind logic, just skip cells
+        // whose own center falls outside the polygon). Boundary tiles will
+        // stair-step; accepted for this kit.
+        if (poly && !polygonContainsPoint(poly, x, z)) continue;
         let kind = this.floorKind(variant, hash2(x * 1.31, z));
         if (kind === 'grate' && Math.abs(x) < 4) kind = 'floor_tile_large'; // keep pits off the walk aisle
         if (kind === 'grate') {
-          // floor_tile_grate is 4x2: a pair fills the cell
-          p.add('floor_tile_grate', x, FLOOR_Y, z - 1);
-          p.add('floor_tile_grate', x, FLOOR_Y, z + 1);
+          // floor_tile_grate is 4x2: a pair fills the cell, test each half's own center
+          if (!poly || polygonContainsPoint(poly, x, z - 1))
+            p.add('floor_tile_grate', x, FLOOR_Y, z - 1);
+          if (!poly || polygonContainsPoint(poly, x, z + 1))
+            p.add('floor_tile_grate', x, FLOOR_Y, z + 1);
           continue;
         }
         if (kind === 'quad') {
           for (const dx of [-1, 1]) {
             for (const dz of [-1, 1]) {
+              if (poly && !polygonContainsPoint(poly, x + dx, z + dz)) continue;
               const sub = this.floorQuadKind(variant, hash2(x + dx, z + dz));
               const rot = Math.floor(hash2(z + dz, x + dx) * 4) * quarter;
               p.add(sub, x + dx, FLOOR_Y, z + dz, rot);
@@ -1105,6 +1329,10 @@ export class DungeonInteriors {
     variant: Variant,
     arenaWalls?: PendingArenaWalls,
   ): void {
+    if (layout.shellPolygon) {
+      this.placePolygonWalls(p, layout.shellPolygon, variant);
+      return;
+    }
     const bannerEvery = variant === 'crypt' ? 4 : 3;
     const wallX = layout.wallX ?? DUNGEON_WALL_X;
     const endWallHw = layout.endWallHw ?? DUNGEON_END_WALL_HW;
@@ -1156,6 +1384,48 @@ export class DungeonInteriors {
         Math.PI,
         MODULE_SCALE,
       );
+    }
+  }
+
+  // Polygon-shell wall path: walks each authored boundary edge and places
+  // fixed-pitch wall modules along it (same ~8u module pitch and variant-keyed
+  // wallKind/banner logic as the rectangular loop above), rotated to run along
+  // the edge. This covers the end faces too (the polygon already closes the
+  // room), so there is no separate end-cap pass and no door gap (Drowned
+  // Litany rooms are teleport-in, matching the sim shell colliders built by
+  // polygonShellColliders in sim/delve_litany_layout.ts). Rotation uses the
+  // SAME rot = atan2(-edgeDz, edgeDx) convention as that sim helper (and the
+  // fence OBBs in sim/colliders.ts): it aligns the OBB/module's local +x
+  // (world (cos(rot), -sin(rot)) under Three's Y-Euler) along the edge
+  // direction, which reproduces the existing side-wall ry for the west/east
+  // straight edges (see report for the verification walkthrough).
+  private placePolygonWalls(
+    p: Placements,
+    points: ReadonlyArray<{ x: number; z: number }>,
+    variant: Variant,
+  ): void {
+    const bannerEvery = variant === 'crypt' ? 4 : 3;
+    const n = points.length;
+    let i = 0;
+    for (let e = 0; e < n; e++) {
+      const a = points[e];
+      const b = points[(e + 1) % n];
+      const dx = b.x - a.x;
+      const dz = b.z - a.z;
+      const len = Math.hypot(dx, dz);
+      if (len < 1e-6) continue;
+      const rot = Math.atan2(-dz, dx);
+      const count = Math.max(1, Math.round(len / 8));
+      for (let s = 0; s < count; s++, i++) {
+        const t = (s + 0.5) / count;
+        const x = a.x + dx * t;
+        const z = a.z + dz * t;
+        const kind = this.wallKind(variant, hash2(x * 13.7, z));
+        p.add(kind, x, 0, z, rot, MODULE_SCALE);
+        if (i % bannerEvery === 2 && kind !== 'wall_archedwindow_gated') {
+          p.add(this.bannerKind(variant, hash2(z, x * 7.3)), x, 0, z, rot, MODULE_SCALE);
+        }
+      }
     }
   }
 
@@ -1253,6 +1523,10 @@ export class DungeonInteriors {
   // Wall-side obstacles at +-19 (OBB 2.2 x 4.2): sarcophagi in the crypt and
   // sanctum-free; the drowned bastion stacks cargo in the same footprints.
   private placeTombs(p: Placements, layout: DungeonLayout, variant: Variant): void {
+    if (variant === 'delve_marsh') {
+      placeMarshTombs(p, layout);
+      return;
+    }
     for (const t of layout.tombs) {
       const r = hash2(t.x * 3.7, t.z);
       if (variant === 'bastion') {
@@ -1398,7 +1672,7 @@ export class DungeonInteriors {
         p.add(i % 2 ? 'skull_candle' : 'candle_triple', x, 0.6, z, hash2(x, z) * Math.PI, 1.4);
       else if (variant === 'temple')
         p.add(i % 2 ? 'candle_triple' : 'shrine_candles', x, 0.6, z, hash2(x, z) * Math.PI, 1.3);
-      else if (variant === 'delve_finale')
+      else if (variant === 'delve_finale' || variant === 'delve_marsh_apse')
         p.add(i % 2 ? 'skull_candle' : 'candle_triple', x, 0.6, z, hash2(x, z) * Math.PI, 1.4);
       else p.add(i % 2 ? 'skull' : 'candle_lit', x, 0.6, z, hash2(x, z) * Math.PI, 1.3);
     }
@@ -1414,7 +1688,7 @@ export class DungeonInteriors {
       p.add('coin_stack_medium', d.x - 2.0, 0.6, d.z + d.r - 3.4, -0.7, 1.5);
       p.add('skull_candle', d.x, 0.68, d.z, 0, 1.6); // the moon-idol at the altar's heart
     }
-    if (variant === 'delve_finale') {
+    if (variant === 'delve_finale' || variant === 'delve_marsh_apse') {
       // Deacon Varric's bell-chamber: low ribcage trophies flanking the south
       // (entrance-facing) edge of the stage. The reward chest is a gameplay
       // object the sim places centre-south, and the surface-exit stairs sit at
@@ -1427,6 +1701,28 @@ export class DungeonInteriors {
   // Bone piles / debris strewn along the aisle (legacy deterministic spots)
   private placeAisleClutter(p: Placements, layout: DungeonLayout, variant: Variant): void {
     if (variant === 'arena') return; // the fighting sands stay clear of obstacles
+    // Delve modules drive clutter straight from their layout's authored scatter
+    // points so the visible bone piles sit exactly on the collision circles
+    // (the Drowned Litany marsh shapes use bespoke scatter, not the sine aisle
+    // formula). The Reliquary clutter arrays mirror the old formula positions, so
+    // their rendered output is unchanged.
+    if (isDelveVariant(variant)) {
+      if (variant === 'delve_marsh') {
+        placeMarshClutter(p, layout);
+        return;
+      }
+      for (const c of layout.clutter ?? []) {
+        const x = c.x;
+        const z = c.z;
+        if (z > layout.zMax - 4) continue;
+        const r = hash2(x, z);
+        p.add('ribcage', x, 0.5, z, r * Math.PI * 2, 1.7);
+        p.add('bone_A', x + 1.2, 0.08, z + 0.9, r * 7, 1.9);
+        if (r > 0.4) p.add('bone_B', x - 1.1, 0.06, z - 0.8, r * 11, 1.8);
+        if (r > 0.55) p.add('skull', x + 0.4, 0, z - 1.4, r * 3, 1.35);
+      }
+      return;
+    }
     const dense = variant === 'sanctum' || variant === 'temple';
     const count = variant === 'sanctum' ? 14 : variant === 'temple' ? 12 : 10;
     for (let i = 0; i < count; i++) {
@@ -1434,11 +1730,6 @@ export class DungeonInteriors {
       const z = 12 + i * (dense ? 10 : 9.5);
       if (variant === 'sanctum' && ((z > 60 && z < 74) || (z > 110 && z < 120))) continue; // waist walls
       if (variant === 'temple' && z > 60 && z < 72) continue; // single waist arch
-      // Delve clutter must stay locked to the per-module collider sets in
-      // delve_layout.ts (same sine formula): the Bell Niche skips the two spots
-      // that land inside its alcove piers; the Finale clears its north fighting ring.
-      if (variant === 'delve_bell' && (i === 2 || i === 5)) continue;
-      if (variant === 'delve_finale' && i > 3) continue;
       if (z > layout.zMax - 4) continue;
       const r = hash2(x, z);
       if (variant === 'bastion') {
@@ -1534,6 +1825,10 @@ export class DungeonInteriors {
         p.add('shrine', edge, 0, layout.zMax - 5, -Math.PI * 0.75, 1.5);
         return;
       }
+      if (variant === 'delve_marsh') {
+        placeMarshWallDressing(p, layout);
+        return;
+      }
       if (variant === 'delve_bell') {
         // choir plaques and candles lining the handbell alcoves
         for (const z of [18, 47, 76]) {
@@ -1555,13 +1850,22 @@ export class DungeonInteriors {
         p.add('shrine', edge, 0, layout.zMax - 6, -Math.PI / 2, 1.5);
         return;
       }
-      // delve_finale: bell-chamber trophies and the boss's reliquary hoard south
+      // delve_finale / delve_marsh_apse: bell-chamber trophies and the boss's
+      // reliquary hoard south. delve_marsh_apse is a litany room (polygon
+      // shell), so hug the polygon edge instead of the constant wallX band
+      // when one is authored.
+      const shellPolygon = layout.shellPolygon;
+      const edgeAt = (z: number, side: -1 | 1): number => {
+        if (!shellPolygon) return side * edge;
+        const x = polygonXAtZ(shellPolygon, z, side);
+        return x === null ? side * edge : x - side * 1.6;
+      };
       for (let z = layout.zMin + 14; z < layout.dais.z - 16; z += 20) {
-        for (const side of [-1, 1]) {
+        for (const side of [-1, 1] as const) {
           const r = hash2(side * 9.2, z);
           p.add(
             r < 0.5 ? 'ribcage' : 'gravestone',
-            side * edge,
+            edgeAt(z, side),
             0,
             z,
             side < 0 ? Math.PI / 2 : -Math.PI / 2,
@@ -1569,8 +1873,9 @@ export class DungeonInteriors {
           );
         }
       }
-      p.add('shrine_candles', -edge, 0, layout.dais.z - 4, Math.PI / 2, 1.5);
-      p.add('shrine_candles', edge, 0, layout.dais.z - 4, -Math.PI / 2, 1.5);
+      const daisZ = layout.dais.z - 4;
+      p.add('shrine_candles', edgeAt(daisZ, -1), 0, daisZ, Math.PI / 2, 1.5);
+      p.add('shrine_candles', edgeAt(daisZ, 1), 0, daisZ, -Math.PI / 2, 1.5);
       return;
     }
 

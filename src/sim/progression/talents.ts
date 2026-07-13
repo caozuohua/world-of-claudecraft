@@ -38,6 +38,8 @@ import {
   FIRST_TALENT_LEVEL,
   MAX_LOADOUTS,
   pointsSpent,
+  repairAllocation,
+  SAVED_LOADOUT_BAR_SLOTS,
   type SavedLoadout,
   type TalentAllocation,
   talentPointsAtLevel,
@@ -52,10 +54,17 @@ import type { Entity } from '../types';
 // The ONLY place a talent tree is walked. Re-resolves the flat modifier struct and
 // refreshes the stat pass + known-ability resolver that consume it.
 function recomputeTalents(ctx: SimContext, meta: PlayerMeta): void {
-  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents);
   const e = ctx.entities.get(meta.entityId);
-  if (e) recalcPlayerStats(e, meta.cls, meta.equipment, ctx.playerMods(meta));
-  ctx.refreshKnownAbilities(meta, false);
+  meta.talentMods = computeTalentModifiers(meta.cls, meta.talents, e?.level ?? 20);
+  if (e)
+    recalcPlayerStats(e, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
+  // Announce newly granted abilities (spec signature, active nodes): emits `learnAbility`
+  // (the HUD places it on the bar + spellbook) and a "You have learned" log. This is a
+  // LIVE-action path only (apply/spec-pick/respec/loadout-switch); character LOAD resolves
+  // known abilities via its own silent path (refreshKnownAbilities(meta, false) in the
+  // addPlayer/restore block), so this never spams on login. refreshKnownAbilities only
+  // fires for abilities genuinely new since the last known-set.
+  ctx.refreshKnownAbilities(meta, true);
 }
 
 function talentLockReason(ctx: SimContext, p: Entity): string | null {
@@ -200,7 +209,7 @@ export function saveTalentLoadout(
   }
   const clean = (name || 'Build').toString().slice(0, 24);
   const safeBar = Array.isArray(bar)
-    ? bar.slice(0, 16).map((b) => (typeof b === 'string' ? b : null))
+    ? bar.slice(0, SAVED_LOADOUT_BAR_SLOTS).map((b) => (typeof b === 'string' ? b : null))
     : [];
   const lo: SavedLoadout = { name: clean, alloc: cloneAllocation(r.meta.talents), bar: safeBar };
   const existing = r.meta.loadouts.findIndex((l) => l.name === clean);
@@ -267,7 +276,10 @@ export function deleteTalentLoadout(ctx: SimContext, index: number, pid?: number
       r.meta.loadouts.length > 0 ? Math.min(index, r.meta.loadouts.length - 1) : -1;
     const next = r.meta.activeLoadout >= 0 ? r.meta.loadouts[r.meta.activeLoadout] : null;
     if (next) {
-      r.meta.talents = cloneAllocation(next.alloc);
+      // This is an AUTO-apply (no user gate), so repair against the level budget
+      // first: switchTalentLoadout validates on its path, but here a stale or
+      // tampered next loadout would otherwise be baked into live mods wholesale.
+      r.meta.talents = repairAllocation(r.meta.cls, next.alloc, talentPointsAtLevel(r.e.level));
       recomputeTalents(ctx, r.meta);
     }
   } else if (r.meta.activeLoadout > index) r.meta.activeLoadout -= 1;

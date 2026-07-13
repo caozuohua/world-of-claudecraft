@@ -6,6 +6,7 @@ import {
   GROUND_OBJECTS,
   ITEMS,
   LAKE,
+  NPCS,
 } from '../src/sim/data';
 import { ACTIONS, applyAction, encodeObs, obsSize } from '../src/sim/obs';
 import { Sim } from '../src/sim/sim';
@@ -125,6 +126,14 @@ function despawnMobs(sim: Sim) {
     e.auras = [];
     e.castingAbility = null;
   }
+}
+
+function forwardDistance(sim: Sim, ticks = 60): number {
+  const start = { ...sim.player.pos };
+  sim.moveInput.forward = true;
+  for (let i = 0; i < ticks; i++) sim.tick();
+  sim.moveInput.forward = false;
+  return dist2d(start, sim.player.pos);
 }
 
 describe('classic formulas', () => {
@@ -379,7 +388,7 @@ describe('combat', () => {
     expect(sim.player.resource).toBeCloseTo(1, 5);
   });
 
-  it('mob can kill the player; release respawns at graveyard', () => {
+  it('mob can kill the player; release rises as a ghost, healer resurrects', () => {
     const sim = makeSim('mage');
     const boss = nearestMob(sim, 'gorrak');
     teleportTo(sim, boss.pos.x + 2, boss.pos.z);
@@ -390,10 +399,15 @@ describe('combat', () => {
       if (events.some((e) => e.type === 'playerDeath')) died = true;
     }
     expect(died).toBe(true);
+    // release rises as a ghost at a graveyard (still dead, but a spirit that can move)
     sim.releaseSpirit();
+    expect(sim.player.dead).toBe(true);
+    expect(sim.player.ghost).toBe(true);
+    expect(sim.player.corpsePos).not.toBeNull();
+    // a Spirit Healer hovers at the graveyard, so the ghost can resurrect there
+    sim.resurrectAtSpiritHealer();
     expect(sim.player.dead).toBe(false);
-    expect(sim.player.hp).toBe(sim.player.maxHp);
-    expect(dist2d(sim.player.pos, { x: -12, y: 0, z: -14 })).toBeLessThan(2);
+    expect(sim.player.ghost).toBe(false);
   });
 
   it('mobs leash, evade, and reset to full health', () => {
@@ -627,11 +641,14 @@ describe('spell pushback', () => {
   });
 
   it('a pushed-back cast still completes and lands', () => {
-    const { sim, wolf } = castingMage();
+    const { sim, wolf } = castingMage(20); // high level vs a low wolf: the bolt won't miss
     sim.castAbility('fireball');
     (sim as any).dealDamage(wolf, sim.player, 5, false, 'physical', null, 'hit');
     const hpBefore = wolf.hp;
-    for (let i = 0; i < 20 * 8 && sim.player.castingAbility; i++) sim.tick();
+    // The cast completes (pushed back, not cancelled), THEN the fireball flies to the
+    // wolf and lands its damage a few ticks later (projectile_travel): tick until the
+    // bolt connects, not merely until the cast bar empties.
+    for (let i = 0; i < 20 * 8 && wolf.hp >= hpBefore; i++) sim.tick();
     expect(wolf.hp).toBeLessThan(hpBefore);
   });
 
@@ -711,6 +728,57 @@ describe('rogue', () => {
     expect(sim.player.auras.some((a) => a.kind === 'stealth')).toBe(true);
   });
 
+  it('rogue Stealth moves at 50% speed', () => {
+    const sim = makeSim('rogue');
+    (sim as any).grantXp(xpForLevel(1) + xpForLevel(2) + 10); // reach level 3, learns stealth (lvl 2)
+    expect((sim as any).moveSpeedMult(sim.player)).toBe(1);
+    sim.castAbility('stealth');
+    expect(sim.player.auras.some((a) => a.kind === 'stealth')).toBe(true);
+    expect((sim as any).moveSpeedMult(sim.player)).toBeCloseTo(0.5, 5);
+  });
+
+  it('rogue Stealth actually covers half normal ground', () => {
+    const normal = makeSim('rogue');
+    despawnMobs(normal);
+    (normal as any).grantXp(xpForLevel(1) + xpForLevel(2) + 10);
+
+    const stealthed = makeSim('rogue');
+    despawnMobs(stealthed);
+    (stealthed as any).grantXp(xpForLevel(1) + xpForLevel(2) + 10);
+    stealthed.castAbility('stealth');
+    expect(stealthed.player.auras.some((a) => a.kind === 'stealth')).toBe(true);
+
+    const base = forwardDistance(normal);
+    const stealth = forwardDistance(stealthed);
+    expect(base).toBeGreaterThan(0);
+    expect(stealth / base).toBeCloseTo(0.5, 1);
+  });
+
+  it('rogue Vanish moves at 50% speed', () => {
+    const sim = makeSim('rogue');
+    sim.setPlayerLevel(20); // Vanish learns at level 18
+    sim.castAbility('vanish');
+    expect(sim.player.auras.some((a) => a.kind === 'stealth')).toBe(true);
+    expect((sim as any).moveSpeedMult(sim.player)).toBeCloseTo(0.5, 5);
+  });
+
+  it('rogue Vanish actually covers half normal ground', () => {
+    const normal = makeSim('rogue');
+    despawnMobs(normal);
+    normal.setPlayerLevel(20);
+
+    const vanished = makeSim('rogue');
+    despawnMobs(vanished);
+    vanished.setPlayerLevel(20);
+    vanished.castAbility('vanish');
+    expect(vanished.player.auras.some((a) => a.kind === 'stealth')).toBe(true);
+
+    const base = forwardDistance(normal);
+    const vanish = forwardDistance(vanished);
+    expect(base).toBeGreaterThan(0);
+    expect(vanish / base).toBeCloseTo(0.5, 1);
+  });
+
   it('rogue GCD is 1.0s', () => {
     const sim = makeSim('rogue');
     expect(sim.playerGcd).toBe(1.0);
@@ -725,9 +793,10 @@ describe('food, drink, vendor', () => {
     sim.player.hp = 20;
     sim.player.combatTimer = 99;
     sim.player.inCombat = false;
+    const breadBefore = sim.countItem('baked_bread');
     sim.useItem('baked_bread');
     expect(sim.player.sitting).toBe(true);
-    expect(sim.countItem('baked_bread')).toBe(0);
+    expect(sim.countItem('baked_bread')).toBe(breadBefore - 1);
     const hpBefore = sim.player.hp;
     for (let i = 0; i < 20 * 6; i++) sim.tick();
     expect(sim.player.hp).toBeGreaterThan(hpBefore);
@@ -855,10 +924,11 @@ describe('food, drink, vendor', () => {
     const sim = makeSim('warrior');
     const wilkes = [...sim.entities.values()].find((e) => e.templateId === 'trader_wilkes')!;
     teleportTo(sim, wilkes.pos.x + 2, wilkes.pos.z);
-    sim.copper = 100;
+    sim.copper = 200;
+    const breadBefore = sim.countItem('baked_bread');
     sim.buyItem(wilkes.id, 'baked_bread');
-    expect(sim.countItem('baked_bread')).toBe(1);
-    expect(sim.copper).toBe(75);
+    expect(sim.countItem('baked_bread')).toBe(breadBefore + 5); // food is sold in a stack of 5
+    expect(sim.copper).toBe(75); // 200 - 125 (buyValue 25 per unit x the stack of 5)
     sim.addItem('wolf_fang', 2);
     sim.sellItem('wolf_fang');
     expect(sim.copper).toBe(79);
@@ -1016,6 +1086,13 @@ describe('food, drink, vendor', () => {
     expect(sim.copper).toBe(80);
   });
 
+  it('a general vendor in each of zone 2 and 3 also sells a simple fishing pole', () => {
+    for (const templateId of ['provisioner_hale', 'quartermaster_bree']) {
+      expect(NPCS[templateId].vendorItems).toContain('simple_fishing_pole');
+    }
+    expect(NPCS.trader_wilkes.vendorItems).not.toContain('simple_fishing_pole');
+  });
+
   it('rejects fishing away from fishable water', () => {
     const sim = makeSim('warrior');
     sim.addItem('simple_fishing_pole', 1);
@@ -1164,9 +1241,10 @@ describe('food, drink, vendor', () => {
     sim.events = [];
     sim.useItem('simple_fishing_pole');
     sim.events = [];
+    const breadBefore = sim.countItem('baked_bread');
     sim.useItem('baked_bread');
     expect(sim.player.castingAbility).toBe(FISHING_CAST_ID);
-    expect(sim.countItem('baked_bread')).toBe(1);
+    expect(sim.countItem('baked_bread')).toBe(breadBefore);
     expect(sim.player.eating).toBe(null);
     expect(sim.events).toContainEqual(
       expect.objectContaining({
@@ -1231,8 +1309,10 @@ describe('food, drink, vendor', () => {
     // Eastbrook Vale water: every catch must come from the Vale table, never a
     // marsh/heights fish, and never an item outside the catch list.
     const valeIds = new Set(VALE_CATCHES);
+    const preexisting = new Set(meta.inventory.map((s) => s.itemId)); // starter rations etc.
     for (let i = 0; i < 400; i++) (sim as any).completeFishing(sim.player, meta);
     for (const slot of meta.inventory) {
+      if (preexisting.has(slot.itemId)) continue;
       expect(valeIds.has(slot.itemId)).toBe(true);
     }
     // Over 400 casts the Vale's two staple fish should both show up.
@@ -1280,10 +1360,11 @@ describe('food, drink, vendor', () => {
     teleportTo(sim, wilkes.pos.x + 40, wilkes.pos.z);
     sim.copper = 100;
     sim.events = [];
+    const breadBefore = sim.countItem('baked_bread');
 
     sim.buyItem(wilkes.id, 'baked_bread');
 
-    expect(sim.countItem('baked_bread')).toBe(0);
+    expect(sim.countItem('baked_bread')).toBe(breadBefore);
     expect(sim.events).toContainEqual({ type: 'error', text: 'Too far away.', pid: sim.player.id });
   });
 
@@ -1518,7 +1599,7 @@ describe('RL interface', () => {
       return trace;
     };
     expect(run()).toEqual(run());
-  });
+  }, 20000);
 });
 
 describe('gm characters', () => {

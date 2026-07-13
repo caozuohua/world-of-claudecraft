@@ -1,18 +1,20 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { MOBS } from '../src/sim/data';
 import { createMob } from '../src/sim/entity';
 import {
   activeLootRolls,
   awardSharedLootItem,
   distributeLootCopper,
+  lootRollGroupStatus,
   lootSlotVisibleTo,
   partyLootCandidatesForMob,
   pruneCorpseLoot,
   rollLoot,
   submitLootRoll,
 } from '../src/sim/loot/loot_roll';
+import type { PlayerMeta } from '../src/sim/sim';
 import { Sim } from '../src/sim/sim';
-import type { Entity, LootSlot } from '../src/sim/types';
+import type { Entity, LootSlot, SimEvent } from '../src/sim/types';
 
 // Direct unit tests for the extracted loot-distribution module (L1). These drive the
 // module's exported `(ctx, ...)` functions through `sim.ctx` (the real SimContext
@@ -32,6 +34,20 @@ function partyOfThree(seed = 42) {
   sim.partyInvite(c, a);
   sim.partyAccept(c);
   return { sim, a, b, c };
+}
+
+function playerMeta(sim: Sim, pid: number): PlayerMeta {
+  const meta = sim.ctx.players.get(pid);
+  if (!meta) throw new Error(`expected player ${pid}`);
+  return meta;
+}
+
+function lootRollEvent(sim: Sim): Extract<SimEvent, { type: 'lootRoll' }> {
+  const event = sim.events.find((e): e is Extract<SimEvent, { type: 'lootRoll' }> => {
+    return e.type === 'lootRoll';
+  });
+  if (!event) throw new Error('expected loot roll event');
+  return event;
 }
 
 // A pre-killed corpse with an explicit death-time recipient snapshot, so the
@@ -56,7 +72,7 @@ describe('loot_roll: rollLoot producer (drop-rate determinism)', () => {
   function dropRate(seed: number, mobId: string, itemId: string, n: number): number {
     const sim = makeSim(seed);
     const pid = sim.addPlayer('warrior', 'Looter');
-    const meta = sim.ctx.players.get(pid)!;
+    const meta = playerMeta(sim, pid);
     const template = MOBS[mobId];
     let hits = 0;
     for (let i = 0; i < n; i++) {
@@ -80,6 +96,31 @@ describe('loot_roll: rollLoot producer (drop-rate determinism)', () => {
   });
 });
 
+describe('loot_roll: probability tables', () => {
+  it('keeps every chance valid and every exclusive group at or below 100%', () => {
+    const problems: string[] = [];
+
+    for (const [mobId, mob] of Object.entries(MOBS)) {
+      const groupTotals = new Map<string, number>();
+      for (const [index, entry] of mob.loot.entries()) {
+        if (!Number.isFinite(entry.chance) || entry.chance < 0 || entry.chance > 1) {
+          problems.push(`${mobId}.loot[${index}] has invalid chance ${entry.chance}`);
+        }
+        if (entry.rollGroup) {
+          groupTotals.set(entry.rollGroup, (groupTotals.get(entry.rollGroup) ?? 0) + entry.chance);
+        }
+      }
+      for (const [group, total] of groupTotals) {
+        if (total > 1 + Number.EPSILON) {
+          problems.push(`${mobId}.${group} totals ${total}`);
+        }
+      }
+    }
+
+    expect(problems).toEqual([]);
+  });
+});
+
 describe('loot_roll: need-greed resolution (module entry)', () => {
   it('need beats greed; the winner receives the item and others get nothing', () => {
     const { sim, a, b, c } = partyOfThree();
@@ -87,8 +128,8 @@ describe('loot_roll: need-greed resolution (module entry)', () => {
       copper: 0,
       items: [{ itemId: 'greyjaw_hide_boots', count: 1 }],
     });
-    awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, sim.ctx.players.get(a)!);
-    const rollId = sim.events.find((e) => e.type === 'lootRoll')!.rollId as number;
+    awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, playerMeta(sim, a));
+    const rollId = lootRollEvent(sim).rollId;
     submitLootRoll(sim.ctx, rollId, 'greed', b);
     submitLootRoll(sim.ctx, rollId, 'need', a);
     submitLootRoll(sim.ctx, rollId, 'pass', c);
@@ -104,8 +145,8 @@ describe('loot_roll: need-greed resolution (module entry)', () => {
         copper: 0,
         items: [{ itemId: 'greyjaw_hide_boots', count: 1 }],
       });
-      awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, sim.ctx.players.get(a)!);
-      const rollId = sim.events.find((e) => e.type === 'lootRoll')!.rollId as number;
+      awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, playerMeta(sim, a));
+      const rollId = lootRollEvent(sim).rollId;
       submitLootRoll(sim.ctx, rollId, 'need', a);
       submitLootRoll(sim.ctx, rollId, 'need', b);
       submitLootRoll(sim.ctx, rollId, 'pass', c);
@@ -118,17 +159,40 @@ describe('loot_roll: need-greed resolution (module entry)', () => {
     expect(resolveWinner()).toBe(winner);
   });
 
+  it('breaks an exact d100 tie with a separate random draw', () => {
+    const { sim, a, b, c } = partyOfThree();
+    const mob = deadCorpse(sim, a, [a, b, c], {
+      copper: 0,
+      items: [{ itemId: 'greyjaw_hide_boots', count: 1 }],
+    });
+    awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, playerMeta(sim, a));
+    const rollId = lootRollEvent(sim).rollId;
+    const int = vi
+      .spyOn(sim.ctx.rng, 'int')
+      .mockReturnValueOnce(50)
+      .mockReturnValueOnce(50)
+      .mockReturnValueOnce(1);
+
+    submitLootRoll(sim.ctx, rollId, 'need', a);
+    submitLootRoll(sim.ctx, rollId, 'need', b);
+    submitLootRoll(sim.ctx, rollId, 'pass', c);
+
+    expect(int).toHaveBeenNthCalledWith(3, 0, 1);
+    expect(sim.countItem('greyjaw_hide_boots', a)).toBe(0);
+    expect(sim.countItem('greyjaw_hide_boots', b)).toBe(1);
+  });
+
   it('when everyone passes, the item returns to the corpse as an open slot for all', () => {
     const { sim, a, b, c } = partyOfThree();
     const mob = deadCorpse(sim, a, [a, b, c], {
       copper: 0,
       items: [{ itemId: 'greyjaw_hide_boots', count: 1 }],
     });
-    awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, sim.ctx.players.get(a)!);
+    awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, playerMeta(sim, a));
     // Starting the roll pulls the item off the corpse (lootCorpse zeroes the slot and
     // prunes it); model that so the only slot left is whatever the roll returns.
     mob.loot = { copper: 0, items: [] };
-    const rollId = sim.events.find((e) => e.type === 'lootRoll')!.rollId as number;
+    const rollId = lootRollEvent(sim).rollId;
     submitLootRoll(sim.ctx, rollId, 'pass', a);
     submitLootRoll(sim.ctx, rollId, 'pass', b);
     submitLootRoll(sim.ctx, rollId, 'pass', c);
@@ -138,6 +202,185 @@ describe('loot_roll: need-greed resolution (module entry)', () => {
     // The roll is closed and no longer offered to anyone.
     expect(activeLootRolls(sim.ctx, a)).toHaveLength(0);
   });
+
+  it('removes a logged-out candidate before resolving so their winning item is conserved', () => {
+    const { sim, a, b, c } = partyOfThree();
+    const mob = deadCorpse(sim, a, [a, b, c], {
+      copper: 0,
+      items: [{ itemId: 'greyjaw_hide_boots', count: 1 }],
+    });
+    awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, playerMeta(sim, a));
+    // Starting a roll removes the source item from ordinary corpse loot. Keep
+    // only a returned slot as the conservation signal.
+    mob.loot = { copper: 0, items: [] };
+    const rollId = lootRollEvent(sim).rollId;
+
+    submitLootRoll(sim.ctx, rollId, 'need', a);
+    sim.removePlayer(a); // explicit logout forfeits the unresolved roll
+    submitLootRoll(sim.ctx, rollId, 'pass', b);
+    submitLootRoll(sim.ctx, rollId, 'pass', c);
+
+    expect((sim as any).pendingLootRolls.has(rollId)).toBe(false);
+    const returned = mob.loot?.items.find((s) => s.itemId === 'greyjaw_hide_boots');
+    expect(returned).toMatchObject({ count: 1, openToAll: true });
+  });
+
+  it('resolves a two-needer roll when the leaver was the last undecided candidate, awarding a live winner', () => {
+    const resolveHolder = (seed: number) => {
+      const { sim, a, b, c } = partyOfThree(seed);
+      const mob = deadCorpse(sim, a, [a, b, c], {
+        copper: 0,
+        items: [{ itemId: 'greyjaw_hide_boots', count: 1 }],
+      });
+      awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, playerMeta(sim, a));
+      // The roll pulls the item off the corpse; model that so a wrong
+      // return-to-corpse would surface as a leftover slot.
+      mob.loot = { copper: 0, items: [] };
+      const rollId = lootRollEvent(sim).rollId;
+      submitLootRoll(sim.ctx, rollId, 'need', b);
+      submitLootRoll(sim.ctx, rollId, 'need', c);
+      // `a` never answered: the leave itself is the last-candidate trigger that
+      // runs resolveLootRoll (the only leave-path branch that resolves a roll).
+      sim.removePlayer(a);
+      expect((sim as any).pendingLootRolls.has(rollId)).toBe(false);
+      expect(sim.countItem('greyjaw_hide_boots', a)).toBe(0);
+      // Won by a live needer, not scattered back to the corpse.
+      expect(mob.loot?.items.find((s) => s.itemId === 'greyjaw_hide_boots')).toBeUndefined();
+      const holder = [b, c].find((pid) => sim.countItem('greyjaw_hide_boots', pid) === 1);
+      return holder ?? -1;
+    };
+    const winner = resolveHolder(2024);
+    expect(winner).not.toBe(-1);
+    expect(resolveHolder(2024)).toBe(winner); // deterministic per seed
+  });
+
+  it('draws the resolve-time tie-break on the leave path when the two remaining needers tie', () => {
+    const { sim, a, b, c } = partyOfThree();
+    const mob = deadCorpse(sim, a, [a, b, c], {
+      copper: 0,
+      items: [{ itemId: 'greyjaw_hide_boots', count: 1 }],
+    });
+    awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, playerMeta(sim, a));
+    mob.loot = { copper: 0, items: [] };
+    const rollId = lootRollEvent(sim).rollId;
+    // Force both needers to the same d100 so resolveLootRoll must break the tie;
+    // delegate every other draw so the unrelated leave teardown stays deterministic.
+    const realInt = sim.ctx.rng.int.bind(sim.ctx.rng);
+    const int = vi.spyOn(sim.ctx.rng, 'int').mockImplementation((min: number, max: number) => {
+      if (min === 1 && max === 100) return 50; // tie the two needers
+      if (min === 0 && max === 1) return 1; // tie-break selects the second contender
+      return realInt(min, max);
+    });
+
+    submitLootRoll(sim.ctx, rollId, 'need', b);
+    submitLootRoll(sim.ctx, rollId, 'need', c);
+    sim.removePlayer(a); // the leave resolves the tied roll and must draw the tie-break
+
+    expect(int).toHaveBeenCalledWith(0, 1); // the resolve-time tie-break fired on the leave path
+    expect((sim as any).pendingLootRolls.has(rollId)).toBe(false);
+    // Exactly one live needer holds it; the leaver never does.
+    expect(sim.countItem('greyjaw_hide_boots', a)).toBe(0);
+    expect(sim.countItem('greyjaw_hide_boots', b) + sim.countItem('greyjaw_hide_boots', c)).toBe(1);
+  });
+
+  it('returns the item if an abruptly missing winner bypassed normal leave reconciliation', () => {
+    const { sim, a, b, c } = partyOfThree();
+    const mob = deadCorpse(sim, a, [a, b, c], {
+      copper: 0,
+      items: [{ itemId: 'greyjaw_hide_boots', count: 1 }],
+    });
+    awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, playerMeta(sim, a));
+    mob.loot = { copper: 0, items: [] };
+    const rollId = lootRollEvent(sim).rollId;
+    submitLootRoll(sim.ctx, rollId, 'need', a);
+
+    // Defensive path only: normal logout calls removePlayerFromLootRolls first.
+    sim.entities.delete(a);
+    sim.players.delete(a);
+    submitLootRoll(sim.ctx, rollId, 'greed', b);
+    submitLootRoll(sim.ctx, rollId, 'pass', c);
+
+    expect((sim as any).pendingLootRolls.has(rollId)).toBe(false);
+    expect(sim.countItem('greyjaw_hide_boots', b)).toBe(0);
+    expect(mob.loot?.items.find((slot) => slot.itemId === 'greyjaw_hide_boots')).toMatchObject({
+      count: 1,
+      openToAll: true,
+    });
+  });
+});
+
+describe('loot_roll: group roll status + resolution broadcast (module entry)', () => {
+  function openRoll() {
+    const fixture = partyOfThree();
+    const { sim, a, b, c } = fixture;
+    const mob = deadCorpse(sim, a, [a, b, c], {
+      copper: 0,
+      items: [{ itemId: 'greyjaw_hide_boots', count: 1 }],
+    });
+    awardSharedLootItem(sim.ctx, 'greyjaw_hide_boots', mob, playerMeta(sim, a));
+    return { ...fixture, rollId: lootRollEvent(sim).rollId };
+  }
+
+  it('shows every candidate undecided when the roll opens, to every party member', () => {
+    const { sim, a, b, c } = openRoll();
+    for (const viewer of [a, b, c]) {
+      const status = lootRollGroupStatus(sim.ctx, viewer);
+      expect(status).toHaveLength(1);
+      expect(status[0].itemId).toBe('greyjaw_hide_boots');
+      expect(status[0].entries).toEqual([
+        { pid: a, name: 'Aaa', choice: null },
+        { pid: b, name: 'Bbb', choice: null },
+        { pid: c, name: 'Ccc', choice: null },
+      ]);
+    }
+  });
+
+  it('reveals each choice as it lands, including for a player who already answered, and never the roll number', () => {
+    const { sim, a, b, c, rollId } = openRoll();
+    submitLootRoll(sim.ctx, rollId, 'need', a);
+    submitLootRoll(sim.ctx, rollId, 'pass', c);
+    // a has answered (no longer prompted) but still watches the group status.
+    expect(activeLootRolls(sim.ctx, a)).toHaveLength(0);
+    for (const viewer of [a, b, c]) {
+      const entries = lootRollGroupStatus(sim.ctx, viewer)[0].entries;
+      expect(entries.map((e) => e.choice)).toEqual(['need', null, 'pass']);
+      // Choice only: the d100 result must not leak before resolution.
+      for (const entry of entries) expect(entry).not.toHaveProperty('roll');
+    }
+  });
+
+  it('broadcasts every need/greed roll to the whole party at resolution, then the winner line', () => {
+    const { sim, a, b, c, rollId } = openRoll();
+    submitLootRoll(sim.ctx, rollId, 'greed', b);
+    submitLootRoll(sim.ctx, rollId, 'need', a);
+    submitLootRoll(sim.ctx, rollId, 'pass', c);
+    const lootTexts = (pid: number) =>
+      sim.events
+        .filter((e): e is Extract<SimEvent, { type: 'loot' }> => e.type === 'loot' && e.pid === pid)
+        .map((e) => e.text);
+    for (const viewer of [a, b, c]) {
+      const texts = lootTexts(viewer);
+      const needLine = texts.find((t) => t.startsWith('Need Roll - '));
+      const greedLine = texts.find((t) => t.startsWith('Greed Roll - '));
+      expect(needLine).toMatch(/^Need Roll - \d+ for \[\[i:greyjaw_hide_boots\]\] by Aaa$/);
+      expect(greedLine).toMatch(/^Greed Roll - \d+ for \[\[i:greyjaw_hide_boots\]\] by Bbb$/);
+      // Winner line still closes the roll, after the per-roller reveals.
+      const winLine = texts.find((t) => t.includes(' wins '));
+      expect(winLine).toMatch(/^Aaa wins \[\[i:greyjaw_hide_boots\]\] \(\d+\)$/);
+      expect(texts.indexOf(needLine as string)).toBeLessThan(texts.indexOf(winLine as string));
+    }
+    // The passer has no roll to reveal.
+    expect(lootTexts(a).some((t) => t.includes('by Ccc'))).toBe(false);
+    // Resolved roll leaves the group status.
+    expect(lootRollGroupStatus(sim.ctx, a)).toHaveLength(0);
+  });
+
+  it('hides a curate-phase master roll from the group status', () => {
+    const { sim, a, rollId } = openRoll();
+    const roll = (sim as any).pendingLootRolls.get(rollId);
+    roll.masterLooter = a;
+    expect(lootRollGroupStatus(sim.ctx, a)).toHaveLength(0);
+  });
 });
 
 describe('loot_roll: fair-split copper (module entry)', () => {
@@ -145,9 +388,9 @@ describe('loot_roll: fair-split copper (module entry)', () => {
     const run = () => {
       const { sim, a, b, c } = partyOfThree(99);
       const mob = deadCorpse(sim, a, [a, b, c], { copper: 100, items: [] });
-      const before = [a, b, c].map((pid) => sim.ctx.players.get(pid)!.copper);
-      distributeLootCopper(sim.ctx, mob, sim.ctx.players.get(a)!);
-      const after = [a, b, c].map((pid) => sim.ctx.players.get(pid)!.copper);
+      const before = [a, b, c].map((pid) => playerMeta(sim, pid).copper);
+      distributeLootCopper(sim.ctx, mob, playerMeta(sim, a));
+      const after = [a, b, c].map((pid) => playerMeta(sim, pid).copper);
       return after.map((v, i) => v - before[i]);
     };
     const shares = run();
@@ -163,9 +406,9 @@ describe('loot_roll: fair-split copper (module entry)', () => {
     const run = () => {
       const { sim, a, b, c } = partyOfThree(123);
       const mob = deadCorpse(sim, a, [a, b, c], { copper: 101, items: [] });
-      const before = [a, b, c].map((pid) => sim.ctx.players.get(pid)!.copper);
-      distributeLootCopper(sim.ctx, mob, sim.ctx.players.get(a)!);
-      const after = [a, b, c].map((pid) => sim.ctx.players.get(pid)!.copper);
+      const before = [a, b, c].map((pid) => playerMeta(sim, pid).copper);
+      distributeLootCopper(sim.ctx, mob, playerMeta(sim, a));
+      const after = [a, b, c].map((pid) => playerMeta(sim, pid).copper);
       return after.map((v, i) => v - before[i]);
     };
     const shares = run();
@@ -179,7 +422,7 @@ describe('loot_roll: fair-split copper (module entry)', () => {
     const sim = makeSim(7);
     const a = sim.addPlayer('warrior', 'Solo');
     const mob = deadCorpse(sim, a, [a], { copper: 50, items: [] });
-    const meta = sim.ctx.players.get(a)!;
+    const meta = playerMeta(sim, a);
     const before = meta.copper;
     distributeLootCopper(sim.ctx, mob, meta);
     expect(meta.copper - before).toBe(50);

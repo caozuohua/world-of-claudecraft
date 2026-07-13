@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { PlayerClass } from '../src/sim/types';
 import {
+  blockRows,
   friendRows,
   guildView,
   ignoreRows,
@@ -33,11 +34,12 @@ function friend(over: Partial<FriendInfo> & { name: string }): FriendInfo {
     realm: 'Test',
     online: true,
     ...over,
+    activeTitle: over.activeTitle ?? null,
   };
 }
 
 function guildMember(over: Partial<GuildMemberInfo> & { name: string }): GuildMemberInfo {
-  return { ...friend(over), rank: over.rank ?? 'member' };
+  return { ...friend(over), rank: over.rank ?? 'member', lastLogin: over.lastLogin ?? null };
 }
 
 function partyMember(
@@ -66,6 +68,7 @@ const SOCIAL: SocialInfo = {
     friend({ name: 'Borin', online: false }),
   ],
   blocks: [{ id: 9, name: 'Spammer' }],
+  ignores: [{ id: 11, name: 'Chatterbox' }],
   guild: {
     id: 7,
     name: 'Wolves',
@@ -105,6 +108,7 @@ describe('socialStructSig', () => {
     const a: PartyInfo = {
       leader: 1,
       raid: true,
+      master: { enabled: false, looter: 0, threshold: 'uncommon' },
       members: [partyMember({ pid: 1, group: 1 }), partyMember({ pid: 2, group: 1 })],
     };
     const b: PartyInfo = {
@@ -131,8 +135,12 @@ describe('per-tab row models', () => {
     expect(rows[1].dot).toBe('off');
   });
 
-  it('derives ignore rows', () => {
-    expect(ignoreRows(SOCIAL).map((r) => r.name)).toEqual(['Spammer']);
+  it('derives the two player tiers from their OWN lists, never from each other', () => {
+    // The Ignored and Blocked tabs render one tier each. A cross-wire that fed
+    // blocks into the Ignored tab (or vice versa) trips on either row set.
+    expect(blockRows(SOCIAL).map((r) => r.name)).toEqual(['Spammer']);
+    expect(blockRows(null)).toEqual([]);
+    expect(ignoreRows(SOCIAL).map((r) => r.name)).toEqual(['Chatterbox']);
     expect(ignoreRows(null)).toEqual([]);
   });
 
@@ -154,6 +162,43 @@ describe('per-tab row models', () => {
   it('returns a null guild for a guildless viewer', () => {
     expect(guildView({ ...SOCIAL, guild: null }, 'Me').guild).toBeNull();
   });
+
+  it('passes each row activeTitle through as a DEED ID (null untitled), both tabs', () => {
+    const social: SocialInfo = {
+      ...SOCIAL,
+      friends: [friend({ name: 'Titled', activeTitle: 'prog_veteran' }), friend({ name: 'Plain' })],
+      guild: {
+        ...(SOCIAL.guild as GuildInfo),
+        members: [
+          guildMember({ name: 'MTitled', rank: 'member', activeTitle: 'hid_saul_footnote' }),
+          guildMember({ name: 'MPlain', rank: 'member' }),
+        ],
+      },
+    };
+    const friends = friendRows(social);
+    expect(friends.find((r) => r.name === 'Titled')?.activeTitle).toBe('prog_veteran');
+    expect(friends.find((r) => r.name === 'Plain')?.activeTitle).toBeNull();
+    const rows = guildView(social, 'Me').guild!.rows;
+    expect(rows.find((r) => r.name === 'MTitled')?.activeTitle).toBe('hid_saul_footnote');
+    expect(rows.find((r) => r.name === 'MPlain')?.activeTitle).toBeNull();
+  });
+
+  it('maps each member last_login into the guild row (null when unknown)', () => {
+    const iso = '2026-01-02T03:04:05.000Z';
+    const social: SocialInfo = {
+      ...SOCIAL,
+      guild: {
+        ...(SOCIAL.guild as GuildInfo),
+        members: [
+          guildMember({ name: 'Seen', rank: 'member', online: false, lastLogin: iso }),
+          guildMember({ name: 'NeverSeen', rank: 'member', online: false }),
+        ],
+      },
+    };
+    const rows = guildView(social, 'Me').guild!.rows;
+    expect(rows.find((r) => r.name === 'Seen')?.lastLogin).toBe(iso);
+    expect(rows.find((r) => r.name === 'NeverSeen')?.lastLogin).toBeNull();
+  });
 });
 
 describe('raidView', () => {
@@ -161,6 +206,7 @@ describe('raidView', () => {
     const party: PartyInfo = {
       leader: 1,
       raid: false,
+      master: { enabled: false, looter: 0, threshold: 'uncommon' },
       members: [1, 2, 3, 4, 5].map((pid) => partyMember({ pid, group: 1 })),
     };
     const view = raidView(party, 1);
@@ -174,6 +220,7 @@ describe('raidView', () => {
     const party: PartyInfo = {
       leader: 1,
       raid: true,
+      master: { enabled: false, looter: 0, threshold: 'uncommon' },
       members: [
         partyMember({ pid: 1, group: 1, hp: 50, mhp: 200 }),
         partyMember({ pid: 2, group: 2, hp: 100, mhp: 100 }),
@@ -194,7 +241,15 @@ describe('raidView', () => {
       ...[1, 2, 3, 4, 5].map((pid) => partyMember({ pid, group: 2 })),
       partyMember({ pid: 6, group: 1 }),
     ];
-    const view = raidView({ leader: 1, raid: true, members }, 1);
+    const view = raidView(
+      {
+        leader: 1,
+        raid: true,
+        master: { enabled: false, looter: 0, threshold: 'uncommon' },
+        members,
+      },
+      1,
+    );
     const g1 = view.groups![0];
     expect(g1.members[0].moveTo).toBeNull();
   });
@@ -220,6 +275,7 @@ describe('ClientWorld-vs-Sim parity', () => {
       party: {
         leader: 1,
         raid: true,
+        master: { enabled: false, looter: 0, threshold: 'uncommon' },
         members: [partyMember({ pid: 1, group: 1 }), partyMember({ pid: 2, group: 2 })],
       },
     };
@@ -233,7 +289,7 @@ describe('ClientWorld-vs-Sim parity', () => {
   it('yields identical row + signature models from a Sim-shaped and a mirror-shaped source', () => {
     const sim = simShaped();
     const cli = clientShaped();
-    for (const tab of ['friends', 'guild', 'ignore', 'raid'] as SocialTab[]) {
+    for (const tab of ['friends', 'guild', 'ignore', 'block', 'raid'] as SocialTab[]) {
       expect(socialStructSig(tab, sim.social, sim.party)).toBe(
         socialStructSig(tab, cli.social, cli.party),
       );

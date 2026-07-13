@@ -3,12 +3,12 @@
 // bodies are curated guide copy. Thematic only, no boss scripts, timers, or loot. The
 // endgame raid is teased without naming its boss (its sim name is withheld in the feed).
 
-import { t, formatNumber, type TranslationKey } from '../../ui/i18n';
 import { esc } from '../../ui/esc';
+import { formatNumber, type TranslationKey, t } from '../../ui/i18n';
 import { GUIDE_DUNGEONS, type GuideDungeon } from '../content.generated';
 import { hrefFor } from '../routes';
-import { pageHeader, callout, related, section, p } from './ui';
 import type { GuidePage } from './types';
+import { callout, p, pageHeader, related, section } from './ui';
 
 // Curated flavor body, keyed by the generated dungeon id (raid is the withheld-name one).
 const BODY: Record<string, TranslationKey> = {
@@ -32,7 +32,7 @@ function dungeonCard(d: GuideDungeon): string {
   const name = d.isRaid ? t('guide.dungeonsPage.raidName') : (d.name ?? '');
   const level = levelLabel(d);
   return `
-    <section class="guide-dungeon-card${d.isRaid ? ' guide-dungeon-raid' : ''}">
+    <section class="guide-dungeon-card${d.isRaid ? ' guide-dungeon-raid' : ''}" id="dungeon-${esc(d.id)}">
       <div class="guide-dungeon-head">
         <h2 class="guide-dungeon-name">${esc(name)}</h2>
         ${level ? `<span class="guide-badge guide-badge-level">${esc(level)}</span>` : ''}
@@ -52,12 +52,22 @@ export const dungeons: GuidePage = {
         <p>${esc(t('guide.dungeonsPage.party'))}</p>
         ${callout(esc(t('guide.dungeonsPage.soloLead')))}
         <div class="guide-dungeon-grid">${cards}</div>
+        ${section(
+          'guide.dungeonsPage.heroicTitle',
+          p('guide.dungeonsPage.heroicBody') + p('guide.dungeonsPage.heroicHowBody'),
+        )}
+        ${section(
+          'guide.dungeonsPage.heroicRewardsTitle',
+          p('guide.dungeonsPage.heroicRewardsBody') + p('guide.dungeonsPage.heroicLockoutBody'),
+        )}
         ${section('guide.dungeonsPage.templeLoreTitle', p('guide.dungeonsPage.templeLoreBody'))}
         ${section('guide.dungeonsPage.cryptLeadTitle', p('guide.dungeonsPage.cryptLeadBody'))}
         ${related([
+          { href: hrefFor('delves'), key: 'guide.nav.delves' },
           { href: hrefFor('world'), key: 'guide.nav.world' },
           { href: hrefFor('arena'), key: 'guide.nav.arena' },
           { href: hrefFor('classes'), key: 'guide.nav.classes' },
+          { href: hrefFor('deeds'), key: 'guide.nav.deeds' },
         ])}
       </article>`;
   },

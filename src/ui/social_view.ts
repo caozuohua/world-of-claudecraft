@@ -20,7 +20,7 @@ import type {
   SocialInfo,
 } from '../world_api';
 
-export type SocialTab = 'friends' | 'guild' | 'ignore' | 'raid';
+export type SocialTab = 'friends' | 'guild' | 'ignore' | 'block' | 'raid';
 
 /** Structural identity of the panel: which tab, online or not, and the guild
  *  membership/rank (which changes the footer) plus the raid roster shape.
@@ -53,6 +53,9 @@ export interface FriendRow {
   dot: string;
   status: string | undefined;
   zone: string | undefined;
+  /** The selected Book of Deeds title as a DEED ID (null untitled); the
+   *  painter localizes through deed_i18n.ts and hides on ''. */
+  activeTitle: string | null;
 }
 
 /** Friends-tab rows in source order. */
@@ -66,6 +69,7 @@ export function friendRows(social: SocialInfo | null): FriendRow[] {
     dot: socialDot(f.online, f.status),
     status: f.status,
     zone: f.zone,
+    activeTitle: f.activeTitle ?? null,
   }));
 }
 
@@ -73,10 +77,16 @@ export interface IgnoreRow {
   name: string;
 }
 
-/** Ignore-tab rows in source order. */
-export function ignoreRows(social: SocialInfo | null): IgnoreRow[] {
+/** Blocked-tab rows in source order: the BLOCKED list (the heavy tier). */
+export function blockRows(social: SocialInfo | null): IgnoreRow[] {
   const blocks = social?.blocks ?? [];
   return blocks.map((b) => ({ name: b.name }));
+}
+
+/** Blocked-tab rows in source order: the IGNORED list (chat-only, the light tier). */
+export function ignoreRows(social: SocialInfo | null): IgnoreRow[] {
+  const ignores = social?.ignores ?? [];
+  return ignores.map((i) => ({ name: i.name }));
 }
 
 export interface GuildRow {
@@ -87,6 +97,13 @@ export interface GuildRow {
   dot: string;
   status: string | undefined;
   zone: string | undefined;
+  /** ISO-8601 timestamp of the member's last world entry, or null if unknown.
+   *  The painter formats it (relative/date) and localizes; the core just
+   *  passes it through. */
+  lastLogin: string | null;
+  /** The selected Book of Deeds title as a DEED ID (null untitled), as on
+   *  FriendRow. */
+  activeTitle: string | null;
   /** This member's guild rank key ('leader' | 'officer' | 'member'). */
   rank: string;
   /** True when this row is the viewing player. */
@@ -128,6 +145,8 @@ export function guildView(social: SocialInfo | null, myName: string): GuildView 
       dot: socialDot(m.online, m.status),
       status: m.status,
       zone: m.zone,
+      lastLogin: m.lastLogin ?? null,
+      activeTitle: m.activeTitle ?? null,
       rank: m.rank,
       self,
       canWhisper: m.online && !self,

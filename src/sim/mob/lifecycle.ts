@@ -28,6 +28,7 @@
 // through the seam, all of which still resolve on Sim.
 
 import { MOBS } from '../data';
+import * as deedsMod from '../deeds';
 import type { SimContext } from '../sim_context';
 import { clearThreat } from '../threat';
 import { dist2d, type Entity, NYTHRAXIS_BOSS_ID } from '../types';
@@ -46,6 +47,7 @@ export function respawnMob(ctx: SimContext, mob: Entity): void {
   mob.loot = null;
   mob.lootRecipientIds = undefined;
   mob.tappedById = null;
+  mob.harvestClaimedBy = null;
   mob.ownerId = null;
   mob.hostile = true;
   mob.pos = { ...mob.spawnPos };
@@ -67,7 +69,18 @@ export function respawnMob(ctx: SimContext, mob: Entity): void {
   mob.fleeReturnTimer = 0;
   mob.hasFled = false;
   clearThreat(mob);
+  // A respawn is a brand-new pull: the world-boss damager roster clears with
+  // the hate table so loot rights never carry across lives.
+  mob.bossDamagers.clear();
   despawnSummonedAdds(ctx, mob);
+  // A respawn ends the attempt; the deed window re-arms.
+  deedsMod.resetDeedEncounter(ctx, mob);
+  // The respawn reuses the entity id: an UNCREDITED death (untapped, or a
+  // non-player kill) skips the credited-kill taint consumption, so drop any
+  // kill-order taint here or the fresh mender spawns pre-denied. Respawn only:
+  // the evade reset deliberately keeps the taint (a deliberate post-move fix,
+  // not part of the verbatim extraction; draws no rng).
+  deedsMod.clearMenderTaint(ctx, mob.id);
   mob.firedSummons = 0;
   mob.enraged = false;
   mob.healedThisPull = false;
@@ -75,9 +88,22 @@ export function respawnMob(ctx: SimContext, mob: Entity): void {
   mob.terrifyTimer = MOBS[mob.templateId]?.terrify?.every ?? 0;
   mob.mendTimer = MOBS[mob.templateId]?.mendAlly?.every ?? 0;
   mob.wardTimer = MOBS[mob.templateId]?.wardAllies?.every ?? 0;
+  mob.channelTimer = MOBS[mob.templateId]?.channelHeal?.every ?? 0;
+  mob.channelRamp = 0;
   mob.stoneskinTimer = MOBS[mob.templateId]?.stoneskin?.every ?? 0;
   mob.rallyTimer = MOBS[mob.templateId]?.rally?.every ?? 0;
   mob.warcryTimer = MOBS[mob.templateId]?.warcry?.every ?? 0;
+  // A mid-flight bigCast dies with the pull: clear the bar, reseed the cadence,
+  // and let the next pull bark its engage line again.
+  const bigCastDef = MOBS[mob.templateId]?.bigCast;
+  mob.bigCastTimer = bigCastDef?.every ?? 0;
+  if (bigCastDef && mob.castingAbility === bigCastDef.castId) {
+    mob.castingAbility = null;
+    mob.castTotal = 0;
+    mob.castRemaining = 0;
+    mob.castTargetId = null;
+  }
+  mob.yelledEngage = false;
   mob.wanderTimer = ctx.rng.range(2, 8);
   if (mob.templateId === NYTHRAXIS_BOSS_ID) ctx.resetNythraxisEncounter(mob);
   for (const meta of ctx.players.values()) {
@@ -88,7 +114,8 @@ export function respawnMob(ctx: SimContext, mob: Entity): void {
 
 // Encounter reset: remove the adds a boss summoned this pull so retries
 // start clean (firedSummons re-fires a fresh wave per pull). Player
-// target/combo refs are cleared first, like freeInstance does.
+// target refs are cleared first, like freeInstance does (combo points are
+// character-bound, so a despawning combo target leaves them untouched).
 export function despawnSummonedAdds(ctx: SimContext, boss: Entity): void {
   if (boss.summonedIds.length === 0) return;
   for (const id of boss.summonedIds) {
@@ -96,10 +123,6 @@ export function despawnSummonedAdds(ctx: SimContext, boss: Entity): void {
     for (const meta of ctx.players.values()) {
       const e = ctx.entities.get(meta.entityId);
       if (e?.targetId === id) e.targetId = null;
-      if (e?.comboTargetId === id) {
-        e.comboTargetId = null;
-        e.comboPoints = 0;
-      }
     }
     ctx.dropEntity(id);
   }
@@ -182,11 +205,15 @@ export function detonateCorpse(ctx: SimContext, dead: Entity): void {
     color: '#9acd32',
     entityId: dead.id,
   });
+  const damagedPids: number[] = [];
   for (const meta of ctx.players.values()) {
     const pe = ctx.entities.get(meta.entityId);
     if (pe && !pe.dead && dist2d(pe.pos, dead.pos) <= dt.radius) {
       const dmg = Math.round(ctx.rng.range(dt.min, dt.max));
       ctx.dealDamage(dead, pe, dmg, false, school, dt.name, 'hit', true);
+      damagedPids.push(pe.id);
     }
   }
+  // A clean bloat kill means the blast caught nobody it credits.
+  deedsMod.onBloatDetonatedForDeeds(ctx, dead, damagedPids);
 }

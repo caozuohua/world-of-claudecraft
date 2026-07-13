@@ -8,12 +8,12 @@
 // bound. This ring caps the live node count at FCT_POOL_CAP and never allocates a node
 // after construction.
 //
-// SCREEN-ANCHORED, byte-faithful to the old fct() and to WoW-style combat text: spawn()
+// SCREEN-ANCHORED, byte-faithful to the old fct() and to classic-style combat text: spawn()
 // projects the head anchor ONCE (renderer.worldToScreen + the getUiScale author-space
 // divide), writes left / top a single time, and leaves the number at that screen position
 // for its ~1.25s life while the CSS @keyframes float it straight up. It does NOT re-project
 // per frame, so a number pops over the unit and rises in SCREEN space (it does not slide
-// with the camera) -- exactly how the classic / WoW damage numbers read, and identical to
+// with the camera) -- exactly how the classic-era damage numbers read, and identical to
 // the old fct(). step() therefore only ages out expired slots; there is no per-frame
 // position write, so an unchanged frame costs nothing.
 //
@@ -43,7 +43,7 @@
 //    evicts (the pool is far above a boss pull), so it pays no reflow; only a genuine
 //    over-cap AoE burst does (and there it costs one forced reflow per eviction, bounded by
 //    the burst size not the cap -- acceptable because real play never evicts, and the
-//    drop-non-crit / concurrency tiering caps the eviction pressure under heavy load).
+//    low-tier concurrency cap + shorter TTL keep the eviction pressure bounded under load).
 //  - FRAME-ORDERING CONTRACT (the natural-restart precondition): every spawn site MUST run
 //    before step() within a frame. The live callers honour this -- hud.handleEvents() and
 //    showSelfNote() both run before hud.update()'s step() in the same rAF tick -- so a node
@@ -69,14 +69,8 @@
 // the float into a live region too would double-announce.
 
 import type { UiEffectsTier } from '../game/ui_effects_profile';
-import { fctDropNonCrit, fctMaxConcurrent, fctTtlScale } from '../game/ui_tier_knobs';
-import {
-  describeFct,
-  type FctColorToken,
-  type FctDescriptor,
-  type FctEvent,
-  isDamageFctKind,
-} from './fct_core';
+import { fctMaxConcurrent, fctTtlScale } from '../game/ui_tier_knobs';
+import { describeFct, type FctColorToken, type FctDescriptor, type FctEvent } from './fct_core';
 import type { PainterHostWriters } from './painter_host';
 
 /**
@@ -144,7 +138,7 @@ export class FctPainter {
   private readonly cap: number;
   // The STATIC ui effects tier accessor (reads data-fx-level, written only by the
   // preset applier, NEVER the FPS governor: the two-controller hazard). Read per spawn
-  // (event-driven, not a per-frame cost) to tier the cap / TTL / drop-non-crit knobs.
+  // (event-driven, not a per-frame cost) to tier the live-cap / TTL knobs.
   private readonly getFxTier: () => UiEffectsTier;
 
   constructor(
@@ -193,14 +187,12 @@ export class FctPainter {
    */
   spawn(event: FctEvent, now: number): void {
     const tier = this.getFxTier();
-    // Low sheds non-crit DAMAGE-NUMBER floaters (the high-volume combat spam, the cost
-    // driver). Scoped to the damage kinds via isDamageFctKind, so a low player still gets
-    // every crit hit PLUS the low-volume informational floaters (xp, rested-xp, self-note)
-    // and avoidance words (miss, dodge). Gate on the event crit + kind BEFORE describeFct
-    // so a dropped floater costs no descriptor / projection / jitter draw. A crit's number
-    // is never refused; crit EMPHASIS on low (the scale/pop) is the separate, already-
-    // shipped CSS gate ([data-fx-level="low"] .fct.crit).
-    if (fctDropNonCrit(tier) && isDamageFctKind(event.kind) && !event.crit) return;
+    // Every FCT floater is spawned on every tier: the low preset sheds FCT cost purely
+    // through the bounded pool (a tighter live cap + a shorter TTL below), never by refusing
+    // to spawn a damage number. Refusing non-crit damage used to hide the player's own hits
+    // on their target -- their primary combat feedback -- so low is no longer allowed to drop
+    // it. Crit EMPHASIS on low (the scale/pop) is still shed by the separate CSS gate
+    // ([data-fx-level="low"] .fct.crit); that keeps the number, only dropping the pop.
     const d = describeFct(event, this.random());
     const v = this.project(d.anchor.x, d.anchor.y, d.anchor.z);
     if (v.behind) return; // faithful to the live `if (v.behind) return;` -- waste no slot.

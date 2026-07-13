@@ -127,9 +127,18 @@ describe('minimapMode (delve vs overworld discriminator)', () => {
       player: { pos: { x: number } };
       delveRun: unknown;
     };
-    w.player.pos.x = 100000; // a delve-band x
-    w.delveRun = { delveId: 'd', modules: ['m'], moduleIndex: 0, origin: { x: 100000, z: 0 } };
+    // A real delve-band x: the band is CAPPED east by the Protect Yumi maze
+    // band (YUMI_BAND_X_MIN = 8000), so the old open-ended 100000 probe now
+    // classifies as the maze.
+    w.player.pos.x = 5000;
+    w.delveRun = { delveId: 'd', modules: ['m'], moduleIndex: 0, origin: { x: 5000, z: 0 } };
     expect(minimapMode(w as unknown as IWorld)).toBe('delve');
+  });
+
+  it('returns yumiMaze anywhere in the Protect Yumi band, run or not', () => {
+    const w = makeWorld('client') as unknown as { player: { pos: { x: number } } };
+    w.player.pos.x = 8400;
+    expect(minimapMode(w as unknown as IWorld)).toBe('yumiMaze');
   });
 });
 
@@ -249,5 +258,21 @@ describe('allocation budget (the reused-reference proxy, wrapper floor)', () => 
     const core = createMinimapMarkers();
     const world = makeWorld('sim');
     expect(() => assertAllocationStable(() => core.build(world, S, PPY))).not.toThrow();
+  });
+});
+
+describe('minimap corpse marker (ghost run)', () => {
+  it('marks the body with a corpse skull only while the player is a ghost', () => {
+    const world = makeWorld('sim');
+    // alive (not a ghost): no corpse marker
+    expect(buildMarkers(world).some((m) => m.kind === 'corpse')).toBe(false);
+    // a ghost with a nearby body: a corpse marker appears at the body
+    (world.player as unknown as { ghost: boolean; corpsePos: unknown }).ghost = true;
+    (world.player as unknown as { ghost: boolean; corpsePos: unknown }).corpsePos = {
+      x: 3,
+      y: 0,
+      z: PZ,
+    };
+    expect(buildMarkers(world).some((m) => m.kind === 'corpse')).toBe(true);
   });
 });

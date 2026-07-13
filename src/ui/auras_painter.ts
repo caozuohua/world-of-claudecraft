@@ -4,7 +4,7 @@
 // per aura key (the aura id), reused across frames, its tooltip attached ONCE and
 // reading a LIVE mutable record, data updated IN PLACE through the host's elided
 // writers. Same painter, two instances: the player buff bar
-// (#buff-bar, mode 'all') and the target debuffs (#tf-debuffs, mode 'debuffs').
+// (#buff-bar) and the target strip (#tf-debuffs, mode 'all': buffs AND debuffs).
 //
 // TOP RISK 3 (the load-bearing correctness rule): the pooled record is a MUTABLE
 // object. The tooltip closure attaches ONCE per node and reads `rec.name` / `rec.remaining`
@@ -34,6 +34,17 @@ import type { PainterHostWriters } from './painter_host';
 // references no bare DOM string literal.
 const BUFF_CLASS = 'buff';
 const DEBUFF_CLASS = 'debuff';
+// Marks a node the local player may right-click to cancel (a helpful own buff). The
+// stylesheet draws the affordance (context-menu cursor + hover border); the class is
+// toggled per frame so a recycled node never keeps a stale affordance.
+const CANCELABLE_CLASS = 'cancelable';
+// Marks the LOCAL player's own aura on an ownFirst view (the target strip): the
+// stylesheet renders it larger so your dots/hots read at a glance among other
+// casters'. Toggled per frame so a recycled node never keeps stale prominence.
+const OWN_CLASS = 'own';
+// Carries the debuff's magic school so the stylesheet tints the border per school
+// (WoW-style poison/magic/curse reads); '' on a buff, so no school selector matches.
+const SCHOOL_ATTR = 'data-school';
 const DUR_CLASS = 'dur';
 const STACKS_CLASS = 'stacks';
 const BACKGROUND_IMAGE_PROP = 'background-image';
@@ -61,10 +72,16 @@ export interface AurasPainterDeps {
   /** Render the tooltip HTML from the LIVE aura name + remaining (host: the
    *  tt-title/tt-sub markup with esc + tPlural). Called lazily on hover, reading the
    *  pooled record's current fields. */
-  renderTooltip(name: string, remaining: number): string;
+  renderTooltip(name: string, remaining: number, effectHtml: string): string;
   /** Attach a lazily-built tooltip to a node (host: Hud.attachTooltip). Called ONCE per
    *  pooled node; the closure reads the live record. */
   attachTooltip(el: HTMLElement, html: () => string): void;
+  /** Optional: attach the right-click-cancel handler to a pooled node ONCE (the painter
+   *  never calls addEventListener itself; that listener churn is banned on the hot painter,
+   *  exactly like the tooltip's attachTooltip). Supplied ONLY to the player buff-bar painter.
+   *  `cancelableAuraId` is read live on right-click: it returns the aura id to cancel, or null
+   *  when the node currently shows a debuff / non-cancelable aura (the host then no-ops). */
+  attachCancel?(el: HTMLElement, cancelableAuraId: () => string | null): void;
 }
 
 /** One pooled aura node: the DOM refs plus the LIVE fields the tooltip closure reads.
@@ -75,8 +92,17 @@ interface PooledAura {
   dur: HTMLElement;
   stacks: HTMLElement;
   key: string;
+  /** The logical aura id (the slot key's base), read live by the cancel contextmenu
+   *  closure so a recycled node cancels the aura it currently shows, never a captured one. */
+  auraId: string;
+  /** Whether this node is currently a cancelable own-buff, read live by the cancel closure
+   *  (a recycled buff->debuff node must not stay cancelable). */
+  cancelable: boolean;
   name: string;
   remaining: number;
+  /** The one-line effect summary HTML (or '' when the aura has no descriptor), read live
+   *  by the tooltip closure alongside name/remaining. */
+  effectHtml: string;
   /** The last icon key written, so the expensive data-URL resolve + write fire only on
    *  change. null until the first paint (never equals a real key). */
   lastIconKey: string | null;
@@ -166,7 +192,13 @@ export class AurasPainter {
       // recycled to a different aura never renders the previous aura (Top risk 3).
       rec.name = s.name;
       rec.remaining = s.remaining;
+      rec.auraId = s.key;
+      rec.cancelable = s.cancelable;
+      rec.effectHtml = s.effectHtml;
       rec.seen = this.frame;
+      // Cancel affordance: only when this painter has an attachCancel dep (the player buff bar)
+      // and the view marked the aura as cancelable. Read live by the contextmenu closure.
+      rec.cancelable = !!this.deps.attachCancel && s.cancelable;
       // The icon: resolve the (expensive) data URL + write only when the key changes.
       if (rec.lastIconKey !== s.iconKey) {
         rec.lastIconKey = s.iconKey;
@@ -179,6 +211,9 @@ export class AurasPainter {
       // The buff/debuff distinction is a structural class (not an inline color); the
       // stylesheet renders it as a border the icon meaning does not depend on.
       this.writers.toggleClass(rec.el, DEBUFF_CLASS, s.isDebuff);
+      this.writers.setAttr(rec.el, SCHOOL_ATTR, s.school);
+      this.writers.toggleClass(rec.el, CANCELABLE_CLASS, rec.cancelable);
+      this.writers.toggleClass(rec.el, OWN_CLASS, s.own);
       this.writers.setText(rec.dur, s.durationText);
       const hasStacks = s.stacksText !== '';
       this.writers.setDisplay(rec.stacks, hasStacks ? STACKS_SHOWN : STACKS_HIDDEN);
@@ -217,12 +252,21 @@ export class AurasPainter {
       dur,
       stacks,
       key: '',
+      auraId: '',
+      cancelable: false,
       name: '',
       remaining: 0,
+      effectHtml: '',
       lastIconKey: null,
       seen: 0,
     };
-    this.deps.attachTooltip(el, () => this.deps.renderTooltip(rec.name, rec.remaining));
+    this.deps.attachTooltip(el, () =>
+      this.deps.renderTooltip(rec.name, rec.remaining, rec.effectHtml),
+    );
+    // Right-click-cancel: attached ONCE per pooled node via the injected helper (the
+    // buff-bar painter only). The closure reads the live record so a recycled node cancels
+    // its current aura, and returns null unless the node currently shows a cancelable buff.
+    this.deps.attachCancel?.(el, () => (rec.cancelable ? rec.auraId : null));
     return rec;
   }
 

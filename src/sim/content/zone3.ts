@@ -25,18 +25,18 @@ export const ZONE3_ZONE: ZoneDef = {
   graveyard: { x: 15, z: 645 },
   lakes: [{ x: -70, z: 760, radius: 18 }],
   pois: [
-    { x: 0, z: 660, label: 'Highwatch' },
-    { x: -50, z: 590, label: 'Stalker Ridge' },
-    { x: 85, z: 615, label: 'Deeprock Burrows' },
-    { x: -90, z: 700, label: 'Ogre Foothills' },
-    { x: -130, z: 740, label: "Drogmar's War-Camp" },
-    { x: 110, z: 760, label: 'Stormcrag' },
-    { x: -70, z: 770, label: 'The Glimmermere' },
-    { x: 55, z: 820, label: 'Wyrmcult Tents' },
-    { x: -40, z: 830, label: 'Revenant Fields' },
-    { x: 0, z: 880, label: 'Gravewyrm Sanctum' },
+    { x: 0, z: 660, label: 'Highwatch', id: 'highwatch' },
+    { x: -50, z: 590, label: 'Stalker Ridge', id: 'stalker_ridge' },
+    { x: 85, z: 615, label: 'Deeprock Burrows', id: 'deeprock_burrows' },
+    { x: -90, z: 700, label: 'Ogre Foothills', id: 'ogre_foothills' },
+    { x: -130, z: 740, label: "Drogmar's War-Camp", id: 'drogmars_war_camp' },
+    { x: 110, z: 760, label: 'Stormcrag', id: 'stormcrag' },
+    { x: -70, z: 770, label: 'The Glimmermere', id: 'the_glimmermere' },
+    { x: 55, z: 820, label: 'Wyrmcult Tents', id: 'wyrmcult_tents' },
+    { x: -40, z: 830, label: 'Revenant Fields', id: 'revenant_fields' },
+    { x: 0, z: 880, label: 'Gravewyrm Sanctum', id: 'gravewyrm_sanctum' },
   ],
-  welcome: 'Captain Thessaly holds the wall at Highwatch — barely.',
+  welcome: 'Captain Thessaly holds the wall at Highwatch - barely.',
 };
 
 // Mountain road from Fenbridge up to Highwatch, then spokes.
@@ -69,6 +69,30 @@ export const ZONE3_ROADS: { x: number; z: number }[][] = [
 // ---------------------------------------------------------------------------
 
 export const ZONE3_MOBS: Record<string, MobTemplate> = {
+  // Highwatch practice target: a near-immortal, stationary dummy for testing damage
+  // rotations and reading the combat meters. Cap-level with zero armor so the damage
+  // it takes is your clean, unmitigated rotation output. Inert (never fights back),
+  // drops nothing (you can never really fell it), and pops back up 10s after a death.
+  training_dummy: {
+    id: 'training_dummy',
+    name: 'Training Dummy',
+    minLevel: 20,
+    maxLevel: 20,
+    family: 'humanoid',
+    hpBase: 999999,
+    hpPerLevel: 0,
+    dmgBase: 0,
+    dmgPerLevel: 0,
+    attackSpeed: 2.0,
+    armorPerLevel: 0,
+    moveSpeed: 0,
+    aggroRadius: 0,
+    loot: [], // a practice target: no drops (you can never really fell it)
+    scale: 1.4,
+    color: 0xb8924a,
+    dummy: true,
+    respawnSeconds: 10,
+  },
   ridge_stalker: {
     id: 'ridge_stalker',
     name: 'Ridge Stalker',
@@ -97,9 +121,11 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     loot: [
       { copper: 60, chance: 1 },
       { itemId: 'ridge_stalker_pelt', chance: 0.6, questId: 'q_stalker_pelts' },
+      { itemId: 'ridge_stalker_pelt', chance: 0.6, questId: 'q_stalker_cloaks' },
     ],
     scale: 0.95,
     color: 0x8c8270,
+    componentTags: ['hide', 'claw'],
   },
   // The apex of the southern ridge: a grizzled, scar-pelted old cat that has
   // outlived three generations of its pack. A rare elite counterpart to the
@@ -134,13 +160,14 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     ],
     scale: 1.3,
     color: 0x6e6453,
+    componentTags: ['hide', 'fang', 'claw'],
   },
   deeprock_kobold: {
     id: 'deeprock_kobold',
     name: 'Deeprock Tunneler',
     minLevel: 14,
     maxLevel: 15,
-    family: 'kobold',
+    family: 'burrower',
     hpBase: 60,
     hpPerLevel: 22,
     dmgBase: 10,
@@ -154,6 +181,10 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
       { itemId: 'glowing_wax', chance: 0.5, questId: 'q_glowing_wax' },
       { itemId: 'tallow_candle', chance: 0.4 },
       { itemId: 'healing_potion', chance: 0.08 },
+      // A grindable long-shot at the epic T1 mail boots that also drop from the
+      // Ironvein Foreman: a rare per-kill chance so the Deeprock Burrows are a
+      // farmable path to the sabatons, not just the Foreman rare.
+      { itemId: 'deathlord_sabatons', chance: 0.001 },
     ],
     scale: 0.85,
     color: 0x9c7a3c,
@@ -166,12 +197,14 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     name: 'Ironvein Foreman',
     minLevel: 16,
     maxLevel: 16,
-    family: 'kobold',
+    family: 'burrower',
     rare: true,
     elite: true,
     canSwim: true,
     ccImmune: true,
-    respawnMult: 864,
+    // 144 * 25s base = 1 hour, so the epic-mail-boot rare is farmable on a
+    // predictable hourly cadence rather than the old 6-hour wait.
+    respawnMult: 144,
     hpBase: 420,
     hpPerLevel: 70,
     dmgBase: 19,
@@ -200,7 +233,7 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     name: 'Ironvein Sapper',
     minLevel: 15,
     maxLevel: 16,
-    family: 'kobold',
+    family: 'burrower',
     hpBase: 58,
     hpPerLevel: 20,
     dmgBase: 11,
@@ -292,7 +325,7 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     // blow stokes his Battle Fury, stacking attack power up to a hard cap. A
     // drawn-out fight snowballs, so burn him down or kite him off you to bleed
     // the stacks back off.
-    rampage: { ap: 20, maxStacks: 5, duration: 10, name: 'Battle Fury', school: 'physical' },
+    rampage: { ap: 20, maxStacks: 5, duration: 10, name: 'Mounting Rage', school: 'physical' },
     loot: [
       { copper: 2000, chance: 1 },
       { itemId: 'drogmar_warboots', chance: 0.3 },
@@ -402,7 +435,7 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
       perTick: 6,
       interval: 3,
       duration: 12,
-      name: 'Frostbite',
+      name: 'Winterbite',
       school: 'frost',
     },
     scale: 1.3,
@@ -482,6 +515,10 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
       { copper: 100, chance: 1 },
       { itemId: 'bone_fragments', chance: 0.6 },
       { itemId: 'runed_bone_shard', chance: 0.7, questId: 'q_nythraxis_restless_dead' },
+      // A grindable long-shot at the epic T1 cloth legs that also drop from
+      // Marrowlord Varkas: a rare per-kill chance so the bonefields are a
+      // farmable path to the legwraps, not just the once-per-respawn rare.
+      { itemId: 'necromancers_legwraps', chance: 0.001 },
     ],
     scale: 1.05,
     color: 0xcacfd2,
@@ -542,7 +579,7 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
       name: 'Profane Mending',
       school: 'shadow',
     },
-    petSpell: { name: 'Mind Blast', school: 'shadow', min: 38, max: 56, range: 28, every: 2.8 },
+    petSpell: { name: 'Mindfracture', school: 'shadow', min: 38, max: 56, range: 28, every: 2.8 },
     aoePulse: {
       min: 28,
       max: 42,
@@ -695,7 +732,9 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     elite: true,
     canSwim: true,
     ccImmune: true,
-    respawnMult: 864,
+    // 144 * 25s base = 1 hour, so the epic-cloth-leg rare is farmable on a
+    // predictable hourly cadence rather than the old 6-hour wait.
+    respawnMult: 144,
     hpBase: 480,
     hpPerLevel: 80,
     dmgBase: 22,
@@ -787,6 +826,167 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     scale: 1.3,
     color: 0xe8702a,
   },
+  // Thunzharr, the Waking Peak: the world boss of Thornpeak Heights. The
+  // mountain at Stormcrag is no mountain at all: a primordial storm elemental the
+  // Gravecallers' chanting keeps stirring loose. It rises on a fixed cadence (see
+  // src/sim/world_boss.ts), bellows a server-wide warning, and rewards every player
+  // who helps bring it down with personal loot (once per day). A genuine raid-tier
+  // overworld fight: Thunderclap nova, a quaking stomp, summoned stormlings, a
+  // crushing heave, a mountain-hide barrier, and a hard enrage in the last fifth.
+  thunzharr_waking_peak: {
+    id: 'thunzharr_waking_peak',
+    name: 'Thunzharr, the Waking Peak',
+    minLevel: 20,
+    maxLevel: 20,
+    family: 'elemental',
+    worldBoss: true,
+    boss: true,
+    elite: true,
+    canSwim: false,
+    // The mountain does not path around camp furniture: every chase step walks
+    // the straight line through fences, buildings, and the waterline, so he can
+    // always go directly at his target and never wedges on a collider.
+    phasesThroughObstacles: true,
+    // His only periodic voice is the battle cry below (every ~45s, zone-wide). The
+    // per-mechanic log barks ("unleashes Seismic Stomp/Tectonic Heave/Mountainhide!"
+    // and "becomes enraged!") are silenced so an overworld pull does not spam the
+    // combat log; the mechanics still fire with their spellfx and damage.
+    quietMechanics: true,
+    ccImmune: true,
+    // A raid boss cannot be perma-snared by a wall of Frostbolts / Hamstrings: slows do
+    // not stick to him (ccImmune already blocks stun/root/etc; slow is separate).
+    slowImmune: true,
+    // Raid-tier health: ~20k base at level 20, ~44k after the elite multiplier, a
+    // sustained fight for a gathered raid, far above the solo/small-group rares
+    // (Varkas and Bound Guardian scale the same way from ~2k / ~1.3k base).
+    hpBase: 4000,
+    hpPerLevel: 800,
+    // Raid-tier melee, tuned to Nythraxis dps parity (content/dungeons.ts): at
+    // level 20 after createMob's 1.5x elite multiplier this averages ~375 per
+    // 2.4s swing vs Nythraxis ~406 per 2.6s, ~156 melee dps for both, so the
+    // pull needs a healed tank exactly like the raid.
+    dmgBase: 54,
+    dmgPerLevel: 10.3,
+    attackSpeed: 2.4,
+    armorPerLevel: 46,
+    // Faster than a player's base run speed (7, entity.ts): Thunzharr cannot be
+    // outrun on foot, so there is no kite even before the Howling Gale snare lands.
+    moveSpeed: 11.6,
+    aggroRadius: 18,
+    aoePulse: {
+      min: 36,
+      max: 50,
+      radius: 12,
+      every: 12,
+      name: 'Thunderclap',
+      school: 'nature',
+      fx: 'nova',
+    },
+    stomp: {
+      radius: 11,
+      every: 24,
+      // A short pin, not a shutdown: at 11.6 vs a base run of 7 the boss closes
+      // about 7yd in 1.5s, enough to be on top of anyone caught mid-flight
+      // without benching the raid for whole GCDs.
+      duration: 1.5,
+      min: 18,
+      max: 28,
+      name: 'Seismic Stomp',
+      school: 'nature',
+    },
+    // Howling Gale: the anti-kite snare. Gale-force winds pin every player within 40yd
+    // to 70% move speed for 6s, re-slammed every 5s (so uptime is permanent while you
+    // stand in the storm, and the snare lingers if you flee the radius). Unlike the
+    // other pulses this one also fires while Thunzharr is CHASING. With the boss now
+    // outrunning base run speed (11.6 vs 7) the snare is a second layer: it keeps a
+    // sprint-cooldown or speed-buffed runner from opening a gap. A gentle 30% snare,
+    // not a hard 80% one: it denies a permanent kite without rooting the raid in place.
+    aoeSlow: {
+      radius: 40,
+      mult: 0.7,
+      duration: 6,
+      every: 5,
+      name: 'Howling Gale',
+      school: 'nature',
+    },
+    summonAdds: { mobId: 'thunzharr_stormling', count: 2, atHpPct: [0.66, 0.33] },
+    knockback: { chance: 0.3, distance: 7, name: 'Tectonic Heave' },
+    stoneskin: { amount: 500, every: 27, duration: 9, name: 'Mountainhide', school: 'nature' },
+    // Stormcall: the telegraphed hardcast. A 3.5s cast bar the whole raid can see
+    // (and the yell announces), then a heavy nature nova on everyone within 30yd,
+    // roughly double a Thunderclap pulse on a much longer cadence.
+    bigCast: {
+      castId: 'thunzharr_stormcall',
+      name: 'Stormcall',
+      castTime: 3.5,
+      every: 40,
+      radius: 30,
+      min: 70,
+      max: 90,
+      school: 'nature',
+      yell: 'The storm answers my call!',
+    },
+    yells: {
+      engage: 'You wake the mountain? Then be buried by it!',
+      summon: 'Rise, stormlings! Tear them loose from my slopes!',
+      enrage: 'The peak breaks, and the sky falls with it!',
+    },
+    // Loud: a mountain-sized voice, and (with quietMechanics) his ONLY periodic
+    // voice. Every yell (engage/summon/enrage + these battle cries) carries 350yd,
+    // far past the 100yd default; he bellows one of these lines about every 45s in
+    // combat, so the whole of Thornpeak knows he is awake without the log ever
+    // filling with per-mechanic barks.
+    battleYells: {
+      every: 45,
+      range: 350,
+      lines: [
+        'THUNDER ANSWERS! The peak has teeth again!',
+        'Run, little climbers! The mountain runs faster!',
+        'Every stone remembers your name, and none forgive!',
+        'I am the storm the summit swallowed!',
+      ],
+    },
+    enrage: { belowHpPct: 0.2, dmgMult: 1.5, hasteMult: 1.25 },
+    // Personal loot table: rolled INDEPENDENTLY for every contributor (see
+    // rollWorldBossLoot). A guaranteed storm trophy, plus AT MOST ONE epic Tier-2 set
+    // piece. The glove group rolls first at ~32%; the belt group also rolls at ~32% but
+    // the one-gear cap keeps it only when the glove roll missed, so its EFFECTIVE drop
+    // rate is ~22% (0.68 x 0.32) and a single kill never hands out both a glove and a belt.
+    // Keep the glove entries first if this ordering skew is ever retuned.
+    loot: [
+      { itemId: 'inert_storm_shard', chance: 1 },
+      { itemId: 'crownforged_gauntlets', chance: 0.08, rollGroup: 'thunzharr_t2' },
+      { itemId: 'nighttalon_grips', chance: 0.08, rollGroup: 'thunzharr_t2' },
+      { itemId: 'soulflame_gloves', chance: 0.08, rollGroup: 'thunzharr_t2' },
+      { itemId: 'stormcallers_handguards', chance: 0.08, rollGroup: 'thunzharr_t2' },
+      { itemId: 'crownforged_girdle', chance: 0.08, rollGroup: 'thunzharr_t2_belt' },
+      { itemId: 'nighttalon_waistband', chance: 0.08, rollGroup: 'thunzharr_t2_belt' },
+      { itemId: 'soulflame_cord', chance: 0.08, rollGroup: 'thunzharr_t2_belt' },
+      { itemId: 'stormcallers_waistguard', chance: 0.08, rollGroup: 'thunzharr_t2_belt' },
+    ],
+    scale: 8, // a large, imposing world boss that reads on the skyline without being mountain-sized. Visual scale is DECOUPLED from combat reach: his melee is pinned to a ~17yd (scale-5) body in combatProfileForMob (mob_combat.ts), so his move speed and the Howling Gale snare, not a giant swing, are what keep him unkitable.
+    color: 0x7d8a99,
+  },
+  // Stormlings: lesser storm elementals Thunzharr tears loose from itself at the
+  // health thresholds above. Fast, fragile, and meant to split a raid's attention.
+  thunzharr_stormling: {
+    id: 'thunzharr_stormling',
+    name: 'Roused Stormling',
+    minLevel: 19,
+    maxLevel: 20,
+    family: 'elemental',
+    hpBase: 70,
+    hpPerLevel: 24,
+    dmgBase: 13,
+    dmgPerLevel: 2.9,
+    attackSpeed: 2.0,
+    armorPerLevel: 22,
+    moveSpeed: 7.4,
+    aggroRadius: 12,
+    loot: [],
+    scale: 0.95,
+    color: 0x9fb3c8,
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -804,6 +1004,8 @@ export const ZONE3_NPCS: Record<string, NpcDef> = {
     questIds: [
       'q_highwatch_summons',
       'q_stalkers',
+      'q_stalkers_return',
+      'q_old_cragmaw',
       'q_ogre_bounty',
       'q_crushers',
       'q_drogmar',
@@ -875,7 +1077,7 @@ export const ZONE3_NPCS: Record<string, NpcDef> = {
     pos: { x: -5, z: 668 },
     facing: 1.6,
     color: 0xca8a2a,
-    questIds: ['q_stalker_pelts', 'q_glowing_wax'],
+    questIds: ['q_stalker_pelts', 'q_stalker_cloaks', 'q_glowing_wax'],
     vendorItems: [
       'trail_hardtack',
       'meltwater_flask',
@@ -888,6 +1090,17 @@ export const ZONE3_NPCS: Record<string, NpcDef> = {
       'stalkerhide_jerkin',
       'cragwalker_boots',
       'windguard_leggings',
+      'simple_fishing_pole',
+      // Tier 4/5 hub-recipe reagents (items.ts): Bree is the trade-goods
+      // vendor inside the crafting hub radius, so every requiresHubStation
+      // recipe has a live reagent source (prog_tools_of_the_trade needs at
+      // least one hub craft to be possible).
+      'thorium_ore',
+      'arcanite_bar',
+      'ashwood_log',
+      'elderwood_log',
+      'goldleaf_herb',
+      'sunpetal_herb',
     ],
     greeting:
       'Wool, hardtack, and steel-shod boots — Highwatch runs on all three, and I am short of everything.',
@@ -903,6 +1116,18 @@ export const ZONE3_NPCS: Record<string, NpcDef> = {
     vendorItems: ['highwatch_warblade', 'craghorn_staff', 'icevein_dirk'],
     greeting: 'Forge is hot and the grindstone is turning. If it cuts, I sell it.',
   },
+  heroic_quartermaster: {
+    id: 'heroic_quartermaster',
+    name: 'Quartermaster Vex',
+    title: 'Heroic Quartermaster',
+    pos: { x: -8, z: 665 },
+    facing: 1.2,
+    color: 0x8e44ad,
+    questIds: [],
+    heroicVendor: true,
+    greeting:
+      'Proof of the heroic depths buys the finest rings and pendants in Highwatch. Show me your marks.',
+  },
   loremaster_caddis: {
     id: 'loremaster_caddis',
     name: 'Loremaster Caddis',
@@ -913,6 +1138,48 @@ export const ZONE3_NPCS: Record<string, NpcDef> = {
     questIds: ['q_kobold_tunnels', 'q_elementals', 'q_shard_cores', 'q_kazzix'],
     greeting:
       'Mind the loose shale, $C. The mountain has been... restless of late. I intend to learn why.',
+  },
+  // A second auctioneer: the same shared World Market as The Merchant in Eastbrook,
+  // reachable up here in Highwatch so zone-3 players need not trek back to deal. A
+  // distinct name and amethyst tint set her apart from the gold Eastbrook merchant.
+  auctioneer_voss: {
+    id: 'auctioneer_voss',
+    name: 'Auctioneer Voss',
+    title: 'Keeper of the World Market',
+    pos: { x: 16, z: 666 },
+    facing: -2.2,
+    color: 0x8e5ad6,
+    questIds: [],
+    market: true,
+    greeting:
+      'The World Market is open here too, $C. Buy from every adventurer in the realm, or set out your own wares.',
+  },
+  bursar_aldous_crane: {
+    id: 'bursar_aldous_crane',
+    name: 'Bursar Aldous Crane',
+    title: 'The Gilded Strongbox',
+    pos: { x: -12, z: 663 },
+    facing: Math.PI / 2,
+    color: 0xc9a227,
+    questIds: [],
+    banker: true,
+    greeting: 'Every crate, coffer, and trinket is safe with the Gilded Strongbox.',
+  },
+  chronicler_edda_hartwell: {
+    // Display name renamed to Zenzie (maintainer call). The template id is
+    // retained for save compatibility: player saves persist it as the
+    // npc:chronicler_edda_hartwell visited mark, and it is the locale key stem.
+    id: 'chronicler_edda_hartwell',
+    name: 'Chronicler Zenzie',
+    title: 'The Peaks Chronicle',
+    // On the south road shoulder below the square, facing south over the road
+    // up from Fenbridge (clear of the house footprint at {8,650}; nearest
+    // authored neighbor ~15 units, she had been wedged into the gate cluster).
+    pos: { x: 2, z: 643 },
+    facing: 3.1,
+    color: 0x5a6fd6, // cool indigo: the chronicler tint is her identity (shared mage visual)
+    questIds: [],
+    greeting: 'The mountain forgets nothing, $N, and neither do I. Let us see what you have done.',
   },
 };
 
@@ -970,14 +1237,65 @@ export const ZONE3_QUESTS: Record<string, QuestDef> = {
       rogue: 'ridgestalker_treads',
     },
   },
+  q_stalkers_return: {
+    id: 'q_stalkers_return',
+    name: 'The Stalkers Return',
+    giverNpcId: 'captain_thessaly',
+    turnInNpcId: 'captain_thessaly',
+    text: 'Twelve dead, and the ridge crawls thicker than the day you started, $N. Beasts do not throw themselves at a wall out of hunger. Something on the high ridge is pushing them down, and until I know what, the culling does not stop. Fourteen more.',
+    completionText:
+      'Fourteen more, and still my patrols count fresh tracks by morning. My scout came back from the high ridge white as the snowline: prints the size of a shield, she says, and old kills no stalker would leave. Whatever walks up there is no ordinary cat.',
+    objectives: [
+      { type: 'kill', targetMobId: 'ridge_stalker', count: 14, label: 'Ridge Stalker slain' },
+    ],
+    xpReward: 2400,
+    copperReward: 1100,
+    itemRewards: {},
+    requiresQuest: 'q_stalkers',
+    minLevel: 13,
+  },
+  q_stalker_cloaks: {
+    id: 'q_stalker_cloaks',
+    name: 'Cloaks for the Watch',
+    giverNpcId: 'quartermaster_bree',
+    turnInNpcId: 'quartermaster_bree',
+    text: "Eight pelts lined the officers' cloaks, and now every soldier on the wall wants the same, $N. They are right to want it: winter takes fingers first and apologies never. Ten more pelts from the ridges south of the gate, and the whole watch sleeps warm.",
+    completionText:
+      'Ten good pelts, thick as any I have... no, look at these, $N. Torn, half of them, and by no blade or spear. Claw marks wide as my hand, right through the winter coat. Something on that ridge is savaging its own kind.',
+    objectives: [
+      { type: 'collect', itemId: 'ridge_stalker_pelt', count: 10, label: 'Ridge Stalker Pelt' },
+    ],
+    xpReward: 2400,
+    copperReward: 1200,
+    itemRewards: {},
+    requiresQuest: 'q_stalker_pelts',
+    minLevel: 13,
+  },
+  q_old_cragmaw: {
+    id: 'q_old_cragmaw',
+    name: 'Old Cragmaw',
+    giverNpcId: 'captain_thessaly',
+    turnInNpcId: 'captain_thessaly',
+    text: 'The mountain folk put a name to the prints my scout found: Old Cragmaw, a scar-pelted tyrant of a cat that has outlived three generations of its own pack. It is the reason the stalkers flood my road, $N. Its den sits on the western ridge above the road south. Bring a friend, and put the old devil down.',
+    completionText:
+      'Down at last. The mountain folk swore that cat would outlive the wall itself. The stalkers will keep to their high snows now, $N, and my patrols will walk the road without bleeding for it. The whole ridge is quieter for your work.',
+    objectives: [
+      { type: 'kill', targetMobId: 'old_cragmaw', count: 1, label: 'Old Cragmaw slain' },
+    ],
+    xpReward: 2700,
+    copperReward: 1500,
+    itemRewards: {},
+    requiresQuest: 'q_stalkers_return',
+    suggestedPlayers: 2,
+  },
   q_kobold_tunnels: {
     id: 'q_kobold_tunnels',
     name: 'Deeprock Trouble',
     giverNpcId: 'loremaster_caddis',
     turnInNpcId: 'loremaster_caddis',
-    text: 'The kobolds at Deeprock Burrows are digging deeper than any candle-rat has business digging — straight down, as if something were calling them. Their tunnels run beneath our wall, $N. Collapse the matter: kill twelve Deeprock Tunnelers.',
+    text: 'The tunnelers at Deeprock Burrows are digging deeper than any pit-rat has business digging — straight down, as if something were calling them. Their tunnels run beneath our wall, $N. Collapse the matter: kill twelve Deeprock Tunnelers.',
     completionText:
-      'Straight down, every shaft of it — kobolds do not dig like that on their own. I must consult my books.',
+      'Straight down, every shaft of it — burrowers do not dig like that on their own. I must consult my books.',
     objectives: [
       { type: 'kill', targetMobId: 'deeprock_kobold', count: 12, label: 'Deeprock Tunneler slain' },
     ],
@@ -991,7 +1309,7 @@ export const ZONE3_QUESTS: Record<string, QuestDef> = {
     name: 'Strange Wax',
     giverNpcId: 'quartermaster_bree',
     turnInNpcId: 'quartermaster_bree',
-    text: 'Caddis showed me a candle taken off one of those tunnelers — the wax glows, $N, and it is warm as a heartbeat. He wants more for study, and I want it off my requisition list. Bring back six lumps of the glowing wax.',
+    text: 'Caddis showed me a lump of wax taken off one of those tunnelers — it glows, $N, and it is warm as a heartbeat. He wants more for study, and I want it off my requisition list. Bring back six lumps of the glowing wax.',
     completionText:
       'Still warm. The Loremaster says the glow matches no flame he knows of. I say it is mountain trouble, and I say it kindly.',
     objectives: [{ type: 'collect', itemId: 'glowing_wax', count: 6, label: 'Glowing Wax' }],
@@ -1387,7 +1705,10 @@ export const ZONE3_QUESTS: Record<string, QuestDef> = {
       mage: 'wyrmcult_grand_robe',
       rogue: 'wyrmscale_jerkin',
     },
-    requiresQuest: 'q_velkhar',
+    // Korzul shares the Sanctum with Korgath and Velkhar; gate it on opening
+    // the gate (like its sibling boss quests), not on Velkhar's turn-in, so the
+    // party can pick up all three and clear the instance in a single run.
+    requiresQuest: 'q_sanctum_gate',
     minLevel: 18,
     suggestedPlayers: 5,
   },
@@ -1521,6 +1842,9 @@ export const ZONE3_QUEST_ORDER = [
   'q_highwatch_summons',
   'q_stalkers',
   'q_stalker_pelts',
+  'q_stalkers_return',
+  'q_stalker_cloaks',
+  'q_old_cragmaw',
   'q_kobold_tunnels',
   'q_glowing_wax',
   'q_ogre_edges',
@@ -1555,6 +1879,8 @@ export const ZONE3_QUEST_ORDER = [
 // ---------------------------------------------------------------------------
 
 export const ZONE3_CAMPS: CampDef[] = [
+  // Training dummy: a single fixed practice target on the hill above Highwatch.
+  { mobId: 'training_dummy', center: { x: -40, z: 648 }, radius: 0, count: 1 },
   // Ridge stalkers: the ridge flanking the road from the pass
   { mobId: 'ridge_stalker', center: { x: -50, z: 590 }, radius: 22, count: 7 },
   { mobId: 'ridge_stalker', center: { x: 45, z: 600 }, radius: 20, count: 6 },
@@ -1574,13 +1900,19 @@ export const ZONE3_CAMPS: CampDef[] = [
   { mobId: 'stormcrag_elemental', center: { x: 110, z: 760 }, radius: 20, count: 8 },
   { mobId: 'stormcrag_elemental', center: { x: 135, z: 795 }, radius: 16, count: 6 },
   { mobId: 'shardlord_kazzix', center: { x: 145, z: 815 }, radius: 8, count: 1 },
-  // Wyrmcult: tents below the Sanctum
+  // Wyrmcult: tents below the Sanctum. The (25, 845) pack's radius clipped the
+  // x=0 approach road, so it is nudged east to keep the central path clear; the
+  // tents still flank the gate.
   { mobId: 'wyrmcult_zealot', center: { x: 55, z: 820 }, radius: 20, count: 8 },
-  { mobId: 'wyrmcult_zealot', center: { x: 25, z: 845 }, radius: 16, count: 6 },
+  { mobId: 'wyrmcult_zealot', center: { x: 34, z: 845 }, radius: 16, count: 6 },
   { mobId: 'wyrmcult_necromancer', center: { x: 40, z: 855 }, radius: 14, count: 5 },
-  // Revenants: the old battlefield and the Sanctum gate plaza
+  // Revenants: the old battlefield (Revenant Fields). The second pack used to sit
+  // at (-15, 860), right where the x=0 Sanctum Approach road ends and only ~20yd
+  // from the gate, so (aggroRadius 11) it jumped players entering/exiting the
+  // Sanctum. Pulled it back into the fields, off the central road and away from
+  // the gate, so the approach stays a clear walk.
   { mobId: 'boneclad_revenant', center: { x: -40, z: 830 }, radius: 20, count: 8 },
-  { mobId: 'boneclad_revenant', center: { x: -15, z: 860 }, radius: 16, count: 6 },
+  { mobId: 'boneclad_revenant', center: { x: -40, z: 838 }, radius: 16, count: 6 },
   { mobId: 'marrowlord_varkas', center: { x: -34, z: 842 }, radius: 5, count: 1 },
   // Voskar the Emberwing: perched on a scorched crag east of the Sanctum tents,
   // with two zealot drakebinders posted to keep their captive on its chain.
@@ -1819,6 +2151,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'ridgestalker_treads',
     name: 'Ridgestalker Treads',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'feet',
     quality: 'uncommon',
     stats: { armor: 50, agi: 3, sta: 2 },
@@ -1841,6 +2174,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'cragmaw_prowlboots',
     name: 'Cragmaw Prowlboots',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'feet',
     quality: 'rare',
     stats: { armor: 58, agi: 5, sta: 3 },
@@ -1852,18 +2186,27 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'cragmaw_huntcord',
     name: "Cragmaw's Huntcord",
     kind: 'armor',
+    armorType: 'leather',
     slot: 'waist',
     quality: 'rare',
     stats: { armor: 44, agi: 5, sta: 3 },
     sellValue: 340,
   },
+  // --- Level-20 endgame loot: Korzul (5-player Gravewyrm Sanctum) and Nythraxis
+  // (10-player raid). Every piece below is NORMALIZED to the stat budget its item
+  // level earns (see src/sim/item_level.ts): item level = level 20 + quality bonus,
+  // plus a raid bonus for Nythraxis drops, so the raid set reads a tier above the
+  // dungeon set. Within each (item level, quality, slot) group the primary-stat sum
+  // is identical while each piece keeps its own stat identity (plate str/sta, cloth
+  // int/spi, leather agi/sta). tests/item_level.test.ts pins data == formula. ---
   boneplate_vest: {
     id: 'boneplate_vest',
     name: 'Boneplate Vest',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'chest',
     quality: 'uncommon',
-    stats: { armor: 170, sta: 6, str: 3 },
+    stats: { armor: 170, sta: 5, str: 3 },
     sellValue: 800,
     requiredClass: ['warrior', 'paladin', 'shaman'],
   },
@@ -1871,9 +2214,10 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'revenant_silk_robe',
     name: 'Revenant Silk Robe',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'chest',
     quality: 'uncommon',
-    stats: { armor: 60, int: 7, spi: 4 },
+    stats: { armor: 60, int: 5, spi: 3 },
     sellValue: 800,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
   },
@@ -1881,9 +2225,10 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'nightwalk_jerkin',
     name: 'Nightwalk Jerkin',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'chest',
     quality: 'uncommon',
-    stats: { armor: 105, agi: 7, sta: 2 },
+    stats: { armor: 105, agi: 6, sta: 2 },
     sellValue: 800,
     requiredClass: ['rogue', 'hunter'],
   },
@@ -1896,7 +2241,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 18, max: 29, speed: 2.3 },
     stats: { str: 6, sta: 2 },
     sellValue: 900,
-    requiredClass: ['warrior', 'paladin', 'shaman'],
+    requiredClass: ['warrior', 'rogue', 'hunter', 'shaman', 'paladin'],
   },
   emberwood_staff: {
     id: 'emberwood_staff',
@@ -1905,9 +2250,9 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'uncommon',
     weapon: { min: 20, max: 33, speed: 3.0 },
-    stats: { int: 8, spi: 3 },
+    stats: { int: 6, spi: 2 },
     sellValue: 900,
-    requiredClass: ['mage', 'priest', 'warlock', 'druid'],
+    requiredClass: ['mage', 'priest', 'warlock', 'shaman', 'paladin', 'druid'],
   },
   cultist_flayer: {
     id: 'cultist_flayer',
@@ -1916,7 +2261,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'uncommon',
     weapon: { min: 12, max: 19, speed: 1.7, dagger: true },
-    stats: { agi: 7 },
+    stats: { agi: 8 },
     sellValue: 900,
     requiredClass: ['rogue', 'hunter'],
   },
@@ -1924,6 +2269,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'drogmar_warboots',
     name: "Drogmar's Warboots",
     kind: 'armor',
+    armorType: 'mail',
     slot: 'feet',
     quality: 'uncommon',
     stats: { armor: 85, str: 3, sta: 4 },
@@ -1950,12 +2296,13 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 19, max: 31, speed: 3.0 },
     stats: { int: 7, spi: 3 },
     sellValue: 950,
-    requiredClass: ['mage', 'priest', 'warlock', 'druid'],
+    requiredClass: ['mage', 'priest', 'warlock', 'shaman', 'paladin', 'druid'],
   },
   marrowlord_boneboots: {
     id: 'marrowlord_boneboots',
     name: 'Marrowlord Boneboots',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'feet',
     quality: 'uncommon',
     stats: { armor: 90, sta: 5, str: 2 },
@@ -1967,6 +2314,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'skullsmasher_warbelt',
     name: "Skullsmasher's Warbelt",
     kind: 'armor',
+    armorType: 'mail',
     slot: 'chest',
     quality: 'uncommon',
     stats: { armor: 96, sta: 5, str: 3 },
@@ -1984,6 +2332,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'emberwing_legguards',
     name: 'Emberwing Legguards',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'legs',
     quality: 'rare',
     stats: { armor: 120, sta: 6, str: 4 },
@@ -1999,7 +2348,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 26, max: 41, speed: 2.5 },
     stats: { str: 8, sta: 3 },
     sellValue: 2400,
-    requiredClass: ['warrior', 'paladin', 'shaman'],
+    requiredClass: ['warrior', 'rogue', 'hunter', 'shaman', 'paladin'],
   },
   // --- quest & dungeon blues (rare) ---
   // Brutok Skullsmasher chase weapons (mutually exclusive: brutok_chase)
@@ -2012,7 +2361,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 24, max: 37, speed: 2.7 },
     stats: { str: 8, sta: 3 },
     sellValue: 2000,
-    requiredClass: ['warrior', 'paladin', 'shaman'],
+    requiredClass: ['warrior', 'rogue', 'hunter', 'shaman', 'paladin'],
   },
   crag_warden_cudgel: {
     id: 'crag_warden_cudgel',
@@ -2023,7 +2372,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 23, max: 36, speed: 3.0 },
     stats: { int: 8, spi: 4 },
     sellValue: 2000,
-    requiredClass: ['mage', 'priest', 'warlock', 'druid'],
+    requiredClass: ['mage', 'priest', 'warlock', 'shaman', 'paladin', 'druid'],
   },
   skullsplitter_dirk: {
     id: 'skullsplitter_dirk',
@@ -2045,7 +2394,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 22, max: 35, speed: 2.6 },
     stats: { str: 7, sta: 4 },
     sellValue: 2000,
-    requiredClass: ['warrior', 'paladin', 'shaman'],
+    requiredClass: ['warrior', 'rogue', 'hunter', 'shaman', 'paladin'],
   },
   ogre_bonecharm_staff: {
     id: 'ogre_bonecharm_staff',
@@ -2056,7 +2405,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 24, max: 38, speed: 3.0 },
     stats: { int: 9, spi: 4 },
     sellValue: 2000,
-    requiredClass: ['mage', 'priest', 'warlock', 'druid'],
+    requiredClass: ['mage', 'priest', 'warlock', 'shaman', 'paladin', 'druid'],
   },
   gutripper_shiv: {
     id: 'gutripper_shiv',
@@ -2073,6 +2422,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'stormshard_leggings',
     name: 'Stormshard Leggings',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'legs',
     quality: 'rare',
     stats: { armor: 110, sta: 5 },
@@ -2082,18 +2432,20 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'korgaths_chainwraps',
     name: "Korgath's Chainwraps",
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'legs',
     quality: 'rare',
-    stats: { armor: 125, sta: 6 },
+    stats: { armor: 125, sta: 12 },
     sellValue: 2200,
   },
   boneguard_breastplate: {
     id: 'boneguard_breastplate',
     name: 'Boneguard Breastplate',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'chest',
     quality: 'rare',
-    stats: { armor: 210, sta: 7, str: 4 },
+    stats: { armor: 210, sta: 8, str: 5 },
     sellValue: 2500,
     requiredClass: ['warrior', 'paladin', 'shaman'],
   },
@@ -2104,14 +2456,15 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'rare',
     weapon: { min: 27, max: 43, speed: 3.0 },
-    stats: { int: 10, spi: 5 },
+    stats: { int: 9, spi: 4 },
     sellValue: 2500,
-    requiredClass: ['mage', 'priest', 'warlock', 'druid'],
+    requiredClass: ['mage', 'priest', 'warlock', 'shaman', 'paladin', 'druid'],
   },
   shadowmeld_tunic: {
     id: 'shadowmeld_tunic',
-    name: 'Shadowmeld Tunic',
+    name: 'Nightveil Tunic',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'chest',
     quality: 'rare',
     stats: { armor: 130, agi: 9, sta: 4 },
@@ -2122,6 +2475,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'gravewyrm_scale_hauberk',
     name: 'Gravewyrm Scale Hauberk',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'chest',
     quality: 'rare',
     stats: { armor: 230, sta: 8, str: 5 },
@@ -2132,9 +2486,10 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'wyrmcult_grand_robe',
     name: 'Wyrmcult Grand Robe',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'chest',
     quality: 'rare',
-    stats: { armor: 75, int: 11, spi: 5 },
+    stats: { armor: 75, int: 9, spi: 4 },
     sellValue: 3000,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
   },
@@ -2142,9 +2497,10 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'wyrmscale_jerkin',
     name: 'Wyrmscale Jerkin',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'chest',
     quality: 'rare',
-    stats: { armor: 145, agi: 10, sta: 5 },
+    stats: { armor: 145, agi: 9, sta: 4 },
     sellValue: 3000,
     requiredClass: ['rogue', 'hunter'],
   },
@@ -2152,9 +2508,10 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'gravewyrm_stalkers_treads',
     name: "Gravewyrm Stalker's Treads",
     kind: 'armor',
+    armorType: 'leather',
     slot: 'feet',
     quality: 'rare',
-    stats: { armor: 105, agi: 10, sta: 5 },
+    stats: { armor: 105, agi: 5, sta: 3 },
     sellValue: 3200,
     requiredClass: ['rogue', 'hunter'],
   },
@@ -2162,9 +2519,10 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'gravewyrm_sabatons',
     name: 'Gravewyrm Sabatons',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'feet',
     quality: 'rare',
-    stats: { armor: 145, str: 5, sta: 6 },
+    stats: { armor: 145, str: 4, sta: 4 },
     sellValue: 3200,
     requiredClass: ['warrior', 'paladin', 'shaman'],
   },
@@ -2172,16 +2530,19 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'wyrmcult_soulsteps',
     name: 'Wyrmcult Soulsteps',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'feet',
     quality: 'rare',
-    stats: { armor: 68, int: 9, spi: 5 },
+    stats: { armor: 68, int: 5, spi: 3 },
     sellValue: 3200,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
   },
   deathlord_warplate: {
     id: 'deathlord_warplate',
-    name: 'Deathlord Warplate',
+    set: 'deathlord',
+    name: 'Barrowlord Warplate',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'chest',
     quality: 'epic',
     stats: { armor: 270, str: 8, sta: 10 },
@@ -2190,38 +2551,46 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
   },
   necromancers_starshroud: {
     id: 'necromancers_starshroud',
-    name: "Necromancer's Starshroud",
+    set: 'necromancers',
+    name: 'Mournweave Starshroud',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'chest',
     quality: 'epic',
-    stats: { armor: 92, int: 14, spi: 8 },
+    stats: { armor: 92, int: 11, spi: 7 },
     sellValue: 9000,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
   },
   wyrmshadow_harness: {
     id: 'wyrmshadow_harness',
-    name: 'Wyrmshadow Harness',
+    set: 'wyrmshadow',
+    name: 'Nightfang Harness',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'chest',
     quality: 'epic',
-    stats: { armor: 170, agi: 13, sta: 7 },
+    stats: { armor: 170, agi: 12, sta: 6 },
     sellValue: 9000,
     requiredClass: ['rogue', 'hunter'],
   },
   deathlord_legguards: {
     id: 'deathlord_legguards',
-    name: 'Deathlord Legguards',
+    set: 'deathlord',
+    name: 'Barrowlord Legguards',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'legs',
     quality: 'epic',
-    stats: { armor: 240, str: 8, sta: 9 },
+    stats: { armor: 240, str: 8, sta: 8 },
     sellValue: 9000,
     requiredClass: ['warrior', 'paladin', 'shaman'],
   },
   deathlord_sabatons: {
     id: 'deathlord_sabatons',
-    name: 'Deathlord Sabatons',
+    set: 'deathlord',
+    name: 'Barrowlord Sabatons',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'feet',
     quality: 'epic',
     stats: { armor: 205, str: 7, sta: 8 },
@@ -2230,18 +2599,22 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
   },
   necromancers_soulsteps: {
     id: 'necromancers_soulsteps',
-    name: "Necromancer's Soulsteps",
+    set: 'necromancers',
+    name: 'Mournweave Soulsteps',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'feet',
     quality: 'epic',
-    stats: { armor: 80, int: 12, spi: 7 },
+    stats: { armor: 80, int: 8, spi: 4 },
     sellValue: 9000,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
   },
   necromancers_legwraps: {
     id: 'necromancers_legwraps',
-    name: "Necromancer's Legwraps",
+    set: 'necromancers',
+    name: 'Mournweave Legwraps',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'legs',
     quality: 'epic',
     stats: { armor: 86, int: 13, spi: 7 },
@@ -2250,21 +2623,25 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
   },
   wyrmshadow_treads: {
     id: 'wyrmshadow_treads',
-    name: 'Wyrmshadow Treads',
+    set: 'wyrmshadow',
+    name: 'Nightfang Treads',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'feet',
     quality: 'epic',
-    stats: { armor: 145, agi: 11, sta: 7 },
+    stats: { armor: 145, agi: 7, sta: 5 },
     sellValue: 9000,
     requiredClass: ['rogue', 'hunter'],
   },
   wyrmshadow_legguards: {
     id: 'wyrmshadow_legguards',
-    name: 'Wyrmshadow Legguards',
+    set: 'wyrmshadow',
+    name: 'Nightfang Legguards',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'legs',
     quality: 'epic',
-    stats: { armor: 155, agi: 12, sta: 7 },
+    stats: { armor: 155, agi: 10, sta: 6 },
     sellValue: 9000,
     requiredClass: ['rogue', 'hunter'],
   },
@@ -2276,9 +2653,9 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'epic',
     weapon: { min: 30, max: 48, speed: 2.6 },
-    stats: { str: 10, sta: 6 },
+    stats: { str: 11, sta: 7 },
     sellValue: 8000,
-    requiredClass: ['warrior', 'paladin', 'shaman'],
+    requiredClass: ['warrior', 'rogue', 'hunter', 'shaman', 'paladin'],
   },
   staff_of_the_gravewyrm: {
     id: 'staff_of_the_gravewyrm',
@@ -2289,7 +2666,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     weapon: { min: 32, max: 52, speed: 3.0 },
     stats: { int: 12, spi: 6 },
     sellValue: 8000,
-    requiredClass: ['mage', 'priest', 'warlock', 'druid'],
+    requiredClass: ['mage', 'priest', 'warlock', 'shaman', 'paladin', 'druid'],
   },
   fang_of_korzul: {
     id: 'fang_of_korzul',
@@ -2298,43 +2675,150 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'epic',
     weapon: { min: 19, max: 30, speed: 1.7, dagger: true },
-    stats: { agi: 11, sta: 5 },
+    stats: { agi: 12, sta: 6 },
     sellValue: 8000,
     requiredClass: ['rogue', 'hunter'],
   },
   // --- Inventory 2.0 epics: one per armor archetype, filling the new slots and
-  // named into the existing Deathlord/Necromancer's/Wyrmshadow Korzul epic families.
-  // Budgeted just under the matching chest epic and slot-weighted (head≈1.0,
-  // shoulder≈0.75, gloves≈0.65) so they slot cleanly into each set. ---
+  // named into the existing Barrowlord/Mournweave/Nightfang Korzul epic families.
+  // Stat budget is slot-weighted off the item-level formula (src/sim/item_level.ts),
+  // so each lands a notch under its chest epic and slots cleanly into its set. ---
   deathlords_dread_visage: {
     id: 'deathlords_dread_visage',
-    name: "Deathlord's Dread Visage",
+    set: 'deathlord',
+    name: 'Barrowlord Dread Visage',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'helmet',
     quality: 'epic',
-    stats: { armor: 245, str: 7, sta: 9 },
+    stats: { armor: 245, str: 7, sta: 8 },
     sellValue: 9000,
     requiredClass: ['warrior', 'paladin', 'shaman'],
   },
   necromancers_soulspire_mantle: {
     id: 'necromancers_soulspire_mantle',
-    name: "Necromancer's Soulspire Mantle",
+    set: 'necromancers',
+    name: 'Mournweave Soulspire Mantle',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'shoulder',
     quality: 'epic',
-    stats: { armor: 70, int: 11, spi: 6 },
+    stats: { armor: 70, int: 9, spi: 5 },
     sellValue: 9000,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
   },
   wyrmshadow_talongrips: {
     id: 'wyrmshadow_talongrips',
-    name: 'Wyrmshadow Talongrips',
+    set: 'wyrmshadow',
+    name: 'Nightfang Talongrips',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'gloves',
     quality: 'epic',
-    stats: { armor: 110, agi: 10, sta: 5 },
+    stats: { armor: 110, agi: 9, sta: 4 },
     sellValue: 9000,
     requiredClass: ['rogue', 'hunter'],
+  },
+  // --- Thunzharr, the Waking Peak (world boss): epic GLOVES that extend the
+  // Tier-2 set families to a third piece. Named and stat-shaped to match each
+  // family's existing helm/shoulder. The `set` tag wires each into its family. ---
+  crownforged_gauntlets: {
+    id: 'crownforged_gauntlets',
+    name: 'Bonewrought Gauntlets',
+    kind: 'armor',
+    slot: 'gloves',
+    armorType: 'mail',
+    quality: 'epic',
+    stats: { armor: 180, str: 6, sta: 7 },
+    sellValue: 3600,
+    requiredClass: ['warrior', 'paladin'],
+    set: 'crownforged', // 3rd Bonewrought piece, unlocks the set's 3-piece bonus
+  },
+  nighttalon_grips: {
+    id: 'nighttalon_grips',
+    name: 'Direfang Grips',
+    kind: 'armor',
+    slot: 'gloves',
+    armorType: 'leather',
+    quality: 'epic',
+    stats: { armor: 110, agi: 8, sta: 5 },
+    sellValue: 3600,
+    requiredClass: ['rogue', 'hunter', 'druid'],
+    set: 'nighttalon', // 3rd Direfang piece, unlocks the set's 3-piece bonus
+  },
+  soulflame_gloves: {
+    id: 'soulflame_gloves',
+    name: 'Wraithfire Gloves',
+    kind: 'armor',
+    slot: 'gloves',
+    armorType: 'cloth',
+    quality: 'epic',
+    stats: { armor: 60, int: 8, sta: 5 },
+    sellValue: 3600,
+    requiredClass: ['mage', 'priest', 'warlock', 'druid'],
+    set: 'soulflame', // 3rd Wraithfire piece, unlocks the set's 3-piece bonus
+  },
+  stormcallers_handguards: {
+    id: 'stormcallers_handguards',
+    name: 'Galecall Handguards',
+    kind: 'armor',
+    slot: 'gloves',
+    armorType: 'mail',
+    quality: 'epic',
+    stats: { armor: 130, int: 8, sta: 5 },
+    sellValue: 3600,
+    requiredClass: ['shaman'],
+    set: 'stormcallers', // 3rd Galecall piece, unlocks the set's 3-piece bonus
+  },
+  // --- Thunzharr, the Waking Peak (world boss): epic BELTS, each family's fourth
+  // piece (helm, shoulder, glove, belt), alongside the glove drops above. ---
+  crownforged_girdle: {
+    id: 'crownforged_girdle',
+    name: 'Bonewrought Girdle',
+    kind: 'armor',
+    slot: 'waist',
+    armorType: 'mail',
+    quality: 'epic',
+    stats: { armor: 150, str: 7, sta: 6 },
+    sellValue: 3600,
+    requiredClass: ['warrior', 'paladin'],
+    set: 'crownforged',
+  },
+  nighttalon_waistband: {
+    id: 'nighttalon_waistband',
+    name: 'Direfang Waistband',
+    kind: 'armor',
+    slot: 'waist',
+    armorType: 'leather',
+    quality: 'epic',
+    stats: { armor: 95, agi: 8, sta: 5 },
+    sellValue: 3600,
+    requiredClass: ['rogue', 'hunter', 'druid'],
+    set: 'nighttalon',
+  },
+  soulflame_cord: {
+    id: 'soulflame_cord',
+    name: 'Wraithfire Cord',
+    kind: 'armor',
+    slot: 'waist',
+    armorType: 'cloth',
+    quality: 'epic',
+    stats: { armor: 50, int: 8, spi: 5 },
+    sellValue: 3600,
+    requiredClass: ['mage', 'priest', 'warlock', 'druid'],
+    set: 'soulflame',
+  },
+  stormcallers_waistguard: {
+    id: 'stormcallers_waistguard',
+    name: 'Galecall Waistguard',
+    kind: 'armor',
+    slot: 'waist',
+    armorType: 'mail',
+    quality: 'epic',
+    stats: { armor: 110, int: 8, sta: 5 },
+    sellValue: 3600,
+    requiredClass: ['shaman'],
+    set: 'stormcallers',
   },
   deathless_heartwood: {
     id: 'deathless_heartwood',
@@ -2343,98 +2827,165 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'legendary',
     weapon: { min: 42, max: 68, speed: 3.2 },
-    stats: { agi: 24, sta: 18, int: 20 },
+    // A druid caster/healer staff by deliberate choice: its 17 points sit in
+    // spirit (druid mana/healing) rather than agility, accepting that feral
+    // wearers lose real value from the swap (bear-form AP scales on agility).
+    // Hunters/rogues cannot equip it. Still exactly on the 44-pt legendary
+    // mainhand budget.
+    stats: { spi: 17, sta: 13, int: 14 },
     sellValue: 25000,
-    requiredClass: ['druid'],
+    requiredClass: ['mage', 'priest', 'warlock', 'shaman', 'paladin', 'druid'],
+    // Life and decay: a damaging spell may fester a nature DoT (Deathbloom); a heal
+    // may bloom a nature heal-over-time on its target (Lifebloom).
+    weaponProcs: [
+      {
+        id: 'deathbloom',
+        name: 'Deathbloom',
+        trigger: 'spellDamage',
+        chance: 0.15,
+        effects: [
+          {
+            kind: 'dot',
+            name: 'Deathbloom',
+            school: 'nature',
+            perTick: 12,
+            interval: 2,
+            duration: 8,
+          },
+        ],
+      },
+      {
+        id: 'lifebloom',
+        name: 'Lifebloom',
+        trigger: 'heal',
+        chance: 0.15,
+        effects: [{ kind: 'hot', name: 'Lifebloom', perTick: 10, interval: 2, duration: 8 }],
+      },
+    ],
   },
   kingsbane_last_oath: {
     id: 'kingsbane_last_oath',
-    name: 'Kingsbane, Last Oath of Thornpeak',
+    name: 'Thronebane, Last Oath of Thornpeak',
     kind: 'weapon',
     slot: 'mainhand',
     quality: 'legendary',
     weapon: { min: 46, max: 74, speed: 2.8 },
-    stats: { str: 24, sta: 20 },
+    // Rebalanced into a str/agi/sta hybrid within the fixed 44-pt legendary
+    // mainhand budget: 15 agi makes it a viable hunter ranged weapon (ranged AP +
+    // crit) while it stays usable by its warrior/paladin owners.
+    stats: { str: 15, agi: 15, sta: 14 },
     sellValue: 25000,
-    requiredClass: ['warrior', 'paladin'],
+    requiredClass: ['warrior', 'rogue', 'hunter', 'shaman', 'paladin'],
+    // Thunderfury-style on-hit: a nature arc that blasts the target and chains to
+    // nearby foes, and slows the primary target's attack speed.
+    weaponProcs: [
+      {
+        id: 'thronebane_arc',
+        name: 'Chain Arc',
+        // Fires on any weapon strike: a melee swing for its warrior/paladin owners,
+        // or a hunter's Auto Shot (which shoots this same weapon).
+        trigger: 'weaponHit',
+        chance: 0.1,
+        effects: [
+          { kind: 'chainArc', school: 'nature', damage: 42, jumps: 3, falloff: 0.6, radius: 8 },
+          { kind: 'attackSlow', name: 'Thunderclap', mult: 1.2, duration: 6 },
+        ],
+      },
+    ],
   },
   crownforged_dreadhelm: {
     id: 'crownforged_dreadhelm',
-    name: 'Crownforged Dreadhelm',
+    set: 'crownforged',
+    name: 'Bonewrought Dreadhelm',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'helmet',
     quality: 'epic',
-    stats: { armor: 310, str: 12, sta: 14 },
+    stats: { armor: 310, str: 8, sta: 9 },
     sellValue: 12000,
     requiredClass: ['warrior', 'paladin'],
   },
   crownforged_warspaulders: {
     id: 'crownforged_warspaulders',
-    name: 'Crownforged Warspaulders',
+    set: 'crownforged',
+    name: 'Bonewrought Warspaulders',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'shoulder',
     quality: 'epic',
-    stats: { armor: 260, str: 10, sta: 12 },
+    stats: { armor: 260, str: 7, sta: 8 },
     sellValue: 12000,
     requiredClass: ['warrior', 'paladin'],
   },
   nighttalon_crown: {
     id: 'nighttalon_crown',
-    name: 'Nighttalon Crown',
+    set: 'nighttalon',
+    name: 'Direfang Crown',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'helmet',
     quality: 'epic',
-    stats: { armor: 190, agi: 16, sta: 10 },
+    stats: { armor: 190, agi: 10, sta: 7 },
     sellValue: 12000,
     requiredClass: ['rogue', 'hunter', 'druid'],
   },
   nighttalon_shoulderguards: {
     id: 'nighttalon_shoulderguards',
-    name: 'Nighttalon Shoulderguards',
+    set: 'nighttalon',
+    name: 'Direfang Shoulderguards',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'shoulder',
     quality: 'epic',
-    stats: { armor: 165, agi: 14, sta: 9 },
+    stats: { armor: 165, agi: 9, sta: 6 },
     sellValue: 12000,
     requiredClass: ['rogue', 'hunter', 'druid'],
   },
   soulflame_cowl: {
     id: 'soulflame_cowl',
-    name: 'Soulflame Cowl',
+    set: 'soulflame',
+    name: 'Wraithfire Cowl',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'helmet',
     quality: 'epic',
-    stats: { armor: 105, int: 17, sta: 10 },
+    stats: { armor: 105, int: 11, sta: 6 },
     sellValue: 12000,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
   },
   soulflame_mantle: {
     id: 'soulflame_mantle',
-    name: 'Soulflame Mantle',
+    set: 'soulflame',
+    name: 'Wraithfire Mantle',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'shoulder',
     quality: 'epic',
-    stats: { armor: 92, int: 15, sta: 9 },
+    stats: { armor: 92, int: 9, sta: 6 },
     sellValue: 12000,
     requiredClass: ['mage', 'priest', 'warlock', 'druid'],
   },
   stormcallers_crown: {
     id: 'stormcallers_crown',
-    name: "Stormcaller's Crown",
+    set: 'stormcallers',
+    name: 'Galecall Crown',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'helmet',
     quality: 'epic',
-    stats: { armor: 225, int: 16, sta: 12 },
+    stats: { armor: 225, int: 10, sta: 7 },
     sellValue: 12000,
     requiredClass: ['shaman'],
   },
   stormcallers_spaulders: {
     id: 'stormcallers_spaulders',
-    name: "Stormcaller's Spaulders",
+    set: 'stormcallers',
+    name: 'Galecall Spaulders',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'shoulder',
     quality: 'epic',
-    stats: { armor: 190, int: 14, sta: 11 },
+    stats: { armor: 190, int: 8, sta: 7 },
     sellValue: 12000,
     requiredClass: ['shaman'],
   },
@@ -2511,6 +3062,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'highwatch_breastplate',
     name: 'Highwatch Breastplate',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'chest',
     quality: 'common',
     stats: { armor: 160 },
@@ -2521,6 +3073,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'peakwool_robe',
     name: 'Peakwool Robe',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'chest',
     quality: 'common',
     stats: { armor: 50 },
@@ -2531,6 +3084,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'stalkerhide_jerkin',
     name: 'Stalkerhide Jerkin',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'chest',
     quality: 'common',
     stats: { armor: 95 },
@@ -2541,6 +3095,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'cragwalker_boots',
     name: 'Cragwalker Boots',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'feet',
     quality: 'common',
     stats: { armor: 55 },
@@ -2551,6 +3106,7 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     id: 'windguard_leggings',
     name: 'Windguard Leggings',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'legs',
     quality: 'common',
     stats: { armor: 70 },
@@ -2611,7 +3167,7 @@ export const ZONE3_PROPS: ZonePropsDef = {
   wells: [{ x: 0, z: 662, r: 1.5 }],
   stalls: [
     { x: -7.5, z: 667, rot: Math.PI / 2, r: 1.7 }, // Quartermaster Bree
-    { x: -4.5, z: 673.5, rot: -0.6, r: 1.7 }, // Armorer Hode
+    { x: -4.5, z: 673.5, rot: -0.6, r: 1.7, smithy: true }, // Armorer Hode
   ],
   mines: [
     { x: 88, z: 612, rot: -2.0 }, // Deeprock Burrows
@@ -2662,4 +3218,5 @@ export const ZONE3_PROPS: ZonePropsDef = {
     { x: 138, z: 838 },
     { x: -139, z: 787 },
   ],
+  delveMarkers: [{ x: -95, z: 505, delveId: 'drowned_litany' }],
 };

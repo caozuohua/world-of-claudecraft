@@ -4,7 +4,6 @@ const config: CapacitorConfig = {
   appId: 'com.worldofclaudecraft',
   appName: 'World of ClaudeCraft',
   webDir: 'dist',
-  bundledWebRuntime: false,
   server: {
     androidScheme: 'http',
   },

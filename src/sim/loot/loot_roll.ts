@@ -23,8 +23,12 @@
 // `src/sim`-pure: no DOM/Three/render/ui/game/net imports, no Math.random/Date.now
 // (enforced by tests/architecture.test.ts).
 
+import { HEROIC_BOSS_LOOT } from '../content/heroic_loot';
+import { heroicVariantId } from '../content/heroic_variants';
 import { ITEMS, MOBS, QUESTS } from '../data';
 import { formatMoney } from '../format_money';
+import { itemLevel } from '../item_level';
+import { effectiveMasterLooter, meetsMasterThreshold } from '../loot_master';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import type {
@@ -34,15 +38,25 @@ import type {
   ItemLootStrategy,
   LootEntry,
   LootRollChoice,
+  LootRollGroupStatus,
   LootRollPrompt,
   LootSlot,
   LootStrategies,
+  MasterLootThreshold,
 } from '../types';
 import { dist2d, PARTY_XP_RANGE } from '../types';
+import { LOOT_FFA_DELAY } from './loot_ffa';
 
 // How long (seconds) a need-greed roll stays open before it auto-resolves. Sole
 // users are startNeedGreedRoll + pruneCorpseLoot, so the constant lives with them.
-const LOOT_ROLL_TIMEOUT = 30;
+const LOOT_ROLL_TIMEOUT = 60;
+
+// How long (seconds) the master looter has to curate a threshold drop before it
+// falls back to a need/greed roll for all candidates. Longer than a need/greed
+// window because assigning loot by hand (deciding who gets the drop) is a
+// deliberate call, not a quick roll. On timeout convertMasterRollToNeedGreed
+// refreshes the roll to a fresh LOOT_ROLL_TIMEOUT need/greed window.
+const MASTER_LOOT_TIMEOUT = 300;
 
 // The server-authoritative pending need-greed roll record. Sim-internal (the public
 // projection clients see is LootRollPrompt); the `pendingLootRolls` map lives on Sim
@@ -54,8 +68,19 @@ export interface PendingLootRoll {
   itemName: string;
   quality: ItemDef['quality'];
   candidates: number[];
+  // Name snapshot for every candidate, captured when the roll opened. A winner who
+  // disconnects before resolution is gone from ctx.players by then, so loot-line
+  // text falls back to this instead of rendering "Unknown".
+  candidateNames: Map<number, string>;
+  // Full party/raid membership snapshot captured when the roll opened. Whole-group
+  // loot broadcasts target this, NOT the live party of a candidate: a snapshot stays
+  // anchored to the roll's own party even if a member re-groups during the window.
+  partyMembers: number[];
   choices: Map<number, { choice: LootRollChoice; roll: number | null }>;
   expiresAt: number;
+  // When set, this is a master-loot assignment (not a need/greed vote): only the
+  // master looter pid decides, and a timeout returns the item to the corpse.
+  masterLooter?: number;
 }
 
 function partyLootStrategiesForMob(ctx: SimContext, mob: Entity): LootStrategies | null {
@@ -67,7 +92,7 @@ export function partyLootCandidatesForMob(ctx: SimContext, mob: Entity): PlayerM
   if (mob.lootRecipientIds && mob.lootRecipientIds.length > 0) {
     return mob.lootRecipientIds.flatMap((pid) => {
       const candidate = ctx.players.get(pid);
-      return candidate ? [candidate] : [];
+      return candidate && !candidate.leaving ? [candidate] : [];
     });
   }
   if (mob.tappedById === null) return [];
@@ -80,9 +105,18 @@ export function partyLootCandidatesForMob(ctx: SimContext, mob: Entity): PlayerM
     // Before a corpse has a death-time snapshot, fall back to current range.
     // Do not filter on `e.dead`: a downed member whose corpse is still in
     // range keeps loot rights.
-    if (candidate && e && dist2d(e.pos, mob.pos) <= PARTY_XP_RANGE) candidates.push(candidate);
+    if (candidate && !candidate.leaving && e && dist2d(e.pos, mob.pos) <= PARTY_XP_RANGE)
+      candidates.push(candidate);
   }
   return candidates;
+}
+
+// The full party/raid membership behind a roll (for whole-group broadcasts), vs
+// partyLootCandidatesForMob which is only the in-range, loot-eligible subset. Read
+// from the creation-time snapshot; falls back to the candidate set for any roll that
+// predates the snapshot (defensive, since partyMembers is set at every creation site).
+function partyMembersForRoll(roll: PendingLootRoll): number[] {
+  return roll.partyMembers.length > 0 ? roll.partyMembers : roll.candidates;
 }
 
 function effectiveCurrencyLootStrategy(ctx: SimContext, mob: Entity): CurrencyLootStrategy {
@@ -122,6 +156,22 @@ export function rollLoot(
   let copper = 0;
   const items: LootSlot[] = [];
   const rolledGroups = new Set<string>();
+  // A heroic dungeon claim upgrades the mob's normal epic/rare drops to their
+  // "Heroic" variant in place (content/heroic_variants.ts). Resolved once and
+  // reused by the heroic-only append below. No rng is drawn here, so normal-run
+  // draw order and the parity goldens are untouched.
+  const heroicClaim =
+    ctx.instances.find(
+      (i) => i.partyKey !== null && i.difficulty === 'heroic' && i.mobIds.includes(mob.id),
+    ) !== undefined;
+  // Swap a base drop for its Heroic variant when the instance is heroic AND the
+  // swap is an upgrade (raid epics, already item level 29, are left as-is).
+  const heroicItem = (id: string): string => {
+    if (!heroicClaim) return id;
+    const variant = ITEMS[heroicVariantId(id)];
+    if (!variant) return id;
+    return (itemLevel(variant) ?? 0) > (itemLevel(ITEMS[id]) ?? 0) ? variant.id : id;
+  };
   for (const entry of template.loot) {
     // Exclusive groups: a single rng draw is partitioned by the group
     // entries' chances, so at most one matching entry drops.
@@ -135,7 +185,7 @@ export function rollLoot(
       for (const g of group) {
         cumulative += g.chance;
         if (roll < cumulative) {
-          if (g.itemId) items.push({ itemId: g.itemId, count: 1 });
+          if (g.itemId) items.push({ itemId: heroicItem(g.itemId), count: 1 });
           break;
         }
       }
@@ -145,8 +195,9 @@ export function rollLoot(
       const questRecipients = eligible.filter((m) => needsQuestDrop(ctx, entry, m));
       if (questRecipients.length === 0) continue;
       if (!ctx.rng.chance(entry.chance)) continue;
+      if (!entry.itemId) continue;
       items.push({
-        itemId: entry.itemId!,
+        itemId: entry.itemId,
         count: 1,
         personalFor: questRecipients.map((m) => m.entityId),
       });
@@ -155,17 +206,51 @@ export function rollLoot(
     if (!ctx.rng.chance(entry.chance)) continue;
     if (entry.copper)
       copper += ctx.rng.int(Math.ceil(entry.copper * 0.6), Math.ceil(entry.copper * 1.4));
-    if (entry.itemId) items.push({ itemId: entry.itemId, count: 1 });
+    if (entry.itemId) items.push({ itemId: heroicItem(entry.itemId), count: 1 });
+  }
+  // Heroic-only drops: when the mob's claimed instance is heroic and it has a
+  // heroic drop table (the final bosses), roll those entries into the SAME
+  // corpse item list so party need/greed applies unchanged. These rng draws
+  // happen ONLY for a heroic claim, so the normal loot trace and the parity
+  // goldens are byte-identical. rollGroup names never overlap the base
+  // table's, so sharing `rolledGroups` is safe.
+  const heroicEntries = HEROIC_BOSS_LOOT[mob.templateId];
+  if (heroicEntries) {
+    if (heroicClaim) {
+      for (const entry of heroicEntries) {
+        if (entry.rollGroup) {
+          if (rolledGroups.has(entry.rollGroup)) continue;
+          rolledGroups.add(entry.rollGroup);
+          const group = heroicEntries.filter((l) => l.rollGroup === entry.rollGroup);
+          const roll = ctx.rng.next();
+          let cumulative = 0;
+          for (const g of group) {
+            cumulative += g.chance;
+            if (roll < cumulative) {
+              if (g.itemId) items.push({ itemId: g.itemId, count: 1 });
+              break;
+            }
+          }
+          continue;
+        }
+        if (!ctx.rng.chance(entry.chance)) continue;
+        if (entry.itemId) items.push({ itemId: entry.itemId, count: 1 });
+      }
+    }
   }
   if (copper > 0 || items.length > 0) {
     mob.loot = { copper, items };
     mob.lootable = true;
+    // start the owner-lock countdown: after LOOT_FFA_DELAY the tap opens to all.
+    mob.lootFfaTimer = LOOT_FFA_DELAY;
   }
 }
 
 function grantLootCopper(ctx: SimContext, meta: PlayerMeta, amount: number): void {
   meta.copper += amount;
   meta.counters.lootCopper += amount;
+  // The persisted lifetime twin of the session counter above.
+  ctx.bumpDeedStat(meta, 'lootCopper', amount);
   ctx.emit({ type: 'loot', text: `You loot ${formatMoney(amount)}.`, pid: meta.entityId });
 }
 
@@ -206,6 +291,8 @@ function startNeedGreedRoll(ctx: SimContext, itemId: string, mob: Entity): boole
   if (candidates.length <= 1) return false;
   const def = ITEMS[itemId];
   const itemName = def?.name ?? itemId;
+  const party = mob.tappedById !== null ? ctx.partyOf(mob.tappedById) : null;
+  const partyMembers = party ? [...party.members] : candidates.map((cand) => cand.entityId);
   const roll: PendingLootRoll = {
     id: ctx.nextLootRollId++,
     mobId: mob.id,
@@ -213,6 +300,8 @@ function startNeedGreedRoll(ctx: SimContext, itemId: string, mob: Entity): boole
     itemName,
     quality: def?.quality,
     candidates: candidates.map((candidate) => candidate.entityId),
+    candidateNames: new Map(candidates.map((candidate) => [candidate.entityId, candidate.name])),
+    partyMembers,
     choices: new Map(),
     expiresAt: ctx.time + LOOT_ROLL_TIMEOUT,
   };
@@ -229,16 +318,91 @@ function startNeedGreedRoll(ctx: SimContext, itemId: string, mob: Entity): boole
       pid: candidate.entityId,
     });
   }
+  for (const pid of partyMembers)
+    ctx.emit({ type: 'loot', text: `Rolling for [[i:${itemId}]].`, pid });
   return true;
 }
 
+// Opens a master-loot assignment when the tapping party uses master loot and
+// the drop is at/above the configured threshold. Returns false (so the caller
+// falls through to need/greed or looter-takes-all) when master loot does not
+// apply: disabled, below threshold, a solo looter, or no resolvable looter.
+function startMasterLootRoll(ctx: SimContext, itemId: string, mob: Entity): boolean {
+  const strategies = partyLootStrategiesForMob(ctx, mob);
+  if (!strategies || !strategies.master.enabled) return false;
+  const def = ITEMS[itemId];
+  if (!meetsMasterThreshold(def?.quality, strategies.master.threshold)) return false;
+  const candidates = partyLootCandidatesForMob(ctx, mob);
+  if (candidates.length <= 1) return false;
+  const party = mob.tappedById !== null ? ctx.partyOf(mob.tappedById) : null;
+  if (!party) return false;
+  const looterPid = effectiveMasterLooter(strategies.master, party.leader, party.members);
+  if (looterPid === null || ctx.players.get(looterPid)?.leaving) return false;
+  const itemName = def?.name ?? itemId;
+  const roll: PendingLootRoll = {
+    id: ctx.nextLootRollId++,
+    mobId: mob.id,
+    itemId,
+    itemName,
+    quality: def?.quality,
+    candidates: candidates.map((candidate) => candidate.entityId),
+    candidateNames: new Map(candidates.map((candidate) => [candidate.entityId, candidate.name])),
+    partyMembers: [...party.members],
+    choices: new Map(),
+    expiresAt: ctx.time + MASTER_LOOT_TIMEOUT,
+    masterLooter: looterPid,
+  };
+  ctx.pendingLootRolls.set(roll.id, roll);
+  mob.corpseTimer = Math.max(mob.corpseTimer, MASTER_LOOT_TIMEOUT + 2);
+  // Sent only to the master looter; the candidate list is who they can assign to.
+  ctx.emit({
+    type: 'masterLoot',
+    rollId: roll.id,
+    itemId,
+    itemName,
+    quality: roll.quality,
+    expiresAt: roll.expiresAt,
+    candidates: candidates.map((candidate) => ({ pid: candidate.entityId, name: candidate.name })),
+    pid: looterPid,
+  });
+  return true;
+}
+
+// Rotates a common/junk drop over the kill-time eligible party members
+// (`partyLootCandidatesForMob`, backed by `mob.lootRecipientIds`), never the
+// loot-time in-range set: that is the fairness point. Mirrors
+// tryAwardCopperByFairSplit's shape (strategy check, candidate-count guard,
+// party lookup) but advances a per-party cursor instead of a Fisher-Yates split.
+function tryAwardItemByRoundRobin(ctx: SimContext, itemId: string, mob: Entity): boolean {
+  if (effectiveItemLootStrategy(ctx, itemId, mob) !== 'round-robin') return false;
+  const candidates = partyLootCandidatesForMob(ctx, mob);
+  if (candidates.length <= 1) return false;
+  const party = mob.tappedById !== null ? ctx.partyOf(mob.tappedById) : null;
+  if (!party) return false;
+  const winner = candidates[party.lootTurn % candidates.length];
+  party.lootTurn++;
+  ctx.addItem(itemId, 1, winner.entityId);
+  return true;
+}
+
+// Returns true when the item was consumed off the corpse (a roll started, a
+// round-robin winner took it, or it landed in the looter's bags); false when
+// the looter-takes-all direct grant found the looter's bags full, so the
+// caller leaves it on the corpse. The roll and round-robin paths are not
+// capacity-gated: those grants force-add (items are never destroyed, and the
+// looter cannot free space on the winner's behalf).
 export function awardSharedLootItem(
   ctx: SimContext,
   itemId: string,
   mob: Entity,
   looter: PlayerMeta,
-): void {
-  if (!startNeedGreedRoll(ctx, itemId, mob)) ctx.addItem(itemId, 1, looter.entityId);
+): boolean {
+  if (startMasterLootRoll(ctx, itemId, mob)) return true;
+  if (startNeedGreedRoll(ctx, itemId, mob)) return true;
+  if (tryAwardItemByRoundRobin(ctx, itemId, mob)) return true;
+  if (!ctx.canAddItem(itemId, 1, looter.entityId)) return false;
+  ctx.addItem(itemId, 1, looter.entityId);
+  return true;
 }
 
 // Open need-greed rolls the given player may still answer. Mirrors the
@@ -248,6 +412,10 @@ export function awardSharedLootItem(
 export function activeLootRolls(ctx: SimContext, pid: number): LootRollPrompt[] {
   const out: LootRollPrompt[] = [];
   for (const roll of ctx.pendingLootRolls.values()) {
+    // A curate-phase master roll is not a need/greed prompt anyone answers (the
+    // master looter assigns it via assignMasterLoot), so it must never reconcile
+    // onto a candidate's screen as a roll prompt. Mirrors submitLootRoll's guard.
+    if (roll.masterLooter !== undefined) continue;
     if (!roll.candidates.includes(pid) || roll.choices.has(pid)) continue;
     out.push({
       rollId: roll.id,
@@ -255,6 +423,34 @@ export function activeLootRolls(ctx: SimContext, pid: number): LootRollPrompt[] 
       itemName: roll.itemName,
       quality: roll.quality,
       expiresAt: roll.expiresAt,
+    });
+  }
+  return out;
+}
+
+// Group-visible status of every open need-greed roll the given player's party
+// is voting on: who has answered and how (choice only, never the roll number,
+// which stays hidden until resolveLootRoll broadcasts it). Read from the same
+// authoritative state as activeLootRolls, so the HUD's per-player choice strip
+// survives reconnects and missed events the same way the prompt does. Master
+// rolls in their curate phase are excluded for the same reason they are in
+// activeLootRolls: nobody is voting yet.
+export function lootRollGroupStatus(ctx: SimContext, pid: number): LootRollGroupStatus[] {
+  const out: LootRollGroupStatus[] = [];
+  for (const roll of ctx.pendingLootRolls.values()) {
+    if (roll.masterLooter !== undefined) continue;
+    if (!partyMembersForRoll(roll).includes(pid)) continue;
+    out.push({
+      rollId: roll.id,
+      itemId: roll.itemId,
+      itemName: roll.itemName,
+      quality: roll.quality,
+      expiresAt: roll.expiresAt,
+      entries: roll.candidates.map((candidate) => ({
+        pid: candidate,
+        name: ctx.players.get(candidate)?.name ?? 'Unknown',
+        choice: roll.choices.get(candidate)?.choice ?? null,
+      })),
     });
   }
   return out;
@@ -269,7 +465,15 @@ export function submitLootRoll(
   const r = ctx.resolve(pid);
   if (!r) return;
   const roll = ctx.pendingLootRolls.get(rollId);
-  if (!roll?.candidates.includes(r.meta.entityId) || roll.choices.has(r.meta.entityId)) return;
+  // A master-loot roll is not a need/greed vote: the master looter assigns it
+  // through assignMasterLoot, so reject any submitLootRoll against it.
+  if (
+    !roll ||
+    roll.masterLooter !== undefined ||
+    !roll.candidates.includes(r.meta.entityId) ||
+    roll.choices.has(r.meta.entityId)
+  )
+    return;
   roll.choices.set(r.meta.entityId, {
     choice,
     roll: choice === 'need' || choice === 'greed' ? ctx.rng.int(1, 100) : null,
@@ -277,7 +481,155 @@ export function submitLootRoll(
   if (roll.choices.size >= roll.candidates.length) resolveLootRoll(ctx, roll);
 }
 
+// Explicit logout removes the character from the live Sim, unlike the server's
+// linkdead grace reconnect path. Reconcile that departure before the entity is
+// deleted so a stale winning pid can never consume a roll into a no-op addItem.
+// The leaver forfeits the unresolved roll; every item remains with a live winner
+// or returns to its corpse.
+export function removePlayerFromLootRolls(ctx: SimContext, pid: number): void {
+  for (const roll of [...ctx.pendingLootRolls.values()]) {
+    const wasCandidate = roll.candidates.includes(pid);
+    const wasMasterLooter = roll.masterLooter === pid;
+    if (!wasCandidate && !wasMasterLooter && !roll.partyMembers.includes(pid)) continue;
+
+    roll.partyMembers = roll.partyMembers.filter((member) => member !== pid);
+    if (wasCandidate) {
+      roll.candidates = roll.candidates.filter((candidate) => candidate !== pid);
+      roll.choices.delete(pid);
+    }
+
+    if (roll.candidates.length === 0) {
+      if (ctx.pendingLootRolls.delete(roll.id)) returnLootRollItemToCorpse(ctx, roll);
+      continue;
+    }
+
+    if (wasMasterLooter) {
+      convertMasterRollToNeedGreed(ctx, roll, [...roll.candidates]);
+      continue;
+    }
+
+    if (roll.masterLooter === undefined && roll.choices.size >= roll.candidates.length) {
+      resolveLootRoll(ctx, roll);
+    }
+  }
+}
+
+// The master looter's curate-then-roll choice. `targetPids` is the set of
+// eligible players the looter checked: exactly one grants the item directly (the
+// classic assign), two or more open a need/greed roll for just that subset. Only
+// the master looter may decide, and only while the roll is still in its curate
+// phase (masterLooter set).
+export function assignMasterLoot(
+  ctx: SimContext,
+  rollId: number,
+  targetPids: number[],
+  pid?: number,
+): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  const roll = ctx.pendingLootRolls.get(rollId);
+  if (!roll || roll.masterLooter === undefined) return;
+  if (r.meta.entityId !== roll.masterLooter) return; // only the master looter decides
+  // Keep only still-eligible targets; ignore anyone no longer a candidate.
+  const targets = targetPids.filter((p) => roll.candidates.includes(p));
+  if (targets.length === 0) return; // nothing valid selected: leave the prompt open
+  if (targets.length === 1) {
+    // The target can have logged out during the up-to-5min curate window
+    // between the roll opening and the master looter's assignment click; a
+    // grant to a departed pid would silently destroy the item (see the
+    // matching guard in resolveLootRoll). Return it to the corpse instead.
+    if (!isPidResolvable(ctx, targets[0])) {
+      convertMasterRollToNeedGreed(ctx, roll, roll.candidates);
+      return;
+    }
+    if (!ctx.pendingLootRolls.delete(roll.id)) return;
+    const targetName = ctx.players.get(targets[0])?.name ?? 'Unknown';
+    for (const pid of partyMembersForRoll(roll))
+      ctx.emit({
+        type: 'loot',
+        text: `${r.meta.name} assigned [[i:${roll.itemId}]] to ${targetName}.`,
+        pid,
+      });
+    ctx.addItem(roll.itemId, 1, targets[0]);
+    return;
+  }
+  convertMasterRollToNeedGreed(ctx, roll, targets);
+}
+
+// Turn a curate-phase master roll into a normal need/greed roll for `targets` (a
+// subset of the original candidates). The roll keeps its id; the master flag is
+// cleared, choices reset, and the timer refreshed to a full window so the chosen
+// players get the standard need/greed/pass prompt.
+function convertMasterRollToNeedGreed(
+  ctx: SimContext,
+  roll: PendingLootRoll,
+  targets: number[],
+): void {
+  roll.candidates = targets;
+  roll.masterLooter = undefined;
+  roll.choices = new Map();
+  roll.expiresAt = ctx.time + LOOT_ROLL_TIMEOUT;
+  const mob = ctx.entities.get(roll.mobId);
+  if (mob) mob.corpseTimer = Math.max(mob.corpseTimer, LOOT_ROLL_TIMEOUT + 2);
+  for (const pid of targets) {
+    ctx.emit({
+      type: 'lootRoll',
+      rollId: roll.id,
+      itemId: roll.itemId,
+      itemName: roll.itemName,
+      quality: roll.quality,
+      expiresAt: roll.expiresAt,
+      pid,
+    });
+  }
+}
+
+// Leader-only switch for the party's loot method. `looter === 0` keeps the
+// looter pinned to whoever currently leads; a named non-member is ignored.
+export function setPartyLootMaster(
+  ctx: SimContext,
+  enabled: boolean,
+  looter: number,
+  threshold: MasterLootThreshold,
+  pid?: number,
+): void {
+  const r = ctx.resolve(pid);
+  if (!r) return;
+  const party = ctx.partyOf(r.meta.entityId);
+  if (!party) return;
+  if (party.leader !== r.meta.entityId) {
+    ctx.error(r.e.id, 'Only the party leader can change the loot method.');
+    return;
+  }
+  const looterPid = looter !== 0 && party.members.includes(looter) ? looter : 0;
+  const prev = party.lootStrategies.master;
+  const next = { enabled, looter: looterPid, threshold };
+  party.lootStrategies.master = next;
+  const looterName =
+    ctx.players.get(looterPid === 0 ? party.leader : looterPid)?.name ?? 'the leader';
+  const messages: string[] = [];
+  if (prev.enabled !== next.enabled) {
+    messages.push(
+      next.enabled
+        ? `Loot method set to Master Loot. Master Looter: ${looterName}.`
+        : 'Loot method set to Group Loot.',
+    );
+  } else if (next.enabled) {
+    if (prev.looter !== next.looter) messages.push(`Master Looter is now ${looterName}.`);
+    if (prev.threshold !== next.threshold) messages.push(`Loot threshold set to ${threshold}.`);
+  }
+  for (const member of party.members)
+    for (const text of messages) ctx.emit({ type: 'log', text, pid: member });
+}
+
 export function resolveLootRoll(ctx: SimContext, roll: PendingLootRoll): void {
+  // Master looter never curated in time: open the roll to every eligible member
+  // rather than scrambling the item onto the corpse. Convert in place (same id)
+  // instead of resolving, so the roll lives on as a normal need/greed roll.
+  if (roll.masterLooter !== undefined) {
+    convertMasterRollToNeedGreed(ctx, roll, roll.candidates);
+    return;
+  }
   if (!ctx.pendingLootRolls.delete(roll.id)) return;
   const entries = roll.candidates
     .map((pid) => ({
@@ -290,24 +642,66 @@ export function resolveLootRoll(ctx: SimContext, roll: PendingLootRoll): void {
     needers.length > 0 ? needers : entries.filter((entry) => entry.result.choice === 'greed');
   if (contenders.length === 0) {
     returnLootRollItemToCorpse(ctx, roll);
-    for (const pid of roll.candidates)
-      ctx.emit({ type: 'loot', text: `Everyone passed on ${roll.itemName}.`, pid });
+    for (const pid of partyMembersForRoll(roll))
+      ctx.emit({ type: 'loot', text: `Everyone passed on [[i:${roll.itemId}]].`, pid });
     return;
   }
-  let winner = contenders[0];
-  for (const contender of contenders.slice(1)) {
-    if ((contender.result.roll ?? 0) > (winner.result.roll ?? 0)) winner = contender;
+  // Reveal every roll, classic-style: one loot line per need/greed roller so the
+  // whole group can audit the outcome (passes were already visible live via
+  // lootRollGroupStatus and have no number to reveal).
+  for (const entry of entries) {
+    const rollerName =
+      ctx.players.get(entry.pid)?.name ?? roll.candidateNames.get(entry.pid) ?? 'Unknown';
+    for (const pid of partyMembersForRoll(roll)) {
+      ctx.emit({
+        type: 'loot',
+        text:
+          entry.result.choice === 'need'
+            ? `Need Roll - ${entry.result.roll ?? 0} for [[i:${roll.itemId}]] by ${rollerName}`
+            : `Greed Roll - ${entry.result.roll ?? 0} for [[i:${roll.itemId}]] by ${rollerName}`,
+        pid,
+      });
+    }
   }
+  const highestRoll = Math.max(...contenders.map((contender) => contender.result.roll ?? 0));
+  const tiedWinners = contenders.filter((contender) => contender.result.roll === highestRoll);
+  const winner =
+    tiedWinners.length === 1 ? tiedWinners[0] : tiedWinners[ctx.rng.int(0, tiedWinners.length - 1)];
   const winnerMeta = ctx.players.get(winner.pid);
-  const winnerName = winnerMeta?.name ?? 'Unknown';
-  for (const pid of roll.candidates) {
+  const winnerName = winnerMeta?.name ?? roll.candidateNames.get(winner.pid) ?? 'Unknown';
+  for (const pid of partyMembersForRoll(roll)) {
     ctx.emit({
       type: 'loot',
-      text: `${winnerName} wins ${roll.itemName} (${winner.result.roll ?? 0})`,
+      text: `${winnerName} wins [[i:${roll.itemId}]] (${winner.result.roll ?? 0})`,
       pid,
     });
   }
+  // The winner can have logged out during the up-to-60s roll window (need/greed)
+  // or the up-to-5min master-loot curate window that converts into one: addItem
+  // resolves nothing for a departed pid and silently no-ops, which would destroy
+  // the item outright, violating the "items are never destroyed" grant guarantee
+  // (see addItem's own comment in sim.ts). Fall back to returning it to the
+  // corpse, exactly like the everyone-passed branch above, so it is never lost.
+  if (!isPidResolvable(ctx, winner.pid)) {
+    returnLootRollItemToCorpse(ctx, roll);
+    for (const pid of partyMembersForRoll(roll))
+      ctx.emit({
+        type: 'loot',
+        text: `${winnerName} was offline; [[i:${roll.itemId}]] returned to the corpse.`,
+        pid,
+      });
+    return;
+  }
   ctx.addItem(roll.itemId, 1, winner.pid);
+}
+
+// Whether `pid` is a currently-connected player the loot hub's addItem/resolve
+// machinery can actually grant to. Exactly Sim's private `resolve()` guard
+// (both the player record AND the live entity must exist): kept as its own
+// helper rather than calling ctx.resolve directly to skip that call's result-
+// object allocation here, not because the semantics differ.
+function isPidResolvable(ctx: SimContext, pid: number): boolean {
+  return ctx.players.has(pid) && ctx.entities.has(pid);
 }
 
 function returnLootRollItemToCorpse(ctx: SimContext, roll: PendingLootRoll): void {

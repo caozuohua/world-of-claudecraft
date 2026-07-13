@@ -4,30 +4,67 @@
 // attenuate with distance and pan with direction relative to the camera.
 //
 // Decoupled, like audio/music/voice: its own AudioContext + AudioListener,
-// driven by the `sfxVolume` setting. Efficient by construction — one decoded
-// AudioBuffer per clip shared across every source, a hard concurrency cap, a
-// per-key cooldown, and a tiny pool of persistent looping sources for ambience
-// and sustained spell casts (cross-faded by gain, never restarted).
+// driven by the `sfxVolume` setting. Efficient by construction: one decoded
+// AudioBuffer per clip shared across every source, startup-only preloading with
+// lazy context loads, a hard concurrency cap, a per-key cooldown, and a tiny
+// pool of persistent looping sources for ambience and sustained spell casts.
 
-import { SFX_CLIPS } from './sfx_manifest.generated';
+import { apiUrl } from '../client_origin';
+import type { BiomeId } from '../sim/types';
+import {
+  SFX_CATALOG_HASH,
+  SFX_CLIPS,
+  SFX_RUNTIME_PACK_URL,
+  type SfxEntry,
+} from './sfx_manifest.generated';
+import { loadRuntimeSfxPack } from './sfx_runtime_pack';
 
 const SAMPLE_GAIN = 0.85; // base level for sampled clips; sfxVolume multiplies this
-const MAX_VOICES = 24;     // concurrent one-shot sources (frame-budget guard)
-const REF_DISTANCE = 5;    // world units at which a sound is at full volume
-const MAX_DISTANCE = 46;   // hard cutoff — beyond this, sources are silent/skipped
+const MAX_VOICES = 24; // concurrent one-shot sources (frame-budget guard)
+const REF_DISTANCE = 5; // world units at which a sound is at full volume
+const MAX_DISTANCE = 46; // hard cutoff: beyond this, sources are silent/skipped
 const MAX_DISTANCE_SQ = MAX_DISTANCE * MAX_DISTANCE;
+const POINT_AMBIENCE_GAIN = 0.18;
+const FOOTSTEP_CUES: Partial<Record<string, string>> = {
+  grass: 'foot_grass',
+  dirt: 'foot_dirt',
+  stone: 'foot_stone',
+  wood: 'foot_wood',
+  snow: 'foot_snow',
+  water: 'foot_water',
+};
+
+function assetCacheKey(key: string, variantIndex: number): string {
+  return variantIndex === 0 ? key : `${key}:${variantIndex}`;
+}
+
+function retainDecodedBuffer(
+  ctx: AudioContext,
+  decoded: AudioBuffer,
+  spatial: boolean,
+): AudioBuffer {
+  if (!spatial || !(decoded.numberOfChannels > 1)) return decoded;
+  const mono = ctx.createBuffer(1, decoded.length, decoded.sampleRate);
+  const output = mono.getChannelData(0);
+  const scale = 1 / decoded.numberOfChannels;
+  for (let channel = 0; channel < decoded.numberOfChannels; channel++) {
+    const input = decoded.getChannelData(channel);
+    for (let frame = 0; frame < decoded.length; frame++) output[frame] += input[frame] * scale;
+  }
+  return mono;
+}
 
 export interface PlayOpts {
-  gain?: number;       // 0..1 multiplier (default 1)
-  rate?: number;       // playback-rate multiplier (default 1); ±6% jitter added
-  cooldown?: number;   // min seconds between plays of this key (default 0.03)
-  jitter?: boolean;    // randomize rate/gain slightly (default true)
+  gain?: number; // 0..1 multiplier (default 1)
+  rate?: number; // playback-rate multiplier (default 1); ±6% jitter added
+  cooldown?: number; // min seconds between plays of this key (default 0.03)
+  jitter?: boolean; // randomize rate/gain slightly (default true)
   // Percussive amplitude envelope. `release` truncates the clip to a crisp
-  // transient that fully decays within `attack + release` seconds — used by fast
+  // transient that fully decays within `attack + release` seconds, used by fast
   // retriggered sounds (footsteps) so successive plays of the same sample don't
   // pile up and comb-filter into a metallic ring. 0 (default) plays the clip flat.
-  attack?: number;     // fade-in seconds (default 0 = instant)
-  release?: number;    // fade-out seconds; the clip is stopped once it ends
+  attack?: number; // fade-in seconds (default 0 = instant)
+  release?: number; // fade-out seconds; the clip is stopped once it ends
 }
 
 interface LoopSlot {
@@ -35,20 +72,48 @@ interface LoopSlot {
   src: AudioBufferSourceNode;
   gain: GainNode;
   panner: PannerNode | null;
-  target: number; // last commanded gain — skip re-arming the ramp when unchanged
+  target: number; // last commanded gain; skip re-arming the ramp when unchanged
+  x?: number;
+  y?: number;
+  z?: number;
+}
+
+interface PendingLoop {
+  key: string;
+  target: number;
+  x?: number;
+  y?: number;
+  z?: number;
+}
+
+interface AmbientPointSource {
+  readonly id: string;
+  readonly kind: 'campfire' | 'forge';
+  readonly x: number;
+  readonly y: number;
+  readonly z: number;
 }
 
 class Sfx {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
+  private clips: Record<string, SfxEntry> = SFX_CLIPS;
+  private clipsReady: Promise<void> | null = null;
   private buffers = new Map<string, AudioBuffer>();
+  private loading = new Map<string, Promise<AudioBuffer | null>>();
+  private failedLoads = new Set<string>();
+  private pendingOneShots = new Set<string>();
+  private variantCursor = new Map<string, number>();
+  private pendingLoops = new Map<string, PendingLoop>();
+  private pendingLoopLoads = new Map<string, string>();
+  private pendingLoopVariants = new Map<string, number>();
   private vol = 0.8;
   private active = 0;
   private lastPlay = new Map<string, number>();
   private loops = new Map<string, LoopSlot>();
-  private ready = false;
   private footstepsOn = false; // off by default; driven by the footstepSfx setting
-  private lx = 0; private ly = 0; private lz = 0; // cached listener position
+  private lx = 0;
+  private lz = 0; // cached listener position
 
   /** Set SFX volume (0..1). Shares the `sfxVolume` slider with `audio`. */
   setVolume(v: number): void {
@@ -63,7 +128,8 @@ class Sfx {
     this.footstepsOn = on;
   }
 
-  /** Create the context + listener and decode every clip. Gated on a user gesture
+  /** Create the context + listener and decode the small startup working set.
+   *  Context-specific clips load once on first use. Gated on a user gesture
    *  (called from enterWorld alongside audio.init()). Safe to call repeatedly. */
   init(): void {
     if (this.ctx) return;
@@ -72,39 +138,172 @@ class Sfx {
       this.master = this.ctx.createGain();
       this.master.gain.value = SAMPLE_GAIN * this.vol;
       this.master.connect(this.ctx.destination);
-      void this.ctx.resume?.().catch(() => { /* resumes on the next gesture */ });
+      void this.ctx.resume?.().catch(() => {
+        /* resumes on the next gesture */
+      });
       const l = this.ctx.listener;
-      if (l.upX) { l.upX.value = 0; l.upY.value = 1; l.upZ.value = 0; }
-      else if (l.setOrientation) l.setOrientation(0, 0, -1, 0, 1, 0);
-      void this.preload();
+      if (l.upX) {
+        l.upX.value = 0;
+        l.upY.value = 1;
+        l.upZ.value = 0;
+      } else if (l.setOrientation) l.setOrientation(0, 0, -1, 0, 1, 0);
+      this.installProceduralBuffers();
+      if (typeof window !== 'undefined') {
+        this.clipsReady = loadRuntimeSfxPack(
+          apiUrl(SFX_RUNTIME_PACK_URL),
+          SFX_CATALOG_HASH,
+          SFX_CLIPS,
+        ).then((clips) => {
+          this.clips = clips;
+        });
+      }
+      void this.preloadStartup();
     } catch {
       this.ctx = null;
     }
   }
 
-  private async preload(): Promise<void> {
+  private entry(key: string): SfxEntry | undefined {
+    return this.clips[key];
+  }
+
+  private authoredPlaybackRate(key: string): number {
+    return this.entry(key)?.playbackRate ?? 1;
+  }
+
+  private nextVariantIndex(key: string): number {
+    const count = Math.max(1, this.entry(key)?.variants.length ?? 1);
+    const start = (this.variantCursor.get(key) ?? 0) % count;
+    for (let offset = 0; offset < count; offset++) {
+      const index = (start + offset) % count;
+      if (!this.failedLoads.has(assetCacheKey(key, index))) return index;
+    }
+    return start;
+  }
+
+  private commitVariant(key: string, variantIndex: number): void {
+    const count = Math.max(1, this.entry(key)?.variants.length ?? 1);
+    this.variantCursor.set(key, (variantIndex + 1) % count);
+  }
+
+  private loadBuffer(key: string, variantIndex = 0): Promise<AudioBuffer | null> {
+    const ctx = this.ctx;
+    const cacheKey = assetCacheKey(key, variantIndex);
+    const cached = this.buffers.get(cacheKey);
+    if (cached) return Promise.resolve(cached);
+    if (this.failedLoads.has(cacheKey)) return Promise.resolve(null);
+    const inFlight = this.loading.get(cacheKey);
+    if (inFlight) return inFlight;
+    if (!ctx) return Promise.resolve(null);
+    const request = (async () => {
+      try {
+        if (this.clipsReady) await this.clipsReady;
+        const entry = this.entry(key);
+        const variant = entry?.variants[variantIndex];
+        if (!entry || !variant) {
+          this.failedLoads.add(cacheKey);
+          return null;
+        }
+        const res = await fetch(variant.url);
+        if (!res.ok) {
+          this.failedLoads.add(cacheKey);
+          return null;
+        }
+        const decoded = await ctx.decodeAudioData(await res.arrayBuffer());
+        // Positional cues are intentional point sources. Fold them to mono so
+        // PannerNode builds the spatial stereo image from one retained channel,
+        // without another lossy asset transcode.
+        const buf = retainDecodedBuffer(ctx, decoded, entry.spatial);
+        this.buffers.set(cacheKey, buf);
+        return buf;
+      } catch {
+        this.failedLoads.add(cacheKey);
+        return null;
+      } finally {
+        this.loading.delete(cacheKey);
+      }
+    })();
+    this.loading.set(cacheKey, request);
+    return request;
+  }
+
+  private async preloadStartup(): Promise<void> {
+    if (this.clipsReady) await this.clipsReady;
+    await Promise.all(
+      Object.keys(this.clips).flatMap((key) =>
+        this.entry(key)?.preload === 'startup'
+          ? (this.entry(key)?.variants ?? []).map((_variant, index) => this.loadBuffer(key, index))
+          : [],
+      ),
+    );
+  }
+
+  private installProceduralBuffers(): void {
     const ctx = this.ctx;
     if (!ctx) return;
-    await Promise.all(Object.entries(SFX_CLIPS).map(async ([key, entry]) => {
-      try {
-        const res = await fetch(entry.url);
-        if (!res.ok) return;
-        const buf = await ctx.decodeAudioData(await res.arrayBuffer());
-        this.buffers.set(key, buf);
-      } catch { /* missing/corrupt clip — that key just stays silent */ }
-    }));
-    this.ready = this.buffers.size > 0;
+    try {
+      this.buffers.set('amb_crowd', this.makeCrowdBuffer(ctx, 6, false));
+      this.buffers.set('vcup_crowd_roar', this.makeCrowdBuffer(ctx, 2.6, true));
+    } catch {
+      /* minimal AudioContext stubs may not implement buffer synthesis */
+    }
+  }
+
+  /** Procedural crowd noise. Bed mode is a seamless 6s murmur loop (filtered
+   *  noise under slow integer-cycle swells, so the wrap point is silent-clean);
+   *  roar mode bakes a crescendo-decay envelope for a goal-roar one-shot. */
+  private makeCrowdBuffer(ctx: AudioContext, seconds: number, roar: boolean): AudioBuffer {
+    const sr = ctx.sampleRate;
+    const len = Math.floor(seconds * sr);
+    const buf = ctx.createBuffer(2, len, sr);
+    for (let ch = 0; ch < 2; ch++) {
+      const data = buf.getChannelData(ch);
+      let lpDeep = 0;
+      let lpMid = 0;
+      const phase = ch * 1.9;
+      for (let i = 0; i < len; i++) {
+        const w = Math.random() * 2 - 1;
+        lpDeep += 0.026 * (w - lpDeep);
+        lpMid += 0.11 * (w - lpMid);
+        const t = i / len;
+        const swell =
+          0.62 +
+          0.22 * Math.sin(2 * Math.PI * 3 * t + phase) +
+          0.16 * Math.sin(2 * Math.PI * 7 * t + phase * 1.31);
+        const voiceBand = (lpMid - lpDeep) * 0.9;
+        let sample = (lpDeep * 2.2 + voiceBand) * swell;
+        if (roar) {
+          const envelope = t < 0.18 ? t / 0.18 : t < 0.55 ? 1 : 1 - (t - 0.55) / 0.45;
+          sample = (lpDeep * 1.6 + voiceBand * 2.4 + w * 0.06) * envelope * 1.5;
+        }
+        data[i] = Math.max(-1, Math.min(1, sample));
+      }
+      if (!roar) {
+        const fade = Math.floor(0.25 * sr);
+        for (let i = 0; i < fade; i++) {
+          const amount = i / fade;
+          data[len - fade + i] =
+            data[len - fade + i] * Math.sqrt(1 - amount) + data[i] * Math.sqrt(amount);
+        }
+      }
+    }
+    return buf;
   }
 
   /** Position + forward vector of the listener (camera), once per frame. */
   setListener(x: number, y: number, z: number, fx: number, fy: number, fz: number): void {
     const ctx = this.ctx;
     if (!ctx) return;
-    this.lx = x; this.ly = y; this.lz = z;
+    this.lx = x;
+    this.lz = z;
     const l = ctx.listener;
     if (l.positionX) {
-      l.positionX.value = x; l.positionY.value = y; l.positionZ.value = z;
-      l.forwardX.value = fx; l.forwardY.value = fy; l.forwardZ.value = fz;
+      l.positionX.value = x;
+      l.positionY.value = y;
+      l.positionZ.value = z;
+      l.forwardX.value = fx;
+      l.forwardY.value = fy;
+      l.forwardZ.value = fz;
     } else if (l.setPosition) {
       l.setPosition(x, y, z);
       if (l.setOrientation) l.setOrientation(fx, fy, fz, 0, 1, 0);
@@ -112,13 +311,18 @@ class Sfx {
   }
 
   private setPannerPos(p: PannerNode, x: number, y: number, z: number): void {
-    if (p.positionX) { p.positionX.value = x; p.positionY.value = y; p.positionZ.value = z; }
-    else if (p.setPosition) p.setPosition(x, y, z);
+    if (p.positionX) {
+      p.positionX.value = x;
+      p.positionY.value = y;
+      p.positionZ.value = z;
+    } else if (p.setPosition) p.setPosition(x, y, z);
   }
 
   private makePanner(x: number, y: number, z: number): PannerNode {
-    const p = this.ctx!.createPanner();
-    p.panningModel = 'equalpower';      // cheap; HRTF is overkill for an MMO crowd
+    const ctx = this.ctx;
+    if (!ctx) throw new Error('audio context is unavailable');
+    const p = ctx.createPanner();
+    p.panningModel = 'equalpower'; // cheap; HRTF is overkill for an MMO crowd
     p.distanceModel = 'linear';
     p.refDistance = REF_DISTANCE;
     p.maxDistance = MAX_DISTANCE;
@@ -127,35 +331,74 @@ class Sfx {
     return p;
   }
 
-  /** Squared distance from the listener — callers can pre-cull, but playAt also
+  /** True when a compiled/runtime entry or procedural buffer exists. HUD uses
+   *  this to prefer disk-discovered mob subfamily cues over family fallbacks. */
+  hasVariants(key: string): boolean {
+    if (this.buffers.has(key)) return true;
+    const entry = this.entry(key);
+    return !!entry?.variants.some(
+      (_variant, index) => !this.failedLoads.has(assetCacheKey(key, index)),
+    );
+  }
+
+  /** Squared distance from the listener. Callers can pre-cull, but playAt also
    *  guards internally so a far event is a cheap no-op. */
   private tooFar(x: number, z: number): boolean {
-    const dx = x - this.lx, dz = z - this.lz;
+    const dx = x - this.lx,
+      dz = z - this.lz;
     return dx * dx + dz * dz > MAX_DISTANCE_SQ;
   }
 
   /** Positional one-shot at world (x,y,z). */
   playAt(key: string, x: number, y: number, z: number, opts?: PlayOpts): void {
-    const ctx = this.ctx, master = this.master;
+    const ctx = this.ctx,
+      master = this.master;
     if (!ctx || !master) return;
     if (this.tooFar(x, z)) return;
-    const buf = this.buffers.get(key);
-    if (!buf || this.active >= MAX_VOICES) return;
+    const variantIndex = this.nextVariantIndex(key);
+    const cacheKey = assetCacheKey(key, variantIndex);
+    const buf = this.buffers.get(cacheKey);
+    if (!buf) {
+      if (!this.pendingOneShots.has(cacheKey)) {
+        this.pendingOneShots.add(cacheKey);
+        const requestedAt = ctx.currentTime;
+        void this.loadBuffer(key, variantIndex).then((loaded) => {
+          this.pendingOneShots.delete(cacheKey);
+          if (loaded && this.ctx && this.ctx.currentTime - requestedAt < 0.12) {
+            this.playAt(key, x, y, z, opts);
+          }
+        });
+      }
+      return;
+    }
+    if (this.active >= MAX_VOICES) return;
     const now = ctx.currentTime;
     const cd = opts?.cooldown ?? 0.03;
     if (now - (this.lastPlay.get(key) ?? -1) < cd) return;
     this.lastPlay.set(key, now);
+    this.commitVariant(key, variantIndex);
 
     const jitter = opts?.jitter !== false;
     const src = ctx.createBufferSource();
     src.buffer = buf;
-    src.playbackRate.value = (opts?.rate ?? 1) * (jitter ? 1 + (Math.random() * 2 - 1) * 0.06 : 1);
+    src.playbackRate.value =
+      (opts?.rate ?? 1) *
+      this.authoredPlaybackRate(key) *
+      (jitter ? 1 + (Math.random() * 2 - 1) * 0.06 : 1);
     const g = ctx.createGain();
-    const peak = (opts?.gain ?? 1) * (jitter ? 1 + (Math.random() * 2 - 1) * 0.1 : 1);
+    const peak =
+      (opts?.gain ?? 1) *
+      (this.entry(key)?.gain ?? 1) *
+      (jitter ? 1 + (Math.random() * 2 - 1) * 0.1 : 1);
     const panner = this.makePanner(x, y, z);
     src.connect(g).connect(panner).connect(master);
     this.active++;
-    src.onended = () => { this.active--; src.disconnect(); g.disconnect(); panner.disconnect(); };
+    src.onended = () => {
+      this.active--;
+      src.disconnect();
+      g.disconnect();
+      panner.disconnect();
+    };
     this.applyEnvelope(src, g, peak, now, opts);
   }
 
@@ -163,7 +406,13 @@ class Sfx {
    *  attack/release this is a flat play at `peak`; with a `release` the source is
    *  shaped into a short transient and stopped early so rapid retriggers of the
    *  same clip can't overlap and comb-filter. */
-  private applyEnvelope(src: AudioBufferSourceNode, g: GainNode, peak: number, now: number, opts?: PlayOpts): void {
+  private applyEnvelope(
+    src: AudioBufferSourceNode,
+    g: GainNode,
+    peak: number,
+    now: number,
+    opts?: PlayOpts,
+  ): void {
     const attack = Math.max(0, opts?.attack ?? 0);
     const release = Math.max(0, opts?.release ?? 0);
     if (attack === 0 && release === 0) {
@@ -180,25 +429,53 @@ class Sfx {
       const clip = src.buffer ? src.buffer.duration / (src.playbackRate.value || 1) : a + release;
       const end = Math.min(now + clip, now + a + release);
       g.gain.setTargetAtTime(0.0001, Math.max(now + a, end - release), release / 3);
-      try { src.stop(end + 0.03); } catch { /* stop unsupported in stub */ }
+      try {
+        src.stop(end + 0.03);
+      } catch {
+        /* stop unsupported in stub */
+      }
     }
   }
 
   /** Non-positional one-shot (personal/UI sounds that shouldn't pan). */
   playUi(key: string, opts?: PlayOpts): void {
-    const ctx = this.ctx, master = this.master;
+    const ctx = this.ctx,
+      master = this.master;
     if (!ctx || !master) return;
-    const buf = this.buffers.get(key);
-    if (!buf || this.active >= MAX_VOICES) return;
+    const variantIndex = this.nextVariantIndex(key);
+    const cacheKey = assetCacheKey(key, variantIndex);
+    const buf = this.buffers.get(cacheKey);
+    if (!buf) {
+      if (!this.pendingOneShots.has(cacheKey)) {
+        this.pendingOneShots.add(cacheKey);
+        const requestedAt = ctx.currentTime;
+        void this.loadBuffer(key, variantIndex).then((loaded) => {
+          this.pendingOneShots.delete(cacheKey);
+          if (loaded && this.ctx && this.ctx.currentTime - requestedAt < 0.25) {
+            this.playUi(key, opts);
+          }
+        });
+      }
+      return;
+    }
+    if (this.active >= MAX_VOICES) return;
+    this.commitVariant(key, variantIndex);
     const jitter = opts?.jitter !== false;
     const src = ctx.createBufferSource();
     src.buffer = buf;
-    src.playbackRate.value = (opts?.rate ?? 1) * (jitter ? 1 + (Math.random() * 2 - 1) * 0.05 : 1);
+    src.playbackRate.value =
+      (opts?.rate ?? 1) *
+      this.authoredPlaybackRate(key) *
+      (jitter ? 1 + (Math.random() * 2 - 1) * 0.05 : 1);
     const g = ctx.createGain();
-    g.gain.value = opts?.gain ?? 1;
+    g.gain.value = (opts?.gain ?? 1) * (this.entry(key)?.gain ?? 1);
     src.connect(g).connect(master);
     this.active++;
-    src.onended = () => { this.active--; src.disconnect(); g.disconnect(); };
+    src.onended = () => {
+      this.active--;
+      src.disconnect();
+      g.disconnect();
+    };
     src.start();
   }
 
@@ -209,48 +486,119 @@ class Sfx {
   /** Ensure a loop `id` is playing `key` at `target` gain; (x,y,z) makes it
    *  positional. Ramps gain smoothly; creating from scratch fades in from 0. */
   loop(id: string, key: string, target: number, x?: number, y?: number, z?: number): void {
-    const ctx = this.ctx, master = this.master;
+    const ctx = this.ctx,
+      master = this.master;
     if (!ctx || !master) return;
-    const positional = x !== undefined;
+    const positional = x !== undefined && y !== undefined && z !== undefined;
     let slot = this.loops.get(id);
-    if (slot && slot.key !== key) { this.unloop(id, 0); slot = undefined; }
+    if (slot && slot.key !== key) {
+      this.unloop(id, 0);
+      slot = undefined;
+    }
     if (!slot) {
-      const buf = this.buffers.get(key);
-      if (!buf) return;
+      const pending = this.pendingLoops.get(id);
+      const pendingVariant = pending?.key === key ? this.pendingLoopVariants.get(id) : undefined;
+      const variantIndex = pendingVariant ?? this.nextVariantIndex(key);
+      const cacheKey = assetCacheKey(key, variantIndex);
+      const buf = this.buffers.get(cacheKey);
+      if (!buf) {
+        if (this.failedLoads.has(cacheKey)) {
+          this.pendingLoops.delete(id);
+          this.pendingLoopLoads.delete(id);
+          this.pendingLoopVariants.delete(id);
+          return;
+        }
+        this.pendingLoops.set(id, { key, target, x, y, z });
+        this.pendingLoopVariants.set(id, variantIndex);
+        if (this.pendingLoopLoads.get(id) !== key) {
+          this.pendingLoopLoads.set(id, key);
+          void this.loadBuffer(key, variantIndex).then((loaded) => {
+            if (this.pendingLoopLoads.get(id) !== key) return;
+            this.pendingLoopLoads.delete(id);
+            const pending = this.pendingLoops.get(id);
+            if (!loaded) {
+              if (pending?.key === key) {
+                this.pendingLoops.delete(id);
+                this.pendingLoopVariants.delete(id);
+              }
+              return;
+            }
+            if (!pending || pending.key !== key) return;
+            this.pendingLoops.delete(id);
+            this.loop(id, key, pending.target, pending.x, pending.y, pending.z);
+          });
+        }
+        return;
+      }
       const src = ctx.createBufferSource();
-      src.buffer = buf; src.loop = true;
+      src.buffer = buf;
+      src.loop = true;
+      src.playbackRate.value = this.authoredPlaybackRate(key);
       const g = ctx.createGain();
       g.gain.value = 0;
-      const panner = positional ? this.makePanner(x!, y!, z!) : null;
+      const panner = positional ? this.makePanner(x, y, z) : null;
       if (panner) src.connect(g).connect(panner).connect(master);
       else src.connect(g).connect(master);
       src.start();
-      slot = { key, src, gain: g, panner, target: -1 };
+      this.commitVariant(key, variantIndex);
+      this.pendingLoopVariants.delete(id);
+      slot = { key, src, gain: g, panner, target: -1, x, y, z };
       this.loops.set(id, slot);
-    } else if (positional && slot.panner) {
-      this.setPannerPos(slot.panner, x!, y!, z!);
+    } else if (positional && slot.panner && (slot.x !== x || slot.y !== y || slot.z !== z)) {
+      this.setPannerPos(slot.panner, x, y, z);
+      slot.x = x;
+      slot.y = y;
+      slot.z = z;
     }
-    // Only (re)arm the ramp when the target actually changes — loop() is called
+    // Only (re)arm the ramp when the target actually changes. loop() is called
     // every frame for active ambience, so this keeps the hot path allocation-free.
-    if (slot.target !== target) {
-      slot.target = target;
-      slot.gain.gain.setTargetAtTime(target, ctx.currentTime, 0.25);
+    const mixedTarget = target * (this.entry(key)?.gain ?? 1);
+    if (slot.target !== mixedTarget) {
+      slot.target = mixedTarget;
+      slot.gain.gain.setTargetAtTime(mixedTarget, ctx.currentTime, 0.25);
     }
   }
 
   /** Fade a loop out and free it. */
   unloop(id: string, fade = 0.4): void {
+    this.pendingLoops.delete(id);
+    this.pendingLoopLoads.delete(id);
+    this.pendingLoopVariants.delete(id);
     const slot = this.loops.get(id);
     const ctx = this.ctx;
     if (!slot || !ctx) return;
     this.loops.delete(id);
-    if (fade <= 0) { try { slot.src.stop(); } catch { /* already stopped */ } slot.src.disconnect(); slot.gain.disconnect(); slot.panner?.disconnect(); return; }
+    if (fade <= 0) {
+      try {
+        slot.src.stop();
+      } catch {
+        /* already stopped */
+      }
+      slot.src.disconnect();
+      slot.gain.disconnect();
+      slot.panner?.disconnect();
+      return;
+    }
     slot.gain.gain.setTargetAtTime(0, ctx.currentTime, fade / 3);
     const src = slot.src;
-    setTimeout(() => { try { src.stop(); } catch { /* already stopped */ } src.disconnect(); slot.gain.disconnect(); slot.panner?.disconnect(); }, fade * 1000 + 200);
+    setTimeout(
+      () => {
+        try {
+          src.stop();
+        } catch {
+          /* already stopped */
+        }
+        src.disconnect();
+        slot.gain.disconnect();
+        slot.panner?.disconnect();
+      },
+      fade * 1000 + 200,
+    );
   }
 
-  hasLoop(id: string): boolean { return this.loops.has(id); }
+  hasLoop(id: string): boolean {
+    return this.loops.has(id);
+  }
 
   // --- SpatialAudioSink surface (driven by the renderer) -------------------
   // Implemented here so the surface→clip and ambience→loop mappings live in one
@@ -262,11 +610,20 @@ class Sfx {
    *  comb-filter into a metallic "jingle". Two fixes: a short `release` shapes
    *  each footfall into a transient that decays before the next, and alternating
    *  the pitch per step reads as two distinct feet rather than one looping sample. */
-  footstep(x: number, y: number, z: number, surface: string, running: boolean, _self: boolean): void {
+  footstep(
+    x: number,
+    y: number,
+    z: number,
+    surface: string,
+    running: boolean,
+    _self: boolean,
+  ): void {
     if (!this.footstepsOn) return; // silenced by default (footstepSfx setting)
     this.footTick = (this.footTick + 1) & 1;
     const foot = this.footTick === 0 ? 0.97 : 1.04; // left/right
-    this.playAt(`foot_${surface}`, x, y, z, {
+    const key = FOOTSTEP_CUES[surface];
+    if (!key) return;
+    this.playAt(key, x, y, z, {
       gain: running ? 0.8 : 0.55,
       rate: (running ? 1.06 : 1) * foot,
       cooldown: 0.05,
@@ -276,28 +633,107 @@ class Sfx {
   private footTick = 0;
 
   /** Jump / land / water-entry / swim-stroke. */
-  movement(kind: 'jump' | 'land' | 'splash' | 'swim', x: number, y: number, z: number, _self: boolean): void {
-    const key = kind === 'jump' ? 'move_jump' : kind === 'land' ? 'move_land' : kind === 'splash' ? 'move_splash' : 'move_swim';
+  movement(
+    kind: 'jump' | 'land' | 'splash' | 'swim',
+    x: number,
+    y: number,
+    z: number,
+    _self: boolean,
+  ): void {
+    const key =
+      kind === 'jump'
+        ? 'move_jump'
+        : kind === 'land'
+          ? 'move_land'
+          : kind === 'splash'
+            ? 'move_splash'
+            : 'move_swim';
     this.playAt(key, x, y, z, { gain: kind === 'swim' ? 0.5 : 0.7, cooldown: 0.08 });
   }
 
   private ambient(key: string, target: number): void {
     if (target > 0) this.loop(key, key, target);
-    else if (this.loops.has(key)) this.unloop(key, 0.7);
+    else this.unloop(key, 0.7);
+  }
+
+  private pointAmbient(source: AmbientPointSource): void {
+    if (this.tooFar(source.x, source.z)) {
+      if (this.loops.has(source.id) || this.pendingLoops.has(source.id)) {
+        this.unloop(source.id, 0.7);
+      }
+      return;
+    }
+    const key = source.kind === 'campfire' ? 'amb_campfire' : 'amb_forge';
+    this.loop(source.id, key, POINT_AMBIENCE_GAIN, source.x, source.y, source.z);
   }
 
   /** Cross-fade the global ambience loops to match the player's surroundings.
    *  These are continuous background beds, kept well under the foreground
    *  footstep/jump/combat one-shots so movement always reads clearly over them. */
-  ambience(biome: 'vale' | 'marsh' | 'peaks', inDungeon: boolean, precip: 'snow' | 'rain' | null, nearWater: boolean): void {
+  ambience(
+    biome: BiomeId,
+    inDungeon: boolean,
+    precip: 'snow' | 'rain' | null,
+    nearWater: boolean,
+    crowd = 0,
+    points: readonly AmbientPointSource[] = [],
+  ): void {
     this.ambient('amb_dungeon', inDungeon ? 0.3 : 0);
-    this.ambient('amb_wind_vale', !inDungeon && biome === 'vale' ? 0.12 : 0);
+    // Sowfield crowd murmur (procedural bed): quiet chatter on the grounds,
+    // swelling while a match is live (the renderer passes 0 / ~0.4 / 1).
+    this.ambient('amb_crowd', crowd > 0 ? 0.08 + 0.18 * Math.min(1, crowd) : 0);
+    this.ambient('amb_wind_vale', !inDungeon && (biome === 'vale' || biome === 'beach') ? 0.12 : 0);
     this.ambient('amb_birds', !inDungeon && biome === 'vale' ? 0.1 : 0);
-    this.ambient('amb_wind_marsh', !inDungeon && biome === 'marsh' ? 0.13 : 0);
-    this.ambient('amb_wind_peaks', !inDungeon && biome === 'peaks' ? 0.18 : 0);
-    this.ambient('amb_rain', precip === 'rain' ? 0.11 : 0); // sharp clip — kept very low
+    this.ambient(
+      'amb_wind_marsh',
+      !inDungeon && (biome === 'marsh' || biome === 'cave') ? 0.13 : 0,
+    );
+    this.ambient(
+      'amb_wind_peaks',
+      !inDungeon && (biome === 'peaks' || biome === 'desert' || biome === 'volcano') ? 0.18 : 0,
+    );
+    this.ambient('amb_rain', precip === 'rain' ? 0.11 : 0); // sharp clip, kept very low
     this.ambient('amb_snow', precip === 'snow' ? 0.13 : 0);
     this.ambient('amb_water', nearWater ? 0.18 : 0);
+    for (let i = 0; i < points.length; i++) this.pointAmbient(points[i]);
+  }
+
+  // --- Vale Cup one-shots (HUD-armed on vcupGoal/vcupEnd events) -----------
+
+  /** GOAL! Two rising open fifths on stacked saws, the festival air horn.
+   *  Fully synthesized (no clip file); non-positional so the whole stadium
+   *  moment lands regardless of camera direction. */
+  goalHorn(): void {
+    const ctx = this.ctx,
+      master = this.master;
+    if (!ctx || !master) return;
+    const t0 = ctx.currentTime;
+    const blast = (freq: number, at: number, dur: number): void => {
+      for (const [mult, level] of [
+        [1, 0.16],
+        [1.5, 0.12],
+        [2.02, 0.05],
+      ] as const) {
+        const osc = ctx.createOscillator();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(freq * mult, t0 + at);
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, t0 + at);
+        g.gain.linearRampToValueAtTime(level, t0 + at + 0.05);
+        g.gain.setValueAtTime(level, t0 + at + dur * 0.7);
+        g.gain.exponentialRampToValueAtTime(0.001, t0 + at + dur);
+        osc.connect(g).connect(master);
+        osc.start(t0 + at);
+        osc.stop(t0 + at + dur + 0.05);
+      }
+    };
+    blast(196, 0, 0.5);
+    blast(261.6, 0.42, 0.9);
+  }
+
+  /** The stands erupt: the baked crescendo-decay crowd roar (procedural). */
+  crowdRoar(gain = 0.9): void {
+    this.playUi('vcup_crowd_roar', { gain, cooldown: 0.4 });
   }
 }
 

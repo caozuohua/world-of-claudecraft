@@ -1,3 +1,4 @@
+import { type LetterDef, QUEST_LETTERS, WELCOME_LETTER } from '../sim/content/letters';
 import { DELVES, DUNGEONS, MOBS, NPCS, QUESTS, ZONES } from '../sim/data';
 
 // English world-entity names + narratives (mobs, NPCs, quests, zones, dungeons).
@@ -17,6 +18,7 @@ import { DELVES, DUNGEONS, MOBS, NPCS, QUESTS, ZONES } from '../sim/data';
 // consumed, so this object carries only `en`.
 
 const MOB_IDS = [
+  'yumi_cat',
   'forest_wolf',
   'old_greyjaw',
   'wild_boar',
@@ -37,6 +39,7 @@ const MOB_IDS = [
   'gravecaller_summoner',
   'gravecaller_mender',
   'deacon_voss',
+  'training_dummy',
   'ridge_stalker',
   'deeprock_kobold',
   'thornpeak_ogre',
@@ -73,6 +76,9 @@ const MOB_IDS = [
   'bound_guardian',
   'nythraxis_skeleton_warrior',
   'nythraxis_scourge_of_thornpeak',
+  'nythraxis_heroic_warrior_add',
+  'nythraxis_heroic_priest_add',
+  'nythraxis_heroic_rogue_add',
   // Collapsed Reliquary delve mobs
   'reliquary_ledger_wraith',
   'reliquary_funeral_ringer',
@@ -81,6 +87,22 @@ const MOB_IDS = [
   'reliquary_saintless_effigy',
   'deacon_varric',
   'acolyte_tessa',
+  // Drowned Litany delve mobs (Mirefen Marsh)
+  'drowned_cantor',
+  'reedbound_acolyte',
+  'deepfen_spearjaw',
+  'mirefen_widowling',
+  'spider_egg_sac',
+  'grave_silt_bulwark',
+  'sump_troll_devourer',
+  'choir_thrall',
+  'sister_nhalia_drowned_canticle',
+  'edda_reedhand',
+  'tolling_bell',
+  'vale_cup_ball',
+  // Thornpeak Heights world boss + its summoned adds
+  'thunzharr_waking_peak',
+  'thunzharr_stormling',
 ] as const;
 
 const NPC_IDS = [
@@ -102,12 +124,25 @@ const NPC_IDS = [
   'scout_maren_highwatch',
   'quartermaster_bree',
   'armorer_hode',
+  'heroic_quartermaster', // Heroic Marks vendor (Highwatch, zone 3)
+  'fury', // Honor Quartermaster and WARFARE vendor (Eastbrook, zone 1)
   'loremaster_caddis',
+  'auctioneer_voss', // second World Market auctioneer (Highwatch, zone 3)
+  'bursar_fernando', // Gilded Strongbox banker (Eastbrook, zone 1)
+  'bursar_petra_vell', // Gilded Strongbox banker (Fenbridge, zone 2)
+  'bursar_aldous_crane', // Gilded Strongbox banker (Highwatch, zone 3)
   'brother_aldric_raid', // dynamically-spawned raid turn-in NPC (Crypt of Nythraxis)
   'brother_halven', // Collapsed Reliquary delve board NPC
+  'brother_halven_marsh', // Drowned Litany delve board NPC (same character, marsh camp)
+  'spirit_healer', // the graveyard angel (spawned at every graveyard + dungeon entry)
+  'groundskeeper_bram', // Vale Cup queue master at the Sowfield gate (docs/prd/vale-cup.md)
+  'chronicler_saul', // Book of Deeds Chronicler (Eastbrook, zone 1)
+  'chronicler_osric_fenn', // Book of Deeds Chronicler (Fenbridge, zone 2)
+  'chronicler_edda_hartwell', // Book of Deeds Chronicler (Highwatch, zone 3)
 ] as const;
 
 const QUEST_IDS = [
+  'q_prof_intro',
   'q_wolves',
   'q_greyjaw',
   'q_boars',
@@ -150,6 +185,9 @@ const QUEST_IDS = [
   'q_highwatch_summons',
   'q_stalkers',
   'q_stalker_pelts',
+  'q_stalkers_return',
+  'q_stalker_cloaks',
+  'q_old_cragmaw',
   'q_kobold_tunnels',
   'q_glowing_wax',
   'q_ogre_edges',
@@ -179,6 +217,8 @@ const QUEST_IDS = [
   'q_nythraxis_bound_guardian',
   'q_nythraxis_scourges_end',
   'q_mogger',
+  'q_archetype_acceptance',
+  'q_prof_make_amends',
 ] as const;
 
 const ZONE_IDS = ['eastbrook_vale', 'mirefen_marsh', 'thornpeak_heights'] as const;
@@ -189,7 +229,15 @@ const DUNGEON_IDS = [
   'nythraxis_crypt',
   'nythraxis_boss_arena',
 ] as const;
-const DELVE_IDS = ['collapsed_reliquary'] as const;
+const DELVE_IDS = ['collapsed_reliquary', 'drowned_litany'] as const;
+// Ravenpost authored letters (src/sim/content/letters.ts): the welcome letter
+// plus every quest thank-you letter, keyed by letterId.
+const LETTER_IDS = [
+  'ravenpost_welcome',
+  'letter_q_wolves',
+  'letter_q_greyjaw',
+  'letter_q_hollow',
+] as const;
 
 type MobId = (typeof MOB_IDS)[number];
 type NpcId = (typeof NPC_IDS)[number];
@@ -197,6 +245,7 @@ type QuestId = (typeof QUEST_IDS)[number];
 type ZoneId = (typeof ZONE_IDS)[number];
 type DungeonId = (typeof DUNGEON_IDS)[number];
 type DelveId = (typeof DELVE_IDS)[number];
+type LetterId = (typeof LETTER_IDS)[number];
 
 type MobTranslations = Record<MobId, { name: string }>;
 type NpcTranslations = Record<NpcId, { name: string; title: string; greeting: string }>;
@@ -216,6 +265,7 @@ type DungeonTranslations = Record<
   { name: string; enterText: string; leaveText: string }
 >;
 type DelveTranslations = Record<DelveId, { name: string; enterText: string; leaveText: string }>;
+type LetterTranslations = Record<LetterId, { sender: string; subject: string; body: string }>;
 
 type WorldEntityTranslations = {
   worldContent: {
@@ -226,6 +276,12 @@ type WorldEntityTranslations = {
     delveLockedChestInteract: string;
     delveRewardChestInteract: string;
     delveSurfaceExitInteract: string;
+    delveReliquaryInteract: string;
+    delveRiteShrineBellInteract: string;
+    delveRiteShrineCandleInteract: string;
+    delveRiteShrineReedInteract: string;
+    delveRiteShrineSkullInteract: string;
+    mailboxName: string;
   };
   entities: {
     mobs: MobTranslations;
@@ -234,6 +290,7 @@ type WorldEntityTranslations = {
     zones: ZoneTranslations;
     dungeons: DungeonTranslations;
     delves: DelveTranslations;
+    letters: LetterTranslations;
   };
 };
 
@@ -312,6 +369,17 @@ function makeEnglishWorldEntities(): WorldEntityTranslations {
     };
   });
 
+  const lettersById: Record<string, LetterDef> = { [WELCOME_LETTER.letterId]: WELCOME_LETTER };
+  for (const letter of Object.values(QUEST_LETTERS)) lettersById[letter.letterId] = letter;
+  const letters = {} as LetterTranslations;
+  orderedValues(LETTER_IDS, lettersById).forEach((letter) => {
+    letters[letter.letterId as LetterId] = {
+      sender: letter.senderName,
+      subject: normalizeSourceText(letter.subject),
+      body: normalizeSourceText(letter.body),
+    };
+  });
+
   return {
     worldContent: {
       corpseName: '{name} (corpse)',
@@ -321,8 +389,14 @@ function makeEnglishWorldEntities(): WorldEntityTranslations {
       delveLockedChestInteract: 'Press F to pick the lock',
       delveRewardChestInteract: 'Press F to claim spoils',
       delveSurfaceExitInteract: 'Press F to climb',
+      delveReliquaryInteract: 'Drowned Reliquary: Press F to begin the rite',
+      delveRiteShrineBellInteract: 'Bell Shrine: Press F to ring it',
+      delveRiteShrineCandleInteract: 'Candle Shrine: Press F to touch it',
+      delveRiteShrineReedInteract: 'Reed Shrine: Press F to touch it',
+      delveRiteShrineSkullInteract: 'Skull Shrine: Press F to touch it',
+      mailboxName: 'Mailbox',
     },
-    entities: { mobs, npcs, quests, zones, dungeons, delves },
+    entities: { mobs, npcs, quests, zones, dungeons, delves, letters },
   };
 }
 

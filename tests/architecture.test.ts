@@ -120,10 +120,12 @@ const simFiles = walk(simRoot);
 // import), so it is registered here even though it lives in src/game. Paths are
 // repo-relative for the failure messages.
 const UI_PURE_CORES = [
+  'src/ui/chat_ignore_core.ts',
   'src/ui/unit_portrait.ts',
   'src/ui/xp_bar.ts',
   'src/ui/absorb_bar.ts',
   'src/ui/party_frames.ts',
+  'src/ui/party_collapse.ts',
   'src/ui/rest_indicator.ts',
   'src/ui/low_health.ts',
   'src/ui/low_resource.ts',
@@ -134,28 +136,64 @@ const UI_PURE_CORES = [
   'src/ui/delve_map.ts',
   'src/ui/raid_lockout_view.ts',
   'src/ui/stat_tooltip_view.ts',
+  'src/ui/mob_tooltip_view.ts',
   'src/ui/talents_view.ts',
   'src/ui/social_view.ts',
   'src/ui/bags_view.ts',
+  'src/ui/bank_view.ts',
+  'src/ui/item_set_tooltip_view.ts',
+  'src/ui/weapon_proc_view.ts',
   'src/ui/options_view.ts',
   'src/ui/vendor_view.ts',
+  'src/ui/heroic_vendor_view.ts',
+  'src/ui/claudium_view.ts',
+  'src/ui/woc_store_view.ts',
+  'src/ui/loot_roll_status_view.ts',
+  'src/ui/loot_settings_view.ts',
+  'src/ui/crafting_view.ts',
   'src/ui/market_view.ts',
+  'src/ui/mailbox_view.ts',
+  'src/ui/calendar_view.ts',
   'src/ui/char_view.ts',
   'src/ui/map_window_view.ts',
+  'src/ui/map_quest_list_view.ts',
   'src/ui/arena_window_view.ts',
+  'src/ui/yumi_match_view.ts',
+  'src/ui/vale_cup_window_view.ts',
+  'src/ui/vale_cup_indicator_view.ts',
+  'src/ui/vale_cup_hud_view.ts',
+  'src/ui/vale_cup_briefing_view.ts',
+  'src/ui/vale_cup_betting_view.ts',
+  'src/ui/vale_cup_charge_view.ts',
   'src/ui/leaderboard_view.ts',
+  'src/ui/guild_leaderboard_view.ts',
+  'src/ui/dev_leaderboard_view.ts',
+  'src/ui/deeds_leaderboard_view.ts',
+  'src/ui/daily_rewards_view.ts',
+  'src/ui/deeds_view.ts',
   'src/ui/spellbook_view.ts',
   'src/ui/questlog_view.ts',
   'src/ui/swing_timer.ts',
   'src/ui/unit_frame.ts',
   'src/ui/action_bar_view.ts',
+  'src/ui/mobile_action_page_view.ts',
+  'src/ui/consumable_bar_view.ts',
+  'src/ui/mobile_hud_layout.ts',
   'src/ui/auras_view.ts',
   'src/ui/minimap_markers.ts',
+  'src/ui/gathering_view.ts',
   'src/ui/fct_core.ts',
   'src/ui/fct_event.ts',
+  'src/ui/window_drag_core.ts',
+  'src/ui/window_resize_core.ts',
+  'src/ui/window_stack_state_core.ts',
   'src/ui/focus_order.ts',
   'src/ui/roving_index.ts',
   'src/ui/live_region_politeness.ts',
+  'src/ui/discord_widget_view.ts',
+  'src/ui/desktop_update_view.ts',
+  'src/ui/corpse_harvest_view.ts',
+  'src/ui/town_focus_view.ts',
   'src/game/ui_effects_profile.ts',
   'src/game/ui_tier_knobs.ts',
 ].map((rel) => join(repoRoot, rel));
@@ -165,9 +203,16 @@ const UI_PURE_CORES = [
 // nameplate visibility / anchor / threat / combo model). Each emits state
 // from sim types with no Three import and no i18n, so a NameplatePainter /
 // cast_bar painter draws it and a Vitest drives it directly.
-const RENDER_PURE_CORES = ['src/render/cast_bar.ts', 'src/render/nameplate_view.ts'].map((rel) =>
-  join(repoRoot, rel),
-);
+// terrain_region_core (editor partial-rebuild chunk/texel selection math) and
+// water_core (the shore-depth sample shared by build + editor setLevel) follow
+// the same contract for the map editor's realtime terrain/water edits.
+const RENDER_PURE_CORES = [
+  'src/render/cast_bar.ts',
+  'src/render/nameplate_view.ts',
+  'src/render/net_interp_core.ts',
+  'src/render/terrain_region_core.ts',
+  'src/render/water_core.ts',
+].map((rel) => join(repoRoot, rel));
 
 // Bare-named pure cores: registered cores (from UI_PURE_CORES + RENDER_PURE_CORES)
 // whose basename does NOT end in _view / _core, so the onDiskCores() sweep's
@@ -182,6 +227,7 @@ const BARE_NAMED = [
   'src/ui/xp_bar.ts',
   'src/ui/absorb_bar.ts',
   'src/ui/party_frames.ts',
+  'src/ui/party_collapse.ts',
   'src/ui/rest_indicator.ts',
   'src/ui/low_health.ts',
   'src/ui/low_resource.ts',
@@ -197,6 +243,7 @@ const BARE_NAMED = [
   'src/ui/focus_order.ts',
   'src/ui/roving_index.ts',
   'src/ui/live_region_politeness.ts',
+  'src/ui/mobile_hud_layout.ts',
   'src/game/ui_effects_profile.ts',
   'src/game/ui_tier_knobs.ts',
   'src/render/cast_bar.ts',
@@ -269,11 +316,13 @@ describe('src/sim architecture invariants', () => {
 // sim import would drag the deterministic engine into the seam), and run no
 // i18n/UI logic (no t()/tSim()/tServer()). Without this scan the facet files'
 // purity is convention-only; a later W6-W10 re-home could add a net/ui import or a
-// t() call to a facet and no gate would redden. This closes that gap. The two
-// blessed value sites are COMMAND_NAMES (world_api.ts) and OVERHEAD_EMOTES +
-// isOverheadEmoteId (chat.ts); string literals are NOT banned (only imports + DOM
-// + i18n calls are), and the one sanctioned runtime sim import is chat.ts pulling
-// OVERHEAD_EMOTE_IDS to back its isOverheadEmoteId guard.
+// t() call to a facet and no gate would redden. This closes that gap. The one
+// blessed value site is COMMAND_NAMES (world_api.ts); string literals are NOT
+// banned (only imports + DOM + i18n calls are). chat.ts's OVERHEAD_EMOTES +
+// isOverheadEmoteId derive their runtime id set from OVERHEAD_EMOTES itself
+// (not sim/types' OVERHEAD_EMOTE_IDS), so there is currently no sanctioned
+// runtime sim import; SANCTIONED_VALUE_SIM_IMPORTS below stays as the escape
+// valve for a future one.
 
 const worldApiEntry = join(repoRoot, 'src', 'world_api.ts');
 const worldApiRoot = join(repoRoot, 'src', 'world_api');
@@ -322,13 +371,22 @@ function runtimeBindings(clause: string): string[] {
     .map((n) => n.split(/\s+as\s+/)[0].trim());
 }
 
-// The ONLY sanctioned runtime sim import on the seam, keyed by repo-relative file:
-// chat.ts pulls OVERHEAD_EMOTE_IDS to back its isOverheadEmoteId guard. Any OTHER
-// value sim import, in chat.ts or any other facet, still reddens the gate, so this
-// is a per-site allowlist, not a blanket file-level exemption.
-const SANCTIONED_VALUE_SIM_IMPORTS: Record<string, ReadonlySet<string>> = {
-  'src/world_api/chat.ts': new Set(['OVERHEAD_EMOTE_IDS']),
-};
+// Any sanctioned runtime sim import on the seam, keyed by repo-relative file
+// (forward-slash form: see posixRel below, since `relative()` yields backslashes
+// on Windows). Currently empty (chat.ts derives its runtime id set from its own
+// OVERHEAD_EMOTES instead of value-importing sim/types' OVERHEAD_EMOTE_IDS); kept
+// as the escape valve for a future legitimate case. Any value sim import not
+// listed here, in any facet, reddens the gate: this is a per-site allowlist, not
+// a blanket file-level exemption. (The flip side, that chat.ts's local
+// OVERHEAD_EMOTES stays complete against sim/types' OVERHEAD_EMOTE_IDS so the
+// decoupled id set cannot silently drift, is guarded in overhead_emote_parity.test.ts.)
+const SANCTIONED_VALUE_SIM_IMPORTS: Record<string, ReadonlySet<string>> = {};
+
+// Normalizes a relative() path to forward slashes so the allowlist above (and
+// its keys, always written posix-style) matches on Windows too.
+function posixRel(rel: string): string {
+  return rel.split('\\').join('/');
+}
 
 describe('src/world_api IWorld seam purity invariants', () => {
   it('finds the IWorld seam (world_api.ts + every facet file)', () => {
@@ -359,7 +417,7 @@ describe('src/world_api IWorld seam purity invariants', () => {
     const violations: string[] = [];
     for (const file of worldApiFiles) {
       const rel = relative(repoRoot, file);
-      const allowed = SANCTIONED_VALUE_SIM_IMPORTS[rel] ?? new Set<string>();
+      const allowed = SANCTIONED_VALUE_SIM_IMPORTS[posixRel(rel)] ?? new Set<string>();
       const src = stripComments(readFileSync(file, 'utf8'));
       for (const m of src.matchAll(SEAM_IMPORT_RE)) {
         const [, clause, spec] = m;

@@ -32,11 +32,12 @@
 
 import { lineOfSightClear } from '../colliders';
 import { MOBS } from '../data';
+import { isTrivialTo } from '../mob/targeting';
 import { findPlayerPath, PLAYER_BODY_RADIUS } from '../pathfind';
+import { scheduleProjectile } from '../projectile_travel';
 import type { SimContext } from '../sim_context';
 import {
   type Aura,
-  angleTo,
   DT,
   dist2d,
   type Entity,
@@ -44,17 +45,24 @@ import {
   PET_GROWL_INTERVAL,
   PET_TELEPORT_DISTANCE,
   RUN_SPEED,
+  steadyAngleTo,
 } from '../types';
 
 const BODY_RADIUS = PLAYER_BODY_RADIUS;
 const PET_LEASH = 40; // yards from the owner before a pet gives up its target
 const PET_FOLLOW_DISTANCE = 3.5;
 const PET_PATH_RECALC = 0.5; // seconds between heel-path A* recomputes per pet (throttle)
-const PET_PATH_SPAN = 96; // A* search half-window in cells; covers the teleport distance + slack
+const PET_PATH_SPAN = 96; // maximum A* search cells per axis; covers teleport distance + slack
+const PET_FORCE_RECOVERY_DISTANCE = 96; // beyond this separation, snap after a fresh bounded path fails
 const PET_PATH_STALE_DISTANCE = 4; // path end this far from the (now-moved) owner: recompute the heel route
 const PET_WAYPOINT_REACHED = 1; // pet within this of the next waypoint: pop it and home on the next leg
 const PET_ASSIST_RANGE = 50; // how far the pet scans for enemies engaging the pair
 const PET_AGGRESSIVE_RANGE = 18; // aggressive pets look for idle enemies this close
+// A pet pulls idle wild mobs by proximity just like its owner. The max mob detection
+// radius is 20 (see the clamp below), so any mob that could notice the pet is within
+// 20yd of it; scanning from the pet (there are at most a handful) keeps this off every
+// idle mob's per-tick path, so work scales with pet count, not mob count.
+const PET_PULL_SCAN = 20;
 // Anti-AFK: an aggressive pet only proactively pulls fresh targets while its
 // owner has acted (moved, cast, or commanded the pet) within this many ticks.
 // 1200 ticks = 60s at 20Hz. Stops hunters/warlocks parking an aggressive pet to
@@ -73,6 +81,8 @@ export function updatePet(ctx: SimContext, pet: Entity): void {
   if (!pet.inCombat && ctx.tickCount % 40 === 0 && pet.hp < pet.maxHp) {
     pet.hp = Math.min(pet.maxHp, pet.hp + Math.max(1, Math.round(pet.maxHp * 0.02)));
   }
+
+  pullNearbyMobs(ctx, pet);
 
   let target = pet.aggroTargetId !== null ? (ctx.entities.get(pet.aggroTargetId) ?? null) : null;
   if (target && (target.dead || !ctx.isHostileTo(pet, target))) target = null;
@@ -98,7 +108,7 @@ export function updatePet(ctx: SimContext, pet: Entity): void {
         ctx.moveToward(pet, target.pos, pet.moveSpeed * ctx.moveSpeedMult(pet));
       pet.swingTimer = Math.max(0, pet.swingTimer - DT);
     } else {
-      pet.facing = angleTo(pet.pos, target.pos);
+      pet.facing = steadyAngleTo(pet.pos, target.pos, pet.facing);
       if (
         target.kind === 'mob' &&
         !ranged &&
@@ -113,7 +123,8 @@ export function updatePet(ctx: SimContext, pet: Entity): void {
       if (pet.swingTimer <= 0) {
         if (ranged) petRangedAttack(ctx, pet, target, ranged);
         else ctx.mobSwing(pet, target);
-        pet.swingTimer = pet.weapon.speed * ctx.swingIntervalMult(pet);
+        // pet_spellhaste (Metamorphosis) speeds the demon's attack/cast cadence.
+        pet.swingTimer = (pet.weapon.speed * ctx.swingIntervalMult(pet)) / petHasteMult(pet);
       }
     }
     return;
@@ -124,12 +135,30 @@ export function updatePet(ctx: SimContext, pet: Entity): void {
   petFollow(ctx, pet, owner);
 }
 
+// A pet standing inside an idle wild mob's detection radius pulls it, exactly as its
+// owner would: the mob notices the pet sent in ahead instead of waiting for the pet's
+// first strike. This mirrors the player proximity-aggro pass (mob/locomotion) but runs
+// from the pet side so a pet-free region costs nothing.
+function pullNearbyMobs(ctx: SimContext, pet: Entity): void {
+  ctx.grid.forEachInRadius(pet.pos.x, pet.pos.z, PET_PULL_SCAN, (m, d2) => {
+    // wild, live, idle mobs only (skip pets/adds, corpses, already-engaged, visions)
+    if (m.ownerId !== null || m.kind !== 'mob' || m.dead) return;
+    if (m.aiState !== 'idle' || !m.hostile || m.templateId.startsWith('vision_')) return;
+    if (isTrivialTo(m, pet)) return;
+    const radius = Math.max(
+      4,
+      Math.min(20, (MOBS[m.templateId]?.aggroRadius ?? 0) + (m.level - pet.level) * 1.5),
+    );
+    if (Math.sqrt(d2) < radius) ctx.aggroMob(m, pet, true);
+  });
+}
+
 // Heel locomotion: route the pet to its owner AROUND obstacles instead of
 // letting greedy slide-steering wedge on a wall and then snapping the pet to
 // the owner. Mirrors the warrior-charge path cache (`petPath`): A* is recomputed
 // at most every PET_PATH_RECALC and otherwise the cached waypoints are followed.
-// The 60yd teleport is kept only as a true last resort, for when no route to the
-// owner exists at all (e.g. owner stranded across un-navigable terrain).
+// The teleport is kept as a recovery path when no route exists or the pet-owner
+// separation is implausibly large (for example, after an instance transition).
 export function petFollow(ctx: SimContext, pet: Entity, owner: Entity): void {
   pet.petPathCooldown = Math.max(0, pet.petPathCooldown - DT);
   const d = dist2d(pet.pos, owner.pos);
@@ -156,14 +185,20 @@ export function petFollow(ctx: SimContext, pet: Entity, owner: Entity): void {
   while (pet.petPath.length > 1 && dist2d(pet.pos, pet.petPath[0]) < PET_WAYPOINT_REACHED)
     pet.petPath.shift();
 
-  // Last-resort teleport: only when the owner is far AND genuinely unreachable.
+  // Last-resort teleport: only when the owner is far and either genuinely
+  // unreachable or beyond the forced recovery boundary.
   // We confirm with a FRESH path (ignoring the throttle) so a stale single-point
   // cache from a moment ago can never trigger a spurious snap while a real route
   // exists — e.g. right after a combat→heel transition.
   if (
     pet.petPath.length <= 1 &&
     d > PET_TELEPORT_DISTANCE &&
-    !lineOfSightClear(ctx.cfg.seed, pet.pos, owner.pos, BODY_RADIUS)
+    // lineOfSightClear samples every 0.5yd. Do not trace an arbitrarily long
+    // world-space segment for a pet stranded across a teleport or instance
+    // transition. Below the explicit recovery boundary, preserve the clear-line
+    // run-home behavior.
+    (d > PET_FORCE_RECOVERY_DISTANCE ||
+      !lineOfSightClear(ctx.cfg.seed, pet.pos, owner.pos, BODY_RADIUS))
   ) {
     recompute();
     if (pet.petPath.length <= 1) {
@@ -184,6 +219,25 @@ export function petFollow(ctx: SimContext, pet: Entity, owner: Entity): void {
   ctx.moveToward(pet, aim, speed);
 }
 
+function petDamageMult(ctx: SimContext, pet: Entity): number {
+  if (pet.ownerId === null) return 1;
+  let mult = 1;
+  for (const a of pet.auras) {
+    if (a.kind === 'pet_damage_pct') mult += a.value > 1 ? a.value / 100 : a.value;
+  }
+  const ownerMeta = ctx.players.get(pet.ownerId);
+  if (ownerMeta) mult *= 1 + ctx.playerMods(ownerMeta).global.petDmgPct;
+  return mult;
+}
+
+// Pet attack/cast speed multiplier from pet_spellhaste auras (Metamorphosis: +20% cast
+// speed on the demon). value is a fraction (0.2 = +20%); the swing interval divides by it.
+function petHasteMult(pet: Entity): number {
+  let bonus = 0;
+  for (const a of pet.auras) if (a.kind === 'pet_spellhaste') bonus += a.value;
+  return 1 + Math.max(0, bonus);
+}
+
 /** A ranged demon pet (imp) hurls a spell-school bolt: a telegraphed
  *  projectile that bypasses armor, mirroring the player caster path. Damage
  *  comes from the mob's weapon range + AP, exactly like its melee siblings. */
@@ -200,12 +254,17 @@ export function petRangedAttack(
     school: ranged.school,
     fx: 'projectile',
   });
-  const crit = ctx.rng.chance(0.05);
-  let dmg =
-    ctx.rng.range(pet.weapon.min, pet.weapon.max) +
-    (ctx.effectiveAttackPower(pet) / 14) * pet.weapon.speed;
-  if (crit) dmg *= 2;
-  ctx.dealDamage(pet, target, Math.max(1, Math.round(dmg)), crit, ranged.school, null, 'hit');
+  // The imp's bolt resolves on arrival (projectile_travel), not the tick it is hurled;
+  // it fizzles if the pet or its target dies before impact.
+  scheduleProjectile(ctx, pet, target, (src, tgt) => {
+    const crit = ctx.rng.chance(0.05);
+    let dmg =
+      ctx.rng.range(src.weapon.min, src.weapon.max) +
+      (ctx.effectiveAttackPower(src) / 14) * src.weapon.speed;
+    if (crit) dmg *= 2;
+    dmg *= petDamageMult(ctx, src);
+    ctx.dealDamage(src, tgt, Math.max(1, Math.round(dmg)), crit, ranged.school, null, 'hit');
+  });
 }
 
 export function petPickTarget(ctx: SimContext, pet: Entity, owner: Entity): Entity | null {
@@ -217,20 +276,29 @@ export function petPickTarget(ctx: SimContext, pet: Entity, owner: Entity): Enti
   const ownerIdle = !ownerMeta || ctx.tickCount - ownerMeta.lastActiveTick > PET_OWNER_IDLE_TICKS;
   let best: Entity | null = null;
   let bestD = pet.petMode === 'aggressive' ? PET_AGGRESSIVE_RANGE : PET_ASSIST_RANGE;
-  for (const m of ctx.entities.values()) {
-    if (m.id === pet.id || m.dead || !ctx.isHostileTo(pet, m)) continue;
+  // Scan the spatial grid within PET_ASSIST_RANGE instead of the whole entity roster:
+  // a target-less pet ran this O(all-entities) scan every idle tick (20Hz), a top CPU
+  // frame at scale. PET_ASSIST_RANGE (50) is a safe superset in BOTH modes: bestD only
+  // decreases from at most 50 and selection is strict `<`, so no winner can lie beyond
+  // 50yd (aggressive-mode 18..50 extras the wider query surfaces are re-rejected by the
+  // `aggressive` d <= 18 predicate). The grid holds every kind (mobs, players, pets),
+  // so PvP players are still candidates. Body is verbatim (the pet.id skip stays: the
+  // grid visits the pet itself at distance 0). We keep the inner dist2d rather than the
+  // callback's squared d2 to avoid a units mismatch silently changing the radius.
+  ctx.grid.forEachInRadius(pet.pos.x, pet.pos.z, PET_ASSIST_RANGE, (m) => {
+    if (m.id === pet.id || m.dead || !ctx.isHostileTo(pet, m)) return;
     const engagingUs =
       m.kind === 'mob' && (m.aggroTargetId === owner.id || m.aggroTargetId === pet.id);
     const ownerOffense =
       owner.targetId === m.id && (owner.autoAttack || (m.kind === 'mob' && m.threat.has(owner.id)));
     const aggressive =
       pet.petMode === 'aggressive' && !ownerIdle && dist2d(pet.pos, m.pos) <= PET_AGGRESSIVE_RANGE;
-    if (!engagingUs && !ownerOffense && !aggressive) continue;
+    if (!engagingUs && !ownerOffense && !aggressive) return;
     const d = dist2d(pet.pos, m.pos);
     if (d < bestD) {
       best = m;
       bestD = d;
     }
-  }
+  });
   return best;
 }

@@ -14,7 +14,7 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Gymnasium](https://img.shields.io/badge/Gymnasium-RL%20env-0C7BDC)](https://gymnasium.farama.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.14.1-blue)](package.json)
+[![Version](https://img.shields.io/badge/version-0.25.0-blue)](package.json)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Discord](https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white)](https://discord.gg/GjhnUsBtw)
 
@@ -40,27 +40,29 @@ Same seed, same world, everywhere. And almost nothing is a shipped asset: the to
 
 ## Highlights
 
-- **Nine classic classes**, each with a real vanilla-style kit that gains ranks as you level, plus a full **talent system** (three specs per class, 27 specs in all).
+- **Nine classic classes**, each with a full classic-era-style kit that gains ranks as you level, plus a full **talent system** (three specs per class, 27 specs in all).
 - **Three open-world zones** from level 1 to 20, nearly 80 quests, and a single connected storyline about the Gravecaller conspiracy.
-- **Five instanced dungeons**, four of them five-player elite raids and one solo crypt, with elite scaling, AoE boss mechanics, and class-archetype loot.
+- **Five instanced dungeons**, four of them five-player elite raids and one solo crypt, with elite scaling, AoE boss mechanics, class-archetype loot, and a **Heroic difficulty tier** with richer rewards, plus open-world **world bosses**.
 - **Scalable delves**, a small-group mode for one or two players plus an AI companion, rebuilt from randomized chambers each run across Normal and Heroic tiers.
-- **The Ashen Coliseum**, a ranked PvP arena with 1v1 and 2v2 ladders plus a 2v2 Fiesta mode (augment pickups, a shrinking ring, first to fifteen takedowns).
-- **Real multiplayer**: parties, trading, duels, tap rights, party-split XP, whispers, away status, and a server that owns every combat roll.
+- **The Ashen Coliseum**, a ranked PvP arena with 1v1 and 2v2 ladders plus a 2v2 Fiesta mode (augment pickups, a shrinking ring, first to fifteen takedowns), and the **Vale Cup**, a seasonal boarball tournament.
+- **A Book of Deeds**: an achievement journal of cosmetic titles, badge borders, and Renown, with per-zone Chronicles kept by in-world Chronicler NPCs and a lifetime leaderboard.
+- **Professions**: gathering nodes across every zone, crafting stations in town, and deeper trades to discover, feeding a player-driven **World Market** and the **Ravenpost** mail service.
+- **Real multiplayer**: parties, guilds, trading, duels, tap rights, party-split XP, whispers, away status, and a server that owns every combat roll.
 - **Procedural everything**: timber-framed towns, rigged creature families, painted spell icons drawn on canvas, WebAudio sound, biome weather, and real-time shadows. No 3D model files for the world.
-- **Localized into 21 locales** through a deterministic, sim-emits-keys pipeline.
+- **Localized into 22 locales** through a deterministic, sim-emits-keys pipeline.
 - **Headless RL environment** with Gymnasium bindings, reward shaping, and a benchmark mode.
 - **Web3-native**: link a Solana wallet to show your $WOC balance and a cosmetic holder badge, fully optional and non-custodial.
 
 ## Screenshots
 
-![A party gathers outside the apothecary in Eastbrook](docs/screenshots/party-questing.jpg)
+![The Eastbrook town square, campfire and questgivers](docs/screenshots/party-questing.jpg)
 
 | | |
 |:---:|:---:|
 | ![Dusk at the Eastbrook campfire](docs/screenshots/eastbrook-dusk.jpg)<br>*Dusk at the Eastbrook campfire* | ![Elite pulls in the Hollow Crypt](docs/screenshots/hollow-crypt.jpg)<br>*Torch-lit elite pulls in the Hollow Crypt* |
 | ![The restless dead at the ruined chapel](docs/screenshots/restless-dead.jpg)<br>*The restless dead at the ruined chapel* | ![A brawl with Vale Bandits](docs/screenshots/vale-bandits.jpg)<br>*Outnumbered at the bandit camp* |
-| ![Old Greyjaw hunted down on the north road](docs/screenshots/old-greyjaw.jpg)<br>*Old Greyjaw, the rare spawn, run down on the north road* | ![Vendor and bags UI](docs/screenshots/vendor-and-bags.jpg)<br>*Gearing up at Smith Haldren's, with tooltips, bags, and coin* |
-| ![The moongate on the Glimmermere shore](docs/screenshots/glimmermere-moongate.jpg)<br>*The drowned climb out at the Glimmermere moongate* | ![Ysolei on the altar of the Drowned Temple](docs/screenshots/drowned-temple-altar.jpg)<br>*Moonfire and the altar of the Drowned Temple* |
+| ![Old Greyjaw hunted down on the north road](docs/screenshots/old-greyjaw.jpg)<br>*Old Greyjaw, the rare spawn, run down on the north road* | ![Vendor and bags UI](docs/screenshots/vendor-and-bags.jpg)<br>*Gearing up at Trader Wilkes's, with the vendor and bags open* |
+| ![The moongate on the Glimmermere shore](docs/screenshots/glimmermere-moongate.jpg)<br>*The drowned climb out at the Glimmermere moongate* | ![Ysolei on the altar of the Drowned Temple](docs/screenshots/drowned-temple-altar.jpg)<br>*Lunar Tempest and the altar of the Drowned Temple* |
 
 Weather is biome-driven and render-only, so it never touches the deterministic sim:
 
@@ -79,11 +81,30 @@ npm install
 npm run dev        # then open http://localhost:5173 and click Play Offline
 ```
 
-Name your character, pick any of the nine classes, and you start in **Eastbrook Vale** (levels 1-7), a market town ringed by six hubs: wolf runs to the north, boar meadows east, the Webwood west, Mirror Lake northwest, a kobold copper dig southwest, and a ruined chapel of restless dead northeast, with Gorrak's bandit camp to the southeast. The north road climbs a mountain pass into **Mirefen Marsh** (6-13, hub Fenbridge) and on up to **Thornpeak Heights** (13-20, hub Highwatch). The world seed is fixed in `src/main.ts`, so it is the same place every visit.
+Name your character, pick any of the nine classes, and you start in **Eastbrook Vale** (levels 1-7), a market town ringed by six hubs: wolf runs to the north, boar meadows east, the Webwood west, Mirror Lake northwest, a burrower-ridden copper dig southwest, and a ruined chapel of restless dead northeast, with Gorrak's bandit camp to the southeast. The north road climbs a mountain pass into **Mirefen Marsh** (6-13, hub Fenbridge) and on up to **Thornpeak Heights** (13-20, hub Highwatch). The world seed is fixed in `src/main.ts`, so it is the same place every visit.
 
 ### Online, with other players
 
 See [Host your own world](#host-your-own-world-one-command) below to stand up the real client/server game with accounts and persistent characters.
+
+### Desktop app
+
+The Electron desktop shell wraps the same Vite client. Online sign-in is Discord and email only, exactly the web flow: email/password logs in inside the app, and "Continue with Discord" opens your default browser on the `/desktop-login` page, which hands a one-time code back to the app over a `worldofclaudecraft://` deep link that the app exchanges for a normal World of ClaudeCraft session token.
+
+```bash
+npm run electron:dev          # Vite + Electron dev shell
+npm run electron:pack         # local unpacked desktop app
+npm run electron:build        # website-channel installers (self-updating)
+npm run electron:build:steam  # SteamPipe depot layouts (in-app updater off)
+```
+
+Point the shell at a different API with `VITE_DESKTOP_API_ORIGIN`, for example a local server or a staging host:
+
+```bash
+VITE_DESKTOP_API_ORIGIN=http://127.0.0.1:8787 npm run electron:dev
+```
+
+Override the production API origin for staging builds with `VITE_DESKTOP_API_ORIGIN=https://dev.worldofclaudecraft.com` (a BUILD-time value: it is baked into the bundle and stamped into the packaged app, and installed builds ignore it as a runtime env var). Steam is a distribution channel only (the same Electron bundle, uploaded via SteamPipe); there is no Steam sign-in. The full release runbook (signing, notarization, publishing an auto-update, SteamPipe depots, the server deploy) is `docs/desktop-release.md`.
 
 ## Host your own world (one command)
 
@@ -112,7 +133,7 @@ Open http://localhost:5173, choose **Play Online**, create an account, create a 
 What persists and how the server stays in charge:
 
 - **Accounts**: scrypt-hashed passwords and 7-day bearer tokens (`auth_tokens`).
-- **Characters**: up to 10 per account; level, gear, bags, quests, talents, position, and money persist as JSONB in Postgres, saved every 30 seconds, on logout, and on server shutdown. Names are globally unique, letters only, classic style.
+- **Characters**: up to 10 per account; level, gear, bags, bank vault, quests, talents, position, and money persist as JSONB in Postgres, saved every 30 seconds, on logout, and on server shutdown. Names are globally unique, letters only, classic style.
 - **The server is authoritative**: clients stream movement intent and commands at 20 Hz; the server runs the one shared `Sim` and returns interest-scoped snapshots (~120 yd) plus per-player events. Every combat roll, loot drop, quest credit, and vendor transaction resolves server-side. The client is a renderer.
 
 ## Train an agent (headless RL)
@@ -132,13 +153,13 @@ python python/example_random_agent.py
 ```python
 from wow_env import WoWClassicEnv
 
-env = WoWClassicEnv(player_class="warrior")   # warrior or mage
+env = WoWClassicEnv(player_class="warrior")   # any of the nine classes
 obs, info = env.reset(seed=42)
 obs, reward, terminated, truncated, info = env.step(env.action_space.sample())
 env.close()
 ```
 
-- **Observation and action spaces are content-derived.** Query them from the env's `info` reply at startup rather than hardcoding; they grow with the game. Today the action space is `Discrete(44)` (movement, target, attack, the full ability kit, interact, eat/drink) and the observation is a `Box` of 276 floats (self, abilities, target, nearby mobs, nearest interactable, quest progress).
+- **Observation and action spaces are content-derived.** Query them from the env's `info` reply at startup rather than hardcoding; they grow with the game. The action space is a `Discrete` covering movement, target, attack, the full ability kit, interact, and eat/drink; the observation is a `Box` covering self, abilities, target, nearby mobs, the nearest interactable, and quest progress.
 - **Reward** is a weighted sum of per-tick counter deltas (XP, damage dealt and taken, kills, deaths, quest progress, level-ups), tunable per reset. Each `step` applies one action and advances five sim ticks by default, so roughly four decisions per simulated second.
 - **Deterministic by construction.** No wall clock, no `Math.random`. Seed the reset and the episode replays exactly.
 
@@ -162,19 +183,19 @@ More on the token at [worldofclaudecraft.com](https://worldofclaudecraft.com/).
 
 ### The nine classes
 
-Every class uses real vanilla-style mechanics and learns ranked spells across levels 1-20 (Lightning Bolt R2 at 8, R3 at 14, R4 at 20, with high-band abilities like Execute, Kidney Shot, Flash Heal, Stormstrike, and Starfire arriving on their classic level).
+Every class runs on classic-era MMO mechanics implemented from first principles, and learns ranked spells across levels 1-20 (Arc Bolt R2 at 8, R3 at 14, R4 at 20, with high-band abilities like Early Grave, Low Blow, Urgent Prayer, Ancestral Strike, and Skyfall arriving near the top of the band).
 
-- **Warrior**: rage, Heroic Strike (on-next-swing, off-GCD), Battle Shout, Charge, Rend, Thunder Clap, Hamstring, Bloodrage, Overpower (dodge proc).
-- **Paladin**: Seal of Righteousness unleashed by Judgement, Holy Light, Devotion Aura, Blessing of Might, Divine Protection (absorb), Hammer of Justice (stun), Lay on Hands.
-- **Hunter**: ranged Auto Shot (8-35 yd with the classic dead zone), Raptor Strike, Aspect of the Hawk, Serpent Sting, Arcane Shot, Concussive Shot, Mongoose Bite, Wing Clip, and a tameable pet from level 10.
-- **Rogue**: energy and combo points, Sinister Strike, Eviscerate, Backstab (behind, dagger), Gouge, Evasion, Slice and Dice, Sprint.
-- **Priest**: Smite, Lesser Heal, Power Word: Fortitude, Shadow Word: Pain, Power Word: Shield (absorb), Renew (HoT), Mind Blast.
-- **Shaman**: Lightning Bolt, Rockbiter Weapon (imbue), Healing Wave, Earth Shock, Lightning Shield (thorns), Flame Shock.
-- **Mage**: Fireball, Frost Armor, Arcane Intellect, Frostbolt, Conjure Water, Fire Blast, Arcane Missiles (channeled), Polymorph, Frost Nova.
-- **Warlock**: Shadow Bolt, Demon Skin, Immolate, Corruption, Life Tap, Curse of Agony, Drain Life, and seven summonable demons from Imp to Doomguard.
-- **Druid**: Wrath, Healing Touch, Mark of the Wild, Moonfire, Rejuvenation, Thorns, Entangling Roots, Bear Form at 10.
+- **Warrior**: rage, Reaver Strike (on-next-swing, off-GCD), Iron Bellow, Onrush, Deep Gash, Quaking Blow, Hobbling Cut, Blood Toll, Redhand (dodge proc).
+- **Paladin**: Oathbrand unleashed by Verdict, Mending Light, Steadfast Aura, Oath of Iron, Ward of Faith (absorb), Sundering Gavel (stun), Last Rite.
+- **Hunter**: ranged auto-attack (8-35 yd with a classic-style dead zone), Gutting Strike, Harrier's Guise, Venom Barb, Fell Shot, Rattling Shot, Counterfang, Fettering Slash, and a tameable pet from level 10.
+- **Rogue**: energy and combo points, Wicked Slash, Dirt Nap, Craven Thrust (behind, dagger), Eye Jab, Ghostfoot, Cutthroat Tempo, Swift Heels.
+- **Priest**: Smite, Whispered Prayer, Litany of Resolve, Dirge of Decay, Psalm of Warding (absorb), Lingering Grace (HoT), Mindfracture.
+- **Shaman**: Arc Bolt, Stonebound Weapon (imbue), Mending Waters, Earthen Jolt, Thunder Ward (thorns), Cinder Jolt.
+- **Mage**: Cinderbolt, Hoarfrost Mantle, Aether Insight, Rimelance, Waterbind, Cinderfall, Aether Darts (channeled), Bewitch, Icebind.
+- **Warlock**: Gloom Bolt, Fiendhide, Burning Pact, Blackrot, Hard Bargain, Hex of Anguish, Consume, and seven summonable demons from Emberkin to Wraithborn.
+- **Druid**: Wildbolt, Wildmend, Wildward, Lunar Tempest, Wildbloom, Briarguard, Gripping Roots, Bruin Form at 10.
 
-Heals and buffs land on party members, healing can crit, and absorb shields soak damage before health. Spend points across **three talent specs per class** (Arms/Fury/Protection, Balance/Feral/Restoration, and so on); allocation is server-validated and exportable as a build string.
+Heals and buffs land on party members, healing can crit, and absorb shields soak damage before health. Spend points across **three talent specs per class** (Battlecraft/Bloodrush/Ironguard, Moongrove/Wildfang/Groveheart, and so on); allocation is server-validated and exportable as a build string.
 
 ### Dungeons
 
@@ -182,7 +203,7 @@ The Gravecaller storyline runs through four five-player elite instances, and a s
 
 - **The Hollow Crypt** (5 players) beneath the Fallen Chapel: paired elite trash, the Sexton Marrow miniboss, and Morthen the Gravecaller, who drops a Shadow Pulse AoE every ten seconds. The crypt door teleports your party into a private instance copy that resets after five minutes empty.
 - **The Sunken Bastion** (5 players, around level 13, southeast Mirefen): Vael the Mistcaller summons waves of Drowned Thralls at 60% and 30% health.
-- **Gravewyrm Sanctum** (5 players, level 20, beneath Thornpeak): three chambers of elite boneguard and drakonid, Korgath the Bound (enrages below 30%), Grand Necromancer Velkhar, and Korzul the Gravewyrm, where epic weapons drop.
+- **Gravewyrm Sanctum** (5 players, level 20, beneath Thornpeak): three chambers of elite boneguard and scaleguard, Korgath the Bound (enrages below 30%), Grand Necromancer Velkhar, and Korzul the Gravewyrm, where epic weapons drop.
 - **The Drowned Temple** (5 players) through the Glimmermere moongate: a pale, moon-violet instance leading to Choirmother Selthe and then Ysolei, Avatar of the Drowned Moon, who pulses Lunar Tide every nine seconds and summons Moonspawn at 60% and 30%.
 - **The Abandoned Crypt** (solo) in Thornpeak: a quiet keystone-and-diary dive for one whose trail unseals the royal door to **Nythraxis, Scourge of Thornpeak**, a ten-player raid finale fought across three soul wardstones.
 
@@ -201,15 +222,22 @@ Press `G` or the arena button to queue. Matchmaking teleports fighters into a pr
 
 ### Playing together
 
-- **Parties** up to 5: right-click a player and Invite to Party. Members share tap rights and quest credit, split XP with the real vanilla group bonuses (1.166 / 1.3 / 1.43 for 3/4/5), and show up as blips on the minimap. `/p` for party chat, `/roll` to settle loot.
+- **Parties** up to 5: right-click a player and Invite to Party. Members share tap rights and quest credit, split XP with the classic-era group bonuses (1.166 / 1.3 / 1.43 for 3/4/5), and show up as blips on the minimap. `/p` for party chat, `/roll` to settle loot.
 - **Trading**: right-click and Trade. Both sides stage items and money, both must accept, and the swap is atomic and server-validated. Quest items cannot be traded, and walking apart cancels.
 - **Duels**: right-click and Challenge to a Duel. A 3-second countdown, then fight until one side hits 1 hp; the winner is announced zone-wide and running 60 yards away forfeits.
 - **Tap rights and away status**: the first player to damage a mob owns its loot, XP, and quest credit; `/afk` and `/dnd` mark you away with an auto-reply to whispers.
 
 ### World and systems
 
+- **Professions**: gather from ore, herb, and timber nodes seeded across every zone, craft at hub-town stations, and trade the results; there are deeper trades (and an archetype system) to discover in play.
+- **The World Market**: a player-driven auction house for gear, materials, and consumables, browsable from the hub towns.
+- **Ravenpost mail**: send items and coin to other characters, with attachments held safely until claimed.
+- **Guilds**: charters, rosters, ranks, and guild chat.
+- **Daily rewards**: a login streak with escalating chests.
 - **Eating and drinking**: sit to restore over 18 seconds, broken by damage or standing, and yes, you can eat and drink at once.
 - **Vendors** that buy food and water and sell honest white gear, with coin shown in gold, silver, and copper.
+- **A personal bank** (the Gilded Strongbox): bursars in each hub town keep a vault per character, from 24 slots up to 96 with coin-bought expansions, plus bonus slots earned online for a verified email, linked accounts, and referrals.
+- **The Book of Deeds**: an achievement journal (default `Shift+Z`) of quests, kills, clears, and delights, paying out cosmetic titles you can wear on your nameplate, in chat, and on the boards, plus a HUD tracker for the deeds you are chasing, per-zone Chronicles kept by Chronicler NPCs, and a lifetime Renown leaderboard; the public list lives at `/wiki/deeds`.
 - **Mob AI**: wander, proximity aggro by level difference, social pulls, chase, leash and reset, corpse loot, and respawns, with a rare spawn (Old Greyjaw) on a long timer.
 - **Fishing** spots with their own loot tables and rare catches.
 - **Cosmetic skins** rolled at uncommon, rare, and epic rarity, purely for looks.
@@ -225,7 +253,7 @@ Press `G` or the arena button to queue. Matchmaking teleports fighters into a pr
 | `Tab` | cycle nearest enemies. left-click to target, right-click to attack, loot, or talk |
 | `1`-`9`, `0`, `-`, `=` | action bar |
 | `F` | interact (loot a corpse, pick up an object, talk) |
-| `C` `P` `L` `M` `B` `G` | character, spellbook, quest log, world map, bags, arena |
+| `C` `P` `L` `M` `B` `G` `Shift+Z` | character, spellbook, quest log, world map, bags, arena, deeds |
 | `V` / `R` / `Esc` | nameplates, autorun, close windows or clear target |
 
 Touch controls (a movement stick, camera drag, and on-screen action buttons) come up automatically on mobile.
@@ -235,7 +263,7 @@ Touch controls (a movement stick, camera drag, and on-screen action buttons) com
 Three ideas hold the project together:
 
 - **One sim, three hosts.** The same `src/sim/` code runs the offline browser world, the online server, and the RL env. Behavior must be identical everywhere, and the tests exist to keep it that way.
-- **`IWorld` is the only seam.** `src/world_api.ts` defines `IWorld`. The offline `Sim` satisfies it structurally and the online `ClientWorld` implements it by mirroring server snapshots. The renderer and HUD talk only to `IWorld`, never to a concrete world, so a new feature extends the interface first and then both worlds.
+- **`IWorld` is the only seam.** `IWorld` is defined as per-domain facet interfaces under `src/world_api/`, aggregated by `src/world_api.ts`. The offline `Sim` satisfies it structurally and the online `ClientWorld` implements it by mirroring server snapshots. The renderer and HUD talk only to `IWorld`, never to a concrete world, so a new feature extends the matching facet first and then both worlds.
 - **The server is authoritative.** Clients send intent; the server decides outcomes. The client never resolves combat, loot, or economy on its own.
 
 The sim is a fixed 20 Hz tick (`DT = 1/20`), all randomness flows through one seeded `Rng`, and `src/sim/` carries zero DOM, browser, or Three.js imports. That is what lets the same code bundle into a Node env server, an authoritative game loop, and a browser tab without changing a line.
@@ -245,19 +273,20 @@ The sim is a fixed 20 Hz tick (`DT = 1/20`), all randomness flows through one se
 | Path | What it is |
 |---|---|
 | `src/sim/` | Deterministic game core, the source of truth. No DOM or Three dependencies. |
-| `src/sim/content/` | Data as code: the nine classes, abilities, zones, dungeons, items, talents. |
-| `src/render/` | Three.js renderer (procedural geometry, textures, VFX). Reads the world, never mutates it. |
-| `src/game/` | Local input, camera, keybinds, mobile controls, procedural WebAudio. |
-| `src/ui/` | Classic HUD (frames, windows, tooltips, map, floating combat text), procedural icons, i18n. |
-| `src/net/` | Online client: REST auth plus a WebSocket world mirror (`ClientWorld`). |
-| `src/admin/` | Admin dashboard SPA (separate `admin.html` entry). |
+| `src/sim/content/` | Data as code: the nine classes, abilities, zones, dungeons, items, talents, professions, deeds. |
+| `src/` (rest) | Three.js renderer, HUD + styles, input/audio, online mirror, and the admin, guide, and editor SPAs. |
 | `server/` | Authoritative server: HTTP and WS, world loop, Postgres, auth, social, moderation. |
 | `headless/` + `python/` | RL env server (`env_server.ts`) and Python Gym bindings. |
+| `bot/` | Discord bot (roles, relay, activity feed). |
+| `electron/`, `android/`, `ios/` | Desktop (Steam) and native mobile shells. |
 | `tests/` | Vitest suite. |
-| `scripts/` | Asset build plus browser E2E, screenshot, and integration scripts. |
-| `public/` · `docs/` | Static assets (GLB models, textures, HDRIs) and design docs. |
+| `scripts/` | Build, asset, i18n, SFX, screenshot, and browser E2E tooling. |
+| `public/` · `docs/` | Static assets (deployed verbatim to the site) and design docs. |
 
-Most directories carry their own `CLAUDE.md` with local conventions. The full set of project invariants lives in the root [`CLAUDE.md`](CLAUDE.md).
+Most directories carry their own `CLAUDE.md` with local conventions. The full set of
+project invariants lives in the root [`CLAUDE.md`](CLAUDE.md). Codex contributors start
+with [`AGENTS.md`](AGENTS.md) and the [Codex operator guide](docs/codex.md); those files
+route into the same canonical architecture without changing the Claude Code setup.
 
 ## Built like the classics
 
@@ -266,15 +295,23 @@ Combat, leveling, and threat all run on authentic classic-era rules: rage and en
 And almost none of it is a shipped asset. The world is drawn from code:
 
 - Procedural towns, creatures, terrain, water, weather, and real-time shadows, with no 3D model files for the world.
-- Twelve rigged creature families with full walk, attack, cast, sit, and death animations.
+- Rigged creature families with full walk, attack, cast, sit, and death animations.
 - Spell, item, and buff icons painted on canvas at runtime.
-- A complete classic HUD (unit frames, action bars, tooltips, quest log, world map, minimap, floating combat text) and procedural WebAudio for every sound.
+- A complete classic HUD (unit frames, action bars, tooltips, quest log, world map, minimap, floating combat text, the Book of Deeds), sampled spatial/UI sound effects, and a procedural soundtrack.
 
 ## Development
 
+The SFX conformance checks (`npm run sfx:check`) and the audio tests use the bundled
+`ffmpeg-static`/`ffprobe-static` npm packages, so `npm test` needs no system install. The SFX
+Studio and the audio generator scripts shell out to `ffmpeg` on `PATH`, and `npm run gate`
+checks for it up front: install FFmpeg with your platform package manager before running the
+gate or the Studio.
+
 ```bash
 npm test                        # vitest: formulas, combat, AI, quests, all 9 classes, parties, duels, trades, dungeons
+npm run gate                    # complete CI-equivalent contribution gate
 npm run build                   # production web build
+npm run sfx:studio              # local SFX authoring, runtime mix, and production export
 node scripts/smoke_browser.mjs  # warrior end-to-end (needs npm run dev)
 node scripts/smoke_mage.mjs     # mage: casting, polymorph, conjure and drink, death and release
 node scripts/visual_tour.mjs    # screenshot tour of the zone and UI into tmp/
@@ -287,11 +324,14 @@ node scripts/crypt_raid.mjs     # five bots clear the Hollow Crypt (ALLOW_DEV_CO
 
 Logic and unit tests use Vitest. While iterating, run a single file: `npx vitest run tests/sim.test.ts`. The E2E and visual scripts drive real browsers via `puppeteer-core` and need `npm run dev` running (often `npm run server` too). Browser agents can drive movement through `window.__game.controller` instead of simulating held keys, for example `controller.move({ forward: true }, facingRadians)` or compact flags like `{ f: 1, sr: 1 }`.
 
-For the server commands see [Develop online](#develop-online-with-hot-reload) above, [DEPLOY.md](DEPLOY.md) for production, and [CREDITS.md](CREDITS.md) for asset licenses.
+For the server commands see [Develop online](#develop-online-with-hot-reload) above,
+the [SFX Studio tutorial](docs/sfx-studio-tutorial.md) for sound authoring and
+artifact export, [DEPLOY.md](DEPLOY.md) for production, and
+[CREDITS.md](CREDITS.md) for asset licenses.
 
 ## Localization
 
-Every player-visible string resolves through `t()`, and the game ships in **21 locales** (English, two Spanish, two French, English Canada, Italian, German, Simplified and Traditional Chinese, Korean, Japanese, Brazilian Portuguese, Russian, Dutch, Polish, Indonesian, Turkish, Swedish, Vietnamese, and Danish). The sim and server stay language-agnostic: they emit stable keys or English that the client re-localizes at the boundary, which keeps determinism intact. Contributors add English only; the maintainer batch-fills the other locales before each release. The workflow is documented in `docs/i18n-scaling/translation-workflow.md`.
+Every player-visible string resolves through `t()`, and the game ships in **22 locales** (English, two Spanish, two French, English Canada, Italian, German, Simplified and Traditional Chinese, Korean, Japanese, Brazilian Portuguese, Russian, Czech, Dutch, Polish, Indonesian, Turkish, Swedish, Vietnamese, and Danish). The sim and server stay language-agnostic: they emit stable keys or English that the client re-localizes at the boundary, which keeps determinism intact. Contributors add English only; the maintainer batch-fills the other locales before each release. The workflow is documented in `docs/i18n-scaling/translation-workflow.md`.
 
 ## Contributing
 
@@ -309,4 +349,4 @@ Contributions of every kind are welcome: code, translations, bug reports, and do
 
 The code is [MIT licensed](LICENSE), so fork it, remix it, and host your own world.
 
-The bundled third-party art assets (models, textures, HDRIs) keep their own licenses, all CC0 public domain except the MIT water normal maps, documented per pack in [CREDITS.md](CREDITS.md).
+The bundled third-party art assets (models, textures, HDRIs, fonts) keep their own licenses, mostly CC0 public domain, documented per pack in [CREDITS.md](CREDITS.md).

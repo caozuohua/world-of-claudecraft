@@ -1,15 +1,16 @@
 // Economy & Trade overview: coin, vendors, the World Market, and player trading.
-// Systems and direction only, no prices or stock lists (WoW-style altitude).
+// Systems and direction only, no prices or stock lists (classic-guide altitude).
 
-import { t } from '../../ui/i18n';
 import { esc } from '../../ui/esc';
+import { t } from '../../ui/i18n';
 import { hrefFor } from '../routes';
-import { lead, section, p, related } from './ui';
 import type { GuidePage } from './types';
+import { lead, p, related, section } from './ui';
 
 // Heading + one body paragraph each, in reading order.
 const BLOCKS = [
   ['guide.economy.coinTitle', 'guide.economy.coinBody'],
+  ['guide.economy.marksTitle', 'guide.economy.marksBody'],
   ['guide.economy.vendorsTitle', 'guide.economy.vendorsBody'],
   ['guide.economy.buyingTitle', 'guide.economy.buyingBody'],
   ['guide.economy.junkTitle', 'guide.economy.junkBody'],
@@ -19,9 +20,7 @@ const BLOCKS = [
 export const economy: GuidePage = {
   titleKey: 'guide.nav.economy',
   render() {
-    const blocks = BLOCKS
-      .map(([title, body]) => section(title, p(body)))
-      .join('');
+    const blocks = BLOCKS.map(([title, body]) => section(title, p(body))).join('');
     return `
       <article class="guide-article">
         <h1>${esc(t('guide.nav.economy'))}</h1>
@@ -37,8 +36,24 @@ export const economy: GuidePage = {
           <p>${esc(t('guide.economy.marketPricing'))}</p>
         </section>
 
+        <section class="guide-block">
+          <h2>${esc(t('guide.economy.bankTitle'))}</h2>
+          <p>${esc(t('guide.economy.bankBody'))}</p>
+          <p>${esc(t('guide.economy.bankHow'))}</p>
+          <p>${esc(t('guide.economy.bankSlots'))}</p>
+        </section>
+
+        <section class="guide-block">
+          <h2>${esc(t('guide.economy.mailTitle'))}</h2>
+          <p>${esc(t('guide.economy.mailBody'))}</p>
+          <p>${esc(t('guide.economy.mailHow'))}</p>
+        </section>
+
+        ${section('guide.economy.dailyTitle', p('guide.economy.dailyBody'))}
+
         ${related([
           { href: hrefFor('gear'), key: 'guide.nav.gear' },
+          { href: hrefFor('delves'), key: 'guide.nav.delves' },
           { href: hrefFor('social'), key: 'guide.nav.social' },
           { href: hrefFor('how-to-play'), key: 'guide.nav.howToPlay' },
         ])}

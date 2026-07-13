@@ -32,6 +32,7 @@ import { recalcPlayerStats } from '../entity';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
 import { type Aura, type AuraKind, CAST_COMPLETE_EPS, DT, type Entity } from '../types';
+import { tickThornsCooldown } from './thorns_charge';
 
 // Friendly NPCs reject hostile control / debuff auras: any aura of these kinds is
 // stripped on the NPC's tick (cleanseFriendlyNpcAuras). Moved here with that method
@@ -46,6 +47,9 @@ const FRIENDLY_NPC_REJECTED_AURA_KINDS: ReadonlySet<AuraKind> = new Set([
   'polymorph',
   'attackspeed',
   'sunder',
+  'bleed_vuln',
+  'corrode',
+  'faerie_fire',
   'spellvuln',
   'vulnerability',
   'tongues',
@@ -55,6 +59,10 @@ const FRIENDLY_NPC_REJECTED_AURA_KINDS: ReadonlySet<AuraKind> = new Set([
 
 export function isRejectedFriendlyNpcAura(aura: Aura): boolean {
   return FRIENDLY_NPC_REJECTED_AURA_KINDS.has(aura.kind);
+}
+
+function pctValue(value: number): number {
+  return value > 1 ? value / 100 : value;
 }
 
 export function updateRegen(ctx: SimContext, p: Entity, _meta: PlayerMeta): void {
@@ -68,7 +76,10 @@ export function updateRegen(ctx: SimContext, p: Entity, _meta: PlayerMeta): void
       p.resource = Math.min(p.maxResource, p.resource + Math.round(regen));
     }
   } else if (p.resourceType === 'energy') {
-    p.resource = Math.min(p.maxResource, p.resource + 20);
+    // Feral Instinct (cat form) grants a buff_energyregen aura (value = fraction, 1 = +100%).
+    let regen = 20;
+    for (const a of p.auras) if (a.kind === 'buff_energyregen') regen *= 1 + a.value;
+    p.resource = Math.min(p.maxResource, p.resource + Math.round(regen));
   } else if (p.resourceType === 'rage' && !p.inCombat) {
     p.resource = Math.max(0, p.resource - 2);
   }
@@ -95,12 +106,24 @@ export function updateRegen(ctx: SimContext, p: Entity, _meta: PlayerMeta): void
 
 export function updateTimers(p: Entity): void {
   p.gcdRemaining = Math.max(0, p.gcdRemaining - DT);
+  p.potionCdRemaining = Math.max(0, p.potionCdRemaining - DT);
   p.fiveSecondRule += DT;
   p.combatTimer += DT;
   for (const [k, v] of p.cooldowns) {
     const nv = v - DT;
     if (nv <= 0) p.cooldowns.delete(k);
     else p.cooldowns.set(k, nv);
+  }
+}
+
+// Combo points are character-bound (retail-style): they survive target swaps and
+// kills, so this per-tick check is the only passive decay. awardCombo (sim.ts)
+// restamps comboUntil on every point built; spending, player death, and the
+// arena/fiesta resets clear the pool explicitly.
+export function updateComboExpiry(ctx: SimContext, p: Entity): void {
+  if (p.comboPoints > 0 && ctx.time >= p.comboUntil) {
+    p.comboPoints = 0;
+    ctx.emit({ type: 'comboPoint', points: 0, pid: p.id });
   }
 }
 
@@ -114,16 +137,30 @@ export function cleanseFriendlyNpcAuras(ctx: SimContext, e: Entity): void {
 }
 
 export function updateAuras(ctx: SimContext, e: Entity): void {
-  if (e.dead) return;
+  if (e.dead) {
+    e.stealthed = e.auras.some((a) => a.kind === 'stealth');
+    return;
+  }
   let statsDirty = false;
   for (let i = e.auras.length - 1; i >= 0; i--) {
     const a = e.auras[i];
     a.remaining -= DT;
+    // charge-limited thorns (Lightning Shield): age its internal cooldown so the
+    // next melee hit can reflect once it elapses. No-op for ungated thorns.
+    if (a.kind === 'thorns') tickThornsCooldown(a);
     if (a.tickInterval) {
       a.tickTimer = (a.tickTimer ?? a.tickInterval) - DT;
       if (a.tickTimer <= CAST_COMPLETE_EPS) {
         a.tickTimer += a.tickInterval;
         if (a.kind === 'dot') {
+          let tickDamage = a.value;
+          if (a.school === 'physical') {
+            let bleedAmp = 0;
+            for (const targetAura of e.auras) {
+              if (targetAura.kind === 'bleed_vuln') bleedAmp += pctValue(targetAura.value);
+            }
+            if (bleedAmp > 0) tickDamage = Math.round(tickDamage * (1 + bleedAmp));
+          }
           ctx.emit({
             type: 'spellfx',
             sourceId: a.sourceId,
@@ -134,13 +171,35 @@ export function updateAuras(ctx: SimContext, e: Entity): void {
           ctx.dealDamage(
             ctx.entities.get(a.sourceId) ?? null,
             e,
-            a.value,
+            tickDamage,
             false,
             a.school,
             a.name,
             'hit',
             true,
+            undefined,
+            // Periodic (DoT) ticks are not a direct attack: they must not walk a
+            // mob's leash anchor, so a DoT-kited mob still leashes home.
+            false,
           );
+          if (a.leechPct !== undefined) {
+            const src = ctx.entities.get(a.sourceId);
+            if (src && !src.dead) {
+              const healed = Math.min(Math.round(tickDamage * a.leechPct), src.maxHp - src.hp);
+              if (healed > 0) {
+                src.hp += healed;
+                ctx.emit({
+                  type: 'heal2',
+                  sourceId: src.id,
+                  targetId: src.id,
+                  amount: healed,
+                  crit: false,
+                  ability: a.name,
+                });
+                ctx.healingThreat(src, src, healed);
+              }
+            }
+          }
           if (e.dead) return;
         } else if (a.kind === 'hot') {
           const healed = Math.min(Math.round(a.value * ctx.healingTakenMult(e)), e.maxHp - e.hp);
@@ -167,11 +226,16 @@ export function updateAuras(ctx: SimContext, e: Entity): void {
       e.auras.splice(i, 1);
       ctx.applyNonPlayerStatAura(e, a, -1);
       ctx.emit({ type: 'aura', targetId: e.id, name: a.name, gained: false });
-      if (a.kind.startsWith('buff') || a.kind.startsWith('form')) statsDirty = true;
+      // debuff_ap is the one non-buff kind recalcPlayerStats folds, so it must
+      // mark stats dirty on expiry or the AP cut would persist after the fade.
+      if (a.kind.startsWith('buff') || a.kind.startsWith('form') || a.kind === 'debuff_ap')
+        statsDirty = true;
     }
   }
   if (statsDirty && e.kind === 'player') {
     const meta = ctx.players.get(e.id);
-    if (meta) recalcPlayerStats(e, meta.cls, meta.equipment, ctx.playerMods(meta));
+    if (meta)
+      recalcPlayerStats(e, meta.cls, meta.equipment, ctx.playerMods(meta), meta.equipmentInstance);
   }
+  e.stealthed = e.auras.some((a) => a.kind === 'stealth');
 }

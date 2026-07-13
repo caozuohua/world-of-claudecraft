@@ -151,6 +151,22 @@ export const pl_PL: EnTranslations = {
     }
   },
   "hudChrome": {
+    "spectate": {
+      "banner": "Obserwujesz {name}"
+    },
+    "readyCheck": {
+      "prompt": "{name} rozpoczyna sprawdzenie gotowości. Czy wszystko gotowe?",
+      "ready": "Gotowość",
+      "notReady": "Brak gotowości",
+      "result": "Sprawdzenie gotowości: {ready} gotowych, {notReady} niegotowych, {noResponse} bez odpowiedzi.",
+      "notInPartyError": "Aby rozpocząć sprawdzenie gotowości, musisz należeć do grupy.",
+      "inProgressError": "Sprawdzenie gotowości już trwa."
+    },
+    "death": {
+      "resurrectAtCorpse": "Odrodź się przy zwłokach",
+      "resurrectAtHealer": "Blady Strażnik (Myto Strażnika)",
+      "spiritHealerAlive": "Blady Strażnik czuwa nad umarłymi. Ty wciąż jesteś wśród żywych."
+    },
     "emotes": {
       "wave": "Pomachaj",
       "laugh": "Hehe",
@@ -173,6 +189,317 @@ export const pl_PL: EnTranslations = {
     "emoteEditor": {
       "title": "Emotki",
       "done": "Gotowe"
+    },
+    "dailyRewards": {
+      "title": "Codzienne nagrody",
+      "close": "Zamknij codzienne nagrody",
+      "loading": "Ładowanie codziennych nagród...",
+      "error": "Nie udało się załadować codziennych nagród.",
+      "intro": "Trzymaj wystarczająco dużo WOC w zweryfikowanym portfelu, aby odblokować codzienne nagrody. Zdobywaj punkty dzięki jednemu codziennemu losowaniu i zmieniającym się zadaniom, a następnie wspinaj się w codziennej tabeli wyników, aby zdobyć udział w puli nagród.",
+      "disclaimer": "Cena WOC może zmieniać się szybko. Zalecamy trzymanie więcej niż minimalne 20 USD, aby zwykłe wahania ceny nie odcięły ci dostępu. To nie jest porada finansowa.",
+      "prize": "Pula nagród",
+      "reset": "Reset",
+      "endsIn": "Kończy się za {time}",
+      "remainingLessThanMinute": "<1 min",
+      "remainingMinutes": "{minutes} min",
+      "remainingHoursMinutes": "{hours} godz. {minutes} min",
+      "score": "Wynik",
+      "walletValue": "Wartość portfela (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "Nieznane",
+      "spinTitle": "Codzienne losowanie",
+      "spinDialogTitle": "Losowanie codziennej nagrody",
+      "spinClose": "Zamknij codzienne losowanie",
+      "spinReady": "Jedno losowanie jest gotowe.",
+      "spinClaimed": "Odebrano: +{points} pkt.",
+      "spinResult": "+{points} pkt",
+      "spinButton": "Zakręć",
+      "tasks": "Zadania",
+      "taskMultiplier": "mnożnik x{multiplier}",
+      "pointsGained": "Zdobyto {points} pkt. codziennych nagród.",
+      "showChestButton": "Pokaż skrzynię",
+      "hideChestButton": "Ukryj skrzynię",
+      "hideChestConfirmTitle": "Ukryć skrzynię codziennych nagród?",
+      "hideChestConfirmBody": "To usuwa skrót skrzyni z twojego HUD-u. Nagrody, uprawnienia i ten panel pozostają dostępne; skrót możesz przywrócić w Opcjach.",
+      "hideChestConfirmOk": "Ukryj skrzynię",
+      "hideChestConfirmCancel": "Anuluj",
+      "leaderboard": "Codzienna tabela wyników",
+      "totalPlayer": "{count} gracz dzisiaj",
+      "totalPlayers": "{count} graczy dzisiaj",
+      "history": "Poprzedni zwycięzcy",
+      "noLeaders": "Jeszcze brak punktów.",
+      "noHistory": "Jeszcze brak wypłat.",
+      "walletConnectTitle": "Zweryfikuj portfel",
+      "walletConnectBody": "Zweryfikuj portfel Solana z WOC, aby odblokować codzienne nagrody.",
+      "walletConnectButton": "Zweryfikuj portfel",
+      "walletHoldTitle": "Trzymaj WOC",
+      "walletHoldBody": "Trzymaj co najmniej {amount} USD w WOC, aby odblokować codzienne nagrody.",
+      "walletPriceBody": "Wycena WOC jest obecnie niedostępna. Sprawdź ponownie za chwilę.",
+      "reason": {
+        "eligible": "Nagrody odblokowane.",
+        "no_wallet": "Podłącz portfel z co najmniej 20 USD w WOC.",
+        "under_minimum": "Portfel jest poniżej minimum 20 USD w WOC.",
+        "price_unavailable": "Cena WOC jest niedostępna, nagrody są tymczasowo zablokowane.",
+        "banned": "Masz zakaz udziału w codziennych nagrodach. Powód: {reason}"
+      }
+    },
+    "wocStore": {
+      "title": "Sklep WOK",
+      "close": "Zamknij sklep WOC",
+      "tabsLabel": "Sekcje sklepu WOC",
+      "storeTab": "Sklep",
+      "rewardsTab": "Codzienne nagrody",
+      "loading": "Ładowanie sklepu WOC...",
+      "error": "Sklep WOC jest obecnie niedostępny. Spróbuj ponownie wkrótce.",
+      "balance": "Saldo Claudium",
+      "buyClaudium": "Kup Claudium",
+      "owned": "Posiadane",
+      "needMoreTitle": "Potrzeba więcej Claudium",
+      "needMoreBody": "Potrzebujesz {shortfall} więcej Claudium, aby kupić {item}.",
+      "cancel": "Anuluj",
+      "confirmTitle": "Potwierdź zakup kosmetyków",
+      "confirmBody": "Kupić {item} za {cost} Claudium?",
+      "confirmPurchase": "Kup",
+      "priceChanged": "Cena uległa zmianie przed sfinalizowaniem zakupu. Przejrzyj odświeżoną cenę i potwierdź ponownie.",
+      "armoryEyebrow": "Sezon 1",
+      "armoryTitle": "Zbrojownia",
+      "armoryBody": "Limitowane skórki broni ze Zbrojowni Sezonu 1. Dotyczy całego konta, ma wyłącznie charakter kosmetyczny i jest pokazywany wszystkim wokół Ciebie.",
+      "collectionLine": "{collection} Kolekcja",
+      "collections": {
+        "guildmark": "Znak Gildii",
+        "emberwrought": "Wykuty w żarze",
+        "hoarfrost": "Szron",
+        "fallen_star": "Upadła Gwiazda"
+      },
+      "skins": {
+        "guildmark_arming_sword": {
+          "name": "Miecz zbrojny Guildmark",
+          "look": "Ostrze ze stali oksydowanej, jelec typu fishtail z brązu, rękojeść ze skóry w kolorze turkusowym, mały wytłoczony znak gildii.",
+          "lore": "Tam, gdzie kute ostrze jest anonimowe, to jest sygnowane. Płatnerz zyskuje prawo do zatopienia swojego znaku w ricasso tylko wtedy, gdy Kupiec z Rynku Światowego poręczy za jego stal, a znak Smitha Haldrena zostanie poręczony. Zanieczyszczona wilgocią Doliny, zrównoważona jak włos. Za znaczek płacisz tyle samo co za miecz, a warto."
+        },
+        "brasscap_axe": {
+          "name": "Topór mosiężny",
+          "look": "Wiertło ze stali polerowanej, skuwka i langety z mosiądzu na trzonku z lakierowanego jesionu, schludne opakowanie, pieczątka wytwórcy.",
+          "lore": "Wybity topór to przechwałka, którą możesz się pochwalić. Mosiężna czapka i langety są w połowie zbroją, w połowie charakterystyczną: chronią rękojeść przed pęknięciem i odbijają światło tawerny, więc wszyscy wiedzą, że kupiłeś dzieło płatnerza Hode'a, a nie podarunek milicji. „Jeśli się przetnie, sprzedam” – mówi kowal Wysokiej Straży. Ten tnie."
+        },
+        "tempered_flanged_mace": {
+          "name": "Buzdygan z hartowanym kołnierzem",
+          "look": "Główka z sześcioma kołnierzami, z hartowanej niebieskiej stali, mosiężny kołnierz i głowica, rękojeść skórzana w kolorze wina czerwonego.",
+          "lore": "Sześć kołnierzy z oksydowanej, hartowanej stali, każdy szlifowany w celu otwarcia hełmu, zamkniętych z mosiądzu i owiniętych skórą w kolorze wina. Płatnerze królestwa nie produkują brzydkiej broni, nawet jeśli praca jest brutalna. Ten został zamówiony na Rynku Światowym, a nie ściągnięty ze stojaka; gdzieś jest księga z nazwiskiem dumnego kupującego i kwotą, jaką zapłacił za niego Hode."
+        },
+        "guildmark_dirk": {
+          "name": "Guildmark Dirk",
+          "look": "Smukły sztylet ze stali hartowanej, jelca i nakrętka z brązu, rękojeść z ciemnozielonego sznurka, wytłoczony znak.",
+          "lore": "To, co nosi człowiek stworzony, gdy miecz zostaje w domu: smukły, hartowany, z tym samym znakiem, który świadczy o pełnym ostrzu, noszony na pasku jak sygnet z krawędzią. Zaniżone dla wszystkich, z wyjątkiem tych, którzy potrafią przeczytać dowód płatnerza. Kwatermistrz Bree trzyma ich szufladę w Wysokiej Straży dla oficerów, którzy zasłużyli na szacunek muru."
+        },
+        "brasscrown_staff": {
+          "name": "Chodząca laska z mosiężną koroną",
+          "look": "Laska z twardego drewna zwieńczona toczonym mosiężnym zwieńczeniem w kształcie korony, mosiężna skuwka, pasek z barwionej skóry.",
+          "lore": "Wykonany z sezonowanego twardego drewna i zwieńczony mosiężnym zwieńczeniem, odlanym przez kowali z Eastbrook w setkach, ale doskonały w każdym przypadku. Należy do tych podróżników, którzy chcą być traktowani poważnie zarówno przy bramie Fenbridge, jak i przy murze Wysokiej Straży. Laska, która tak naprawdę nigdy nie potrzebowała chodzić; barwiona opaska pasuje do płaszcza, którego cenę można odgadnąć."
+        },
+        "lacquered_wand": {
+          "name": "Lakierowany drążek",
+          "look": "Smukła różdżka lakierowana w kolorze głębokiej czerwieni, dwie polerowane mosiężne opaski, mała zaokrąglona mosiężna końcówka.",
+          "lore": "Głęboko czerwony lakier w siedmiu płaszczach pacjenta, dwukrotnie przepasany polerowanym mosiądzem: rodzaj różdżki, którą mag z żywopłotu kupuje na Rynku Światowym, gdy zacznie pobierać prawdziwe monety i chce na nie patrzeć. Przewodzi Światło nie lepiej niż kij brzozowy. Ale błyszczy wspaniale na ladzie Kupca i zawsze wierzono w połowę pomniejszej magii."
+        },
+        "fletcher_s_guild_bow": {
+          "name": "Łuk Gildii Fletchera",
+          "look": "Łuk refleksyjny z lakierowanego orzecha włoskiego, końcówki ramion z mosiądzu, woskowany lniany sznurek, na podstopnicy pieczęć cechowa.",
+          "lore": "Najbliższą rzeczą, jaką królestwo ma do gildii, jest pieczęć łucznika na płycie, obietnica dotycząca tego, co jest w środku, sposobu, w jaki winiarz pieczętuje beczkę. Lakierowany orzech, mosiądz na końcach kończyn, woskowany lniany sznurek, który nie strzępi się podczas deszczu Mirefen. Każdy joint przemawia za ceną. Narysuj go raz obok Wdowiego Gąszczu, a argument wygra."
+        },
+        "cinderbrand_sword": {
+          "name": "Cinderbrand",
+          "look": "Ostrze z ciemnej kutej stali, pełniejsze, wypełnione świecącymi bursztynowo-pomarańczowymi runami, pęknięciami termicznymi i tlącym się klejnotem w jelcu.",
+          "lore": "Pierwsze ostrze zgaszone nie w wodzie, ale w Błogosławionym Żarze zgarniętym z Burzowej Krainy, węglu, jak przysięgają kowale Wysokiej Straży, „płoną błękitem i czystością, ponieważ góra pamięta swoją starą przysięgę”. Włożony w pełnię, ten ogień tli się na pomarańczowo i nie gaśnie; runy pozostają ciepłe w gołej dłoni podczas najzimniejszej nocy na ścianie. Cinderbrand nigdy nie potrzebuje oświetlenia. Po prostu odmawia wyjścia."
+        },
+        "emberbite_axe": {
+          "name": "Żar",
+          "look": "Topór z poczerniałego żelaza z żarno-pomarańczowymi pęknięciami świecącymi przez wędzidło, klejnot z węgla kamiennego, smugi ciepła.",
+          "lore": "Płatnerz Hode włożył w serce wędzidła żywy węgiel z górskiego ognia, dzięki czemu krawędź nigdy tak naprawdę nie stygnie pomiędzy uderzeniami. Pęknięcia oddychają pomarańczowo podczas downswingu, jakby uderzenie obudziło coś, co pierwsza kuta pozostawiła uśpione w żelazie. Mówią, że żywiołak Burzowej Krainy oddał za to żar; mówią bardzo wiele rzeczy w Wysokiej Straży, gdy wieje wiatr."
+        },
+        "smoulderfall_mace": {
+          "name": "Tlący się upadek",
+          "look": "Kołnierze z ciemnego żelaza świecą na pomarańczowo wzdłuż wewnętrznych pęknięć, niczym klejnot ze stopionym rdzeniem w głowie.",
+          "lore": "Buzdygan, który ma własne ognisko: kamień o roztopionym rdzeniu, odłupany z pieczęci Sanctum, „wykuty ogniem górskim”, świecący w głowie. Kołnierze pozostają ciepłe w dotyku i cieplejsze w miejscu lądowania; Sierżant Wysokiej Straży przysięga, że ​​uderzenie nim pozostawia siniak, który świeci słabo aż do rana. Górski ogień w końcu stworzony do rozbijania, a nie uszczelniania."
+        },
+        "ashspark_dagger": {
+          "name": "Ashspark Shiv",
+          "look": "Krótkie, poczerniałe ostrze z żyłkami żarzącej się pomarańczy, maleńkim tlącym się klejnotem w głowicy, popiołem i iskrą.",
+          "lore": "Ostrze z zaułka z ogniem górskim przemyconym do kamienia głowicy, cichy żart płatnerza: nawet kieszonka może pomieścić żar z pierwszej kuźni. Czernione, z pomarańczowymi żyłkami, w pochwie zawsze odrobinę za ciepłe. Narysuj go w ciemności pod Wysoką Strażą, a blask oświetli twoją dłoń na tyle, aby znaleźć lukę w męskiej gardzie."
+        },
+        "forgeheart_staff": {
+          "name": "Laska Forgeheart",
+          "look": "Okuta żelazną laską zwieńczona żarzącym się żarzącym się rdzeniem w klatce, runy żaru wznoszą się w górę drzewca, wznosząc się blaskiem ciepła.",
+          "lore": "Żywy węgiel górskiego ognia zamknięty w żelaznej klatce w koronie. Mistrz Caddis nazywa to dowodem na to, że ogień z pierwszej odkuwki może służyć, a nie tylko pieczętować. Gorący blask unosi się z niego w postaci cienkiej, niekończącej się wstęgi; Mag, który go nosi, nigdy nie chce kuźni ani ogniska. Żar, szepczą, został zaczerpnięty z oddechu Voskara Żaru Skrzydła i od tego czasu nie ostygł."
+        },
+        "emberwrought_wand": {
+          "name": "Wykuta w żarze różdżka",
+          "look": "Różdżka z poczerniałego metalu zakończona żarzącym się węglem w żelaznych pazurach, włoskowatymi pęknięciami termicznymi, ciepłym wewnętrznym światłem.",
+          "lore": "Różdżka, która nazwała stopień. Kiedy płatnerz Wysokiej Straży po raz pierwszy włożył węgiel górskiego ognia w żelazne szpony i sprawił, że odpowiedział śmiertelnej dłoni, nawet Kapłan Światła przestali nazywać to herezją i zaczęli nazywać to użytecznym. Ciepły, cierpliwy i cicho niebezpieczny: żar na końcu płonął nieprzerwanie, odkąd jego właściciel zaczerpnął tchu."
+        },
+        "cinderlatch_crossbow": {
+          "name": "Cinderlatch",
+          "look": "Kusza z poczerniałej stali, żarząco-pomarańczowy blask sączący się z pęknięć w pałce, tlący się węgiel w rumplu.",
+          "lore": "Najdziwniejszy z wykutych w węglu: ogień góry wlał się do maszyny. Pomarańcza wycieka z pęknięć w drążku, a tlący się węgiel w rumplu zapobiega usztywnieniu sznurka w zimnie Thornpeak lub wilgoci w Mirefen. Jego śruby opuszczają rowek już ciepły i lądują cieplej. Odpowiedź myśliwego na ścianę, gdzie wróg też nie czuje zimna."
+        },
+        "ice_fang_sword": {
+          "name": "Lodowy Kieł",
+          "look": "Zakrzywione ostrze bladego lodowatego lodu, postrzępione kryształy szronu wzdłuż grzbietu, świecący cyjanowy zamrożony rdzeń w pełniejszym soplowym jelcu.",
+          "lore": "Okręt flagowy gatunku mrożonego i przedmiot, po który każdy kolekcjoner sięga jako pierwszy. Lodowy Kieł został wyrzeźbiony, a nie sfałszowany, z kła lodowca pokrywającego Cierniowy Szczyt nad Wysoką Strażą, a jego cyjanowe jądro płonęło zimno niczym światło z Glimmermere. To samo powietrze, które przecina. Strażnik muru przysięga, że ​​jeden żołnierz niósł go tej nocy, gdy wysokie śniegi powstrzymywały Kult Wyrm, i „kupił mur na zimę”."
+        },
+        "glaciersplit_axe": {
+          "name": "Rozpad lodowca",
+          "look": "Głowa z przezroczystego błękitnego lodowca, popękane wnętrze świecące na cyjan, najeżone kryształy szronu, trzonek unoszący się w powietrzu zimnej pary.",
+          "lore": "Wyciosany z błękitnego serca lodowca Thornpeak, gdzie dwa wieki lodu wypierały chłód, aż zaczął samoistnie świecić. Unosi parę nawet w stanie spoczynku, a szczelina podczas lądowania to szczelina pod grzbietem Podchodyer. Highwatch oddaje swój upadek na lód tam w górze; więc jest to broń mająca na celu powstrzymanie odwilży i tego, co odwilż ma obudzić."
+        },
+        "rimecrusher_mace": {
+          "name": "Kruszarka rymów",
+          "look": "Gromada postrzępionych kryształków lodu wokół świecącego cyjanowego rdzenia, szron pełzający po srebrzystym trzonku.",
+          "lore": "Nie wyrzeźbiony, ale wyhodowany: lód Cierniowego Szczytu owijał się wokół zimnego cyjanowego jądra, aż stwardniał tak mocno, jak najlepsza stal Hode'a. Szron pełza po posrebrzanej rękojeści w stronę dłoni i nigdy do końca nie dociera. W miejscu uderzenia woda zamarza; gdzie spoczywa, ziemia bieleje. Śmiertelnie zimno szczytów, tak małych, że można nimi kołysać się na rzeczach wspinających się po ścianach."
+        },
+        "frostbite_dagger": {
+          "name": "Igła Rimowa",
+          "look": "Okropnie cienki sztylet z przejrzystego, błękitnego lodu, świecąca cyjanowa żyłka pośrodku, igłowe kryształy szronu, rękojeść szronu.",
+          "lore": "Cienka jak wstrzymany oddech i dwa razy zimniejsza: odłamek lodowca Thornpeak szlifowany w pojedynczą świecącą żyłkę, tak ostrą, że rana zostaje zamrożona, zanim krew zdąży płynąć. Jego nazwa została zapożyczona od chłodu grobowego, który zmarli niosą ze szczytów. Nigdy nie wymaga ostrzenia; Lód nie tępi, Loremaster Caddis zauważa sucho, on tylko czeka."
+        },
+        "hoarfrost_vigil_staff": {
+          "name": "Szronowe czuwanie",
+          "look": "Posrebrzana laska zwieńczona unoszącym się w powietrzu, wolno obracającym się odłamkiem świecącego błękitnego lodu, promieniującymi kryształami i zimną parą.",
+          "lore": "Laska straży, która nigdy nie śpi na ścianie Wysokiej Straży. Jego koroną jest odłamek cyjanowego smolistego lodu, który unosi się na wodzie i obraca się powoli, z własnej woli: zawsze, przysięga strażnik, w stronę zimna gromadzącego się pod szczytami. Niesienie Wigilii oznacza pełnienie dwustu lat straży w ciągu jednej nocy i przyrzeczenie, że nie odwrócimy wzroku."
+        },
+        "everwinter_wand": {
+          "name": "Odłamek Wiecznej Zimy",
+          "look": "Pojedynczy kolec świecącego błękitnego lodowca, szron wyrastający ze srebrnego kołnierza, lekka zimna mgła.",
+          "lore": "Mówi się, że kolec świecącego lodu lodowcowego wyłamał się z głębokiej tarn pod Sanctum, gdzie górski chłód ma swoje zęby. Szron kwitnie bez przerwy ze srebrnego kołnierza i nigdy nie topnieje, ani przez ogień, ani przez lato. Mag trzymają go blisko ze względu na zimno, jakie zapewnia im praca, i trzymają go daleko w nocy, gdy wydaje się, że pochyla się w stronę krypty Nythraxis, i słuchają."
+        },
+        "winterbite": {
+          "name": "Ukąszenie zimy",
+          "look": "Posrebrzana stal i łuk z błękitnego lodu, świecący cyjanowy zamrożony rdzeń w pionie, strzała z cięciwą z litego lodu i zimnej pary.",
+          "lore": "Łuk ze srebrzonej stali i lodu Cierniowego Szczytu, jego pion oświetlony zimnym cyjanowym rdzeniem, który przytrzymuje strzałę na cięciwie. Łączy szyb z litego lodu lodowcowego, który odnawia każde zaciągnięcie; łucznik nie nosi na ścianie kołczanu, tylko chłód. Wysoka Straż utrzymała Podchodyer Ridge podczas oblężenia z kimś podobnym: jednym łucznikiem, jak mówią, i strzałami na całą zimę, które zawsze tam były."
+        },
+        "solheim_sword": {
+          "name": "Solheim, Ostatnie światło świtu",
+          "look": "Wielki miecz wykuty z upadłej gwiazdy, rdzeń ze stopionego złota rozłupujący ostrze, kosmicznie czarna stal o krawędziach w świetle gwiazd, złote odłamki krążące wokół osłony, wstążka zorzy.",
+          "lore": "Kiedy gwiazda spadła z zachodniego nieba i „pęknęła niczym kuźnia” za Wdowim Gąszczem, brat Aldric wyciągnął jej wciąż tlące się serce z krateru Mirefen i błagał kowali królestwa, aby wykonali „rzecz, która nie należy do tego świata”. Zrobili z niego jeden wielki miecz: Solheim. Jego rdzeń ze stopionego złota rozłupuje kosmiczne czarne ostrze niczym świt rozdzierający nocne niebo, a odłamki gwiezdnego metalu krążą wokół strażnika po niewytyczonych ścieżkach. Tylko jeden został kiedykolwiek sfałszowany. Nie będzie innego."
+        },
+        "skyrender_axe": {
+          "name": "Skyrender, Rana Firmamentu",
+          "look": "Głowa niczym rozdarty kawałek nocnego nieba, pęknięcia stopionego złota i ryciny konstelacji, unoszące się w powietrzu odłamki światła gwiazd, migocząca zorza polarna wzdłuż krawędzi.",
+          "lore": "Pobity z krawędzi krateru, gdzie upadła gwiazda wyrwała odbicie nieba z Mirefenu i pozostawiła ranę, która wciąż paruje. Głowa wygląda jak kawałek rozdartej nocy: pęknięcia stopionego złota, konstelacje, których żaden uczony z Wysokiej Straży nie jest w stanie nazwać, zorza krwawiąca z krawędzi przy każdym zamachu. Brat Aldric pobłogosławił go i nie chciał go dotknąć. Podnieść go oznacza utrzymać dziurę, którą pozostawiło niebiosa."
+        },
+        "starfall_mace": {
+          "name": "Upadek gwiazd, Sąd niebios",
+          "look": "Uwięziony rdzeń gwiazdy ze stopionego złota otoczony orbitującymi fragmentami, kosmoczarne kołnierze poprzetykane światłem gwiazd, zorza wylewająca się ze szwów.",
+          "lore": "Jądro gwiazdy złapane na chwilę przed śmiercią, otoczone spadającymi wraz z nim gruzami, zamrożone o cal od zapomnienia. Jego kosmiczne czarne kołnierze wypełniają uwięzione światło gwiazd, a gdy jest podniesiona, ze szwów wylewa się zorza polarna. Stare Kapłan Światła nazywały spadającą gwiazdę wyrokiem, werdyktem wydanym z góry, że żadna tarcza nie jest w stanie zatrzymać, i nazwały ją na cześć tej, która spadła na Mirefen."
+        },
+        "astravyr_dagger": {
+          "name": "Astravyr, Kieł Upadłej Gwiazdy",
+          "look": "Kawałek upadłej gwiazdy, świecąca stopionym złotem krawędź kosmoczarnego metalu, jasny pyłek gwiazdy krążący wokół głowicy, cienki ślad zorzy polarnej.",
+          "lore": "Najmniejszy kawałek gwiazdy, który Aldric wyciągnął z krateru i według niektórych najniebezpieczniejszy. Pojedynczy odłamek tego nieziemskiego serca, jego stopione złoto na krawędziach na kosmicznym czarnym metalu, samotny pyłek gwiazdy krążący wokół głowicy niczym księżyc, który utracił swój świat. Prawie nic nie waży i rozkłada prawie wszystko. Wystarczająco mały, aby się ukryć, wystarczająco jasny, aby znaleźć go w ciemności dzięki własnemu światłu."
+        },
+        "cosmarch_staff": {
+          "name": "Cosmarch, Iglica Nieskończonej Pustki",
+          "look": "Orbitująca gromada złotych odłamków gwiazd wokół stopionego złotego rdzenia, wyrytych konstelacjami czarnego kosmosu, wstęg zorzy polarnej wijących się w górę.",
+          "lore": "Drążek gwiezdnego metalu zwieńczony rdzeniem ze stopionego złota i pierścieniem złotych odłamków krążących wokół niego po powolnej, nieskończonej orbicie: mały kosmos ozdobiony konstelacjami, które nie pasują do nieba nad Thornpeak. Aurora wije się jak dym, który zapomniał się unieść. Ci, którzy go nosili, twierdzili, że czuli przepływającą przez niego próżnię, tak jak Ysolei zwyczajnie „pije światło księżyca”: cierpliwa, zimna i patrząca wstecz."
+        },
+        "emberwish_wand": {
+          "name": "Żar Żar, Okruch Umierającego Słońca",
+          "look": "Schwytany pyłek umierającej gwiazdy ze stopionego złota otoczony krążącymi na orbicie iskrami, kosmoczarny trzonek wyryty świecącymi konstelacjami.",
+          "lore": "Nie sama upadła gwiazda, ale ostatni pyłek umierającej: pojedynczy żar ze stopionego złota już zgasłego słońca, spowity iskrami, które były jego ostatecznym światłem. Na jego kosmicznym czarnym drzewie wyryto konstelacje, które obserwowały jego śmierć. Rolnicy z Mirefen mówią, że spełnia jedno życzenie tego, kto trzyma go o zmierzchu; mówią też, że każda dusza, która go trzymała, pragnęła więcej czasu i że Utopiony Księżyc nie dał żadnego z nich."
+        },
+        "encore_bow": {
+          "name": "Bis, druga spadająca gwiazda",
+          "look": "Komicznie powiększona gwiezdna armata: kosmicznie czarna lufa wyryta świecącymi złotymi konstelacjami, rozszerzana lufa w kształcie dzwonu z osadzoną wewnątrz skorupą komety ze stopionego złota, mosiężne okucia, drewniana kolba.",
+          "lore": "Kowale, którzy pracowali nad upadłą gwiazdą, zrobili z niej sześć reliktów i nadal pozostało im gwiezdnego metalu wartego beczkę, a do tego czasu uczniowie mieli już swoje zdanie. To, co wyszło z kowadła, to albo pierwsze działo w królestwie, albo jego najmniejsza machina oblężnicza: działo naramienne, które nie tyle traci strzał, ile żąda wycelowania drugiej gwiazdy. Brat Aldric odmówił pobłogosławienia go, argumentując, że cokolwiek tak głośnego zostało już zauważone przez niebo. Łowca to uwielbiają. Nic downrange nigdy nie miało."
+        },
+        "meteorlatch_crossbow": {
+          "name": "Meteorlatch, Sąd Ostateczny nieba",
+          "look": "Meteoryczny gwiezdny metal, rdzeń ze stopionego złota wzdłuż rumpla, kosmiczne czarne kończyny z wyrytymi konstelacjami, nasadzona śruba czystego gwiezdnego ognia.",
+          "lore": "Wykuty z surowego meteorytowego metalu gwiezdnego, gdy krater Mirefen wciąż się świecił, szczątki „zbyt gorące, by sobie z nimi poradzić”, wbite w kończyny z czarnej kosmosu wyryte konstelacjami, z rdzeniem ze stopionego złota osadzonym wzdłuż rumpla. Nie napina żadnego rygla, lecz go przywołuje: promień gwiezdnego ognia, wypuszczony jak wyrok i lądujący jak jego koniec. Kiedy Wysoka Straż obawiała się, że nawet nieśmiertelna korona Nythraxis może nie być najgorszą rzeczą pod szczytami, to była broń, której chcieli na ścianie. Wyceluj dobrze."
+        }
+      },
+      "seasonOne": "Sezon 1",
+      "rarity": {
+        "uncommon": "Niezwykły",
+        "rare": "Rzadki",
+        "epic": "Epicki",
+        "legendary": "Legendarny"
+      },
+      "wtype": {
+        "sword": "Miecz",
+        "axe": "Topór",
+        "mace": "Buzdygan",
+        "dagger": "Sztylet",
+        "staff": "Kostur",
+        "wand": "Różdżka",
+        "bow": "Ukłon",
+        "crossbow": "Kusza"
+      },
+      "badge": {
+        "flagship": "Flagowiec",
+        "hero": "Bohater"
+      },
+      "inspectAria": "Sprawdź {item}",
+      "viewModeLabel": "Tryb podglądu",
+      "tryOn": "Wypróbuj",
+      "weaponOnly": "Tylko broń",
+      "sceneLabel": "Oświetlenie sceny",
+      "scene": {
+        "day": "Dzień",
+        "dusk": "Zmierzch",
+        "night": "Noc"
+      },
+      "lore": "Historia",
+      "buySkin": "Kup skórkę",
+      "unavailable": "Nie płynny",
+      "applied": "Zastosowano",
+      "apply": "Zastosuj skórkę",
+      "detach": "Usuń skórkę",
+      "equipHint": "Wyposaż {type}, aby zastosować tę skórkę."
+    },
+    "claudium": {
+      "title": "Klaudium",
+      "open": "Otwórz Klaudium",
+      "close": "Zamknij Klaudium",
+      "loading": "Ładowanie Claudium...",
+      "balanceLabel": "Saldo",
+      "balanceUnit": "{amount} Klaudium",
+      "solBalance": "SOL: {amount}",
+      "wocBalance": "WOC: {amount}",
+      "unavailable": "Sklep Claudium jest obecnie niedostępny. Nie ma to wpływu na Twoje saldo i zakupy; sprawdź ponownie wkrótce.",
+      "disclosure": "Claudium to jednokierunkowa miękka waluta: kup ją za pieniądze i wydawaj na kosmetyki. Nie można go wymienić, przenieść ani wypłacić.",
+      "buyTitle": "Kup Claudium",
+      "railLabel": "Metoda płatności",
+      "railStripe": "Karta",
+      "railSol": "SOL",
+      "railWoc": "WOC",
+      "railWocDiscount": "20% zniżki",
+      "railWocUnavailable": "Ceny WOC są obecnie niedostępne.",
+      "railNativeUnavailable": "SOL/WOC są obecnie niedostępne.",
+      "amountLabel": "Kwota",
+      "showAmounts": "Pokaż wszystkie ilości Claudium",
+      "hideAmounts": "Ukryj dodatkowe ilości Claudium",
+      "skuRow": "{usd} dla {claudium} Claudium",
+      "buyButton": "Kup",
+      "buyUnavailable": "Zakupy są obecnie niedostępne.",
+      "storeTitle": "Sklep kosmetyczny",
+      "storeEmpty": "W tej chwili nie ma żadnych kosmetyków.",
+      "storeCost": "{amount} Klaudium",
+      "spendButton": "Wymień",
+      "kindCosmetic": "Kosmetyk",
+      "kindSkin": "Skórka",
+      "kindItem": "Przedmiot",
+      "checkoutTitle": "Dokonaj zakupu",
+      "checkoutClose": "Zamknij kasę",
+      "checkoutLoading": "Ładowanie kasy...",
+      "checkoutPending": "Transakcja w toku. Potwierdź w swoim portfelu i nie zamykaj tego panelu.",
+      "checkoutPendingButton": "Przetwarzanie",
+      "checkoutFailed": "Nie udało się wczytać kasy. Spróbuj ponownie.",
+      "checkoutUnavailable": "Ten zakup Claudium nie jest obecnie dostępny.",
+      "checkoutWalletRequired": "Podłącz portfel Solana przed zakupem Claudium za kryptowalutę.",
+      "checkoutWalletUnsupported": "Ten portfel nie może podpisywać i wysyłać transakcji Solana.",
+      "checkoutNotSettled": "Transakcja została wysłana, ale Claudium nie zostało jeszcze zaksięgowane. Spróbuj ponownie wkrótce."
     },
     "theme": {
       "preset": "Motyw interfejsu",
@@ -222,13 +549,20 @@ export const pl_PL: EnTranslations = {
     "rest": {
       "resting": "Odpoczynek"
     },
+    "abilityScaling": {
+      "bonus": "(+{value})"
+    },
     "unitFrame": {
       "playerLabel": "Twój bohater",
       "targetLabel": "Twój cel",
       "targetAnnounce": "Oznacz {name}",
       "partyLabel": "Twoja drużyna",
+      "partyChip": "Drużyna",
       "partyGroup": "Grupa {n}",
-      "durationUnitSeconds": "s"
+      "durationUnitSeconds": "s",
+      "durationUnitMinutes": "m",
+      "durationUnitHours": "h",
+      "durationUnitDays": "d"
     },
     "character": {
       "modelPreview": "Podgląd modelu postaci"
@@ -238,19 +572,36 @@ export const pl_PL: EnTranslations = {
       "chat": "Przejdź do czatu"
     },
     "mobile": {
-      "autorun": "Autobieg",
       "jump": "Skok",
       "leaderboard": "Rankingi",
+      "dailyRewards": "Sklep",
+      "deeds": "Czyny",
       "nameplates": "Nazwy",
       "haptics": "Wibracje",
       "hapticsOff": "Wibracje wył.",
-      "toggleHaptics": "Przełącz wibracje"
+      "toggleHaptics": "Przełącz wibracje",
+      "hotbarPage": "Umiejętności",
+      "hotbarPageAria": "Pokaż następny zestaw umiejętności",
+      "actionRing": "Działania bojowe",
+      "actionPageToggle": "Zmień stronę akcji",
+      "actionPageIndicator": "Str. {page}",
+      "targetCycle": "Zmień cel",
+      "targetCycleShort": "Cel",
+      "spellbookPageLabel": "Strona {page}",
+      "hideKeyboard": "Ukryj klawiaturę",
+      "chatPlaceholder": "Powiedz coś..."
     },
     "tutorial": {
       "moveBodyTouch": "Użyj gałki ruchu, aby się poruszać, i przeciągaj ekran, aby się rozglądać. Zrób kilka kroków, by zacząć.",
       "talkBodyTouch": "Stań blisko marszałka Redbrooka i dotknij przycisku Użyj, aby z nim porozmawiać, a następnie przyjmij jego zadanie.",
       "returnBodyTouch": "Twoje zadanie jest wykonane. Wróć do marszałka Redbrooka i dotknij przycisku Użyj, aby je oddać.",
-      "doneBodyTouch": "Masz już podstawy, {name}. Dolina stoi przed tobą otworem. Dotknij Więcej, a potem Zadania, aby w każdej chwili przejrzeć swój dziennik. Dobrych łowów."
+      "doneBodyTouch": "Masz już podstawy, {name}. Dolina stoi przed tobą otworem. Dotknij Więcej, a potem Zadania, aby w każdej chwili przejrzeć swój dziennik. Dobrych łowów.",
+      "slayTargetHint": "Nowy w walce? Naciśnij {targetKey} lub kliknij wilka, aby go wycelować, a następnie użyj zdolności z paska akcji, aby go zaatakować.",
+      "slayTargetHintTouch": "Nowy w walce? Stuknij wilka, aby go wycelować, a następnie stuknij zdolność na pasku akcji, aby go zaatakować.",
+      "nextTipsTitle": "Gdzie dalej",
+      "nextTipQuestLog": "Otwórz dziennik zadań ({key}), aby znaleźć następne zadanie w pobliżu.",
+      "nextTipMap": "Sprawdź mapę świata ({key}), aby zobaczyć, gdzie czekają zadania.",
+      "nextTipSocial": "Otwórz Społeczność ({key}), aby znaleźć grupę do trudniejszych walk."
     },
     "widgets": {
       "clockTitle": "Czas lokalny - kliknij, aby przełączyć format 12/24-godzinny",
@@ -259,12 +610,32 @@ export const pl_PL: EnTranslations = {
       "heading": "Kierunek",
       "minimapZoom": "Przybliżenie minimapy"
     },
+    "nativeUpdate": {
+      "title": "Dostępna aktualizacja",
+      "body": "Dostępna jest nowa wersja World of ClaudeCraft. Zaktualizuj teraz, aby uzyskać najnowsze poprawki i ulepszenia.",
+      "bodyWithVersion": "Dostępna jest wersja {version} World of ClaudeCraft. Zaktualizuj teraz, aby uzyskać najnowsze poprawki i ulepszenia.",
+      "notNow": "Nie teraz",
+      "update": "Aktualizuj"
+    },
     "castBar": {
       "playerAria": "Twój pasek rzucania",
       "targetAria": "Pasek rzucania jednostki"
     },
     "leaderboard": {
-      "close": "Zamknij"
+      "close": "Zamknij",
+      "tabsLabel": "Tablice wyników",
+      "tabPlayers": "Gracze",
+      "tabGuilds": "Gildie",
+      "tabDevs": "Deweloperzy",
+      "guildName": "Gildia",
+      "members": "Członkowie",
+      "topLevel": "Top",
+      "guildXp": "Łączne XP",
+      "guildEmpty": "Brak sklasyfikowanych gildii.",
+      "devName": "Kontrybutor",
+      "devTierCol": "Odznaka",
+      "mergedPrs": "Scalone PR-y",
+      "devEmpty": "Brak sklasyfikowanych kontrybutorów."
     },
     "raidLockout": {
       "title": "Blokady rajdów",
@@ -273,7 +644,9 @@ export const pl_PL: EnTranslations = {
       "hoursMinutes": "{h}h {m}m",
       "minutes": "{m}m",
       "lessThanMinute": "<1m",
-      "lockedToast": "Jesteś przypisany do rajdu {raid}. Odblokowanie za {time}."
+      "lockedToast": "Jesteś przypisany do rajdu {raid}. Odblokowanie za {time}.",
+      "heroicName": "Heroiczny {name}",
+      "heroicLocked": "Jesteś przypisany do heroicznego {name}."
     },
     "compass": {
       "N": "Pn",
@@ -294,11 +667,156 @@ export const pl_PL: EnTranslations = {
     "keybinds": {
       "emoteWheel": "Koło emotek",
       "targetFriendly": "Obierz najbliższego sojusznika",
-      "targetFriendlyNext": "Przełączaj przyjazny cel"
+      "targetFriendlyNext": "Przełączaj przyjazny cel",
+      "discord": "Discord",
+      "valecup": "Puchar Doliny",
+      "categoryPet": "Zwierzę",
+      "petAttack": "Zwierzę: Atak",
+      "petStop": "Zwierzę: Zatrzymaj",
+      "petTaunt": "Zwierzę: Prowokacja",
+      "petDefensive": "Zwierzę: Obronne",
+      "petAggressive": "Zwierzę: Agresywne"
+    },
+    "vcup": {
+      "title": "Puchar Doliny",
+      "shootPower": "MOC",
+      "close": "Zamknij okno Pucharu Doliny",
+      "offlineNote": "Księga rozgrywek jest zamknięta. Puchar Doliny jest teraz niedostępny.",
+      "recordLine": "Twój bilans: zwycięstwa {wins}, porażki {losses}, remisy {draws}.",
+      "bracketsAria": "Format meczu",
+      "bracketLabel": "{n} na {n}",
+      "waitingCount": "Oczekuje: {count}",
+      "nationsHeading": "Sztandar nacji",
+      "nation": {
+        "vale": "Dolina Wschodniego Strumienia",
+        "mirefen": "Mokrzaw",
+        "thornpeak": "Ciernisty Szczyt",
+        "coliseum": "Popielne Koloseum",
+        "choir": "Blady Chór",
+        "ogre": "Klany Ogrów",
+        "moon": "Blady Księżyc",
+        "copperdig": "Miedziane Wykopalisko"
+      },
+      "awayNote": "Jeśli obie strony niosą ten sam sztandar, goście grają w odwróconych barwach.",
+      "rolesHeading": "Rola sportowa",
+      "role": {
+        "allrounder": {
+          "name": "Wszechstronny",
+          "desc": "Wszystkiego po trochu: kopnięcie, wykop i uczciwy bark."
+        },
+        "striker": {
+          "name": "Napastnik",
+          "desc": "Żyje dla dalekiego wykopu i szybkiego zwodu."
+        },
+        "sweeper": {
+          "name": "Libero",
+          "desc": "Odpycha biegnących od piłki i wybija ją daleko."
+        },
+        "keeper": {
+          "name": "Bramkarz",
+          "desc": "Strzeże pola bramkowego chwytem, rzutem i wybiciem."
+        }
+      },
+      "queue": "Dołącz do kolejki",
+      "leaveQueue": "Opuść kolejkę",
+      "queueNote": "Do kolejki dołączysz z dowolnego miejsca; gwizdek wezwie cię na Maciorowe Błonie.",
+      "queuedStatus": "W kolejce do {bracket}: miejsce {position} z {count}.",
+      "blockNation": "Najpierw wybierz sztandar nacji.",
+      "blockPartySize": "Ten format wymaga mniejszej drużyny.",
+      "blockNotLeader": "Tylko przywódca drużyny może zapisać zespół do kolejki.",
+      "inMatchNote": "Twoja drużyna jest na boisku. Graj dalej!",
+      "deserterNote": "Opiekun Murawy pamięta. Do kolejki wrócisz za {seconds} s.",
+      "liveHeading": "Teraz na Maciorowym Błoniu",
+      "liveAria": "Puchar Doliny: {nationA} {scoreA}, {nationB} {scoreB}",
+      "walkUp": "Podejdź na Maciorowe Błonie, aby oglądać z trybun.",
+      "noLive": "Na boisku cisza. Żaden mecz się nie toczy.",
+      "boardHeading": "Tablica zwycięzców",
+      "boardEmpty": "Nie zapisano jeszcze zwycięzców. Miedziany Skopek czeka.",
+      "boardWins": "zwycięstwa: {count}",
+      "enterAsGuild": "Wystąp pod sztandarem gildii {guild}",
+      "guildRecordLine": "Bilans twojej gildii: zwycięstwa {wins}, porażki {losses}.",
+      "guildBoardHeading": "Sztandary gildii",
+      "guildBoardEmpty": "Żadna gildia nie wyszła jeszcze na boisko. Wznieś swój sztandar!",
+      "guildBoardWl": "{wins} Z, {losses} P",
+      "practice": "Trening z botami",
+      "practiceNote": "Od razu rozpoczyna prywatny mecz z botami na twoim własnym boisku treningowym.",
+      "practicingNow": "Trenują teraz ({count}):",
+      "clock": "{minutes}:{seconds}",
+      "indicatorQueued": "Kolejka Pucharu Doliny: {bracket}, miejsce {position} z {count}",
+      "indicatorLive": "Puchar Doliny",
+      "indicatorOpen": "Otwórz okno Pucharu Doliny",
+      "phaseCountdown": "Rozpoczęcie za {seconds}",
+      "phaseGoal": "GOL!",
+      "phaseGolden": "ZŁOTY GOL",
+      "phaseOver": "KONIEC MECZU",
+      "bannerFound": "Puchar Doliny wzywa: {nationA} kontra {nationB}!",
+      "bannerCountdown": "Pierwszy gwizdek za {seconds}...",
+      "bannerKickoff": "ROZPOCZĘCIE!",
+      "bannerGoal": "GOL! {nation} zdobywa bramkę!",
+      "bannerSave": "{name} BRONI!",
+      "bannerGolden": "ZŁOTY GOL: następna bramka wygrywa!",
+      "bannerEnd": "Koniec meczu: {nationA} {scoreA}, {nationB} {scoreB}",
+      "bannerWin": "Zwycięstwo na Maciorowym Błoniu!",
+      "bannerDraw": "Remis na Maciorowym Błoniu.",
+      "bannerLoss": "Porażka na Maciorowym Błoniu.",
+      "logQueued": "Dołączasz do kolejki Pucharu Doliny w formacie {bracket} (miejsce {position}).",
+      "logUnqueued": "Opuszczasz kolejkę Pucharu Doliny.",
+      "logFound": "Twój mecz Pucharu Doliny jest gotowy: {nationA} kontra {nationB}.",
+      "logRoster": "Twoja strona: {allies}. Ich strona: {enemies}.",
+      "logGoal": "{name} zdobywa gola dla {nation}! {nationA} {scoreA}, {nationB} {scoreB}.",
+      "logSave": "{name} broni!",
+      "logWin": "Wygrywasz starcie na Maciorowym Błoniu.",
+      "logDraw": "Starcie na Maciorowym Błoniu kończy się remisem.",
+      "logLoss": "Przegrywasz starcie na Maciorowym Błoniu.",
+      "gossipOpen": "Księga rozgrywek",
+      "gossipOpenAria": "Otwórz okno Pucharu Doliny",
+      "mobileLabel": "Puchar",
+      "briefing": {
+        "subtitle": "Odprawa przedmeczowa",
+        "vs": "kontra",
+        "rulesHeading": "Jak grać",
+        "rule1": "Kopnij lub podaj piłkę do bramki przeciwnika, aby zdobyć gola.",
+        "rule2": "Wygrywa strona, która pierwsza zdobędzie 5 goli, albo ta z większą liczbą goli po końcowym gwizdku.",
+        "rule3": "Remis po końcowym gwizdku przechodzi w złotego gola: następna bramka wygrywa.",
+        "rule4": "Wślizgi tylko cię przewracają. Podczas żniwnego rozejmu nikomu nie dzieje się krzywda.",
+        "rule5": "Każdy może podejść i kibicować ci z trybun.",
+        "kitHeading": "Twój zestaw",
+        "kitNote": "Te zagrania zastępują twoje umiejętności klasowe na czas meczu.",
+        "rosterHeading": "Skład drużyn",
+        "you": "Ty",
+        "bot": "Bot",
+        "ready": "Zgłaszam gotowość",
+        "readyDone": "Gotowość",
+        "readyAria": "Zgłoś gotowość do rozpoczęcia",
+        "waiting": "Oczekiwanie, aż druga strona zgłosi gotowość...",
+        "whistle": "Gwizdek za {seconds} s.",
+        "readyCount": "Gotowych: {ready} z {total}"
+      },
+      "bet": {
+        "title": "Zakłady meczowe",
+        "aria": "Zakłady na mecz Pucharu Doliny",
+        "closesIn": "Zakłady zamykają się za {seconds} s",
+        "closed": "Zakłady zamknięte",
+        "prize": "Pula {amount}",
+        "splitAria": "Udział puli zakładów na każdą z drużyn",
+        "expand": "Zobacz zakłady i obstaw",
+        "collapse": "Ukryj zakłady",
+        "oddsLabel": "Kurs",
+        "back": "Postaw na {team}",
+        "form": "{wins}Z-{losses}P",
+        "mine": "Twój zakład: {amount} na {team}",
+        "none": "Nie masz jeszcze zakładu na ten mecz.",
+        "record": "Bilans zakładów: {wins}Z-{losses}P, {sign}{net}",
+        "wonBanner": "Twój zakład wygrał!",
+        "wonLog": "Twój zakład w Pucharze Doliny wygrał: zwrócono {amount}.",
+        "lostLog": "Twój zakład w Pucharze Doliny przegrał: {amount}.",
+        "refundLog": "Zakłady unieważnione, twoja stawka {amount} została zwrócona."
+      }
     },
     "options": {
       "clickMoveLeft": "Lewy przycisk",
       "clickMoveRight": "Prawy przycisk",
+      "version": "v{version} ({build})",
       "browserEffects": "Efekty przeglądarki",
       "browserEffectsAuto": "Auto",
       "browserEffectsFull": "Pełne",
@@ -316,8 +834,23 @@ export const pl_PL: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Utrzymuje kursor myszy wewnątrz okna podczas przeciągania w celu obracania kamery, aby nie mógł dotrzeć do krawędzi ekranu ani przejść na inny monitor. Wyłącz, jeśli wolisz swobodny kursor.",
       "showWalletOnCharacterScreen": "Pokaż sakiewkę na ekranie postaci",
       "showWalletOnPlayerCard": "Pokaż sakiewkę na karcie gracza",
+      "showDevBadges": "Pokaż odznaki deweloperów",
+      "showOwnNameplate": "Pokaż moją plakietkę",
       "uiScale": "Skala interfejsu",
-      "highContrastBackground": "Tło o wysokim kontraście"
+      "playerFrameScale": "Skala ramki gracza",
+      "targetFrameScale": "Skala ramki celu",
+      "aurasOnPlayerFrame": "Wzmocnienia na ramce gracza",
+      "highContrastBackground": "Tło o wysokim kontraście",
+      "startAttackOnAbility": "Automatyczny atak przy użyciu umiejętności",
+      "walkByAutoloot": "Automatyczny łup w przelocie",
+      "groundReticle": "Celownik naziemny",
+      "showItemLevel": "Pokaż poziom przedmiotu",
+      "itemLevelLine": "Poziom przedmiotu {level}",
+      "itemScoreLine": "Ocena {score}",
+      "showSecondaryActionBar": "Pokaż dodatkowy pasek akcji",
+      "showDailyRewardsChest": "Pokaż skrzynię codziennych nagród",
+      "mobileCameraJoystick": "Joystick aparatu",
+      "mobileLeftHanded": "Układ leworęczny"
     },
     "controller": {
       "title": "Kontroler",
@@ -368,7 +901,9 @@ export const pl_PL: EnTranslations = {
         "fps01Low": "Min. 0,1%",
         "ping": "Ping",
         "jitter": "Drżenie",
+        "predLead": "Wyprzedzenie predykcji",
         "snapshot": "Częstotliwość migawek",
+        "serverTick": "Częstotliwość tików serwera",
         "connection": "Połączenie",
         "drawCalls": "Wywołania rysowania",
         "triangles": "Trójkąty",
@@ -408,8 +943,29 @@ export const pl_PL: EnTranslations = {
       "highContrast": "Wysoki kontrast",
       "highContrastAria": "Przełącz tło o wysokim kontraście: wyłącza ruchomy zwiastun, aby tekst ekranu startowego pozostał czytelny"
     },
+    "warfare": {
+      "honorAmount": "{amount} Honor",
+      "dualPrice": "{money} + {honor}",
+      "balance": "Honor: {amount}",
+      "honorFloat": "+{amount} Honor",
+      "honorGain": "Otrzymujesz {amount} Honor ({reason}).",
+      "notEnoughHonor": "Za mało Honoru.",
+      "reasons": {
+        "arenaWin": "Zwycięstwo na arenie",
+        "fiestaKill": "Upadek Fiesty",
+        "fiestaComplete": "Fiesta zakończona",
+        "fiestaWin": "Zwycięstwo Fiesty"
+      }
+    },
     "statInfo": {
       "fromYour": "Z twoich {value} pkt. cechy {stat}:",
+      "names": {
+        "spellPower": "Moc zaklęć",
+        "critRating": "Ocena krytyczna",
+        "hasteRating": "Ocena pośpiechu",
+        "warfare": "Działania wojenne"
+      },
+      "warfareValue": "+{increase}% zadawane / -{reduction}% otrzymywane",
       "desc": {
         "str": "Zwiększa twoją moc ataku, więc twoje ciosy bronią są mocniejsze.",
         "agi": "Wyostrza twój refleks i celność, poprawiając kilka twoich statystyk bojowych.",
@@ -418,9 +974,13 @@ export const pl_PL: EnTranslations = {
         "spi": "Przyspiesza tempo regeneracji many rzucającego zaklęcia podczas odpoczynku, poza walką.",
         "armor": "Łagodzi nadchodzące ciosy fizyczne. Redukcja jest większa wobec atakujących o niższym poziomie i jest ograniczona do 75%.",
         "attackPower": "Zasila twoje ataki bronią. Każde 14 punktów mocy ataku dodaje 1 obrażenie na sekundę.",
+        "spellPower": "Zwiększa obrażenia twoich zaklęć i siłę leczenia. Każdy punkt Intelektu zapewnia odrobinę Mocy zaklęć, dodatkowo do tej z ekwipunku lub wzmocnień.",
         "dps": "Twoje szacowane obrażenia bronią na sekundę, łączące obrażenia i szybkość twojej broni z mocą ataku.",
         "critChance": "Twoja szansa na zadanie ataku krytycznego, zadającego podwójne obrażenia.",
-        "dodge": "Twoja szansa na całkowite uniknięcie nadchodzącego ataku wręcz, bez otrzymania obrażeń."
+        "dodge": "Twoja szansa na całkowite uniknięcie nadchodzącego ataku wręcz, bez otrzymania obrażeń.",
+        "critRating": "Ocena krytyczna z twojego ekwipunku i bonusów zestawów, zwiększająca szansę na trafienie krytyczne. Około 10 oceny daje 1% trafienia krytycznego.",
+        "hasteRating": "Ocena pośpiechu z twojego ekwipunku i bonusów zestawów, przyspieszająca twoje ataki i rzucanie zaklęć. Około 10 oceny daje 1% pośpiechu.",
+        "warfare": "Zwiększa obrażenia zadawane graczom o {increase}% i zmniejsza obrażenia otrzymywane od graczy o {reduction}%."
       },
       "effects": {
         "attackPower": "+{value} mocy ataku",
@@ -440,13 +1000,37 @@ export const pl_PL: EnTranslations = {
         "minorForClass": "Niewielka korzyść dla twojej klasy.",
         "baseChance": "Obejmuje 5% szansy bazowej wspólnej dla wszystkich poszukiwaczy przygód.",
         "dpsApprox": "To szacunek, pomija trafienia krytyczne i obrażenia zdolności."
+      },
+      "sources": {
+        "header": "Składa się z:",
+        "base": "Bazowa: {value}",
+        "attributes": "Z twoich atrybutów: {value}",
+        "fromAttribute": "Z {stat}: {value}",
+        "gear": "Założony ekwipunek: {value}",
+        "buff": "{name}: {value}",
+        "talents": "Talenty i efekty: {value}"
       }
     },
     "talents": {
       "defaultBuildName": "Zestaw {n}"
     },
     "tips": {
-      "joinChannels": "Wskazówka: wpisz /join world lub /join lfg, aby rozmawiać z graczami z całego realmu."
+      "joinChannels": "Wskazówka: wpisz /join world lub /join lfg, aby rozmawiać z graczami z całego świata."
+    },
+    "itemHeroicTag": "[HEROICZNY]",
+    "itemSoulbound": "Związany z duszą",
+    "itemSet": {
+      "header": "{name} ({have}/{total})",
+      "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Szansa przy trafieniu ({chance}%): {effect}",
+      "onSpellDamage": "Szansa przy zaklęciach zadających obrażenia ({chance}%): {effect}",
+      "onHeal": "Szansa przy leczeniu ({chance}%): {effect}",
+      "chainArc": "razi cel czarem {school} {name} ({damage}), który przeskakuje na {jumps} pobliskich wrogów, zadając malejące obrażenia",
+      "attackSlow": "i spowalnia szybkość ataku celu o {pct}% na {duration} s",
+      "dot": "wywołuje {name}, obrażenia od {school} w czasie zadające łącznie {total} przez {duration} s",
+      "hot": "rozkwita {name}, leczenie w czasie przywracające {total} przez {duration} s"
     },
     "questShare": {
       "notShareable": "Tego zadania nie można udostępnić.",
@@ -459,6 +1043,9 @@ export const pl_PL: EnTranslations = {
       "ineligible": "Nie spełniasz wymagań tego zadania.",
       "noQuestSelected": "Wybierz zadanie w dzienniku, aby je udostępnić.",
       "linkTitle": "Kliknij z Shiftem, aby podlinkować to zadanie na czacie."
+    },
+    "itemShare": {
+      "linkHint": "Kliknij z Shift, aby wstawić link do tego przedmiotu na czacie."
     },
     "plurals": {
       "guildMembers": {
@@ -484,6 +1071,12 @@ export const pl_PL: EnTranslations = {
         "few": "Kto: {count} graczy online na realmie {realm}.",
         "many": "Kto: {count} graczy online na realmie {realm}.",
         "other": "Kto: {count} graczy online na realmie {realm}."
+      },
+      "playersMatching": {
+        "one": "Kto: {count} gracz pasujący do \"{query}\" na {realm}.",
+        "few": "Kto: {count} graczy pasujących do \"{query}\" na {realm}.",
+        "many": "Kto: {count} graczy pasujących do \"{query}\" na {realm}.",
+        "other": "Kto: {count} gracza pasujących do \"{query}\" na {realm}."
       }
     },
     "bugReport": {
@@ -584,7 +1177,93 @@ export const pl_PL: EnTranslations = {
       "exportDone": "Twoje dane zostały pobrane. Wysłaliśmy ci potwierdzenie e-mailem.",
       "exportFailed": "Nie udało się wyeksportować twoich danych. Spróbuj ponownie za chwilę."
     },
+    "masterLoot": {
+      "title": "Mistrz lupow",
+      "enableLabel": "Mistrz lupow",
+      "enableAria": "Wlacz mistrza lupow",
+      "looterLabel": "Mistrz lupow",
+      "leaderOption": "Przywodca grupy",
+      "thresholdLabel": "Prog",
+      "thresholdUncommon": "Niezwykle i wyzej",
+      "thresholdRare": "Rzadkie i wyzej",
+      "thresholdEpic": "Epickie i wyzej",
+      "assignPrompt": "Przydziel {item}",
+      "assignAria": "Przydziel {item} graczowi {name}",
+      "rollButton": "Rzut",
+      "selectAll": "Zaznacz wszystko",
+      "methodMaster": "Metoda lupow ustawiona na mistrza lupow. Mistrz lupow: {name}.",
+      "methodGroup": "Metoda lupow ustawiona na lup grupowy.",
+      "assigned": "{looter} przydzielil {item} graczowi {target}.",
+      "unassigned": "{item} nie zostal przydzielony i jest wolny dla wszystkich.",
+      "leaderOnly": "Tylko przywodca grupy moze zmienic metode lupow.",
+      "rollingFor": "Losowanie o {item}.",
+      "looterChanged": "Głównym zbieraczem jest teraz {name}.",
+      "thresholdSet": "Próg łupów ustawiony na {threshold}.",
+      "summaryMaster": "Ustawienia łupów: Łup główny, główny zbieracz {name}, próg {threshold}.",
+      "summaryGroup": "Ustawienia łupów: Łup grupowy."
+    },
+    "corpseHarvest": {
+      "title": "Zbieranie",
+      "harvestButton": "Zbierz",
+      "harvestButtonTooltip": "Żniwa: zbierz materiały rzemieślnicze z tych zwłok (skórę, kły, jedwab i podobne elementy), oddzielnie od wszelkich łupów. Każdy może zbierać plony; tylko jeden gracz może zebrać dane zwłoki.",
+      "concentrateHint": "Im mniej części wybierzesz, tym wyższa jakość każdej z nich.",
+      "alreadyHarvested": "Z tego truchła już wszystko zebrano.",
+      "componentAria": "Zbierz: {component}",
+      "components": {
+        "hide": "Skóra",
+        "fang": "Kieł",
+        "silk": "Jedwab",
+        "venomSac": "Worek jadowy",
+        "gills": "Skrzela",
+        "claw": "Pazur",
+        "horn": "Róg",
+        "tusk": "Cios"
+      }
+    },
+    "townFocus": {
+      "title": "Priorytety miasta",
+      "hint": "Punkty priorytetu dodają premię ponad bazowy uzysk każdego elementu. Elementy bez priorytetu pozostają na poziomie bazowym.",
+      "budgetLabel": "Pozostałe punkty: {remaining} / {budget}",
+      "saveButton": "Zapisz priorytety",
+      "notInTownHint": "Musisz być w mieście, aby ustawić priorytety.",
+      "increaseAria": "Zwiększ priorytet: {component}",
+      "decreaseAria": "Zmniejsz priorytet: {component}"
+    },
+    "party": {
+      "promoteLeader": "Mianuj przywódcą",
+      "inviteUsage": "Kogo zaprosić? Użycie: /invite <imię>."
+    },
+    "playerMenu": {
+      "info": "Informacje o graczu",
+      "block": "Zablokuj",
+      "unblock": "Odblokuj",
+      "openFor": "Otwórz menu gracza {name}",
+      "profileUnavailable": "Nie znaleziono profilu gracza {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Konto prowadzone przez SI",
+      "watchTwitch": "Oglądaj na Twitchu",
+      "watchX": "Zobacz na X",
+      "watchKick": "Oglądaj na Kicku",
+      "watchYouTube": "Oglądaj na YouTube"
+    },
+    "lootSettings": {
+      "title": "Ustawienia łupów",
+      "close": "Zamknij ustawienia łupów",
+      "menuItem": "Ustawienia łupów",
+      "method": "Metoda podziału łupów",
+      "rollThreshold": "Próg losowania",
+      "groupLoot": "Łup grupowy",
+      "valueMaster": "Łup główny",
+      "leaderOption": "Główny zbieracz: Przywódca (Ty)",
+      "masterOption": "Główny zbieracz: {name}"
+    },
+    "dungeonDifficulty": {
+      "setHeroic": "Ustaw trudność podziemia: Heroiczna",
+      "setNormal": "Ustaw trudność podziemia: Normalna"
+    },
     "bags": {
+      "cannotDestroy": "Tego przedmiotu nie można zniszczyć.",
+      "rightClickDestroy": "Kliknij prawym, aby zniszczyć",
       "filterGroupAria": "Filtruj torby według kategorii",
       "filterAll": "Wszystko",
       "filterWeapon": "Bronie",
@@ -598,7 +1277,13 @@ export const pl_PL: EnTranslations = {
       "sortName": "Nazwa",
       "searchPlaceholder": "Szukaj przedmiotów",
       "searchAria": "Szukaj przedmiotów w torbie według nazwy",
-      "noMatch": "Żaden przedmiot nie pasuje do filtrów."
+      "noMatch": "Żaden przedmiot nie pasuje do filtrów.",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Zajęte miejsca w torbach: {used} z {total}",
+      "backpack": "Plecak",
+      "bagSocketAria": "{name}: {slots}",
+      "socketEmpty": "Puste gniazdo na torbę",
+      "unequipHint": "Kliknij, aby zdjąć tę torbę"
     },
     "raidConvert": {
       "toPartyDone": "Twój rajd został z powrotem przekształcony w drużynę.",
@@ -606,8 +1291,116 @@ export const pl_PL: EnTranslations = {
       "leaderOnly": "Tylko przywódca rajdu może przekształcić go w drużynę.",
       "tooLarge": "Rajd liczący ponad pięciu członków nie może zostać przekształcony z powrotem w drużynę."
     },
+    "itemArmorType": {
+      "cloth": "Tkanina",
+      "leather": "Skóra",
+      "mail": "Kolczuga"
+    },
+    "auraEffect": {
+      "dot": "Zadaje {value} obrażeń od {school} co {interval} s",
+      "hot": "Przywraca {value} zdrowia co {interval} s",
+      "absorb": "Pochłania {value} obrażeń",
+      "healAbsorb": "Pochłania {value} otrzymywanego leczenia",
+      "thorns": "Verursacht bei Angreifern {value} {school}schaden",
+      "slow": "Verringert Bewegungstempo um {pct}%",
+      "speed": "Erhöht Bewegungstempo um {pct}%",
+      "attackSpeedSlow": "Verlangsamt Angriffstempo um {pct}%",
+      "attackSpeedFast": "Erhöht Angriffstempo um {pct}%",
+      "haste": "Erhöht Angriffs- und Zaubertempo um {pct}%",
+      "tongues": "Erhöht Zauberzeit um {pct}%",
+      "increase": {
+        "ap": "Erhöht Angriffskraft um {value}",
+        "armor": "Erhöht Rüstung um {value}",
+        "int": "Erhöht Intelligenz um {value}",
+        "agi": "Erhöht Beweglichkeit um {value}",
+        "sta": "Erhöht Ausdauer um {value}",
+        "spi": "Erhöht Willenskraft um {value}",
+        "allStats": "Erhöht alle Attribute um {value}"
+      },
+      "reduce": {
+        "ap": "Verringert Angriffskraft um {value}",
+        "armor": "Verringert Rüstung um {value}",
+        "int": "Verringert Intelligenz um {value}",
+        "agi": "Verringert Beweglichkeit um {value}",
+        "sta": "Verringert Ausdauer um {value}",
+        "spi": "Verringert Willenskraft um {value}",
+        "allStats": "Verringert alle Attribute um {value}"
+      },
+      "allStatsPctReduce": "Zmniejsza wszystkie atrybuty o {pct}%",
+      "increasePct": {
+        "ap": "Zwiększa moc ataku o {pct}%",
+        "armor": "Zwiększa pancerz o {pct}%",
+        "int": "Zwiększa Intelekt o {pct}%",
+        "sta": "Zwiększa Wytrzymałość o {pct}%",
+        "allStats": "Zwiększa wszystkie atrybuty o {pct}%"
+      },
+      "dodge": "Erhöht Ausweichchance um {pct}%",
+      "dodgeReduce": "Verringert Ausweichchance um {pct}%",
+      "armorFlat": "Verringert Rüstung um {value}",
+      "armorFlatStacks": "Verringert Rüstung um {value} ({stacks} Stapel)",
+      "armorPct": "Zmniejsza pancerz o {pct}%",
+      "armorPctStacks": "Zmniejsza pancerz o {pct}% ({stacks} nałożeń)",
+      "mortalWound": "Verringert erhaltene Heilung um {pct}%",
+      "vulnerability": "Erhöht erlittenen Schaden um {pct}%",
+      "physVuln": "Erhöht erlittenen physischen Schaden um {pct}%",
+      "spellVuln": "Erhöht erlittenen Magieschaden um {pct}%",
+      "critVuln": "Erhöht Chance, kritisch getroffen zu werden, um {pct}%",
+      "costTax": "Erhöht Fähigkeitskosten um {pct}%",
+      "stun": "Betäubt: handlungsunfähig",
+      "root": "Festgewurzelt: bewegungsunfähig",
+      "incapacitate": "Handlungsunfähig: kann nicht handeln",
+      "polymorph": "Przemieniony: niezdolny do działania",
+      "hex": "Verringert verursachten Schaden und Heilung um {pct}%",
+      "blind": "Geblendet: handlungsunfähig",
+      "silence": "Zum Schweigen gebracht: kann keine Zauber wirken",
+      "disarm": "Entwaffnet: kann keine Waffenangriffe nutzen",
+      "lockout": "Zauberschule gesperrt",
+      "imbue": "Waffe mit Bonuseffekten erfüllt",
+      "imbueRange": "Broń nasycona: od {min} do {max} dodatkowych obrażeń przy Verdict",
+      "stealth": "Verborgen; Bewegungstempo um {pct}% verringert",
+      "formBear": "Postać Bruina: zwiększone zdrowie i pancerz",
+      "formCat": "Katzengestalt: Nahkampfschaden und Energie",
+      "formTravel": "Postać Fleet: prędkość ruchu zwiększona o {pct}%",
+      "defensiveStance": "Czujna postawa: mniej otrzymywanych obrażeń, większe zagrożenie",
+      "righteousFury": "Płonąca przysięga: znacznie zwiększone zagrożenie od obrażeń od Świętości",
+      "scale": "Größe um {pct}% erhöht",
+      "jump": "Sprunghöhe um {pct}% erhöht",
+      "school": {
+        "physical": "Fizyczne",
+        "fire": "Ogień",
+        "frost": "Mróz",
+        "arcane": "Arkana",
+        "shadow": "Cień",
+        "holy": "Święte",
+        "nature": "Natura"
+      }
+    },
+    "worldBoss": {
+      "spawn": "{name} powstaje nad Wyżynami Ciernistego Szczytu!"
+    },
+    "auth": {
+      "appleLoginCta": "Kontynuuj przez Apple",
+      "appleError": "Nie udało się zalogować przez Apple. Spróbuj ponownie.",
+      "appleChoiceIntro": "Utwórz nowe konto albo połącz Apple z istniejącym kontem.",
+      "appleChoiceExpired": "To logowanie przez Apple wygasło. Zaloguj się ponownie przez Apple.",
+      "forgotPrompt": "Nie pamiętasz hasła?",
+      "forgotTitle": "Zresetuj hasło",
+      "forgotHint": "Podaj nazwę użytkownika, a wyślemy link do resetowania na zapisany adres e-mail.",
+      "forgotUsername": "Nazwa użytkownika",
+      "forgotSubmit": "Wyślij link do resetowania",
+      "forgotSent": "Jeśli konto o tej nazwie użytkownika ma zapisany adres e-mail, wysłaliśmy link do resetowania. Sprawdź swoją skrzynkę.",
+      "forgotBack": "Powrót do logowania",
+      "resetTitle": "Wybierz nowe hasło",
+      "resetNewPassword": "Nowe hasło",
+      "resetConfirm": "Potwierdź nowe hasło",
+      "resetSubmit": "Zaktualizuj hasło",
+      "resetDone": "Twoje hasło zostało zaktualizowane. Możesz się teraz zalogować.",
+      "resetMismatch": "Hasła nie są zgodne.",
+      "resetErrInvalid": "Ten link do resetowania jest nieprawidłowy lub wygasł. Poproś o nowy."
+    },
     "loot": {
-      "chestTitle": "Skrzynia"
+      "chestTitle": "Skrzynia",
+      "takeAllTooltip": "Weź Wszystkie: zbierz wszystkie monety i przedmioty w tym oknie łupów."
     },
     "spellbook": {
       "addToBarAria": "Dodaj {name} do paska akcji",
@@ -616,6 +1409,572 @@ export const pl_PL: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "mobTooltip": {
+      "levelFamily": "Poziom {level}: {family}",
+      "familyDemon": "Demon",
+      "hostile": "Wrogi",
+      "friendly": "Przyjazny"
+    },
+    "targetFrame": {
+      "unlock": "Przesuń ramkę celu",
+      "lock": "Zablokuj ramkę celu"
+    },
+    "playerFrame": {
+      "unlock": "Przesuń ramkę gracza",
+      "lock": "Zablokuj ramkę gracza"
+    },
+    "frameReset": {
+      "label": "Resetuj pozycje ramek"
+    },
+    "itemTooltip": {
+      "requiresLevel": "Wymaga poziomu {level}"
+    },
+    "discord": {
+      "title": "Discord",
+      "panelTitle": "World of ClaudeCraft",
+      "open": "Discord",
+      "close": "Zamknij",
+      "keybind": "Panel Discorda",
+      "disabled": "Integracja z Discord jest obecnie niedostępna.",
+      "tiers": {
+        "none": "Bez rangi",
+        "initiate": "Adept",
+        "squire": "Giermek",
+        "footman": "Piechur",
+        "knight": "Rycerz",
+        "champion": "Mistrz",
+        "warlord": "Wódz wojenny",
+        "legend": "Legenda",
+        "mythic": "Mityczny"
+      },
+      "loginCta": "Kontynuuj z Discordem",
+      "orEmail": "lub użyj e-maila",
+      "cta": {
+        "title": "Połącz Discord, aby zdobywać punkty i awansować w rankingu",
+        "stats": "{online} online · {total} członków na serwerze",
+        "statsLoading": "Dołącz do społeczności i zdobywaj nagrody",
+        "button": "Połącz jednym kliknięciem",
+        "dismiss": "Odrzuć"
+      },
+      "link": {
+        "cta": "Połącz Discord",
+        "relink": "Połącz Discord ponownie",
+        "connecting": "Otwieranie Discorda...",
+        "benefits": "Połącz Discord, aby zdobywać punkty za grę i aktywność w społeczności oraz wspinać się po progach statusu.",
+        "error": "Nie udało się połączyć Discorda. Spróbuj ponownie.",
+        "success": "Discord połączony."
+      },
+      "choice": {
+        "title": "Kontynuuj z Discordem",
+        "intro": "Utwórz nowe konto lub połącz Discord z kontem, które już masz.",
+        "greeting": "Witaj, {name}!",
+        "createCta": "Utwórz nowe konto",
+        "haveAccount": "Masz już konto?",
+        "linkCta": "Połącz istniejące konto",
+        "linkSubmit": "Połącz konto",
+        "error": "Nie udało się kontynuować. Spróbuj ponownie.",
+        "expired": "Logowanie przez Discord wygasło. Zaloguj się ponownie przez Discord."
+      },
+      "keep": {
+        "title": "Ustaw hasło",
+        "body": "Twoje konto loguje się przez Discord. Ustaw hasło, aby po rozłączeniu nadal móc logować się za pomocą nazwy użytkownika.",
+        "usernameLabel": "Twoja nazwa użytkownika",
+        "confirmLabel": "Potwierdź hasło",
+        "submit": "Ustaw hasło i rozłącz",
+        "cancel": "Anuluj",
+        "mismatch": "Hasła nie są takie same.",
+        "tooShort": "Hasło musi mieć co najmniej 6 znaków."
+      },
+      "linkedAs": "Połączono jako {name}",
+      "linkedTitle": "Discord: {name}",
+      "viewCharacter": "Zobacz {name}",
+      "viewProfile": "Otwórz publiczny profil tej postaci",
+      "unlink": "Rozłącz",
+      "visit": "Odwiedź Discord",
+      "unlinkConfirm": "Odłączyć konto Discord od tego konta w grze?",
+      "statusLabel": "Status",
+      "rank": "Ranga",
+      "points": "Punkty",
+      "lifetime": "Łącznie",
+      "toNext": "{points} do następnej rangi",
+      "maxRank": "Osiągnięto najwyższą rangę",
+      "tiersTitle": "Progi statusu",
+      "tierLocked": "Zablokowane",
+      "tierCurrent": "Obecny",
+      "earnTitle": "Jak zdobywać punkty",
+      "earnBody": "Zdobywaj punkty za czas gry oraz za aktywność na Discordzie. Punkty podnoszą twój próg statusu.",
+      "memberSince": "Członek od",
+      "memberSinceDays": "{days}d na Discordzie",
+      "roleTag": {
+        "levyst": "Levy St",
+        "admin": "Admin",
+        "coredevs": "Główny deweloper",
+        "devs": "Dev",
+        "mods": "Mod",
+        "artists": "Grafik"
+      },
+      "guildMember": "Zweryfikowany członek",
+      "notMember": "Jeszcze nie na serwerze",
+      "joinCta": "Dołącz do Discorda",
+      "online": "{count} online",
+      "community": "Społeczność",
+      "rewards": "Nagrody",
+      "voice": {
+        "title": "Głos",
+        "channel": "Na {channel}",
+        "empty": "Nikogo nie ma teraz na kanale głosowym.",
+        "speaking": "Mówi",
+        "muted": "Wyciszony",
+        "join": "Dołącz do głosowego",
+        "connect": "Połącz z kanałem głosowym"
+      },
+      "swag": {
+        "title": "Gadżety",
+        "claim": "Odbierz",
+        "claimed": "Odebrano",
+        "locked": "Zablokowane",
+        "free": "Za darmo",
+        "cost": "{points} pkt",
+        "needTier": "Osiągnij wyższą rangę, aby to odebrać.",
+        "needPoints": "Za mało punktów.",
+        "claimError": "Nie udało się odebrać tej nagrody. Spróbuj ponownie.",
+        "claimedToast": "Odebrano: {name}",
+        "titleDiscordian": "Tytuł: Discordianin",
+        "titleSquire": "Tytuł: Giermek Królestwa",
+        "chromaBlurple": "Chroma mecha Blurple",
+        "titleChampion": "Tytuł: Mistrz Claudemoon",
+        "swagStickers": "Zestaw naklejek (wysyłka)",
+        "swagTee": "Koszulka (wysyłka)"
+      },
+      "relay": {
+        "tooFast": "Publikujesz zbyt szybko. Poczekaj chwilę i spróbuj ponownie.",
+        "lfg": {
+          "label": "Szukam drużyny",
+          "hint": "Znajdź graczy do lochu lub zadania"
+        },
+        "wts": {
+          "label": "Chcę sprzedać",
+          "hint": "Ogłoś przedmiot lub usługę na sprzedaż"
+        },
+        "wtb": {
+          "label": "Chcę kupić",
+          "hint": "Poproś o przedmiot, który chcesz kupić"
+        },
+        "recruit": {
+          "label": "Rekrutacja do gildii",
+          "hint": "Rekrutuj graczy do swojej gildii"
+        },
+        "event": {
+          "label": "Wydarzenie / Rajd",
+          "hint": "Ogłoś rajd, spotkanie lub wydarzenie"
+        },
+        "help": {
+          "label": "Potrzebuję pomocy",
+          "hint": "Poproś społeczność o pomoc"
+        }
+      }
+    },
+    "devBadge": {
+      "title": "Deweloper",
+      "tiers": {
+        "tinkerer": "Majsterkowicz",
+        "artificer": "Mechanik",
+        "runesmith": "Runokowal",
+        "architect": "Architekt",
+        "worldwright": "Twórca światów"
+      },
+      "flavors": {
+        "tinkerer": "Twój pierwszy pull request trafił do królestwa.",
+        "artificer": "Pięć pull requestów i świat ugina się pod twoim kodem.",
+        "runesmith": "Piętnaście pull requestów wykutych w działającej grze.",
+        "architect": "Architekt królestwa: 30 scalonych pull requestów.",
+        "worldwright": "Twórca światów: 70 pull requestów kształtuje grę."
+      },
+      "badgeTitle": "Deweloper: {tier}",
+      "prsLanded": "{count} scalonych pull requestów",
+      "contributor": "Kontrybutor open source",
+      "link": {
+        "cta": "Połącz z GitHub",
+        "relink": "Połącz ponownie z GitHub",
+        "benefits": "Połącz swoje konto GitHub, aby zdobyć odznakę dewelopera za pull requesty scalone z repozytorium open source.",
+        "error": "Nie udało się połączyć z GitHub. Spróbuj ponownie."
+      },
+      "linkedAs": "Połączono jako {login}",
+      "unlink": "Odłącz GitHub"
+    },
+    "steam": {
+      "title": "Steam",
+      "link": "Połącz ze Steam",
+      "unlink": "Odłącz Steam",
+      "linked": "Połączono z kontem Steam {id}",
+      "benefits": "Połącz swoje konto Steam z poziomu aplikacji na komputer, aby zdobywane czyny znajdowały odbicie w osiągnięciach Steam.",
+      "noTicket": "Steam nie wystawił biletu połączenia. Uruchom Steam i spróbuj ponownie."
+    },
+    "mailbox": {
+      "title": "Skrzynka pocztowa",
+      "subtitle": "Krucza Poczta",
+      "close": "Zamknij skrzynkę pocztową",
+      "tabInbox": "Odebrane",
+      "tabInboxWithCount": "Odebrane ({count})",
+      "tabSend": "Wyślij",
+      "empty": "Twoja skrzynka pocztowa jest pusta.",
+      "truncated": "Wyświetlane najnowsze {shown} z {total} listów.",
+      "attachmentsBadge": "Załączono paczkę",
+      "unreadBadge": "Nieprzeczytany",
+      "back": "Wstecz",
+      "take": "Zabierz załączniki",
+      "delete": "Usuń list",
+      "deleteAria": "Usuń list {subject}",
+      "openAria": "Przeczytaj list {subject} od {name}",
+      "noSubject": "(bez tematu)",
+      "toLabel": "Do",
+      "toPlaceholder": "Imię postaci",
+      "subjectLabel": "Temat",
+      "bodyLabel": "Wiadomość",
+      "coinLabel": "Załącz monety",
+      "parcelsLabel": "Paczki",
+      "parcelsHint": "Kliknij przedmiot w torbach, aby go załączyć.",
+      "removeParcelAria": "Usuń {item} z listu",
+      "parcelQtyDecreaseAria": "Wyślij o jedną sztukę {item} mniej",
+      "parcelQtyIncreaseAria": "Wyślij o jedną sztukę {item} więcej",
+      "sendButton": "Wyślij list",
+      "postageNote": "Opłata pocztowa: {amount}. Kruk leci około {seconds} s.",
+      "arrivedBanner": "Kruk wylądował: poczta od {name}.",
+      "arrivedLog": "Masz nową pocztę od {name}.",
+      "indicatorAria": "Nieprzeczytana poczta: {count}",
+      "indicatorTip": "Masz {count} nieprzeczytanych listów. Odwiedź skrzynkę pocztową, aby je przeczytać.",
+      "clickAttach": "Kliknij, aby załączyć do listu.",
+      "cannotMail": "Tego nie można wysłać pocztą.",
+      "result": {
+        "sent": "Kruk wzbija się w powietrze z twoim listem do {name} (opłata: {postage}).",
+        "collected": "Odbierasz {amount} z listu.",
+        "tooFar": "Musisz być przy skrzynce pocztowej, aby zająć się pocztą.",
+        "needRecipient": "Wskaż odbiorcę listu.",
+        "noRecipient": "Nikt o tym imieniu nie ma tu skrzynki pocztowej.",
+        "tooManyParcels": "List mieści najwyżej {count} paczek.",
+        "noMailQuestItems": "Nie możesz wysyłać pocztą przedmiotów zadań.",
+        "notEnoughItems": "Nie masz aż tylu do wysłania.",
+        "cantAffordPostage": "Nie stać cię na opłatę pocztową.",
+        "recipientBoxFull": "Skrzynka odbiorcy jest pełna.",
+        "letterGone": "Tego listu nie ma już w twojej skrzynce.",
+        "takeParcelsFirst": "Wyjmij paczki, zanim wyrzucisz list."
+      }
+    },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "Złocona Szkatuła",
+      "close": "Zamknij bank",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Zajęte miejsca w banku: {used} z {total}",
+      "empty": "Twój bank jest pusty.",
+      "tooFar": "Musisz być przy bankierze, aby zajrzeć do swojego banku.",
+      "buySlots": "Kup {count} miejsc",
+      "buySlotsMaxed": "W pełni rozszerzony",
+      "buyConfirm": "Kupić {count} dodatkowych miejsc w banku za {price}?",
+      "buyConfirmAccept": "Kup",
+      "withdrawHint": "Kliknij, aby wyjąć",
+      "withdrawPartialHint": "Kliknij z Shiftem, aby wyjąć część",
+      "depositHint": "Kliknij, aby zdeponować",
+      "depositPartialHint": "Kliknij z Shiftem, aby zdeponować część",
+      "cannotDeposit": "Nie można zdeponować",
+      "depositQuantityTitle": "Zdeponuj: {item}",
+      "depositQuantityInput": "Liczba do zdeponowania",
+      "depositQuantityConfirm": "Zdeponuj",
+      "withdrawQuantityTitle": "Wyjmij: {item}",
+      "withdrawQuantityInput": "Liczba do wyjęcia",
+      "withdrawQuantityConfirm": "Wyjmij",
+      "filterGroupAria": "Filtruj bank według kategorii",
+      "sortAria": "Sortuj przedmioty w banku",
+      "searchAria": "Szukaj przedmiotów w banku po nazwie",
+      "depositAll": "Zdeponuj wszystkie materiały",
+      "depositAllDone": "Zdeponowane materiały: {count}.",
+      "depositAllFull": "Zdeponowane materiały: {count}. Bank jest teraz pełny.",
+      "depositAllNone": "Bank pełny: niczego nie zdeponowano.",
+      "bonusTitle": "Miejsca premiowe",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "Zweryfikowany e-mail",
+      "bonusSourceDiscord": "Połączony Discord",
+      "bonusSourceWallet": "Połączony portfel",
+      "bonusSourceReferral": "Zaproszeni przyjaciele",
+      "bonusAdvertEmail": "Zweryfikuj swój e-mail, aby zdobyć 2 miejsca.",
+      "bonusAdvertDiscord": "Połącz swój Discord, aby zdobyć 2 miejsca.",
+      "bonusAdvertWallet": "Połącz portfel, aby zdobyć 2 miejsca.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Zaproś przyjaciela: gdy osiągnie 10. poziom, oboje zdobywacie po 2 miejsca, maksymalnie za 5 przyjaciół.",
+      "bonusSectionAria": "Premiowe miejsca w banku i jak zdobyć ich więcej"
+    },
+    "calendar": {
+      "title": "Kalendarz wydarzeń",
+      "close": "Zamknij kalendarz",
+      "keybindLabel": "Kalendarz wydarzeń",
+      "prevMonth": "Poprzedni miesiąc",
+      "nextMonth": "Następny miesiąc",
+      "dayAria": "{date}: {count} wydarzeń",
+      "noEvents": "Nic nie zaplanowano na ten dzień.",
+      "allDay": "Cały dzień",
+      "bookedBy": "Zaplanowane przez {name}",
+      "deleteAria": "Usuń wydarzenie {title}",
+      "bookTitle": "Zaplanuj wydarzenie gildii",
+      "titlePlaceholder": "Tytuł wydarzenia",
+      "notePlaceholder": "Notatka (opcjonalnie)",
+      "hourLabel": "Godzina (UTC)",
+      "hourAllDay": "Cały dzień",
+      "addButton": "Zaplanuj wydarzenie",
+      "guildOnlyNote": "Dołącz do gildii, aby wspólnie planować wydarzenia.",
+      "result": {
+        "created": "Wydarzenie trafiło do kalendarza gildii.",
+        "removed": "Wydarzenie zostało zdjęte z kalendarza.",
+        "notInGuild": "Nie należysz do gildii.",
+        "notOfficer": "Tylko oficerowie i mistrz gildii mogą zarządzać wydarzeniami gildii.",
+        "badInput": "Nadaj wydarzeniu tytuł i prawidłowy dzień.",
+        "calendarFull": "Kalendarz gildii jest pełny.",
+        "eventGone": "Tego wydarzenia nie ma już w kalendarzu."
+      },
+      "events": {
+        "raidCall": {
+          "title": "Zew Rajdu",
+          "note": "Strażnicy dmą w róg: zbierz drużynę na krypty i rajd."
+        },
+        "marketDay": {
+          "title": "Dzień Targowy",
+          "note": "Kupiec spodziewa się świeżego towaru. Dobry dzień na przegląd Rynku Świata."
+        },
+        "fiestaNight": {
+          "title": "Noc Fiesty",
+          "note": "Ring Fiesty 2v2 przyciąga dziś wieczorem najgłośniejsze tłumy."
+        },
+        "arenaClash": {
+          "title": "Starcie na Arenie",
+          "note": "Pojedynkowicze ściągają do Popielnego Koloseum. Zapisz się do kolejki i wspinaj po drabinie rankingowej."
+        },
+        "fishingDerby": {
+          "title": "Zawody Wędkarskie",
+          "note": "Wędkarze obstawiają jeziora. Weź wędkę i powymieniaj się rybackimi opowieściami."
+        },
+        "delveDay": {
+          "title": "Dzień Wyprawy",
+          "note": "Brat Halven zaznacza na swoich mapach: dobry dzień, by stawić czoła Zawalonemu Relikwiarzowi."
+        },
+        "moongateCommunion": {
+          "title": "Komunia Księżycowej Bramy",
+          "note": "Pielgrzymi gromadzą się przy księżycowej bramie świątyni pod księżycem połowy miesiąca."
+        }
+      }
+    },
+    "social": {
+      "lastSeen": "Ostatnio widziano: {when}",
+      "lastSeenNever": "nigdy",
+      "ignoredTab": "Ignorowani",
+      "blockedTab": "Zablokowani",
+      "ignoredEmpty": "Nikogo nie ignorujesz.",
+      "blockedEmpty": "Nikogo nie zablokowałeś.",
+      "blockSearchPlaceholder": "Nazwa gracza",
+      "blockAction": "Zablokuj",
+      "nowBlocking": "{name} zablokowany.",
+      "stopBlockingTitle": "Odblokuj gracza {name}"
+    },
+    "gathering": {
+      "title": "Zbieractwo",
+      "mining": "Górnictwo",
+      "logging": "Wyrąb",
+      "herbalism": "Zielarstwo"
+    },
+    "archetypeTitle": {
+      "label": "Tytuł",
+      "none": "Brak",
+      "hobbyLabel": "Pasja",
+      "armorcrafting": "Płatnerz",
+      "weaponcrafting": "Zbrojmistrz",
+      "jewelcrafting": "Jubiler",
+      "alchemy": "Alchemik",
+      "engineering": "Inżynier",
+      "cooking": "Kucharz",
+      "inscription": "Skryba",
+      "enchanting": "Zaklinacz",
+      "tailoring": "Krawiec",
+      "leatherworking": "Garbarz"
+    },
+    "crafting": {
+      "title": "Rzemiosło",
+      "close": "Zamknij rzemiosło",
+      "craft": "Rzemiosło",
+      "reagentsNeeded": "Wymaga:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Nie są jeszcze znane żadne przepisy.",
+      "resultAria": "Craft {name}",
+      "craftedToast": "Wykonane: {name}",
+      "insufficientMaterials": "Nie masz na to materiałów.",
+      "unknownRecipe": "Ten przepis nie istnieje.",
+      "comboRequirementUnmet": "Nie masz obu wymaganych rzemiosł na wymaganym poziomie dla tego przepisu.",
+      "notAtHub": "Musisz być w warsztacie rzemieślniczym i mieć wymagany poziom, aby to wytworzyć.",
+      "throttled": "Wytwarzasz zbyt szybko. Zaczekaj chwilę i spróbuj ponownie.",
+      "recipeNotLearned": "Nie nauczyłeś się jeszcze tego przepisu."
+    },
+    "deeds": {
+      "title": "Księga Czynów",
+      "close": "Zamknij Księgę Czynów",
+      "searchPlaceholder": "Szukaj czynów",
+      "searchAria": "Szukaj czynów po nazwie",
+      "renownLabel": "Renoma",
+      "countLabel": "{earned}/{total} czynów",
+      "completionAria": "Zdobyte czyny: {earned} z {total}",
+      "recentLabel": "Ostatnie:",
+      "nearestLabel": "Prawie u celu:",
+      "filterGroupAria": "Filtruj czyny",
+      "filterAll": "Wszystkie",
+      "filterEarned": "Zdobyte",
+      "filterUnearned": "Niezdobyte",
+      "filterNearly": "Prawie ukończone",
+      "categoriesAria": "Kategorie czynów",
+      "catProgression": "Postępy",
+      "catCombat": "Walka",
+      "catDungeon": "Lochy",
+      "catDelve": "Wyprawy",
+      "catChronicle": "Kroniki",
+      "catCollection": "Kolekcja",
+      "catPvp": "PvP i sport",
+      "catSocial": "Społeczność",
+      "catExploration": "Eksploracja",
+      "catFeat": "Wyczyny",
+      "categoryCountAria": "{category}: zdobyto {earned} z {visible} czynów",
+      "emptyCategory": "Brak pasujących czynów.",
+      "progressText": "{current}/{target}",
+      "progressAria": "Postęp: {current} z {target}",
+      "renownChip": "{renown} Renomy",
+      "earnedDate": "Zdobyto {date}",
+      "featRibbon": "Wyczyn",
+      "hiddenBadge": "Ukryty",
+      "titleChip": "Nagroda: tytuł",
+      "watch": "Śledź",
+      "unwatch": "Przestań śledzić",
+      "watchFull": "Lista śledzonych pełna (maks. {cap})",
+      "watchAria": "Śledź czyn {name} w podglądzie czynów",
+      "unwatchAria": "Przestań śledzić czyn {name}",
+      "titlesSection": "Tytuły",
+      "titlesAria": "Wybierz wyświetlany tytuł",
+      "titlesNone": "Bez tytułu",
+      "titlesEmpty": "Zdobądź czyn nagradzany tytułem, aby odsłonić tę półkę.",
+      "unlockedBanner": "Czyn dokonany: {name}",
+      "unlockedTitleHint": "Zdobyto nowy tytuł: {title}. Wybierz go w Księdze Czynów.",
+      "retroSummary": "Twoja kronika nadrabia zaległości: zapisano {count} czynów.",
+      "broadcastLine": "{name} dokonuje czynu: {deed}",
+      "rarityLine": "Zdobyty przez {percent} poszukiwaczy przygód",
+      "trackerLabel": "Czyny",
+      "collapseHint": "Zwiń podgląd czynów",
+      "expandHint": "Rozwiń podgląd czynów",
+      "openBookHint": "Otwórz Księgę Czynów",
+      "charTitleLabel": "Tytuł",
+      "charTitleNone": "Nie wybrano tytułu",
+      "charOpenBook": "Księga Czynów",
+      "lbTab": "Renoma",
+      "lbDeedsCol": "Czyny",
+      "lbTitleCol": "Tytuł",
+      "lbSelf": "Twoja pozycja: miejsce {rank}, czołowe {percent} procent",
+      "lbEmpty": "W rankingu nie ma jeszcze żadnych kronikarzy.",
+      "broadcastsLabel": "Ogłaszaj zdobyte czyny gildii i znajomym",
+      "titledName": "{name} [{title}]"
+    }
+  },
+  "apiError": {
+    "validation": {
+      "failed": "Niektóre pola są nieprawidłowe. Sprawdź formularz i spróbuj ponownie."
+    },
+    "json": {
+      "malformed": "Nie udało się odczytać żądania. Spróbuj ponownie."
+    },
+    "body": {
+      "too_large": "To żądanie jest zbyt duże. Spróbuj ponownie z mniejszą ilością danych.",
+      "unsupported_media_type": "Nieobsługiwany format żądania."
+    },
+    "db": {
+      "conflict": "Ta zmiana koliduje z inną aktualizacją. Spróbuj ponownie."
+    },
+    "rate_limit": {
+      "exceeded": "Zbyt wiele żądań. Spróbuj ponownie za {seconds}."
+    },
+    "internal": {
+      "error": "Coś poszło nie tak po naszej stronie. Spróbuj ponownie."
+    },
+    "auth": {
+      "token_missing": "Musisz być zalogowany, aby to zrobić.",
+      "token_invalid": "Twoja sesja wygasła. Zaloguj się ponownie.",
+      "forbidden": "Nie masz uprawnień, aby to zrobić.",
+      "invalid_credentials": "Nieprawidłowa nazwa użytkownika lub hasło.",
+      "required": "Brak uwierzytelnienia.",
+      "web_login_only": "Logowanie jest dozwolone tylko z klienta gry.",
+      "too_many_attempts": "Zbyt wiele prób. Odczekaj minutę i spróbuj ponownie.",
+      "too_many_failed_attempts": "Zbyt wiele nieudanych prób. Odczekaj kilka minut i spróbuj ponownie.",
+      "current_password_incorrect": "Twoje obecne hasło jest nieprawidłowe.",
+      "password_incorrect": "Twoje hasło jest nieprawidłowe.",
+      "verification_failed": "Weryfikacja nie powiodła się. Spróbuj ponownie."
+    },
+    "account": {
+      "username_invalid": "Nazwa użytkownika musi mieć od 3 do 24 znaków i zawierać litery, cyfry lub podkreślenie.",
+      "username_not_allowed": "Ta nazwa użytkownika jest niedozwolona.",
+      "username_taken": "Ta nazwa użytkownika jest już zajęta.",
+      "username_mismatch": "Ta nazwa użytkownika nie pasuje do Twojego konta.",
+      "password_too_short": "Hasło musi mieć co najmniej 6 znaków.",
+      "password_too_long": "Nowe hasło może mieć maksymalnie 128 znaków.",
+      "characters_online": "Wyloguj wszystkie swoje postacie przed dezaktywacją.",
+      "deactivated": "To konto zostało dezaktywowane. Skontaktuj się z administratorem, aby je przywrócić.",
+      "not_found": "Nie znaleziono konta."
+    },
+    "character": {
+      "name_invalid": "Nieprawidłowe imię postaci. Użyj od 2 do 16 liter.",
+      "name_not_allowed": "To imię postaci jest niedozwolone.",
+      "invalid_class": "Nieprawidłowa klasa.",
+      "limit_reached": "Osiągnięto limit postaci.",
+      "name_taken": "To imię jest już zajęte.",
+      "not_found": "Nie znaleziono postaci.",
+      "online": "Postać jest obecnie online.",
+      "rename_not_permitted": "Zmiana imienia tej postaci jest niedozwolona.",
+      "delete_confirm": "Wpisz imię postaci, aby potwierdzić usunięcie.",
+      "already_in_world": "Postać jest już w świecie.",
+      "taken_over": "Twoją postać przejęła inna sesja.",
+      "rename_required": "Tę postać trzeba przemianować przed wejściem do świata."
+    },
+    "moderation": {
+      "suspended_until": "To konto jest zawieszone do {date}.",
+      "suspended": "To konto jest zawieszone.",
+      "banned": "To konto zostało zbanowane.",
+      "force_rename": "Moderator wymaga zmiany imienia jednej z Twoich postaci."
+    },
+    "email": {
+      "invalid": "Podaj prawidłowy adres e-mail.",
+      "unchanged": "To jest już Twój adres e-mail."
+    },
+    "two_factor": {
+      "code_invalid": "Ten kod jest nieprawidłowy, spróbuj ponownie.",
+      "setup_required": "Najpierw rozpocznij konfigurację uwierzytelniania dwuskładnikowego.",
+      "already_enabled": "Uwierzytelnianie dwuskładnikowe jest już włączone.",
+      "not_enabled": "Uwierzytelnianie dwuskładnikowe nie jest włączone."
+    },
+    "origin": {
+      "cross_site": "Żądanie zablokowane ze względów bezpieczeństwa."
+    },
+    "discord": {
+      "not_configured": "Integracja z Discord jest obecnie niedostępna.",
+      "expired": "Logowanie przez Discord wygasło. Zaloguj się ponownie przez Discord.",
+      "already_linked": "To konto Discord jest już połączone z innym kontem.",
+      "password_required": "Ustaw hasło przed odłączeniem swojego konta Discord.",
+      "unknown_swag": "Ta nagroda jest niedostępna.",
+      "link_required": "Najpierw połącz swoje konto Discord.",
+      "swag_claimed": "Już odebrałeś tę nagrodę.",
+      "swag_tier": "Osiągnij wyższą rangę, aby to odebrać.",
+      "swag_points": "Za mało punktów."
+    },
+    "deeds": {
+      "invalid_input": "Nieprawidłowe dane."
+    },
+    "steam": {
+      "disabled": "Łączenie kont Steam jest obecnie niedostępne.",
+      "invalid_ticket": "Steam nie mógł zweryfikować tej prośby o połączenie. Spróbuj ponownie z aplikacji na komputer.",
+      "banned": "Tego konta Steam nie można połączyć.",
+      "already_linked": "Twoje konto ma już połączone konto Steam.",
+      "account_taken": "To konto Steam jest już połączone z innym kontem.",
+      "upstream": "Steam nie odpowiada. Spróbuj ponownie za chwilę."
     }
   },
   "guide": {
@@ -633,6 +1992,7 @@ export const pl_PL: EnTranslations = {
       "bestiary": "Bestiariusz",
       "models": "Modele 3D",
       "gear": "Ekwipunek i przedmioty",
+      "professions": "Profesje",
       "economy": "Ekonomia i handel",
       "social": "Społeczność i grupy",
       "stats": "Postać i statystyki",
@@ -640,11 +2000,15 @@ export const pl_PL: EnTranslations = {
       "world": "Świat",
       "quests": "Zadania",
       "dungeons": "Lochy i rajdy",
+      "delves": "Wyprawy",
       "reference": "Odniesienie",
       "controls": "Sterowanie",
+      "settings": "Ustawienia i wydajność",
       "combat": "Walka",
       "talents": "Talenty",
       "arena": "Arena i PvP",
+      "valeCup": "Puchar Doliny",
+      "deeds": "Księga Czynów",
       "glossary": "Słowniczek",
       "wishIKnew": "Czego żałuję, że nie wiedziałem",
       "faq": "FAQ",
@@ -654,6 +2018,7 @@ export const pl_PL: EnTranslations = {
       "primary": "Sekcje poradnika",
       "topics": "Tematy",
       "onThisPage": "Na tej stronie",
+      "sidebarLabel": "Tematy przewodnika",
       "backToGame": "Powrót do gry"
     },
     "groups": {
@@ -679,7 +2044,8 @@ export const pl_PL: EnTranslations = {
       "github": "Źródło na GitHubie",
       "discord": "Dołącz do Discorda",
       "communityWiki": "Wiki społeczności",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Odnośniki do gry i społeczności"
     },
     "language": {
       "label": "Język",
@@ -694,7 +2060,10 @@ export const pl_PL: EnTranslations = {
       "typeZone": "Strefa",
       "typeCreature": "Stwory",
       "typeDungeon": "Loch",
-      "typeTerm": "Termin"
+      "typeDelve": "Wyprawa",
+      "typeTerm": "Termin",
+      "typeAbility": "Zdolność",
+      "typeDeed": "Czyn"
     },
     "home": {
       "eyebrow": "Klasyczne MMO w przeglądarce",
@@ -724,7 +2093,7 @@ export const pl_PL: EnTranslations = {
         "valeName": "Dolina Wschodniego Strumienia",
         "valeBlurb": "Zielone wzgórza i stare lasy, gdzie zaczyna się każda przygoda.",
         "marshName": "Trzęsawisko Mokrzawia",
-        "marshBlurb": "Zatopione bagna i nadgryzione przez przypływy ruiny, dom murloków i gorszych stworzeń.",
+        "marshBlurb": "Zatopione bagna i nadgryzione przez przypływy ruiny, dom Mudfinów i gorszych stworzeń.",
         "peaksName": "Wyżyny Ciernistego Szczytu",
         "peaksBlurb": "Smagane wiatrem granie wspinające się ku najzimniejszym niebezpieczeństwom królestwa."
       },
@@ -744,14 +2113,14 @@ export const pl_PL: EnTranslations = {
         "q1": "Czy gra jest darmowa?",
         "a1": "Tak. Cała gra jest darmowa aż do maksymalnego poziomu, a jej kod źródłowy jest otwarty na GitHubie.",
         "q2": "Czy potrzebuję portfela krypto?",
-        "a2": "Nie. W grę można grać w pełni bez niego. Opcjonalny token społecznościowy odblokowuje jedynie kosmetyczne ozdoby i nigdy nie wpływa na moc.",
+        "a2": "Nie. W grę można w pełni grać bez niego. Opcjonalny żeton społeczności dodaje jedynie kosmetyczny akcent i udział w puli dziennych nagród, i nigdy nie wpływa na siłę.",
         "q3": "Czy mogę grać offline?",
-        "a3": "Tak. Jest natychmiastowy tryb dla jednego gracza w przeglądarce, a także wspólne królestwo online.",
+        "a3": "Tak. Jest natychmiastowy tryb dla jednego gracza w przeglądarce, a także wspólny świat online.",
         "q4": "Ile zajmuje osiągnięcie maksymalnego poziomu?",
         "a4": "Limit to poziom {cap}, osiągany w trzech strefach pełnych zadań, lochów i eksploracji."
       },
       "community": {
-        "heading": "Dołącz do królestwa",
+        "heading": "Dołącz do świata",
         "body": "Wskocz teraz albo wpadnij się przywitać. Świat jest lepszy w towarzystwie.",
         "play": "Zagraj teraz",
         "discord": "Dołącz na Discordzie",
@@ -764,7 +2133,7 @@ export const pl_PL: EnTranslations = {
       "step1Title": "Stwórz postać",
       "step1Body": "Wybierz klasę i wygląd, nadaj bohaterowi imię i wejdź do świata. Więcej postaci stworzysz później.",
       "step2Title": "Znajdź swoje pierwsze zadanie",
-      "step2Body": "Marszałek Redbrook czeka w startowym miasteczku. Porozmawiaj z nim i przyjmij zadanie Wilki u bram.",
+      "step2Body": "Marszałek Redbrook czeka w startowym miasteczku z zadaniem Wilki u bram, a pobliski Brygadzista Odell również ma robotę. Porozmawiaj z którymkolwiek, by przyjąć swoje pierwsze zadanie.",
       "step3Title": "Poruszaj się i rozglądaj",
       "step3Body": "Poruszaj się klawiszami W, A, S, D. Przytrzymaj prawy przycisk myszy i przeciągnij, by się rozejrzeć. To w zasadzie tyle.",
       "step4Title": "Stocz walkę",
@@ -781,44 +2150,129 @@ export const pl_PL: EnTranslations = {
       "questsTitle": "Zadania",
       "questsBody": "Przyjmuj zadania od osób z oznaczeniem nad głową, wykonaj cel i oddaj je za doświadczenie, monety i ekwipunek. Tracker na ekranie utrzymuje twoje cele w zasięgu wzroku.",
       "deathTitle": "Śmierć to nie koniec",
-      "deathBody": "Jeśli polegniesz, uwalniasz ducha na najbliższym cmentarzu i wracasz biegiem do swojego ciała. Nie tracisz doświadczenia.",
+      "deathBody": "Jeśli polegniesz, twoje ciało zostaje tam, gdzie padłeś, a ty powstajesz jako duch na najbliższym cmentarzu. Wróć duchem do ciała, by odrodzić się na miejscu bez żadnej kary, albo przyjmij Bladego Strażnika na cmentarzu, by natychmiast powstać kosztem przemijającego osłabienia. Zupełnie nowi bohaterowie są oszczędzeni tego osłabienia, a nic z tego, co posiadasz lub zdobyłeś, nigdy nie przepada.",
       "groupingTitle": "Wspólna gra",
       "groupingBody": "Zaproś innych do drużyny, by dzielić zaliczenie zadań i mierzyć się z lochami. Większość świata da się przejść samotnie, więc dołączanie do grupy to wybór, nie obowiązek.",
       "onlineTitle": "Online czy offline",
-      "onlineBody": "Graj we wspólnym królestwie online z wszystkimi innymi albo rozpocznij natychmiastowy świat offline w przeglądarce, by poznać zasady.",
-      "reassure": "Talenty odblokowują się na poziomie 10 i można je zresetować w każdej chwili, więc twoje wczesne wybory nigdy nie są ostateczne. Eksperymentuj śmiało.",
+      "onlineBody": "Graj we wspólnym świecie online z wszystkimi innymi albo rozpocznij natychmiastowy świat offline w przeglądarce, by poznać zasady.",
+      "reassure": "Talenty odblokowują się na poziomie 10 i można je zresetować w każdej chwili poza walką, więc twoje wczesne wybory nigdy nie są ostateczne. Eksperymentuj śmiało.",
       "controlsLink": "Zobacz pełne odniesienie sterowania"
     },
     "controls": {
-      "intro": "Domyślne klawisze dla komputera. Każde przypisanie można zmienić w opcjach gry.",
+      "intro": "Domyślne klawisze dla komputera. Każde przypisanie można zmienić w opcjach gry, poza Esc, które zawsze otwiera menu gry, a przypisaniem może być kombinacja z modyfikatorem, na przykład Shift+Z.",
       "keyHeader": "Klawisz",
       "actionHeader": "Akcja",
       "groupMovement": "Poruszanie się",
       "groupCombat": "Namierzanie i walka",
-      "groupInterface": "Okna",
+      "groupInterface": "Interfejs",
       "groupCamera": "Kamera",
       "talents": "Talenty",
       "arena": "Arena",
       "leaderboard": "Tabela wyników",
-      "abilities": "Używaj zdolności",
+      "deeds": "Księga Czynów",
+      "crafting": "Wytwarzanie",
+      "valeCup": "Puchar Doliny",
+      "calendar": "Kalendarz wydarzeń",
+      "discord": "Discord",
+      "abilities": "Używaj zdolności z paska akcji (rząd cyfr; drugi pasek znajduje się na klawiaturze numerycznej)",
+      "targetFriendly": "Namierz najbliższy przyjazny cel",
+      "cycleFriendly": "Przełączaj przyjazny cel",
+      "gameMenu": "Otwórz menu gry i opcje",
+      "bothMouse": "Oba przyciski myszy",
+      "runForward": "Biegnij naprzód",
+      "arrowKeys": "Klawisze strzałek",
+      "groupPet": "Komendy zwierzęcia",
+      "petBar": "Pasek zwierzęcia: Atak, Stój, Prowokacja, Obronny, Agresywny (gdy przywołane jest zwierzę łowcy lub czarnoksiężnika)",
+      "attackMoveNote": "Jeszcze jedno, domyślnie wyłączone: włącz w opcjach Ruch z atakiem, aby zarezerwować klawisz (A, gdy opcja jest aktywna), który prowadzi cię ku kursorowi i otwiera ogień do wroga pod nim lub pierwszego napotkanego po drodze.",
       "mobileHeading": "Na urządzeniu mobilnym",
-      "mobileBody": "Sterowanie dotykowe pojawia się automatycznie na telefonach i tabletach: gałka ruchu po lewej, przeciągnij gdziekolwiek po prawej, aby się rozglądać, oraz przyciski ekranowe dla twoich umiejętności i menu."
+      "mobileBody": "Sterowanie dotykowe pojawia się automatycznie na telefonach i tabletach: gałka ruchu po lewej, przeciągnij gdziekolwiek indziej, aby się rozglądać, zbliż dwa palce, aby przybliżyć kamerę, oraz przyciski ekranowe dla twoich umiejętności i menu. Mała strzałka w lewym górnym rogu pokazuje lub ukrywa przyciski menu, a tamtejszy przycisk Więcej mieści resztę twoich okien.",
+      "controllerHeading": "Na kontrolerze",
+      "controllerBody": "Pady również działają, a obsługa kontrolera jest domyślnie włączona. Lewa gałka odpowiada za ruch, prawa steruje kamerą, a przyciski akcji i bumpery obsługują twoje umiejętności, skakanie i interakcję. Otwórz okno, na przykład torby, aby przywołać ekranowy wskaźnik, a po menu gry poruszasz się wprost krzyżakiem i przyciskami akcji. W ustawieniach kontrolera w opcjach możesz zmienić przypisania przycisków oraz dostosować martwą strefę gałek, szybkość kamery, wibracje i odwrócone patrzenie."
+    },
+    "settingsPage": {
+      "heading": "Ustawienia i wydajność",
+      "intro": "Spraw, aby gra wyglądała najlepiej lub działała najszybciej. Trzy gotowe zestawy wyposażenia plus to, co naprawdę robi każda opcja graficzna.",
+      "wherePath": "Wszystko na tej stronie jest obecne w grze: naciśnij Esc, aby otworzyć opcje. Menu otwiera się na Przeglądzie przypiętych najważniejszych ustawień, z kategoriami na listwie obok: opisane niżej ustawienia znajdziesz w grupie Ekran, pod Grafiką, Interfejsem i Dostępnością, a Nakładkę wydajności pod Systemem. Jeszcze szybciej: wpisz nazwę w pole wyszukiwania na górze i przejdź prosto do niej.",
+      "fairnessTitle": "Uczciwe według projektu",
+      "fairnessBody": "Żadna opcja nie zastąpi piękna w zamian za moc. Ustawienia Lower usuwają tylko kosmetyczne poprawki, nigdy informacje, z którymi walczysz: twoje debuffy, rzucane paski, zdrowie drużyny i liczby obrażeń są identyczne od Low do Ultra. Gra na skromnej maszynie nigdy nie jest utrudnieniem.",
+      "loadoutsHeading": "Trzy gotowe zestawy wyposażenia",
+      "loadoutsIntro": "Zacznij od wyposażenia, które brzmi jak Twoja maszyna, a następnie dostosowuj jedną opcję na raz, aż poczujesz, że jest właściwa.",
+      "recommended": "Zalecony",
+      "whyLabel": "Dlaczego to działa:",
+      "tagReload": "po ponownym załadowaniu",
+      "fpsTitle": "Najlepszy FPS",
+      "fpsTagline": "Do starszych laptopów, zintegrowanej grafiki i odtwarzania na baterii.",
+      "fpsWhy": "Jakość grafiki to główny przełącznik, a Jakość renderowania to najsilniejszy suwak: przy ustawieniu 70% świat rysuje mniej więcej połowę pikseli, podczas gdy interfejs pozostaje idealnie ostry.",
+      "balancedTitle": "Zrównoważony",
+      "balancedTagline": "Najlepszy sposób na większość maszyn i nasza domyślna rada.",
+      "balancedWhy": "Medium przynosi prawdziwe cienie i pełne materiały; High dodaje okluzję otoczenia i rozkwit. Poniżej Ultra wbudowana siatka zabezpieczająca pochłania nagłe spadki podczas intensywnych walk, więc Balanced działa płynnie bez konieczności opieki nad dziećmi.",
+      "visualsTitle": "Najlepsze efekty wizualne",
+      "visualsTagline": "Tryb zrzutu ekranu dla wydajnych komputerów stacjonarnych.",
+      "visualsWhy": "Ultra renderuje w najwyższej rozdzielczości, jaką oferuje Twój wyświetlacz, z najbogatszym oświetleniem. Wyłącza także siatkę zabezpieczającą i działa tylko na komputerze stacjonarnym: telefony i aplikacja są dostępne o godzinie High.",
+      "value50to70": "50 do 70%",
+      "value90to100": "90 do 100%",
+      "value100": "100%",
+      "valueHighOrMedium": "High na komputerze do gier, Medium na laptopie",
+      "valueOnOptional": "Włączone (opcjonalnie)",
+      "howHeading": "Jak zachowują się opcje",
+      "factDetectTitle": "Gra najpierw sama się dostraja",
+      "factDetectBody": "Przy pierwszym uruchomieniu gra odczytuje Twoje urządzenie i wybiera rozsądny poziom, od Low na skromnym telefonie do Ultra na mocnym komputerze stacjonarnym. Każdy wybór, którego sam dokonasz, zawsze wygrywa.",
+      "factReloadTitle": "Dwa rodzaje opcji",
+      "factReloadBody": "Jakość grafiki i selektory Zaawansowane zaczynają działać po ponownym załadowaniu, a w razie potrzeby na panelu znajduje się przycisk Odśwież teraz. Każda inna opcja ma zastosowanie w momencie jej zmiany.",
+      "factGovernorTitle": "Wbudowana siatka zabezpieczająca",
+      "factGovernorBody": "Na każdym poziomie poniżej Ultra gra po cichu przerzedza trawę, efekty i oświetlenie na chwilę, gdy nasili się wielka walka, a następnie je przywraca. Wybranie Ultra mówi, że wolisz zachować każdy szczegół.",
+      "factSearchTitle": "Wyszukiwarka znajdzie to szybciej",
+      "factSearchBody": "Nie wiesz, gdzie znajduje się dana opcja? Wpisz ją w pole wyszukiwania na górze menu. Rozumie też potoczne sformułowania, więc fps odnajdzie odczyt FPS, a wybranie wyniku przenosi cię prosto do ustawienia i pozostawia je podświetlone.",
+      "advancedHeading": "Zaawansowane ustawienie wstępne: miksuj własne",
+      "advancedBody": "Zaawansowany zaczyna się od poziomu High i odblokowuje cztery dodatkowe selektory, dzięki czemu możesz spędzać klatki tam, gdzie je faktycznie zauważasz: szczegóły terenu, gęstość listowia, efekty i oświetlenie oraz jakość cieni. Podobnie jak jakość grafiki, obowiązują one po przeładowaniu.",
+      "advancedMixes": "Dwie ulubione kombinacje: ustaw Jakość cienia na High i ustaw Efekty i oświetlenie na Low, aby uzyskać wyraźny, pozbawiony blasku wygląd, ale działając lekko, lub wykonaj odwrotną operację, aby zachować rozkwit i zmiękczyć cienie.",
+      "tableHeading": "Każda opcja graficzna, objaśniona",
+      "colSetting": "Ustawienie",
+      "colDoes": "Co to robi",
+      "colImpact": "wpływ FPS",
+      "impactNone": "Nic",
+      "impactLight": "Światło",
+      "impactModerate": "Umiarkowany",
+      "impactHeavy": "Ciężki",
+      "rowGraphicsQuality": "Główny wyłącznik. Każdy krok zmienia rozdzielczość, cienie, materiały, listowie i efekty świetlne. Największa pojedyncza różnica, jaką możesz zrobić.",
+      "rowRenderQuality": "Rysuje świat 3D w niższej rozdzielczości wewnętrznej i skaluje go w górę; interfejs pozostaje ostry. Najsilniejszy błyskawiczny suwak na słabszych maszynach i ekranach o wysokiej rozdzielczości.",
+      "rowFieldOfView": "Jaka część świata mieści się na ekranie, od powiększenia 55 do 100 stopni. Komfortowy wybór; szersze widoki rysują nieco więcej.",
+      "rowBrightness": "Ekspozycja sceny, ciemniejsza lub jaśniejsza. Czysta preferencja.",
+      "rowWeather": "Deszcz i śnieg w otoczeniu. Tylko atmosfera, a wyłączenie jej trochę oszczędza podczas burz.",
+      "rowBrowserEffects": "Jak fantazyjny może być sam interfejs: rozmycie szkła, poświata, animowane menu. Automatycznie dopasowuje się do Twojej przeglądarki; tak czy inaczej świat 3D pozostaje nietknięty.",
+      "rowTerrainDetail": "Bogate, mieszane tekstury podłoża w porównaniu z prostszym, szybszym wyglądem terenu.",
+      "rowFoliageDensity": "Jak daleko i jak gęsta trawa rośnie wokół twojej postaci.",
+      "rowEffectsQuality": "Bloom, okluzja otoczenia oraz ilość pochodni i zaklęć rzucających prawdziwe światło. Największa pojedyncza oszczędność wśród zaawansowanych zbieraczy.",
+      "rowShadowQuality": "Wyrazistość cieni. Low utrzymuje cienie, ale zmiękcza ich krawędzie.",
+      "rowFrostedPanels": "Rozmazana plama za oknami. Ładne i dokładnie takie, jakie daje słabsza przeglądarka; zostaw to, aby uzyskać klasyczny, wyrazisty wygląd.",
+      "rowReduceMotion": "Usuwa animacje interfejsu, dzięki czemu okna pojawiają się natychmiast. Najpierw opcja dostępności, z niewielką premią za wydajność.",
+      "rowPerfOverlay": "Odczyt na ekranie FPS, czasu trwania klatki i innych informacji. Włącz tę opcję podczas dostrajania tej strony, a następnie ukryj ją ponownie.",
+      "tableFoot": "Szukasz suwaka odległości rysowania lub ograniczenia FPS? Nie ma na co polować: odległość oglądania jest częścią każdego poziomu jakości, a tempo klatek dostosowuje się do wyświetlacza.",
+      "mobileTitle": "Na telefonach i tabletach",
+      "mobileBody": "Urządzenia mobilne zarządzają za Ciebie więcej: gra wybiera poziom, utrzymuje rozdzielczość nieco niższą, aby chronić baterię i ciepło, a najwyższe poziomy utrzymuje tylko na komputerach stacjonarnych. Powyższe wyposażenie nadal obowiązuje; telefony po prostu osiągają szczyt w High.",
+      "touchBody": "Na ekranie dotykowym opcje zyskują też własny zestaw ustawień wygody: rozmiar i czułość gałki, rozmiar i przezroczystość przycisków ekranowych, lustrzany układ dla leworęcznych, opcjonalną gałkę kamery oraz odwrócone patrzenie dotykiem, tak aby ekran dopasował się do twoich dłoni, a nie odwrotnie.",
+      "audioTitle": "Dźwięk i język",
+      "audioBody": "Okno opcji to nie tylko piksele. Kategoria Dźwięk zawiera osobne suwaki głośności dla efektów, muzyki i głosu, a kategoria Interfejs mieści wybór języka, który od razu lokalizuje cały interfejs, bez potrzeby przeładowania, oraz wybór motywu oprawy okien. Język jest też przypięty na pierwszym miejscu w Przeglądzie, więc zawsze dzieli go jeden krok od otwarcia menu.",
+      "autolootBody": "Wolisz nie klikać każdego ciała? Opcja interfejsu, domyślnie wyłączona, zgarnia łup z twoich własnych zabójstw, gdy koło nich przechodzisz."
     },
     "combat": {
       "intro": "Walka rządzi się znajomymi zasadami klasycznych MMO. Nigdy nie musisz tego zgłębiać, by dobrze grać, to tylko zarys tego, jak działają starcia.",
       "hitTitle": "Nie każdy cios trafia",
-      "hitBody": "Ataki mogą chybić albo zostać uniknięte, sparowane i zablokowane, podobnie jak ataki wroga. Walka z przeciwnikami zbliżonymi poziomem i utrzymywanie aktualnego ekwipunku sprawiają, że twoje ciosy trafiają.",
-      "mitigationTitle": "Pancerz i ekwipunek trzymają cię na nogach",
-      "mitigationBody": "Pancerz łagodzi fizyczne ciosy, a odpowiedni ekwipunek osłabia magię, więc ulepszenia to twoje główne źródło wytrwałości. Klasy w cięższym pancerzu znoszą więcej, ale nic nie czyni cię nietykalnym.",
+      "hitBody": "Ataki mogą chybić albo zostać uniknięte, podobnie jak ataki wroga, a zaklęcia mogą zostać wprost odparte. To walka z przeciwnikami zbliżonymi twoim poziomem sprawia, że twoje ciosy trafiają; im większa różnica poziomów, tym częściej tniesz powietrze.",
+      "mitigationTitle": "Pancerz i zdrowie trzymają cię na nogach",
+      "mitigationBody": "Pancerz łagodzi fizyczne ciosy, więc lepszy pancerz to twoje główne źródło wytrwałości w walce wręcz. Magia to inna sprawa: zaklęcia znosisz głębszą pulą zdrowia i szansą na wprost odparcie jednego z nich, a nie pancerzem. Klasy w cięższym pancerzu znoszą więcej, ale nic nie czyni cię nietykalnym.",
       "resourcesTitle": "Każda klasa ma swój własny rytm",
       "resourcesBody": "Wojownicy budują wściekłość w wirze walki, łotrzykowie zużywają energię, która stale wraca, a rzucający zaklęcia gospodarują zasobem many. Poznanie swojego zasobu to połowa dobrego grania klasą.",
       "growTitle": "Z każdym poziomem stajesz się silniejszy",
-      "growBody": "Każdy poziom czyni cię wytrzymalszym i odblokowuje nowe zdolności, aż po pułap poziomu {cap}. Wykonywanie zadań to najszybsza droga w górę; lochy i eksploracja ją dopełniają.",
+      "growBody": "Każdy poziom czyni cię wytrzymalszym i odblokowuje nowe zdolności, aż po pułap poziomu {cap}. Wykonywanie zadań to najszybsza droga w górę; polowania, wyprawy do lochów i głębie ją dopełniają.",
       "effectsTitle": "Wzmocnienia, osłabienia i kontrola tłumu",
-      "effectsBody": "Wiele zdolności nakłada utrzymujący się efekt. Korzystne (wzmocnienia) zwiększają twoje cechy, osłaniają cię lub leczą po trochu; szkodliwe (osłabienia) wysysają twoje zdrowie obrażeniami w czasie albo cię osłabiają. Obserwuj małe ikony przy pasku akcji, by zobaczyć, co na tobie działa i jak długo.",
-      "ccBody": "Kontrola tłumu to szczególny rodzaj osłabienia, które ogranicza możliwości celu: ogłuszenia, unieruchomienia i spowolnienia, uciszenia powstrzymujące rzucanie zaklęć, rozbrojenia, efekty strachu oraz polimorfia, która na chwilę czyni wroga nieszkodliwym. Niektóre z nich, jak unieruchomienia, strach i polimorfia, tracą moc, gdy nakłada się je zbyt szybko ponownie, więc nie da się ich łączyć w nieskończoność.",
+      "effectsBody": "Wiele zdolności nakłada utrzymujący się efekt. Korzystne (wzmocnienia) zwiększają twoje cechy, osłaniają cię lub leczą po trochu; szkodliwe (osłabienia) wysysają twoje zdrowie obrażeniami w czasie albo cię osłabiają. Obserwuj małe ikony w górnym rogu ekranu, obok minimapy, by zobaczyć, co na tobie działa i jak długo.",
+      "ccBody": "Kontrola tłumu to szczególny rodzaj osłabienia, które ogranicza możliwości celu: ogłuszenia, unieruchomienia i spowolnienia, uciszenia powstrzymujące rzucanie zaklęć, rozbrojenia, efekty strachu oraz przemiany, które na chwilę czynią wroga nieszkodliwym. Wobec innych graczy kontrola słabnie z każdym powtórzeniem: ten sam jej rodzaj nałożony zbyt szybko ponownie traci moc, a w końcu w ogóle zawodzi, a ogłuszenie otwierające ze skrytości liczone jest osobno od ogłuszeń, które następują po nim, więc nikogo nie da się w nieskończoność trzymać bezbronnym. Stworzenia tego świata nie chowają takiej urazy: na nie kontrola nigdy nie słabnie z powtórzeniem, choć wielu najpotężniejszych wrogów, nazwanych elit i najsilniejszych bossów wśród nich, nie da się kontrolować wcale.",
+      "metersBody": "Ciekawi cię, jak poszła walka? Naciśnij Z, aby otworzyć liczniki drużyny, które zliczają obrażenia, leczenie i zagrożenie twojej grupy, starcie po starciu.",
+      "queueTitle": "Twój następny ruch jest już gotowy",
+      "queueBody": "Nie musisz wstrzeliwać się z naciśnięciami co do klatki. Naciśnij następną zdolność w ostatnich chwilach obecnego rzucania, a zostanie zakolejkowana i odpali w momencie, gdy rzucanie dobiegnie końca, dzięki czemu wprawna gra płynie bez przerw. Naciśnięcie zbyt wczesne jest po prostu odrzucane, więc nic się nie marnuje. Niektóre ciosy w zwarciu działają tak samo, wychodząc wraz z twoim następnym zamachem bronią.",
       "deathTitle": "Gdy padniesz",
-      "deathBody": "Gdy twoje zdrowie spadnie do zera, padasz. Odradzasz się po krótkiej chwili i kontynuujesz tam, gdzie skończyłeś, więc śmierć kosztuje cię trochę czasu, a nie postępu. Między walkami usiądź, by zjeść i napić się, byś następną zaczął w pełni sił."
+      "deathBody": "Gdy twoje zdrowie spadnie do zera, padasz tam, gdzie stoisz, a twoje ciało zostaje na miejscu. Uwolnij ducha, a powstaniesz jako zjawa na najbliższym cmentarzu: szybszy w nogach niż żywi, poza zasięgiem wrogów, lecz niezdolny do walki, zbierania łupów czy rozmowy z kimkolwiek poza Bladym Strażnikiem unoszącym się nad kamieniami. Stąd wybierasz. Wróć duchem do ciała, a odrodzisz się na miejscu z częścią przywróconego zdrowia i many, bez żadnej kary. Albo skorzystaj z natychmiastowego wskrzeszenia u Bladego Strażnika tam, gdzie stoisz, za cenę Myta Strażnika: chwilowego osłabienia wszystkiego, czym jesteś, które trwa tym dłużej, im bardziej jesteś doświadczony, a zupełnie nowe postacie omija. Polegnij w lochu, a twój duch czeka na cmentarzu na zewnątrz; przejdź zjawą z powrotem przez drzwi, a odrodzisz się przy wejściu. Głębie są wyjątkiem: gdy polegniesz w nich, po prostu stajesz z powrotem na nogi przy wejściu do głębi, choć drugi upadek kończy przebieg. Którąkolwiek drogę wybierzesz, nie tracisz doświadczenia, ekwipunku ani monet. Między walkami usiądź, by zjeść i napić się, byś następną zaczął w pełni sił."
     },
     "glossary": {
       "intro": "Szybki przewodnik po terminach używanych w tym poradniku oraz na czacie.",
@@ -829,7 +2283,7 @@ export const pl_PL: EnTranslations = {
       "gcdTerm": "Globalne odnowienie",
       "gcdDef": "Krótka, wspólna pauza po użyciu większości umiejętności, dzięki czemu nie możesz wypalić wszystkiego naraz.",
       "dpsTerm": "DPS",
-      "dpsDef": "Obrażenia na sekundę, zgrubna miara tego, jak szybko coś zadaje obrażenia.",
+      "dpsDef": "Obrażenia na sekundę, zgrubna miara tego, jak szybko coś zadaje obrażenia. Używa się go też na samą rolę zadającą obrażenia, jak w zestawieniu: obrońca, uzdrowiciel i trzech DPS-ów.",
       "buffTerm": "Wzmocnienie",
       "buffDef": "Korzystny efekt na tobie lub sojuszniku, jak błogosławieństwo, które na pewien czas podnosi statystykę.",
       "debuffTerm": "Osłabienie",
@@ -855,20 +2309,52 @@ export const pl_PL: EnTranslations = {
       "pullTerm": "Ściągnięcie",
       "pullDef": "Wciągnięcie wroga lub grupy do walki, zwykle celowo i jedna partia naraz.",
       "instanceTerm": "Instancja",
-      "instanceDef": "Prywatna kopia lochu lub rajdu stworzona wyłącznie dla twojej drużyny."
+      "instanceDef": "Prywatna kopia lochu lub rajdu stworzona wyłącznie dla twojej drużyny.",
+      "raidTerm": "Rajd",
+      "raidDef": "Większa grupa, tutaj do dziesięciu graczy, tworzona na najtrudniejsze starcia końca gry; drużyna przekształca się w rajd, gdy się zapełni.",
+      "delveTerm": "Wyprawa",
+      "delveDef": "Krótkie, powtarzalne instancjowane zejście dla jednego lub dwóch graczy, rozpoczynane przy tablicy opiekuna, z towarzyszką u twego boku.",
+      "augmentTerm": "Wzmocnienie",
+      "augmentDef": "Tymczasowe wzmocnienie, które dobierasz podczas meczu na arenie Fiesta dwóch na dwóch i które przekształca twój zestaw tylko na czas tego meczu.",
+      "deedTerm": "Czyn",
+      "deedDef": "Osiągnięcie zapisane w Księdze Czynów. Zdobycie go daje Renomę, a niektóre przyznają kosmetyczny tytuł lub obramowanie plakietki z imieniem.",
+      "renownTerm": "Renoma",
+      "renownDef": "Życiowy wynik, na który składają się twoje czyny. Zawsze tylko rośnie, a królestwo prowadzi jego zestawienie w Rankingu.",
+      "heroicTerm": "Tryb heroiczny",
+      "heroicDef": "Trudniejsza wersja lochu lub rajdu, dostrojona do wyposażonych drużyn endgame. Heroiczni bossowie upuszczają ulepszony łup, a ostatni boss płaci Znakami Heroicznymi.",
+      "lockoutTerm": "Blokada",
+      "lockoutDef": "Dzienny limit największych powtarzalnych nagród. Każdy heroiczny loch wypłaca jedno ukończenie na dzień, rajd liczy tryb normalny i heroiczny osobno, a złupienie bossa świata uruchamia twoją blokadę. Ukończony przebieg dla pięciu graczy pozostaje otwarty dla własnej drużyny; zablokowane drzwi rajdu nie otworzą się ponownie aż do resetu.",
+      "restedTerm": "Wypoczęcie",
+      "restedDef": "Dodatkowe doświadczenie, które twoja postać gromadzi, odpoczywając w karczmie, poza walką. Twoje kolejne zabójstwa dają dodatkowe doświadczenie, dopóki pula się nie wyczerpie.",
+      "petBarTerm": "Pasek zwierzęcia",
+      "petBarDef": "Rząd komend, który dodaje zwierzę łowcy lub czarnoksiężnika: Atak, Stój, Prowokacja, Obronny i Agresywny, domyślnie przypisany do Ctrl plus 1 do 5.",
+      "metersTerm": "Liczniki obrażeń",
+      "metersDef": "Okno tablicy wyników drużyny dla bieżącej walki: zadane obrażenia, wykonane leczenie i kto dzierży najwięcej zagrożenia, liczone dla każdego starcia. Otwórz je przypisanym klawiszem (domyślnie Z).",
+      "targetMarkerTerm": "Znacznik celu",
+      "targetMarkerDef": "Symbol, który dowolny członek drużyny lub rajdu może przypiąć nad celem, aby wszyscy skupiali się na tym samym lub go unikali. Osiem symboli, jeden cel na symbol.",
+      "loadoutTerm": "Układ",
+      "loadoutDef": "Zapisany układ talentów. Trzymaj kilka i przełączaj się między buildami bez ponownego wydawania punktów jeden po drugim.",
+      "readyCheckTerm": "Sprawdzenie gotowości",
+      "readyCheckDef": "Przywódca grupy wpisuje /ready, aby odpytać drużynę lub rajd: każdy potwierdza Gotowy lub Niegotowy, a grupa widzi zestawienie.",
+      "soulboundTerm": "Związany z duszą",
+      "soulboundDef": "Przedmiot przywiązany do twojej postaci od chwili, gdy go zdobędziesz. Nie można go wymienić, wysłać pocztą, sprzedać sprzedawcy ani wystawić na targu.",
+      "spiritHealerTerm": "Blady Strażnik",
+      "spiritHealerDef": "Uzdrowiciel duchów królestwa, unoszący się nad każdym cmentarzem: może wskrzesić twoją zjawę na miejscu za cenę przemijającego osłabienia.",
+      "worldBossTerm": "Boss świata",
+      "worldBossDef": "Boss o sile rajdowej, który powstaje w otwartym świecie w stałym rytmie, zwalczany przez każdego, kto się zbierze, by odpowiedzieć na wezwanie, a nie przez ustaloną drużynę."
     },
     "faqPage": {
       "intro": "Pytania, które nowi gracze zadają najczęściej.",
       "q1": "Czy to naprawdę za darmo?",
       "a1": "Tak. Cała gra jest darmowa do maksymalnego poziomu, a kod źródłowy jest otwarty na GitHubie.",
       "q2": "Czy potrzebuję portfela kryptowalut lub jakichś żetonów?",
-      "a2": "Nie. W grę można w pełni grać bez niego. Opcjonalny żeton społeczności odblokowuje jedynie kosmetyczny akcent i nigdy nie wpływa na siłę ani postęp.",
+      "a2": "Nie. W grę można w pełni grać bez niego. Opcjonalny żeton społeczności dodaje jedynie kosmetyczny akcent i udział w puli dziennych nagród, i nigdy nie wpływa na siłę ani postęp.",
       "q3": "Czy mogę grać na telefonie?",
       "a3": "Tak. Gra działa w przeglądarce mobilnej ze sterowaniem dotykowym, a istnieje też launcher na komputer.",
       "q4": "Czy mogę grać offline lub samotnie?",
-      "a4": "Tak. Istnieje natychmiastowy tryb offline dla jednego gracza, a świat online da się w pełni przejść samotnie poza lochami i rajdem.",
+      "a4": "Tak. Istnieje natychmiastowy tryb offline dla jednego gracza, a świat online da się w pełni przejść samotnie poza lochami, rajdem i bossem świata.",
       "q5": "Ile jest klas?",
-      "a5": "Dziewięć, obejmujących klasyczne role obrońcy, uzdrowiciela i zadającego obrażenia, każda z własnym zasobem i charakterystycznymi umiejętnościami.",
+      "a5": "Dziewięć, obejmujących klasyczne role obrońcy, uzdrowiciela i zadającego obrażenia, każda z własnym systemem zasobów (Wściekłość, Mana lub Energia) i charakterystycznymi umiejętnościami.",
       "q6": "Jaki jest limit poziomu?",
       "a6": "Poziom {cap}, osiągany w trzech połączonych krainach pełnych zadań, lochów i eksploracji.",
       "q7": "Czy moja postać zostanie zapisana?",
@@ -878,7 +2364,7 @@ export const pl_PL: EnTranslations = {
       "q9": "Czy jest PvP?",
       "a9": "Tak. Pojedynkuj się z każdym dla zabawy lub wkrocz do Popielnego Koloseum, by walczyć z innymi graczami. PvP jest dobrowolne, więc nigdy nie jesteś do niego zmuszany.",
       "q10": "Co jest do roboty na maksymalnym poziomie?",
-      "a10": "Limit to poziom {cap}. Stamtąd przemierzasz lochy dla pięciu graczy i rajd dla dziesięciu, polujesz na lepsze wyposażenie i sprawdzasz się na arenie.",
+      "a10": "Limit to poziom {cap}. Stamtąd przemierzasz lochy dla pięciu graczy i rajd dla dziesięciu, mierzysz się z nimi ponownie w trybie heroicznym po ulepszone łupy, stajesz do walki z bossem świata, gdy ten powstaje, sprawdzasz się na arenie, zapuszczasz się w głębie z towarzyszem u boku i ścigasz czyny w Księdze Czynów, by piąć się w rankingu królestwa.",
       "q11": "Jak znaleźć grupę?",
       "a11": "Zaproś do drużyny każdego, kogo spotkasz, zapytaj na czacie lub połączcie siły przy lochu. Większość świata da się przejść samotnie, więc grupowanie się to wybór, a nie wymóg."
     },
@@ -905,7 +2391,7 @@ export const pl_PL: EnTranslations = {
       "abilitiesNote": "Próbka zestawu. Uczysz się więcej wraz z poziomami, a talenty przekształcają sposób, w jaki to wszystko działa.",
       "masteryLabel": "Mistrzostwo",
       "fullKitHeading": "Pełny zestaw",
-      "fullKitNote": "Każda zdolność, jakiej ta klasa może się nauczyć, w kolejności, w jakiej staje się dostępna. Talenty decydują, które z nich tworzą twój build.",
+      "fullKitNote": "Zestaw, którego ta klasa uczy się wraz z poziomami, w kolejności, w jakiej staje się dostępny. Talenty dają kilka dodatkowych zdolności i decydują, które z nich niosą twój build.",
       "petsHeading": "Demony",
       "petsNote": "Czarnoksiężnicy przywołują demony do walki u swego boku, każdy odpowiedni do innego zadania."
     },
@@ -951,12 +2437,12 @@ export const pl_PL: EnTranslations = {
       "charge": "Szarżujesz na odległego wroga, otwierając walkę krótkim ogłuszeniem.",
       "rend": "Otwiera krwawienie, które z czasem wyczerpuje cel.",
       "thunder_clap": "Uderza we wszystko wokół ciebie i spowalnia ataki wrogów.",
-      "seal_of_righteousness": "Nasyca twoje ciosy świętymi obrażeniami, które potem zużywasz Osądem.",
+      "seal_of_righteousness": "Nasyca twoje ciosy świętymi obrażeniami, które potem zużywasz Verdictem.",
       "holy_light": "Stabilne, pokaźne leczenie do uzupełnienia zdrowia sojusznika lub własnego.",
       "devotion_aura": "Trwałe wzmocnienie, które zwiększa pancerz, by ciosy mniej bolały.",
       "judgement": "Zużywa twoją aktywną pieczęć, by uderzyć wroga z bliskiego dystansu.",
       "blessing_of_might": "Zwiększa siłę ataku przyjaznego celu; warto rzucić je przed rozpoczęciem walki.",
-      "divine_protection": "Szybka święta tarcza pochłaniająca obrażenia, gdy robi się gorąco.",
+      "divine_protection": "Szybka ochronna osłona pochłaniająca obrażenia, gdy robi się gorąco.",
       "raptor_strike": "Mocny cios wręcz na wypadek, gdy coś zbliży się do ciebie.",
       "aspect_of_the_hawk": "Aspekt, który utrzymujesz, by wyostrzyć siłę ataku dystansowego.",
       "serpent_sting": "Wstrzykuje jad, który z czasem zadaje obrażenia od natury.",
@@ -988,7 +2474,7 @@ export const pl_PL: EnTranslations = {
       "conjure_water": "Przywołuje napoje przywracające manę, byś mógł uzupełnić ją między walkami.",
       "conjure_food": "Przywołuje jedzenie, które przywraca zdrowie, gdy usiądziesz, by się posilić.",
       "shadow_bolt": "Pocisk cienia rzucany w cel, twój podstawowy atak.",
-      "summon_imp": "Przywołuje chochlika, który ciska ognistymi pociskami we wrogów z dystansu.",
+      "summon_imp": "Przywołuje Emberkina, który ciska ognistymi pociskami we wrogów z dystansu.",
       "demon_skin": "Trwałe wzmocnienie, które utwardza skórę i zwiększa pancerz.",
       "immolate": "Podpala cel, zadając początkowy cios i pozostawiając utrzymujące się płomienie.",
       "corruption": "Skaża cel cieniem, który zadaje obrażenia, gdy zajmujesz się czymś innym.",
@@ -1001,17 +2487,17 @@ export const pl_PL: EnTranslations = {
       "thorns": "Chroni sojusznika tak, że atakujący wręcz ranią się przy uderzeniu."
     },
     "petHook": {
-      "imp": "Demon ciskający ognistymi pociskami z bezpiecznej odległości, podgryzający wrogów na dystans.",
-      "voidwalker": "Wytrzymały demon, który prowokuje i przyjmuje ciosy na siebie, byś mógł spokojnie rzucać zaklęcia.",
-      "succubus": "Szybki demon walczący wręcz, który zadaje potężne ciosy, lecz łatwo pada pod naporem.",
-      "felhunter": "Cienisty harcownik, który tropi wrogich rzucających zaklęcia.",
-      "felguard": "Wytrzymały zabijaka walczący wręcz, uniwersalny towarzysz, gdy już zdołasz go przyzwać.",
-      "infernal": "Potężny kolos miażdżący wrogów w zwarciu, przyzywany dla czystej siły.",
-      "doomguard": "Elitarny rzucający zaklęcia, który z oddali sprowadza ciężki ostrzał cienia."
+      "emberkin": "Demon ciskający ognistymi pociskami z bezpiecznej odległości, podgryzający wrogów na dystans.",
+      "gloomshade": "Wytrzymały demon, który prowokuje i przyjmuje ciosy na siebie, byś mógł spokojnie rzucać zaklęcia.",
+      "duskborn": "Szybki demon walczący wręcz, który zadaje potężne ciosy, lecz łatwo pada pod naporem.",
+      "spellhound": "Cienisty harcownik, który tropi wrogich rzucających zaklęcia.",
+      "warfiend": "Wytrzymały zabijaka walczący wręcz, uniwersalny towarzysz, gdy już zdołasz go przyzwać.",
+      "pyre_colossus": "Potężny kolos miażdżący wrogów w zwarciu, przyzywany dla czystej siły.",
+      "wraithborn": "Elitarny rzucający zaklęcia, który z oddali sprowadza ciężki ostrzał cienia."
     },
     "bestiary": {
       "heading": "Bestiariusz",
-      "intro": "Stworzenia tego świata, pogrupowane według rodzin. To wrogowie, których spotkasz w otwartym terenie. Najgroźniejsze istoty czekają, niewymienione, za drzwiami lochów.",
+      "intro": "Stworzenia tego świata, pogrupowane według rodzin. To codzienni wrogowie, których spotkasz w otwartym terenie. Elitarni przeciwnicy i ich hersztowie trzymają się z dala od tych stron, a najgroźniejsze istoty ze wszystkich czekają za drzwiami lochów.",
       "rare": "Rzadki",
       "levels": "Poziomy od {min} do {max}",
       "levelsSame": "Poziom {min}",
@@ -1020,7 +2506,8 @@ export const pl_PL: EnTranslations = {
         "old_greyjaw": "Pokryty bliznami stary wilk, którego nie utrzymały żadne wnyki, obwiniany o trzy psy gończe i rękę chłopca stajennego. Poluje samotnie w głębi lasu i staje się tym dzikszy, im dłużej trwa walka.",
         "grubjaw": "Trol z trzęsawisk tak chciwy, że inne trole nie kopią obok niego; podobno pożarł dwa ostatnie juczne muły pewnego kupca, razem z uprzężą.",
         "shardlord_kazzix": "Żywiołak burzy obleczony w barki, kroczący po dalekich turniach nad Stormcrag z sercowym odłamkiem wartym zmierzenia się z błyskawicami.",
-        "mirejaw_frenzy": "Bagienny murlok, który w środku walki wpada w szaleńczy szał, najgłośniejszy w głośnej, terytorialnej watasze.",
+        "sethrael_palecoil": "Kościstobiały wąż, który sunie po głębokiej półce Glimmermere, milczący strażnik wody, którą sobie przywłaszczył. Pływacy, którzy dzielą z nim toń, rzadko wracają na powierzchnię.",
+        "mirejaw_frenzy": "Bagienny Mudfin, który w środku walki wpada w szaleńczy szał, najgłośniejszy w głośnej, terytorialnej watasze.",
         "gravecaller_cultist": "Odziani w szaty słudzy kultu śmierci, których dzieło plugawi groby od Doliny po szczyty. Gdzie się gromadzą, zmarli nie zaznają spoczynku."
       }
     },
@@ -1031,15 +2518,15 @@ export const pl_PL: EnTranslations = {
       },
       "spider": {
         "name": "Pająki",
-        "desc": "Tkacze sieci i jadowite czyhające stworzenia, które gnieżdżą się w ciemnych, splątanych miejscach."
+        "desc": "Tkacze sieci i jadowite czyhające stworzenia, które gnieżdżą się w ciemnych, splątanych miejscach. Łowcy mogą je oswajać, tak samo jak bestie."
       },
-      "murloc": {
-        "name": "Murloki",
+      "mudfin": {
+        "name": "Mudfiny",
         "desc": "Ziemnowodni mieszkańcy bagien, którzy zalewają płycizny w hałaśliwych, terytorialnych watahach."
       },
-      "kobold": {
-        "name": "Kobold",
-        "desc": "Świecogłowi kopacze, którzy zarażają kopalnie i nory, zaciekle strzegąc swojej rudy."
+      "burrower": {
+        "name": "Drążyciele",
+        "desc": "Oblepieni błotem kopacze, którzy zarażają kopalnie i nory, zaciekle strzegąc swojej rudy."
       },
       "humanoid": {
         "name": "Humanoidy",
@@ -1047,7 +2534,7 @@ export const pl_PL: EnTranslations = {
       },
       "troll": {
         "name": "Trolle",
-        "desc": "Masywne, szybko gojące się brutale, które legowiska mają na bagnach i w wysokich górach."
+        "desc": "Masywne brutale, które legowiska mają na bagnach trzęsawiska."
       },
       "ogre": {
         "name": "Ogry",
@@ -1060,6 +2547,10 @@ export const pl_PL: EnTranslations = {
       "elemental": {
         "name": "Żywiołaki",
         "desc": "Żywa burza i kamień, związane z dzikimi miejscami, gdzie żywioły szaleją mocno."
+      },
+      "dragonkin": {
+        "name": "Smoczy ród",
+        "desc": "Łuskowate, wężowate istoty ze starych głębin. Rzadkie, dumne i znacznie silniejsze, niż na to wyglądają."
       }
     },
     "worldPage": {
@@ -1071,7 +2562,7 @@ export const pl_PL: EnTranslations = {
       "places": "Godne uwagi miejsca",
       "residents": "Kogo spotkasz",
       "valeBlurb": "Zielona startowa dolina, gdzie nowi bohaterowie zaprawiają się w boju na wilkach i bandytach wokół miasta Eastbrook.",
-      "marshBlurb": "Zatopiona kraina mgieł i ruin. Murloki roją się na płyciznach, a coś starszego porusza się pod wodą, obserwowane z mostowego miasteczka Fenbridge.",
+      "marshBlurb": "Zatopiona kraina mgieł i ruin. Mudfiny roją się na płyciznach, a coś starszego porusza się pod wodą, obserwowane z mostowego miasteczka Fenbridge.",
       "peaksBlurb": "Smagane wiatrem granie i stare wyrobiska wspinające się ku najzimniejszym, najwyżej położonym niebezpieczeństwom królestwa, bronione przez posterunek Highwatch.",
       "valeGreeting": "Trzymaj ostrze blisko. Dolina nie jest już tym, czym była.",
       "valeGreeter": "Marszałek Redbrook, Eastbrook",
@@ -1079,51 +2570,55 @@ export const pl_PL: EnTranslations = {
       "marshGreeter": "Strażniczka Fenwick, Fenbridge",
       "peaksGreeting": "Od dwustu lat ten mur trzyma. Nie pęknie na mojej warcie, ale jęczy.",
       "peaksGreeter": "Kapitan Thessaly, Highwatch",
-      "valePlaceNotes": "Eastbrook to twoja pierwsza baza wypadowa. Wilczy Bieg i Dzicza Łąka to łagodne tereny łowieckie; Jezioro Lustrzane to spokojna woda do łowienia; Pajęczy Bór i Miedziany Wykop kryją pająki i chciwych na rudę kopaczy; Obóz Bandytów i Upadła Kaplica oferują trudniejszą robotę; Brightwood Glade to spokojny zwierzęcy zagajnik na północy.",
-      "marshPlaceNotes": "Fenbridge strzeże jedynej suchej drogi. Trzciny Czyhacza i Płycizny Głębotopieli aż się roją od bagiennych bestii i murloków; Gąszcz Wdowy jest gęsto osnuty pajęczyną; Zatopiona Kaplica i Kopce Trolli kryją starsze niebezpieczeństwa; Obozowisko Grobowych Przyzywaczy to okopany kult, a Zatopiony Bastion to instancjowane serce trzęsawiska.",
-      "peaksPlaceNotes": "Highwatch trzyma mur. Grań Skradacza i Głębogłazowe Nory należą do górskich kotów i kobaltów; Pogórze Ogrów i Obóz Wojenny Drogmara do najemnych brutali; Stormcrag trzaska żywiołami, a poniżej jarzy się Glimmermere; Namioty Kultu Żmija i Pola Powracających otaczają wyżynne pozycje kultu, a na ich szczycie wznosi się Sanktuarium Grobowego Żmija.",
+      "valePlaceNotes": "Eastbrook to twoja pierwsza baza wypadowa. Wolf Run i Boar Meadow to łagodne tereny łowieckie; Mirror Lake to dobra woda do łowienia, choć jego płycizny roją się od mętników; Sableweb i Copper Dig kryją pająki i chciwych na rudę kopaczy; Bandit Camp i Fallen Chapel oferują trudniejszą robotę; Reliquary Hill schodzi w Collapsed Reliquary, pierwszą głębię królestwa; Brightwood Glade to spokojny, nasłoneczniony zagajnik na północy; a Maciorowe Błonie to otoczone murem boisko do dziczej piłki w Eastbrook, gdzie pod żniwnym rozejmem rozgrywa się Puchar Doliny.",
+      "marshPlaceNotes": "Fenbridge strzeże jedynej suchej drogi. Trzciny Czyhacza i Płycizny Głębotopieli aż się roją od bagiennych bestii i Mudfinów; Gąszcz Wdowy jest gęsto osnuty pajęczyną; Zatopiona Kaplica i Kopce Trolli kryją starsze niebezpieczeństwa, a Utopiona Litania, własna wyprawa trzęsawiska, otwiera się tuż na północ od kopców; Obozowisko Gravecallera to okopany kult, a Zatopiony Bastion to instancjowane serce trzęsawiska.",
+      "peaksPlaceNotes": "Highwatch trzyma mur. Grań Skradacza i Głębogłazowe Nory należą do górskich kotów i drążycieli; Pogórze Ogrów i Obóz Wojenny Drogmara do najemnych brutali; Stormcrag trzaska żywiołami, a poniżej jarzy się Glimmermere, górskie jeziorko, którego brzeg strzeże wrót bladego światła wiodących w dół do Zatopionej Świątyni; Namioty Kultu Żmija i Pola Powracających otaczają wyżynne pozycje kultu, a na ich szczycie wznosi się Sanktuarium Grobowego Żmija.",
       "gladeTitle": "Cichy zakątek: Brightwood Glade",
-      "gladeBody": "Nie każda historia w Dolinie dotyczy umarłych. Na północy nasłoneczniony zagajnik zwany Brightwood Glade trzyma się własnego, łagodniejszego rytmu: ciche ścieżki, pasące się jelenie i czujne bestie pod konarami. To miękki kontrapunkt dla szlaku, którym podążasz, i warto go zobaczyć, gdy droga daje ci chwilę na wędrówkę."
+      "gladeBody": "Nie każda historia w Vale dotyczy umarłych. Na północy nasłoneczniony zagajnik zwany Brightwood Glade trzyma się własnego, łagodniejszego rytmu: same ciche ścieżki i cętkowane światło pod konarami. To miękki kontrapunkt dla szlaku, którym podążasz, i warto go zobaczyć, gdy droga daje ci chwilę na wędrówkę.",
+      "worldBossTitle": "Gdy szczyt się budzi: boss świata",
+      "worldBossBody": "Wysoko na Ciernistym Szczycie burza nad Stormcrag czasem przybiera kształt. Thunzharr, Budzący się Szczyt powstaje tam w stałym rytmie, żywiołak o sile rajdowej zwalczany w otwartym świecie przez każdego, kto odpowie na wezwanie, i staje się tym potężniejszy, im więcej wyzywających staje przeciw niemu. Każdy, kto dołączy do walki, otrzymuje własne losowanie jego zdobyczy, honorowane na zasadach blokady rajdowej, a jego upadek trwa dość długo, by polegli zdążyli wrócić po swoje. Zbierz więcej mieczy, niż sądzisz, że potrzebujesz."
     },
     "questsPage": {
       "heading": "Zadania",
       "intro": "Zadania są sercem świata i najszybszą drogą do zdobywania poziomów. Oto jak działają.",
       "acceptTitle": "Znajdowanie i przyjmowanie",
-      "acceptBody": "Osoby z oznaczeniem nad głową mają dla ciebie zajęcie. Porozmawiaj z nimi, by przyjąć zadanie. Twoje pierwsze to Wilki u bram, od Marszałka Redbrooka w Dolinie Wschodniego Strumienia.",
+      "acceptBody": "Osoby z oznaczeniem nad głową mają dla ciebie zajęcie. Porozmawiaj z nimi, by przyjąć zadanie. W Eastbrook Marszałek Redbrook czeka z zadaniem Wilki u bram, jednym z pierwszych, jakie możesz podjąć.",
       "objectivesTitle": "Cele",
-      "objectivesBody": "Pokonaj określonych wrogów, zbierz przedmioty lub wejdź w interakcję z czymś w świecie. Ekranowy znacznik liczy twoje postępy w trakcie gry.",
+      "objectivesBody": "Pokonaj określonych wrogów, zbierz przedmioty lub wejdź w interakcję z czymś w świecie. Ekranowy znacznik liczy twoje postępy w trakcie gry. Jeśli zmienisz zdanie, możesz porzucić zadanie z dziennika zadań i podjąć je ponownie u zleceniodawcy później.",
       "turninTitle": "Oddawanie zadania",
-      "turninBody": "Wróć do zleceniodawcy, mapa pokaże ci gdzie, po doświadczenie, monety i często część ekwipunku dobraną do twojej klasy.",
+      "turninBody": "Zanieś ukończone zadanie do jego znacznika oddania, mapa pokaże ci gdzie, po doświadczenie, monety i często część ekwipunku dobraną do twojej klasy. Zwykle jest to ten, kto ci je zlecił, choć niektóre zadania odsyłają cię do kogoś innego.",
       "partyTitle": "Zadania w grupie",
-      "partyBody": "Pobliscy członkowie drużyny dzielą się zaliczeniem zabójstw i celów, więc wykonywanie zadań razem jest szybsze, nigdy wolniejsze.",
+      "partyBody": "Pobliscy członkowie drużyny dzielą się zaliczeniem zabójstw i celów, więc wykonywanie zadań razem jest szybsze, nigdy wolniejsze. Możesz też udostępnić zadanie swojej grupie: wyślij je na czat jako klikalny odnośnik komendą /share, a każdy członek, który się kwalifikuje, może podjąć to samo zadanie jednym kliknięciem.",
       "storyTitle": "Nić, która przewija się przez wszystko",
       "storyBody": "Od twoich pierwszych poleceń w Dolinie Wschodniego Strumienia ze zmarłymi dzieje się coś złego. Działa kult, a trop wiedzie na północ przez każdą strefę. Podążaj za nim, by odkryć, kto za tym stoi.",
-      "soloNote": "Główną opowieść da się w pełni przejść samotnie; tylko jej ostatnie rozdziały wymagają grupy.",
+      "soloNote": "Główną opowieść da się przejść samotnie aż do finału każdego rozdziału, którym jest loch dla pięciu graczy.",
       "typesTitle": "Rodzaje zadań, jakie napotkasz",
       "typesBody": "Większość zadań przyjmuje jeden z kilku znajomych kształtów. Ekranowy znacznik dokładnie określa, czego każde z nich wymaga, więc nigdy nie zostajesz bez wskazówki.",
       "typeSlayTitle": "Pokonywanie",
-      "typeSlayBody": "Przetrzeb watahę bestii lub złam uścisk kultu, pokonując określoną liczbę oznaczonego wroga. Pierwsze zadanie w grze, oczyszczenie drogi w Dolinie Wschodniego Strumienia z wilków, jest właśnie takie.",
+      "typeSlayBody": "Przetrzeb watahę bestii lub złam uścisk kultu, pokonując określoną liczbę oznaczonego wroga. Jedno z twoich pierwszych zadań, oczyszczenie drogi pod Eastbrook z wilków, jest właśnie takie.",
       "typeGatherTitle": "Zbieranie",
-      "typeGatherBody": "Zbieraj przedmioty ze świata lub z tego, co upuszczają wrogowie: zioła, rudę, zagubione listy, ponure składniki kultu. Niektóre części wypadają tylko z konkretnego przeciwnika, więc polowanie i zdobycz idą w parze.",
+      "typeGatherBody": "Zbieraj przedmioty ze świata lub z tego, co upuszczają wrogowie: zioła, rudę, ponure składniki kultu. Niektóre części wypadają tylko z konkretnego przeciwnika, więc polowanie i zdobycz idą w parze.",
       "typeInteractTitle": "Interakcja",
       "typeInteractBody": "Użyj, oczyść lub odczytaj coś osadzonego w świecie: zbezczeszczony grób, ostrzeżenie wyryte na nadbrzeżnej skale, zapieczętowane drzwi krypty. Podejdź do oznaczenia i podejmij działanie.",
-      "typeMusterTitle": "Eskorta i zbiórka",
-      "typeMusterBody": "Bezpiecznie odprowadź przyjazną postać z jednego miejsca do drugiego lub zbierz obrońców miasta przed natarciem na północ. Te zadania utrzymują cię w ruchu wśród ludzi, w których historii uczestniczysz.",
+      "typeMusterTitle": "Zmobilizuj obronę",
+      "typeMusterBody": "Niektóre zadania każą ci zmobilizować miasto przed natarciem na północ: przerzedź zagrożenie u bram i zbierz to, czego potrzebują obrońcy. To cele typu pokonaj i zbierz w służbie ludzi, w których historii uczestniczysz, i utrzymują cię w ruchu wraz z nimi.",
       "typeGroupTitle": "Grupowe finały",
-      "typeGroupBody": "Każdy rozdział głównej opowieści kończy się u drzwi lochu. Wprowadzenie da się przejść samotnie, lecz ostateczny cios przeciwko złoczyńcy rozdziału jest przeznaczony dla pięcioosobowej drużyny (a ten ostatni, dla dziesięciu).",
+      "typeGroupBody": "Każdy rozdział głównej opowieści kończy się u drzwi lochu. Wprowadzenie da się przejść samotnie, lecz ostateczny cios przeciwko złoczyńcy rozdziału jest przeznaczony dla pięcioosobowej drużyny.",
       "sagaTitle": "Podążaj śladem na północ",
       "sagaBody": "Główna opowieść to jeden długi pościg. Kult śmierci działa przy grobach królestwa, a każdy zamknięty rozdział wskazuje o jedną strefę dalej w głąb drogi. Nigdy nie walczysz z całym spiskiem naraz; pociągasz za jedną nić, a ona prowadzi do następnej dłoni, która ją trzyma.",
       "sagaValeTitle": "Dolina: imię na pieczęci",
       "sagaValeBody": "W Dolinie Wschodniego Strumienia zmarli nie zaznają spoczynku, a stojący za tym znak należy do sekty od dawna uważanej za wygasłą. Wytrop go do Grobowego Przyzywacza działającego w krypcie kaplicy, a jego własne papiery skierują cię ku trzęsawisku na północy.",
       "sagaMarshTitle": "Trzęsawisko: dziesięcina dusz",
-      "sagaMarshBody": "Na Mokrzawiu utonięcia nie są przypadkiem. Ktoś napełnia trzęsawisko niczym skarbonkę dziesięciny, wskrzeszając posłusznych nieumarłych z każdego wędrowca, którego pochłonie woda. Podążaj za rozkazami w górę łańcucha, aż do Mglistego Przyzywacza w zatopionym bastionie, którego ostatnie słowa wymieniają coś jeszcze starszego, poruszającego się pod szczytami.",
+      "sagaMarshBody": "Na Mokrzawiu utonięcia nie są przypadkiem. Ktoś napełnia trzęsawisko niczym skarbonkę dziesięciny, wskrzeszając posłusznych nieumarłych z każdego wędrowca, którego pochłonie woda. Podążaj za rozkazami w górę łańcucha, aż do Fogbindera w zatopionym bastionie, którego ostatnie słowa wymieniają coś jeszcze starszego, poruszającego się pod szczytami.",
       "sagaPeaksTitle": "Szczyty: po co była dziesięcina",
-      "sagaPeaksBody": "Na Ciernistym Szczycie cały plan staje się jasny. Każda dusza skradziona od czasów Doliny była dziesięciną wlewaną w przebudzenie pradawnej istoty zapieczętowanej pod górą. Trop, który zaczął się na kościelnym dziedzińcu, kończy się tutaj, u drzwi, które otworzyć może dziesięcioro. Pozwolimy ci samemu odkryć, kto czeka za nimi.",
+      "sagaPeaksBody": "Na Thornpeak cały plan staje się jasny. Każda dusza skradziona od czasów Vale była dziesięciną wlewaną w ponurą pracę kultu w sercu góry. Trop, który zaczął się na kościelnym dziedzińcu, kończy się tutaj, w zejściu dla pięciu graczy, by stawić czoła ręce stojącej za tym wszystkim. Pozwolimy ci samemu odkryć, kto czeka na dole.",
       "sideTitle": "Nici poza główną drogą",
       "sideWardenTitle": "Wyrabianie sobie imienia",
-      "sideWardenBody": "Obok opowieści strażnicy Doliny i trzęsawiska rozdają stałą drabinę nagród. Wspinaj się po niej, wróg po wrogu, tak jak każdy strażnik przed tobą zapracował na swoje miejsce. To uczciwe zdobywanie poziomów i objazd najgorszych mącicieli każdej strefy.",
+      "sideWardenBody": "Obok opowieści marszałkowie i strażnicy Vale oraz trzęsawiska rozdają stałą drabinę nagród za głowy. Wspinaj się po niej, wróg po wrogu, tak jak każdy łowca nagród przed tobą zapracował na swoje miejsce. To uczciwe zdobywanie poziomów i objazd najgorszych mącicieli każdej strefy.",
       "sideCryptTitle": "Zapomniany król",
-      "sideCryptBody": "Wysoko na szczytach kryje się cichsza tajemnica: stare groby naznaczone koroną, której nie pamięta żaden zapis. Odczytaj zmarłych, zbierz to, czego strzegli, i odpieczętuj grobowiec, który miał pozostać zamknięty. To detektywistyczny trop, który otwiera drogę do drugiej próby końca gry dla pełnego rajdu."
+      "sideCryptBody": "Wysoko na szczytach kryje się cichsza tajemnica: stare groby naznaczone koroną, której nie pamięta żaden zapis. Odczytaj zmarłych, zbierz to, czego strzegli, i odpieczętuj grobowiec, który miał pozostać zamknięty. To detektywistyczny trop, który otwiera drogę do końcowego rajdu królestwa dla dziesięciu graczy.",
+      "sideTempleTitle": "Zatopiona świątynia",
+      "sideTempleBody": "Brama z bladego światła nad wysokim górskim stawem otwiera się na zatopioną świątynię, gdzie utopiony kult wciąż śpiewa. Jej krótki łańcuch zadań stoi na uboczu głównej opowieści, samodzielna zagadka dla każdego, kto wespnie się na brzeg, odczyta ostrzeżenia wyryte w skałach i zejdzie w dół, by zobaczyć, czemu służyły."
     },
     "lore": {
       "figuresTitle": "Twarze, które poznasz",
@@ -1138,25 +2633,59 @@ export const pl_PL: EnTranslations = {
       "intro": "Gdy otwarty świat to za mało, zbierz drużynę i wejdź do instancji: prywatnej kopii lochu stworzonej tylko dla twojej grupy.",
       "party": "Lochy są stworzone dla drużyny pięciu osób. Rajd na koniec gry jest dla dziesięciu.",
       "soloLead": "Każdy loch otwiera się zadaniem wprowadzającym, które można wykonać samotnie, więc zawsze wiesz, po co tam wchodzisz.",
-      "levelAround": "Około poziomu {n}",
       "levelExact": "Poziom {n}",
       "levelBand": "Poziomy od {min} do {max}",
       "partySize": "{n} graczy",
+      "levelAround": "Około poziomu {n}",
       "raidSize": "Dziesięciu graczy, poziom {n}",
       "hollowName": "Wydrążona Krypta",
-      "hollowBody": "Okradziona z grobów kaplica-krypta, gdzie świeżo zmarli odmawiają spoczynku. Pierwszy prawdziwy sprawdzian dla nowej drużyny.",
       "bastionName": "Zatopiony Bastion",
-      "bastionBody": "Zalana forteca utracona na rzecz bagien, dzierżona przez utopionych obrońców i sam przybierający przypływ.",
       "templeName": "Zatopiona Świątynia",
-      "templeBody": "Skąpane w blasku księżyca sanktuarium zatopione pod świetlistym górskim jeziorkiem wysoko w szczytach, do którego dociera się przez bramę zimnego światła. Utopiony kult wciąż śpiewa tam na dole w swych zbutwiałych szatach, a ostrzeżenia wyryte na brzegu mówią, że coś na dole tylko śpi. Samodzielna tajemnica, oddzielona od głównej historii, dla ciekawskich i dobrze przygotowanych.",
       "sanctumName": "Sanktuarium Grobowego Żmija",
+      "hollowBody": "Okradziona z grobów kaplica-krypta, gdzie świeżo zmarli odmawiają spoczynku. Pierwszy prawdziwy sprawdzian dla nowej drużyny.",
+      "bastionBody": "Zalana forteca utracona na rzecz bagien, dzierżona przez utopionych obrońców i sam przybierający przypływ.",
+      "templeBody": "Skąpane w blasku księżyca sanktuarium zatopione pod świetlistym górskim jeziorkiem wysoko w szczytach, do którego dociera się przez bramę zimnego światła. Utopiony kult wciąż śpiewa tam na dole w swych zbutwiałych szatach, a ostrzeżenia wyryte na brzegu mówią, że coś na dole tylko śpi. Samodzielna tajemnica, oddzielona od głównej historii, dla ciekawskich i dobrze przygotowanych.",
       "sanctumBody": "Mroczne serce Ciernistego Szczytu, gdzie długa praca kultu osiąga swój straszliwy szczyt.",
       "raidName": "Rajd na koniec gry",
       "raidBody": "Za zapieczętowanymi królewskimi drzwiami czeka próba dla dziesięciu graczy: wielofazowa walka i nieśmiertelna moc, którą cały rajd musi wspólnie powstrzymać. Wywalcz sobie wstęp, a potem przyprowadź dziewięcioro przyjaciół.",
+      "heroicTitle": "Tryb heroiczny",
+      "heroicBody": "Każdy loch dla pięciu graczy, a także sam rajd, ma wersję heroiczną czekającą za pułapem poziomów. Te same sale, przebudowane dla wyposażonej drużyny endgame: wszystko uderza mocniej, niczego nie da się prześcignąć na własnych nogach, a bossowie całkowicie ignorują ogłuszenia i spętania. Najpierw wyrośnij ponad wersje normalne; tryb heroiczny zakłada, że już to zrobiłeś.",
+      "heroicHowBody": "Wybierz trudność, zanim twoja grupa zajmie instancję: wpisz /dungeon heroic lub przełącz Trudność podziemia w menu drużyny. Wybór jest wspólny dla całej drużyny i zostaje przypieczętowany u drzwi, więc przebieg pozostaje tym, czym został ogłoszony.",
+      "heroicRewardsTitle": "Znaki Heroiczne i ulepszone zdobycze",
+      "heroicRewardsBody": "Heroiczni bossowie upuszczają znany ci łup, ulepszony i oznaczony jako Heroiczny w podpowiedzi, a ostatni boss każdego przebiegu dorzuca epiki, których nie znajdziesz nigdzie indziej. To ostatnie zabójstwo zostawia też każdemu uczestnikowi Znaki Heroiczne: walutę wydawaną u Kwatermistrza Vexa w Highwatch, którego zapas pierścieni i naszyjników to jedyna biżuteria w królestwie.",
+      "heroicLockoutBody": "Normalne lochy można przemierzać bez końca. Tryb heroiczny wymaga cierpliwości: zabicie ostatniego bossa blokuje wszystkim w przebiegu więcej niż jedno heroiczne ukończenie tego lochu na dzień, a rajd prowadzi osobną dzienną blokadę dla każdej trudności. Ukończony przebieg dla pięciu graczy pozostaje otwarty dla własnej drużyny, na powroty po ciało i łupy, więc nikt nie zostaje odcięty od tego, co tam zdobył. Rajd jest surowszy: gdy jego zabójstwo cię zablokuje, drzwi pozostają zamknięte aż do dziennego resetu, więc zbierz swoje zdobycze, zanim opuścisz arenę.",
       "templeLoreTitle": "Zatopiona Świątynia, nieco głębiej",
       "templeLoreBody": "Świątynia ma własną legendę, starszą niż kult, którego tropisz gdzie indziej. Na brzegu Migotliwego Stawu, jeziorka, które pije światło księżyca i oddaje utopionych, samotny strażnik pilnuje bramy bladego światła. Pod powierzchnią schody z zimnego kamienia zbiegają w dół do niej. Lud, który tam zatonął, nie utonął przez nieszczęśliwy wypadek: byli to członkowie Bladego Chóru, którzy zeszli pod wodę w modlitwie i nigdy nie przestali śpiewać. Dawni strażnicy wydrapali jedno ostrzeżenie w skałach, zanim woda ich pochłonęła, modlitwę do czegoś, co nazwali Utopionym Księżycem, a pewniejsza ręka dopisała pod nią dwa słowa: ono tylko śpi.",
       "cryptLeadTitle": "Drzwi, które zmarli mieli trzymać zamknięte",
-      "cryptLeadBody": "Wysoko na szczytach, z dala od głównej bitwy, kryje się chłodniejsza tajemnica. Stare groby noszą koronę, której żaden zapis nie pamięta, a zmarli, którzy ich strzegą, służyli niegdyś zapomnianemu królowi. Odczytaj ich kamienie, zbierz klucze sklepienia, które przechowywali, a zdołasz odpieczętować grobowiec, który trzy wierne dusze poległy, by trzymać zamknięty, otwierając drugą próbę dla dziesięciu graczy dla tych, którzy podążą za wskazówkami do końca."
+      "cryptLeadBody": "Wysoko na szczytach, z dala od głównej bitwy, kryje się chłodniejsza tajemnica. Stare groby noszą koronę, której żaden zapis nie pamięta, a zmarli, którzy ich strzegą, służyli niegdyś zapomnianemu królowi. Odczytaj ich kamienie, zbierz klucze sklepienia, które przechowywali, a zdołasz odpieczętować grobowiec, który trzy wierne dusze poległy, by trzymać zamknięty, opcjonalną próbę, która otwiera królestwu jego rajd dla dziesięciu graczy dla tych, którzy podążą za wskazówkami do końca."
+    },
+    "delvesPage": {
+      "heading": "Wyprawy",
+      "intro": "Wyprawy to krótkie, powtarzalne zejścia dla jednego lub dwóch graczy, z wierną towarzyszką u twego boku, ilekroć schodzisz samotnie. Znajdź tablicę, wybierz wyprawę i wespnij się z powrotem z łupami.",
+      "fromLevel": "Od poziomu {n}",
+      "partyLabel": "Dla jednego lub dwóch",
+      "keeperLabel": "Opiekun",
+      "keeperFmt": "{name}, {title}",
+      "companionLabel": "Towarzyszka",
+      "companionFmt": "{name}, {role}",
+      "tiersLabel": "Poziomy trudności",
+      "affixesLabel": "Możliwe modyfikatory",
+      "whatHeading": "Czym jest wyprawa",
+      "whatBody": "Wyprawa to mały instancjowany loch stworzony tylko dla ciebie i najwyżej jednego sojusznika, prywatna kopia, w której nikt ci nie przeszkodzi. Rozpoczynasz ją przy tablicy, której pilnuje opiekun wypraw gdzieś w świecie, wskakujesz do środka, przebijasz się przez garść pomieszczeń i kończysz na jednym strażniku. Wyprawy są szybkie i pomyślane do powtarzania, więc stanowią pewny kawałek postępu, ilekroć otwarty świat się wyczerpie.",
+      "howHeading": "Jak wygląda wyprawa",
+      "howBody": "Porozmawiaj z opiekunem, aby otworzyć tablicę, wybierz poziom trudności i zejdź w dół. Każda wyprawa łączy kilka krótkich komnat i kończy się starciem ze strażnikiem; pokonaj go, aby odebrać nagrodę i wrócić na powierzchnię. Zabierz przyjaciela, jeśli go masz, albo zdaj się na towarzyszkę, jeśli go nie masz.",
+      "companionHeading": "Twoja towarzyszka",
+      "companionBody": "Wyprawa wysyła z tobą towarzyszkę, więc samotne zejście nigdy nie jest beznadziejne. Walczy u twego boku, a gdy inwestujesz w nią między wyprawami, stale staje się silniejsza, aż w końcu raz na zejście potrafi wyrwać sojusznika z krawędzi śmierci. Należy do ciebie na czas wyprawy i czeka przy tablicy między zejściami.",
+      "lockpickHeading": "Zamki i to, co kryją",
+      "lockpickBody": "Niektóre drzwi i skrytki są zaryglowane, a ich otwarcie to mała próba nerwów, a nie sprawdzian statystyk: rozwiąż zamek czysto i spokojnie, a zdobędziesz lepszą nagrodę niż za pośpieszną, sfuszerowaną próbę. To opcjonalne, ale ostrożny śmiałek wychodzi z niej bogatszy.",
+      "tiersHeading": "Poziom trudności",
+      "tiersBody": "Wyprawa oferuje więcej niż jeden poziom trudności. Wyższy czyni wrogów silniejszymi i dorzuca modyfikator wyprawy, a w zamian wypłaca więcej. Wymaga też, byś miał za sobą kilka poziomów, nim cię wpuści.",
+      "affixesHeading": "Modyfikatory wyprawy",
+      "affixesBody": "Trudniejsze wyprawy losują modyfikator, który zmienia przebieg zejścia, od niespokojnych umarłych przez cuchnące powietrze po obsuwający się strop. Podnoszą jednocześnie zagrożenie i nagrodę. Każda wyprawa czerpie z modyfikatorów pasujących do jej motywu; w skali całego królestwa pula wygląda tak:",
+      "marksHeading": "Znaki Wypraw",
+      "marksBody": "Ukończenie wypraw przynosi Znaki Wypraw, walutę trzymaną z dala od twoich monet. Wydawaj je u opiekuna, aby wzmocnić swoją towarzyszkę i zdobyć ekwipunek, którego nie znajdziesz nigdzie indziej.",
+      "whereHeading": "Gdzie ją znaleźć",
+      "whereBody": "Pierwsza wyprawa, Zawalony Relikwiarz, otwiera się na Relikwiarzowym Wzgórzu w początkowej dolinie, czyli Dolinie Wschodniego Strumienia. Tablicy pilnuje tam Brat Halven, który pośle cię w dół, gdy będziesz gotów. Na tym jego obchód się nie kończy: za Kopcami Trolli, przy północnym krańcu Trzęsawiska Mokrzawia, ten sam opiekun otwiera Utopioną Litanię dla poszukiwaczy, którzy złapali już grunt pod nogami."
     },
     "talentsPage": {
       "heading": "Talenty i specjalizacje",
@@ -1164,11 +2693,13 @@ export const pl_PL: EnTranslations = {
       "whatHeading": "Co robią talenty",
       "whatBody": "Wraz z awansowaniem zdobywasz punkty talentów, które wydajesz na drobne, stałe ulepszenia swoich zdolności i statystyk. Kształtują one to, jak gra się daną klasą, kierując ją ku większym obrażeniom, wytrzymalszej obronie lub silniejszemu leczeniu.",
       "howHeading": "Jak działają",
-      "howBody": "Talenty odblokowują się na 10. poziomie, a kolejne punkty zdobywasz w miarę wspinaczki ku maksimum. Wydajesz je w panelu talentów swojej klasy i możesz zapisać więcej niż jeden układ, aby przełączać się między buildami.",
+      "howBody": "Talenty odblokowują się na 10. poziomie, a kolejne punkty zdobywasz w miarę wspinaczki ku maksimum. Wydajesz je w panelu talentów swojej klasy, gdzie głębsze rzędy otwierają się w miarę inwestowania i awansowania, i możesz zapisać więcej niż jeden układ, aby przełączać się między buildami.",
+      "shareNote": "Gotowy zestaw można skopiować do krótkiego kodu do udostępniania i przekazać przyjacielowi, który wkleja go prosto do własnego panelu talentów, aby go wczytać.",
+      "choiceNote": "Kilka punktów na każdym drzewku to raczej rozdroże niż zakup: węzeł oferuje dwie lub trzy opcje, a ty wybierasz jedną z nich. Kolejny reset otwiera ten wybór na nowo, tak jak wszystko inne na drzewku.",
       "resetTitle": "Nic nie jest na stałe",
-      "resetNote": "Talenty możesz zresetować w dowolnej chwili, więc wczesny wybór nigdy nie jest pułapką. Próbuj różnych rzeczy, sprawdzaj, co lubisz, i zmieniaj zdanie do woli.",
+      "resetNote": "Talenty możesz zresetować w dowolnej chwili poza walką i poza meczem na arenie, więc wczesny wybór nigdy nie jest pułapką. Próbuj różnych rzeczy, sprawdzaj, co lubisz, i zmieniaj zdanie do woli.",
       "specsHeading": "Specjalizacje według klas",
-      "specsBody": "Każda klasa ma kilka specjalizacji, a każda z nich ma własną rolę i charakterystyczny motyw przewodni. Oto zarys ich wszystkich. Otwórz klasę, by poznać jej pełny zestaw."
+      "specsBody": "Każda klasa ma kilka specjalizacji, a każda z nich ma własną rolę i charakterystyczny motyw przewodni. Wybranie jednej w panelu talentów daje charakterystyczną zdolność i trwałe, własne mistrzostwo. Oto zarys ich wszystkich. Otwórz klasę, by poznać jej pełny zestaw."
     },
     "arenaPage": {
       "heading": "Arena i PvP",
@@ -1176,22 +2707,88 @@ export const pl_PL: EnTranslations = {
       "duelsHeading": "Pojedynki",
       "duelsBody": "Wyzwij dowolnego napotkanego gracza na przyjacielski pojedynek. Stawką jest tylko duma, więc to najprostszy sposób, by poznać starcie lub rozstrzygnąć przyjacielski spór.",
       "coliseumHeading": "Popielne Koloseum",
-      "coliseumBody": "Koloseum to arena królestwa, gdzie stajesz naprzeciw innych graczy w meczach rankingowych. Wygrywaj, a twoja pozycja rośnie, a najsilniejsi wojownicy pną się w rankingu na oczach wszystkich.",
+      "coliseumBody": "Koloseum to arena królestwa, gdzie stajesz naprzeciw innych graczy w meczach rankingowych, jeden na jednego lub dwóch na dwóch. Każdy przedział ma własny ranking, więc zwycięstwo wynosi cię po tej drabinie na oczach całego królestwa. Otwórz okno Areny, aby zapisać się do przedziału, samotnie lub ze swoim partnerem.",
       "fiestaHeading": "Fiesta dwóch na dwóch",
-      "fiestaBody": "Fiesta to szybki tryb dwóch na dwóch rozgrywany w krótkich rundach. Między rundami wybierasz ulepszenia, szybkie wzmocnienia, które w locie przekształcają twój zestaw, więc żaden mecz nie jest taki sam.",
+      "fiestaBody": "Fiesta to szybka bijatyka dwóch na dwóch, toczona jako jedno nieprzerwane starcie, w którym każdy walczący zostaje sprowadzony do równych szans. W trakcie walki dobierasz ulepszenia, szybkie wzmocnienia, które w locie przekształcają twój zestaw, więc żaden mecz nie jest taki sam.",
       "augmentsNote": "Ulepszenia i wzmocnienia działają tylko podczas meczu. Chodzi w nich o swobodne, doraźne buildy, a nie o trwałą potęgę, więc nikt nie kupi sobie zwycięstwa.",
       "wavesTitle": "Ulepszenia napływają falami",
-      "wavesBody": "Każda runda Fiesty daje ci nowy wybór, a wybory stają się coraz śmielsze w miarę trwania meczu. Budujesz od fali do fali, za każdym razem wybierając jedną z kilku opcji i zachowując ją do końca starcia.",
+      "wavesBody": "Starcie Fiesty podsuwa ci nowe wybory w miarę trwania, a stają się one coraz śmielsze, im dłużej toczy się walka. Budujesz od fali do fali, za każdym razem wybierając jedną z kilku opcji i zachowując ją do końca starcia.",
       "waveSilverTitle": "Srebro",
       "waveSilverBody": "Pierwsza fala: czyste wzmocnienia pojedynczej cechy, które wyostrzają podstawy twojej klasy.",
       "waveGoldTitle": "Złoto",
       "waveGoldBody": "Środkowa fala: obosieczne kombinacje, w których twój build zaczyna nabierać kształtu i rozbrzmiewać.",
       "wavePrismaticTitle": "Pryzmatyczny",
       "wavePrismaticBody": "Ostatnia fala: definiujące build, rozsadzające ekran skoki mocy, które mają wydawać się absurdalne w najlepszym tego słowa znaczeniu.",
+      "yumiHeading": "Ochrona Yumi",
+      "yumiBody": "Ochrona Yumi to drużynowy tryb z zadaniem, rozgrywany w labiryncie: każda strona strzeże własnego kociego chowańca, jednocześnie polując na cudzego. Co jakiś czas oba koty przeskakują w nowe zakątki labiryntu, więc walka waha się między obroną, polowaniem i wyścigiem, by znaleźć je na nowo. Zapisuj się w trybie trzech na trzech lub pięciu na pięciu; upadek w boju odstawia cię jedynie na chwilę.",
       "powerupsTitle": "Wzmocnienia na ringu",
       "powerupsBody": "Na arenę w trakcie walki spadają też świecące kule, dostępne dla tego, kto pierwszy do nich dotrze. Są celowo przesadne i działają tylko przez chwilę: Demon Prędkości dla mgnienia oślepiającego tempa, Kolos, by rozrosnąć się w ociężałego giganta, Księżycowe Buty dla skocznego susu w niskiej grawitacji oraz Berserker dla nagłego przypływu furii.",
       "ladderHeading": "Wspinaczka po drabinie rankingowej",
       "ladderBody": "Rozgrywka rankingowa śledzi twoją pozycję w czasie. Sprawdź ranking, by zobaczyć, gdzie jesteś i kto dzierży szczyt królestwa."
+    },
+    "valeCupPage": {
+      "heading": "Puchar Doliny",
+      "intro": "Dzicza piłka na Maciorowym Błoniu: wybierz sztandar, wybierz rolę i kopnij wypchaną dziczą skórę za plecy bramkarza, by zdobyć Miedziany Skopek. Bez krwi, bez łupów, tylko ryk trybun.",
+      "loreHeading": "Dzicza piłka i żniwny rozejm",
+      "loreOldSow": "Na długo zanim zbudzili się umarli, parobkowie z Eastbrook grali w dziczą piłkę na ścierniskach po żniwach: dwie gromady, jedna dzicza skóra wypchana słomą i dwie wozowe bramy zaciągnięte na oba końce błonia. Pierwsza piłka, Stara Maciora, wisi odlana w brązie nad kominkiem tawerny.",
+      "loreTruce": "Gdy Popielne Koloseum zaczęło urządzać wojenne igrzyska, Marszałek Redbrook odpowiedział czymś łagodniejszym: stałym żniwnym rozejmem na starym błoniu. Wozowe bramy stały się słupkami, błonie zyskało mury, trybuny i nazwę, Maciorowe Błonie, a nagrodą zawsze był ten sam wgnieciony skopek na mleko, z którego pili zwycięzcy: Miedziany Skopek.",
+      "howHeading": "Jak grać",
+      "howQueue": "Do kolejki dołączysz z dowolnego miejsca przez okno Pucharu Doliny albo rozmawiając z Opiekunem Murawy Bramem przy bramie Maciorowego Błonia. Wybierz format od jeden na jednego do pięciu na pięciu, sztandar nacji i rolę sportową; stawaj w kolejce solo albo z drużyną.",
+      "howMatch": "Przy pierwszym gwizdku twój zestaw klasowy zostaje podmieniony na sportowy, a po meczu wraca dokładnie taki, jaki był. Kopnięcia celują w celownik na ziemi, piłka odbija się od band, a drybling to po prostu bieg z piłką. Zdobądź więcej goli niż przeciwnik przed końcem meczu; remis rozstrzyga złoty gol.",
+      "howTruce": "Na Maciorowym Błoniu nikt nie krwawi: wślizgi tylko przewracają, nic nie boli, a zwierzęta oglądają mecz z boku.",
+      "spectateBody": "Na stadionie toczy się jeden mecz naraz i każdy może podejść i oglądać go z trybun.",
+      "bettingHeading": "Zakład przy barierce",
+      "bettingBody": "Widzowie na Maciorowym Błoniu mogą postawić na jedną ze stron, gdy mecz się zawiązuje: zakłady zbierają się w jedną pulę, a na ostatni gwizdek zwycięzcy dzielą pulę przegranych proporcjonalnie do tego, co postawili. Remis lub niespodzianka, na którą nikt nie stawiał, zwraca każdą monetę. Gracze zasiadający w meczu nie mogą na niego stawiać, a barierka prowadzi twój życiowy bilans zwycięstw, porażek i salda monet.",
+      "practiceHeading": "Mecze treningowe i puste boisko",
+      "practiceBody": "Okno Pucharu Doliny oferuje też trening: prywatną kopię boiska, gdzie boty wypełniają obie strony i nic nie liczy się do twojego bilansu. Brakuje gracza lub dwóch do prawdziwego meczu? Po krótkim oczekiwaniu boty uzupełniają drużyny, a każdy mecz z botami na boisku jest towarzyski, nigdy rankingowy. A gdy Maciorowe Błonie stoi bezczynnie, boty dają pokaz, który możesz oglądać z trybun i obstawiać; w chwili, gdy prawdziwi gracze zgłoszą gotowość, pokaz ustępuje boiska, a każdy zakład zostaje zwrócony.",
+      "nationsHeading": "Osiem nacji pod sztandarami",
+      "nationsBody": "Każda drużyna gra pod sztandarem. Kapitan wybiera nację, a jeśli obie strony niosą ten sam sztandar, goście grają w odwróconych barwach.",
+      "nationVale": "Zieleń i złoto pod snopem pszenicy: gospodarze, parobkowie z krwi i kości.",
+      "nationMirefen": "Morska zieleń i szarość pod czaplą: cierpliwi, długonodzy, nigdy się nie spieszą.",
+      "nationThornpeak": "Lodowy błękit i biel pod górskim szczytem: pewni kroku i uparci.",
+      "nationColiseum": "Czerwień i czerń ze skrzyżowanymi mieczami: grają, jakby to wciąż były wojenne igrzyska.",
+      "nationChoir": "Bladobłękitni i srebrni pod dzwonem: niesamowici, precyzyjni i bardzo cisi.",
+      "nationOgre": "Pomarańcz i umbra za pięścią: grają barkiem naprzód i są z tego dumni.",
+      "nationMoon": "Fiolet i srebro pod półksiężycem: nocni gracze, lekcy na nogach.",
+      "nationCopperdig": "Miedź i brąz z kilofem: kopacze, którzy nigdy nie przestają biegać.",
+      "rolesHeading": "Role sportowe",
+      "rolesBody": "Rola decyduje o zestawie, z którym wychodzisz na boisko. Kopie każdy; reszta to kwestia temperamentu. W przedziałach jeden na jednego i dwóch na dwóch wszyscy grają zestawem wszechstronnym, więc wybór roli nabiera znaczenia dopiero od trzech na trzech w górę.",
+      "rewardsHeading": "Zasady rozejmu",
+      "rewardsBody": "Zasady rozejmu oznaczają brak doświadczenia i łupów: rozstrzygnięty mecz liczy się do twojego bilansu i tablicy zwycięzców, a zwycięstwo liczy się też do zadań nagród dnia. Dezercja z meczu odsyła cię na ławkę, a Opiekun Murawy pamięta."
+    },
+    "deedsPage": {
+      "intro": "Księga Czynów to miejsce, w którym świat prowadzi rachunek wszystkiego, czego dokonałeś: od pierwszych kroków poza początkową doliną po najtrudniejsze starcia, jakie królestwo ma do zaoferowania. Zdobywaj czyny podczas gry, noś tytuły, które przyznają, i patrz, jak twoja Renoma rośnie.",
+      "howHeading": "Jak działają czyny",
+      "howBody": "Czyny zdobywasz i przechowujesz jedną postacią naraz, więc każdy bohater, którym grasz, buduje własną Księgę; dopiero ranking królestwa zbiera twoją Renomę ze wszystkich postaci, którymi grasz, i liczy każdy czyn tylko raz. Każdy czyn jasno opisuje, czego od ciebie wymaga, wprost w Księdze Czynów w grze, więc zawsze wiesz, za czym gonić, a te, na których ci zależy, możesz zacząć śledzić, by mieć je na oku podczas gry. Nieliczne pozostają tajemnicą i ujawniają się dopiero wtedy, gdy je zdobędziesz. Księga dba też o rzetelność: cokolwiek zdoła potwierdzić twoja dotychczasowa historia, zalicza od razu, więc weteran nigdy nie otwiera jej na pustej stronie; jedynie czyny zliczające zaczynają swój rachunek od nowa.",
+      "renownHeading": "Renoma",
+      "renownBody": "Renoma to wynik kryjący się za Księgą. Każdy zdobyty czyn jest wart ustaloną liczbę punktów, a twoja suma tylko rośnie, więc spokojny tydzień nigdy nie odbiera ci pozycji. Garść czynów zależy od szczęścia, a nie umiejętności, Wyczyny zaś są osobnym wyróżnieniem, dlatego ani jedne, ani drugie nie są warte żadnej Renomy.",
+      "rewardsHeading": "Tytuły i obramowania",
+      "rewardsBody": "Nagrody służą wyłącznie ozdobie i właśnie o to chodzi. Niektóre czyny przyznają tytuł do noszenia albo obramowanie, które oprawi twoje imię, nigdy zaś nic, co uczyniłoby twojego bohatera silniejszym. Wybierz tytuł w Księdze Czynów, a będzie ci towarzyszył na plakietce z imieniem, na czacie i w rankingach, na oczach wszystkich.",
+      "chroniclesHeading": "Kroniki",
+      "chroniclesBody": "Każda kraina prowadzi własną Kronikę, zbiór czynów zebranych przez miejscowego Kronikarza, który wziął na siebie zadanie odnotowania każdego przechodzącego wędrowca. Pierwszym z nich jest Saul z Doliny Wschodniego Strumienia. Kronika dzieli się na rozdziały, przez które możesz przechodzić w dowolnej kolejności.",
+      "featsHeading": "Wyczyny",
+      "featsBody": "Wyczyny to osobna półka: zapisy dziedzictwa i dokonań pierwszych na świecie, czyny związane z minioną erą albo chwilą, która wydarzy się tylko raz. Nie niosą Renomy i nie wliczają się do licznika ukończenia, przechowywane na zawsze jako pamiątka tego, czego dokonano.",
+      "catalogHeading": "Pełny rejestr czynów",
+      "catalogBody": "Oto wszystkie czyny, jakie mieści Księga, zebrane według kategorii. Te tajemne celowo pominięto: czekają, aż je odnajdziesz. Otwórz Księgę Czynów w grze, aby zobaczyć dokładnie, czego każdy z nich wymaga.",
+      "standingsNote": "Królestwa prowadzą bieżący rachunek Renomy na wszystkich kontach. Aby zobaczyć, kto jak stoi, otwórz Ranking w grze i przejdź do jego zakładki Renomy; zestawienie żyje tam, nie na wiki.",
+      "catHeading": "{label} ({count})",
+      "colName": "Czyn",
+      "colRenown": "Renoma",
+      "colReward": "Nagroda",
+      "featTag": "Wyczyn",
+      "rewardBorder": "Obramowanie",
+      "cat": {
+        "progression": "Postępy",
+        "combat": "Walka",
+        "dungeon": "Lochy",
+        "delve": "Wyprawy",
+        "chronicle": "Kroniki",
+        "collection": "Kolekcja",
+        "pvp": "PvP i sport",
+        "social": "Społeczność",
+        "exploration": "Eksploracja",
+        "feat": "Wyczyny"
+      }
     },
     "wishPage": {
       "heading": "Rzeczy, które chciałbym wiedzieć wcześniej",
@@ -1199,9 +2796,9 @@ export const pl_PL: EnTranslations = {
       "i1Title": "Nie da się wybrać złej klasy",
       "i1Body": "Każda klasa poradzi sobie sama i dotrze do maksymalnego poziomu. Wybierz fantazję, która ci się podoba, a nie tę, którą ktoś inny nazywa najlepszą.",
       "i2Title": "Śmierć prawie nic nie kosztuje",
-      "i2Body": "Gdy padniesz, odradzasz się na cmentarzu i biegniesz z powrotem do swojego ciała. Nie tracisz doświadczenia, więc spokojnie możesz ryzykować i się uczyć.",
+      "i2Body": "Gdy polegniesz, powstajesz jako duch na najbliższym cmentarzu. Wróć do ciała, by odrodzić się za darmo, albo skorzystaj z natychmiastowego wskrzeszenia u Bladego Strażnika i przyjmij za tę wygodę krótkotrwałe osłabienie. Nie tracisz doświadczenia, ekwipunku ani monet, więc spokojnie możesz ryzykować i się uczyć.",
       "i3Title": "Talenty to nie pułapka",
-      "i3Body": "Odblokowują się na 10. poziomie i resetują, kiedy tylko chcesz, więc twoje wczesne wybory nigdy nie są ostateczne.",
+      "i3Body": "Odblokowują się na 10. poziomie i resetują się, kiedy tylko chcesz, poza walką, więc twoje wczesne wybory nigdy nie są ostateczne.",
       "i4Title": "Podążaj śladem zadań",
       "i4Body": "Zadania to najszybszy sposób na zdobywanie poziomów i prowadzą cię przez cały świat. Gdy nie wiesz, dokąd iść, odszukaj kolejny znacznik.",
       "i5Title": "Dbaj o aktualny ekwipunek",
@@ -1219,13 +2816,18 @@ export const pl_PL: EnTranslations = {
       "loading": "Wczytywanie modelu...",
       "error": "Nie udało się wczytać modelu 3D. Grafika powyżej i tak pokazuje tę postać: {name}.",
       "dragHint": "Przeciągnij, aby obrócić model. Gdy jest zaznaczony, użyj strzałek w lewo i w prawo.",
-      "canvasLabel": "Obrotowy model 3D: {name}"
+      "canvasLabel": "Obrotowy model 3D: {name}",
+      "posterAlt": "{name}"
     },
     "models": {
       "title": "Przeglądarka modeli 3D",
       "lead": "Przyjrzyj się z bliska bohaterom, potworom i demonom świata. Wybierz model, a następnie przeciągnij, by go obrócić.",
       "intro": "Każda figura tutaj to ten sam model, który spotykasz w grze, renderowany na żywo w twojej przeglądarce. Wybierz jeden, by go wczytać.",
       "groupClasses": "Klasy",
+      "groupForms": "Postacie druida",
+      "formBear": "Postać Bruina",
+      "formCat": "Postać wilka",
+      "formTravel": "Postać Fleet",
       "groupCreatures": "Stworzenia",
       "groupPets": "Demony Czarnoksiężnika",
       "pickerLabel": "Wybierz model do obejrzenia",
@@ -1235,15 +2837,19 @@ export const pl_PL: EnTranslations = {
     "gear": {
       "intro": "Wyposażenie to ekwipunek, który nosi twoja postać, oraz przedmioty, które ze sobą dźwigasz. Lepsze wyposażenie to najpewniejszy sposób, by stać się silniejszym, a większość z niego zbierasz po prostu grając.",
       "slotsTitle": "Co możesz założyć",
-      "slotsBody": "Masz slot na broń i siedem slotów na pancerz. Każdy założony element dodaje coś twojej postaci, a możesz dowolnie je łączyć i mieszać, w miarę jak znajdujesz ulepszenia.",
+      "slotsBody": "Masz slot na broń, siedem slotów na pancerz i trzy sloty na biżuterię: szyję i dwa palce. Każda klasa może używać tylko określonych broni i nosi pancerz do swojej wagi, tkaninę, skórę lub kolczugę, więc ulepszenia, które do ciebie pasują, to te stworzone dla twojej klasy. Biżuteria nie ma żadnej wagi: każda klasa nosi to, co zdobędzie. W ich obrębie wypełniaj każdy slot najlepszym elementem, jaki znajdziesz.",
       "slotMainhand": "Broń",
       "slotHelmet": "Głowa",
+      "slotNeck": "Szyja",
       "slotShoulder": "Barki",
       "slotChest": "Tułów",
       "slotWaist": "Pas",
       "slotLegs": "Nogi",
       "slotGloves": "Dłonie",
       "slotFeet": "Stopy",
+      "slotFinger": "Palec",
+      "bagsTitle": "Torby i miejsce na noszenie",
+      "bagsBody": "Wszystko, co podniesiesz, trafia do jednego wspólnego plecaka, a powiększasz go, zakładając torby. Twoje okno toreb ma cztery gniazda: kliknij torbę w plecaku, aby wsunąć ją do wolnego gniazda, a każda noszona torba dokłada własne miejsce. Proste torby to tani towar u sprzedawców, obszerniejsze wypadają z bestii, a najlepsze pochodzą od bossów w lochach, więc twoje miejsce na noszenie rośnie wraz z ekwipunkiem.",
       "qualityTitle": "Jakość na pierwszy rzut oka",
       "qualityBody": "Każdy przedmiot ma jakość, a jego nazwa jest pokolorowana tak, by do niej pasować, dzięki czemu odczytasz jego wartość na pierwszy rzut oka. Od najpospolitszej do najbardziej cenionej:",
       "qualityPoor": "Lichy",
@@ -1255,37 +2861,89 @@ export const pl_PL: EnTranslations = {
       "qualityNote": "Wyższa jakość zwykle oznacza lepsze statystyki, ale jakość to wskazówka, nie reguła. Dobrze dobrany przedmiot do twojej klasy i poziomu może pokonać bardziej efektowny.",
       "upgradeTitle": "Trzymaj wyposażenie na bieżąco",
       "upgradeBody": "Zastąpienie starego elementu świeżym ulepszeniem daje ci więcej niż perfekcyjna gra w wyposażeniu, z którego wyrosłeś. Gdy coś lepszego wypadnie lub zaoferuje to zadanie, weź to. Nie odkładaj dobrych przedmiotów na później.",
+      "itemLevelBody": "Jeśli chcesz szybkiego sposobu na porównanie dwóch elementów, włącz w opcjach Pokaż poziom przedmiotu. Ekwipunek zdobyty w świecie, od wrogów i z zadań, pokaże wtedy poziom przedmiotu, jedną liczbę określającą z grubsza jego potęgę na podstawie tego, skąd pochodzi, dzięki czemu na pierwszy rzut oka poznasz, które ulepszenie waży więcej, nawet w różnych slotach. Przedmioty bez takiego źródła, jak zwykłe podstawy od sprzedawców i ekwipunek startowy, nie pokazują poziomu przedmiotu, więc brak liczby jest czymś normalnym, nie usterką.",
       "sourcesTitle": "Skąd pochodzi wyposażenie",
-      "sourcesBody": "Większość twoich wczesnych ulepszeń to nagrody za zadania, więc opłaca się kończyć zadania zamiast młócić wrogów. Wrogowie upuszczają wyposażenie, gdy ich pokonasz, sprzedawcy w mieście oferują solidne podstawy, a rynek graczy pozwala kupować od innych poszukiwaczy przygód.",
+      "sourcesBody": "Większość twoich wczesnych ulepszeń to nagrody za zadania, więc opłaca się kończyć zadania zamiast młócić wrogów. Wrogowie upuszczają wyposażenie, gdy ich pokonasz, sprzedawcy w mieście oferują solidne podstawy, rzemieślnicy przerabiają zebrane materiały na noszalne części, a rynek graczy pozwala kupować od innych poszukiwaczy przygód. Na samym szczycie dwie waluty znaków kupują ekwipunek nieosiągalny nigdzie indziej: Znaki Wypraw u opiekuna wypraw oraz Znaki heroiczne u heroicznego kwatermistrza.",
+      "soulboundTitle": "Związany z duszą: tylko i wyłącznie twój",
+      "soulboundBody": "Kilka szczególnych nagród jest związanych z duszą, przywiązanych do twojej postaci od chwili, gdy je zdobędziesz. Przedmiotu związanego z duszą nie można wymienić, wysłać pocztą, sprzedać sprzedawcy ani wystawić na targu; należy tylko i wyłącznie do ciebie. Dziś ta ochrona strzeże żetonów nagród, takich jak Znaki Heroiczne, podczas gdy zdobyty ekwipunek możesz swobodnie wymieniać, sprzedawać i udostępniać.",
+      "setsTitle": "Zestawy i bonusy zestawów",
+      "setsBody": "Część pancerza występuje w pasujących do siebie rodzinach, gdzie kilka elementów skrojono tak, by wyglądały i walczyły jak jedna całość. Noś naraz dość elementów rodziny, a zestaw się przebudzi, dając bonusy ponad statystyki każdej części, a im więcej elementów nosisz, tym silniejszy się staje. Kilka takich rodzin trafia się jako cenne łupy podczas zdobywania poziomów; najpotężniejsze z nich pochodzą z najtrudniejszej zawartości grupowej blisko maksymalnego poziomu, więc kompletowanie pełnego zestawu to klasyczny cel końca gry.",
       "consumablesTitle": "Materiały zużywalne",
       "consumablesIntro": "Niektóre przedmioty zużywa się raz dla szybkiej korzyści. To tania polisa, więc trzymaj kilka pod ręką.",
       "consumablesPotions": "Mikstury przywracają zdrowie lub manę w chwili użycia, nawet w środku walki, co czyni je ratunkiem w sytuacji, gdy zaczepka pójdzie nie tak. Dzielą krótki czas odnowienia, więc zaplanuj jeden dobry moment, by ich użyć.",
       "consumablesFood": "Jedzenie i napoje regenerują cię, gdy siedzisz i odpoczywasz między walkami. Jedzenie przywraca zdrowie, picie przywraca manę, a odpoczynek w ten sposób jest darmowy. Usiądź na kilka sekund po ciężkiej walce, zamiast wbiegać w następną wyleczony tylko do połowy.",
       "consumablesElixirs": "Eliksiry dają tymczasowe wzmocnienie podczas wędrówki, niewielką przewagę, która pomaga, gdy chcesz pójść nieco dalej.",
       "fishingTitle": "Wędkowanie",
-      "fishingBody": "Wędkowanie to spokojna odmiana tempa. Wyposaż się w wędkę, zarzuć do otwartej wody i wyciągaj to, co bierze. Najczęściej łowisz ryby, które możesz ugotować na jedzenie, od czasu do czasu jakiś rupieć do sprzedania za kilka monet, a raz na jakiś czas cenny rzadki połów. To, co znajdziesz, zależy od wody, w której łowisz.",
-      "fishingFood": "Ryby, które wyciągasz, są surowe, a surowe ryby to jedzenie. Ugotuj swój połów, a leczy bardziej, gdy siadasz do jedzenia, przy czym lepsze ryby pochodzą z zimniejszych, głębszych wód na północy. Wędka na jeziorze to cichy sposób, by uzupełniać zapasy między walkami.",
+      "fishingBody": "Wędkowanie to spokojna odmiana tempa. Wyposaż się w wędkę, zarzuć do otwartej wody i wyciągaj to, co bierze. Najczęściej łowisz ryby, które są jedzeniem gotowym do zjedzenia, od czasu do czasu jakiś rupieć do sprzedania za kilka monet, a raz na jakiś czas cenny rzadki połów. To, co znajdziesz, zależy od wody, w której łowisz.",
+      "fishingFood": "Ryby, które wyciągasz, są jedzeniem: zjedz jedną, gdy siadasz, by odpocząć, a przywróci zdrowie, przy czym pożywniejsze ryby pochodzą z zimniejszych, głębszych wód na północy. Wędka na jeziorze to cichy sposób, by uzupełniać zapasy między walkami.",
       "fishingRare": "Raz na jakiś czas twoja żyłka łapie coś o wiele lepszego niż kolacja: migoczącą cenną rybę, na którą każdy wędkarz może mieć szczęście w dowolnej wodzie. Złap jedną, a twój dziennik rozbłyśnie połowem. To rodzaj szczęśliwego trafu, który sprawia, że leniwe popołudnie nad jeziorem warto opowiedzieć ludziom.",
       "cosmeticsTitle": "Wyglądy i kosmetyki",
       "cosmeticsBody": "Niektóre nagrody zmieniają jedynie wygląd twojej postaci, nigdy jej siłę. Te kosmetyczne skórki pozwalają ci się wyróżnić bez wpływu na grę, więc noś, którą tylko zechcesz.",
       "cosmeticsRanks": "Kosmetyki mają własne poziomy rzadkości, a te rzadsze to przyjemna rzecz do zdobywania. Zdobycie wyższego poziomu odblokowuje też wyglądy poniżej niego.",
-      "cosmeticsSkins": "Są dwie kosmetyczne linie do skompletowania. Każda klasa ma garść alternatywnych wyglądów, świeże ujęcie jej stylu, które tylko ty możesz nosić. Obok nich są chromy: nazwane dwukolorowe schematy barw, które całkowicie przemalowują wygląd, od stonowanych metali po jaskrawe cesarskie barwy.",
-      "cosmeticsCache": "Kilka z nich pochodzi z tajemniczej kosmetycznej skrytki, zapieczętowanej nagrody, która przy otwarciu losuje jeden z trzech stopni jakości i przyznaje pasujący do niego wygląd. To czysto dla efektu wizualnego: nic w jej wnętrzu nie czyni cię silniejszym, jedynie piękniejszym dla oka."
+      "cosmeticsSkins": "Są dwie kosmetyczne linie do skompletowania. Większość klas ma kilka alternatywnych wyglądów, świeże ujęcie stylu klasy, które tylko ty możesz nosić. Obok nich są chromy: nazwane dwukolorowe schematy barw, które całkowicie przemalowują wygląd, od stonowanych metali po jaskrawe cesarskie barwy.",
+      "cosmeticsCache": "Kilka z nich pochodzi z tajemniczej kosmetycznej skrytki, zapieczętowanej nagrody, która przy otwarciu losuje jeden z trzech stopni jakości i przyznaje pasujący do niego wygląd. To czysto dla efektu wizualnego: nic w jej wnętrzu nie czyni cię silniejszym, jedynie piękniejszym dla oka.",
+      "cosmeticsApply": "Ustaw aktywny wygląd w wierszu wyglądu na ekranie postaci i swobodnie przełączaj się między wszystkim, co odblokowałeś."
+    },
+    "professions": {
+      "intro": "Poza walką i zadaniami świat nagradza pracę na roli i przy kuźni: zbieranie surowców, przekuwanie ich w ekwipunek i towary w dziesięciu rzemiosłach oraz wrastanie w tożsamość jednego z dziesięciu archetypów, które te fachy reprezentują.",
+      "gatherTitle": "Zbieractwo: Górnictwo, Wyrąb i Zielarstwo",
+      "gatherIntro": "Trzy fachy zbierackie pozwalają czerpać surowce prosto ze świata: Górnictwo wydobywa rudę i kamień z żył, Wyrąb pozyskuje drewno z kęp drzew, a Zielarstwo zbiera dziko rosnące zioła i rośliny. Każdy z nich liczony jest osobno, więc praca w jednym nigdy nie spowalnia postępów w innym. Nowy w tym wszystkim? Brygadzista Odell w Eastbrook ma krótkie zlecenie, Fach dla każdej ręki, które przeprowadzi cię przez pierwszy zbiór.",
+      "gatherWhatTitle": "Węzły zasobów",
+      "gatherWhatBody": "Żyły rudy, kępy drzew i kępki ziół rozmieszczone są w Dolinie i na trzęsawisku jako widoczne, niczyje obiekty. Podejdź do jednego z nich i użyj go, aby zebrać, co skrywa. Po zbiorze węzeł potrzebuje czasu, by się odnowić, zanim ty osobiście zbierzesz z niego ponownie, ale nigdy nie blokuje innych: inny gracz może w tym czasie zebrać z tego samego węzła.",
+      "gatherProficiencyTitle": "Wprawa",
+      "gatherProficiencyBody": "Każdy udany zbiór buduje twoją wprawę w danym fachu zbierackim, a twoja karta postaci śledzi każdy fach osobno. Więcej praktyki nigdy nie szkodzi twoim postępom, zawsze je tylko zwiększa.",
+      "gatherToolsTitle": "Narzędzia fachu",
+      "gatherToolsBody": "Sprzedawcy oferują podstawowe narzędzia dla każdego fachu zbierackiego, a lepsze można wytworzyć. Dziś do pracy przy węźle nie jest wymagane żadne narzędzie: narzędzia to fundament pod bogatsze węzły, które nadejdą, gdzie kilofy, siekiery i sierpy wyższego stopnia będą drogą do środka.",
+      "harvestTitle": "Pozyskiwanie z samego łowu",
+      "harvestBody": "Zbieractwo nie kończy się na węzłach. Z niektórych ubitych bestii można pozyskać komponenty, skóry, kły, jedwab i dziwniejsze rzeczy, prosto z ciała, obok zwykłego łupu. Jeden zbieracz na jedno zabójstwo: kto zbierze pierwszy, bierze wszystko. Za każdym razem wybór należy do ciebie: zdejmij wszystko, co ciało oferuje, albo skup się na jednym komponencie i weź jego lepszy gatunek. Zbierać może każda postać, bez fachu czy szkolenia, a szczególnie okazały komponent nosi nawet imię tego, kto go pozyskał.",
+      "focusTitle": "Priorytety miasta",
+      "focusBody": "W każdym głównym mieście działa panel Priorytetów miasta dla odwiedzających zbieraczy: stań w mieście, otwórz go obok minimapy i skieruj niewielki budżet punktów priorytetu na interesujące cię rodzaje komponentów. Im więcej priorytetu przydzielisz komponentowi, tym lepszej i bogatszej jakości schodzi on z każdego późniejszego ciała; twój przydział podąża za postacią, gdziekolwiek się uda, a możesz go przerobić za darmo przy każdej kolejnej wizycie w mieście.",
+      "craftTitle": "Dziesięć rzemiosł",
+      "craftIntro": "Dziesięć rzemiosł przetwarza zebrane materiały w gotowy ekwipunek i towary: Płatnerstwo, Zbrojmistrzostwo i Jubilerstwo nadają surowej materii kształt noszonego ekwipunku; Alchemia i Inżynieria opierają się na próbach i błędach; Gotowanie, Inskrypcja i Zaklinanie sięgają po wytwory innych rzemiosł; Krawiectwo i Garbarstwo pracują według dokładnych wzorów. Razem tworzą koło, w którym każde rzemiosło sąsiaduje z dwoma innymi i leży naprzeciw jednego.",
+      "craftRingTitle": "Koło specjalności",
+      "craftRingBody": "Dziesięć rzemiosł ułożonych jest w stały krąg, a miejsce rzemiosła na tym kręgu ma znaczenie: rzemiosła sąsiadujące ze sobą na kole mają ze sobą więcej wspólnego niż te po przeciwnych stronach. Oddanie się jednemu rzemiosłu ma przypominać dołączenie do rodziny pokrewnych fachów, a nie wybór odosobnionej umiejętności.",
+      "craftRecipesTitle": "Przepisy i składniki",
+      "craftRecipesBody": "Każdy przepis wymaga konkretnych składników, które zbierasz lub kupujesz. Najprostsze przepisy potrzebują wyłącznie pospolitych materiałów i są dostępne od samego początku, więc możesz zacząć pracę w fachu od chwili, gdy go podejmiesz. Listy przepisów wciąż się zapełniają: kilka fachów czeka na swoje pierwsze przepisy, a kolejne pojawiają się wraz z rozwojem rzemiosł.",
+      "craftHowTitle": "Okno wytwarzania",
+      "craftHowBody": "Otwórz okno Wytwarzania (domyślnie klawisz T), aby zobaczyć każdy znany ci przepis, czego wymaga i co masz pod ręką; gdy materiały są na miejscu, jedno kliknięcie wykonuje pracę. Pospolite przepisy można wytwarzać wszędzie w świecie. Garść zaawansowanych przepisów na narzędzia wymaga natomiast, byś stanął przy warsztacie rzemieślniczym w Highwatch.",
+      "craftMasteryTitle": "Umiejętność i biegłość",
+      "craftMasteryBody": "Udane wytwarzanie buduje umiejętność w danym fachu, a umiejętność nigdy nie zamyka przepisów rzemiosła: jeśli znasz przepis i masz jego materiały, możesz spróbować. To, co daje ci umiejętność, to jakość, wprawna ręka wykonuje lepszą robotę. Jedynym wyjątkiem są przepisy łączone, które wymagają, byś wykazał się w obu ich fachach, zanim się otworzą.",
+      "craftComboTitle": "Przepisy łączone",
+      "craftComboBody": "Poza listą przepisów pojedynczego rzemiosła koło wspiera też przepisy łączone, które wymagają dwóch sąsiadujących rzemiosł naraz, nagradzając postać, która zainwestowała w sąsiednie fachy na kręgu, a nie w jeden w izolacji. Rzemieślnik musi sam władać oboma fachami; umiejętność partnera nie zastąpi żadnej z połówek.",
+      "archetypeTitle": "Dziesięć archetypów",
+      "archetypeIntro": "Każde z dziesięciu rzemiosł reprezentuje też archetyp, szerszą tożsamość, którą możesz przyjąć ponad samo uprawianie fachu. Aktywny archetyp to pojedynczy wybór, nie lista do odhaczenia: nosisz jeden i możesz go później zmienić, jeśli zechcesz.",
+      "archetypeChooseTitle": "Wybór archetypu",
+      "archetypeChooseBody": "Zadeklarowanie archetypu będzie momentem fabularnym: zadaniem, które formalnie przyjmuje cię do tej tożsamości. Ta droga wciąż powstaje, więc na razie każda postać przemierza świat z tym wyborem wciąż przed sobą, a każde rzemiosło w międzyczasie rozwija się do poziomu rzadkiej jakości.",
+      "archetypeSwitchTitle": "Zmiana zdania",
+      "archetypeSwitchBody": "Deklaracja nie będzie też dożywotnim wyrokiem. W planach jest powtarzalny akt zadośćuczynienia twojemu dawnemu fachowi, zanim podejmiesz nowy, przy czym zadośćuczynienie robi się coraz surowsze z każdą zmianą, dzięki czemu wybór pozostaje znaczący, a nie darmowy. Podobnie jak sama deklaracja, wciąż jest w drodze.",
+      "archetypeIdentityTitle": "Co oznacza twój archetyp",
+      "archetypeIdentityBody": "Aktywny archetyp to deklaracja, kim twoja postać jest w świecie, widoczna w tym, jak zwracają się do ciebie inni i sam świat. Dokładne nagrody i wyróżnienia z nim związane wciąż są dopracowywane; zaglądaj tu, w miarę jak system się rozrasta."
     },
     "economy": {
-      "intro": "Monety napędzają cały świat: kupują wyposażenie i zaopatrzenie, opłacają twoje naprawy i koszty zadań oraz przechodzą z rąk do rąk między graczami. Zbierasz to wszystko po prostu grając, więc traktuj tę stronę jako mapę tego, skąd pochodzą i dokąd trafiają twoje pieniądze.",
+      "intro": "Monety napędzają cały świat: kupują twoje wyposażenie, zaopatrzenie i ekwipunek podróżny oraz przechodzą z rąk do rąk między graczami. Zbierasz to wszystko po prostu grając, więc traktuj tę stronę jako mapę tego, skąd pochodzą i dokąd trafiają twoje pieniądze.",
       "coinTitle": "Złoto, srebro i miedź",
       "coinBody": "Pieniądze występują w trzech monetach. Sto miedziaków tworzy srebrniaka, a sto srebrników tworzy złotą monetę, więc twoja sakiewka zapełnia się najpierw od najmniejszej monety. Zdobywasz je z nagród za zadania, z łupów po pokonanych wrogach i ze sprzedaży tego, czego już nie potrzebujesz.",
       "vendorsTitle": "Sprzedawcy i to, co trzymają",
-      "vendorsBody": "Miasta i posterunki są usiane kupcami, każdy z własnym fachem. Zaopatrzeniowcy mają jedzenie i napoje, płatnerze i zbrojmistrze noszą wyposażenie, zielarze handlują składnikami, a kwatermistrz trzyma praktyczny ekwipunek podróżny. Podejdź do jednego z nich, aby zobaczyć, co sprzedaje.",
+      "vendorsBody": "Miasta i posterunki są usiane kupcami, każdy z własnym fachem. Zaopatrzeniowcy mają jedzenie i napoje, płatnerze i zbrojmistrze noszą wyposażenie, a kwatermistrz trzyma praktyczny ekwipunek podróżny. Podejdź do jednego z nich, aby zobaczyć, co sprzedaje.",
+      "marksTitle": "Znaki: waluty poza monetą",
+      "marksBody": "Monety to nie jedyne, co odkładasz. Wyprawy wypłacają Znaki Wypraw, wydawane wyłącznie u opiekuna wypraw na ulepszenia towarzyszki i ekwipunek, którego nie znajdziesz gdzie indziej. Heroiczne oczyszczenia lochów zostawiają Znaki heroiczne na ostatnim bossie, wydawane u heroicznego kwatermistrza w Wysokiej Straży na biżuterię, której nie sprzedaje żaden inny zakątek królestwa. Żadne z nich nigdy nie miesza się z twoimi monetami.",
+      "bankTitle": "Bank",
+      "bankBody": "W każdym głównym mieście działa oddział Złoconej Szkatuły, domu bankowego królestwa. Porozmawiaj z tamtejszym skarbnikiem, aby otworzyć swój skarbiec, prywatny schowek poza torbami, który twoja postać zachowuje na całe życie. Cokolwiek tam zostawisz, czeka bezpiecznie, niezależnie od tego, który oddział odwiedzisz następnym razem.",
+      "bankHow": "Przy otwartym skarbcu kliknij przedmiot w torbach, aby go zdeponować, i kliknij go w skarbcu, aby zabrać z powrotem. Skarbiec przechowuje wyłącznie dobra, nigdy monety, a przedmioty zadań zostają przy tobie. Gdy torby zapełnią ci się w połowie drogi, jeden przycisk zgarnia do środka wszystkie materiały rzemieślnicze naraz.",
+      "bankSlots": "Świeży skarbiec zaczyna skromnie i rośnie razem z tobą. Skarbnik sprzedaje kolejne miejsca za monety po coraz wyższych cenach, a granie online przynosi na dodatek premiowe miejsca, na przykład za zweryfikowany e-mail, połączone konta i przyjaciół, których przyprowadzisz do gry.",
       "buyingTitle": "Kupowanie i sprzedawanie",
-      "buyingBody": "Stań przy kupcu, aby otworzyć jego okno. Możesz kupić wszystko, co ma na składzie, jeśli cię na to stać, i sprzedać większość tego, co masz w torbach, za monety. Jeśli sprzedasz coś przez pomyłkę, sprzedawca zachowa twoje niedawne sprzedaże, abyś mógł je odkupić.",
+      "buyingBody": "Porozmawiaj z kupcem i wybierz przeglądanie jego towarów, a sklep otworzy się z trzema zakładkami: Przeglądaj, Sprzedaj i Odkup. Przeglądaj mieści wszystko, co ma na składzie, twoje, jeśli cię na to stać. Sprzedaj wypisuje to z twoich toreb, za co zapłaci, a sprzedaż przedmiotu o własnej wylosowanej jakości wymaga najpierw potwierdzenia, więc cenny egzemplarz nigdy nie wymknie się przez pomyłkę. Jeśli rozstaniesz się z czymś, czego żałujesz, zakładka Odkup przechowuje twoje niedawne sprzedaże, byś mógł je odkupić za monety, które ci zapłacono.",
       "junkTitle": "Pozbywanie się rupieci",
-      "junkBody": "Łupy, dla których nie masz zastosowania, wciąż można sprzedać dowolnemu sprzedawcy, więc opróżniaj torby za każdym razem, gdy przechodzisz przez miasto, zamiast pozwalać im się zapełniać. Naprawdę bezwartościowe drobiazgi można też po prostu wyrzucić, by zrobić miejsce.",
+      "junkBody": "Łupy, dla których nie masz zastosowania, wciąż można sprzedać dowolnemu sprzedawcy, więc opróżniaj torby za każdym razem, gdy przechodzisz przez miasto, zamiast pozwalać im się zapełniać. Zakładka Sprzedaj u sprzedawcy ma nawet przycisk, który jednym kliknięciem sprzedaje wszystkie drobiazgi kiepskiej jakości naraz. Naprawdę bezwartościowe drobiazgi można też po prostu wyrzucić, by zrobić miejsce.",
       "tradeTitle": "Handel z innymi graczami",
       "tradeBody": "Możesz handlować twarzą w twarz z każdym, kto stoi obok ciebie. Oboje wkładacie przedmioty i monety do wspólnego okna, a wymiana następuje dopiero, gdy oboje ją potwierdzicie, więc żadna ze stron nie może zostać oszukana. To prosty sposób, by przekazać przyjacielowi łup lub dobić targu.",
+      "mailTitle": "Krucza Poczta",
+      "mailBody": "W każdym głównym mieście stoi rzeźbiony kruczy filar: skrzynka Kruczej Poczty, listowej służby królestwa. Stań przy nim, aby napisać do dowolnej postaci po imieniu, do przyjaciela online lub od dawna offline, i dołącz do listu monety lub towary za drobną opłatą pocztową. Kruk potrzebuje chwili na lot; gdy dotrze, wskaźnik koperty mówi odbiorcy, że coś na niego czeka.",
+      "mailHow": "Odbiór działa tak samo, tyle że na odwrót: stań przy dowolnym filarze, aby przeczytać listy i przenieść to, co niosą, do sakiewki i toreb. Zwykły list po pewnym czasie znika, ale ten, który wciąż niesie monety lub towary, czeka na ciebie, jakkolwiek długo zwlekasz. Niektórych rzeczy poczta odmawia wprost: przedmioty związane z duszą, przedmioty zadaniowe i jedyne w swoim rodzaju kosmetyczne żetony podróżują z tobą albo wcale. I miej oko na filar po udanym oddaniu zadania; niektórzy zleceniodawcy piszą.",
+      "dailyTitle": "Dzienne nagrody",
+      "dailyBody": "Przycisk skrzyni skarbów na ekranie otwiera okno dziennych nagród. Każdy dzień wyznacza garść zadań, wykonaj questy, walcz w Popielnym Koloseum, wygraj mecz Pucharu Doliny, i oferuje darmowe zakręcenie kołem nagród, a wszystko to daje punkty w rankingu danego dnia, przy czym najlepsi tego dnia dzielą się pulą nagród przeznaczoną dla posiadaczy opcjonalnego żetonu społeczności. Nic z tego nie daje przewagi w grze. Samo okno wyjaśnia zasady dnia i kto się kwalifikuje, pokazuje ranking oraz przechowuje twoją historię.",
       "marketTitle": "Targ Świata",
-      "marketBody": "Kupiec prowadzi Targ Świata, napędzaną przez graczy giełdę, na której możesz kupować i sprzedawać ludziom, których być może nigdy nie spotkasz. Porozmawiaj z Kupcem, aby ją otworzyć.",
+      "marketBody": "Kupiec prowadzi Targ Świata, napędzaną przez graczy giełdę, na której możesz kupować i sprzedawać ludziom, których być może nigdy nie spotkasz. Porozmawiaj z Kupcem w Eastbrook lub z Licytatorem Vossem w Highwatch, aby ją otworzyć: obaj gospodarze obsługują ten jeden wspólny targ. Kupiec utrzymuje tam też stały zapas własnych towarów, więc zawsze jest coś do kupienia, nawet gdy żaden inny gracz nic nie wystawił.",
       "marketBrowse": "Przeglądanie: przewijaj ogłoszenia lub wyszukuj po nazwie, aby znaleźć to, co jest na sprzedaż. Każde ogłoszenie pokazuje towar, sprzedawcę i cenę wywoławczą za cały plik.",
       "marketPost": "Wystawianie: wybierz plik ze swoich toreb, ustal cenę i wystaw go. Towar jest przechowywany przez Kupca, dopóki ktoś go nie kupi. Niesprzedane ogłoszenia wracają do ciebie po pewnym czasie, a jedno możesz odzyskać wcześniej, jeśli zmienisz zdanie.",
       "marketCollect": "Odbieranie: gdy twój towar się sprzeda, twój utarg czeka na ciebie u Kupca. Wróć, aby odebrać monety wraz ze wszystkim, co wróciło niesprzedane. Kupiec pobiera niewielką prowizję od każdej zakończonej sprzedaży.",
@@ -1304,15 +2962,15 @@ export const pl_PL: EnTranslations = {
       "chanParty": "Drużyna.",
       "chanPartyBody": "Rozmawiaj ze wszystkimi w swojej grupie, bez względu na to, jak bardzo jesteście rozproszeni.",
       "chanGeneral": "Ogólny.",
-      "chanGeneralBody": "Zawsze aktywny lokalny kanał dla osób wokół ciebie, dobry do zadania pytania lub pogawędki.",
+      "chanGeneralBody": "Zawsze aktywny kanał obejmujący całe królestwo, docierający do wszystkich zalogowanych, dobry do zadania pytania lub ogólnej pogawędki. W przeciwieństwie do World i Looking for Group, nigdy nie musisz się do niego zapisywać.",
       "chanWorld": "Świat.",
       "chanWorldBody": "Kanał obejmujący całe królestwo, do którego dobrowolnie dołączasz. Otwórz jego zakładkę, by dołączyć, a będziesz widzieć i docierać do wszystkich obecnych online.",
       "chanLfg": "Szukam grupy.",
       "chanLfgBody": "Dobrowolny kanał obejmujący całe królestwo do znajdowania ludzi do przejścia lochu. Otwórz jego zakładkę, by dołączyć.",
       "chanGuild": "Gildia i Oficer.",
-      "chanGuildBody": "Kanały twojej gildii. Czat gildyjny dociera do każdego członka; kanał oficerski jest tylko dla oficerów.",
+      "chanGuildBody": "Kanały twojej gildii. Czat gildyjny dociera do każdego członka; kanał oficerski jest dla oficerów i przywódcy gildii.",
       "partyHeading": "Tworzenie drużyny",
-      "partyBody": "Zaproś innego gracza, klikając prawym przyciskiem jego imię i wybierając zaproszenie, lub komendą czatu. Drużyna mieści do pięciu graczy, a jeden z was jest przywódcą.",
+      "partyBody": "Zaproś innego gracza, klikając prawym przyciskiem jego imię i wybierając zaproszenie. Drużyna mieści do pięciu graczy, a jeden z was jest przywódcą.",
       "partyCredit": "Członkowie grupy będący blisko siebie dzielą się zaliczeniem zabójstw i zadań, więc wykonywanie zadań razem jest szybsze, nigdy wolniejsze. Drużyna to także sposób, w jaki wkraczacie do lochu jako zespół.",
       "raidBody": "Gdy masz już pełną pięcioosobową drużynę, przywódca może przekształcić ją w rajd liczący do dziesięciu osób, na potrzeby rajdu końca gry.",
       "lootHeading": "Łup drużynowy",
@@ -1320,17 +2978,30 @@ export const pl_PL: EnTranslations = {
       "lootCoinTitle": "Monety.",
       "lootCoinBody": "Pieniądze z zabójstwa mogą trafić do tego, kto je zbierze, albo zostać podzielone równo na całą drużynę.",
       "lootCommonTitle": "Przedmioty.",
-      "lootCommonBody": "Zwykłe znaleziska mogą trafić do zbierającego, podczas gdy lepsze są wystawiane do losowania, by każdy miał uczciwą szansę.",
+      "lootCommonBody": "Zwykłe znaleziska mogą krążyć po kolei w drużynie lub trafiać do zbierającego, podczas gdy lepsze są wystawiane do losowania, by każdy miał uczciwą szansę.",
       "lootRollTitle": "Potrzebuję, Zachłanność lub Pasuję.",
       "lootRollBody": "Gdy przedmiot trafia do losowania, każdy uprawniony członek wybiera Potrzebuję, jeśli go chce, Zachłanność, jeśli wziąłby go tylko na zapas, lub Pasuję, by zrezygnować. Wygrywa najwyższy rzut.",
+      "lootMasterTitle": "Mistrz łupów.",
+      "lootMasterBody": "Przywódca może zamiast tego sam zająć się lepszymi łupami, przekazując każdy z nich temu członkowi, który powinien go dostać. Dzięki temu cenny ekwipunek nie trafia do przypadkowego rzutu, tak jak prowadzi loch zorganizowana grupa.",
       "friendsHeading": "Przyjaciele i ignorowanie",
       "friendsBody": "Dodaj graczy do listy przyjaciół, by widzieć, kiedy są online i gdzie się znajdują, abyś mógł połączyć się w grupę w chwili, gdy się zalogują.",
       "ignoreBody": "Jeśli ktoś ci dokucza, dodaj go do listy ignorowanych, a przestaniesz widzieć jego czat.",
       "guildHeading": "Gildie",
       "guildBody": "Gildia to trwała grupa graczy, do której należysz między sesjami. Załóż własną lub przyjmij zaproszenie, by dołączyć, a możesz być w jednej gildii naraz. Członkowie mają rangę: przywódca, oficerowie i członkowie.",
       "guildChatBody": "Przynależność do gildii daje ci prywatny kanał czatu gildyjnego i pokazuje twoich kompanów z gildii na wspólnej liście, więc zawsze są online znajome twarze.",
+      "communityHeading": "Wezwanie całej społeczności",
+      "communityBody": "Zacznij linię czatu wykrzyknikiem, aby ogłosić wezwanie społeczności: !lfg, gdy szukasz grupy, !wts i !wtb do handlu, !recruit dla twojej gildii, !event, by ogłosić rajd lub spotkanie, i !help, gdy prosisz o pomoc. Menu wezwań pojawia się w chwili, gdy wpiszesz znak. Każde wezwanie jest rozgłaszane w świecie i powtarzane na społecznościowym Discordzie, więc dociera nawet do graczy, którzy nie są zalogowani. Wezwania społeczności są częścią gry online.",
+      "slashHeading": "Przydatne komendy ukośnika",
+      "slashBody": "Kilka codziennych komend warto zapamiętać: /w Imię wysyła szept, a /r odpowiada na ostatni otrzymany, /invite zaprasza kogoś do drużyny, /follow każe iść krok w krok za przyjacielem, /roll rzuca kośćmi na oczach grupy, /who pokazuje, kto jest online, a /afk oznacza cię jako nieobecnego. Wpisz /help w grze, by zobaczyć pełną listę.",
+      "emotesBody": "Twoja postać potrafi też mówić bez słów: wpisz emotkę, taką jak /wave, /dance, /cheer lub /bow, najpierw obierz przyjaciela za cel, aby skierować ją do niego, albo przytrzymaj X, by otworzyć koło emotek dla szybkiego wyrazu nad głową.",
+      "calendarHeading": "Kalendarz wydarzeń",
+      "calendarBody": "Naciśnij I, aby otworzyć kalendarz wydarzeń. Zaznacza on dni królestwa warte zaplanowania, od cotygodniowego wezwania na rajd po wieczór fiesty, i to na nim gildie prowadzą swój harmonogram: przywódca gildii i oficerowie mogą wpisywać w niego wydarzenia, a każdy członek widzi je na tej samej stronie.",
+      "readyHeading": "Sprawdzenia gotowości",
+      "readyBody": "Przed dużym natarciem przywódca grupy może wpisać /ready, aby odpytać zebranych: wszyscy pozostali otrzymują pytanie Gotowy lub Niegotowy, a gdy wszyscy odpowiedzą lub minie 30 sekund, cała grupa widzi jedno zestawienie wyników. Nikt nie jest wytykany; liczy się rachunek, nie winowajca.",
+      "markersHeading": "Znaczniki celu",
+      "markersBody": "W drużynie obierz wrogie stworzenie za cel i kliknij prawym przyciskiem jego portret na ramce celu (długie przytrzymanie na dotyku), aby ukoronować je jednym z ośmiu symboli rajdowych. Oznaczać może każdy członek, każdy symbol żyje naraz na jednym celu, a ponowne nałożenie symbolu na jego własny cel usuwa go. Kolejność zabijania, przydziały kontroli tłumu czy zwykłe „ten pierwszy” podróżują jako symbol szybciej niż jako zdanie.",
       "etiquetteHeading": "Etykieta grupowania",
-      "etiquetteBody": "Grupowanie to wybór, nie obowiązek. Przywitaj się, gdy dołączasz, rzucaj Potrzebuję tylko na ekwipunek, którego naprawdę użyjesz, i daj grupie znać, zanim ruszysz dalej. Odrobina uprzejmości wiele znaczy, a większość graczy cieszy się towarzystwem."
+      "etiquetteBody": "Grupowanie to wybór, nie obowiązek. Przywitaj się, gdy dołączasz, rzucaj Potrzebuję tylko na ekwipunek, którego naprawdę użyjesz, i daj grupie znać, zanim ruszysz dalej. Odrobina uprzejmości wiele znaczy, a większość graczy cieszy się towarzystwem. Moderatorzy pilnują porządku, a gracz, który nie pozwala innym cieszyć się grą, może trafić do celi, dopóki moderator go nie wypuści."
     },
     "stats": {
       "intro": "Twoją postać opisuje garść atrybutów. Nigdy nie musisz ich zapamiętywać, by dobrze grać, lecz znajomość tego, co z grubsza robi każdy z nich, pomaga czytać kartę postaci i wybierać właściwe ulepszenia.",
@@ -1343,17 +3014,23 @@ export const pl_PL: EnTranslations = {
       "staTitle": "Wytrzymałość",
       "staBody": "Wytrzymałość to twoja zdolność do przetrwania. Więcej Wytrzymałości oznacza większą pulę zdrowia i przyspiesza zdrowie odzyskiwane podczas odpoczynku poza walką. Każda klasa chce jej nieco mieć.",
       "intTitle": "Inteligencja",
-      "intBody": "Inteligencja zwiększa pulę many rzucającego zaklęcia i poprawia szansę na trafienie krytyczne zaklęć. Ma znaczenie dla klas, które czerpią z many; dla klasy korzystającej z Wściekłości lub Energii niewiele daje.",
+      "intBody": "Inteligencja zwiększa pulę many rzucającego zaklęcia, podnosi jego moc zaklęć, by zaklęcia mocniej trafiały, i poprawia szansę na trafienie krytyczne zaklęć. Ma znaczenie dla klas, które czerpią z many; dla klasy korzystającej z Wściekłości lub Energii niewiele daje.",
       "spiTitle": "Duch",
-      "spiBody": "Duch rządzi tym, jak szybko mana rzucającego zaklęcia powraca poza walką. Podobnie jak Inteligencja, służy klasom many i niewiele znaczy dla pozostałych.",
+      "spiBody": "Duch rządzi tym, jak szybko mana rzucającego zaklęcia powraca, gdy tylko przerwie rzucanie, co dzieje się przez większość czasu między walkami. Podobnie jak Inteligencja, służy klasom many i niewiele znaczy dla pozostałych.",
       "armorTitle": "Pancerz",
       "armorBody": "Pancerz redukuje fizyczne obrażenia, które otrzymujesz. Pochodzi głównie z tego, co nosisz, a cięższe klasy pancerza dźwigają go znacznie więcej. Większy pancerz przeciwko wrogowi w pobliżu twojego poziomu sprawia, że każdy jego cios pada słabiej.",
       "apTitle": "Moc ataku",
-      "apBody": "Moc ataku określa, jak mocno uderza twoja broń. Zasilają ją twoje główne atrybuty, a silniejsza broń i ekwipunek podnoszą ją jeszcze wyżej, dlatego ulepszenie potrafi być prawdziwym skokiem obrażeń.",
+      "apBody": "Moc ataku określa, jak mocno uderza twoja broń. Zasilają ją twoje główne atrybuty, a ekwipunek niosący te atrybuty podnosi ją jeszcze wyżej, podczas gdy silniejsza broń podnosi twoje obrażenia wprost, dlatego ulepszenie potrafi być prawdziwym skokiem obrażeń.",
+      "spTitle": "Moc zaklęć",
+      "spBody": "Moc zaklęć to odpowiednik mocy ataku dla rzucającego zaklęcia: zwiększa obrażenia zadawane przez twoje czary. Zasila ją inteligencja, a ekwipunek i wzmocnienia rzucającego dokładają jeszcze więcej, dlatego rzucający zaklęcia pilnuje mocy zaklęć tak, jak walczący wręcz pilnuje mocy ataku.",
       "critTitle": "Trafienie krytyczne",
-      "critBody": "Twoja szansa na trafienie krytyczne to częstotliwość, z jaką atak zadaje dodatkowe obrażenia. Każdy zaczyna z niewielką szansą bazową, a Zręczność (oraz część talentów i ekwipunku) ją zwiększa.",
+      "critBody": "Twoja szansa na trafienie krytyczne to częstotliwość, z jaką atak zadaje dodatkowe obrażenia. Każdy zaczyna z niewielką szansą bazową, a Zręczność (oraz część talentów i ekwipunku) ją zwiększa. Twoja karta postaci pokazuje zarówno samą szansę, jak i ocenę krytyczną, którą wnosi twój ekwipunek.",
       "dodgeTitle": "Unik",
       "dodgeBody": "Unik to twoja szansa na całkowite uniknięcie nadchodzącego ataku wręcz. Zaczynasz z niewielką szansą bazową, a Zręczność ją podnosi, więc zwinne klasy wymijają więcej ciosów.",
+      "hasteTitle": "Pośpiech",
+      "hasteBody": "Pośpiech to jedna z cech, która przyspiesza wszystko, co robisz: zamachy w zwarciu, strzały z dystansu i rzucanie zaklęć nabierają tempa razem. Pochodzi z ekwipunku, zwłaszcza z premii kompletów pancerza, a kilka zdolności daje krótki zryw szybszych zamachów. Na twojej karcie widnieje jako Ocena pośpiechu.",
+      "dpsTitle": "Obrażenia na sekundę",
+      "dpsBody": "Twoja karta postaci pokazuje również szacunkowe obrażenia na sekundę: z grubsza to, co twoja broń, jej szybkość zamachu i moc ataku dają w sumie z biegiem czasu. To szybki sposób, by na pierwszy rzut oka porównać dwie bronie.",
       "sheetHeading": "Czytanie karty postaci",
       "sheetBody": "Otwórz w grze okno postaci, by zobaczyć to wszystko w jednym miejscu: pięć atrybutów po jednej stronie i statystyki, które zasilają, po drugiej. Najedź na dowolną wartość, a podpowiedź rozłoży na czynniki, co robi dla twojej klasy, byś w mig dostrzegł, które liczby naprawdę poruszyło ulepszenie.",
       "growHeading": "Jak rosną twoje statystyki",
@@ -1362,16 +3039,16 @@ export const pl_PL: EnTranslations = {
     "progression": {
       "intro": "Każda walka, każde zadanie i każdy krok na północ czynią twojego bohatera silniejszym. Oto jak działa zdobywanie poziomów i co napędza twój rozwój, gdy dotrzesz na szczyt.",
       "xpTitle": "Jak zdobywasz doświadczenie",
-      "xpBody": "Doświadczenie zdobywasz, wykonując zadania i pokonując wrogów. Zadania dają go zdecydowanie najwięcej, więc podążanie śladem zadań to najszybszy sposób na awans. Zabijanie napotkanych po drodze przeciwników uzupełnia resztę.",
+      "xpBody": "Doświadczenie zdobywasz, wykonując zadania, pokonując wrogów i ukańczając głębie. Zadania dają go zdecydowanie najwięcej, więc podążanie śladem zadań to najszybszy sposób na awans. Napotkane po drodze zabójstwa i wyprawy w głębie uzupełniają resztę.",
       "capBody": "Każdy poziom czyni cię odporniejszym i przynosi nowe umiejętności, aż po sam limit, czyli poziom {cap}.",
       "journeyTitle": "Wędrówka na północ",
       "journeyBody": "Świat to jedna ciągła kraina, trzy strefy rozłożone z południa na północ, każda o stopień wyższa poziomem. Zaczynasz w zielonej dolinie, przedzierasz się przez trzęsawisko i kończysz na zimnych, wysokich szczytach. Podążaj śladem zadań, a kraina sama poprowadzi cię od jednej do następnej.",
       "bandLabel": "Poziomy od {min} do {max}",
       "restedTitle": "Wypoczęte doświadczenie",
-      "restedBody": "Gdy się wylogujesz lub odpoczniesz w bezpiecznym miejscu, jak karczma, twoja postać gromadzi wypoczęte doświadczenie podczas twojej nieobecności. Następnym razem, gdy wyruszysz w bój, ta pula daje twoim zabójstwom dodatkowy zastrzyk, dopóki się nie wyczerpie. Narasta z czasem i przyspiesza wczesne poziomy, więc wylogowanie się w mieście to nigdy nie zmarnowany czas.",
+      "restedBody": "Wejdź do karczmy i pozostań poza walką, a twoja postać gromadzi wypoczęte doświadczenie, gdy czekasz. Każde miasto ma karczmę. Następnym razem, gdy wyruszysz w bój, ta pula daje twoim zabójstwom dodatkowy zastrzyk, dopóki się nie wyczerpie. Pauza w karczmie to nigdy nie zmarnowany czas; przyspiesza twój kolejny odcinek zdobywania poziomów.",
       "capTitle": "Osiągnięcie poziomu {cap}",
-      "capJourneyBody": "Poziom {cap} to limit, koniec zdobywania poziomów, lecz nie koniec rozwoju. Stamtąd przemierzasz lochy i rajd, polujesz na lepszy ekwipunek i sprawdzasz się na arenie.",
-      "prestigeBody": "Doświadczenie liczy się dalej nawet po osiągnięciu limitu. Zasila kosmetyczny poziom wirtualny, więc pasek doświadczenia wciąż się wypełnia, oraz długoterminową rangę prestiżu, którą możesz zdobyć dla uznania. Jest ona całkowicie opcjonalna i nigdy nie daje mocy, to jedynie znak przebytej drogi.",
+      "capJourneyBody": "Poziom {cap} to limit, koniec zdobywania poziomów, lecz nie koniec rozwoju. Stamtąd przemierzasz lochy i rajd w trybie normalnym i heroicznym, stajesz do walki z bossem świata, gdy ten powstaje, polujesz na lepszy ekwipunek i sprawdzasz się na arenie.",
+      "prestigeBody": "Doświadczenie liczy się dalej nawet po osiągnięciu limitu. Zasila kosmetyczny poziom wirtualny, więc pasek doświadczenia wciąż się wypełnia, oraz długoterminową rangę prestiżu, którą możesz odebrać z karty postaci, gdy już tam dotrzesz. Przekraczanie wielkich kamieni milowych życiowego doświadczenia zdobywa też czyny w twojej Księdze Czynów, z kosmetycznymi tytułami i obramowaniami plakietki z imieniem, które widać na twojej karcie postaci. Wszystko to jest czysto opcjonalne i nigdy nie daje mocy, to jedynie znak przebytej drogi.",
       "noRush": "Nie ma pośpiechu. Świat jest po to, by się nim cieszyć we własnym tempie, więc wędruj, podejmuj zadania, które przykują twoją uwagę, i pozwól bohaterowi rosnąć po drodze."
     },
     "placeholder": {
@@ -1381,6 +3058,430 @@ export const pl_PL: EnTranslations = {
       "title": "Nie udało nam się znaleźć tej strony",
       "body": "Strona, której szukasz, nie istnieje lub mogła zostać przeniesiona.",
       "home": "Powrót do przeglądu"
+    }
+  },
+  "editor": {
+    "appTitle": "Edytor map",
+    "docTitle": "Edytor map - World of ClaudeCraft",
+    "untitledMap": "Mapa bez nazwy",
+    "playtestPlayerName": "Kartograf",
+    "topbar": {
+      "label": "Akcje edytora",
+      "mapNameLabel": "Nazwa mapy",
+      "dirty": "Niezapisane zmiany",
+      "dirtyDot": "Ta mapa ma niezapisane zmiany",
+      "clean": "Wszystkie zmiany zapisane",
+      "savedLocal": "Zapisano w tej przeglądarce",
+      "savedServer": "Zapisano na serwerze (v{version})",
+      "saving": "Zapisywanie...",
+      "neverSaved": "Jeszcze nie zapisano",
+      "new": "Nowa",
+      "newTitle": "Rozpocznij nową mapę na bazie wbudowanego świata",
+      "open": "Otwórz",
+      "openTitle": "Otwórz zapisaną mapę (przeglądarka lub serwer)",
+      "save": "Zapisz",
+      "saveTitle": "Zapisz w tej przeglądarce, a po zalogowaniu także na serwerze (Ctrl+S)",
+      "saveAs": "Zapisz jako",
+      "saveAsTitle": "Zapisz kopię pod nową nazwą",
+      "fork": "Utwórz kopię",
+      "forkTitle": "Utwórz własną kopię tej mapy na serwerze",
+      "forkDisabledTitle": "Najpierw otwórz mapę serwerową, aby ją skopiować",
+      "import": "Importuj",
+      "importTitle": "Importuj mapę z pliku JSON",
+      "export": "Eksportuj",
+      "exportTitle": "Pobierz tę mapę jako plik JSON",
+      "uploadAsset": "Prześlij zasób",
+      "uploadAssetTitle": "Prześlij model GLB (do 8 MiB), aby umieszczać go na swoich mapach",
+      "uploadAssetDisabledTitle": "Zaloguj się z poziomu gry, aby przesyłać zasoby",
+      "playtest": "Testuj grę",
+      "playtestTitle": "Uruchom grę na tej mapie (offline, z bieżącymi zmianami)",
+      "viewLabel": "Tryb widoku",
+      "view3d": "3D",
+      "view3dTitle": "Edytuj w renderowanym świecie",
+      "view2d": "2D",
+      "view2dTitle": "Edytuj na symbolicznej mapie z góry",
+      "undoCount": "Cofnij: {count}",
+      "undoCountTitle": "{count} kroków do cofnięcia (Ctrl+Z cofa, Ctrl+Y ponawia)",
+      "autosave": "Autozapis",
+      "autosaveTitle": "Automatycznie zapisuje mapę, gdy są niezapisane zmiany. Wyłącza się samoczynnie, jeśli zapis się nie powiedzie.",
+      "undo": "Cofnij",
+      "undoTitle": "Cofnij ostatnią zmianę (Ctrl+Z)",
+      "redo": "Ponów",
+      "redoTitle": "Ponów ostatnią cofniętą zmianę (Ctrl+Y)",
+      "offline": "Offline",
+      "offlineTitle": "Nie zalogowano: mapy zapisują się tylko w tej przeglądarce. Zaloguj się z poziomu gry, aby zapisywać online.",
+      "signIn": "Zaloguj się",
+      "signInTitle": "Otwórz ekran logowania gry w nowej karcie",
+      "help": "Pomoc",
+      "helpTitle": "Przewodnik po edytorze: narzędzia, skróty i samouczek"
+    },
+    "tool": {
+      "listLabel": "Narzędzia edytora",
+      "keyHint": "{name} ({key})",
+      "select": "Zaznacz",
+      "raise": "Podnieś",
+      "lower": "Obniż",
+      "smooth": "Wygładź",
+      "flatten": "Spłaszcz",
+      "paint": "Maluj biom",
+      "water": "Woda",
+      "place": "Umieść zasób",
+      "blocker": "Ściana blokująca",
+      "camp": "Obóz",
+      "spawn": "Punkt startu",
+      "region": "Region",
+      "erase": "Wymaż"
+    },
+    "inspector": {
+      "label": "Opcje narzędzia"
+    },
+    "brush": {
+      "title": "Pędzel",
+      "size": "Rozmiar pędzla",
+      "strength": "Siła",
+      "sizeHint": "Klawisze: [ i ] zmieniają rozmiar pędzla; Shift+[ i Shift+] zmieniają siłę.",
+      "editCount": "Edycje terenu: {count} / {max}"
+    },
+    "biome": {
+      "title": "Biom",
+      "paletteLabel": "Biom do malowania",
+      "vale": "Dolina",
+      "marsh": "Bagno",
+      "peaks": "Szczyty",
+      "beach": "Plaża",
+      "desert": "Pustynia",
+      "volcano": "Wulkan",
+      "cave": "Jaskinia",
+      "erase": "Zmaż malowanie",
+      "hint": "Pomalowane komórki zastępują biom strefy w kształcie i kolorze terenu.",
+      "clear": "Wyczyść całe malowanie biomów",
+      "clearConfirm": "Usunąć z tej mapy wszystkie pomalowane komórki biomów?"
+    },
+    "flatten": {
+      "hint": "Spłaszczanie wyrównuje teren do wysokości pod kursorem w chwili rozpoczęcia przeciągania.",
+      "hardEdge": "Twarda krawędź"
+    },
+    "water": {
+      "title": "Poziom wody",
+      "level": "Poziom wody",
+      "hint": "Ustawia wysokość lustra wody dla całej mapy, od {min} do {max} jardów.",
+      "reset": "Resetuj do wbudowanego poziomu"
+    },
+    "place": {
+      "title": "Umieść zasób",
+      "scale": "Skala",
+      "collide": "Blokuje ruch",
+      "collideHint": "Blokujący zasób otrzymuje obrys kolizji, przez który gracze nie przejdą.",
+      "randomRotation": "Losowy obrót",
+      "chosen": "Umieszczanie: {name}",
+      "none": "Wybierz zasób z przeglądarki poniżej, a potem kliknij ziemię, aby go umieścić."
+    },
+    "blockerTool": {
+      "title": "Ściana blokująca",
+      "hint": "Przeciągnij wzdłuż ziemi, aby narysować niewidzialną ścianę, przez którą gracze nie przejdą ani nie przeskoczą. Puść, aby ją postawić; ściana krótsza niż pół jarda jest odrzucana.",
+      "count": "Ściany blokujące: {count} / {max}"
+    },
+    "camp": {
+      "title": "Obóz potworów",
+      "mob": "Potwór",
+      "count": "Liczba",
+      "radius": "Promień",
+      "delete": "Usuń obóz",
+      "hint": "Kliknij wolny teren, aby dodać obóz, albo kliknij istniejący obóz, aby go edytować.",
+      "playtestNote": "Potwory pojawiają się tylko w teście gry, nigdy w widoku edytora.",
+      "selected": "Obóz: {mob}",
+      "none": "Nie wybrano obozu."
+    },
+    "spawn": {
+      "title": "Punkt startu",
+      "hint": "Kliknij ziemię, aby ustawić, gdzie test gry umieszcza gracza.",
+      "position": "Start: {x}, {z}",
+      "unset": "Używana jest wbudowana pozycja startowa.",
+      "clear": "Wyczyść punkt startu"
+    },
+    "region": {
+      "title": "Region",
+      "hint": "Przeciągnij prostokąt, aby zaznaczyć rozmieszczone zasoby i edycje terenu. Skopiuj, a potem kliknij, aby wkleić.",
+      "hint3d": "Prostokąty regionu rysuje się w widoku 2D; kopiowanie i wklejanie działa w obu widokach.",
+      "copy": "Kopiuj region",
+      "pasteBeside": "Wklej obok",
+      "copied": "Skopiowano {assets} zasobów i {edits} edycji terenu.",
+      "pasted": "Wklejono {count} elementów.",
+      "needBox": "Najpierw narysuj prostokąt regionu.",
+      "needClipboard": "Najpierw skopiuj region."
+    },
+    "eraseTool": {
+      "title": "Wymazywanie",
+      "hint": "Kliknij umieszczony zasób, aby go usunąć, albo kliknij wyrzeźbiony teren, aby usunąć najnowszy stempel pod kursorem.",
+      "blockerHint": "Kliknięcie w pobliżu ściany blokującej usuwa zamiast tego tę ścianę."
+    },
+    "selection": {
+      "title": "Zaznaczenie",
+      "none": "Nic nie zaznaczono. Użyj narzędzia Zaznacz i kliknij umieszczony zasób.",
+      "asset": "Zasób: {name}",
+      "x": "X",
+      "z": "Z",
+      "rotation": "Obrót",
+      "scale": "Skala",
+      "collide": "Blokuje ruch",
+      "radius": "Promień kolizji",
+      "radiusAuto": "Auto",
+      "radiusAutoTitle": "Resetuj promień kolizji, aby podążał za skalą zasobu",
+      "radiusHint": "Auto wyprowadza promień kolizji ze skali zasobu; przeciągnij suwak, aby go nadpisać.",
+      "footprints": "Pokaż obrysy kolizji",
+      "duplicate": "Duplikuj",
+      "delete": "Usuń",
+      "deleteHint": "Delete usuwa zaznaczenie; Ctrl+Z je przywraca.",
+      "moveHint": "Przesuwanie: przeciągnij zasób po ziemi w widoku 3D albo przesuwaj go klawiszami strzałek (0,5 yd, z Shift 2 yd).",
+      "wheelHint": "Shift+kółko obraca zasób, Alt+kółko go skaluje, Ctrl+D go duplikuje."
+    },
+    "marker": {
+      "title": "Znacznik",
+      "reset": "Resetuj pozycję",
+      "moved": "{count} znaczników przesuniętych względem wbudowanego układu."
+    },
+    "layers": {
+      "title": "Warstwy",
+      "hub": "Osady",
+      "graveyard": "Cmentarze",
+      "lake": "Jeziora",
+      "poi": "Punkty orientacyjne",
+      "camp": "Obozy",
+      "npc": "NPC",
+      "object": "Obiekty",
+      "blocker": "Ściany blokujące"
+    },
+    "frame": {
+      "title": "Kadr",
+      "all": "Wszystko"
+    },
+    "procgen": {
+      "title": "Proceduralne",
+      "count": "Liczba",
+      "scatter": "Rozrzuć zasoby kategorii",
+      "hills": "Generuj łagodne wzgórza",
+      "scattered": "Rozrzucono {count} zasobów z kategorii {category}.",
+      "hillsAdded": "Dodano {count} wzgórz.",
+      "noAssets": "Brak zasobów w tej kategorii."
+    },
+    "assets": {
+      "title": "Przeglądarka zasobów",
+      "label": "Przeglądarka zasobów",
+      "search": "Szukaj zasobów",
+      "searchPlaceholder": "Szukaj zasobów...",
+      "empty": "Brak pasujących zasobów.",
+      "uploadedTab": "Przesłane",
+      "uploadedEmpty": "Nie ma jeszcze przesłanych zasobów. Użyj opcji Prześlij zasób, aby dodać model GLB (do 8 MiB).",
+      "uploadedSignIn": "Zaloguj się z poziomu gry, aby przesyłać i umieszczać własne modele GLB.",
+      "uploadedLoadFailed": "Nie udało się wczytać twoich przesłanych zasobów.",
+      "deleteAsset": "Usuń przesłany zasób",
+      "deleteAssetConfirm": "Usunąć przesłany zasób \"{name}\"? Mapy, które go używają, stracą ten model.",
+      "pick": "Umieść {name}",
+      "categoryTab": "{category} ({count})",
+      "category": {
+        "biome": "Biom",
+        "chars": "Postacie",
+        "creatures": "Stworzenia",
+        "dungeon": "Loch",
+        "foliage": "Roślinność",
+        "props": "Rekwizyty",
+        "quest": "Zadania",
+        "resources": "Surowce",
+        "tools": "Narzędzia",
+        "weapons": "Bronie"
+      }
+    },
+    "upload": {
+      "notGlb": "Wybierz plik .glb.",
+      "tooLarge": "Ten plik przekracza limit 8 MiB.",
+      "uploading": "Przesyłanie zasobu...",
+      "uploaded": "Zasób przesłany: {name}",
+      "uploadedExisting": "Ten model był już na serwerze; zostanie użyty ponownie.",
+      "deleted": "Przesłany zasób usunięty."
+    },
+    "openDrawer": {
+      "title": "Otwórz mapę",
+      "close": "Zamknij",
+      "tabLocal": "Ta przeglądarka",
+      "tabMine": "Moje mapy serwerowe",
+      "tabPublic": "Mapy publiczne",
+      "colName": "Nazwa",
+      "colUpdated": "Zaktualizowano",
+      "colStatus": "Status",
+      "statusPublic": "Publiczna",
+      "statusPrivate": "Prywatna",
+      "open": "Otwórz",
+      "fork": "Utwórz kopię",
+      "publish": "Opublikuj",
+      "unpublish": "Cofnij publikację",
+      "delete": "Usuń",
+      "draft": "Automatycznie zapisany szkic",
+      "emptyLocal": "W tej przeglądarce nie ma jeszcze zapisanych map. Zapisz jakąś, a pojawi się tutaj.",
+      "emptyMine": "Na serwerze nie ma jeszcze map. Zapisz po zalogowaniu, aby jakąś utworzyć.",
+      "emptyPublic": "Nie ma jeszcze publicznych map.",
+      "loading": "Wczytywanie map...",
+      "loadFailed": "Nie udało się wczytać map z serwera.",
+      "signInHint": "Zaloguj się z poziomu gry, aby przeglądać, zapisywać i kopiować mapy serwerowe.",
+      "deleteLocalConfirm": "Usunąć lokalną mapę \"{name}\"?",
+      "deleteServerConfirm": "Usunąć mapę serwerową \"{name}\"? Tego nie można cofnąć.",
+      "prev": "Poprzednia strona",
+      "next": "Następna strona",
+      "page": "Strona {page}"
+    },
+    "status": {
+      "savedLocal": "Zapisano \"{name}\" w tej przeglądarce.",
+      "savedServer": "Zapisano \"{name}\" na serwerze (v{version}).",
+      "savedLocalOnly": "Zapisano \"{name}\" w tej przeglądarce. Zaloguj się, aby zapisywać online.",
+      "saveFailedLocal": "Zapis lokalny nie powiódł się (pamięć zablokowana).",
+      "opened": "Otwarto \"{name}\".",
+      "imported": "Zaimportowano \"{name}\".",
+      "importFailed": "Import anulowany albo plik nie jest prawidłową mapą.",
+      "exported": "Pobrano \"{name}\".",
+      "newMap": "Nowa mapa utworzona na bazie wbudowanego świata.",
+      "forked": "Utworzono kopię \"{name}\". Edytujesz teraz własną kopię.",
+      "published": "Mapa opublikowana. Każdy może ją teraz znaleźć i skopiować.",
+      "unpublished": "Publikacja mapy cofnięta.",
+      "deleted": "Mapa usunięta.",
+      "assetPlacedFirst": "Najpierw wybierz zasób w przeglądarce.",
+      "loading3d": "Wczytywanie świata...",
+      "playtestLaunch": "Uruchamianie testu gry...",
+      "playtestFailed": "Nie udało się uruchomić testu gry (pamięć zablokowana).",
+      "draftSaved": "Szkic zapisano automatycznie.",
+      "draftRestored": "Przywrócono automatycznie zapisany szkic.",
+      "autosaveFailed": "Automatyczny zapis nie powiódł się (pamięć przeglądarki jest pełna lub zablokowana). Wyeksportuj mapę, aby zachować kopię zapasową.",
+      "terrainCapReached": "Osiągnięto limit edycji terenu ({max}). Nadmiarowe stemple rzeźbienia nie zostały dodane.",
+      "placementCapReached": "Osiągnięto limit rozmieszczeń ({max}). Nadmiarowe zasoby nie zostały dodane.",
+      "blockerCapReached": "Osiągnięto limit ścian blokujących ({max}). Nowa ściana nie została dodana.",
+      "autosaveOff": "Automatyczny zapis wyłączony: {reason} Zapisz ręcznie, a potem włącz go ponownie."
+    },
+    "confirm": {
+      "ok": "OK",
+      "cancel": "Anuluj",
+      "discardTitle": "Odrzucić zmiany?",
+      "discardBody": "Masz niezapisane zmiany w \"{name}\". Odrzucić je?",
+      "discard": "Odrzuć",
+      "conflictTitle": "Konflikt zapisu",
+      "conflictBody": "Ta mapa zmieniła się na serwerze, odkąd ją otworzono (obecnie v{version}). Zapisać twoją wersję jako nową kopię?",
+      "conflictSaveCopy": "Zapisz jako kopię"
+    },
+    "prompt": {
+      "saveAsTitle": "Zapisz jako",
+      "nameLabel": "Nazwa nowej mapy"
+    },
+    "serverError": {
+      "invalid_map_name": "Ta nazwa mapy jest niedozwolona. Użyj liter, cyfr, spacji, apostrofów lub łączników.",
+      "map_name_not_allowed": "Ta nazwa mapy jest niedozwolona.",
+      "invalid_map_doc": "Serwer odrzucił dokument mapy.",
+      "invalid_version": "Żądanie zapisu było nieprawidłowe. Odśwież stronę i spróbuj ponownie.",
+      "map_limit_reached": "Osiągnięto limit map na serwerze. Usuń mapę, aby zapisać więcej.",
+      "map_not_found": "Ta mapa już nie istnieje na serwerze.",
+      "version_conflict": "Mapa zmieniła się na serwerze, odkąd ją otworzono.",
+      "slug_unavailable": "Serwer nie mógł utworzyć odnośnika dla tej nazwy. Spróbuj innej nazwy.",
+      "map_too_large": "Dokument mapy jest zbyt duży, aby zapisać go na serwerze.",
+      "invalid_glb": "Ten plik nie jest prawidłowym modelem GLB.",
+      "asset_blocked": "Ten zasób został zablokowany przez moderację.",
+      "asset_limit_reached": "Osiągnięto limit przesłanych zasobów. Usuń jeden, aby przesłać więcej.",
+      "asset_storage_limit_reached": "Zabrakło miejsca na zasoby. Najpierw usuń jakiś zasób.",
+      "asset_too_large": "Ten model przekracza limit rozmiaru przesyłania.",
+      "asset_not_found": "Ten zasób już nie istnieje na serwerze.",
+      "rate_limited": "Zwolnij nieco i spróbuj ponownie.",
+      "unauthorized": "Twoja sesja wygasła. Zaloguj się ponownie z poziomu gry.",
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "timeout": "Serwer zbyt długo nie odpowiadał. Spróbuj ponownie.",
+      "unknown": "Coś poszło nie tak w komunikacji z serwerem."
+    },
+    "hints": {
+      "nav3d": "Przeciągaj, aby orbitować; kółko przybliża. Podczas przeciągania WASD steruje lotem, a Q/E zmienia wysokość.",
+      "nav2d": "Przeciągaj, aby przesuwać; kółko przybliża."
+    },
+    "help": {
+      "title": "Pomoc edytora",
+      "toolsTitle": "Narzędzia",
+      "shortcutsTitle": "Skróty klawiszowe",
+      "mouseTitle": "Mysz i nawigacja",
+      "flowTitle": "Zapisywanie i testowanie gry",
+      "beginTutorial": "Rozpocznij samouczek",
+      "close": "Zamknij",
+      "tool": {
+        "select": "Wybieraj umieszczone zasoby, aby je przesuwać, obracać i skalować; kliknij znacznik 2D, aby go edytować.",
+        "raise": "Podnoś teren pod pędzlem.",
+        "lower": "Obniżaj teren pod pędzlem.",
+        "smooth": "Wygładzaj nierówności ku lokalnej średniej wysokości.",
+        "flatten": "Wyrównuj teren do wysokości z miejsca rozpoczęcia przeciągania.",
+        "paint": "Maluj pokrycie terenu biomem w miejsce domyślnego dla strefy.",
+        "water": "Ustaw poziom wody dla całej mapy.",
+        "place": "Umieszczaj na ziemi zasoby z katalogu lub przesłane.",
+        "blocker": "Przeciągaj niewidzialne ściany, które blokują ruch w teście gry.",
+        "camp": "Dodawaj i edytuj obozy potworów, które pojawiają się w teście gry.",
+        "spawn": "Ustaw, gdzie test gry umieszcza gracza.",
+        "region": "Zaznaczaj prostokątem teren i zasoby do kopiowania i wklejania.",
+        "erase": "Usuwaj umieszczone zasoby lub stemple rzeźbienia pod kursorem."
+      },
+      "key": {
+        "tools": "Każde narzędzie ma jednoliterowy skrót, widoczny na jego przycisku na pasku narzędzi.",
+        "brush": "[ i ] zmieniają rozmiar pędzla; Shift+[ i Shift+] zmieniają jego siłę.",
+        "undo": "Ctrl+Z cofa ostatnią zmianę; Ctrl+Y lub Ctrl+Shift+Z ją ponawia.",
+        "save": "Ctrl+S zapisuje mapę.",
+        "duplicate": "Ctrl+D duplikuje zaznaczony zasób.",
+        "nudge": "Klawisze strzałek przesuwają zaznaczony zasób o 0,5 jarda; z wciśniętym Shift o 2 jardy.",
+        "wheel": "Shift+kółko obraca zaznaczony zasób; Alt+kółko go skaluje.",
+        "delete": "Delete usuwa zaznaczony zasób lub obóz.",
+        "escape": "Esc najpierw czyści zaznaczenie, a potem wraca do narzędzia Zaznacz."
+      },
+      "mouse": {
+        "orbit3d": "Widok 3D: przeciągaj, aby orbitować, kółko przybliża; przeciąganie środkowym przyciskiem lub Shift+przeciąganie przesuwa widok.",
+        "fly3d": "Podczas przeciągania w 3D klawisze WASD sterują lotem kamery, a Q/E zmienia wysokość.",
+        "move": "Przy aktywnym narzędziu Zaznacz przeciągnij umieszczony zasób, aby przesunąć go po ziemi.",
+        "pan2d": "Widok 2D: przeciągaj, aby przesuwać, kółko przybliża."
+      },
+      "flow": {
+        "save": "Zapisz przechowuje mapę w tej przeglądarce, a po zalogowaniu także na serwerze.",
+        "draft": "Gdy masz niezapisane zmiany, szkic jest automatycznie zapisywany co 30 sekund; Otwórz go przywraca.",
+        "playtest": "Test gry uruchamia prawdziwą grę na tej mapie, z uwzględnieniem niezapisanych zmian."
+      }
+    },
+    "tutorial": {
+      "title": "Samouczek edytora",
+      "back": "Wstecz",
+      "next": "Dalej",
+      "finish": "Zakończ",
+      "skip": "Pomiń przewodnik",
+      "counter": "Krok {current} z {total}",
+      "steps": {
+        "toolbar": {
+          "title": "Pasek narzędzi",
+          "body": "Tu mieszka każde narzędzie edycji: pędzle rzeźbienia, malowanie biomów, woda, rozmieszczanie zasobów, obozy i więcej. Każde ma jednoklawiszowy skrót, widoczny w jego rogu."
+        },
+        "stage": {
+          "title": "Świat",
+          "body": "To twoja mapa, renderowana prawdziwym silnikiem gry. Przeciągaj, aby orbitować, kółkiem przybliżaj, a środkowym przyciskiem lub Shift+przeciąganiem przesuwaj widok. Kliknij ziemię narzędziem, aby edytować."
+        },
+        "inspector": {
+          "title": "Opcje narzędzia",
+          "body": "Tutaj pojawiają się opcje aktywnego narzędzia: rozmiar pędzla, paleta biomów, skala zasobu, ustawienia obozu i właściwości tego, co zaznaczysz."
+        },
+        "viewToggle": {
+          "title": "3D i 2D",
+          "body": "Przełączaj się między renderowanym światem 3D a symboliczną mapą 2D z góry. Widok 2D najlepiej nadaje się do przesuwania znaczników strefy i kadrowania dużych obszarów."
+        },
+        "save": {
+          "title": "Zapisuj swoją pracę",
+          "body": "Zapisz przechowuje mapę w tej przeglądarce, a po zalogowaniu na serwerze. Eksportuj pobiera kopię zapasową JSON, a Otwórz przywraca zapisane mapy i szkice."
+        },
+        "playtest": {
+          "title": "Test gry",
+          "body": "Uruchom prawdziwą grę na swojej mapie w dowolnej chwili, z bieżącymi zmianami. Zamknij kartę testu gry, aby wrócić i edytować dalej."
+        },
+        "help": {
+          "title": "Pomoc jest tutaj",
+          "body": "To cała pętla pracy. Otwórz Pomoc w dowolnej chwili, aby zobaczyć pełną listę narzędzi i wszystkie skróty albo uruchomić ten przewodnik ponownie."
+        }
+      }
+    },
+    "a11y": {
+      "stage": "Widok mapy",
+      "toasts": "Powiadomienia edytora",
+      "dialog": "Okno dialogowe edytora"
     }
   },
   "skinEvent": {
@@ -1439,6 +3540,7 @@ export const pl_PL: EnTranslations = {
     "copyright": "2026 World of ClaudeCraft",
     "githubLink": "https://github.com/levy-street/world-of-claudecraft",
     "githubLabel": "Projekt open source",
+    "whitepaper": "Biała księga",
     "terms": "Warunki korzystania z usługi",
     "privacy": "Polityka prywatności",
     "discordLabel": "Dołącz do Discorda"
@@ -1450,7 +3552,7 @@ export const pl_PL: EnTranslations = {
   },
   "highscores": {
     "title": "Tabela najlepszych wyników",
-    "desc": "Śledź największych mistrzów królestwa i porównuj swoje postępy."
+    "desc": "Śledź największych mistrzów świata i porównuj swoje postępy."
   },
   "wiki": {
     "title": "Wiki i poradnik gry",
@@ -1468,7 +3570,11 @@ export const pl_PL: EnTranslations = {
   },
   "download": {
     "title": "Pobierz launcher na komputer",
-    "desc": "Pobierz samodzielny launcher dla zoptymalizowanej wydajności i gry na pełnym ekranie."
+    "desc": "Pobierz samodzielny launcher dla zoptymalizowanej wydajności i gry na pełnym ekranie.",
+    "macCta": "Pobierz dla macOS",
+    "linuxCta": "Pobierz dla Linuksa",
+    "linuxHint": "AppImage: uczyń go wykonywalnym, a następnie uruchom. Nie wymaga instalacji.",
+    "windowsPending": "Build Windows w przygotowaniu."
   },
   "comingSoon": {
     "placeholder": "Już wkrótce...",
@@ -1476,8 +3582,8 @@ export const pl_PL: EnTranslations = {
   },
   "mode": {
     "onlineTitle": "Graj online",
-    "onlineDesc": "Zaloguj się do królestwa. Twoje postacie żyją na serwerze, a świat dzielisz ze wszystkimi innymi, którzy są online.",
-    "onlineAria": "Graj online: zaloguj się do trwałego współdzielonego królestwa",
+    "onlineDesc": "Zaloguj się do świata. Twoje postacie żyją na serwerze, a świat dzielisz ze wszystkimi innymi, którzy są online.",
+    "onlineAria": "Graj online: zaloguj się do trwałego współdzielonego świata",
     "offlineTitle": "Graj offline",
     "offlineDesc": "Natychmiastowy świat jednoosobowy w twojej przeglądarce. Nic nie jest zapisywane: idealny na szybką potyczkę lub testy.",
     "offlineAria": "Graj offline: rozpocznij natychmiastową lokalną sesję jednoosobową",
@@ -1502,6 +3608,9 @@ export const pl_PL: EnTranslations = {
     "password": "Hasło",
     "passwordError": "Wprowadź swoje hasło.",
     "passwordPlaceholder": "Wprowadź hasło",
+    "email": "E-mail",
+    "emailPlaceholder": "ty@example.com",
+    "emailError": "Wprowadź prawidłowy adres e-mail.",
     "showPassword": "Pokaż hasło",
     "hidePassword": "Ukryj hasło",
     "logIn": "Zaloguj się",
@@ -1527,7 +3636,15 @@ export const pl_PL: EnTranslations = {
     "create": "Utwórz",
     "twoFactorLabel": "Kod uwierzytelniający",
     "twoFactorPlaceholder": "6-cyfrowy kod lub kod odzyskiwania",
-    "twoFactorHint": "Wprowadź kod z aplikacji uwierzytelniającej lub jeden z kodów odzyskiwania."
+    "twoFactorHint": "Wprowadź kod z aplikacji uwierzytelniającej lub jeden z kodów odzyskiwania.",
+    "recovery": {
+      "title": "Dodaj e-mail odzyskiwania",
+      "body": "Ustaw adres e-mail, aby móc odzyskać konto. Używamy go wyłącznie do potwierdzenia, że to konto należy do ciebie, gdybyś kiedykolwiek musiał zresetować hasło.",
+      "save": "Zapisz e-mail",
+      "logOut": "Wyloguj się",
+      "invalid": "Wprowadź prawidłowy adres e-mail.",
+      "failed": "Nie udało się zapisać adresu e-mail. Spróbuj ponownie."
+    }
   },
   "wallet": {
     "label": "Portfel $WOC",
@@ -1581,6 +3698,7 @@ export const pl_PL: EnTranslations = {
     "helpLinkedWithBalance": "Przywileje posiadacza są aktywne. Aplikacja portfela połączona w tej przeglądarce.",
     "helpLinkedDisconnected": "Przywileje posiadacza są aktywne. Połącz aplikację, gdy musisz podpisać lub wydać środki.",
     "helpLinkedDisconnectedWithBalance": "Przywileje posiadacza są aktywne. Połącz aplikację, gdy musisz podpisać lub wydać środki.",
+    "extensionHelp": "Aby zobaczyć tu portfel, utrzymuj aktywne rozszerzenie portfela w przeglądarce, na przykład Solflare Wallet.",
     "flowConnect": "Wybierz portfel. Weryfikacja przebiega automatycznie.",
     "flowSign": "Podpisz wiadomość weryfikacyjną w aplikacji portfela. Transakcja ani SOL nie są wymagane.",
     "flowVerify": "Weryfikowanie własności portfela...",
@@ -1766,6 +3884,7 @@ export const pl_PL: EnTranslations = {
       "unknownTier": "Nieznany poziom trudności eskapady.",
       "levelRequired": "Musisz być na poziomie {level}, aby wejść do {name}.",
       "levelRequiredTier": "Musisz być na poziomie {level}, aby wejść do {name} na poziomie trudności {tier}.",
+      "partyTooLarge": "{name}: wyprawa tylko solo lub w duecie. Drużyny liczące {max} lub więcej graczy nie mogą wejść.",
       "instancesBusy": "Wszystkie instancje {name} są zajęte. Spróbuj ponownie wkrótce.",
       "runFailed": "Wyprawa {name} nie powiodła się.",
       "complete": "{name} ukończone.",
@@ -1775,6 +3894,14 @@ export const pl_PL: EnTranslations = {
       "doorAlreadyOpen": "Drzwi są już otwarte.",
       "companionRankUp": "{name} osiąga rangę {rank}.",
       "bossChest": "Boss pada. Na podwyższeniu wyłania się zaczarowana relikwiarzowa skrzynia. Otwórz jej zamek wytrychem, by zgarnąć łupy.",
+      "drownedLitanyReliquaryRise": "Siostra Nhalia milknie. Utopiony Relikwiarz wynurza się z czarnej wody. Podejdź do niego, aby rozpocząć obrzęd.",
+      "riteSequenceReady": "Kapliczki gasną. Powtórz sekwencję.",
+      "riteSequencePlaying": "Kapliczki odtwarzają obrzęd. Czekaj.",
+      "riteCorrect": "Cichy dźwięk odpowiada na twoje dotknięcie.",
+      "riteWrong": "Ostry trzask dzwonu. Czarna woda pryska ci pod nogi.",
+      "riteReliquaryOpen": "Utopiony Relikwiarz otwiera się.",
+      "riteReliquaryLocked": "Ukończ obrzęd kapliczek, aby otworzyć relikwiarz.",
+      "riteReliquaryEmpty": "Relikwiarz jest pusty.",
       "surfaceStairs": "Otwierają się schody na powierzchnię. Naciśnij F przy schodach, aby wyjść.",
       "moduleEnter": "{name}: {objective}",
       "objectiveClearRoom": "Oczyść komnatę.",
@@ -1782,6 +3909,13 @@ export const pl_PL: EnTranslations = {
       "tombstoneHint": "Po oczyszczeniu komnaty na północy otwiera się nagrobne przejście.",
       "tombstoneOpen": "Zapieczętowane nagrobne przejście otwiera się ze zgrzytem na północy. Wejdź w nie, aby kontynuować.",
       "tombstoneInto": "Przechodzisz przez nagrobek do {name}.",
+      "bellRopeShock": "Sznur dzwonu napina się gwałtownie. Utopieni Kantorzy zataczają się od wstrząsu.",
+      "eggSacBurst": "Kokon jaj pęka. Pajączki rozbiegają się po krawędzi baptysterium.",
+      "baptistryEggs": "Baptysterium cichnie. Pajęcze kokony jaj lepią się wilgotnie do jego krawędzi.",
+      "baptistrySpidersSealed": "Spróbuj zniszczyć pajęcze kokony.",
+      "puzzleSealed": "Musisz otworzyć pieczęć, wywierając nacisk gdzieś w pomieszczeniu.",
+      "ropesSealed": "Spróbuj pociągnąć za sznury dzwonów.",
+      "baptistryWave": "Coś porusza się w czarnej wodzie baptysterium.",
       "chestEmpty": "Skrzynia jest pusta.",
       "notInDelve": "Nie jesteś w eskapadzie.",
       "cannotInteract": "Nie możesz wejść z tym w interakcję.",
@@ -1800,9 +3934,12 @@ export const pl_PL: EnTranslations = {
       "passageSealed": "Przejście jest zapieczętowane.",
       "moveCloserPassage": "Podejdź bliżej przejścia.",
       "moveCloserChest": "Podejdź bliżej skrzyni.",
+      "moveCloserReliquary": "Podejdź bliżej relikwiarza.",
       "nothingToTake": "Nie ma już nic do zabrania.",
       "wayOutNotOpen": "Droga wyjścia jeszcze się nie otworzyła.",
-      "moveCloserStairs": "Podejdź bliżej schodów."
+      "moveCloserStairs": "Podejdź bliżej schodów.",
+      "nhaliaCantorShield": "Kantorzy, trzymajcie nutę!",
+      "nhaliaBlackwaterMark": "{name} naznacza {player} Czarną Wodą!"
     },
     "lockpick": {
       "lockYields": "Zamek ustępuje! Łupy poziomu: {tier}.",
@@ -1865,6 +4002,30 @@ export const pl_PL: EnTranslations = {
       "abandoned": "Wysuwasz wytrychy z powrotem. Zamek czeka."
     }
   },
+  "delveRiteUi": {
+    "title": "Obrzęd Utopionego Relikwiarza",
+    "blurb": "Kapliczki rozbłysną po kolei. Powtórz sekwencję, aktywując każdą kapliczkę w tej samej kolejności. Błędne dotknięcie przekreśla próbę i odtwarza sekwencję od nowa, bezbłędna próba przynosi najbogatsze łupy, a wyczerpanie prób otwiera relikwiarz w najskromniejszej postaci. Wybierz, jak obrzęd ma cię wypróbować.",
+    "easy": "Łatwy",
+    "medium": "Średni",
+    "hard": "Trudny",
+    "guideWatch": "Po dokonaniu wyboru cztery kapliczki rozświetlają się jedna po drugiej. Zapamiętaj kolejność.",
+    "guideRepeat": "Gdy kapliczki pogrążą się w mroku, podejdź do każdej z nich i naciśnij F (Interakcja) w tej samej kolejności.",
+    "guideStakes": "Błędna kapliczka ochlapuje cię czarną wodą i kosztuje jedną próbę. Ukończ sekwencję, aby otworzyć relikwiarz.",
+    "showsTimes": "Sekwencja pokazywana {count} razy",
+    "showsOnce": "Sekwencja pokazywana raz",
+    "symbols": "{count} symboli",
+    "tries": "{count} prób",
+    "reward": {
+      "easy": "Skromne łupy",
+      "medium": "Bogate łupy",
+      "hard": "Łupy Premium"
+    },
+    "closeAria": "Zamknij"
+  },
+  "heroicShop": {
+    "balance": "Znaki heroiczne: {count}",
+    "buyAria": "Kup {item} za {marks} Znaków heroicznych"
+  },
   "delveUi": {
     "board": {
       "title": "Tablica Wypraw",
@@ -1874,6 +4035,7 @@ export const pl_PL: EnTranslations = {
       "openDelveAria": "Otwórz Tablicę Wypraw od {name}",
       "marks": "Znaki Wypraw: {count}",
       "minLevel": "Wymaga poziomu {level}",
+      "partyTooLarge": "Tylko solo lub w duecie (maks. {max} graczy)",
       "tier": {
         "normal": "Normalny",
         "heroic": "Heroiczny"
@@ -1881,6 +4043,7 @@ export const pl_PL: EnTranslations = {
       "companion": {
         "pick": "Wybierz towarzysza",
         "tessa": "Akolitka Tessa",
+        "edda": "Edda Trzcinoręka",
         "rank": "Ranga {rank}",
         "boon": "Leczy drużynę między walkami. Ranga 3 wskrzesza poległego sojusznika raz na wyprawę.",
         "upgrade": "Ulepsz do rangi {rank} ({marks} Znaków)",
@@ -1906,7 +4069,11 @@ export const pl_PL: EnTranslations = {
       "complete": "Ukończono",
       "marks": "Znaki Wypraw: {count}",
       "exitHintOpen": "Wejdź w nagrobne przejście (północ)",
-      "exitHintLocked": "Oczyść pomniejsze potwory, aby otworzyć przejście na północ"
+      "exitHintLocked": "Oczyść pomniejsze potwory, aby otworzyć przejście na północ",
+      "riteChoose": "Podejdź do Utopionego Relikwiarza i naciśnij F, aby rozpocząć obrzęd",
+      "ritePlayback": "Obserwuj kapliczki: zapamiętaj kolejność, w jakiej się rozświetlają",
+      "riteInput": "Naciśnij F przy każdej kapliczce w kolejności, w jakiej się rozświetliły ({current}/{total})",
+      "riteOpen": "Relikwiarz jest otwarty: naciśnij przy nim F, aby odebrać łupy"
     },
     "objective": {
       "kill_boss": "Zgładź {boss}",
@@ -1927,27 +4094,54 @@ export const pl_PL: EnTranslations = {
     "npc": {
       "halven": {
         "greeting": "Relikwiarium na dole znów się przesunęło. Po północy słyszymy intonacje przez posadzkę, a Akolitka Tessa przysięga, że rejestry pogrzebowe same zmieniają swój atrament. Jeśli starczy ci odwagi, {playerName}, weź świecę i zejdź na dół. Nie ufaj każdemu głosowi, który tam usłyszysz. Niektóre z nich znały twoje imię, zanim się urodziłeś."
+      },
+      "halvenMarsh": {
+        "greeting": "Trop powiódł na północ, na bagna, {playerName}. Kolejny relikwiarz śpiewa pod czarną wodą, a utopieni umarli odpowiadają dzwonom. Akolitka Edda zna te trzciny lepiej niż ja, trzymaj się blisko jej latarni. Wybierz poziom trudności, a ja potrzymam linę, aż wrócisz."
       }
     },
     "intro": {
       "normal": "Klatka schodowa jest zimna i ciemna. Schodzenie zaścielają rozbite kamienie świętych, a w wilgotnym powietrzu wisi miękki ton dzwonu. Akolitka Tessa szepcze: \"Relikwiarium nie powinno być otwarte aż tak głęboko. Trzymaj się blisko, {playerName}.\"",
-      "heroic": "Drzwi zatrzaskują się z jękiem za tobą. Imiona drapią po kamieniu niczym paznokcie. Świeca Tessy płonie na niebiesko. \"Oni już nie przyzywają umarłych, {playerName}. Oni odpowiadają czemuś.\""
+      "heroic": "Drzwi zatrzaskują się z jękiem za tobą. Imiona drapią po kamieniu niczym paznokcie. Świeca Tessy płonie na niebiesko. \"Oni już nie przyzywają umarłych, {playerName}. Oni odpowiadają czemuś.\"",
+      "litanyNormal": "Zarosłe trzciną schody opadają pod Fenbridge. Edda Trzcinoręka unosi latarnię. \"Bagno pamięta każde imię, które utopili, {playerName}. Trzymaj się światła.\"",
+      "litanyHeroic": "Czarna woda liże kamienie grobli. Płomień Eddy migocze na zielono. \"Znowu śpiewają na dole, {playerName}. Nie odpowiadaj chórowi.\""
     },
     "module": {
       "reliquary_sunken_ossuary": "Woda przesącza się przez grobowe półki, niosąc dawny popiół w srebrnoczarnych strugach.",
       "reliquary_bell_niche": "Dziesiątki ręcznych dzwonków wisi w ciszy, każdy przewiązany pogrzebowym płótnem.",
       "reliquary_saintless_hall": "Posągi o twarzach skutych ze starannej nienawiści.",
-      "reliquary_finale": "Zakopany dzwon bije raz pod twoimi butami."
+      "reliquary_finale": "Zakopany dzwon bije raz pod twoimi butami.",
+      "litany_sluice": "Zarośnięte mchem wrota śluzy sączą czarną wodę do starej krypty chóru.",
+      "litany_ledger": "Wyspy rejestrów wznoszą się z zalanych kanałów, a atrament spływa w bagno.",
+      "litany_ring": "Relikwiarzowy krąg opasuje zapieczętowaną centralną chrzcielnicę czarnej wody.",
+      "litany_baptistry": "Zapadliskowe baptysterium zieje pod pękniętymi kamieniami świętych i kokonami jaj.",
+      "litany_choir_loft": "Rozpostarte chóry niosą echo dzwonów na sznurach, które nigdy do końca nie milkną.",
+      "litany_causeway": "Rozwidlona grobla rozchodzi się nad sięgającą pasa wodą trzęsawiska.",
+      "litany_apse": "Utopiona apsyda otwiera się na ołtarzową wyspę Siostry Nhalii."
     },
     "moduleName": {
       "reliquary_sunken_ossuary": "Zatopione Ossarium",
       "reliquary_bell_niche": "Nisza Dzwonów",
       "reliquary_saintless_hall": "Sala bez Świętych",
-      "reliquary_finale": "Komnata Zagrzebanego Dzwonu"
+      "reliquary_finale": "Komnata Zagrzebanego Dzwonu",
+      "litany_sluice": "Półksiężycowa Śluza",
+      "litany_ledger": "Wyspowy Rejestr",
+      "litany_ring": "Relikwiarzowy Krąg",
+      "litany_baptistry": "Zapadliskowe Baptysterium",
+      "litany_choir_loft": "Galeria Trzcinowej Pieśni",
+      "litany_causeway": "Rozwidlona Grobla",
+      "litany_apse": "Utopiona Apsyda"
+    },
+    "object": {
+      "sluice_valve": "Zawór Śluzy",
+      "grave_tablet": "Nagrobna Tablica",
+      "corpse_candle": "Trupia Świeca",
+      "bell_rope": "Sznur Dzwonu"
     },
     "companion": {
       "barkLine": "{name}: {line}",
       "tessa": {
+        "run_start": "Mam swoją świecę i swój rejestr, {playerName}. Prowadź.",
+        "ally_revive": "Wstawaj. Dzisiejszy rejestr nie niesie twojego imienia.",
         "combat_start": "Pewnie stawiaj kroki, {playerName}. Umarli są tu niespokojni.",
         "low_hp": "Oddychaj. Wciąż mam dla ciebie modlitwy w zapasie.",
         "trap_spotted": "Stój. Coś w posadzce pamięta kroki.",
@@ -1959,6 +4153,20 @@ export const pl_PL: EnTranslations = {
           "3": "Akolitka Relikwiarium",
           "4": "Świadek Grobowego Wezwania",
           "5": "Strażniczka Kaplicy"
+        }
+      },
+      "edda": {
+        "run_start": "Trzymaj się linii desek, {playerName}. Muł zabiera zbyt pewnie stąpających.",
+        "ally_revive": "Wstawaj, już. Bagno nie dostanie cię dzisiaj.",
+        "combat_start": "Uważaj na czarną wodę, {playerName}. Bagno słucha.",
+        "low_hp": "Spokojnie. Moja latarnia jeszcze nie zgasła.",
+        "trap_spotted": "Czekaj. Z trzcinami jest tu coś nie tak.",
+        "boss_pull": "Ten kantyk zna twoje imię, {playerName}. Nie odśpiewuj mu.",
+        "completion": "Trzęsawisko może przełknąć swoje sekrety jeszcze jedną noc.",
+        "rank": {
+          "1": "Niosąca Latarnię",
+          "2": "Strażniczka Trzcin",
+          "3": "Akolitka z Fenbridge"
         }
       }
     },
@@ -2002,13 +4210,55 @@ export const pl_PL: EnTranslations = {
       "flooded_paths": "Zalane ścieżki",
       "grave_tax": "Grobowa danina",
       "unstable_roof": "Niestabilny strop",
-      "cult_remnants": "Pozostałości kultu"
+      "cult_remnants": "Pozostałości kultu",
+      "high_water": "Wysoka woda",
+      "lively_choir": "Ożywiony chór",
+      "belligerent_dead": "Wojowniczy umarli"
     },
     "blessing": {
       "chapel_candle": "Kaplicowa świeca: bezpieczniejsza wyprawa, o jeden Znak mniej po ukończeniu."
     },
     "chest": {
       "flavor": "Umarli oddali to, bez czego mogą się obejść."
+    }
+  },
+  "yumi": {
+    "bracket3": "Yumi 3 na 3",
+    "bracket5": "Yumi 5 na 5",
+    "enterQueue": "Dołącz do Ochrony Yumi!",
+    "queue": {
+      "join": "Dołączasz do kolejki Ochrony Yumi. Strzeż swojego chowańca…",
+      "leave": "Opuszczasz kolejkę Ochrony Yumi.",
+      "teamLeave": "Twoja drużyna opuszcza kolejkę Ochrony Yumi."
+    },
+    "error": {
+      "partyTooBig3": "Ochrona Yumi 3 na 3 pozwala na drużynę liczącą do trzech osób.",
+      "partyTooBig5": "Ochrona Yumi 5 na 5 pozwala na drużynę liczącą do pięciu osób."
+    },
+    "log": {
+      "start": "Ochrona Yumi! Broń swojego chowańca i poluj na cudzego."
+    },
+    "hud": {
+      "title": "OCHRONA YUMI",
+      "getReady": "Przygotuj się…",
+      "teleportIn": "Yumi ruszają za {s}",
+      "suddenDeath": "NAGŁA ŚMIERĆ",
+      "yourYumi": "Twoja Yumi",
+      "enemyYumi": "Wroga Yumi",
+      "aria": "Twoja Yumi ma {mine} z {max} zdrowia, wroga Yumi ma {theirs}.",
+      "collapse": "Zwiń paski Ochrony Yumi",
+      "expand": "Rozwiń paski Ochrony Yumi"
+    },
+    "respawn": {
+      "title": "POWALONY!"
+    },
+    "banner": {
+      "sudden": "NAGŁA ŚMIERĆ! Yumi trzymają pozycje!",
+      "teleport": "Yumi się teleportują!"
+    },
+    "end": {
+      "win": "ZWYCIĘSTWO! Yumi jest bezpieczna!",
+      "loss": "PORAŻKA! Twoja Yumi padła."
     }
   },
   "fiesta": {
@@ -2085,7 +4335,7 @@ export const pl_PL: EnTranslations = {
         "desc": "Twoje fizyczne uderzenia ranią o 15% mocniej."
       },
       "aug_spellfire": {
-        "name": "Czaroogień",
+        "name": "Ponury ogień",
         "desc": "Twoje zaklęcia zadają o 15% więcej obrażeń."
       },
       "aug_toughness": {
@@ -2129,7 +4379,7 @@ export const pl_PL: EnTranslations = {
         "desc": "+18% obrażeń wszelkiego rodzaju i +12% szybkości ruchu."
       },
       "aug_lightwell": {
-        "name": "Studnia Światła",
+        "name": "Grobowe światło",
         "desc": "+30% leczenia i +15% maksymalnego zdrowia. Bądź ostoją drużyny."
       },
       "aug_bounty_hunter": {
@@ -2202,12 +4452,23 @@ export const pl_PL: EnTranslations = {
     "world": "Wczytywanie świata...",
     "worldProgress": "Wczytywanie świata... {done}/{total}",
     "enteringWorld": "Wchodzenie do świata...",
-    "connectingRealm": "Łączenie z królestwem...",
+    "connectingRealm": "Łączenie ze światem...",
     "assetsFailed": "Wczytywanie zasobów nie powiodło się: spróbuj odświeżyć. {error}",
     "rendererFailed": "Nie udało się uruchomić renderera: spróbuj odświeżyć. {error}",
     "enterTimeout": "Nie udało się wejść do świata. Upłynął limit czasu połączenia. Czy serwer gry jest uruchomiony?",
     "connectionLost": "Połączenie z serwerem zostało utracone.",
-    "connectionRejected": "Serwer zamknął połączenie."
+    "reconnecting": "Połączenie utracone. Ponowne łączenie...",
+    "connectionRejected": "Serwer zamknął połączenie.",
+    "tips": {
+      "classes": "Wskazówka: każdą z 9 klas gra się inaczej. Wypróbuj kilka, zanim zdecydujesz się na jedną.",
+      "talents": "Wskazówka: poza walką możesz w każdej chwili wyzerować talenty, więc wczesny wybór nigdy nie jest pułapką.",
+      "dungeons": "Wskazówka: gdy twój ekwipunek stanie się zbyt dobry na zwykły poziom lochu, spróbuj poziomu heroicznego, aby stoczyć trudniejszą i bardziej opłacalną walkę.",
+      "market": "Wskazówka: na Rynku Świata możesz kupować i sprzedawać z graczami z całego królestwa.",
+      "guilds": "Wskazówka: dołączenie do gildii daje ci prywatny kanał czatu i wspólną listę członków gildii.",
+      "professions": "Wskazówka: profesje zbierackie i rzemieślnicze można szkolić równolegle z klasą bojową.",
+      "loadouts": "Wskazówka: zapisz więcej niż jeden zestaw talentów, aby przełączać się między konfiguracjami bez ponownego wydawania punktów.",
+      "pvp": "Wskazówka: wyzwij innego gracza na przyjazny pojedynek lub dołącz do kolejki na arenę Popielnego Koloseum, aby przetestować swoją konfigurację."
+    }
   },
   "errors": {
     "nothingInteract": "Brak obiektu do interakcji.",
@@ -2225,6 +4486,7 @@ export const pl_PL: EnTranslations = {
       "usernameTaken": "Ta nazwa użytkownika jest już zajęta.",
       "invalidCredentials": "Nieprawidłowa nazwa użytkownika lub hasło.",
       "verificationFailed": "Weryfikacja nie powiodła się. Spróbuj ponownie.",
+      "desktopCodeInvalid": "Kod logowania do aplikacji jest nieprawidłowy lub wygasł. Spróbuj ponownie.",
       "invalidCharacterName": "Nieprawidłowe imię postaci. Użyj od 2 do 16 liter.",
       "characterNameNotAllowed": "To imię postaci jest niedozwolone.",
       "invalidClass": "Nieprawidłowa klasa.",
@@ -2238,9 +4500,27 @@ export const pl_PL: EnTranslations = {
       "webLoginOnly": "Logowanie jest dozwolone tylko z klienta gry.",
       "accountSuspended": "To konto jest zawieszone do {date}.",
       "alreadyInWorld": "Postać jest już w świecie.",
+      "accountSessionLimit": "Zbyt wiele postaci na tym koncie jest już w świecie.",
       "takenOver": "Twoją postać przejęła inna sesja.",
       "renameBeforeEntering": "Tę postać trzeba przemianować przed wejściem do świata.",
-      "renameNotPermitted": "Zmiana imienia tej postaci jest niedozwolona."
+      "renameNotPermitted": "Zmiana imienia tej postaci jest niedozwolona.",
+      "unsupportedMediaType": "Nieobsługiwany format żądania.",
+      "crossSiteOrigin": "Żądanie zablokowane ze względów bezpieczeństwa."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Pobieranie aktualizacji {version}...",
+      "ready": "Aktualizacja {version} jest gotowa. Zainstaluje się przy zamknięciu lub uruchom ponownie teraz.",
+      "restart": "Uruchom ponownie teraz",
+      "later": "Później"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "Widok gry przestał działać. Załadować ponownie?",
+      "reload": "Załaduj ponownie",
+      "quit": "Zakończ",
+      "fatalBody": "World of ClaudeCraft napotkał nieoczekiwany błąd i musi się zamknąć."
     }
   },
   "realm": {
@@ -2346,12 +4626,12 @@ export const pl_PL: EnTranslations = {
     },
     "lore": {
       "warrior": "Wojownicy to zaprawieni w boju wojownicy walki wręcz, którzy gromadzą Furię, zadając lub otrzymując obrażenia. Pochłaniają potężne ciosy lub miażdżą wrogów potężnym orężem.",
-      "paladin": "Paladyni to święci krzyżowcy, którzy wspierają sojuszników błogosławieństwami, leczą rany Świętym Światłem i chronią słabych, odziani w ciężki pancerz.",
-      "hunter": "Łowcy są mistrzami dziczy, tropiąc wrogów z oddali za pomocą łuków lub strzelb i używając pułapek do kontrolowania pola bitwy.",
+      "paladin": "Paladyni to święci krzyżowcy, którzy wspierają sojuszników błogosławieństwami, leczą rany Kojącym Światłem i chronią słabych, odziani w ciężki pancerz.",
+      "hunter": "Łowcy to specjaliści walki dystansowej, którzy walczą u boku oswojonej bestii, zasypując wrogów celnymi i szybkimi strzałami, spowalniając ich żądłami oraz ogłuszającym ostrzałem i zmieniając aspekty stosownie do chwili.",
       "rogue": "Łotrzykowie to skradający się zabójcy, którzy wydają Energię i Punkty Kombosów na ciosy w plecy i wykończenia z cienia.",
-      "priest": "Kapłani przyzywają Święte Światło, by leczyć i osłaniać sojuszników, a magia Cienia pozwala im wysysać życie z wrogów.",
+      "priest": "Kapłani przyzywają Kojące Światło, by leczyć i osłaniać sojuszników, a magia Cienia pozwala im wysysać życie z wrogów.",
       "shaman": "Szamani rozkazują żywiołom, napełniając oręż mocą, rażąc wrogów błyskawicami i przywracając siły sojusznikom.",
-      "mage": "Magowie naginają moc Ognia, Mrozu i Arkanów, by niszczyć wrogów, przyzywać wodę i zamrażać zagrożenia w miejscu.",
+      "mage": "Magowie naginają Ogień, Mróz i arkaniczną moc, by niszczyć wrogów, przyzywać wodę i zamrażać zagrożenia w miejscu.",
       "warlock": "Czarnoksiężnicy przyzywają demony, rzucają klątwy i magię obrażeń w czasie oraz wysysają życie z wrogów, by przetrwać.",
       "druid": "Druidzi czerpią z natury, lecząc rany, pętając wrogów i przemieniając się w postacie zwierząt dla obrony lub zadawania obrażeń."
     },
@@ -2437,6 +4717,7 @@ export const pl_PL: EnTranslations = {
       "mobileSocial": "Społeczność",
       "mobileArena": "Arena",
       "mobileMenu": "Menu",
+      "mobileSettings": "Ustawienia",
       "mobileUse": "Użyj",
       "mobileMeters": "Liczniki",
       "mobileMap": "Mapa",
@@ -2645,6 +4926,7 @@ export const pl_PL: EnTranslations = {
     "combat": {
       "floatingMiss": "Pudło",
       "floatingDodge": "Unik",
+      "floatingResist": "Odparto",
       "cannotMove": "Nie można się ruszyć!",
       "attack": "atak",
       "damageDone": "Twój {ability} trafia {target}, zadając {amount}.",
@@ -2653,6 +4935,7 @@ export const pl_PL: EnTranslations = {
       "damageTakenCrit": "{source} trafia cię krytycznie, zadając {amount}.",
       "miss": "Twój {ability} chybia {target}.",
       "dodged": "Twój {ability} zostaje uniknięty przez {target}.",
+      "resisted": "{target} odpiera twoje {ability}.",
       "healSelf": "Twój {ability} leczy cię o {amount}.",
       "healSelfCrit": "Twój {ability} leczy cię krytycznie o {amount}.",
       "healOther": "Twój {ability} leczy {target} o {amount}.",
@@ -2698,9 +4981,9 @@ export const pl_PL: EnTranslations = {
       "requiresCombo": "Ta umiejętność wymaga punktów kombinacji.",
       "requiresForm": "Musisz być w postaci: {form}.",
       "cantInForm": "Nie możesz tego zrobić w postaci: {form}.",
-      "bear": "Niedźwiedź",
+      "bear": "Bruin",
       "cat": "Wilk",
-      "travel": "Podróż",
+      "travel": "Fleet",
       "shapeshifted": "Nie możesz tego zrobić w przemienionej postaci.",
       "stealthed": "Musisz się skradać.",
       "inCombat": "Nie możesz tego zrobić podczas walki.",
@@ -2983,6 +5266,7 @@ export const pl_PL: EnTranslations = {
       "offGlobalCooldown": "Poza globalnym czasem odnowienia",
       "friendlyTarget": "Cel przyjazny",
       "enemyTarget": "Cel wrogi",
+      "selfOnly": "Tylko na siebie",
       "damageRange": "{min} do {max}",
       "finisherDamage": "{base} plus {perCombo} za punkt kombinacji"
     },
@@ -2997,13 +5281,16 @@ export const pl_PL: EnTranslations = {
     },
     "cast": {
       "fishing": "Wędkarstwo",
-      "demonHeal": "Demoniczne leczenie"
+      "demonHeal": "Demoniczne leczenie",
+      "thunzharrStormcall": "Zew burzy"
     }
   },
   "questUi": {
     "tracker": {
       "title": "Zadania",
-      "complete": "Gotowe"
+      "complete": "Gotowe",
+      "showOnMap": "Pokaż {name} na mapie",
+      "hideFromMap": "Ukryj {name} na mapie"
     },
     "log": {
       "title": "Dziennik zadań",
@@ -3082,12 +5369,14 @@ export const pl_PL: EnTranslations = {
     "slots": {
       "mainhand": "Główna ręka",
       "helmet": "Hełm",
+      "neck": "Szyja",
       "shoulder": "Barki",
       "chest": "Tułów",
       "waist": "Pas",
       "legs": "Nogi",
       "gloves": "Rękawice",
-      "feet": "Stopy"
+      "feet": "Stopy",
+      "ring": "Palec"
     },
     "quality": {
       "poor": "Nędzny",
@@ -3106,7 +5395,8 @@ export const pl_PL: EnTranslations = {
       "drink": "Napój",
       "tool": "Narzędzie",
       "potion": "Mikstura",
-      "elixir": "Eliksir"
+      "elixir": "Eliksir",
+      "bag": "Torba"
     },
     "stats": {
       "armor": "Pancerz",
@@ -3148,7 +5438,8 @@ export const pl_PL: EnTranslations = {
       "useManaPotion": "Użycie: Natychmiast przywraca {amount} many. Można użyć w walce. Czas odnowienia 1 min.",
       "clickUseInstant": "Kliknij, aby użyć natychmiast w walce",
       "clickUse": "Kliknij, aby użyć",
-      "clickBuyback": "Kliknij, aby odkupić"
+      "clickBuyback": "Kliknij, aby odkupić",
+      "bagSlots": "Torba z {slots} miejscami"
     },
     "bags": {
       "title": "Torby",
@@ -3284,89 +5575,150 @@ export const pl_PL: EnTranslations = {
       "needAria": "Potrzeba na {item}",
       "greedAria": "Chciwość na {item}",
       "passAria": "Pasuj na {item}",
-      "everyonePassed": "Wszyscy spasowali na {item}."
+      "everyonePassed": "Wszyscy spasowali na {item}.",
+      "rolled": "{answered}/{total} rzuciło"
     }
   },
   "entities": {
     "abilities": {
+      "sport_kick": {
+        "name": "Kopnięcie",
+        "description": "Zagraj piłkę po ziemi w stronę punktu celowania."
+      },
+      "sport_shoot": {
+        "name": "Strzał",
+        "description": "Przytrzymaj, aby nabrać mocy, i puść, aby strzelić na bramkę. Zbyt mocny strzał poszybuje nad poprzeczką."
+      },
+      "sport_pass": {
+        "name": "Podanie",
+        "description": "Mocne podanie po ziemi do wskazanego towarzysza, wyprzedzające jego bieg."
+      },
+      "sport_boot": {
+        "name": "Potężny Wykop",
+        "description": "Długie, wysokie wykopnięcie w stronę punktu celowania. Trybuny to uwielbiają."
+      },
+      "sport_hoof": {
+        "name": "Na Pałę",
+        "description": "Huknij piłkę nisko i mocno w głąb boiska."
+      },
+      "sport_punt": {
+        "name": "Dalekie Wybicie",
+        "description": "Bramkarskie wybicie, wysoko i daleko."
+      },
+      "sport_feint": {
+        "name": "Zwód",
+        "description": "Szybki zwód i zryw w stronę punktu celowania."
+      },
+      "sport_dive": {
+        "name": "Rzut do piłki",
+        "description": "Rzucasz się w stronę punktu celowania. Dośrodkowana piłka przywiera do ciebie."
+      },
+      "sport_shoulder": {
+        "name": "Bark",
+        "description": "Uczciwe natarcie barkiem w duchu żniwnego rozejmu. Posyła rywala na ziemię, z dala od piłki."
+      },
+      "sport_second_wind": {
+        "name": "Świeże Nogi",
+        "description": "Łapiesz oddech: poruszasz się o 50% szybciej przez 4 s."
+      },
+      "flamestrike": {
+        "name": "Ognista nawała",
+        "description": "Sprowadza wybuch płomieni na wybrany obszar, zadając {damage} obrażeń od ognia wrogom w zasięgu eksplozji."
+      },
+      "rain_of_fire": {
+        "name": "Deszcz ognia",
+        "description": "Sprowadza deszcz ognia na wybrany obszar przez 4 sek., paląc wrogów i zadając {damage} obrażeń od ognia co sekundę."
+      },
+      "volley": {
+        "name": "Salwa",
+        "description": "Zasypuje wybrany obszar strzałami przez 3 sek., zadając {damage} obrażeń co 0.5 sek. wrogom w jego obrębie."
+      },
+      "hurricane": {
+        "name": "Huragan",
+        "description": "Sprowadza huragan na wybrany obszar przez 6 sek., smagając wrogów i zadając {damage} obrażeń od sił natury co sekundę."
+      },
+      "earthquake": {
+        "name": "Trzęsienie ziemi",
+        "description": "Wstrząsa wybranym obszarem przez 6 sek., smagając wrogów i zadając {damage} obrażeń od sił natury co 1.5 sek."
+      },
       "heroic_strike": {
-        "name": "Heroiczne uderzenie",
+        "name": "Cios łupieżcy",
         "description": "Potężny atak, który zwiększa obrażenia w zwarciu o {damage}. Aktywuje się przy następnym uderzeniu."
       },
       "battle_shout": {
-        "name": "Okrzyk bojowy",
-        "description": "Zwiększa twoją moc ataku o 20 na 2 min."
+        "name": "Żelazny ryk",
+        "description": "Zwiększa twoją moc ataku o {buff} na 2 min."
       },
       "commanding_shout": {
-        "name": "Rozkazujący okrzyk",
-        "description": "Zwiększa twoją kondycję o 6 na 2 min."
+        "name": "Krzepiący okrzyk",
+        "description": "Zwiększa twoją kondycję o {buff} na 2 min."
       },
       "demoralizing_shout": {
-        "name": "Demoralizujący okrzyk",
-        "description": "Wydaje przerażający okrzyk, zmniejszając moc ataku wszystkich pobliskich wrogów o 30 na 30 sek."
+        "name": "Złowieszcze wycie",
+        "description": "Wydaje przerażający okrzyk, zmniejszając moc ataku wszystkich pobliskich wrogów o {buff} na 30 sek."
       },
       "charge": {
-        "name": "Szarża",
+        "name": "Natarcie",
         "description": "Szarżuj na wroga, generując 9 wściekłości i ogłuszając go na 1 sek. Zasięg 8-25 jardów."
       },
       "rend": {
-        "name": "Rozdarcie",
-        "description": "Rani cel, powodując krwawienie zadające {damage} obrażeń w ciągu 9 sek."
+        "name": "Głęboka rana",
+        "description": "Rani cel, powodując krwawienie zadające {damage} obrażeń w ciągu {duration} sek."
       },
       "thunder_clap": {
-        "name": "Uderzenie gromu",
+        "name": "Trzęsący cios",
         "description": "Razi pobliskich wrogów za {damage} obrażeń i spowalnia ich ataki o 10% na 10 sek."
       },
       "hamstring": {
-        "name": "Podcięcie ścięgien",
-        "description": "Okalecza wroga, zadając 5 obrażeń i spowalniając jego ruch o 50% na 15 sek."
+        "name": "Kulawiące cięcie",
+        "description": "Okalecza wroga, zadając {damage} obrażeń i spowalniając jego ruch o 50% na 15 sek."
       },
       "bloodrage": {
-        "name": "Krwawa furia",
+        "name": "Krwawa danina",
         "description": "Generuje 10 wściekłości kosztem zdrowia."
       },
       "overpower": {
-        "name": "Przewaga",
-        "description": "Natychmiastowy atak za obrażenia broni +5. Użyteczne tylko po uniku celu. Nie można uniknąć."
+        "name": "Krwawa ręka",
+        "description": "Natychmiastowy atak za obrażenia broni plus {damage}. Użyteczne tylko po uniku celu. Nie można uniknąć."
       },
       "execute": {
-        "name": "Egzekucja",
+        "name": "Przedwczesny grób",
         "description": "Próba dobicia rannego przeciwnika, zadająca {damage} obrażeń. Użyteczne tylko na wrogach poniżej 20% zdrowia."
       },
       "slam": {
-        "name": "Walnięcie",
+        "name": "Brutalny zamach",
         "description": "Wali przeciwnika, zadając obrażenia broni plus {damage}."
       },
       "cleave": {
-        "name": "Rozpłatanie",
+        "name": "Kosiący łuk",
         "description": "Zamaszyste uderzenie, które trafia wszystkich wrogów przed tobą, zadając {damage} obrażeń."
       },
       "defensive_stance": {
-        "name": "Postawa defensywna",
+        "name": "Czujna postawa",
         "description": "Defensywna postawa bojowa: generujesz o 30% więcej zagrożenia, lecz zadajesz i otrzymujesz o 10% mniej obrażeń. Rzuć ponownie, aby opuścić postawę."
       },
       "sunder_armor": {
-        "name": "Strzaskanie pancerza",
-        "description": "Strzaskuje pancerz celu, zmniejszając go o {damage} za każde nałożenie. Kumuluje się do 5 razy. Generuje wysokie zagrożenie."
+        "name": "Rozdarcie pancerza",
+        "description": "Rozdziera pancerz celu, zmniejszając go o {damage}% za każde nałożenie. Kumuluje się do 5 razy. Generuje dużą ilość zagrożenia."
       },
       "taunt": {
-        "name": "Prowokacja",
+        "name": "Podjudzenie",
         "description": "Prowokuje cel: twoje zagrożenie wzrasta do poziomu jego najbardziej znienawidzonego wroga, a cel jest zmuszony atakować cię przez 3 sek."
       },
       "fireball": {
-        "name": "Kula ognia",
+        "name": "Żarowy pocisk",
         "description": "Ciska ognistą kulą, która zadaje {damage} obrażeń od ognia oraz dodatkowe obrażenia w czasie."
       },
       "frost_armor": {
-        "name": "Mroźny pancerz",
-        "description": "Otacza cię szronem, zwiększając pancerz o 30 na 30 min."
+        "name": "Płaszcz szronu",
+        "description": "Otacza cię szronem, zwiększając pancerz o {buff} na 30 min."
       },
       "arcane_intellect": {
-        "name": "Arkaniczny intelekt",
-        "description": "Zwiększa intelekt o 2 na 30 min."
+        "name": "Wgląd eteru",
+        "description": "Zwiększa intelekt o {buff} na 30 min."
       },
       "frostbolt": {
-        "name": "Mroźny pocisk",
+        "name": "Szronowa lanca",
         "description": "Wystrzeliwuje pocisk mrozu, zadając {damage} obrażeń od mrozu i spowalniając ruch o 40%."
       },
       "conjure_water": {
@@ -3374,171 +5726,175 @@ export const pl_PL: EnTranslations = {
         "description": "Przywołuje 2 butelki wody, które po wypiciu przywracają manę. Wyższe rangi przywołują czystszą wodę."
       },
       "conjure_food": {
-        "name": "Przywołanie jedzenia",
+        "name": "Przywołanie chleba",
         "description": "Przywołuje 2 porcje chleba, które po zjedzeniu przywracają zdrowie. Wyższe rangi przywołują pożywniejsze jadło."
       },
       "fire_blast": {
-        "name": "Ognisty wybuch",
+        "name": "Deszcz żaru",
         "description": "Razi wroga, zadając {damage} obrażeń od ognia. Natychmiastowe."
       },
       "arcane_missiles": {
-        "name": "Arkaniczne pociski",
-        "description": "Wystrzeliwuje arkaniczne pociski we wroga, zadając 8 obrażeń arkanicznych co sekundę przez 3 sek."
+        "name": "Eteryczne strzały",
+        "description": "Wystrzeliwuje eteryczne strzały we wroga, zadając {damage} obrażeń arkanicznych co sekundę przez 3 sek."
       },
       "polymorph": {
-        "name": "Polimorfia",
-        "description": "Przemienia wroga w owcę na nawet 15 sek. Owca błąka się i szybko się leczy. Każde obrażenie przerywa efekt. Tylko bestie i humanoidy."
+        "name": "Zauroczenie",
+        "description": "Przemienia wroga w ropuchę na nawet {duration} sek. Ropucha błąka się i szybko się leczy. Każde obrażenie przerywa efekt. Tylko bestie i humanoidy."
       },
       "frost_nova": {
-        "name": "Mroźna nowa",
+        "name": "Lodowe okowy",
         "description": "Zamraża wszystkich pobliskich wrogów w miejscu na nawet 8 sek, zadając {damage} obrażeń od mrozu."
       },
       "arcane_explosion": {
-        "name": "Arkaniczna eksplozja",
+        "name": "Wybuch eteru",
         "description": "Wybuch arkanicznej energii uderza wszystkich pobliskich wrogów, zadając {damage} obrażeń arkanicznych."
       },
       "scorch": {
-        "name": "Osmalenie",
+        "name": "Poparzenie",
         "description": "Osmala wroga, zadając {damage} obrażeń od Ognia. Szybkie do rzucenia."
       },
       "pyroblast": {
-        "name": "Pirowybuch",
+        "name": "Ognista lanca",
         "description": "Ciska ogromnym ognistym głazem, który zadaje {damage} obrażeń od ognia oraz dodatkowe obrażenia w czasie."
       },
       "ice_barrier": {
-        "name": "Lodowa bariera",
-        "description": "Osłania cię lodem, pochłaniając 130 obrażeń przez 60 sek."
+        "name": "Lodowa zasłona",
+        "description": "Osłania cię lodem, pochłaniając {damage} obrażeń przez 60 sek."
       },
       "sinister_strike": {
-        "name": "Złowrogie uderzenie",
+        "name": "Nikczemne cięcie",
         "description": "Natychmiastowe uderzenie zadające obrażenia broni plus {damage}. Przyznaje 1 punkt kombinacji."
       },
       "eviscerate": {
-        "name": "Patroszenie",
-        "description": "Ruch kończący, który zadaje obrażenia za każdy punkt kombinacji."
+        "name": "Wieczny sen",
+        "description": "Ruch kończący, który zadaje {damage}."
       },
       "backstab": {
-        "name": "Cios w plecy",
+        "name": "Tchórzliwe pchnięcie",
         "description": "Pchnij cel w plecy, zadając 150% obrażeń broni plus {damage}. Musisz znajdować się za celem. Wymaga sztyletu. Przyznaje 1 punkt kombinacji."
       },
       "gouge": {
-        "name": "Dźgnięcie w oczy",
-        "description": "Uderza w cel, obezwładniając go na 4 sek. Każde obrażenie przerywa efekt. Przyznaje 1 punkt kombinacji."
+        "name": "Cios w oko",
+        "description": "Uderza w cel, zadając {damage} obrażeń i obezwładniając go na 4 sek. Każde obrażenie przerywa efekt. Przyznaje 1 punkt kombinacji."
       },
       "evasion": {
-        "name": "Uniki",
+        "name": "Upiorny krok",
         "description": "Zwiększa twoją szansę na unik o 50% na 15 sek."
       },
       "slice_and_dice": {
-        "name": "Cięcie i szatkowanie",
+        "name": "Mordercze tempo",
         "description": "Cios kończący zwiększający szybkość ataków wręcz o 30%. Trwa dłużej za każdy punkt kombinacji."
       },
       "sprint": {
-        "name": "Sprint",
+        "name": "Rącze pięty",
         "description": "Zwiększa twoją szybkość poruszania się o 70% na 15 sek."
       },
       "kidney_shot": {
-        "name": "Cios w nerki",
+        "name": "Cios poniżej pasa",
         "description": "Ruch kończący, który ogłusza cel. Trwa o 1 sek dłużej za każdy punkt kombinacji."
       },
       "ambush": {
-        "name": "Zasadzka",
+        "name": "Cios czyhacza",
         "description": "Atakuj cel z zasadzki, zadając 250% obrażeń broni plus {damage}. Wymaga skradania się i pozycji za celem. Wymaga sztyletu. Przyznaje 1 punkt kombinacji."
       },
       "stealth": {
-        "name": "Skradanie się",
-        "description": "Ukrywa cię w cieniu: wrogowie ledwie cię dostrzegają, ale poruszasz się o 30% wolniej. Atak lub otrzymanie obrażeń przerywa Skradanie się. Rzuć ponownie, aby się ujawnić."
+        "name": "Duskveil",
+        "description": "Ukrywa cię w cieniu: wrogowie ledwie cię dostrzegają, ale poruszasz się o 50% wolniej. Atak lub otrzymanie obrażeń przerywa Duskveil. Rzuć ponownie, aby się ujawnić."
       },
       "adrenaline_rush": {
-        "name": "Przypływ adrenaliny",
+        "name": "Przyspieszona krew",
         "description": "Twoja krew wrze, natychmiast przywracając 60 energii."
       },
       "garrote": {
-        "name": "Garota",
-        "description": "Dusi wroga garotą, zadając obrażenia natychmiast oraz powodując krwawienie za {damage} w ciągu 18 sek. Wymaga skradania. Przyznaje 1 punkt kombinacji."
+        "name": "Drut na gardło",
+        "description": "Dusi wroga garotą, zadając {damage} obrażeń natychmiast oraz powodując krwawienie za {overTime} w ciągu 18 sek. Wymaga skradania. Przyznaje 1 punkt kombinacji."
       },
       "cheap_shot": {
-        "name": "Podły cios",
-        "description": "Uderz cel, ogłuszając go na 4 sek. Wymaga skradania się. Przyznaje 2 punkty kombinacji."
+        "name": "Cios w brzuch",
+        "description": "Uderz cel, zadając {damage} obrażeń i ogłuszając go na 4 sek. Wymaga skradania się. Przyznaje 2 punkty kombinacji."
       },
       "sap": {
         "name": "Ogłuszenie",
         "description": "Obezwładnia cel na 8 sek. Wymaga skradania się i pozostawania poza walką. Jakiekolwiek obrażenia przerywają efekt."
       },
       "crippling_poison": {
-        "name": "Obezwładniająca trucizna",
-        "description": "Uderza cel obezwładniającą trucizną, zadając {damage} obrażeń natury i spowalniając jego prędkość ruchu o 50% na 12 sek."
+        "name": "Ołowiany jad",
+        "description": "Uderza cel ołowianym jadem, zadając {damage} obrażeń od Natury i spowalniając jego prędkość ruchu o 50% na 12 sek."
       },
       "expose_armor": {
-        "name": "Odsłonięcie pancerza",
-        "description": "Ruch kończący, który odsłania cel, zmniejszając jego pancerz. Więcej wydanych punktów kombinacji pogłębia cięcie."
+        "name": "Wyłom w pancerzu",
+        "description": "Ruch kończący, który odsłania cel, zmniejszając jego pancerz o {damage} na 30 sek."
       },
       "rupture": {
-        "name": "Rozerwanie",
+        "name": "Wykrwawienie",
         "description": "Cios kończący, który rani cel, powodując krwawienie zadające {damage} w ciągu 16 sek."
       },
       "vanish": {
-        "name": "Zniknięcie",
-        "description": "Znikasz z pola widzenia, wchodząc w Skradanie się nawet w walce. Ukryty poruszasz się o 30% wolniej. Trwa do 10 sek."
+        "name": "Dymny krok",
+        "description": "Znikasz z pola widzenia, wchodząc w Duskveil nawet w walce. Ukryty poruszasz się o 50% wolniej. Trwa do 10 sek."
       },
       "instant_poison": {
-        "name": "Natychmiastowa trucizna",
+        "name": "Ukąszenie żmii",
         "description": "Pokrywa twój oręż na 30 min, sprawiając, że każde uderzenie wręcz zadaje 8 dodatkowych obrażeń od natury."
       },
       "deadly_poison": {
-        "name": "Śmiertelna trucizna",
+        "name": "Jątrzący jad",
         "description": "Pokrywa twój oręż na 30 min, sprawiając, że każde uderzenie wręcz zadaje 14 dodatkowych obrażeń od natury."
       },
       "blind": {
-        "name": "Oślepienie",
+        "name": "Rzut piaskiem",
         "description": "Oślepia cel, sprawiając, że błądzi zdezorientowany przez 8 sek. Jakiekolwiek obrażenia przerywają efekt."
       },
       "seal_of_righteousness": {
-        "name": "Pieczęć prawości",
-        "description": "Napełnia cię mocą Świętości na 30 sek., sprawiając, że każde twoje uderzenie wręcz zadaje 4 dodatkowe obrażenia od Świętości. Uwolnij ją Osądem."
+        "name": "Piętno przysięgi",
+        "description": "Napełnia cię mocą Świętości na 30 sek., sprawiając, że każde twoje uderzenie wręcz zadaje {damage} dodatkowych obrażeń od Świętości. Uwolnij ją Verdictem."
       },
       "holy_light": {
-        "name": "Święte światło",
+        "name": "Kojące Światło",
         "description": "Leczy sprzymierzony cel o {damage}."
       },
       "devotion_aura": {
-        "name": "Aura oddania",
-        "description": "Zwiększa twój pancerz o 40 na 30 min."
+        "name": "Aura niezłomności",
+        "description": "Zwiększa twój pancerz o {buff} na 30 min."
       },
       "judgement": {
-        "name": "Osąd",
-        "description": "Uwalnia twoją aktywną pieczęć na wrogu, zużywając ją, by zadać obrażenia jej osądu."
+        "name": "Verdict",
+        "description": "Uwalnia twoją aktywną pieczęć na wrogu, zużywając ją, by zadać zmagazynowane obrażenia od Świętości."
       },
       "blessing_of_might": {
-        "name": "Błogosławieństwo mocy",
-        "description": "Nakłada błogosławieństwo na przyjazny cel, zwiększając moc ataku o 15 na 5 min."
+        "name": "Przysięga żelaza",
+        "description": "Nakłada błogosławieństwo na przyjazny cel, zwiększając moc ataku o {buff} na 5 min."
       },
       "divine_protection": {
-        "name": "Boska ochrona",
-        "description": "Święta tarcza pochłania 50 obrażeń przez 10 sek."
+        "name": "Osłona wiary",
+        "description": "Ochronna osłona pochłania {damage} obrażeń przez 10 sek."
       },
       "hammer_of_justice": {
-        "name": "Młot sprawiedliwości",
-        "description": "Ogłusza cel na 3 sek."
+        "name": "Druzgocący młot",
+        "description": "Ogłusza cel na {duration} sek."
       },
       "lay_on_hands": {
-        "name": "Nałożenie rąk",
-        "description": "Potężny przypływ uzdrowienia: przywraca 250 zdrowia. 10 min czasu odnowienia."
+        "name": "Ostatnie namaszczenie",
+        "description": "Potężny przypływ uzdrowienia: przywraca {damage} zdrowia. 10 min czasu odnowienia."
+      },
+      "holy_taunt": {
+        "name": "Święte Podjudzenie",
+        "description": "Drwi z celu: twoje zagrożenie wzrasta, dorównując najbardziej znienawidzonemu wrogowi i jest on zmuszony do ataku na ciebie przez 3 sekundy."
       },
       "flash_of_light": {
-        "name": "Błysk światła",
-        "description": "Szybki, oszczędny błysk światłości, który leczy sprzymierzony cel o {damage}."
+        "name": "Świetliste ukojenie",
+        "description": "Szybki, oszczędny rozbłysk światła, który leczy sprzymierzony cel o {damage}."
       },
       "exorcism": {
-        "name": "Egzorcyzm",
+        "name": "Rytuał wygnania",
         "description": "Wygania niegodziwca świętym gniewem, zadając {damage} obrażeń od światłości."
       },
       "consecration": {
-        "name": "Poświęcenie",
-        "description": "Poświęca ziemię pod tobą, parząc pobliskich wrogów, zadając {damage} obrażeń świętych."
+        "name": "Święta ziemia",
+        "description": "Poświęca ziemię pod tobą, parząc pobliskich wrogów i zadając {damage} obrażeń od Świętości co 2 sek. przez 10 sek."
       },
       "righteous_fury": {
-        "name": "Sprawiedliwa furia",
+        "name": "Płonąca przysięga",
         "description": "Zwiększa zagrożenie generowane przez twoje obrażenia od Świętości o 60% na 30 min. Filar paladyna-obrońcy."
       },
       "retribution_aura": {
@@ -3546,55 +5902,55 @@ export const pl_PL: EnTranslations = {
         "description": "Otacza cię świętą energią na 30 min, zadając 5 obrażeń od Świętości każdemu wrogowi, który zaatakuje cię wręcz."
       },
       "tame_beast": {
-        "name": "Oswojenie bestii",
+        "name": "Dzika więź",
         "description": "Rozpoczyna oswajanie bestii, by stała się twoim towarzyszem. Musi być na twoim poziomie lub niższym i nie może być elitą. Twoje zwierzę podąża za tobą, atakuje twoich wrogów i utrzymuje własne zagrożenie. Możesz mieć jedno zwierzę naraz."
       },
       "dismiss_pet": {
-        "name": "Odprawienie zwierzęcia",
+        "name": "Uwolnij towarzysza",
         "description": "Odsyła twoje zwierzę z powrotem na łono dziczy."
       },
       "raptor_strike": {
-        "name": "Uderzenie raptora",
-        "description": "Potężny atak w zwarciu, który zwiększa obrażenia o 5. Aktywuje się przy następnym uderzeniu."
+        "name": "Patroszące uderzenie",
+        "description": "Potężny atak w zwarciu, który zwiększa obrażenia o {damage}. Aktywuje się przy następnym uderzeniu."
       },
       "aspect_of_the_hawk": {
-        "name": "Aspekt jastrzębia",
-        "description": "Przyjmij aspekt jastrzębia, zwiększając moc ataku o 20 na 30 min."
+        "name": "Postać błotniaka",
+        "description": "Przyjmij postać błotniaka, zwiększając moc ataku o {buff} na 30 min."
       },
       "serpent_sting": {
-        "name": "Wężowe żądło",
+        "name": "Jadowity kolec",
         "description": "Żądli cel, zadając {damage} obrażeń od Natury w ciągu 15 sek."
       },
       "arcane_shot": {
-        "name": "Arkaniczny strzał",
+        "name": "Plugawy strzał",
         "description": "Natychmiastowy strzał, który zadaje {damage} obrażeń arkanicznych."
       },
       "concussive_shot": {
-        "name": "Ogłuszający strzał",
-        "description": "Oszałamia cel, spowalniając ruch o 50% na 4 sek."
+        "name": "Wstrząsający strzał",
+        "description": "Oszałamia cel, zadając {damage} obrażeń i spowalniając ruch o 50% na 4 sek."
       },
       "mongoose_bite": {
-        "name": "Ugryzienie mangusty",
-        "description": "Kontratak po uniku celu, zadający obrażenia broni plus 12. Nie można uniknąć."
+        "name": "Odwetowy kieł",
+        "description": "Kontratak po uniku celu, zadający obrażenia broni plus {damage}. Nie można uniknąć."
       },
       "wing_clip": {
-        "name": "Podcięcie skrzydeł",
-        "description": "Zadaje ranę, która spowalnia wroga o 40% na 10 sek."
+        "name": "Pętające cięcie",
+        "description": "Zadaje ranę, zadając {damage} obrażeń i spowalniając wroga o 40% na 10 sek."
       },
       "aspect_of_the_monkey": {
-        "name": "Aspekt małpy",
-        "description": "Przyjmij aspekt małpy, zwiększając szansę na unik o 8% na 30 min."
+        "name": "Postać kuny",
+        "description": "Przyjmij postać kuny, zwiększając szansę na unik o 8% na 30 min."
       },
       "aspect_of_the_cheetah": {
-        "name": "Aspekt geparda",
-        "description": "Przyjmij aspekt geparda, zwiększając prędkość ruchu o 30% na 30 min."
+        "name": "Postać rumaka",
+        "description": "Przyjmij postać rumaka, zwiększając prędkość ruchu o 30% na 30 min."
       },
       "aimed_shot": {
-        "name": "Strzał celowany",
-        "description": "Starannie wymierzony strzał, który zadaje {damage} obrażeń."
+        "name": "Długie naciągnięcie",
+        "description": "Starannie naciągnięty strzał, który zadaje {damage} obrażeń."
       },
       "rapid_fire": {
-        "name": "Szybki ostrzał",
+        "name": "Gorączkowy ostrzał",
         "description": "Zwiększa twoją prędkość ataku o 40% na 15 sek."
       },
       "smite": {
@@ -3602,164 +5958,164 @@ export const pl_PL: EnTranslations = {
         "description": "Karze wroga, zadając {damage} obrażeń od Świętości."
       },
       "lesser_heal": {
-        "name": "Słabsze leczenie",
+        "name": "Szeptana modlitwa",
         "description": "Leczy sprzymierzony cel o {damage}."
       },
       "power_word_fortitude": {
-        "name": "Słowo mocy: Hart",
-        "description": "Zwiększa wytrzymałość celu o 3 na 30 min."
+        "name": "Litania hartu",
+        "description": "Zwiększa wytrzymałość celu o {buff} na 30 min."
       },
       "shadow_word_pain": {
-        "name": "Mroczne słowo: Ból",
+        "name": "Pieśń rozkładu",
         "description": "Słowo mroku zadaje {damage} obrażeń od Cienia w ciągu 18 sek."
       },
       "power_word_shield": {
-        "name": "Słowo mocy: Tarcza",
-        "description": "Osłania cel, pochłaniając 48 obrażeń przez 30 sek."
+        "name": "Psalm ochrony",
+        "description": "Osłania cel, pochłaniając {damage} obrażeń przez 30 sek."
       },
       "renew": {
-        "name": "Odnowa",
+        "name": "Trwająca łaska",
         "description": "Leczy cel o {damage} w ciągu 15 sek."
       },
       "mind_blast": {
-        "name": "Atak umysłu",
+        "name": "Roztrzaskanie umysłu",
         "description": "Razi umysł celu, zadając {damage} obrażeń od cienia."
       },
       "heal": {
-        "name": "Leczenie",
+        "name": "Uroczysta modlitwa",
         "description": "Powolna, lecz potężna modlitwa, która leczy sprzymierzony cel o {damage}."
       },
       "mind_flay": {
-        "name": "Smaganie umysłu",
-        "description": "Naciera na umysł celu energią cienia, zadając 12 obrażeń co sekundę przez 3 sek."
+        "name": "Litania niedoli",
+        "description": "Naciera na umysł celu energią cienia, zadając {damage} obrażeń co sekundę przez 3 sek."
       },
       "flash_heal": {
-        "name": "Błyskawiczne leczenie",
+        "name": "Pilna modlitwa",
         "description": "Szybka modlitwa, która leczy sprzymierzony cel o {damage}."
       },
       "lightning_bolt": {
-        "name": "Błyskawica",
+        "name": "Łukowy pocisk",
         "description": "Ciska piorunem, zadając {damage} obrażeń od natury."
       },
       "rockbiter_weapon": {
-        "name": "Oręż kąsacza skał",
-        "description": "Nasyca twoją broń furią kamienia: każde uderzenie zadaje 5 dodatkowych obrażeń przez 5 min."
+        "name": "Oręż kamiennych okowów",
+        "description": "Nasyca twoją broń furią kamienia: każde uderzenie zadaje {damage} dodatkowych obrażeń przez 5 min."
       },
       "healing_wave": {
-        "name": "Fala uzdrowienia",
+        "name": "Kojące wody",
         "description": "Leczy sprzymierzony cel o {damage}."
       },
       "earth_shock": {
-        "name": "Wstrząs ziemi",
+        "name": "Ziemny wstrząs",
         "description": "Natychmiast razi cel wstrząsową siłą, zadając {damage} obrażeń od natury."
       },
       "lightning_shield": {
-        "name": "Tarcza błyskawic",
-        "description": "Otacza cię trzaskająca błyskawica: napastnicy w zwarciu otrzymują 13 obrażeń od natury."
+        "name": "Osłona gromu",
+        "description": "Otacza cię trzaskająca błyskawica: napastnicy w zwarciu otrzymują {buff} obrażeń od natury, do 3 ładunków i najwyżej raz na 5 sek."
       },
       "flame_shock": {
-        "name": "Płomienny wstrząs",
-        "description": "Spala cel ogniem, zadając 25 obrażeń oraz {damage} w ciągu 12 sek."
+        "name": "Żarowy wstrząs",
+        "description": "Spala cel ogniem, zadając {damage} obrażeń oraz {overTime} w ciągu 12 sek."
       },
       "flametongue_weapon": {
-        "name": "Oręż ognistego języka",
-        "description": "Przepaja twój oręż żywiołem ognia: każde uderzenie zadaje 8 dodatkowych obrażeń od ognia przez 5 min."
+        "name": "Oręż żarowego piętna",
+        "description": "Przepaja twój oręż żywiołem ognia: każde uderzenie zadaje {damage} dodatkowych obrażeń od ognia przez 5 min."
       },
       "frost_shock": {
-        "name": "Mroźny wstrząs",
+        "name": "Szronowy wstrząs",
         "description": "Natychmiast razi cel mrozem, zadając {damage} obrażeń od mrozu i spowalniając jego ruch o 50% na 8 sek."
       },
       "frostbrand_weapon": {
-        "name": "Oręż mroźnego piętna",
-        "description": "Przepaja twój oręż kąsającym mrozem: każde uderzenie zadaje 8 dodatkowych obrażeń przez 5 min."
+        "name": "Oręż szronowych okowów",
+        "description": "Przepaja twój oręż kąsającym mrozem: każde uderzenie zadaje {damage} dodatkowych obrażeń przez 5 min."
       },
       "ghost_wolf": {
-        "name": "Wilczy duch",
-        "description": "Przemienia cię w wilczego ducha, zwiększając prędkość ruchu o 40% na 10 min."
+        "name": "Shadewolf",
+        "description": "Przemienia cię w Shadewolfa, zwiększając prędkość ruchu o 40% na 10 min."
       },
       "stormstrike": {
-        "name": "Burzowe uderzenie",
+        "name": "Uderzenie przodków",
         "description": "Kieruje burzę przez twoją broń, natychmiast uderzając za obrażenia broni plus {damage}."
       },
       "shadow_bolt": {
-        "name": "Mroczny pocisk",
+        "name": "Pocisk mroku",
         "description": "Wysyła mroczny pocisk w stronę wroga, zadając {damage} obrażeń od Cienia."
       },
       "demon_skin": {
-        "name": "Demoniczna skóra",
-        "description": "Demoniczna skóra zwiększa twój pancerz o 30 na 30 min."
+        "name": "Skóra plugawca",
+        "description": "Demoniczna skóra zwiększa twój pancerz o {buff} na 30 min."
       },
       "immolate": {
-        "name": "Spopielenie",
-        "description": "Pali wroga, zadając 11 obrażeń od ognia oraz dodatkowe {damage} w ciągu 15 sek."
+        "name": "Płonący pakt",
+        "description": "Pali wroga, zadając {damage} obrażeń od ognia oraz dodatkowe {overTime} w ciągu 15 sek."
       },
       "corruption": {
-        "name": "Skażenie",
+        "name": "Czarna zgnilizna",
         "description": "Skaża cel, zadając {damage} obrażeń cienia przez 18 sek."
       },
       "life_tap": {
-        "name": "Pobór życia",
-        "description": "Zamienia 30 zdrowia na 30 many."
+        "name": "Trudny targ",
+        "description": "Zamienia {damage} zdrowia na {damage} many."
       },
       "curse_of_agony": {
-        "name": "Klątwa agonii",
+        "name": "Urok udręki",
         "description": "Przeklina cel agonią: {damage} obrażeń od cienia w ciągu 24 sek."
       },
       "drain_life": {
-        "name": "Wyssanie życia",
-        "description": "Wysysa życie celu, przekazując ci 7 zdrowia co sekundę przez 5 sek."
+        "name": "Pochłonięcie",
+        "description": "Wysysa życie celu, przekazując ci {damage} zdrowia co sekundę przez 5 sek."
       },
       "fear": {
-        "name": "Strach",
+        "name": "Trwoga",
         "description": "Wzbudza w przeciwniku przerażenie, zmuszając go do kulenia się przez nawet 8 sek. Każde obrażenie przerywa efekt."
       },
       "searing_pain": {
-        "name": "Piekący ból",
+        "name": "Przypalenie",
         "description": "Przypieka wroga dręczącym ogniem, zadając {damage} obrażeń od Ognia. Szybkie do rzucenia."
       },
       "shadowburn": {
-        "name": "Spalenie cieniem",
-        "description": "Natychmiast razi cel Mrocznym Płomieniem, zadając {damage} obrażeń od Cienia."
+        "name": "Ogień zmierzchu",
+        "description": "Natychmiast razi cel palącym cieniem, zadając {damage} obrażeń od Cienia."
       },
       "wrath": {
-        "name": "Gniew",
+        "name": "Dziki pocisk",
         "description": "Ciska pocisk energii natury, zadając {damage} obrażeń od Natury."
       },
       "healing_touch": {
-        "name": "Uzdrawiający dotyk",
+        "name": "Dzikie ukojenie",
         "description": "Leczy sprzymierzony cel o {damage}."
       },
       "mark_of_the_wild": {
-        "name": "Znak dziczy",
-        "description": "Nakłada znak dziczy na sprzymierzony cel, zwiększając pancerz o 25 na 30 min."
+        "name": "Dzika osłona",
+        "description": "Nakłada Dziką osłonę na sprzymierzony cel, zwiększając pancerz o {buff} na 30 min."
       },
       "moonfire": {
-        "name": "Księżycowy ogień",
+        "name": "Księżycowa nawałnica",
         "description": "Spala wroga księżycowym ogniem, zadając {damage} obrażeń arkanicznych oraz obrażenia w czasie."
       },
       "rejuvenation": {
-        "name": "Odmłodzenie",
+        "name": "Dziki rozkwit",
         "description": "Leczy cel o {damage} w ciągu 12 sek."
       },
       "thorns": {
-        "name": "Ciernie",
-        "description": "Z celu wyrastają ciernie: atakujący wręcz otrzymują 3 obrażeń od Natury."
+        "name": "Cierniowa straż",
+        "description": "Z celu wyrastają ciernie: atakujący wręcz otrzymują {buff} obrażeń od Natury."
       },
       "entangling_roots": {
-        "name": "Pętające korzenie",
+        "name": "Chwytające korzenie",
         "description": "Unieruchamia cel w miejscu nawet na 12 sek."
       },
       "bear_form": {
-        "name": "Postać niedźwiedzia",
-        "description": "Zmień postać w niedźwiedzia: pancerz +65%, moc ataku +15, twoje ataki budują wściekłość i generują 30% więcej zagrożenia. Rzuć ponownie, aby wrócić do postaci rzucającego."
+        "name": "Postać Bruina",
+        "description": "Zmień postać w niedźwiedzia: pancerz +90%, znacznie zwiększona moc ataku, twoje ataki budują wściekłość i generują 30% więcej zagrożenia. Rzuć ponownie, aby wrócić do postaci rzucającego."
       },
       "maul": {
-        "name": "Zmiażdżenie",
-        "description": "Miażdżący atak, który zwiększa obrażenia w zwarciu o {damage} i powoduje wysokie zagrożenie. Aktywuje się przy następnym uderzeniu. Tylko w postaci niedźwiedzia."
+        "name": "Kruszenie kości",
+        "description": "Miażdżący atak, który zwiększa obrażenia w zwarciu o {damage} i powoduje wysokie zagrożenie. Aktywuje się przy następnym uderzeniu. Tylko w postaci Bruina."
       },
       "growl": {
-        "name": "Warknięcie",
-        "description": "Warczy na cel: twoje zagrożenie wzrasta do poziomu jego najbardziej znienawidzonego wroga, a cel zostaje zmuszony do atakowania cię przez 3 sek. Tylko w postaci niedźwiedzia."
+        "name": "Groźba",
+        "description": "Warczy na cel: twoje zagrożenie wzrasta do poziomu jego najbardziej znienawidzonego wroga, a cel zostaje zmuszony do atakowania cię przez 3 sek. Tylko w postaci Bruina."
       },
       "cat_form": {
         "name": "Postać wilka",
@@ -3770,43 +6126,43 @@ export const pl_PL: EnTranslations = {
         "description": "Rozdrap wroga, zadając obrażenia broni plus {damage}. Przyznaje 1 punkt kombinacji. Tylko w postaci wilka."
       },
       "ferocious_bite": {
-        "name": "Zaciekłe ugryzienie",
-        "description": "Ruch kończący, który zadaje obrażenia za każdy punkt kombinacji. Tylko w postaci wilka."
+        "name": "Krwawe ukąszenie",
+        "description": "Ruch kończący, który zadaje {damage}. Tylko w postaci wilka."
       },
       "swipe": {
-        "name": "Zamach",
-        "description": "Zamach uderzający pobliskich wrogów za {damage} obrażeń. Wzbudza dodatkowe zagrożenie. Tylko w Postaci niedźwiedzia."
+        "name": "Zamaszyste pazury",
+        "description": "Zamach uderzający pobliskich wrogów za {damage} obrażeń. Wzbudza dodatkowe zagrożenie. Tylko w postaci Bruina."
       },
       "regrowth": {
-        "name": "Odrost",
+        "name": "Drugi rozkwit",
         "description": "Leczy sprzymierzony cel o {damage} oraz dodatkową ilość w ciągu 21 sek."
       },
       "barkskin": {
-        "name": "Kora",
+        "name": "Dębowa skóra",
         "description": "Twoja skóra twardnieje niczym kora, zwiększając pancerz o 150 na 15 sek."
       },
       "starfire": {
-        "name": "Gwiezdny ogień",
+        "name": "Spadające niebo",
         "description": "Sprowadza pocisk gwiezdnego ognia, zadając {damage} obrażeń od Arkanów."
       },
       "travel_form": {
-        "name": "Postać podróżna",
-        "description": "Natychmiast przemienia cię w szybką postać podróżną, zwiększając szybkość poruszania się o 40%. Po przemianie nie możesz używać innych zdolności, ale możesz się przemieniać w walce i poza nią, co czyni ją idealną do ucieczki."
+        "name": "Postać Fleet",
+        "description": "Natychmiast przemienia cię w szybką, rączą postać, zwiększając szybkość poruszania się o 40%. Po przemianie nie możesz używać innych zdolności, ale możesz się przemieniać w walce i poza nią, co czyni ją idealną do ucieczki."
       },
       "enrage": {
-        "name": "Rozjuszenie",
-        "description": "Natychmiast generuje 20 wściekłości. Tylko w postaci niedźwiedzia."
+        "name": "Podsycenie",
+        "description": "Natychmiast generuje 20 wściekłości. Tylko w postaci Bruina."
       },
       "bash": {
-        "name": "Roztrzaskanie",
-        "description": "Ogłusza cel na 2 sek. Tylko w postaci niedźwiedzia."
+        "name": "Wstrząśnienie",
+        "description": "Ogłusza cel na 2 sek. Tylko w postaci Bruina."
       },
       "faerie_fire": {
-        "name": "Wróżkowy ogień",
-        "description": "Zmniejsza pancerz celu o 35 na 40 sek."
+        "name": "Wiedźmie światło",
+        "description": "Zmniejsza pancerz celu o {damage}% na 40 sek. Nie kumuluje się z Rozdarciem pancerza."
       },
       "hibernate": {
-        "name": "Hibernacja",
+        "name": "Uśpienie",
         "description": "Zmusza cel do głębokiego snu na nawet 8 sek. Każde obrażenie go obudzi."
       },
       "dash": {
@@ -3814,83 +6170,203 @@ export const pl_PL: EnTranslations = {
         "description": "Rusza naprzód susem, zwiększając prędkość ruchu o 50% na 15 sek. Tylko w postaci wilka."
       },
       "pounce": {
-        "name": "Skok",
+        "name": "Skradający cios",
         "description": "Otwarcie ze skradania, które ogłusza cel na 2 sek. Przyznaje 1 punkt kombinacji. Tylko w postaci wilka."
       },
       "insect_swarm": {
-        "name": "Rój owadów",
+        "name": "Żądlący rój",
         "description": "Wroga oblepia rój owadów, zadając {damage} obrażeń od natury w ciągu 12 sek."
       },
       "tigers_fury": {
-        "name": "Furia tygrysa",
+        "name": "Wilcza krew",
         "description": "Zwiększa moc ataku o 40 na 6 sek. Tylko w Postaci wilka."
       },
       "rip": {
         "name": "Rozszarpanie",
-        "description": "Cios kończący zadający obrażenia od Krwawienia w ciągu 12 sek. Zużywa punkty kombinacji. Tylko w Postaci wilka."
+        "description": "Cios kończący zadający {damage} obrażeń od Krwawienia w ciągu 12 sek. Zużywa punkty kombinacji. Tylko w Postaci wilka."
       },
       "mortal_strike": {
-        "name": "Śmiertelne uderzenie",
+        "name": "Okaleczające uderzenie",
         "description": "Bezlitosne uderzenie zadające obrażenia broni plus {damage}. (Sygnatura Oręża)"
       },
       "bloodthirst": {
-        "name": "Żądza krwi",
-        "description": "Natychmiast atakuj w krwawym szale, zadając {damage}. (Sygnatura furii)"
+        "name": "Upust krwi",
+        "description": "Natychmiast atakuj w krwawym szale, zadając 60% obrażeń broni plus {damage}. (Sygnatura furii)"
       },
       "shield_slam": {
-        "name": "Uderzenie tarczą",
-        "description": "Uderza cel tarczą, zadając {damage} i wzbudzając ogromne zagrożenie. (Znak rozpoznawczy Ochrony)"
+        "name": "Trzask tarczy",
+        "description": "Uderza cel tarczą, zadając 50% obrażeń broni plus {damage} i wzbudzając ogromne zagrożenie. (Znak rozpoznawczy Ochrony)"
       },
       "whirlwind": {
         "name": "Wir ostrzy",
         "description": "Wirujesz w śmiercionośnym łuku, uderzając wszystkich pobliskich wrogów za {damage}. (Talent Furii)"
       },
       "berserker_rage": {
-        "name": "Furia berserkera",
-        "description": "Wpadnij w furię berserkera, generując 20 wściekłości. (Talent wojownika)"
+        "name": "Kipiąca furia",
+        "description": "Wpadnij w kipiącą furię, generując 20 wściekłości. (Talent wojownika)"
+      },
+      "crusader_strike": {
+        "name": "Cios krzyżowca",
+        "description": "Uderza cel za obrażenia broni plus {damage} obrażeń od Świętości. (talent paladyna)"
+      },
+      "chain_heal": {
+        "name": "Leczenie Łańcuchowe",
+        "description": "Leczy sojusznika za dużą wartość, a następnie przeskakuje do maksymalnie 2 pobliskich sojuszników, lecząc o 50% mniej przy każdym skoku. (Sztandarowa zdolność Odnowy)"
+      },
+      "metamorphosis": {
+        "name": "Metamorfoza",
+        "description": "Przyjmujesz demoniczną moc, zwiększając pancerz i siłę ataku na 20 s. (talent czarnoksiężnika)"
+      },
+      "holy_shock": {
+        "name": "Święty wstrząs",
+        "description": "Razisz przyjazny cel Świętą energią, lecząc go za {damage}. (specjalizacja Świętość)"
+      },
+      "holy_shield": {
+        "name": "Święta tarcza",
+        "description": "Osłaniasz się Świętą mocą na 10 sek., zwiększając pancerz o 90 i rażąc napastników w zwarciu za 12 obrażeń Świętych. (specjalizacja Ochrona)"
+      },
+      "bestial_wrath": {
+        "name": "Bestialski gniew",
+        "description": "Wpadasz w bestialski szał, zwiększając siłę ataku o 55 na 15 sek. (specjalizacja Władca Bestii)"
+      },
+      "trueshot_aura": {
+        "name": "Aura celnego strzału",
+        "description": "Inspiruje pobliskich sojuszników, zwiększając siłę ataku o 35 na 5 min. (specjalizacja Strzelectwo)"
+      },
+      "wyvern_sting": {
+        "name": "Żądło wiwerny",
+        "description": "Żądli wroga z dystansu, obezwładniając go na maksymalnie 4 sek. Jakiekolwiek obrażenia przerywają efekt. (specjalizacja Przetrwanie)"
+      },
+      "arcane_power": {
+        "name": "Moc Arkanów",
+        "description": "Zwiększa obrażenia zaklęć o 20% i przyspieszenie zaklęć o 10% na 10 sek. (specjalizacja Arkana)"
+      },
+      "combustion": {
+        "name": "Zapłon",
+        "description": "Zwiększa szansę na krytyczny efekt zaklęć o 50% na 15 sek. (specjalizacja Ogień)"
+      },
+      "icy_veins": {
+        "name": "Lodowe Żyły",
+        "description": "Zwiększa przyspieszenie zaklęć o 30% oraz zapobiega przerwaniu i opóźnieniu rzucania na 10 sek. (specjalizacja Mróz)"
+      },
+      "cold_blood": {
+        "name": "Zimna krew",
+        "description": "Skupia twoją morderczą intencję, aby następny atak był trafieniem krytycznym. (specjalizacja Zabójstwo)"
+      },
+      "blade_flurry": {
+        "name": "Nawałnica ostrzy",
+        "description": "Uwalnia nawałnicę ostrzy, zwiększając szybkość ataku o 20% na 12 sek. (specjalizacja Walka)"
+      },
+      "hemorrhage": {
+        "name": "Krwotok",
+        "description": "Uderza wroga za obrażenia broni plus {damage} i powoduje krwawienie przez 12 sek. Daje 1 punkt combo. (specjalizacja Subtelność)"
+      },
+      "power_infusion": {
+        "name": "Infuzja mocy",
+        "description": "Napełnia przyjazny cel mocą, zwiększając moc zaklęć o 28 na 15 sek. (specjalizacja Dyscyplina)"
+      },
+      "holy_nova": {
+        "name": "Święta nova",
+        "description": "Wywołuje wybuch Świętego światła, leczy pobliskich sojuszników za {damage} i rani pobliskich wrogów. (specjalizacja Świętość)"
+      },
+      "shadowform": {
+        "name": "Postać cienia",
+        "description": "Przyjmujesz postać cienia, wzmacniając magię cienia do czasu powrotu. Rzuć ponownie, aby wrócić do zwykłej postaci. (specjalizacja Cień)"
+      },
+      "elemental_mastery": {
+        "name": "Mistrzostwo żywiołów",
+        "description": "Przywołuje mistrzostwo żywiołów, sprawiając, że następne zaklęcie jest natychmiastowe. (specjalizacja Żywioły)"
+      },
+      "siphon_life": {
+        "name": "Wyssanie życia",
+        "description": "Wysysa życie z wroga, zadając {damage} obrażeń od Cienia przez 30 sek. i lecząc cię za zadane obrażenia. (specjalizacja Udręka)"
+      },
+      "conflagrate": {
+        "name": "Pożoga",
+        "description": "Zużywa twoje podpalenie na wrogu, aby zajął się ogniem i otrzymał {damage} obrażeń od Ognia. (specjalizacja Zniszczenie)"
+      },
+      "moonkin_form": {
+        "name": "Postać księżycowej sowy",
+        "description": "Przyjmujesz postać księżycowej sowy, wzmacniając rzucanie zaklęć do czasu powrotu. Rzuć ponownie, aby wrócić do zwykłej postaci. (specjalizacja Równowaga)"
+      },
+      "feral_charge": {
+        "name": "Dzika szarża",
+        "description": "Szarżujesz na wroga i unieruchamiasz go na 1 sek. Zasięg 8-25 m. (specjalizacja Dzikość)"
+      },
+      "swiftmend": {
+        "name": "Szybkie uzdrowienie",
+        "description": "Zużywa efekt leczenia w czasie na przyjaznym celu, aby uleczyć go za {damage}. (specjalizacja Odnowa)"
       },
       "summon_imp": {
-        "name": "Przywołanie chochlika",
-        "description": "Przywołuje chochlika pod komendę Czarnoksiężnika. Chochlik ciska Ognistymi pociskami w twoich wrogów z oddali. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Emberkina",
+        "description": "Przywołuje Emberkina pod komendę Czarnoksiężnika. Emberkin ciska popielnymi pociskami w twoich wrogów z oddali. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
       },
       "summon_voidwalker": {
-        "name": "Przywołanie wędrowca pustki",
-        "description": "Przywołuje wędrowca pustki pod komendę Czarnoksiężnika. Wędrowiec pustki to wytrzymały demon, który prowokuje twoich wrogów i pochłania razy. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Gloomshade'a",
+        "description": "Przywołuje Gloomshade'a pod komendę Czarnoksiężnika. Gloomshade to wytrzymały demon, który prowokuje twoich wrogów i pochłania razy. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
       },
       "summon_succubus": {
-        "name": "Przywołanie sukkuba",
-        "description": "Przywołuje sukkuba pod komendę Czarnoksiężnika. Sukkub to kruchy demon, który uderza szybko i mocno bije wręcz. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Duskborna",
+        "description": "Przywołuje Duskborna pod komendę Czarnoksiężnika. Duskborn to kruchy demon, który uderza szybko i mocno bije wręcz. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
       },
       "summon_felhunter": {
-        "name": "Przywołanie plugawego łowcy",
-        "description": "Przywołuje plugawego łowcę pod komendę Czarnoksiężnika. Plugawy łowca nęka wrogów z dystansu Mrocznym Ukąszeniem i znakomicie poluje na rzucających zaklęcia. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Spellhounda",
+        "description": "Przywołuje Spellhounda pod komendę Czarnoksiężnika. Spellhound nęka wrogów z dystansu Mrocznym Ukąszeniem i znakomicie poluje na rzucających zaklęcia. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
       },
       "summon_felguard": {
-        "name": "Przywołanie plugawego strażnika",
-        "description": "Przywołuje plugawego strażnika pod komendę Czarnoksiężnika. Plugawy strażnik to wytrzymały demon walczący wręcz, który wkracza w bitwę i dzielnie się broni. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Warfienda",
+        "description": "Przywołuje Warfienda pod komendę Czarnoksiężnika. Warfiend to wytrzymały demon walczący wręcz, który wkracza w bitwę i dzielnie się broni. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
       },
       "summon_infernal": {
-        "name": "Przywołanie piekielnika",
-        "description": "Wiąże piekielnika z twoją wolą - potężnego kolosa o miażdżącym ataku wręcz oraz najgłębszym zdrowiu i pancerzu spośród wszystkich demonów. Długi czas odnowienia ogranicza jego surową moc. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Pyre Colossus",
+        "description": "Wiąże Pyre Colossus z twoją wolą, potężnego kolosa o miażdżącym ataku wręcz oraz najgłębszym zdrowiu i pancerzu spośród wszystkich demonów. Długi czas odnowienia ogranicza jego surową moc. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
       },
       "summon_doomguard": {
-        "name": "Przywołanie strażnika zagłady",
-        "description": "Wiąże strażnika zagłady z twoją wolą - elitarnego demona, który zsyła z oddali potężne obrażenia od Cienia. Długi czas odnowienia ogranicza jego niszczycielską moc. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+        "name": "Przywołanie Wraithborna",
+        "description": "Wiąże Wraithborna z twoją wolą, elitarnego demona, który zsyła z oddali potężne obrażenia od Cienia. Długi czas odnowienia ogranicza jego niszczycielską moc. Przywołanie nowego demona odprawia obecnego. Możesz mieć jednego demona naraz."
+      },
+      "pummel": {
+        "name": "Okładanie",
+        "description": "Przerywa rzucanie zaklęć celu i uniemożliwia rzucanie ich z tej szkoły na 4 sekundy."
+      },
+      "kick": {
+        "name": "Kopnięcie",
+        "description": "Przerywa rzucanie zaklęć celu i uniemożliwia rzucanie ich z tej szkoły na 4 sekundy."
+      },
+      "counterspell": {
+        "name": "Kontrzaklęcie",
+        "description": "Kontruje zaklęcia celu i zapobiega rzucaniu ich z tej szkoły przez 6 sekund."
+      },
+      "counter_shot": {
+        "name": "Uciszający Strzał",
+        "description": "Szybki strzał, który przerywa rzucanie zaklęć celu i blokuje tę szkołę na 4 sekundy."
+      },
+      "rebuke": {
+        "name": "Nagana",
+        "description": "Przerywa rzucanie zaklęć celu i uniemożliwia rzucanie ich z tej szkoły na 4 sekundy."
+      },
+      "skull_bash": {
+        "name": "Uderzenie Czaszką",
+        "description": "Uderzenie głową z doskoku, które przerywa rzucenie zaklęcia celu i blokuje tę szkołę na 4 sek."
+      },
+      "spell_lock": {
+        "name": "Blokada Zaklęć",
+        "description": "Wycisza cel w trakcie rzucania i zapobiega rzucaniu czaru z tej szkoły na 5 sekund."
       },
       "bear_charge": {
-        "name": "Szarża niedźwiedzia",
-        "description": "Szarżuj na wroga, generując 9 wściekłości i ogłuszając go na 1 sek. Zasięg 8-25 jardów. Tylko w postaci niedźwiedzia."
+        "name": "Szarża Bruina",
+        "description": "Szarżuj na wroga, generując 9 wściekłości i ogłuszając go na 1 sek. Zasięg 8-25 jardów. Tylko w postaci Bruina."
       },
       "demoralizing_roar": {
-        "name": "Demoralizujący ryk",
-        "description": "Demoralizuje pobliskich wrogów, zmniejszając ich moc ataku o 20 na 20 sek. Tylko w postaci niedźwiedzia."
+        "name": "Tchórzliwy ryk",
+        "description": "Demoralizuje pobliskich wrogów, zmniejszając ich moc ataku o 20 na 20 sek. Tylko w postaci Bruina."
       },
       "prowl": {
-        "name": "Czajenie",
-        "description": "Wchodzi w skradanie w postaci wilka. Nie można użyć w walce."
+        "name": "Podchody",
+        "description": "Wchodzi w skradanie w postaci wilka, poruszając się o 50% wolniej. Nie można użyć w walce."
       },
       "rake": {
-        "name": "Rozoranie",
+        "name": "Zdzieranie",
         "description": "Otwarcie ze skradania, które rozdziera wroga za obrażenia broni plus {damage} i powoduje krwawienie w ciągu 9 sek. Przyznaje 1 punkt kombinacji. Tylko w postaci wilka."
       },
       "revive_pet": {
@@ -3900,10 +6376,10 @@ export const pl_PL: EnTranslations = {
     },
     "items": {
       "worn_sword": {
-        "name": "Zużyty krótki miecz"
+        "name": "Wyszczerbiony krótki miecz"
       },
       "gnarled_staff": {
-        "name": "Sękaty kostur"
+        "name": "Kostur z bagiennego dębu"
       },
       "rusty_dagger": {
         "name": "Zardzewiały sztylet"
@@ -3915,10 +6391,10 @@ export const pl_PL: EnTranslations = {
         "name": "Zardzewiały toporek"
       },
       "recruit_tunic": {
-        "name": "Tunika rekruta"
+        "name": "Tunika poborowego"
       },
       "apprentice_robe": {
-        "name": "Szata adepta"
+        "name": "Wytarta szata"
       },
       "footpad_jerkin": {
         "name": "Kaftan rzezimieszka"
@@ -3951,22 +6427,22 @@ export const pl_PL: EnTranslations = {
         "name": "Nogawice z futra Szaroszczękiego"
       },
       "baked_bread": {
-        "name": "Świeżo upieczony chleb"
+        "name": "Wiejski bochenek"
       },
       "spring_water": {
-        "name": "Orzeźwiająca woda źródlana"
+        "name": "Zimna woda ze studni"
       },
       "roasted_boar": {
-        "name": "Pieczone mięso dzika"
+        "name": "Udziec dzika z rożna"
       },
       "conjured_water": {
-        "name": "Przywołana woda źródlana"
+        "name": "Przywołana woda deszczowa"
       },
       "conjured_water2": {
-        "name": "Przywołana woda mineralna"
+        "name": "Przywołana woda studzienna"
       },
       "conjured_water3": {
-        "name": "Przywołana woda gazowana"
+        "name": "Przywołana czysta woda"
       },
       "eastbrook_arming_sword": {
         "name": "Miecz zbrojny ze Wschodniego Strumienia"
@@ -4026,13 +6502,16 @@ export const pl_PL: EnTranslations = {
         "name": "Upiorna esencja"
       },
       "webwood_silk": {
-        "name": "Pajęczy gruczoł jedwabny"
+        "name": "Gruczoł jedwabny Sableweb"
       },
       "supply_crate": {
         "name": "Skradziona skrzynia z zaopatrzeniem"
       },
       "greyjaw_fang": {
         "name": "Kieł Starego Szaroszczękiego"
+      },
+      "chunk_of_ore": {
+        "name": "Kawałek rudy"
       },
       "weathered_ledger_page": {
         "name": "Zniszczona strona księgi"
@@ -4047,13 +6526,13 @@ export const pl_PL: EnTranslations = {
         "name": "Czerwona bandana"
       },
       "tough_jerky": {
-        "name": "Twarde suszone mięso"
+        "name": "Solone suszone mięso"
       },
       "mudfin_scale": {
-        "name": "Oślizgła łuska murloka"
+        "name": "Oślizgła łuska Mudfina"
       },
       "tallow_candle": {
-        "name": "Łojowa świeca"
+        "name": "Tłusta bryła łoju"
       },
       "spider_leg": {
         "name": "Drgająca noga pająka"
@@ -4063,6 +6542,15 @@ export const pl_PL: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Skrawek lnu"
+      },
+      "arcane_dust": {
+        "name": "Arkaniczny pył"
+      },
+      "arcane_essence": {
+        "name": "Arkaniczna esencja"
+      },
+      "arcane_shard": {
+        "name": "Arkaniczny odłamek"
       },
       "fen_muster_order": {
         "name": "Rozkaz zbiórki z Fenbridge"
@@ -4119,7 +6607,7 @@ export const pl_PL: EnTranslations = {
         "name": "Buty bagiennego piechura"
       },
       "mistcallers_edge": {
-        "name": "Ostrze mgłozwańcy"
+        "name": "Ostrze Fogbindera"
       },
       "vaels_mist_staff": {
         "name": "Mglisty kostur Vaela"
@@ -4263,7 +6751,7 @@ export const pl_PL: EnTranslations = {
         "name": "Kostur Velkhara"
       },
       "shadowmeld_tunic": {
-        "name": "Tunika zlania z cieniem"
+        "name": "Tunika nocnej zasłony"
       },
       "gravewyrm_scale_hauberk": {
         "name": "Łuskowy kaftan Grobowego Żmija"
@@ -4332,13 +6820,13 @@ export const pl_PL: EnTranslations = {
         "name": "Pęknięta łuska żmija"
       },
       "conjured_bread": {
-        "name": "Przywołany chleb"
+        "name": "Przywołany placek owsiany"
       },
       "conjured_bread2": {
-        "name": "Przywołany razowiec"
+        "name": "Przywołany czarny bochenek"
       },
       "conjured_bread3": {
-        "name": "Przywołana słodka bułka"
+        "name": "Przywołane ciasto miodowe"
       },
       "roadwardens_helm": {
         "name": "Hełm strażnika dróg"
@@ -4430,8 +6918,206 @@ export const pl_PL: EnTranslations = {
       "monarch_crown_helm": {
         "name": "Korona monarchy"
       },
+      "linen_pouch": {
+        "name": "Lniana sakiewka"
+      },
+      "travelers_knapsack": {
+        "name": "Plecak podróżnika"
+      },
+      "wolfhide_satchel": {
+        "name": "Torba z wilczej skóry"
+      },
+      "gravewoven_bag": {
+        "name": "Grobowo tkana torba"
+      },
+      "mistcallers_duffel": {
+        "name": "Worek Fogbindera"
+      },
+      "copper_mining_pick": {
+        "name": "Miedziany Kilof Górniczy"
+      },
+      "iron_mining_pick": {
+        "name": "Żelazny Kilof Górniczy"
+      },
+      "mithril_mining_pick": {
+        "name": "Mithrilowy Kilof Górniczy"
+      },
+      "handaxe": {
+        "name": "Toporek"
+      },
+      "felling_axe": {
+        "name": "Siekiera Drwala"
+      },
+      "ironbark_axe": {
+        "name": "Toporek z Żelaznej Kory"
+      },
+      "gathering_sickle": {
+        "name": "Sierp do Zbioru"
+      },
+      "bronze_sickle": {
+        "name": "Brązowy Sierp"
+      },
+      "silverleaf_sickle": {
+        "name": "Sierp Srebrnolistny"
+      },
+      "thorium_mining_pick": {
+        "name": "Torowy Kilof Górniczy"
+      },
+      "arcanite_mining_pick": {
+        "name": "Arkanitowy Kilof Górniczy"
+      },
+      "ashwood_axe": {
+        "name": "Siekiera z Jesionu"
+      },
+      "elderwood_axe": {
+        "name": "Siekiera ze Starodrzewu"
+      },
+      "goldleaf_sickle": {
+        "name": "Sierp Złotolistny"
+      },
+      "sunpetal_sickle": {
+        "name": "Sierp Słonecznopłatkowy"
+      },
+      "thorium_ore": {
+        "name": "Ruda Toru"
+      },
+      "arcanite_bar": {
+        "name": "Sztabka Arkanitu"
+      },
+      "ashwood_log": {
+        "name": "Kłoda Jesionu Popiołowego"
+      },
+      "elderwood_log": {
+        "name": "Kłoda Starego Bzu"
+      },
+      "goldleaf_herb": {
+        "name": "Ziele Złotolistne"
+      },
+      "sunpetal_herb": {
+        "name": "Ziele Słonecznego Płatka"
+      },
+      "furyforged_warhelm": {
+        "name": "Wykuty w Furii Hełm Wojenny"
+      },
+      "furyforged_warspaulders": {
+        "name": "Wykute w Furii Naramienniki"
+      },
+      "furyforged_warplate": {
+        "name": "Wykuta w furii płyta bojowa"
+      },
+      "furyforged_girdle": {
+        "name": "Wykuty w furii pas"
+      },
+      "furyforged_legguards": {
+        "name": "Wykute w furii legguardy"
+      },
+      "furyforged_gauntlets": {
+        "name": "Wykute w furii rękawice"
+      },
+      "furyforged_sabatons": {
+        "name": "Furyforged Sabaton"
+      },
+      "stormbound_crown": {
+        "name": "Korona Burzy"
+      },
+      "stormbound_spaulders": {
+        "name": "Naramienniki Burzy"
+      },
+      "stormbound_hauberk": {
+        "name": "Zbrojny Hauberk"
+      },
+      "stormbound_waistguard": {
+        "name": "Obrońca Burzy"
+      },
+      "stormbound_legmail": {
+        "name": "Legmail związany z burzą"
+      },
+      "stormbound_handguards": {
+        "name": "Obrońcy Burzy"
+      },
+      "stormbound_greaves": {
+        "name": "Nagolenniki Burzy"
+      },
+      "ashstalker_cowl": {
+        "name": "Osłona Ashstalkera"
+      },
+      "ashstalker_shoulderguards": {
+        "name": "Naramienniki Ashstalkera"
+      },
+      "ashstalker_harness": {
+        "name": "Napierśnik Ashstalkera"
+      },
+      "ashstalker_waistband": {
+        "name": "Pasek Ashstalkera"
+      },
+      "ashstalker_legguards": {
+        "name": "Legguardy Ashstalkera"
+      },
+      "ashstalker_grips": {
+        "name": "Chwyty Ashstalkera"
+      },
+      "ashstalker_treads": {
+        "name": "Bieżniki Ashstalkera"
+      },
+      "cinderweave_cowl": {
+        "name": "Kaptur Cinderweave"
+      },
+      "cinderweave_mantle": {
+        "name": "Płaszcz Cinderweave"
+      },
+      "cinderweave_raiment": {
+        "name": "Ubranie Cinderweave"
+      },
+      "cinderweave_cord": {
+        "name": "Pas Cinderweave"
+      },
+      "cinderweave_legwraps": {
+        "name": "Opaski na nogi Cinderweave"
+      },
+      "cinderweave_handwraps": {
+        "name": "Opaski na ręce Cinderweave"
+      },
+      "cinderweave_slippers": {
+        "name": "Cinderweave kapcie"
+      },
+      "final_oath_medallion": {
+        "name": "Medalion Przysięgi Ostatecznej"
+      },
+      "razorwind_torque": {
+        "name": "Naszyjnik Razorwind"
+      },
+      "cinder_sigil_pendant": {
+        "name": "Wisiorek Cinder-Sigil"
+      },
+      "iron_vow_band": {
+        "name": "Pierścień Żelaznej Przysięgi"
+      },
+      "unbroken_circle": {
+        "name": "Nieprzerwany Krąg"
+      },
+      "fleetblood_band": {
+        "name": "Pierścień Fleetblood"
+      },
+      "last_step_signet": {
+        "name": "Sygnet ostatniego kroku"
+      },
+      "ashen_focus_ring": {
+        "name": "Popielaty Pierścień Fokusu"
+      },
+      "spellbreakers_seal": {
+        "name": "Pieczęć łamacza zaklęć"
+      },
+      "final_argument_greatblade": {
+        "name": "Ostatni argument: Wielkie Ostrze"
+      },
+      "first_blood_razor": {
+        "name": "Brzytwa Pierwszej Krwi"
+      },
+      "emberglass_warstaff": {
+        "name": "Warstaff z Żarowego Szkła"
+      },
       "bristleback_maul": {
-        "name": "Tłuk szczeciniastych"
+        "name": "Młot Gallowglass"
       },
       "broodmother_silk_robe": {
         "name": "Jedwabna szata matki legu"
@@ -4440,16 +7126,16 @@ export const pl_PL: EnTranslations = {
         "name": "Nagolenniki z kości krypty"
       },
       "cryptstalker_jerkin": {
-        "name": "Kaftan podkradacza krypt"
+        "name": "Kaftan Gravestalker"
       },
       "deathlord_legguards": {
-        "name": "Nagolenniki władcy śmierci"
+        "name": "Nagolenniki Barrowlorda"
       },
       "deathlord_sabatons": {
-        "name": "Buty płytowe władcy śmierci"
+        "name": "Buty płytowe Barrowlorda"
       },
       "deathlord_warplate": {
-        "name": "Płyta bojowa władcy śmierci"
+        "name": "Płyta bojowa Barrowlorda"
       },
       "drogmar_warboots": {
         "name": "Buty bojowe Drogmara"
@@ -4527,13 +7213,13 @@ export const pl_PL: EnTranslations = {
         "name": "Tupiące buty Moggera"
       },
       "necromancers_legwraps": {
-        "name": "Owijki nogawic nekromanty"
+        "name": "Owijki nóg Mournweave"
       },
       "necromancers_soulsteps": {
-        "name": "Duszokroki nekromanty"
+        "name": "Duszokroki Mournweave"
       },
       "necromancers_starshroud": {
-        "name": "Gwiezdny całun nekromanty"
+        "name": "Gwiezdny całun Mournweave"
       },
       "nhalias_dirgeblade": {
         "name": "Ostrze żałobnej pieśni Nhalii"
@@ -4569,13 +7255,13 @@ export const pl_PL: EnTranslations = {
         "name": "Duszokroki kultu żmija"
       },
       "wyrmshadow_harness": {
-        "name": "Uprząż cienia żmija"
+        "name": "Uprząż Nightfang"
       },
       "wyrmshadow_legguards": {
-        "name": "Nogawice cienia żmija"
+        "name": "Nogawice Nightfang"
       },
       "wyrmshadow_treads": {
-        "name": "Trzewiki cienia żmija"
+        "name": "Trzewiki Nightfang"
       },
       "glimmerfin_koi": {
         "name": "Lśniącopłetwy karp koi"
@@ -4593,7 +7279,7 @@ export const pl_PL: EnTranslations = {
         "name": "Surowy okoń rzeczny"
       },
       "raw_stonescale_carp": {
-        "name": "Surowy karp kamiennołuski"
+        "name": "Surowy karp Slatefin"
       },
       "soggy_boot": {
         "name": "Przemoczony but"
@@ -4704,13 +7390,13 @@ export const pl_PL: EnTranslations = {
         "name": "Szabla z księżycowej łuski"
       },
       "moonshroud_breastplate": {
-        "name": "Napierśnik księżycowego całunu"
+        "name": "Napierśnik Moonwrack"
       },
       "moonshroud_robe": {
-        "name": "Szata księżycowego całunu"
+        "name": "Szata Moonwrack"
       },
       "moonshroud_tunic": {
-        "name": "Tunika księżycowego całunu"
+        "name": "Tunika Moonwrack"
       },
       "pale_pearl": {
         "name": "Blada perła"
@@ -4746,7 +7432,7 @@ export const pl_PL: EnTranslations = {
         "name": "Naramienniki z kości krypty"
       },
       "deathlords_dread_visage": {
-        "name": "Maska grozy władcy śmierci"
+        "name": "Maska grozy Barrowlorda"
       },
       "gravewyrm_gauntlets": {
         "name": "Rękawice Grobowego Żmija"
@@ -4761,10 +7447,10 @@ export const pl_PL: EnTranslations = {
         "name": "Rękawice mglistej zasłony"
       },
       "necromancers_soulspire_mantle": {
-        "name": "Płaszcz iglicy dusz nekromanty"
+        "name": "Płaszcz iglicy dusz Mournweave"
       },
       "wyrmshadow_talongrips": {
-        "name": "Szponiaste chwyty cienia żmija"
+        "name": "Szponiaste chwyty Nightfang"
       },
       "reliquary_plate_chest": {
         "name": "Kolczuga strażnika relikwiarza"
@@ -4792,6 +7478,69 @@ export const pl_PL: EnTranslations = {
       },
       "varric_shadow_cowl": {
         "name": "Mroczny kaptur Varrica"
+      },
+      "siltguard_helm": {
+        "name": "Hełm mułowej straży"
+      },
+      "bulwark_rusted_pauldrons": {
+        "name": "Naramienniki zardzewiałego bastionu"
+      },
+      "nhalias_bell_maul": {
+        "name": "Dzwonny obuch Nhalii"
+      },
+      "reedstalker_jerkin": {
+        "name": "Kaftan trzcinowego skradacza"
+      },
+      "mirejaw_fang_knife": {
+        "name": "Nóż z kła Bagnopaszczego"
+      },
+      "widow_silk_hood": {
+        "name": "Kaptur z wdowiego jedwabiu"
+      },
+      "cantors_drowned_sash": {
+        "name": "Utopiona szarfa kantora"
+      },
+      "corpse_candle_focus": {
+        "name": "Ognisko trupiej świecy"
+      },
+      "nhalias_litany_rod": {
+        "name": "Różdżka litanii Nhalii"
+      },
+      "blackwater_vanguard_chest": {
+        "name": "Napierśnik czarnowodnej awangardy"
+      },
+      "siltstep_leggings": {
+        "name": "Nogawice Mułowego Kroku"
+      },
+      "sunken_reliquary_hood": {
+        "name": "Kaptur zatopionego relikwiarza"
+      },
+      "litany_legs": {
+        "name": "Nagolenniki mułowego wędrowca"
+      },
+      "litany_shoulder": {
+        "name": "Peleryna czarnowodnego dryfu"
+      },
+      "litany_gloves_rog": {
+        "name": "Trzcinospętane owijki"
+      },
+      "litany_plate_chest": {
+        "name": "Kirys strażnika topieli"
+      },
+      "litany_leather_chest": {
+        "name": "Szata mulistych głębin"
+      },
+      "litany_cloth_chest": {
+        "name": "Szaty utopionego chóru"
+      },
+      "litany_helm": {
+        "name": "Utopiony kaptur relikwianta"
+      },
+      "sister_nhalia_choir_plate": {
+        "name": "Chórokuta płyta Siostry Nhalii"
+      },
+      "drowned_choir_fang": {
+        "name": "Kieł utopionego chóru"
       },
       "the_codfather": {
         "name": "Dorszny Ojciec"
@@ -4832,35 +7581,149 @@ export const pl_PL: EnTranslations = {
       "event_skin_token": {
         "name": "Tajemnicza skrytka kosmetyczna"
       },
+      "heroic_mark": {
+        "name": "Znak heroiczny"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Kryptokuta kolczuga Morthena"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Owijki cienistego pulsu"
+      },
+      "bonechill_striders": {
+        "name": "Wędrowce kościstego mrozu"
+      },
+      "mistcallers_fang": {
+        "name": "Kieł przyzywacza mgły"
+      },
+      "tidebound_spaulders": {
+        "name": "Naramienniki spętane przypływem"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Szarfa zatopionego dworu"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Wielki kostur księżycowego przypływu"
+      },
+      "tidewoven_trousers": {
+        "name": "Spodnie tkane przypływem"
+      },
+      "choirmothers_casque": {
+        "name": "Hełm matki chóru"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Tasak grobowego żmija"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Całun grobowego żmija"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Rękawice skradacza sanktuarium"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Berło nieśmiertelnego dworu"
+      },
+      "cryptplate_helm": {
+        "name": "Hełm z kryptowej płyty"
+      },
+      "shadowpulse_slippers": {
+        "name": "Trzewiki cienistego pulsu"
+      },
+      "bonechill_cord": {
+        "name": "Sznur kościstego mrozu"
+      },
+      "mistforged_pauldrons": {
+        "name": "Naramienniki kute we mgle"
+      },
+      "tideguard_faceguard": {
+        "name": "Osłona twarzy straży przypływu"
+      },
+      "sunken_court_mantle": {
+        "name": "Peleryna zatopionego dworu"
+      },
+      "lunar_choir_leggings": {
+        "name": "Nogawice księżycowego chóru"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Naramienniki błogosławione przez chór"
+      },
+      "tideworn_warboots": {
+        "name": "Bojowe buty starte przypływem"
+      },
+      "gravewyrm_claws": {
+        "name": "Szpony grobowego żmija"
+      },
+      "gravescale_girdle": {
+        "name": "Pas z grobowej łuski"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Owijki żmijowego chóru"
+      },
+      "deathless_greatblade": {
+        "name": "Nieśmiertelne wielkie ostrze"
+      },
+      "stormcallers_focus": {
+        "name": "Ognisko przyzywacza burz"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Pieczęć dziewięciu przysiąg"
+      },
+      "nielas_coldlight_band": {
+        "name": "Obrączka zimnego światła Nieli"
+      },
+      "sutils_gambit": {
+        "name": "Gambit Sutila"
+      },
+      "oath_of_the_round_table": {
+        "name": "Przysięga Okrągłego Stołu"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Nieśmiertelny sygnet Zyzza"
+      },
+      "architects_cornerstone": {
+        "name": "Kamień węgielny Architekta"
+      },
+      "swiftfang_talisman": {
+        "name": "Talizman rączego kła"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Pamiątkowy medalionik Yumi"
+      },
+      "zense_meridian": {
+        "name": "Meridian Zense"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Medalion niekończącego się zysku"
+      },
       "deathless_heartwood": {
         "name": "Twardziel Nieśmiertelnej Korony"
       },
       "kingsbane_last_oath": {
-        "name": "Królobójca, Ostatnia Przysięga Ciernistego Szczytu"
+        "name": "Thronebane, Ostatnia Przysięga Ciernistego Szczytu"
       },
       "crownforged_dreadhelm": {
-        "name": "Koronokuty hełm grozy"
+        "name": "Hełm grozy Bonewrought"
       },
       "crownforged_warspaulders": {
-        "name": "Koronokute naramienniki bojowe"
+        "name": "Naramienniki bojowe Bonewrought"
       },
       "nighttalon_crown": {
-        "name": "Korona nocnego szpona"
+        "name": "Korona Direfang"
       },
       "nighttalon_shoulderguards": {
-        "name": "Naramienniki nocnego szpona"
+        "name": "Naramienniki Direfang"
       },
       "soulflame_cowl": {
-        "name": "Kaptur duszopłomienia"
+        "name": "Kaptur Wraithfire"
       },
       "soulflame_mantle": {
-        "name": "Płaszcz duszopłomienia"
+        "name": "Płaszcz Wraithfire"
       },
       "stormcallers_crown": {
-        "name": "Korona przywoływacza burz"
+        "name": "Korona Galecall"
       },
       "stormcallers_spaulders": {
-        "name": "Naramienniki przywoływacza burz"
+        "name": "Naramienniki Galecall"
       },
       "unknown_alien_weaponry": {
         "name": "Nieznana obca broń"
@@ -4912,9 +7775,36 @@ export const pl_PL: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Chrom awangardy"
+      },
+      "crownforged_gauntlets": {
+        "name": "Koronokute rękawice"
+      },
+      "nighttalon_grips": {
+        "name": "Chwyty nocnego szpona"
+      },
+      "soulflame_gloves": {
+        "name": "Rękawice duszopłomienia"
+      },
+      "stormcallers_handguards": {
+        "name": "Karwasze przywoływacza burz"
+      },
+      "crownforged_girdle": {
+        "name": "Koronokuty pas"
+      },
+      "nighttalon_waistband": {
+        "name": "Pas nocnego szpona"
+      },
+      "soulflame_cord": {
+        "name": "Sznur duszopłomienia"
+      },
+      "stormcallers_waistguard": {
+        "name": "Ochraniacz pasa przywoływacza burz"
       }
     },
     "mobs": {
+      "yumi_cat": {
+        "name": "Yumi"
+      },
       "forest_wolf": {
         "name": "Leśny Wilk"
       },
@@ -4925,13 +7815,13 @@ export const pl_PL: EnTranslations = {
         "name": "Dziki Odyniec"
       },
       "webwood_spider": {
-        "name": "Czyhający z Pajęczego Boru"
+        "name": "Czyhacz Sableweb"
       },
       "mudfin_murloc": {
         "name": "Błotnopłetwy Skradacz"
       },
       "tunnel_rat": {
-        "name": "Tunelowy Szczur Kopacz"
+        "name": "Kopacz z Deeprock"
       },
       "vale_bandit": {
         "name": "Bandyta z Doliny"
@@ -4946,7 +7836,7 @@ export const pl_PL: EnTranslations = {
         "name": "Bagienny Czający"
       },
       "deepfen_murloc": {
-        "name": "Głębotopielny Kąsacz"
+        "name": "Kąsacz z Deepfen"
       },
       "mire_widow": {
         "name": "Wdowa z Mokrzawia"
@@ -4975,11 +7865,14 @@ export const pl_PL: EnTranslations = {
       "deacon_voss": {
         "name": "Diakon Voss"
       },
+      "training_dummy": {
+        "name": "Manekin treningowy"
+      },
       "ridge_stalker": {
         "name": "Grzbietowy Tropiciel"
       },
       "deeprock_kobold": {
-        "name": "Głęboskalny Drążyciel"
+        "name": "Drążyciel z Deeprock"
       },
       "thornpeak_ogre": {
         "name": "Ogr z Ciernistego Szczytu"
@@ -5033,13 +7926,13 @@ export const pl_PL: EnTranslations = {
         "name": "Komandor Rycerzy Olen"
       },
       "vael_the_mistcaller": {
-        "name": "Vael Mgłowołacz"
+        "name": "Vael Fogbinder"
       },
       "sanctum_boneguard": {
         "name": "Kościostrażnik Sanktuarium"
       },
       "sanctum_drakonid": {
-        "name": "Drakonid Sanktuarium"
+        "name": "Strażnik łusek z Sanktuarium"
       },
       "raised_bonewalker": {
         "name": "Wskrzeszony Kościochód"
@@ -5083,6 +7976,15 @@ export const pl_PL: EnTranslations = {
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Plaga Ciernistego Szczytu"
       },
+      "nythraxis_heroic_warrior_add": {
+        "name": "Aldren, Nieśmiertelny Strażnik Wojenny"
+      },
+      "nythraxis_heroic_priest_add": {
+        "name": "Malric, Nieśmiertelny Hierofant"
+      },
+      "nythraxis_heroic_rogue_add": {
+        "name": "Voss, Nieśmiertelny Nóż"
+      },
       "reliquary_ledger_wraith": {
         "name": "Widmo Ksiąg"
       },
@@ -5103,6 +8005,48 @@ export const pl_PL: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Akolitka Tessa"
+      },
+      "drowned_cantor": {
+        "name": "Utopiony Kantor"
+      },
+      "reedbound_acolyte": {
+        "name": "Trzcinospętany Akolita"
+      },
+      "deepfen_spearjaw": {
+        "name": "Włóczniopaszczy z Deepfen"
+      },
+      "mirefen_widowling": {
+        "name": "Wdowiątko z Mokrzawia"
+      },
+      "spider_egg_sac": {
+        "name": "Pajęczy Kokon Jaj"
+      },
+      "grave_silt_bulwark": {
+        "name": "Bastion Grobowego Mułu"
+      },
+      "sump_troll_devourer": {
+        "name": "Troll Pożeracz z Topieli"
+      },
+      "choir_thrall": {
+        "name": "Bagienny Niewolnik"
+      },
+      "sister_nhalia_drowned_canticle": {
+        "name": "Siostra Nhalia, Utopiony Kantyk"
+      },
+      "edda_reedhand": {
+        "name": "Edda Trzcinoręka"
+      },
+      "tolling_bell": {
+        "name": "Bijący Dzwon"
+      },
+      "vale_cup_ball": {
+        "name": "Dziczy Balon"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, Budzący się Szczyt"
+      },
+      "thunzharr_stormling": {
+        "name": "Zbudzony Burzowiec"
       },
       "ironvein_foreman": {
         "name": "Sztygar z Żelaznej Żyły"
@@ -5134,14 +8078,14 @@ export const pl_PL: EnTranslations = {
       "varkas_boneguard": {
         "name": "Kościostrażnik Varkasa"
       },
-      "imp": {
-        "name": "Chochlik"
+      "emberkin": {
+        "name": "Emberkin"
       },
-      "voidwalker": {
-        "name": "Wędrowiec Pustki"
+      "gloomshade": {
+        "name": "Gloomshade"
       },
-      "succubus": {
-        "name": "Sukkub"
+      "duskborn": {
+        "name": "Duskborn"
       },
       "grix_the_tunnelking": {
         "name": "Grix Tunelowy Król"
@@ -5164,17 +8108,17 @@ export const pl_PL: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "Widmowiąż Maldrec"
       },
-      "felhunter": {
-        "name": "Plugawy Łowca"
+      "spellhound": {
+        "name": "Spellhound"
       },
-      "felguard": {
-        "name": "Plugawy Strażnik"
+      "warfiend": {
+        "name": "Warfiend"
       },
-      "infernal": {
-        "name": "Piekielnik"
+      "pyre_colossus": {
+        "name": "Pyre Colossus"
       },
-      "doomguard": {
-        "name": "Strażnik Zagłady"
+      "wraithborn": {
+        "name": "Wraithborn"
       },
       "choirmother_selthe": {
         "name": "Chórmatka Selthe"
@@ -5247,12 +8191,12 @@ export const pl_PL: EnTranslations = {
       "fisherman_brandt": {
         "name": "Rybak Brandt",
         "title": "Stary Wilk Morski",
-        "greeting": "Grlmurlgrl- wybacz, za długo słuchałem tych rybich ludzi."
+        "greeting": "Blrb-glub- wybacz, za długo słuchałem tych rybich ludzi."
       },
       "foreman_odell": {
         "name": "Sztygar Odell",
         "title": "Sztygar Kopalni",
-        "greeting": "Cały wykop roi się od tego świecogłowego robactwa!"
+        "greeting": "Cały wykop roi się od tego oblepionego błotem robactwa!"
       },
       "warden_fenwick": {
         "name": "Strażnik Fenwick",
@@ -5304,10 +8248,40 @@ export const pl_PL: EnTranslations = {
         "title": "Mistrz Płatnerski",
         "greeting": "Kuźnia rozgrzana, a kamień szlifierski się obraca. Jeśli to tnie, to ja to sprzedaję."
       },
+      "heroic_quartermaster": {
+        "name": "Kwatermistrz Vex",
+        "title": "Heroiczny kwatermistrz",
+        "greeting": "Dowód z heroicznych głębin kupi najlepsze pierścienie i wisiory w Wysokiej Straży. Pokaż mi swoje znaki."
+      },
+      "fury": {
+        "name": "FURIA",
+        "title": "Honorowy kwatermistrz",
+        "greeting": "Piaski pamiętają każde zwycięstwo. Spędź dobrze swój honor."
+      },
       "loremaster_caddis": {
         "name": "Mistrz Wiedzy Caddis",
         "title": "Mistrz Wiedzy",
         "greeting": "Uważaj na luźny łupek, {className}. Góra była ostatnio... niespokojna. Zamierzam dociec dlaczego."
+      },
+      "auctioneer_voss": {
+        "name": "Aukcjoner Voss",
+        "title": "Strażnik Rynku Świata",
+        "greeting": "Rynek Świata jest otwarty także tutaj, {className}. Kupuj od każdego poszukiwacza przygód w królestwie albo wystaw własne towary."
+      },
+      "bursar_fernando": {
+        "name": "Skarbnik Fernando",
+        "title": "Złocona Szkatuła",
+        "greeting": "Witaj w Złoconej Szkatule. Twoje dobra spoczywają bezpiecznie za naszymi zamkami."
+      },
+      "bursar_petra_vell": {
+        "name": "Skarbniczka Petra Vell",
+        "title": "Złocona Szkatuła",
+        "greeting": "Złocona Szkatuła prowadzi czyste księgi i jeszcze czystsze skarbce. Co mamy dla ciebie przechować?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Skarbnik Aldous Crane",
+        "title": "Złocona Szkatuła",
+        "greeting": "Każda skrzynia, kufer i błyskotka są bezpieczne w Złoconej Szkatule."
       },
       "brother_aldric_raid": {
         "name": "Brat Aldric",
@@ -5319,6 +8293,36 @@ export const pl_PL: EnTranslations = {
         "title": "Strażnik Relikwiarza",
         "greeting": "Relikwiarz poniżej znów się przesunął."
       },
+      "brother_halven_marsh": {
+        "name": "Brat Halven",
+        "title": "Strażnik Relikwiarza",
+        "greeting": "Trop powiódł na północ. Kolejny relikwiarz, kolejny obrzęd. Wybierz poziom trudności, a ja potrzymam linę, aż wrócisz."
+      },
+      "spirit_healer": {
+        "name": "Blady Strażnik",
+        "title": "Opiekun Umarłych",
+        "greeting": "Spocznij, duchu. Mogę zwrócić cię twojemu ciału, lecz powrotna przeprawa pozostawia słabość."
+      },
+      "groundskeeper_bram": {
+        "name": "Opiekun Murawy Bram",
+        "title": "Opiekun Maciorowego Błonia",
+        "greeting": "Na Maciorowym Błoniu obowiązuje rozejm, {className}: tylko kopniaki i barki. Zagrasz o Miedziany Skopek?"
+      },
+      "chronicler_saul": {
+        "name": "Saul Kronikarz",
+        "title": "Kronika Doliny",
+        "greeting": "Każdy czyn wart dokonania wart jest zapisania dwa razy, {playerName}: raz do rejestru i raz na opowieść przy ognisku."
+      },
+      "chronicler_osric_fenn": {
+        "name": "Kronikarz Osric Fenn",
+        "title": "Kronika Trzęsawiska",
+        "greeting": "Uważaj na wilgoć na stronicach, {playerName}. Bagno pożera więcej ksiąg, niż kiedykolwiek zdołają pochłonąć czytelnicy."
+      },
+      "chronicler_edda_hartwell": {
+        "name": "Kronikarka Zenzie",
+        "title": "Kronika Szczytów",
+        "greeting": "Góra niczego nie zapomina, {playerName}, i ja też nie. Zobaczmy, czego udało ci się dokonać."
+      },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
         "title": "Strażnik Przypływów",
@@ -5326,6 +8330,16 @@ export const pl_PL: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "Fach dla każdej dłoni",
+        "text": "Każdy w Eastbrook para się jakimś fachem oprócz władania mieczem, {playerName}. Wokół miasta pełno żył rudy, więc chwyć za kilof i przynieś mi 5 kawałków. Wydobądź je własnoręcznie; poznam różnicę.",
+        "completion": "Widzisz? Ruda w torbie i odciski na dłoniach. Dalej zajmuj się górnictwem, wyrębem i zielarstwem podczas wędrówek, a gdy wrócisz do miasta, pamiętaj o tablicy Priorytetów miasta przy targu i pobliskim stole rzemieślniczym. Na tym wszystkim można uczciwie zarobić, jeśli zechcesz.",
+        "objectives": {
+          "0": {
+            "label": "Kawałek rudy"
+          }
+        }
+      },
       "q_wolves": {
         "title": "Wilki u progu",
         "text": "Leśne wilki robią się zuchwałe, kąsają podróżnych na północnej drodze. Przerzedź ich szeregi, {playerName}. Zabij 8 Leśnych wilków, a Eastbrook odetchnie z ulgą.",
@@ -5347,7 +8361,7 @@ export const pl_PL: EnTranslations = {
         }
       },
       "q_boars": {
-        "title": "Szczeciniaste skóry",
+        "title": "Szczeciniaste skóry dzików",
         "text": "Ze skóry dzika robi się najlepsze torby podróżne, a łąki na zachód od miasta aż roją się od tych bestii. Przynieś mi 5 szczeciniastych skór dzika, a wynagrodzę ci poświęcony czas.",
         "completion": "Ach, świetne szczeciniaste skóry! Dostanę za nie dobrą cenę.",
         "objectives": {
@@ -5357,21 +8371,21 @@ export const pl_PL: EnTranslations = {
         }
       },
       "q_spiders": {
-        "title": "Plaga Sieciolasu",
-        "text": "Czaiciele we wschodnich lasach przędą jedwab, którego potrzebuję do okładów - a do tego rozmnożyły się stanowczo zbyt licznie. Przetrzeb 6 Czaicieli z Sieciolasu i wytnij 4 gruczoły jedwabne z ich brzuchów.",
+        "title": "Plaga Sableweb",
+        "text": "Czyhacze we wschodnich lasach przędą jedwab, którego potrzebuję do okładów - a do tego rozmnożyły się stanowczo zbyt licznie. Przetrzeb 6 Czyhaczy Sableweb i wytnij 4 gruczoły jedwabne z ich brzuchów.",
         "completion": "Brr, wciąż drgają. Doskonale. Masz, zasłużyłeś na to.",
         "objectives": {
           "0": {
-            "label": "Czaiciel z Sieciolasu pokonany"
+            "label": "Czyhacz Sableweb pokonany"
           },
           "1": {
-            "label": "Gruczoł jedwabny z Sieciolasu"
+            "label": "Gruczoł jedwabny Sableweb"
           }
         }
       },
       "q_murlocs": {
         "title": "Kłopoty nad jeziorem",
-        "text": "Dwadzieścia lat łowię w Jeziorze Lustrzanym i nigdy nie straciłem sieci, póki te bulgoczące rybo-ludy nie wypełzły z płycizn. Odeprzyj Błotnopłetwych - ubij ich 8. I miej się na baczności: gdzie jest jeden murlok, tam jest ich pięć.",
+        "text": "Dwadzieścia lat łowię w Jeziorze Lustrzanym i nigdy nie straciłem sieci, póki te bulgoczące rybo-ludy nie wypełzły z płycizn. Odeprzyj Mudfiny - ubij ich 8. I miej się na baczności: gdzie jest jeden Mudfin, tam jest ich pięć.",
         "completion": "Ha! To ich nauczy, by pilnowały własnych bajor.",
         "objectives": {
           "0": {
@@ -5381,11 +8395,11 @@ export const pl_PL: EnTranslations = {
       },
       "q_mine": {
         "title": "Szczury w kopalni",
-        "text": "Trafiliśmy na świetną żyłę miedzi, a potem to koboldzie robactwo wysypało się ze zbocza. Moja ekipa nie postawi stopy w wykopie, dopóki nie zostanie oczyszczony. Połóż 10 kopaczy Tunelowych Szczurów.",
+        "text": "Trafiliśmy na świetną żyłę miedzi, a potem to drążące robactwo wysypało się ze zbocza. Moja ekipa nie postawi stopy w wykopie, dopóki nie zostanie oczyszczony. Połóż 10 kopaczy z Deeprock.",
         "completion": "Ha! Wracać do pracy, chłopcy! Masz moje podziękowania i moje złoto.",
         "objectives": {
           "0": {
-            "label": "Zabity kopacz Tunelowych Szczurów"
+            "label": "Zabity kopacz z Deeprock"
           }
         }
       },
@@ -5441,7 +8455,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_rite": {
         "title": "Obrzęd wiążący",
-        "text": "Krypta pod kaplicą musi zostać odpieczętowana, jeśli mamy powstrzymać Grobozwańcę - lecz tylko obrzęd wiążący pozwoli żywym przejść. Potrzebuję 4 bryłek Poświęconego łoju - koboldzcy kopacze gromadzą świece skrzyniami - oraz 6 Upiornych esencji od niespokojnych zmarłych.",
+        "text": "Krypta pod kaplicą musi zostać odpieczętowana, jeśli mamy powstrzymać Gravecallera - lecz tylko obrzęd wiążący pozwoli żywym przejść. Potrzebuję 4 bryłek Poświęconego łoju - drążyciele z kopalni gromadzą łój skrzyniami - oraz 6 Upiornych esencji od niespokojnych zmarłych.",
         "completion": "Stało się. Droga w dół stoi otworem... i niech Światło wybaczy mi, że ją otworzyłem. Zbierz swych najsilniejszych towarzyszy, nim zejdziesz, {playerName}. Nikt nie powinien mierzyć się z Wydrążoną w pojedynkę.",
         "objectives": {
           "0": {
@@ -5475,7 +8489,7 @@ export const pl_PL: EnTranslations = {
       "q_gravecallers_trail": {
         "title": "Trop Grobowołacza",
         "text": "Morthen nie żyje, a jednak dręczy mnie pytanie: sekta, która ukrywała się przez stulecie, nie trwoni się na jedną wiejską kaplicę. Trzymał grymuar, swoje obrzędy, swoją korespondencję. Jeśli cokolwiek z niego przetrwało, leży w zakrystii zrujnowanej kaplicy nad kryptą. Przeszukaj ruinę i przynieś mi wszystko, co zostało z jego pism, {playerName}.",
-        "completion": "Morthen pisał do 'Mglarza' w północnym trzęsawisku. Sekta nie jest martwa, {playerName}, była jedynie cierpliwa.",
+        "completion": "Morthen pisał do 'Fogbindera' w północnym trzęsawisku. Sekta nie jest martwa, {playerName}, była jedynie cierpliwa.",
         "objectives": {
           "0": {
             "label": "Grymuar Morthena"
@@ -5504,7 +8518,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_fenbridge_muster": {
         "title": "Zaciąg w Fenbridge",
-        "text": "Pisma Morthena wymieniały mistrza w północnym bagnie, 'Mglarza'. Teraz strażnik Fenwick zadął w róg zaciągowy w Fenbridge, a ja nie wierzę w przypadki, {playerName}. Ruszaj groblą na północ, zerwij rozkaz zaciągu ze słupa bramy i przedstaw go strażnikowi.",
+        "text": "Pisma Morthena wymieniały mistrza w północnym bagnie, 'Fogbindera'. Teraz strażnik Fenwick zadął w róg zaciągowy w Fenbridge, a ja nie wierzę w przypadki, {playerName}. Ruszaj groblą na północ, zerwij rozkaz zaciągu ze słupa bramy i przedstaw go strażnikowi.",
         "completion": "Pieczęć Aldrica, tak? Zatem się nadasz. Trzęsawisko połyka moje patrole w całości, a ja potrzebuję każdego ostrza, które utrzyma się na wodzie.",
         "objectives": {
           "0": {
@@ -5544,7 +8558,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_deepfen": {
         "title": "Deepfen się budzi",
-        "text": "Murloki z Deepfen przez dwadzieścia lat trzymały się swoich płycizn. Teraz roją się na wschodnim brzegu niczym muchy na padlinie, a moi strażnicy mówią, że wyciągają coś z dna jeziora. Cokolwiek je poruszyło, chcę, by to ustało. Przetrzeb 12 kąsaczy.",
+        "text": "Mudfiny z Deepfen przez dwadzieścia lat trzymały się swoich płycizn. Teraz roją się na wschodnim brzegu niczym muchy na padlinie, a moi strażnicy mówią, że wyciągają coś z dna jeziora. Cokolwiek je poruszyło, chcę, by to ustało. Przetrzeb 12 kąsaczy.",
         "completion": "To na jakiś czas zepchnie ich z powrotem w błoto. Ale coś kazało im kopać i zamierzam się dowiedzieć, co.",
         "objectives": {
           "0": {
@@ -5574,7 +8588,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_deepfen_purge": {
         "title": "Powrót na płycizny",
-        "text": "Aldric twierdzi, że te bożki to wytwór kultu, co znaczy, że murloki garść po garści wydobywają z bagna jego dawne zło. Nie pozwolę, by przybiło to do mojej grobli. Wróć na płycizny i raz na zawsze przerwij to pogłębianie: jeszcze 14 kąsaczy.",
+        "text": "Aldric twierdzi, że te bożki to wytwór kultu, co znaczy, że Mudfiny garść po garści wydobywają z bagna jego dawne zło. Nie pozwolę, by przybiło to do mojej grobli. Wróć na płycizny i raz na zawsze przerwij to pogłębianie: jeszcze 14 kąsaczy.",
         "completion": "Bezwzględnie i dokładnie. Jeśli to bagno kiedykolwiek wyschnie, czeka tu na ciebie praca strażnika.",
         "objectives": {
           "0": {
@@ -5681,7 +8695,7 @@ export const pl_PL: EnTranslations = {
       "q_summoners": {
         "title": "Powstrzymać przywoływanie",
         "text": "Raporty Maren wymieniają przywoływaczy wśród kultystów - głosy, które wzywają utopionych z wody jak ogary na gwizd. Ich szyfry wyłożą łańcuch dowodzenia. Ucisz 8 przywoływaczy i przynieś mi 4 z ich szyfrów.",
-        "completion": "Każdy szyfr jest kontrasygnowany \"Diakon Voss\" - i adresowany dalej do \"Mglarza\" w Bastionie. Mistrz Morthena, {playerName}. Znaleźliśmy go.",
+        "completion": "Każdy szyfr jest kontrasygnowany \"Diakon Voss\" - i adresowany dalej do \"Fogbindera\" w Bastionie. Mistrz Morthena, {playerName}. Znaleźliśmy go.",
         "objectives": {
           "0": {
             "label": "Przywoływacz Grobozwańców pokonany"
@@ -5703,7 +8717,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_bastion_door": {
         "title": "Zatopiony Bastion",
-        "text": "Zatopiony Bastion, warownia rycerza, która sto lat temu utonęła w trzęsawisku, to miejsce, na które wskazują listy Vossa i gdzie ów Mglarz śpiewa swoje topielcze hymny. Kult zabezpieczył jego drzwi nagrobkami. Przynieś mi jeden z kamieni zaklęcia, {playerName}, a rozplotę pieczęć.",
+        "text": "Zatopiony Bastion, warownia rycerza, która sto lat temu utonęła w trzęsawisku, to miejsce, na które wskazują listy Vossa i gdzie ów Fogbinder śpiewa swoje topielcze hymny. Kult zabezpieczył jego drzwi nagrobkami. Przynieś mi jeden z kamieni zaklęcia, {playerName}, a rozplotę pieczęć.",
         "completion": "Zaklęcie pęka jak zbutwiały sznur. Drzwi stoją otworem... a mrok pod nimi nasłuchuje.",
         "objectives": {
           "0": {
@@ -5713,7 +8727,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_olen": {
         "title": "Hańba Rycerza-Komandora",
-        "text": "Rycerz-Komandor Olen bronił Bastionu, gdy ten tonął - utonął na posterunku, zamiast go porzucić. Każdy strażnik z dumą uczy się jego imienia. Teraz Mglarz podniósł go jako marionetkę, by strzegła tych samych wrót, których broniąc zginął. Ta hańba się kończy, {playerName}. Weź czterech towarzyszy w dół i obdarz Olena spoczynkiem, na jaki zasłużył.",
+        "text": "Rycerz-Komandor Olen bronił Bastionu, gdy ten tonął - utonął na posterunku, zamiast go porzucić. Każdy strażnik z dumą uczy się jego imienia. Teraz Fogbinder podniósł go jako marionetkę, by strzegła tych samych wrót, których broniąc zginął. Ta hańba się kończy, {playerName}. Weź czterech towarzyszy w dół i obdarz Olena spoczynkiem, na jaki zasłużył.",
         "completion": "Zatem jego warta wreszcie dobiegła końca. Sam dopilnuję, by jego imię wyryto na bramie. Dziękuję ci, {playerName}.",
         "objectives": {
           "0": {
@@ -5722,12 +8736,12 @@ export const pl_PL: EnTranslations = {
         }
       },
       "q_mistcaller": {
-        "title": "Mglarz",
-        "text": "Na samym dnie Bastionu czeka Vael Mglarz - mistrz Morthena, mistrz Vossa, głos, który utopił setkę wędrowców, by wystawić sobie armię. Jest daleko poza siłami jednego bohatera: weź czterech towarzyszy, nie mniej. Skończ z nim, {playerName}, a zmarli z trzęsawiska wreszcie spoczną w spokoju.",
+        "title": "Fogbinder",
+        "text": "Na samym dnie Bastionu czeka Vael Fogbinder - mistrz Morthena, mistrz Vossa, głos, który utopił setkę wędrowców, by wystawić sobie armię. Jest daleko poza siłami jednego bohatera: weź czterech towarzyszy, nie mniej. Skończ z nim, {playerName}, a zmarli z trzęsawiska wreszcie spoczną w spokoju.",
         "completion": "Vael nie żyje, a mgła unosi się po raz pierwszy od lat. Lecz Maren usłyszała jego ostatnie słowa i mrożą mi one krew w żyłach: \"Żmij budzi się pod szczytami\". Sekta służy czemuś starszemu, niż kiedykolwiek przypuszczaliśmy, {playerName}. Odpocznij, póki możesz - góry są następne.",
         "objectives": {
           "0": {
-            "label": "Vael Mglarz pokonany"
+            "label": "Vael Fogbinder pokonany"
           }
         }
       },
@@ -5761,10 +8775,40 @@ export const pl_PL: EnTranslations = {
           }
         }
       },
+      "q_stalkers_return": {
+        "title": "Tropiciele powracają",
+        "text": "Dwanaście zabitych, a grań roi się gęściej niż w dniu, w którym zaczynałeś, {playerName}. Bestie nie rzucają się na mur z głodu. Coś na wysokiej grani spycha je w dół, a póki nie wiem co, odstrzał się nie kończy. Czternaście kolejnych.",
+        "completion": "Czternaście kolejnych, a moje patrole i tak co rano liczą świeże tropy. Moja zwiadowczyni wróciła z wysokiej grani biała jak linia śniegu: ślady wielkości tarczy, mówi, i stare ofiary, jakich żaden tropiciel by nie zostawił. Cokolwiek tam chodzi, nie jest zwykłym kotem.",
+        "objectives": {
+          "0": {
+            "label": "Zabity Grzbietowy Tropiciel"
+          }
+        }
+      },
+      "q_stalker_cloaks": {
+        "title": "Płaszcze dla Straży",
+        "text": "Osiem skór podbiło płaszcze oficerów, a teraz każdy żołnierz na murze chce tego samego, {playerName}. Słusznie chcą: zima najpierw zabiera palce, a przeprosin nie przyjmuje nigdy. Jeszcze dziesięć skór z grani na południe od bramy, a cała straż będzie spać w cieple.",
+        "completion": "Dziesięć dobrych skór, grubych jak mało która... nie, spójrz na nie, {playerName}. Połowa rozdarta, i to nie ostrzem ani włócznią. Ślady pazurów szerokie jak moja dłoń, na wylot przez zimowe futro. Coś na tej grani szarpie własny gatunek.",
+        "objectives": {
+          "0": {
+            "label": "Skóra Grzbietowego Tropiciela"
+          }
+        }
+      },
+      "q_old_cragmaw": {
+        "title": "Stary Skalogryz",
+        "text": "Górale nadali imię śladom, które znalazła moja zwiadowczyni: Stary Skalogryz, pokryty bliznami tyran wśród kotów, który przeżył trzy pokolenia własnego stada. To przez niego tropiciele zalewają moją drogę, {playerName}. Jego legowisko leży na zachodniej grani nad drogą na południe. Weź towarzysza i połóż starego diabła.",
+        "completion": "Nareszcie padł. Górale przysięgali, że ten kot przeżyje sam mur. Tropiciele będą się teraz trzymać swoich wysokich śniegów, {playerName}, a moje patrole przejdą drogą bez krwawienia. Cała grań jest cichsza dzięki twojej pracy.",
+        "objectives": {
+          "0": {
+            "label": "Zabity Stary Skalogryz"
+          }
+        }
+      },
       "q_kobold_tunnels": {
         "title": "Kłopoty w Deeprock",
-        "text": "Kobolty w Norach Deeprock kopią głębiej, niż jakikolwiek świecowy szczur ma prawo kopać, prosto w dół, jakby coś je wzywało. Ich tunele biegną pod naszym murem, {playerName}. Zakończ sprawę: zabij dwunastu drążycieli z Deeprock.",
-        "completion": "Prosto w dół, każdy szyb, kobolty nie kopią tak z własnej woli. Muszę zajrzeć do moich ksiąg.",
+        "text": "Drążyciele w Norach Deeprock kopią głębiej, niż jakikolwiek szczur z jam ma prawo kopać, prosto w dół, jakby coś je wzywało. Ich tunele biegną pod naszym murem, {playerName}. Zakończ sprawę: zabij dwunastu Drążycieli z Deeprock.",
+        "completion": "Prosto w dół, każdy szyb, drążyciele nie kopią tak z własnej woli. Muszę zajrzeć do moich ksiąg.",
         "objectives": {
           "0": {
             "label": "Zabity drążyciel z Deeprock"
@@ -5773,7 +8817,7 @@ export const pl_PL: EnTranslations = {
       },
       "q_glowing_wax": {
         "title": "Dziwny wosk",
-        "text": "Caddis pokazał mi świecę zabraną jednemu z tych kopaczy, wosk świeci, {playerName}, i jest ciepły jak bicie serca. On chce go więcej do badań, a ja chcę go skreślić z mojej listy zapotrzebowań. Przynieś sześć grudek świecącego wosku.",
+        "text": "Caddis pokazał mi bryłę wosku zabraną jednemu z tych drążycieli, wosk świeci, {playerName}, i jest ciepły jak bicie serca. On chce go więcej do badań, a ja chcę go skreślić z mojej listy zapotrzebowań. Przynieś sześć grudek świecącego wosku.",
         "completion": "Wciąż ciepły. Mistrz Wiedzy mówi, że ta poświata nie pasuje do żadnego znanego mu płomienia. Ja mówię, że to górskie kłopoty, i mówię to łagodnie.",
         "objectives": {
           "0": {
@@ -6078,6 +9122,26 @@ export const pl_PL: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Rzemiosło, które możesz nazwać własnym",
+        "text": "Każdy rzemieślnik z Eastbrook ostatecznie decyduje się na jedno rzemiosło, które nazywa swoim własnym. Wykaż się jednym czynem, {playerName}, i zadeklaruj swoją ścieżkę.",
+        "completion": "Twoja ścieżka została wybrana; chodź dobrze.",
+        "objectives": {
+          "0": {
+            "label": "Leśny Wilk zabity"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Zadośćuczynienie",
+        "text": "Aby odłożyć jeden statek na drugi, rzemieślnik musi najpierw zadośćuczynić za ścieżkę, którą nie przeszedł, {playerName}.",
+        "completion": "Poprawki dokonane; otwiera się przed tobą nowa droga.",
+        "objectives": {
+          "0": {
+            "label": "Leśny Wilk zabity"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Utopiony chór",
         "text": "Brodzący nie działają sami. Wśród nich kroczą Utopieni Wyznawcy — kult, który zatonął wraz ze świątynią, wciąż w zbutwiałych szatach, wciąż śpiewający modlitwę z nadbrzeżnych skał. Ucisz ośmiu z nich i przynieś mi sześć ofiar, które noszą. Chcę wiedzieć, co zamierzają złożyć swojej bogini.",
@@ -6160,7 +9224,7 @@ export const pl_PL: EnTranslations = {
             "label": "Jezioro Lustrzane"
           },
           "4": {
-            "label": "Pajęczy Las"
+            "label": "Sableweb"
           },
           "5": {
             "label": "Miedziane Wykopalisko"
@@ -6176,6 +9240,9 @@ export const pl_PL: EnTranslations = {
           },
           "9": {
             "label": "Polana Jasnoboru"
+          },
+          "10": {
+            "label": "Maciorowe Błonie"
           }
         }
       },
@@ -6283,6 +9350,89 @@ export const pl_PL: EnTranslations = {
         "name": "Zawalony Relikwiarz",
         "enterText": "Schodzisz do zawalonego relikwiarza.",
         "leaveText": "Wspinasz się z powrotem do Brata Halvena przy ruinie relikwiarza."
+      },
+      "drowned_litany": {
+        "name": "Utopiona Litania",
+        "enterText": "Schodzisz do utopionego przybytku na skraju bagien.",
+        "leaveText": "Wspinasz się z powrotem do Brata Halvena na skraju bagien."
+      }
+    },
+    "letters": {
+      "ravenpost_welcome": {
+        "sender": "Krucza Poczta",
+        "subject": "Kruki latają teraz dla ciebie",
+        "body": "Wędrowcze,\n\nKrucza Poczta otworzyła swoje żerdzie w całej dolinie. Szukaj kruczych słupów w Eastbrook, Fenbridge i Highwatch: z każdego z nich możesz wysyłać listy, monety i towary innym poszukiwaczom przygód oraz odbierać wszystko, co przyniosą ci kruki.\n\nZałączamy drobiazg na twój pierwszy znaczek.\n\nSkrzydła w górę,\nKrucza Poczta"
+      },
+      "letter_q_wolves": {
+        "sender": "Marszałek Redbrook",
+        "subject": "W zagrodach znów spokój",
+        "body": "Pasterze mogą wreszcie spać spokojnie i to twoja zasługa. Poprosiłem Kruczą Pocztę, by dostarczyła ci drobiazg z kasy straży.\n\nDbaj o ostrze.\n- Marszałek Redbrook"
+      },
+      "letter_q_greyjaw": {
+        "sender": "Marszałek Redbrook",
+        "subject": "Stary Szaropaszcz, nareszcie",
+        "body": "Wieści szybko się niosą w tak małym miasteczku. Pasterze pili wczoraj za twoje zdrowie, a Wilkes przysięga, że wilk był wielki jak wóz. Niech sobie koloryzują: zasłużyłeś na to.\n\nZjedz posiłek na koszt straży.\n- Marszałek Redbrook"
+      },
+      "letter_q_hollow": {
+        "sender": "Brat Aldric",
+        "subject": "To, czego dokonałeś w mroku",
+        "body": "Niewielu kiedykolwiek się dowie, co było pogrzebane w tamtej kotlinie, a jeszcze mniej by uwierzyło. Ja wiem i nie zapomnę.\n\nNiech twoja droga pozostanie jasna.\n- Brat Aldric"
+      }
+    },
+    "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Straż przednia spętanego kamienia",
+        "bonus3": "Zwiększa szybkość ataku i rzucania zaklęć o 15%."
+      },
+      "crownforged": {
+        "name": "Regalia Bonewrought",
+        "bonus2": "Zwiększa siłę ataku o 40.",
+        "bonus3": "Zwiększa siłę o 15, wytrzymałość o 15 oraz szybkość ataku i rzucania zaklęć o 15%.",
+        "bonus4": "Twoje krytyczne trafienia bronią rozłupują cel Kościaną Drzazgą, zadając 8 obrażeń od krwawienia co 2 s przez 12 s. Kumuluje się do 3 razy."
+      },
+      "deathlord": {
+        "name": "Rynsztunek bojowy Barrowlorda",
+        "bonus2": "Zwiększa siłę ataku o 40.",
+        "bonus3": "Zwiększa siłę o 15 i wytrzymałość o 15.",
+        "bonus4": "Twoje krytyczne trafienia bronią mają 50% szansy na udzielenie Grobowej Potęgi, zwiększającej moc ataku o 60 na 10 s."
+      },
+      "greyjaw_stalker": {
+        "name": "Rynsztunek tropiciela Szaroszczękiego",
+        "bonus3": "Zwiększa szybkość ataku i rzucania zaklęć o 15%."
+      },
+      "necromancers": {
+        "name": "Szaty Mournweave",
+        "bonus2": "Nie można cię odrzucić (100% odporności na odrzucenie).",
+        "bonus3": "Zwiększa intelekt o 10 i wytrzymałość o 10.",
+        "bonus4": "Twoje zaklęcia mają 10% szansy na udzielenie Jasności Umysłu, dzięki czemu następne zaklęcie jest darmowe."
+      },
+      "nighttalon": {
+        "name": "Skóra Direfang",
+        "bonus2": "Zwiększa siłę ataku o 40.",
+        "bonus3": "Zwiększa zręczność o 15, szansę na trafienie krytyczne o 2% oraz szybkość ataku i rzucania zaklęć o 15%.",
+        "bonus4": "Twoje krytyczne trafienia bronią rozrywają cel Poszarpaną Raną, zadając 6 obrażeń od krwawienia co 2 s przez 12 s. Kumuluje się do 3 razy."
+      },
+      "soulflame": {
+        "name": "Regalia Wraithfire",
+        "bonus2": "Nie można cię odrzucić (100% odporności na odrzucenie).",
+        "bonus3": "Zwiększa intelekt o 15, ducha o 15 oraz szybkość ataku i rzucania zaklęć o 15%.",
+        "bonus4": "Twoje zaklęcia mają 10% szansy na udzielenie Płomienia Duszy, zwiększającego moc zaklęć o 40 na 10 s."
+      },
+      "stormcallers": {
+        "name": "Szaty Galecall",
+        "bonus2": "Nie można cię odrzucić (100% odporności na odrzucenie).",
+        "bonus3": "Zwiększa intelekt o 15, ducha o 15 oraz szybkość ataku i rzucania zaklęć o 15%.",
+        "bonus4": "Twoje zaklęcia mają 10% szansy na udzielenie Płomienia Duszy, zwiększającego moc zaklęć o 40 na 10 s."
+      },
+      "vale_arcanist": {
+        "name": "Szaty Arkanisty z Doliny",
+        "bonus3": "Zwiększa szybkość ataku i rzucania zaklęć o 15%."
+      },
+      "wyrmshadow": {
+        "name": "Szaty Nightfang",
+        "bonus2": "Zwiększa siłę ataku o 40.",
+        "bonus3": "Zwiększa zręczność o 15 i szansę na trafienie krytyczne o 2%.",
+        "bonus4": "Twoje krytyczne trafienia bronią mają 50% szansy na udzielenie Pędu Kłów, zwiększającego szybkość ataku o 25% na 8 s."
       }
     }
   },
@@ -6293,6 +9443,12 @@ export const pl_PL: EnTranslations = {
     "dungeonInstanceBusy": "Wszystkie instancje lokacji {name} są zajęte. Spróbuj ponownie za chwilę.",
     "delveLockedChestInteract": "Naciśnij F, aby otworzyć zamek wytrychem",
     "delveRewardChestInteract": "Naciśnij F, aby zgarnąć łupy",
-    "delveSurfaceExitInteract": "Naciśnij F, aby się wspiąć"
+    "delveSurfaceExitInteract": "Naciśnij F, aby się wspiąć",
+    "delveReliquaryInteract": "Utopiony Relikwiarz: Naciśnij F, aby rozpocząć obrzęd",
+    "delveRiteShrineBellInteract": "Kapliczka Dzwonu: Naciśnij F, aby zadzwonić",
+    "delveRiteShrineCandleInteract": "Kapliczka Świecy: Naciśnij F, aby jej dotknąć",
+    "delveRiteShrineReedInteract": "Kapliczka Trzciny: Naciśnij F, aby jej dotknąć",
+    "delveRiteShrineSkullInteract": "Kapliczka Czaszki: Naciśnij F, aby jej dotknąć",
+    "mailboxName": "Skrzynka pocztowa"
   }
 };

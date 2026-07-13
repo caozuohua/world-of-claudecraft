@@ -65,6 +65,13 @@ describe('Settings', () => {
     expect(s.get('cameraFov')).toBe(SETTING_RANGES.cameraFov.def);
     expect(s.get('cameraFov')).toBe(60); // unchanged from the shipped look by default
     expect(s.get('mouseCamera')).toBe(false);
+    // walk-by autoloot is opt-in: auto-grabbing loot by walking past can feel jarring.
+    expect(s.get('walkByAutoloot')).toBe(false);
+    // both unit frames ship at their stock size; the scale sliders are opt-in tuning.
+    expect(s.get('playerFrameScale')).toBe(1);
+    expect(s.get('targetFrameScale')).toBe(1);
+    // the classic top-right aura corner stays the default; frame-anchoring is opt-in.
+    expect(s.get('aurasOnPlayerFrame')).toBe(false);
     expect(s.get('joystickDeadzone')).toBe(SETTING_RANGES.joystickDeadzone.def);
     // Interface Mode defaults to Auto (0): detect desktop vs touch from the device.
     expect(s.get('interfaceMode')).toBe(SETTING_RANGES.interfaceMode.def);
@@ -151,6 +158,14 @@ describe('Settings', () => {
     expect(b.get('leftHandedTouch')).toBe(true);
   });
 
+  it('defaults the mobile camera joystick off and persists enabling it across instances', () => {
+    const a = new Settings();
+    expect(a.get('mobileCameraJoystick')).toBe(false);
+    a.set('mobileCameraJoystick', true);
+    const b = new Settings();
+    expect(b.get('mobileCameraJoystick')).toBe(true);
+  });
+
   it('defaults footstep sounds off and persists re-enabling across instances', () => {
     const a = new Settings();
     expect(a.get('footstepSfx')).toBe(false);
@@ -188,6 +203,7 @@ describe('Settings', () => {
     s.set('shadowQuality', 0);
     s.set('fullscreen', 0);
     s.set('mouseCamera', true);
+    s.set('mobileCameraJoystick', true);
     s.reset();
     expect(s.get('cameraSpeed')).toBe(SETTING_RANGES.cameraSpeed.def);
     expect(s.get('renderScale')).toBe(SETTING_RANGES.renderScale.def);
@@ -199,6 +215,7 @@ describe('Settings', () => {
     expect(s.get('fullscreen')).toBe(SETTING_RANGES.fullscreen.def);
     expect(s.get('clickToMoveButton')).toBe(SETTING_RANGES.clickToMoveButton.def);
     expect(s.get('mouseCamera')).toBe(false);
+    expect(s.get('mobileCameraJoystick')).toBe(false);
   });
 
   it('action button scale defaults to 1.0 and clamps to its slider bounds', () => {
@@ -232,6 +249,8 @@ describe('Interface & Comfort settings pack', () => {
     expect(s.get('showFps')).toBe(false);
     expect(s.get('showWalletOnCharacterScreen')).toBe(true);
     expect(s.get('showWalletOnPlayerCard')).toBe(true);
+    expect(s.get('showDevBadges')).toBe(true);
+    expect(s.get('showDailyRewardsChest')).toBe(true);
     expect(s.get('invertLookY')).toBe(false);
   });
 
@@ -253,16 +272,19 @@ describe('Interface & Comfort settings pack', () => {
     s.set('frostedPanels', true);
     s.set('showWalletOnCharacterScreen', false);
     s.set('showWalletOnPlayerCard', false);
+    s.set('showDevBadges', false);
     // a fresh instance reads the same backing store
     expect(new Settings().get('reduceMotion')).toBe(true);
     expect(new Settings().get('showFps')).toBe(true);
     expect(new Settings().get('showWalletOnCharacterScreen')).toBe(false);
     expect(new Settings().get('showWalletOnPlayerCard')).toBe(false);
+    expect(new Settings().get('showDevBadges')).toBe(false);
     s.reset();
     expect(s.get('reduceMotion')).toBe(false);
     expect(s.get('showFps')).toBe(false);
     expect(s.get('showWalletOnCharacterScreen')).toBe(true);
     expect(s.get('showWalletOnPlayerCard')).toBe(true);
+    expect(s.get('showDevBadges')).toBe(true);
     expect(s.get('invertLookY')).toBe(false);
     expect(s.get('frostedPanels')).toBe(false);
   });

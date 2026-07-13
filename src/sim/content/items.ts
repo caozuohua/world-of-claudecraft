@@ -14,7 +14,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   // --- starting gear ---
   worn_sword: {
     id: 'worn_sword',
-    name: 'Worn Shortsword',
+    name: 'Pitted Shortsword',
     kind: 'weapon',
     slot: 'mainhand',
     quality: 'common',
@@ -23,7 +23,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   gnarled_staff: {
     id: 'gnarled_staff',
-    name: 'Gnarled Staff',
+    name: 'Bogoak Staff',
     kind: 'weapon',
     slot: 'mainhand',
     quality: 'common',
@@ -60,8 +60,9 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   recruit_tunic: {
     id: 'recruit_tunic',
-    name: "Recruit's Tunic",
+    name: "Levyman's Tunic",
     kind: 'armor',
+    armorType: 'leather',
     slot: 'chest',
     quality: 'common',
     stats: { armor: 20 },
@@ -69,8 +70,9 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   apprentice_robe: {
     id: 'apprentice_robe',
-    name: "Apprentice's Robe",
+    name: 'Threadbare Robe',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'chest',
     quality: 'common',
     stats: { armor: 8 },
@@ -78,8 +80,9 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   footpad_jerkin: {
     id: 'footpad_jerkin',
-    name: "Footpad's Jerkin",
+    name: 'Cutpurse Jerkin',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'chest',
     quality: 'common',
     stats: { armor: 14 },
@@ -123,6 +126,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'militia_vest',
     name: 'Militia Chainvest',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'chest',
     quality: 'uncommon',
     stats: { armor: 90, sta: 2 },
@@ -131,8 +135,10 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   woven_robe: {
     id: 'woven_robe',
+    set: 'vale_arcanist',
     name: 'Valewoven Robe',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'chest',
     quality: 'uncommon',
     stats: { armor: 30, int: 3, spi: 2 },
@@ -141,8 +147,10 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   shadow_jerkin: {
     id: 'shadow_jerkin',
+    set: 'greyjaw_stalker',
     name: 'Shadowstitch Jerkin',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'chest',
     quality: 'uncommon',
     stats: { armor: 55, agi: 3 },
@@ -153,6 +161,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'oiled_boots',
     name: 'Oiled Leather Boots',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'feet',
     quality: 'uncommon',
     stats: { armor: 25, agi: 1 },
@@ -162,6 +171,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'quilted_trousers',
     name: 'Quilted Trousers',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'legs',
     quality: 'uncommon',
     stats: { armor: 30, sta: 2 },
@@ -171,6 +181,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'greyjaw_pelt_cloak',
     name: "Greyjaw's Pelt Leggings",
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'legs',
     quality: 'uncommon',
     stats: { armor: 35, sta: 1, agi: 1 },
@@ -178,8 +189,10 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   greyjaw_hide_boots: {
     id: 'greyjaw_hide_boots',
+    set: 'greyjaw_stalker',
     name: 'Greyjaw Hide Boots',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'feet',
     quality: 'uncommon',
     stats: { armor: 28, agi: 1, sta: 1 },
@@ -187,7 +200,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   bristleback_maul: {
     id: 'bristleback_maul',
-    name: 'Bristleback Maul',
+    name: 'Gallowglass Hammer',
     kind: 'weapon',
     slot: 'mainhand',
     quality: 'uncommon',
@@ -200,6 +213,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'sableweb_slippers',
     name: 'Sableweb Slippers',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'feet',
     quality: 'uncommon',
     stats: { armor: 18, int: 2, spi: 1 },
@@ -232,6 +246,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'moggers_stomper_boots',
     name: "Mogger's Stomper Boots",
     kind: 'armor',
+    armorType: 'leather',
     slot: 'feet',
     quality: 'uncommon',
     stats: { armor: 32, agi: 2, sta: 1 },
@@ -275,6 +290,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'cryptbone_greaves',
     name: 'Cryptbone Greaves',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'legs',
     quality: 'uncommon',
     stats: { armor: 48, sta: 2 },
@@ -291,6 +307,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'cryptbone_helm',
     name: 'Cryptbone Helm',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'helmet',
     quality: 'uncommon',
     stats: { armor: 48, sta: 3 },
@@ -300,6 +317,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'cryptbone_pauldrons',
     name: 'Cryptbone Pauldrons',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'shoulder',
     quality: 'uncommon',
     stats: { armor: 36, sta: 2 },
@@ -309,6 +327,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'mistveil_cord',
     name: 'Mistveil Cord',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'waist',
     quality: 'uncommon',
     stats: { armor: 30, sta: 2, agi: 1 },
@@ -318,6 +337,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'mistveil_grips',
     name: 'Mistveil Grips',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'gloves',
     quality: 'uncommon',
     stats: { armor: 36, agi: 2, sta: 1 },
@@ -325,44 +345,97 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   boundstone_helm: {
     id: 'boundstone_helm',
+    set: 'boundstone_vanguard',
     name: 'Boundstone Helm',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'helmet',
     quality: 'rare',
-    stats: { armor: 105, sta: 4, str: 3 },
+    stats: { armor: 105, sta: 6, str: 5 },
     sellValue: 460,
   },
   boundstone_girdle: {
     id: 'boundstone_girdle',
+    set: 'boundstone_vanguard',
     name: 'Boundstone Girdle',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'waist',
     quality: 'rare',
-    stats: { armor: 60, sta: 4, str: 2 },
+    stats: { armor: 60, sta: 6, str: 3 },
     sellValue: 340,
   },
   gravewyrm_mantle: {
     id: 'gravewyrm_mantle',
     name: 'Gravewyrm Mantle',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'shoulder',
     quality: 'rare',
-    stats: { armor: 82, agi: 4, sta: 2 },
+    stats: { armor: 82, agi: 7, sta: 3 },
     sellValue: 410,
   },
   gravewyrm_gauntlets: {
     id: 'gravewyrm_gauntlets',
+    set: 'boundstone_vanguard',
     name: 'Gravewyrm Gauntlets',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'gloves',
     quality: 'rare',
-    stats: { armor: 72, str: 3, sta: 2 },
+    stats: { armor: 72, str: 5, sta: 4 },
     sellValue: 390,
+  },
+  // --- bags (kind:'bag', equip into one of the 4 bag sockets for +bagSlots
+  // pooled inventory capacity; the 16-slot backpack is implicit). Tiered by
+  // quality: common bags are vendor goods, uncommon drops from beasts, rare
+  // and epic from dungeon bosses. See src/sim/bags.ts for the capacity rules. ---
+  linen_pouch: {
+    id: 'linen_pouch',
+    name: 'Linen Pouch',
+    kind: 'bag',
+    quality: 'common',
+    bagSlots: 6,
+    sellValue: 60,
+    buyValue: 250,
+  },
+  travelers_knapsack: {
+    id: 'travelers_knapsack',
+    name: "Traveler's Knapsack",
+    kind: 'bag',
+    quality: 'common',
+    bagSlots: 8,
+    sellValue: 500,
+    buyValue: 2000,
+  },
+  wolfhide_satchel: {
+    id: 'wolfhide_satchel',
+    name: 'Wolfhide Satchel',
+    kind: 'bag',
+    quality: 'uncommon',
+    bagSlots: 10,
+    sellValue: 1200,
+  },
+  gravewoven_bag: {
+    id: 'gravewoven_bag',
+    name: 'Gravewoven Bag',
+    kind: 'bag',
+    quality: 'rare',
+    bagSlots: 12,
+    sellValue: 3500,
+  },
+  mistcallers_duffel: {
+    id: 'mistcallers_duffel',
+    name: "Fogbinder's Duffel",
+    kind: 'bag',
+    quality: 'epic',
+    bagSlots: 14,
+    sellValue: 9000,
   },
   // --- food & drink (vendor) ---
   baked_bread: {
     id: 'baked_bread',
-    name: 'Freshly Baked Bread',
+    name: 'Cottage Loaf',
     kind: 'food',
     quality: 'common',
     foodHp: 61,
@@ -371,7 +444,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   spring_water: {
     id: 'spring_water',
-    name: 'Refreshing Spring Water',
+    name: 'Cold Well Water',
     kind: 'drink',
     quality: 'common',
     drinkMana: 76,
@@ -387,6 +460,208 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     sellValue: 4,
     buyValue: 20,
   },
+  // Base gathering tools (#1123). Each is infinite-durability (this repo has
+  // no durability field on ItemDef) and tiered: `use.tier` gates which
+  // node/material tiers it can gather (see src/sim/professions/tools.ts).
+  copper_mining_pick: {
+    id: 'copper_mining_pick',
+    name: 'Copper Mining Pick',
+    kind: 'tool',
+    quality: 'common',
+    use: { type: 'gatherTool', professionId: 'mining', tier: 1 },
+    sellValue: 4,
+    buyValue: 20,
+  },
+  iron_mining_pick: {
+    id: 'iron_mining_pick',
+    name: 'Iron Mining Pick',
+    kind: 'tool',
+    quality: 'common',
+    use: { type: 'gatherTool', professionId: 'mining', tier: 2 },
+    sellValue: 10,
+    buyValue: 60,
+  },
+  mithril_mining_pick: {
+    id: 'mithril_mining_pick',
+    name: 'Mithril Mining Pick',
+    kind: 'tool',
+    quality: 'uncommon',
+    use: { type: 'gatherTool', professionId: 'mining', tier: 3 },
+    sellValue: 25,
+    buyValue: 150,
+  },
+  handaxe: {
+    id: 'handaxe',
+    name: 'Handaxe',
+    kind: 'tool',
+    quality: 'common',
+    use: { type: 'gatherTool', professionId: 'logging', tier: 1 },
+    sellValue: 4,
+    buyValue: 20,
+  },
+  felling_axe: {
+    id: 'felling_axe',
+    name: 'Felling Axe',
+    kind: 'tool',
+    quality: 'common',
+    use: { type: 'gatherTool', professionId: 'logging', tier: 2 },
+    sellValue: 10,
+    buyValue: 60,
+  },
+  ironbark_axe: {
+    id: 'ironbark_axe',
+    name: 'Ironbark Axe',
+    kind: 'tool',
+    quality: 'uncommon',
+    use: { type: 'gatherTool', professionId: 'logging', tier: 3 },
+    sellValue: 25,
+    buyValue: 150,
+  },
+  gathering_sickle: {
+    id: 'gathering_sickle',
+    name: 'Gathering Sickle',
+    kind: 'tool',
+    quality: 'common',
+    use: { type: 'gatherTool', professionId: 'herbalism', tier: 1 },
+    sellValue: 4,
+    buyValue: 20,
+  },
+  bronze_sickle: {
+    id: 'bronze_sickle',
+    name: 'Bronze Sickle',
+    kind: 'tool',
+    quality: 'common',
+    use: { type: 'gatherTool', professionId: 'herbalism', tier: 2 },
+    sellValue: 10,
+    buyValue: 60,
+  },
+  silverleaf_sickle: {
+    id: 'silverleaf_sickle',
+    name: 'Silverleaf Sickle',
+    kind: 'tool',
+    quality: 'uncommon',
+    use: { type: 'gatherTool', professionId: 'herbalism', tier: 3 },
+    sellValue: 25,
+    buyValue: 150,
+  },
+  // Crafted base tools, tier 4 and 5 (#1135). Same shape and gating as the
+  // vendor tools above (infinite-durability, `use.tier` gates node AND
+  // monster-material tier access via src/sim/professions/tools.ts), but these
+  // are produced by a profession (see COMMON_RECIPES in content/recipes.ts),
+  // never sold by any vendor: no `buyValue` and deliberately absent from
+  // every NPC `vendorItems` list. `quality` (rarity) is independent of
+  // `use.tier` and never affects gating: only the tool's `use.tier` value is
+  // read by the gate.
+  // are produced by a profession, never sold by any vendor: no `buyValue` and
+  // deliberately absent from every NPC `vendorItems` list. `quality` (rarity)
+  // is independent of `use.tier` and never affects gating: only the tool's
+  // `use.tier` value is read by the gate.
+  thorium_mining_pick: {
+    id: 'thorium_mining_pick',
+    name: 'Thorium Mining Pick',
+    kind: 'tool',
+    quality: 'rare',
+    use: { type: 'gatherTool', professionId: 'mining', tier: 4 },
+    sellValue: 60,
+  },
+  arcanite_mining_pick: {
+    id: 'arcanite_mining_pick',
+    name: 'Arcanite Mining Pick',
+    kind: 'tool',
+    quality: 'epic',
+    use: { type: 'gatherTool', professionId: 'mining', tier: 5 },
+    sellValue: 150,
+  },
+  ashwood_axe: {
+    id: 'ashwood_axe',
+    name: 'Ashwood Axe',
+    kind: 'tool',
+    quality: 'rare',
+    use: { type: 'gatherTool', professionId: 'logging', tier: 4 },
+    sellValue: 60,
+  },
+  elderwood_axe: {
+    id: 'elderwood_axe',
+    name: 'Elderwood Axe',
+    kind: 'tool',
+    quality: 'epic',
+    use: { type: 'gatherTool', professionId: 'logging', tier: 5 },
+    sellValue: 150,
+  },
+  goldleaf_sickle: {
+    id: 'goldleaf_sickle',
+    name: 'Goldleaf Sickle',
+    kind: 'tool',
+    quality: 'rare',
+    use: { type: 'gatherTool', professionId: 'herbalism', tier: 4 },
+    sellValue: 60,
+  },
+  sunpetal_sickle: {
+    id: 'sunpetal_sickle',
+    name: 'Sunpetal Sickle',
+    kind: 'tool',
+    quality: 'epic',
+    use: { type: 'gatherTool', professionId: 'herbalism', tier: 5 },
+    sellValue: 150,
+  },
+  // Tier 4/5 crafting reagents for the tools directly above (#1135's
+  // `TOOL_RECIPE_STUBS`, de-stubbed into src/sim/content/recipes.ts once
+  // #1127's crafting action existed to consume them). `kind: 'junk'`, same
+  // generic-material shape as bone_fragments/linen_scrap/spider_leg below:
+  // not gathered from a dedicated node yet (see gathering.ts NODE_HARVEST_TABLE).
+  // Sold by Quartermaster Bree at the Highwatch hub (zone3.ts) so every hub
+  // recipe has a live reagent source; buyValue is the trade-goods staple
+  // markup already used in this file (4x sellValue, travelers_knapsack's
+  // exact ratio, with linen_pouch and spring_water close by at 4.17x), not
+  // a new balance number.
+  thorium_ore: {
+    id: 'thorium_ore',
+    name: 'Thorium Ore',
+    kind: 'junk',
+    quality: 'rare',
+    sellValue: 15,
+    buyValue: 60,
+  },
+  arcanite_bar: {
+    id: 'arcanite_bar',
+    name: 'Arcanite Bar',
+    kind: 'junk',
+    quality: 'epic',
+    sellValue: 40,
+    buyValue: 160,
+  },
+  ashwood_log: {
+    id: 'ashwood_log',
+    name: 'Ashwood Log',
+    kind: 'junk',
+    quality: 'rare',
+    sellValue: 15,
+    buyValue: 60,
+  },
+  elderwood_log: {
+    id: 'elderwood_log',
+    name: 'Elderwood Log',
+    kind: 'junk',
+    quality: 'epic',
+    sellValue: 40,
+    buyValue: 160,
+  },
+  goldleaf_herb: {
+    id: 'goldleaf_herb',
+    name: 'Goldleaf Herb',
+    kind: 'junk',
+    quality: 'rare',
+    sellValue: 15,
+    buyValue: 60,
+  },
+  sunpetal_herb: {
+    id: 'sunpetal_herb',
+    name: 'Sunpetal Herb',
+    kind: 'junk',
+    quality: 'epic',
+    sellValue: 40,
+    buyValue: 160,
+  },
   // Cosmetic event reward: using it rolls a rarity rank (server-side) and opens
   // the skin-select overlay. See src/sim/content/skins.ts. Dev-grant for now.
   event_skin_token: {
@@ -396,6 +671,23 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     quality: 'epic',
     use: { type: 'skinSelect', catalog: 'class' },
     sellValue: 0,
+  },
+  // Heroic-dungeon participation token: the final boss of a heroic instance
+  // directly awards marks to every eligible participant (awardHeroicMarks in
+  // src/sim/instances/dungeons.ts). Not vendorable; a spend sink ships later.
+  heroic_mark: {
+    id: 'heroic_mark',
+    name: 'Heroic Mark',
+    kind: 'tool',
+    quality: 'rare',
+    // Currency-like: marks stack so saving toward a 12-16 mark vendor price
+    // (content/heroic_vendor.ts) does not eat a bag slot per mark.
+    stackSize: 20,
+    sellValue: 0,
+    // Bound to the earner: marks can only be spent at the Heroic Quartermaster,
+    // never traded, mailed, listed, or destroyed.
+    soulbound: true,
+    noDiscard: true,
   },
   raw_mirror_trout: {
     id: 'raw_mirror_trout',
@@ -448,7 +740,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   raw_stonescale_carp: {
     id: 'raw_stonescale_carp',
-    name: 'Raw Stonescale Carp',
+    name: 'Raw Slatefin Carp',
     kind: 'food',
     quality: 'common',
     foodHp: 117,
@@ -472,14 +764,14 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   roasted_boar: {
     id: 'roasted_boar',
-    name: 'Roasted Boar Meat',
+    name: 'Spitted Boar Haunch',
     kind: 'food',
     quality: 'common',
     foodHp: 117,
     sellValue: 12,
     buyValue: 100,
   },
-  // --- combat potions (vendor): instant, usable in combat, 60s shared cooldown.
+  // --- combat potions (vendor): instant, usable in combat, 2-minute shared cooldown.
   // Restore less than sitting to eat/drink, the price you pay for not sitting (#103).
   minor_healing_potion: {
     id: 'minor_healing_potion',
@@ -512,7 +804,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   // Higher tiers of the combat-potion ladder, keeping pace with the zone-2/3
   // level bands (classic Minor -> Lesser -> standard progression). Same instant,
-  // in-combat, 60s-shared-cooldown rules as the Minor tier above.
+  // in-combat, 2-minute-shared-cooldown rules as the Minor tier above.
   lesser_healing_potion: {
     id: 'lesser_healing_potion',
     name: 'Lesser Healing Potion',
@@ -551,7 +843,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   conjured_water: {
     id: 'conjured_water',
-    name: 'Conjured Spring Water',
+    name: 'Conjured Rainwater',
     kind: 'drink',
     quality: 'common',
     drinkMana: 76,
@@ -559,7 +851,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   conjured_water2: {
     id: 'conjured_water2',
-    name: 'Conjured Mineral Water',
+    name: 'Conjured Wellwater',
     kind: 'drink',
     quality: 'common',
     drinkMana: 288,
@@ -567,7 +859,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   conjured_water3: {
     id: 'conjured_water3',
-    name: 'Conjured Sparkling Water',
+    name: 'Conjured Clearwater',
     kind: 'drink',
     quality: 'common',
     drinkMana: 672,
@@ -577,7 +869,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   // conjured-water mana tiers above) ---
   conjured_bread: {
     id: 'conjured_bread',
-    name: 'Conjured Bread',
+    name: 'Conjured Oatcake',
     kind: 'food',
     quality: 'common',
     foodHp: 61,
@@ -585,7 +877,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   conjured_bread2: {
     id: 'conjured_bread2',
-    name: 'Conjured Pumpernickel',
+    name: 'Conjured Black Loaf',
     kind: 'food',
     quality: 'common',
     foodHp: 243,
@@ -593,7 +885,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   conjured_bread3: {
     id: 'conjured_bread3',
-    name: 'Conjured Sweet Roll',
+    name: 'Conjured Honeycake',
     kind: 'food',
     quality: 'common',
     foodHp: 552,
@@ -645,6 +937,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'eastbrook_chain_vest',
     name: 'Eastbrook Chainmail Vest',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'chest',
     quality: 'common',
     stats: { armor: 60 },
@@ -655,6 +948,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'valespun_robe',
     name: 'Valespun Robe',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'chest',
     quality: 'common',
     stats: { armor: 22 },
@@ -665,6 +959,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'tanned_leather_jerkin',
     name: 'Tanned Leather Jerkin',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'chest',
     quality: 'common',
     stats: { armor: 40 },
@@ -675,6 +970,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'hobnail_boots',
     name: 'Hobnailed Boots',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'feet',
     quality: 'common',
     stats: { armor: 18 },
@@ -685,6 +981,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'eastbrook_wool_trousers',
     name: 'Eastbrook Wool Trousers',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'legs',
     quality: 'common',
     stats: { armor: 24 },
@@ -692,6 +989,14 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     buyValue: 1100,
   },
   // --- Hollow Crypt rewards (rare/blue) ---
+  // Item-level showcase: these rares are NORMALIZED to the stat budget their item
+  // level earns (see src/sim/item_level.ts). The three weapons are the q_hollow
+  // reward for felling Morthen (level 10), so item level 13 (rare +3) -> a 7-point
+  // primary-stat budget; each keeps its own stat identity (str/sta, agi/sta,
+  // int/spi) at the same total. The three archetype chests drop from the level-7
+  // chapel elites, so item level 10 -> a 6-point budget. tests/item_level.test.ts
+  // pins data == formula. (hollowbone_hauberk and cryptstalker_jerkin already sat
+  // at 6, so only the off-budget pieces below moved.)
   gravecaller_blade: {
     id: 'gravecaller_blade',
     name: "Gravecaller's Broadblade",
@@ -699,7 +1004,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'rare',
     weapon: { min: 9, max: 16, speed: 2.4 },
-    stats: { str: 3, sta: 2 },
+    stats: { str: 4, sta: 3 },
     sellValue: 800,
   },
   widowfang_dirk: {
@@ -709,7 +1014,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'rare',
     weapon: { min: 6, max: 10, speed: 1.7, dagger: true },
-    stats: { agi: 3, sta: 2 },
+    stats: { agi: 4, sta: 3 },
     sellValue: 800,
   },
   gravecaller_staff: {
@@ -719,13 +1024,14 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     slot: 'mainhand',
     quality: 'rare',
     weapon: { min: 10, max: 17, speed: 3.0 },
-    stats: { int: 4, spi: 2 },
+    stats: { int: 5, spi: 2 },
     sellValue: 800,
   },
   marrowtread_boots: {
     id: 'marrowtread_boots',
     name: 'Marrowtread Boots',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'feet',
     quality: 'rare',
     stats: { armor: 45, sta: 2, str: 1 },
@@ -736,6 +1042,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'sextons_slippers',
     name: "Sexton's Slippers",
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'feet',
     quality: 'rare',
     stats: { armor: 20, int: 2, spi: 2 },
@@ -746,6 +1053,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'gravewalker_softboots',
     name: 'Gravewalker Softboots',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'feet',
     quality: 'rare',
     stats: { armor: 32, agi: 3 },
@@ -756,6 +1064,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'hollowbone_hauberk',
     name: 'Hollowbone Hauberk',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'chest',
     quality: 'rare',
     stats: { armor: 105, str: 3, sta: 3 },
@@ -766,16 +1075,18 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'gravewoven_raiment',
     name: 'Gravewoven Raiment',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'chest',
     quality: 'rare',
-    stats: { armor: 38, int: 4, spi: 3 },
+    stats: { armor: 38, int: 3, spi: 3 },
     sellValue: 700,
     requiredClass: MAG,
   },
   cryptstalker_jerkin: {
     id: 'cryptstalker_jerkin',
-    name: 'Cryptstalker Jerkin',
+    name: 'Gravestalker Jerkin',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'chest',
     quality: 'rare',
     stats: { armor: 65, agi: 4, sta: 2 },
@@ -786,6 +1097,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'hollowbound_legguards',
     name: 'Hollowbound Legguards',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'legs',
     quality: 'rare',
     stats: { armor: 62, sta: 3 },
@@ -795,6 +1107,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'gravepath_treads',
     name: 'Gravepath Treads',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'feet',
     quality: 'rare',
     stats: { armor: 42, sta: 2 },
@@ -807,6 +1120,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'oathbound_greaves',
     name: 'Oathbound Greaves',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'legs',
     quality: 'uncommon',
     stats: { armor: 52, sta: 2, str: 1 },
@@ -886,7 +1200,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   webwood_silk: {
     id: 'webwood_silk',
-    name: 'Webwood Silk Gland',
+    name: 'Sableweb Silk Gland',
     kind: 'quest',
     sellValue: 0,
     questId: 'q_spiders',
@@ -904,6 +1218,13 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     kind: 'quest',
     sellValue: 0,
     questId: 'q_greyjaw',
+  },
+  chunk_of_ore: {
+    id: 'chunk_of_ore',
+    name: 'Chunk of Ore',
+    kind: 'quest',
+    sellValue: 0,
+    questId: 'q_prof_intro',
   },
   weathered_ledger_page: {
     id: 'weathered_ledger_page',
@@ -948,6 +1269,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'bramblehide_jerkin',
     name: 'Bramblehide Jerkin',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'chest',
     quality: 'uncommon',
     stats: { armor: 40, sta: 2, agi: 1 },
@@ -957,6 +1279,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'monarch_crown_helm',
     name: "Monarch's Crown",
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'helmet',
     quality: 'rare',
     stats: { armor: 46, sta: 3, agi: 2, str: 1 },
@@ -979,7 +1302,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   tough_jerky: {
     id: 'tough_jerky',
-    name: 'Tough Jerky',
+    name: 'Salted Jerky',
     kind: 'food',
     quality: 'common',
     foodHp: 61,
@@ -988,14 +1311,14 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   mudfin_scale: {
     id: 'mudfin_scale',
-    name: 'Slimy Murloc Scale',
+    name: 'Slimy Mudfin Scale',
     kind: 'junk',
     quality: 'poor',
     sellValue: 5,
   },
   tallow_candle: {
     id: 'tallow_candle',
-    name: 'Tallow Candle',
+    name: 'Greasy Tallow Lump',
     kind: 'junk',
     quality: 'poor',
     sellValue: 5,
@@ -1022,6 +1345,34 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     sellValue: 3,
   },
 
+  // --- Enchanting materials ------------------------------------------------
+  // Disenchant yield (src/sim/professions/enchanting.ts), tiered by the
+  // disenchanted item's rarity: common/uncommon -> dust, rare -> essence,
+  // epic/legendary -> shard. Consumed as reagents by the ENCHANTS table
+  // (content/enchants.ts). Reuses the 'junk' kind, same as bone_fragments/
+  // linen_scrap/spider_leg above (this repo has no dedicated material kind).
+  arcane_dust: {
+    id: 'arcane_dust',
+    name: 'Arcane Dust',
+    kind: 'junk',
+    quality: 'common',
+    sellValue: 6,
+  },
+  arcane_essence: {
+    id: 'arcane_essence',
+    name: 'Arcane Essence',
+    kind: 'junk',
+    quality: 'uncommon',
+    sellValue: 18,
+  },
+  arcane_shard: {
+    id: 'arcane_shard',
+    name: 'Arcane Shard',
+    kind: 'junk',
+    quality: 'rare',
+    sellValue: 55,
+  },
+
   // --- Quartermaster's Consignment ---------------------------------------
   // A standing line of practical adventuring gear. The Merchant keeps eight
   // pieces stocked on the World Market (see seedHouseListings); four more are
@@ -1031,6 +1382,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'roadwardens_helm',
     name: "Roadwarden's Helm",
     kind: 'armor',
+    armorType: 'mail',
     slot: 'helmet',
     quality: 'uncommon',
     stats: { armor: 45, sta: 2 },
@@ -1041,6 +1393,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'wayfarers_hood',
     name: "Wayfarer's Hood",
     kind: 'armor',
+    armorType: 'leather',
     slot: 'helmet',
     quality: 'uncommon',
     stats: { armor: 30, agi: 2 },
@@ -1049,8 +1402,10 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   acolytes_circlet: {
     id: 'acolytes_circlet',
+    set: 'vale_arcanist',
     name: "Acolyte's Circlet",
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'helmet',
     quality: 'uncommon',
     stats: { armor: 16, int: 2, spi: 1 },
@@ -1061,6 +1416,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'reinforced_pauldrons',
     name: 'Reinforced Pauldrons',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'shoulder',
     quality: 'uncommon',
     stats: { armor: 50, str: 1, sta: 1 },
@@ -1071,6 +1427,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'embroidered_mantle',
     name: 'Embroidered Mantle',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'shoulder',
     quality: 'uncommon',
     stats: { armor: 14, int: 2 },
@@ -1081,6 +1438,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'sturdy_belt',
     name: "Sturdy Traveler's Belt",
     kind: 'armor',
+    armorType: 'leather',
     slot: 'waist',
     quality: 'uncommon',
     stats: { armor: 35, sta: 2 },
@@ -1088,8 +1446,10 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   silk_sash: {
     id: 'silk_sash',
+    set: 'vale_arcanist',
     name: 'Woven Silk Sash',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'waist',
     quality: 'uncommon',
     stats: { armor: 10, int: 2, spi: 1 },
@@ -1100,6 +1460,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'roughspun_gloves',
     name: 'Roughspun Gloves',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'gloves',
     quality: 'uncommon',
     stats: { armor: 28, agi: 1, sta: 1 },
@@ -1110,6 +1471,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'bristlehide_spaulders',
     name: 'Bristlehide Spaulders',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'shoulder',
     quality: 'uncommon',
     stats: { armor: 40, agi: 1, sta: 2 },
@@ -1120,6 +1482,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'sableweb_cord',
     name: 'Sableweb Cord',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'waist',
     quality: 'uncommon',
     stats: { armor: 11, agi: 1, int: 2 },
@@ -1140,6 +1503,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'mossy_handwraps',
     name: 'Mossgrown Handwraps',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'gloves',
     quality: 'uncommon',
     stats: { armor: 12, int: 1, spi: 2 },
@@ -1198,6 +1562,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'outrider_brigandine',
     name: 'Outrider Brigandine',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'chest',
     quality: 'uncommon',
     stats: { armor: 95, str: 1, sta: 2 },
@@ -1207,6 +1572,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'caravan_quilted_vest',
     name: 'Caravan Quilted Vest',
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'chest',
     quality: 'uncommon',
     stats: { armor: 40, sta: 2 },
@@ -1216,6 +1582,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'wanderers_chestguard',
     name: "Wanderer's Chestguard",
     kind: 'armor',
+    armorType: 'leather',
     slot: 'chest',
     quality: 'uncommon',
     stats: { armor: 60, agi: 2, sta: 1 },
@@ -1225,6 +1592,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'outrider_legguards',
     name: 'Outrider Legguards',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'legs',
     quality: 'uncommon',
     stats: { armor: 70, sta: 2 },
@@ -1232,8 +1600,10 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
   },
   trail_leggings: {
     id: 'trail_leggings',
+    set: 'greyjaw_stalker',
     name: 'Trailworn Leggings',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'legs',
     quality: 'uncommon',
     stats: { armor: 45, agi: 2 },
@@ -1243,6 +1613,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'pilgrims_leggings',
     name: "Pilgrim's Leggings",
     kind: 'armor',
+    armorType: 'cloth',
     slot: 'legs',
     quality: 'uncommon',
     stats: { armor: 24, int: 2, spi: 1 },
@@ -1252,6 +1623,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'outrider_sabatons',
     name: 'Outrider Sabatons',
     kind: 'armor',
+    armorType: 'mail',
     slot: 'feet',
     quality: 'uncommon',
     stats: { armor: 55, sta: 2 },
@@ -1261,6 +1633,7 @@ export const BASE_ITEMS: Record<string, ItemDef> = {
     id: 'milepost_boots',
     name: 'Milepost Boots',
     kind: 'armor',
+    armorType: 'leather',
     slot: 'feet',
     quality: 'uncommon',
     stats: { armor: 30, agi: 1, sta: 1 },

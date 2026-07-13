@@ -1,5 +1,5 @@
-// Player-rebindable controls. Every bindable game action — movement, camera,
-// targeting, interface windows, and the 12 action-bar slots — lives in one
+// Player-rebindable controls. Every bindable game action, movement, camera,
+// targeting, interface windows, and the 23 action-bar slots, lives in one
 // registry, and the Keybinds map holds up to two KeyboardEvent.codes per
 // action (primary + secondary, e.g. W and ArrowUp both Move Forward). Input
 // dispatches edge actions and polls held (movement) actions through this map;
@@ -19,7 +19,7 @@ export interface BindAction {
   category: string;
   kind: BindKind;
   defaults: string[]; // 1 or 2 codes; index 0 = primary, 1 = secondary
-  // When true this action is exempt from the WoW-style "one code per action"
+  // When true this action is exempt from the classic-style "one code per action"
   // uniqueness sweep: its code may deliberately overlap another action's. Used
   // by Attack Move, whose default (A) intentionally shadows Turn Left while the
   // setting is on, so they can share a key without either stealing it from the
@@ -27,7 +27,8 @@ export interface BindAction {
   allowShared?: boolean;
 }
 
-export const ACTION_BAR_SLOTS = 12; // slot 0 is Attack, 1..11 the ability bar
+// slot 0 is Attack, 1..11 the primary ability bar, 12..22 the secondary bar.
+export const ACTION_BAR_SLOTS = 23;
 
 const SLOT_DEFAULTS = [
   'Digit1',
@@ -42,6 +43,20 @@ const SLOT_DEFAULTS = [
   'Digit0',
   'Minus',
   'Equal',
+  // Secondary bar (slots 12..22): defaults to the numpad so it never collides
+  // with the primary number row. Fully rebindable like any other slot, and
+  // laptops without a numpad can simply assign their own keys.
+  'Numpad1',
+  'Numpad2',
+  'Numpad3',
+  'Numpad4',
+  'Numpad5',
+  'Numpad6',
+  'Numpad7',
+  'Numpad8',
+  'Numpad9',
+  'Numpad0',
+  'NumpadDecimal',
 ];
 
 export const BIND_ACTIONS: BindAction[] = [
@@ -141,6 +156,7 @@ export const BIND_ACTIONS: BindAction[] = [
   { id: 'questlog', label: 'Quest Log', category: 'Interface', kind: 'edge', defaults: ['KeyL'] },
   { id: 'map', label: 'World Map', category: 'Interface', kind: 'edge', defaults: ['KeyM'] },
   { id: 'bags', label: 'Bags', category: 'Interface', kind: 'edge', defaults: ['KeyB'] },
+  { id: 'crafting', label: 'Crafting', category: 'Interface', kind: 'edge', defaults: ['KeyT'] },
   {
     id: 'nameplates',
     label: 'Toggle Nameplates',
@@ -165,11 +181,44 @@ export const BIND_ACTIONS: BindAction[] = [
     defaults: ['KeyG'],
   },
   {
+    id: 'valecup',
+    label: 'Vale Cup',
+    category: 'Interface',
+    kind: 'edge',
+    defaults: ['KeyY'],
+  },
+  {
     id: 'leaderboard',
     label: 'Leaderboard',
     category: 'Interface',
     kind: 'edge',
     defaults: ['KeyK'],
+  },
+  {
+    id: 'calendar',
+    label: 'Event Calendar',
+    category: 'Interface',
+    kind: 'edge',
+    defaults: ['KeyI'],
+  },
+  {
+    id: 'discord',
+    label: 'Discord',
+    category: 'Interface',
+    kind: 'edge',
+    defaults: ['KeyU'],
+  },
+  // The Book of Deeds parks on the shifted layer of KeyZ, like the
+  // Shift+digit secondary bar: the bare letter stays free (the persistence
+  // suite and player muscle memory both treat KeyZ as the rebindable spare),
+  // and the shipped default survives the interface-overhaul revert unchanged.
+  // Rebindable like any other action.
+  {
+    id: 'deeds',
+    label: 'Book of Deeds',
+    category: 'Interface',
+    kind: 'edge',
+    defaults: ['Shift+KeyZ'],
   },
   {
     id: 'chat',
@@ -185,11 +234,37 @@ export const BIND_ACTIONS: BindAction[] = [
     kind: 'held',
     defaults: ['KeyX'],
   },
+  // Pet bar (hunter/warlock pet commands). Bound to Ctrl + 1..5 by default, so the
+  // action-bar 1..5 stay free; every one is rebindable like any other action. The
+  // handlers live in main.ts (onPet -> the IWorld pet commands).
+  {
+    id: 'petAttack',
+    label: 'Pet: Attack',
+    category: 'Pet',
+    kind: 'edge',
+    defaults: ['Ctrl+Digit1'],
+  },
+  { id: 'petStop', label: 'Pet: Stop', category: 'Pet', kind: 'edge', defaults: ['Ctrl+Digit2'] },
+  { id: 'petTaunt', label: 'Pet: Taunt', category: 'Pet', kind: 'edge', defaults: ['Ctrl+Digit3'] },
+  {
+    id: 'petDefensive',
+    label: 'Pet: Defensive',
+    category: 'Pet',
+    kind: 'edge',
+    defaults: ['Ctrl+Digit4'],
+  },
+  {
+    id: 'petAggressive',
+    label: 'Pet: Aggressive',
+    category: 'Pet',
+    kind: 'edge',
+    defaults: ['Ctrl+Digit5'],
+  },
   // Action bar (slot 0 = Attack)
   ...SLOT_DEFAULTS.map(
     (code, i): BindAction => ({
       id: `slot${i}`,
-      label: i === 0 ? 'Attack' : `Action Bar ${i + 1}`,
+      label: i === 0 ? 'Attack' : i <= 11 ? `Action Bar ${i + 1}` : `Secondary Bar ${i - 11}`,
       category: 'Action Bar',
       kind: 'edge',
       defaults: [code],
@@ -288,7 +363,7 @@ function codeLabel(code: string): string {
   if (/^Digit\d$/.test(code)) return code.slice(5);
   if (/^Key[A-Z]$/.test(code)) return code.slice(3);
   if (/^F\d{1,2}$/.test(code)) return code;
-  if (/^Numpad\d$/.test(code)) return 'Num' + code.slice(6);
+  if (/^Numpad\d$/.test(code)) return `Num${code.slice(6)}`;
   const named: Record<string, string> = {
     Minus: '-',
     Equal: '=',
@@ -349,6 +424,22 @@ export function keyLabel(combo: string | null): string {
   return head + codeLabel(code);
 }
 
+/**
+ * Compact keycap form of a binding label for the tiny UI keycaps (a side-menu
+ * button is 34px wide): lowercase, with modifier words shortened to classic
+ * one-letter prefixes, so "Shift+Z" reads "s-z" and stays inside the cap.
+ * Full-length surfaces (aria labels, tooltips, the keybind options rows) keep
+ * keyLabel/primaryLabel untouched.
+ */
+export function keyCapLabel(label: string): string {
+  return label
+    .toLowerCase()
+    .replace(/shift\+/g, 's-')
+    .replace(/ctrl\+/g, 'c-')
+    .replace(/alt\+/g, 'a-')
+    .replace(/meta\+/g, 'm-');
+}
+
 export class Keybinds {
   // actionId -> [primary, secondary] codes (either may be null)
   private map = new Map<string, (string | null)[]>();
@@ -404,7 +495,7 @@ export class Keybinds {
     }
     // Second pass: for actions that kept their defaults, drop any code an
     // explicit stored binding already claimed so the same key can't drive two
-    // actions (preserving the WoW-style uniqueness invariant).
+    // actions (preserving the classic-style uniqueness invariant).
     for (const a of BIND_ACTIONS) {
       if (Array.isArray(obj[a.id])) continue;
       if (actionAllowsShared(a.id)) continue; // keep its (intentionally shared) default

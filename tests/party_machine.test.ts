@@ -5,6 +5,7 @@
 // branches and the leadership-handoff / disband teardown.
 
 import { beforeEach, describe, expect, it } from 'vitest';
+import { effectiveMasterLooter } from '../src/sim/loot_master';
 import type { PlayerMeta } from '../src/sim/sim';
 import type { SimContext } from '../src/sim/sim_context';
 import { PartyMachine } from '../src/sim/social/party';
@@ -13,12 +14,13 @@ import type { Entity, SimEvent } from '../src/sim/types';
 type Invite = { fromPid: number; expires: number };
 
 // A minimal SimContext that supplies only what PartyMachine reads: resolve/players/
-// error/emit/time + the trade/duel invite maps + dropPartyMarkers. The rest of the
-// seam is irrelevant to the party machine and left unimplemented.
+// error/emit/time + the trade/duel invite maps + readyChecks + dropPartyMarkers. The
+// rest of the seam is irrelevant to the party machine and left unimplemented.
 function makeCtx() {
   const players = new Map<number, PlayerMeta>();
   const tradeInvites = new Map<number, Invite>();
   const duelInvites = new Map<number, Invite>();
+  const readyChecks = new Map();
   const events: SimEvent[] = [];
   const errors: { pid: number; text: string }[] = [];
   const droppedMarkers: number[] = [];
@@ -37,6 +39,9 @@ function makeCtx() {
     get duelInvites() {
       return duelInvites;
     },
+    get readyChecks() {
+      return readyChecks;
+    },
     resolve(pid?: number) {
       if (pid === undefined) return null;
       const meta = players.get(pid);
@@ -45,6 +50,7 @@ function makeCtx() {
     error(pid: number, text: string) {
       errors.push({ pid, text });
     },
+    bumpDeedStat() {},
     emit(ev: SimEvent) {
       events.push(ev);
     },
@@ -285,5 +291,55 @@ describe('PartyMachine: teardown', () => {
     expect(party.partyInvites.has(b)).toBe(false);
     expect(logTexts(t.events)).toContain('Bbb declines your invitation.');
     expect(party.partyOf(b)).toBeNull();
+  });
+});
+
+describe('PartyMachine: promote to leader', () => {
+  function trio() {
+    const t = makeCtx();
+    const a = t.addPlayer(1, 'Aaa');
+    const b = t.addPlayer(2, 'Bbb');
+    const c = t.addPlayer(3, 'Ccc');
+    const party = new PartyMachine(t.ctx);
+    for (const m of [b, c]) {
+      party.partyInvite(m, a);
+      party.partyAccept(m);
+    }
+    return { t, party, a, b, c };
+  }
+
+  it('the leader can hand leadership to a member, announcing it to everyone', () => {
+    const { t, party, a, b } = trio();
+    t.events.length = 0;
+    party.partyPromote(b, a);
+    const p = party.partyOf(a)!;
+    expect(p.leader).toBe(b);
+    expect(p.members).toEqual([1, 2, 3]); // membership is unchanged by a promote
+    expect(logTexts(t.events)).toContain('Bbb is now the party leader.');
+  });
+
+  it('a non-leader cannot promote', () => {
+    const { t, party, a, b, c } = trio();
+    t.errors.length = 0;
+    party.partyPromote(c, b); // b is not the leader
+    expect(t.errors.map((e) => e.text)).toContain('You are not the party leader.');
+    expect(party.partyOf(a)!.leader).toBe(a);
+  });
+
+  it('promoting a non-member or yourself is a no-op (no leadership change, no announce)', () => {
+    const { t, party, a } = trio();
+    t.events.length = 0;
+    party.partyPromote(99, a); // not in the party
+    party.partyPromote(a, a); // already the leader
+    expect(party.partyOf(a)!.leader).toBe(a);
+    expect(logTexts(t.events)).not.toContain('Aaa is now the party leader.');
+  });
+
+  it('master loot pinned to the leader (looter 0) follows the promotion', () => {
+    const { party, a, b } = trio();
+    const p = party.partyOf(a)!;
+    p.lootStrategies.master = { enabled: true, looter: 0, threshold: 'rare' };
+    party.partyPromote(b, a);
+    expect(effectiveMasterLooter(p.lootStrategies.master, p.leader, p.members)).toBe(b);
   });
 });

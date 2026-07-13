@@ -13,7 +13,7 @@ import { canPrestige, DT, type Entity, MAX_LEVEL, xpForLevel } from '../types';
 const RESTED_SECONDS_PER_GAME_HOUR = 60; // 1 in-game hour = 60 sim seconds
 const RESTED_FILL_FRACTION = 0.05; // a full "bubble" = 5% of the level's XP-to-level
 const RESTED_FILL_HOURS = 8; // accrued per this many in-game hours of resting
-const RESTED_CAP_LEVELS = 1.5; // pool clamps to 1.5 levels of XP, as in vanilla
+const RESTED_CAP_LEVELS = 1.5; // pool clamps to 1.5 levels of XP, the classic-era cap
 const RESTED_INN_PADDING = 2; // yards of slack around the inn footprint that still counts as resting
 
 // True while the player is standing in (or just beside) an inn footprint and
@@ -38,7 +38,7 @@ export function isResting(p: Entity): boolean {
   return false;
 }
 
-// Accrue rested XP while resting in an inn. Vanilla: 5% of the level's
+// Accrue rested XP while resting in an inn. Classic-era rate: 5% of the level's
 // XP-to-level per 8 in-game hours, clamped to 1.5 levels. Deterministic —
 // paced off DT, never wall-clock. No accrual at the cap (no level bar).
 export function updateRested(p: Entity, meta: PlayerMeta): void {
@@ -68,6 +68,8 @@ export function prestige(ctx: SimContext, pid?: number): boolean {
   if (!canPrestige(r.e.level, r.meta.lifetimeXp, r.meta.prestigeRank)) return false;
   r.meta.xp = 0;
   r.meta.prestigeRank += 1;
+  // The prestige rank is a persisted deed trigger input, so re-check.
+  ctx.markDeedsDirty(r.meta.entityId);
   ctx.emit({
     type: 'log',
     pid: r.e.id,

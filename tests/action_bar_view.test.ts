@@ -34,8 +34,8 @@ function ability(id: string, opts: Partial<AbilityDef> & { cost?: number } = {})
   return { def, cost: opts.cost ?? 0 };
 }
 
-function item(id: string): ItemDef {
-  return { id } as unknown as ItemDef;
+function item(id: string, kind?: string): ItemDef {
+  return { id, kind } as unknown as ItemDef;
 }
 
 interface SlotOpts {
@@ -85,6 +85,7 @@ interface WorldOpts {
   resource?: number;
   cooldowns?: Map<string, number>;
   gcdRemaining?: number;
+  potionCdRemaining?: number;
   queuedOnSwing?: string | null;
   playerPos?: { x: number; y: number; z: number };
   targetPos?: { x: number; y: number; z: number } | null;
@@ -101,6 +102,7 @@ function world(opts: WorldOpts = {}): ActionBarWorldInput {
       resource: opts.resource ?? 100,
       cooldowns: opts.cooldowns ?? new Map(),
       gcdRemaining: opts.gcdRemaining ?? 0,
+      potionCdRemaining: opts.potionCdRemaining ?? 0,
       queuedOnSwing: opts.queuedOnSwing ?? null,
       pos: opts.playerPos ?? { x: 0, y: 0, z: 0 },
     },
@@ -198,6 +200,27 @@ describe('actionBarView: ability cooldown / usable / range / queued math', () =>
     expect(near.outOfRange).toBe(false);
   });
 
+  it('respects both range boundaries for an ability with a minimum range', () => {
+    const view = createActionBarView(
+      descriptor(
+        slot(1, {
+          ability: ability('charge', { requiresTarget: true, range: 25, minRange: 8 }),
+        }),
+      ),
+      fakeDeps(),
+    );
+    // Snapshot each primitive: the core reuses the slot object across ticks.
+    const tooClose = view.tick(world({ targetPos: { x: 5, y: 0, z: 0 } })).slots[0].outOfRange;
+    const atMinimum = view.tick(world({ targetPos: { x: 8, y: 0, z: 0 } })).slots[0].outOfRange;
+    const atMaximum = view.tick(world({ targetPos: { x: 25, y: 0, z: 0 } })).slots[0].outOfRange;
+    const tooFar = view.tick(world({ targetPos: { x: 26, y: 0, z: 0 } })).slots[0].outOfRange;
+
+    expect(tooClose).toBe(true);
+    expect(atMinimum).toBe(false);
+    expect(atMaximum).toBe(false);
+    expect(tooFar).toBe(true);
+  });
+
   it('a range-0 targeted ability falls back to MELEE_RANGE for the range check', () => {
     const view = createActionBarView(
       descriptor(slot(1, { ability: ability('rend', { requiresTarget: true, range: 0 }) })),
@@ -289,6 +312,35 @@ describe('actionBarView: attack + item slots', () => {
     const dead = view.tick(world({ dead: true, inventory: [{ itemId: 'potion', count: 1 }] }))
       .slots[0];
     expect(dead.usable).toBe(false);
+  });
+
+  it('paints the shared potion cooldown swipe on a potion item-slot', () => {
+    const view = createActionBarView(
+      descriptor(slot(1, { item: item('healing_potion', 'potion') })),
+      fakeDeps(),
+    );
+    // half of the 120s shared cooldown remaining: half-height swipe + ceil text.
+    const onCd = view.tick(world({ potionCdRemaining: 60 })).slots[0];
+    expect(onCd.kind).toBe('item');
+    expect(onCd.cooldownRemaining).toBe(60);
+    expect(onCd.cooldownTotal).toBe(120);
+    expect(onCd.cooldownPercent).toBe(50);
+    expect(onCd.cdText).toBe('60');
+
+    // ready again: no swipe, no text.
+    const ready = view.tick(world({ potionCdRemaining: 0 })).slots[0];
+    expect(ready.cooldownPercent).toBe(0);
+    expect(ready.cdText).toBe('');
+  });
+
+  it('does not paint a cooldown on a non-potion item even while the potion timer runs', () => {
+    const view = createActionBarView(
+      descriptor(slot(1, { item: item('iron_dagger', 'weapon') })),
+      fakeDeps(),
+    );
+    const s = view.tick(world({ potionCdRemaining: 60 })).slots[0];
+    expect(s.cooldownPercent).toBe(0);
+    expect(s.cooldownRemaining).toBe(0);
   });
 });
 
@@ -423,20 +475,24 @@ describe('actionBarView: instance-parameterized + parity', () => {
       slot(1, {
         ability: ability('fireball', { cooldown: 6, requiresTarget: true, range: 5, cost: 30 }),
       }),
-      slot(2, { item: item('potion') }),
+      slot(2, { item: item('potion', 'potion') }),
     );
-    // Sim builds cooldowns directly as a Map and inventory as InvSlot objects.
+    // Sim builds cooldowns directly as a Map and inventory as InvSlot objects, and
+    // materializes potionCdRemaining per tick from potionCooldownUntil.
     const simWorld = world({
       resource: 50,
       cooldowns: new Map([['fireball', 3]]),
+      potionCdRemaining: 42,
       targetPos: { x: 1, y: 1, z: 1 },
       inventory: [{ itemId: 'potion', count: 2 }],
     });
     // ClientWorld mirrors a snapshot: cooldowns rebuilt from Object.entries of the
-    // wire `cds` blob, inventory rebuilt from the snapshot `inv` array (online.ts).
+    // wire `cds` blob, inventory rebuilt from the snapshot `inv` array, and
+    // potionCdRemaining decoded from the wire `pcd` scalar (online.ts).
     const clientWorld = world({
       resource: 50,
       cooldowns: new Map(Object.entries({ fireball: 3 }).map(([k, v]) => [k, Number(v)])),
+      potionCdRemaining: Number('42'),
       targetPos: { x: 1, y: 1, z: 1 },
       inventory: [...[{ itemId: 'potion', count: 2 }]],
     });

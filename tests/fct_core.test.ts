@@ -69,12 +69,14 @@ describe('describeFct: color token by kind + flags', () => {
   const expected: Record<FctKind, { self: FctColorToken; other: FctColorToken }> = {
     miss: { self: 'miss-self', other: 'miss-other' },
     dodge: { self: 'dodge-self', other: 'dodge-other' },
+    resist: { self: 'miss-self', other: 'miss-other' },
     'damage-done-ability': { self: 'damage-done-ability', other: 'damage-done-ability' },
     'damage-done-auto': { self: 'damage-done-auto', other: 'damage-done-auto' },
     'damage-taken': { self: 'damage-taken', other: 'damage-taken' },
     heal: { self: 'heal', other: 'heal' },
     xp: { self: 'xp', other: 'xp' },
     'rested-xp': { self: 'rested-xp', other: 'rested-xp' },
+    honor: { self: 'honor', other: 'honor' },
     'self-note': { self: 'self-note', other: 'self-note' },
   };
 
@@ -89,11 +91,13 @@ describe('describeFct: color token by kind + flags', () => {
     }
   });
 
-  it('only miss/dodge change color with isSelf; every other kind ignores it', () => {
+  it('only miss/dodge/resist change color with isSelf; every other kind ignores it', () => {
     for (const kind of Object.keys(expected) as FctKind[]) {
       const selfToken = describeFct(makeEvent({ kind, isSelf: true }), 0.5).colorToken;
       const otherToken = describeFct(makeEvent({ kind, isSelf: false }), 0.5).colorToken;
-      if (kind === 'miss' || kind === 'dodge') expect(selfToken).not.toBe(otherToken);
+      // resist reuses the miss token (self grey / other white), so it varies with isSelf too.
+      if (kind === 'miss' || kind === 'dodge' || kind === 'resist')
+        expect(selfToken).not.toBe(otherToken);
       else expect(selfToken).toBe(otherToken);
     }
   });
@@ -122,6 +126,7 @@ describe('describeFct: ttl is a pure function of kind (constant across kinds)', 
       'heal',
       'xp',
       'rested-xp',
+      'honor',
       'self-note',
     ] as FctKind[]) {
       const d = describeFct(makeEvent({ kind, crit: true }), 0.9);
@@ -196,7 +201,7 @@ describe('describeFct: ClientWorld-vs-Sim parity', () => {
   });
 });
 
-describe('isDamageFctKind: the combat-damage taxonomy (drop-non-crit target)', () => {
+describe('isDamageFctKind: the combat-damage taxonomy (damage-number classifier)', () => {
   it('classifies exactly the three damage-number kinds as damage', () => {
     expect([...DAMAGE_FCT_KINDS].sort()).toEqual([
       'damage-done-ability',
@@ -209,7 +214,7 @@ describe('isDamageFctKind: the combat-damage taxonomy (drop-non-crit target)', (
   it('treats informational / avoidance floaters as NON-damage (kept on low)', () => {
     // These are the low-volume floaters the low-tier drop must NOT shed: progression,
     // the self-note UX hint, heals, and avoidance words.
-    const nonDamage: FctKind[] = ['miss', 'dodge', 'heal', 'xp', 'rested-xp', 'self-note'];
+    const nonDamage: FctKind[] = ['miss', 'dodge', 'heal', 'xp', 'rested-xp', 'honor', 'self-note'];
     for (const kind of nonDamage) expect(isDamageFctKind(kind)).toBe(false);
   });
 });

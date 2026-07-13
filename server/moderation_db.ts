@@ -1,11 +1,78 @@
+import {
+  normalizeStreamerLink,
+  STREAMER_PLATFORMS,
+  type StreamerLinks,
+} from '../src/sim/account_flair';
 import { pool } from './db';
 
-export const REPORT_REASONS = ['harassment', 'spam', 'cheating', 'offensive_name_or_chat', 'other'] as const;
-export type ReportReason = typeof REPORT_REASONS[number];
-export type ModerationAction = 'ignore' | 'suspend' | 'ban' | 'unban';
+export const REPORT_REASONS = [
+  'harassment',
+  'spam',
+  'cheating',
+  'offensive_name_or_chat',
+  'other',
+] as const;
+export type ReportReason = (typeof REPORT_REASONS)[number];
+export type ModerationAction = 'ignore' | 'kick' | 'kill' | 'suspend' | 'ban' | 'unban';
+
+// The closed set of values ever written to account_moderation_actions.action. The
+// column is free-text in SQL, so this const is the single source of truth: every
+// audit-log INSERT routes through recordModerationAction below, whose `action`
+// parameter is typed to this union, turning a mistyped action into a compile error
+// rather than a silently-persisted row that renders as actionUnknown.
+export const MODERATION_ACTIONS = [
+  'kick',
+  'kill',
+  'jail',
+  'unjail',
+  'suspend',
+  'unsuspend',
+  'ban',
+  'unban',
+  'chat_mute',
+  'chat_unmute',
+  'note',
+  'force_rename',
+  'reset_password',
+  'daily_rewards_ban',
+  'daily_rewards_unban',
+  'daily_rewards_ip_ban',
+  'daily_rewards_ip_unban',
+  // Account flair. Not punitive (they grant a cosmetic mark, they do not sanction),
+  // so unlike every action above they take an OPTIONAL reason. Audited all the same:
+  // the AI mark and a streamer's links are visible to every player, so who set them
+  // and when has to be recoverable.
+  'set_ai',
+  'set_streamer',
+] as const;
+export type ModerationActionKind = (typeof MODERATION_ACTIONS)[number];
+
+// A pg pool or a pinned pool client (both expose query); lets the audit-log INSERT
+// run inside a caller's transaction or standalone.
+type Queryable = Pick<typeof pool, 'query'>;
+
+function recordModerationAction(
+  db: Queryable,
+  action: ModerationActionKind,
+  params: {
+    accountId: number;
+    adminAccountId: number;
+    reason: string;
+    expiresAt?: Date | string | null;
+  },
+): Promise<unknown> {
+  return db.query(
+    `INSERT INTO account_moderation_actions (account_id, admin_account_id, action, reason, expires_at)
+     VALUES ($1, $2, $3, $4, $5)`,
+    [params.accountId, params.adminAccountId, action, params.reason, params.expiresAt ?? null],
+  );
+}
 
 const REPORT_DETAILS_MAX = 1000;
 const ACTION_REASON_MAX = 500;
+// Free-form moderator notes carry more context than an action reason, so they get a
+// roomier bound. Notes are recorded in the same audit log as sanctions.
+const NOTE_MAX = 2000;
 const DUPLICATE_REPORT_WINDOW_HOURS = 12;
 const REGISTRATION_BURST_WINDOW_MINUTES = 10;
 const REGISTRATION_PREFIX_THRESHOLD = 25;
@@ -16,7 +83,7 @@ const SYSTEM_REPORT_PREFIX = 'Automated registration pattern:';
 
 export function cleanReportReason(value: unknown): ReportReason | null {
   return typeof value === 'string' && REPORT_REASONS.includes(value as ReportReason)
-    ? value as ReportReason
+    ? (value as ReportReason)
     : null;
 }
 
@@ -118,22 +185,34 @@ export async function createSuspiciousRegistrationReport(input: {
       )
     : 0;
   if (prefix && prefixCount >= REGISTRATION_PREFIX_THRESHOLD) {
-    signals.push(`${prefixCount} accounts with username prefix "${prefix}" in ${REGISTRATION_BURST_WINDOW_MINUTES} minutes`);
+    signals.push(
+      `${prefixCount} accounts with username prefix "${prefix}" in ${REGISTRATION_BURST_WINDOW_MINUTES} minutes`,
+    );
   }
 
   const ipCount = ip ? await countRecentRegistrations('created_ip = $2', [ip]) : 0;
   if (ip && ipCount >= REGISTRATION_IP_THRESHOLD) {
-    signals.push(`${ipCount} accounts from IP ${ip} in ${REGISTRATION_BURST_WINDOW_MINUTES} minutes`);
+    signals.push(
+      `${ipCount} accounts from IP ${ip} in ${REGISTRATION_BURST_WINDOW_MINUTES} minutes`,
+    );
   }
 
-  const subnetCount = subnet24 ? await countRecentRegistrations('created_ip LIKE $2', [`${subnet24}%`]) : 0;
+  const subnetCount = subnet24
+    ? await countRecentRegistrations('created_ip LIKE $2', [`${subnet24}%`])
+    : 0;
   if (subnet24 && subnetCount >= REGISTRATION_SUBNET_THRESHOLD) {
-    signals.push(`${subnetCount} accounts from subnet ${subnet24}0/24 in ${REGISTRATION_BURST_WINDOW_MINUTES} minutes`);
+    signals.push(
+      `${subnetCount} accounts from subnet ${subnet24}0/24 in ${REGISTRATION_BURST_WINDOW_MINUTES} minutes`,
+    );
   }
 
-  const userAgentCount = userAgent ? await countRecentRegistrations('created_user_agent = $2', [userAgent]) : 0;
+  const userAgentCount = userAgent
+    ? await countRecentRegistrations('created_user_agent = $2', [userAgent])
+    : 0;
   if (userAgent && userAgentCount >= REGISTRATION_USER_AGENT_THRESHOLD) {
-    signals.push(`${userAgentCount} accounts with the same user agent in ${REGISTRATION_BURST_WINDOW_MINUTES} minutes`);
+    signals.push(
+      `${userAgentCount} accounts with the same user agent in ${REGISTRATION_BURST_WINDOW_MINUTES} minutes`,
+    );
   }
 
   if (signals.length === 0) return { created: false, signals };
@@ -149,13 +228,18 @@ export async function createSuspiciousRegistrationReport(input: {
   );
   if (duplicate.rows[0]) return { created: false, signals };
 
-  const details = cleanText([
-    `${SYSTEM_REPORT_PREFIX} ${signals.join('; ')}.`,
-    `Username: ${input.username}`,
-    ip ? `IP: ${ip}` : '',
-    subnet24 ? `Subnet: ${subnet24}0/24` : '',
-    userAgent ? `User-Agent: ${userAgent}` : '',
-  ].filter(Boolean).join('\n'), REPORT_DETAILS_MAX);
+  const details = cleanText(
+    [
+      `${SYSTEM_REPORT_PREFIX} ${signals.join('; ')}.`,
+      `Username: ${input.username}`,
+      ip ? `IP: ${ip}` : '',
+      subnet24 ? `Subnet: ${subnet24}0/24` : '',
+      userAgent ? `User-Agent: ${userAgent}` : '',
+    ]
+      .filter(Boolean)
+      .join('\n'),
+    REPORT_DETAILS_MAX,
+  );
 
   await pool.query(
     `INSERT INTO player_reports (
@@ -171,6 +255,7 @@ export async function createSuspiciousRegistrationReport(input: {
 export interface ModerationQueueRow {
   accountId: number;
   username: string;
+  isAdmin: boolean;
   status: 'active' | 'suspended' | 'banned';
   suspendedUntil: string | null;
   openReports: number;
@@ -180,11 +265,14 @@ export interface ModerationQueueRow {
   online: boolean;
 }
 
-export async function moderationQueue(onlineAccountIds: Set<number>): Promise<ModerationQueueRow[]> {
+export async function moderationQueue(
+  onlineAccountIds: Set<number>,
+): Promise<ModerationQueueRow[]> {
   const res = await pool.query(
     `SELECT
        a.id AS account_id,
        a.username,
+       a.is_admin,
        a.banned_at,
        a.suspended_until,
        count(r.id)::int AS open_reports,
@@ -197,26 +285,35 @@ export async function moderationQueue(onlineAccountIds: Set<number>): Promise<Mo
      GROUP BY a.id
      ORDER BY count(r.id) DESC, max(r.created_at) DESC`,
   );
-  return res.rows.map((r): ModerationQueueRow => {
-    const suspendedUntil = r.suspended_until ? new Date(r.suspended_until).toISOString() : null;
-    const activeSuspension = suspendedUntil !== null && new Date(suspendedUntil).getTime() > Date.now();
-    const status: ModerationQueueRow['status'] = r.banned_at ? 'banned' : activeSuspension ? 'suspended' : 'active';
-    return {
-      accountId: r.account_id,
-      username: r.username,
-      status,
-      suspendedUntil,
-      openReports: r.open_reports,
-      latestReportAt: new Date(r.latest_report_at).toISOString(),
-      latestReason: r.latest_reason,
-      characterNames: r.character_names ?? [],
-      online: onlineAccountIds.has(r.account_id),
-    };
-  }).sort((a, b) => (
-    b.openReports - a.openReports
-    || new Date(b.latestReportAt).getTime() - new Date(a.latestReportAt).getTime()
-    || Number(b.online) - Number(a.online)
-  ));
+  return res.rows
+    .map((r): ModerationQueueRow => {
+      const suspendedUntil = r.suspended_until ? new Date(r.suspended_until).toISOString() : null;
+      const activeSuspension =
+        suspendedUntil !== null && new Date(suspendedUntil).getTime() > Date.now();
+      const status: ModerationQueueRow['status'] = r.banned_at
+        ? 'banned'
+        : activeSuspension
+          ? 'suspended'
+          : 'active';
+      return {
+        accountId: r.account_id,
+        username: r.username,
+        isAdmin: r.is_admin,
+        status,
+        suspendedUntil,
+        openReports: r.open_reports,
+        latestReportAt: new Date(r.latest_report_at).toISOString(),
+        latestReason: r.latest_reason,
+        characterNames: r.character_names ?? [],
+        online: onlineAccountIds.has(r.account_id),
+      };
+    })
+    .sort(
+      (a, b) =>
+        b.openReports - a.openReports ||
+        new Date(b.latestReportAt).getTime() - new Date(a.latestReportAt).getTime() ||
+        Number(b.online) - Number(a.online),
+    );
 }
 
 export interface ReportDetail {
@@ -233,7 +330,13 @@ export interface ReportDetail {
   reportedUsername: string;
   reportedCharacterId: number | null;
   reportedCharacterName: string;
-  chatContext: { id: number; characterName: string; channel: string; message: string; createdAt: string }[];
+  chatContext: {
+    id: number;
+    characterName: string;
+    channel: string;
+    message: string;
+    createdAt: string;
+  }[];
 }
 
 export async function moderationReportsForAccount(accountId: number): Promise<ReportDetail[]> {
@@ -282,7 +385,11 @@ export async function moderationReportsForAccount(accountId: number): Promise<Re
   return out;
 }
 
-export async function ignoreReport(reportId: number, adminAccountId: number, note: unknown): Promise<boolean> {
+export async function ignoreReport(
+  reportId: number,
+  adminAccountId: number,
+  note: unknown,
+): Promise<boolean> {
   const res = await pool.query(
     `UPDATE player_reports
      SET status = 'ignored', reviewed_at = now(), reviewed_by_account_id = $2, review_note = $3
@@ -292,10 +399,24 @@ export async function ignoreReport(reportId: number, adminAccountId: number, not
   return (res.rowCount ?? 0) > 0;
 }
 
+// Fired after every SUCCESSFUL moderateAccount commit, of ANY action kind, so
+// main.ts can bust the public board caches: a ban delists and an unban relists
+// immediately instead of waiting out a board TTL. Injected at boot the same
+// runtime-injection way as the route modules (this module must not import
+// main.ts). Hooking the write itself, rather than one route, covers every
+// caller: both admin dispatch arms AND the in-game GM sanctions
+// (server/game.ts ModerationService).
+let onAccountModerated: (() => void) | null = null;
+
+/** Inject (or clear) the post-moderation hook. Called once at boot by main.ts. */
+export function setOnAccountModerated(hook: (() => void) | null): void {
+  onAccountModerated = hook;
+}
+
 export async function moderateAccount(input: {
   accountId: number;
   adminAccountId: number;
-  action: 'suspend' | 'ban' | 'unban';
+  action: 'suspend' | 'unsuspend' | 'ban' | 'unban';
   reason: unknown;
   expiresAt?: unknown;
 }): Promise<void> {
@@ -329,7 +450,20 @@ export async function moderateAccount(input: {
          WHERE id = $1`,
         [input.accountId, reason],
       );
+    } else if (input.action === 'unsuspend') {
+      const updated = await client.query(
+        `UPDATE accounts
+         SET suspended_until = NULL, moderation_reason = $2
+         WHERE id = $1 AND suspended_until > now()`,
+        [input.accountId, reason],
+      );
+      if ((updated.rowCount ?? 0) === 0) {
+        throw new Error('account is not suspended');
+      }
     } else {
+      if (expiresAt === null) {
+        throw new Error('suspension expiry must be in the future');
+      }
       // Suspending supersedes any standing ban (an admin downgrading a ban to a
       // timed suspension). banned_at must be cleared here for the same reason
       // the ban branch clears suspended_until — moderationStatusForAccount reads
@@ -339,26 +473,36 @@ export async function moderateAccount(input: {
         `UPDATE accounts
          SET banned_at = NULL, suspended_until = $2, moderation_reason = $3
          WHERE id = $1`,
-        [input.accountId, expiresAt!.toISOString(), reason],
+        [input.accountId, expiresAt.toISOString(), reason],
       );
     }
-    await client.query(
-      `INSERT INTO account_moderation_actions (account_id, admin_account_id, action, reason, expires_at)
-       VALUES ($1, $2, $3, $4, $5)`,
-      [input.accountId, input.adminAccountId, input.action, reason, expiresAt ? expiresAt.toISOString() : null],
-    );
-    await client.query(
-      `UPDATE player_reports
-       SET status = 'actioned', reviewed_at = now(), reviewed_by_account_id = $2, review_note = $3
-       WHERE reported_account_id = $1 AND status = 'open'`,
-      [input.accountId, input.adminAccountId, reason],
-    );
+    await recordModerationAction(client, input.action, {
+      accountId: input.accountId,
+      adminAccountId: input.adminAccountId,
+      reason,
+      expiresAt: expiresAt ? expiresAt.toISOString() : null,
+    });
+    if (input.action !== 'unsuspend') {
+      await client.query(
+        `UPDATE player_reports
+         SET status = 'actioned', reviewed_at = now(), reviewed_by_account_id = $2, review_note = $3
+         WHERE reported_account_id = $1 AND status = 'open'`,
+        [input.accountId, input.adminAccountId, reason],
+      );
+    }
     await client.query('COMMIT');
   } catch (err) {
     await client.query('ROLLBACK').catch(() => {});
     throw err;
   } finally {
     client.release();
+  }
+  // The action is committed; a cache-bust failure must never surface as a
+  // failed moderation action, so the hook runs outside the transaction path.
+  try {
+    onAccountModerated?.();
+  } catch (err) {
+    console.error('post-moderation hook failed:', err);
   }
 }
 
@@ -383,10 +527,217 @@ export async function muteAccountChat(input: {
        WHERE id = $1`,
       [input.accountId, expiresAt, reason],
     );
-    await client.query(
-      `INSERT INTO account_moderation_actions (account_id, admin_account_id, action, reason, expires_at)
-       VALUES ($1, $2, $3, $4, $5)`,
-      [input.accountId, input.adminAccountId, 'chat_mute', reason, expiresAt],
+    await recordModerationAction(client, 'chat_mute', {
+      accountId: input.accountId,
+      adminAccountId: input.adminAccountId,
+      reason,
+      expiresAt,
+    });
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+export async function liftAccountChatMute(input: {
+  accountId: number;
+  adminAccountId: number;
+  reason: unknown;
+}): Promise<void> {
+  const reason = cleanText(input.reason, ACTION_REASON_MAX);
+  if (!reason) throw new Error('moderation reason is required');
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const updated = await client.query(
+      `UPDATE accounts
+       SET chat_muted_until = NULL, chat_mute_reason = NULL
+       WHERE id = $1 AND chat_muted_until > now()`,
+      [input.accountId],
+    );
+    if ((updated.rowCount ?? 0) === 0) {
+      throw new Error('account is not chat muted');
+    }
+    await recordModerationAction(client, 'chat_unmute', {
+      accountId: input.accountId,
+      adminAccountId: input.adminAccountId,
+      reason,
+    });
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Mark an account as AI-operated (or clear the mark). Cosmetic and non-punitive, so
+ * the reason is optional, but the write is audited exactly like a sanction: the mark
+ * shows on the nameplate and every chat line the account sends.
+ */
+export async function setAccountAiFlag(input: {
+  accountId: number;
+  adminAccountId: number;
+  ai: boolean;
+  reason?: unknown;
+}): Promise<void> {
+  const reason = cleanText(input.reason, ACTION_REASON_MAX);
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    await client.query('UPDATE accounts SET is_ai = $2 WHERE id = $1', [input.accountId, input.ai]);
+    await recordModerationAction(client, 'set_ai', {
+      accountId: input.accountId,
+      adminAccountId: input.adminAccountId,
+      reason,
+    });
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Set an account's streamer flair: the flag plus the platform links. Every supplied
+ * link goes through normalizeStreamerLink (https only, that platform's own hosts, no
+ * credentials, length-capped) and a non-empty value that fails is REJECTED for the
+ * whole write rather than silently dropped, so an operator never believes they saved
+ * a link that was thrown away. Only the normalized bag is stored.
+ *
+ * The links are stored even when `streamer` is false: UNMARKING PRESERVES THEM, so
+ * re-marking an account does not make the operator retype four URLs. wireStreamerLinks
+ * is what gates them off the wire, so nothing ships while the flag is down, and
+ * stored-but-not-shipped is exactly the right state.
+ *
+ * `links` is three-valued on purpose. A bag REPLACES the stored set (an explicit `{}`
+ * clears it); `undefined` leaves the column ALONE, so a caller that sends only the flag
+ * can never wipe an account's links by omission. The write is idempotent: re-sending an
+ * unchanged flag (saving links while already a streamer) is a plain UPDATE, never a
+ * conflict.
+ */
+export async function setAccountStreamerFlair(input: {
+  accountId: number;
+  adminAccountId: number;
+  streamer: boolean;
+  links?: unknown;
+  reason?: unknown;
+}): Promise<void> {
+  const reason = cleanText(input.reason, ACTION_REASON_MAX);
+  const raw =
+    // An ARRAY is rejected, not coerced. It is an object, so without this it would
+    // fall through the platform loop, match no keys, and decode to {}, i.e. the CLEAR
+    // branch, silently wiping the operator's stored URLs. That is the exact failure
+    // this function's three-valued contract exists to prevent (absent = leave alone,
+    // {} = clear, object = replace). The admin handler already 400s an array, so this
+    // is unreachable today; the guard lives here anyway because the invariant belongs
+    // next to the SQL that depends on it, not one caller away.
+    input.links && typeof input.links === 'object' && !Array.isArray(input.links)
+      ? (input.links as Record<string, unknown>)
+      : null;
+  if (input.links !== undefined && input.links !== null && raw === null) {
+    throw new Error('invalid streamer link');
+  }
+  let links: StreamerLinks | null = null;
+  if (raw !== null) {
+    links = {};
+    for (const platform of STREAMER_PLATFORMS) {
+      const value = raw[platform];
+      // An absent or blank field is "no link for this platform", not a bad link.
+      if (value === undefined || value === null || String(value).trim() === '') continue;
+      const url = normalizeStreamerLink(platform, value);
+      if (!url) throw new Error('invalid streamer link');
+      links[platform] = url;
+    }
+  }
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    if (links === null) {
+      await client.query('UPDATE accounts SET is_streamer = $2 WHERE id = $1', [
+        input.accountId,
+        input.streamer,
+      ]);
+    } else {
+      await client.query(
+        'UPDATE accounts SET is_streamer = $2, streamer_links = $3 WHERE id = $1',
+        [input.accountId, input.streamer, links],
+      );
+    }
+    await recordModerationAction(client, 'set_streamer', {
+      accountId: input.accountId,
+      adminAccountId: input.adminAccountId,
+      reason,
+    });
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+// Append a free-form moderator note to an account's audit log. Purely additive: it
+// changes no account state and resolves no reports (unlike moderateAccount), so a
+// single INSERT is atomic on its own and needs no transaction.
+export async function addAccountNote(input: {
+  accountId: number;
+  adminAccountId: number;
+  note: unknown;
+}): Promise<void> {
+  const note = cleanText(input.note, NOTE_MAX);
+  if (!note) throw new Error('a note is required');
+  await recordModerationAction(pool, 'note', {
+    accountId: input.accountId,
+    adminAccountId: input.adminAccountId,
+    reason: note,
+  });
+}
+
+export async function setDailyRewardsBan(input: {
+  accountId: number;
+  adminAccountId: number;
+  banned: boolean;
+  reason: unknown;
+}): Promise<void> {
+  const reason = cleanText(input.reason, ACTION_REASON_MAX);
+  if (!reason) throw new Error('moderation reason is required');
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    if (input.banned) {
+      await client.query(
+        `INSERT INTO daily_reward_bans (account_id, reason, admin_account_id)
+         VALUES ($1, $2, $3)
+         ON CONFLICT (account_id) DO UPDATE
+           SET reason = EXCLUDED.reason,
+               admin_account_id = EXCLUDED.admin_account_id,
+               updated_at = now()`,
+        [input.accountId, reason, input.adminAccountId],
+      );
+    } else {
+      const removed = await client.query('DELETE FROM daily_reward_bans WHERE account_id = $1', [
+        input.accountId,
+      ]);
+      if ((removed.rowCount ?? 0) === 0)
+        throw new Error('account is not banned from daily rewards');
+    }
+    await recordModerationAction(
+      client,
+      input.banned ? 'daily_rewards_ban' : 'daily_rewards_unban',
+      {
+        accountId: input.accountId,
+        adminAccountId: input.adminAccountId,
+        reason,
+      },
     );
     await client.query('COMMIT');
   } catch (err) {
@@ -397,6 +748,89 @@ export async function muteAccountChat(input: {
   }
 }
 
+export async function setDailyRewardsIpBan(input: {
+  accountId: number;
+  adminAccountId: number;
+  ip: unknown;
+  banned: boolean;
+  reason: unknown;
+}): Promise<void> {
+  const ip = cleanText(input.ip, 128);
+  const reason = cleanText(input.reason, ACTION_REASON_MAX);
+  if (!ip) throw new Error('IP address is required');
+  if (!reason) throw new Error('moderation reason is required');
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    if (input.banned) {
+      await client.query(
+        `INSERT INTO daily_reward_ip_bans (ip_address, reason, admin_account_id)
+         VALUES ($1, $2, $3)
+         ON CONFLICT (ip_address) DO UPDATE
+           SET reason = EXCLUDED.reason,
+               admin_account_id = EXCLUDED.admin_account_id,
+               updated_at = now()`,
+        [ip, reason, input.adminAccountId],
+      );
+    } else {
+      const removed = await client.query('DELETE FROM daily_reward_ip_bans WHERE ip_address = $1', [
+        ip,
+      ]);
+      if ((removed.rowCount ?? 0) === 0)
+        throw new Error('IP address is not banned from daily rewards');
+    }
+    await recordModerationAction(
+      client,
+      input.banned ? 'daily_rewards_ip_ban' : 'daily_rewards_ip_unban',
+      {
+        accountId: input.accountId,
+        adminAccountId: input.adminAccountId,
+        reason: `${reason} (IP: ${ip})`,
+      },
+    );
+    await client.query('COMMIT');
+  } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+// Audit-only record for an in-game action whose live effect is owned by the
+// GameServer. Unlike account sanctions, this changes no persistent account state.
+export async function recordInGameAction(input: {
+  action: 'kick' | 'kill' | 'jail' | 'unjail';
+  accountId: number;
+  adminAccountId: number;
+  reason: unknown;
+}): Promise<void> {
+  const reason = cleanText(input.reason, ACTION_REASON_MAX);
+  if (!reason) throw new Error('moderation reason is required');
+  await recordModerationAction(pool, input.action, {
+    accountId: input.accountId,
+    adminAccountId: input.adminAccountId,
+    reason,
+  });
+}
+
+// Audit-only record for an admin-initiated password reset. The credential write
+// itself is owned by the caller (server/admin.ts via updatePasswordHash); like
+// recordInGameAction this only appends the moderation-history row.
+export async function recordPasswordReset(input: {
+  accountId: number;
+  adminAccountId: number;
+  reason: unknown;
+}): Promise<void> {
+  const reason = cleanText(input.reason, ACTION_REASON_MAX);
+  if (!reason) throw new Error('moderation reason is required');
+  await recordModerationAction(pool, 'reset_password', {
+    accountId: input.accountId,
+    adminAccountId: input.adminAccountId,
+    reason,
+  });
+}
+
 export async function forceCharacterRename(input: {
   characterId: number;
   adminAccountId: number;
@@ -404,7 +838,9 @@ export async function forceCharacterRename(input: {
 }): Promise<{ accountId: number }> {
   const reason = cleanText(input.reason, ACTION_REASON_MAX);
   if (!reason) throw new Error('moderation reason is required');
-  const character = await pool.query('SELECT account_id FROM characters WHERE id = $1', [input.characterId]);
+  const character = await pool.query('SELECT account_id FROM characters WHERE id = $1', [
+    input.characterId,
+  ]);
   const accountId = character.rows[0]?.account_id;
   if (!accountId) throw new Error('character not found');
   // Pin a single pooled client so the whole transaction is atomic; see the note
@@ -412,12 +848,14 @@ export async function forceCharacterRename(input: {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
-    await client.query('UPDATE characters SET force_rename = TRUE WHERE id = $1', [input.characterId]);
-    await client.query(
-      `INSERT INTO account_moderation_actions (account_id, admin_account_id, action, reason)
-       VALUES ($1, $2, 'force_rename', $3)`,
-      [accountId, input.adminAccountId, reason],
-    );
+    await client.query('UPDATE characters SET force_rename = TRUE WHERE id = $1', [
+      input.characterId,
+    ]);
+    await recordModerationAction(client, 'force_rename', {
+      accountId,
+      adminAccountId: input.adminAccountId,
+      reason,
+    });
     await client.query(
       `UPDATE player_reports
        SET status = 'actioned', reviewed_at = now(), reviewed_by_account_id = $2, review_note = $3

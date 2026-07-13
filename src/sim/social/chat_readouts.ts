@@ -10,6 +10,7 @@
 // S3 i18n guard never scanned their internal `return '...'` strings; the existing en/
 // em-dash readout literals are preserved byte-for-byte under the move-not-rewrite waiver.
 
+import { isDebuffAura } from '../aura_classify';
 import { isRooted } from '../combat/cc';
 import {
   FIRST_TALENT_LEVEL,
@@ -47,27 +48,6 @@ import {
 } from '../types';
 import { groundHeight } from '../world';
 
-// The auras a target carries that are working against it. Everything else
-// (buff_*, hot, absorb, imbue, stances, forms, stealth, thorns, attackspeed
-// haste) is treated as helpful/neutral. Used by /targetbuffs to tag each aura.
-const HARMFUL_AURA_KINDS: ReadonlySet<AuraKind> = new Set<AuraKind>([
-  'dot',
-  'slow',
-  'stun',
-  'root',
-  'incapacitate',
-  'polymorph',
-  'sunder',
-  'spellvuln',
-  'vulnerability',
-  'tongues',
-  'cost_tax',
-  'critvuln',
-]);
-
-function isHarmfulAura(kind: AuraKind): boolean {
-  return HARMFUL_AURA_KINDS.has(kind);
-}
 const NEARBY_RANGE = 40; // /nearby scan radius — wider than say, tighter than yell
 const NEARBY_MAX = 10; // cap the /nearby list so a crowded camp can't spam chat
 
@@ -156,11 +136,11 @@ export function buybackReadout(meta: PlayerMeta): string {
   });
   return `Vendor buyback (${slots.length}): ${parts.join(', ')}. Repurchase at any merchant.`;
 }
-export function comboReadout(ctx: SimContext, e: Entity): string {
+// Combo points are character-bound (retail-style), so the readout names no
+// target: the pool finishes on whatever the player targets next.
+export function comboReadout(e: Entity): string {
   if (e.comboPoints <= 0) return 'You have no combo points built up.';
-  const target = e.comboTargetId !== null ? ctx.entities.get(e.comboTargetId) : undefined;
-  const on = target ? ` on ${target.name}` : '';
-  return `Combo points: ${e.comboPoints}/5${on}.`;
+  return `Combo points: ${e.comboPoints}/5.`;
 }
 // Readout for "/combat": reads only the live Entity.inCombat / combatTimer
 // (no new fields). combatTimer is "time since last combat event"; a player
@@ -257,7 +237,7 @@ export function targetBuffsReadout(ctx: SimContext, self: Entity): string {
   if (auras.length === 0) return `${target.name} has no active effects.`;
   const parts = auras.map((a) => {
     const stack = (a.stacks ?? 1) > 1 ? ` x${a.stacks}` : '';
-    const tag = isHarmfulAura(a.kind) ? 'debuff' : 'buff';
+    const tag = isDebuffAura(a.kind, a.value) ? 'debuff' : 'buff';
     return `${a.name}${stack} [${tag}] (${Math.ceil(a.remaining)}s)`;
   });
   return `Effects on ${target.name} (${auras.length}): ${parts.join(', ')}.`;
@@ -310,6 +290,8 @@ export function formReadout(e: Entity): string {
       a.kind === 'form_bear' ||
       a.kind === 'form_cat' ||
       a.kind === 'form_travel' ||
+      a.kind === 'form_moonkin' ||
+      a.kind === 'form_shadow' ||
       a.kind === 'defensive_stance' ||
       a.kind === 'stealth',
   );
@@ -596,7 +578,7 @@ export function consumableReadout(e: Entity): string {
 }
 // Self-only readout of the shared combat-potion cooldown (#103). Distinct from
 // /cooldowns, which reads the per-ability Entity.cooldowns map and never shows
-// this separate 60s potion timer. potionCooldownUntil is an absolute sim-time
+// this separate 2-minute potion timer. potionCooldownUntil is an absolute sim-time
 // deadline, so the remaining time is computed against ctx.time.
 export function potionReadout(ctx: SimContext, e: Entity): string {
   const remaining = e.potionCooldownUntil - ctx.time;

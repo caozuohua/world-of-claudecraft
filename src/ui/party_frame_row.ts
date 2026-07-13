@@ -18,6 +18,9 @@
 // overwrites slot.member in place, so the handlers always act on the row's current
 // member, not a stale one.
 
+import type { PartyMemberAura } from '../world_api';
+import { AurasPainter, type AurasPainterDeps } from './auras_painter';
+import { type AuraInput, type AurasDeps, createAurasView } from './auras_view';
 import { t } from './i18n';
 import { iconDataUrl } from './icons';
 import type { PainterHostWriters } from './painter_host';
@@ -69,6 +72,17 @@ export interface PartyRow {
   leadStar: HTMLElement;
   group: HTMLElement;
   relocalize: () => void;
+  /** Repaint the member's mini aura strip (its own keyed AurasPainter pool per row).
+   *  Called by the pool on each signature-gated sync, never per frame. */
+  paintAuras: (auras: readonly PartyMemberAura[]) => void;
+}
+
+/** The aura view/painter deps a row's mini aura strip needs from the Hud (the icon
+ *  resolver, name resolver, tooltip attach). One shared pair drives every row; each
+ *  row builds its OWN view + painter instance over them (independent pools). */
+export interface PartyRowAuraDeps {
+  view: AurasDeps;
+  painter: AurasPainterDeps;
 }
 
 // The pointer-vs-keyboard context-menu position. A pointer contextmenu carries real
@@ -127,6 +141,7 @@ export function createPartyRow(
   writers: PainterHostWriters,
   deps: PartyRowDeps,
   member: PartyFrameMember,
+  auraDeps: PartyRowAuraDeps,
 ): PartyRow {
   const slot: PartyRowSlot = { member };
 
@@ -202,7 +217,31 @@ export function createPartyRow(
   resFill.className = 'bar-fill';
   resBar.append(resFill);
 
-  row.append(nameRow, hpBar, resBar);
+  // The member's mini aura strip (their buffs/debuffs), a per-row instance of the
+  // keyed aura pool under the bars. paintAuras converts the compact wire summaries
+  // into the aura core's input shape (no countdown: remaining rides as Infinity, so
+  // the duration label stays blank and the icons only change when the set changes).
+  const aurasEl = doc.createElement('div');
+  aurasEl.className = 'pfm-auras';
+  const aurasView = createAurasView('all', auraDeps.view);
+  const aurasPainter = new AurasPainter(writers, aurasEl, auraDeps.painter, doc);
+  const auraInputs: AuraInput[] = [];
+  const aurasEntity = { auras: auraInputs };
+  const paintAuras = (auras: readonly PartyMemberAura[]): void => {
+    auraInputs.length = 0;
+    for (const a of auras) {
+      auraInputs.push({
+        id: a.id,
+        name: a.id,
+        kind: a.kind,
+        remaining: Number.POSITIVE_INFINITY,
+        value: a.neg ? -1 : 1,
+      });
+    }
+    aurasPainter.paint(aurasView.tick(aurasEntity));
+  };
+
+  row.append(nameRow, hpBar, resBar, aurasEl);
 
   const handlers = partyRowHandlers(slot, deps);
   row.addEventListener('click', handlers.click);
@@ -240,7 +279,25 @@ export function createPartyRow(
     badges: { dead: deadBadge, combat: combatBadge, oor: oorBadge },
     leadStar,
     group,
+    paintAuras,
   };
+}
+
+/** The member-rows wrapper class. The wrapper nests every pooled member row one level
+ *  under #party-frames so the mobile collapse chip, the rows, the master-loot control,
+ *  and the Leave button stack as a simple column (chip alone on its own line), while the
+ *  rows themselves keep the 2-column auto-flow double-stack on the wrapper. */
+export const PARTY_ROWS_CLASS = 'party-rows';
+
+/** Build the persistent member-rows wrapper (created once, reused across rebuilds). On
+ *  mobile hud.mobile.css gives it the 2-column auto-flow grid #party-frames used to carry
+ *  (so 3-4 members double-stack); on desktop it is display:contents (transparent), so the
+ *  rows participate directly in the #party-frames flex column exactly as before the
+ *  wrapper existed. The pool re-parents the pooled rows into it without churning nodes. */
+export function createPartyRowsWrapper(doc: Document): HTMLElement {
+  const el = doc.createElement('div');
+  el.className = PARTY_ROWS_CLASS;
+  return el;
 }
 
 /** Build the persistent "Leave Party" button (created once, its click listener

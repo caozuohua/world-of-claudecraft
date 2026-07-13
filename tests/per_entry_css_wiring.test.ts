@@ -3,8 +3,9 @@
 // extraction both inline <style> blocks are empty and the game CSS lives in the shared
 // src/styles/* @layer modules (loaded by both entries via the src/main.ts barrel),
 // EXCEPT the #rotate-device gate which differs per entry: index suppresses the
-// rotate overlay in-game, play shows it in portrait. Each entry loads ONLY its own
-// per-entry .extra via a <link>.
+// rotate overlay in browser web gameplay but lets the native app show it in portrait,
+// while play shows it in portrait. Each entry loads ONLY its own per-entry .extra via
+// a <link>.
 //
 // css_corpus is blind to this (it tests inline UNION modules, so empty-inline +
 // modules passes regardless) and client_shell asserts hud.mobile.css CONTENT but
@@ -47,11 +48,13 @@ describe('per-entry CSS wiring + #rotate-device gate', () => {
     expect(playHtml).not.toContain('index.extra.css');
   });
 
-  it('index.extra.css suppresses #rotate-device in-game (index side of the gate)', () => {
+  it('index.extra.css shows #rotate-device in portrait gameplay', () => {
     expect(indexExtra).toMatch(/@layer index-extra\b/);
+    expect(indexExtra).toMatch(/orientation:\s*portrait/);
     expect(indexExtra).toMatch(
-      /body\.mobile-touch\.game-active #rotate-device\s*\{[^}]*display:\s*none\s*!important/,
+      /body\.mobile-touch\.game-active #rotate-device\s*\{[^}]*display:\s*flex/,
     );
+    expect(indexExtra).not.toMatch(/#rotate-device[^}]*display:\s*none\s*!important/);
   });
 
   it('play.extra.css shows #rotate-device in portrait (play side of the gate)', () => {
@@ -60,10 +63,7 @@ describe('per-entry CSS wiring + #rotate-device gate', () => {
     expect(playExtra).toMatch(/#rotate-device\s*\{\s*display:\s*flex/);
   });
 
-  it('the shared mobile layer carries no index-only #rotate-device suppress (no cross-entry leak)', () => {
-    // The !important suppress lives ONLY in index.extra.css. If it were in the shared
-    // hud.mobile.css it would leak onto play, where play.extra (a later layer) cannot
-    // override an earlier-layer !important, breaking play's portrait rotate overlay.
+  it('the shared mobile layer carries no #rotate-device suppress', () => {
     expect(hudMobile).not.toMatch(/#rotate-device[^}]*display:\s*none\s*!important/);
   });
 

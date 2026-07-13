@@ -9,6 +9,7 @@
 // has a proper icon. Results are cached as data URLs.
 
 import { ABILITIES, ITEMS } from '../sim/data';
+import { DEED_IMAGE_IDS } from './deed_image_ids';
 import { ITEM_WEAPON_VARIANTS } from './weapon_variants';
 
 export type IconKind = 'ability' | 'item' | 'aura' | 'crest';
@@ -1052,6 +1053,113 @@ const PRIMITIVES = {
     ctx.quadraticCurveTo(-12, -2, -10, 8);
     ctx.stroke();
   },
+  // Drawstring bag/pouch: a plump sack body cinched at a gathered neck with a
+  // knotted rope, stitched bottom seam and a soft ground shadow, for the bag
+  // items (Linen Pouch ... Mistcaller's Duffel) and the backpack.
+  sack(ctx, pal) {
+    // the pouch is drawn in a compact ~44-unit box; scale it up to fill the
+    // icon like the weapon/armor primitives do
+    ctx.save();
+    ctx.scale(1.32, 1.32);
+    // ground shadow so the bag sits instead of floating
+    noShadow(ctx);
+    ctx.fillStyle = 'rgba(0,0,0,0.32)';
+    ctx.beginPath();
+    ctx.ellipse(0, 21, 16, 3.6, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // plump body: wide hips, waist pulled in toward the cinch
+    ctx.beginPath();
+    ctx.moveTo(-6.5, -13);
+    ctx.bezierCurveTo(-15, -12, -20, -3, -19.5, 6);
+    ctx.bezierCurveTo(-19, 16, -10, 21, 0, 21);
+    ctx.bezierCurveTo(10, 21, 19, 16, 19.5, 6);
+    ctx.bezierCurveTo(20, -3, 15, -12, 6.5, -13);
+    ctx.closePath();
+    ctx.fillStyle = rad(ctx, -6, -2, 30, [
+      [0, pal.light],
+      [0.45, pal.base],
+      [1, pal.dark],
+    ]);
+    ctx.fill();
+    edge(ctx, pal.dark, 1.8);
+    // gathered neck flaring above the tie, with pleat cuts
+    ctx.beginPath();
+    ctx.moveTo(-7, -12);
+    ctx.quadraticCurveTo(-8.5, -19, -11, -23);
+    ctx.quadraticCurveTo(-3.5, -20.5, 0, -21.5);
+    ctx.quadraticCurveTo(3.5, -20.5, 11, -23);
+    ctx.quadraticCurveTo(8.5, -19, 7, -12);
+    ctx.closePath();
+    ctx.fillStyle = lin(ctx, -8, -23, 8, -12, [
+      [0, pal.base],
+      [1, pal.dark],
+    ]);
+    ctx.fill();
+    edge(ctx, pal.dark, 1.4);
+    noShadow(ctx);
+    // pleats in the gathered neck
+    ctx.strokeStyle = withAlpha(pal.dark, 0.4);
+    ctx.lineWidth = 1;
+    for (const x of [-4.5, 0, 4.5]) {
+      ctx.beginPath();
+      ctx.moveTo(x * 0.9, -20);
+      ctx.lineTo(x, -13);
+      ctx.stroke();
+    }
+    // knotted rope tie: dark strand + light strand + knot bead and hanging tail
+    ctx.strokeStyle = pal.dark;
+    ctx.lineWidth = 3.4;
+    ctx.beginPath();
+    ctx.moveTo(-8.5, -13.5);
+    ctx.quadraticCurveTo(0, -9.5, 8.5, -13.5);
+    ctx.stroke();
+    ctx.strokeStyle = withAlpha(pal.light, 0.75);
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(-8, -14);
+    ctx.quadraticCurveTo(0, -10.2, 8, -14);
+    ctx.stroke();
+    ctx.fillStyle = pal.dark;
+    ctx.beginPath();
+    ctx.arc(8.2, -12.6, 2.4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = pal.dark;
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.moveTo(8.6, -11);
+    ctx.quadraticCurveTo(10.5, -6, 9.2, -1.5);
+    ctx.stroke();
+    // two soft cloth folds falling from the cinch (kept faint so the bag does
+    // not read as a striped vase at 40px)
+    ctx.strokeStyle = withAlpha(pal.dark, 0.28);
+    ctx.lineWidth = 1.6;
+    for (const x of [-5.5, 4]) {
+      ctx.beginPath();
+      ctx.moveTo(x * 0.5, -9);
+      ctx.quadraticCurveTo(x * 1.35, 5, x * 0.8, 16);
+      ctx.stroke();
+    }
+    // stitched bottom seam: short dashes following the belly curve
+    ctx.strokeStyle = withAlpha(pal.light, 0.55);
+    ctx.lineWidth = 1.3;
+    for (let i = -3; i <= 3; i++) {
+      const a = Math.PI / 2 + i * 0.19;
+      const cx = Math.cos(a) * 16.4;
+      const cy = 3.2 + Math.sin(a) * 16.2;
+      ctx.beginPath();
+      ctx.moveTo(cx - 1.4, cy - 0.4);
+      ctx.lineTo(cx + 1.4, cy + 0.4);
+      ctx.stroke();
+    }
+    // top-left sheen following the body curve
+    ctx.strokeStyle = withAlpha(pal.light, 0.6);
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(-12.5, -7);
+    ctx.quadraticCurveTo(-16.5, 2, -12, 13);
+    ctx.stroke();
+    ctx.restore();
+  },
   droplet(ctx, pal) {
     ctx.beginPath();
     ctx.moveTo(0, -20);
@@ -1531,6 +1639,36 @@ const PRIMITIVES = {
     ctx.fill();
     ctx.beginPath();
     ctx.arc(-6, 6, 1.3, 0, TAU);
+    ctx.fill();
+  },
+  bell(ctx, pal) {
+    // hand-bell silhouette: dome + flared lip, crown loop above, clapper below
+    ctx.beginPath();
+    ctx.moveTo(-13, 12);
+    ctx.bezierCurveTo(-13, 2, -11, -14, 0, -17);
+    ctx.bezierCurveTo(11, -14, 13, 2, 13, 12);
+    ctx.lineTo(17, 16);
+    ctx.lineTo(-17, 16);
+    ctx.closePath();
+    ctx.fillStyle = lin(ctx, -12, -16, 10, 14, [
+      [0, pal.light],
+      [0.55, pal.base],
+      [1, pal.dark],
+    ]);
+    ctx.fill();
+    edge(ctx, pal.dark, 1.2);
+    ctx.beginPath();
+    ctx.arc(0, -19, 3.2, 0, TAU);
+    ctx.strokeStyle = pal.dark;
+    ctx.lineWidth = 2.4;
+    ctx.stroke();
+    noShadow(ctx);
+    ctx.beginPath();
+    ctx.arc(0, 21, 3.6, 0, TAU);
+    ctx.fillStyle = rad(ctx, -1, 20, 4.2, [
+      [0, pal.light],
+      [1, pal.dark],
+    ]);
     ctx.fill();
   },
   lightning(ctx, pal) {
@@ -2073,7 +2211,6 @@ interface IconRecipe {
 // corner-badge / backdrop placement shorthand
 const TL = { x: -13, y: -13, s: 0.45 } as const;
 const TR = { x: 13, y: -13, s: 0.45 } as const;
-const BL = { x: -13, y: 13, s: 0.45 } as const;
 const BR = { x: 13, y: 13, s: 0.45 } as const;
 const BIG = { s: 1.15, alpha: 0.35 } as const;
 
@@ -2087,9 +2224,59 @@ function r(
 }
 
 const ABILITY_RECIPES: Record<string, IconRecipe> = {
+  // Talents 2.0 ground-targeted spells (each aimed AoE gets a distinct recipe;
+  // grouped here so the family reads together, order within the map is cosmetic).
+  flamestrike: r('fire', 'ember', ['meteor', { p: 'sunburst', ...BIG }], ['glow']),
+  rain_of_fire: r(
+    'fire',
+    'ember',
+    [
+      { p: 'flame', x: -11, y: -11, s: 0.6 },
+      { p: 'flame', s: 0.72 },
+      { p: 'flame', x: 11, y: 11, s: 0.84 },
+    ],
+    ['drips'],
+  ),
+  volley: r(
+    'storm',
+    'sky',
+    [
+      { p: 'arrow', x: -11, y: -11, s: 0.6 },
+      { p: 'arrow', s: 0.72 },
+      { p: 'arrow', x: 11, y: 11, s: 0.84 },
+    ],
+    ['motion'],
+  ),
+  hurricane: r(
+    'nature',
+    'leafGreen',
+    [
+      { p: 'leaf', x: -11, y: -10, s: 0.62 },
+      { p: 'leaf', s: 0.74 },
+      { p: 'leaf', x: 11, y: 10, s: 0.62 },
+    ],
+    ['arcs'],
+  ),
+  earthquake: r('earth', 'earthBrown', ['sunburst'], ['crack']),
   attack: r('steel', 'steel', ['sword'], ['motion']),
+  // pet action bar (dedicated, never a class ability id: see pet_action_icons.ts).
+  pet_attack: r('blood', 'blood', ['fang'], ['motion']),
+  pet_growl: r('fury', 'gold', ['roar'], ['arcs']),
+  pet_feed: r('food', 'ember', ['meat']), // roasted meat: hunters feed, not magic-heal
+  pet_mend: r('shadow', 'shadowPurple', ['heart'], ['drips']),
+  pet_passive: r('nature', 'earthBrown', ['paw']),
+  pet_defensive: r('leather', 'earthBrown', ['shield']),
+  pet_aggressive: r('fury', 'blood', ['claw_slash'], ['glow']),
   // warrior
   heroic_strike: r('fury', 'steel', ['sword'], ['glow']),
+  // Baseline class interrupts (physical spell-kicks).
+  pummel: r('fury', 'steel', ['fist'], ['motion']),
+  kick: r('leather', 'steel', ['boot'], ['motion']),
+  counterspell: r('arcane', 'steel', ['fist', { p: 'sunburst', ...TR }]),
+  counter_shot: r('nature', 'gold', ['sword', { p: 'sunburst', ...TR }]),
+  rebuke: r('holy', 'gold', ['fist'], ['glow']),
+  skull_bash: r('earth', 'earthBrown', ['paw'], ['motion']),
+  spell_lock: r('shadow', 'steel', ['fist'], ['glow']),
   battle_shout: r('fury', 'gold', ['fist'], ['arcs']),
   commanding_shout: r('fury', 'earthBrown', ['shield'], ['arcs']),
   demoralizing_shout: r('shadow', 'steel', ['fist'], ['arcs']),
@@ -2162,6 +2349,7 @@ const ABILITY_RECIPES: Record<string, IconRecipe> = {
   divine_protection: r('holy', 'silverWhite', ['shield'], ['glow']),
   hammer_of_justice: r('holy', 'gold', ['mace'], ['arcs']),
   lay_on_hands: r('holy', 'holyGold', [{ p: 'sunburst', ...BIG }, 'hand'], ['sparkle', 'glow']),
+  holy_taunt: r('holy', 'holyGold', ['roar'], ['arcs']),
   // hunter
   raptor_strike: r('earth', 'blood', ['claw_slash']),
   aspect_of_the_hawk: r('storm', 'sky', ['wing'], ['glow']),
@@ -2171,6 +2359,17 @@ const ABILITY_RECIPES: Record<string, IconRecipe> = {
   concussive_shot: r('storm', 'sky', ['arrow'], ['arcs']),
   mongoose_bite: r('earth', 'steel', ['fang', { p: 'claw_slash', ...BR }], ['motion']),
   wing_clip: r('earth', 'blood', ['wing', { p: 'claw_slash', ...BR }]),
+  // the Vale Cup sport kit (boarball): the 'coin' disc reads as the ball
+  sport_kick: r('earth', 'leather', ['coin', { p: 'boot', ...BR }]),
+  sport_shoot: r('fury', 'ember', ['coin', { p: 'boot', ...BR }], ['motion']),
+  sport_pass: r('nature', 'gold', ['coin', { p: 'boot', ...TL }], ['motion']),
+  sport_boot: r('fury', 'gold', ['coin', { p: 'boot', ...BR }], ['motion']),
+  sport_hoof: r('fury', 'steel', ['boot', { p: 'coin', ...TR }], ['arcs']),
+  sport_punt: r('nature', 'leafGreen', ['coin', { p: 'sunburst', ...TL }], ['motion']),
+  sport_feint: r('shadow', 'steel', ['boot'], ['arcs']),
+  sport_dive: r('earth', 'leather', ['gauntlet', { p: 'coin', ...TR }], ['motion']),
+  sport_shoulder: r('fury', 'steel', ['pauldron', { p: 'claw_slash', ...BR }]),
+  sport_second_wind: r('nature', 'leafGreen', ['boot', { p: 'leaf', ...TR }], ['glow']),
   // priest
   smite: r('holy', 'holyGold', ['bolt', { p: 'sunburst', ...TL }], ['glow']),
   lesser_heal: r('holy', 'silverWhite', ['cross'], ['glow']),
@@ -2183,6 +2382,7 @@ const ABILITY_RECIPES: Record<string, IconRecipe> = {
   lightning_bolt: r('storm', 'sky', ['lightning'], ['glow']),
   rockbiter_weapon: r('earth', 'earthBrown', ['fist'], ['crack']),
   healing_wave: r('frost', 'sky', ['droplet'], ['arcs', 'sparkle']),
+  chain_heal: r('nature', 'sky', ['droplet'], ['arcs', 'glow']),
   earth_shock: r('earth', 'earthBrown', [{ p: 'lightning', pal: 'earthBrown' }], ['crack']),
   lightning_shield: r('storm', 'sky', ['shield', { p: 'lightning', s: 0.6 }], ['glow']),
   flame_shock: r('fire', 'ember', ['flame'], ['arcs']),
@@ -2236,6 +2436,7 @@ const ABILITY_RECIPES: Record<string, IconRecipe> = {
   arcane_explosion: r('arcane', 'arcanePink', ['sunburst'], ['arcs']),
   scorch: r('fire', 'ember', ['flame'], ['motion']),
   ice_barrier: r('frost', 'ice', ['shield'], ['glow']),
+  crusader_strike: r('holy', 'gold', ['sword', { p: 'cross', ...BR }], ['glow']),
   // rogue
   kidney_shot: r('shadow', 'steel', ['dagger', { p: 'boot', ...BR }]),
   ambush: r('shadow', 'steel', ['dagger'], ['motion']),
@@ -2273,6 +2474,7 @@ const ABILITY_RECIPES: Record<string, IconRecipe> = {
   summon_felguard: r('shadow', 'steel', ['axe', { p: 'helm', ...TL }], ['glow']),
   summon_infernal: r('fire', 'ember', ['meteor'], ['glow']),
   summon_doomguard: r('shadow', 'shadowPurple', ['wing', { p: 'skull', ...BR }], ['glow']),
+  metamorphosis: r('shadow', 'ember', ['wing', { p: 'chestplate', ...BR }], ['glow']),
   // druid
   bear_charge: r('earth', 'earthBrown', ['paw', { p: 'boot', ...BR }], ['motion']),
   maul: r('earth', 'earthBrown', ['paw', { p: 'claw_slash', ...TR }], ['glow']),
@@ -2287,9 +2489,50 @@ const ABILITY_RECIPES: Record<string, IconRecipe> = {
   regrowth: r('nature', 'leafGreen', ['heart', { p: 'leaf', ...BR }], ['sparkle']),
   barkskin: r('earth', 'earthBrown', ['shield', { p: 'leaf', ...BR }]),
   starfire: r('arcane', 'silverWhite', ['moon', { p: 'sunburst', ...BR }], ['sparkle', 'glow']),
+  holy_shock: r('holy', 'holyGold', ['bolt', { p: 'cross', ...BR }], ['glow']),
+  holy_shield: r('holy', 'gold', ['shield', { p: 'sunburst', ...BR }]),
+  bestial_wrath: r('fury', 'blood', ['paw'], ['glow']),
+  trueshot_aura: r('storm', 'gold', ['arrow'], ['arcs']),
+  wyvern_sting: r('nature', 'venom', ['wing', { p: 'fang', ...BR }], ['drips']),
+  arcane_power: r('arcane', 'arcanePink', ['sigil_rune'], ['glow']),
+  combustion: r('fire', 'ember', ['flame'], ['sparkle']),
+  icy_veins: r('frost', 'ice', ['snowflake'], ['glow']),
+  cold_blood: r('frost', 'steel', ['dagger'], ['glow']),
+  blade_flurry: r('fury', 'steel', ['sword', { p: 'sword', ...BR }], ['motion']),
+  hemorrhage: r('blood', 'blood', ['dagger', { p: 'droplet', ...BR }], ['drips']),
+  power_infusion: r('holy', 'arcanePink', ['sunburst'], ['sparkle']),
+  holy_nova: r('holy', 'holyGold', ['sunburst'], ['arcs']),
+  shadowform: r('shadow', 'shadowPurple', ['eye'], ['glow']),
+  elemental_mastery: r('storm', 'sky', ['lightning', { p: 'sigil_rune', ...BR }], ['glow']),
+  siphon_life: r('shadow', 'venom', ['heart'], ['drips']),
+  conflagrate: r('fire', 'ember', ['flame', { p: 'skull', ...BR }], ['crack']),
+  moonkin_form: r('nature', 'sky', ['moon'], ['sparkle']),
+  feral_charge: r('nature', 'earthBrown', ['paw'], ['motion']),
+  swiftmend: r('nature', 'leafGreen', ['droplet'], ['glow']),
 };
 
 const ITEM_RECIPES: Record<string, IconRecipe> = {
+  // Bags (+ the implicit backpack the bag bar shows). All six now ship painted art
+  // (ITEM_IMAGE_IDS / UI_ITEM_IMAGE_IDS below), which iconDataUrl prefers; these recipes
+  // stay as the drawn fallback. Palettes step up with the quality tier so the bag reads
+  // richer as it grows.
+  backpack: r('leather', 'earthBrown', [{ p: 'sack', pal: 'earthBrown' }]),
+  linen_pouch: r('cloth', 'cloth', [{ p: 'sack', pal: 'cloth' }]),
+  travelers_knapsack: r('leather', 'leather', [{ p: 'sack', pal: 'leather' }]),
+  wolfhide_satchel: r('leather', 'earthBrown', [
+    { p: 'sack', pal: 'earthBrown' },
+    { p: 'paw', ...BR },
+  ]),
+  gravewoven_bag: r('shadow', 'shadowPurple', [{ p: 'sack', pal: 'shadowPurple' }], ['glow']),
+  mistcallers_duffel: r(
+    'arcane',
+    'sky',
+    [
+      { p: 'sack', pal: 'sky' },
+      { p: 'gem', ...TR },
+    ],
+    ['sparkle'],
+  ),
   worn_sword: r('steel', 'steel', ['sword']),
   gnarled_staff: r('wood', 'earthBrown', [{ p: 'staff', pal: 'earthBrown' }]),
   rusty_dagger: r('steel', 'earthBrown', [{ p: 'dagger', pal: 'earthBrown' }]),
@@ -2405,6 +2648,75 @@ const ITEM_RECIPES: Record<string, IconRecipe> = {
     ['crack'],
   ),
   linen_scrap: r('junk', 'silverWhite', [{ p: 'pelt', pal: 'silverWhite' }]),
+  // --- The Drowned Litany (Drowned Reliquary Rite loot) ---
+  siltguard_helm: r('earth', 'earthBrown', [
+    { p: 'helm', pal: 'earthBrown' },
+    { p: 'droplet', ...BR, pal: 'venom' },
+  ]),
+  bulwark_rusted_pauldrons: r(
+    'earth',
+    'earthBrown',
+    [{ p: 'pauldron', pal: 'earthBrown' }],
+    ['crack'],
+  ),
+  nhalias_bell_maul: r(
+    'shadow',
+    'bone',
+    ['mace', { p: 'sunburst', ...TR, pal: 'bone' }],
+    ['glow', 'arcs'],
+  ),
+  reedstalker_jerkin: r('leather', 'leafGreen', [{ p: 'chestplate', pal: 'leafGreen' }]),
+  mirejaw_fang_knife: r('earth', 'venom', ['dagger', { p: 'fang', ...BR, pal: 'bone' }]),
+  widow_silk_hood: r(
+    'shadow',
+    'shadowPurple',
+    [
+      { p: 'helm', pal: 'shadowPurple' },
+      { p: 'web', ...TR },
+    ],
+    ['glow'],
+  ),
+  cantors_drowned_sash: r('drink', 'sky', [{ p: 'belt', pal: 'sky' }]),
+  corpse_candle_focus: r('shadow', 'bone', [{ p: 'candle', pal: 'bone' }], ['drips']),
+  nhalias_litany_rod: r(
+    'shadow',
+    'bone',
+    ['staff', { p: 'sunburst', ...TR, pal: 'bone' }],
+    ['glow'],
+  ),
+  blackwater_vanguard_chest: r(
+    'steel',
+    'steel',
+    [
+      { p: 'chestplate', pal: 'steel' },
+      { p: 'droplet', ...BR, pal: 'sky' },
+    ],
+    ['glow', 'sparkle'],
+  ),
+  siltstep_leggings: r('leather', 'earthBrown', ['trousers'], ['glow', 'sparkle']),
+  sunken_reliquary_hood: r(
+    'cloth',
+    'arcanePink',
+    [
+      { p: 'helm', pal: 'arcanePink' },
+      { p: 'gem', ...TR },
+    ],
+    ['glow', 'sparkle'],
+  ),
+  // Heroic-dungeon participation token (final-boss personal drop).
+  heroic_mark: r('holy', 'holyGold', ['sigil_rune'], ['glow']),
+  // Heroic Quartermaster jewelry (marks-vendor rings and pendants); a coin
+  // base reads as the band, the overlay carries the stat identity.
+  seal_of_the_nine_oaths: r('fury', 'blood', ['coin', 'gem'], ['glow']),
+  nielas_coldlight_band: r('arcane', 'arcanePink', ['coin', 'gem'], ['glow']),
+  sutils_gambit: r('nature', 'leafGreen', ['coin', 'gem'], ['sparkle']),
+  oath_of_the_round_table: r('earth', 'earthBrown', ['coin', 'gem'], ['glow']),
+  zyzzs_deathless_signet: r('holy', 'holyGold', ['coin', 'sigil_rune'], ['glow']),
+  architects_cornerstone: r('arcane', 'sky', ['coin', 'scroll'], ['glow']),
+  swiftfang_talisman: r('storm', 'silverWhite', ['wing', 'gem'], ['motion']),
+  yumis_keepsake_locket: r('storm', 'sky', ['gem'], ['sparkle', 'glow']),
+  zense_meridian: r('arcane', 'arcanePink', ['moon', 'gem'], ['glow']),
+  medallion_of_endless_profit: r('treasure', 'gold', ['coin', 'sunburst'], ['sparkle']),
   // misc UI icons (not real items)
   coin_gold: r('treasure', 'gold', ['coin'], ['sparkle']),
   slot_empty: r('junk', 'silverWhite', []),
@@ -2462,9 +2774,9 @@ const CREST_RECIPES: Record<string, IconRecipe> = {
   // mob families
   family_beast: r('earth', 'earthBrown', ['paw']),
   family_humanoid: r('steel', 'steel', ['sword']),
-  family_murloc: r('drink', 'sky', ['droplet']),
+  family_mudfin: r('drink', 'sky', ['droplet']),
   family_spider: r('shadow', 'silverWhite', ['web']),
-  family_kobold: r('earth', 'gold', ['candle']),
+  family_burrower: r('earth', 'gold', ['candle']),
   family_undead: r('shadow', 'bone', ['skull']),
   family_troll: r('junk', 'bone', ['bone']),
   family_ogre: r('fury', 'earthBrown', ['fist']),
@@ -2486,6 +2798,61 @@ const CREST_RECIPES: Record<string, IconRecipe> = {
   talent_haste: r('storm', 'sky', ['lightning']),
   talent_choice: r('arcane', 'arcanePink', ['gem'], ['sparkle']),
   talent_generic: r('steel', 'steel', ['sigil_rune']),
+  // Book of Deeds display-category base crests (deed_cat_<category>), one per
+  // sidebar bucket; hidden deeds share the Feats shelf crest. Resolution
+  // (bespoke first, else the category base) is deedCrestId in deeds_view.ts.
+  deed_cat_progression: r('treasure', 'gold', ['sunburst'], ['glow']),
+  deed_cat_combat: r('fury', 'blood', [
+    { p: 'sword', x: -6, rot: -0.42 },
+    { p: 'sword', x: 6, rot: 0.42 },
+  ]),
+  deed_cat_dungeon: r('shadow', 'silverWhite', ['skull', { p: 'sword', ...BIG }]),
+  deed_cat_delve: r('earth', 'gold', ['candle'], ['glow']),
+  deed_cat_chronicle: r('parchment', 'gold', ['scroll']),
+  deed_cat_collection: r('treasure', 'gold', ['gem'], ['sparkle']),
+  deed_cat_pvp: r('fury', 'gold', ['fist'], ['motion']),
+  deed_cat_social: r('holy', 'pink', ['heart']),
+  deed_cat_exploration: r('nature', 'earthBrown', ['boot'], ['motion']),
+  deed_cat_feat: r('parchment', 'silverWhite', ['wing'], ['glow']),
+  // Bespoke marquee crests (deed_<id>): the ~20-deed highlight subset of the
+  // launch catalog's Steam marquee list (title/border capstones and iconic
+  // milestones); every other deed renders its category base above.
+  deed_prog_veteran: r('steel', 'leather', ['shield', { p: 'sunburst', ...TL }]),
+  deed_prog_eternal: r('arcane', 'holyGold', ['sunburst'], ['glow', 'arcs']),
+  deed_prog_prestige: r('storm', 'gold', [{ p: 'wing', ...BIG }, 'sunburst'], ['glow']),
+  deed_prog_level_cap: r('storm', 'silverWhite', ['staff', { p: 'sunburst', ...TR }]),
+  deed_cmb_first_blood: r('blood', 'steel', [
+    { p: 'sword', x: -5, rot: -0.42 },
+    { p: 'sword', x: 5, rot: 0.42 },
+    { p: 'droplet', ...TL, pal: 'blood' },
+  ]),
+  deed_cmb_thunzharr_unbroken: r('storm', 'sky', ['lightning'], ['crack', 'glow']),
+  deed_dgn_nythraxis: r('fire', 'ember', [{ p: 'shield', ...BIG }, 'claw_slash'], ['glow']),
+  deed_dgn_korzul_flawless: r('shadow', 'bone', [
+    'skull',
+    { p: 'sword', y: 4, rot: Math.PI, s: 0.8 },
+  ]),
+  deed_dgn_nythraxis_deathless: r('holy', 'silverWhite', ['skull'], ['arcs', 'glow']),
+  deed_dgn_deepward: r('shadow', 'gold', ['shield', { p: 'gem', ...TL }], ['glow']),
+  deed_dlv_nhalia_bells: r('shadow', 'silverWhite', ['bell'], ['glow']),
+  deed_dlv_tumbler_premium: r('treasure', 'gold', ['crate', { p: 'gem', ...TL }], ['sparkle']),
+  deed_chr_vale_chapter_iii: r('nature', 'leafGreen', ['scroll', { p: 'leaf', ...TL }]),
+  deed_chr_marsh_chapter_iii: r('drink', 'venom', ['scroll', { p: 'droplet', ...TL }]),
+  deed_chr_peaks_chapter_iii: r('frost', 'sky', ['scroll', { p: 'snowflake', ...TL }]),
+  deed_col_discovery_250: r('treasure', 'gold', ['crate'], ['sparkle', 'glow']),
+  deed_col_seven_regalia: r('treasure', 'arcanePink', ['helm', { p: 'gem', ...TL }], ['sparkle']),
+  deed_pvp_arena_1v1_1900: r('fury', 'holyGold', [{ p: 'sunburst', ...BIG }, 'sword'], ['glow']),
+  deed_pvp_vcup_wins_25: r('nature', 'gold', ['roar', { p: 'coin', ...BR }]),
+  deed_soc_wyrms_hoard: r(
+    'treasure',
+    'gold',
+    [
+      { p: 'coin', x: -8, y: 8, s: 0.8 },
+      { p: 'coin', x: 8, y: -6 },
+    ],
+    ['sparkle'],
+  ),
+  deed_exp_world_traveler: r('nature', 'sky', ['crosshair', { p: 'boot', ...BR }], ['glow']),
 };
 
 // ---------------------------------------------------------------------------
@@ -2681,6 +3048,10 @@ function itemFallback(id: string): IconRecipe | null {
     const prim: PrimitiveName = has(name, ['pole', 'rod', 'staff']) ? 'staff' : 'mace';
     return r('wood', 'earthBrown', [prim], fx);
   }
+  if (it.kind === 'bag') {
+    const isCloth = has(name, ['linen', 'silk', 'woven', 'cloth', 'wool']);
+    return r(isCloth ? 'cloth' : 'leather', isCloth ? 'cloth' : 'leather', ['sack'], fx);
+  }
   const t = trinketPrimitive(name);
   return r(it.kind === 'quest' ? 'parchment' : 'junk', t.pal, [{ p: t.p, pal: t.pal }], fx);
 }
@@ -2691,11 +3062,17 @@ function itemFallback(id: string): IconRecipe | null {
 
 const SPECK_COUNT = 40;
 
+function getCanvas2d(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('2D canvas context is unavailable');
+  return ctx;
+}
+
 function compose(recipe: IconRecipe, seedKey: string, size: number): HTMLCanvasElement {
   const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
-  const ctx = canvas.getContext('2d')!;
+  const ctx = getCanvas2d(canvas);
   ctx.scale(size / 100, size / 100);
 
   ctx.save();
@@ -2805,13 +3182,18 @@ function weaponIconUrl(id: string): string | null {
   return model ? `${WEAPON_ICON_DIR}/${model}.jpg` : null;
 }
 
-// Hand-picked image icons for class abilities, served from
-// /ui/skills/<class>/<abilityId>.png (128px PNGs; see public/ui/skills/ and the
-// per-class mapping.json). Class folder is derived from the ability's own
-// `class`, so adding a class is just listing its ability ids here. Abilities not
-// listed fall through to the procedural ABILITY_RECIPES below.
+// Hand-picked image icons for class abilities, committed as 128px WebP under
+// public/ui/skills/<class>/<id>.webp (each icon's provenance/license is recorded in the
+// per-class mapping.json). WebP is the source of truth: the tree is WebP only, no PNGs.
+// To add an icon, drop the art into public/ui/skills/<class>/ in any common raster format
+// and run `npm run assets:skills` (scripts/convert_skill_icons_webp.mjs): it encodes each
+// non-webp image to WebP (quality 82, alphaQuality 100, smartSubsample true, effort 6) and
+// deletes the original. Then list its id below. Class folder is derived from the ability's
+// own `class`, so adding a class is just listing its ability ids here. Abilities not listed
+// fall through to the procedural ABILITY_RECIPES below. ABILITY_IMAGE_IDS and abilityImageUrl
+// are exported for the gate in tests/skill_icons.test.ts.
 const SKILL_ICON_DIR = '/ui/skills';
-const ABILITY_IMAGE_IDS = new Set<string>([
+export const ABILITY_IMAGE_IDS = new Set<string>([
   // paladin (CraftPix premium "RPG Paladin skill icons" pack)
   'seal_of_righteousness',
   'holy_light',
@@ -2990,10 +3372,330 @@ const ABILITY_IMAGE_IDS = new Set<string>([
 ]);
 
 /** Static URL of an ability's image icon, or null if it uses a recipe. */
-function abilityImageUrl(id: string): string | null {
+export function abilityImageUrl(id: string): string | null {
   if (!ABILITY_IMAGE_IDS.has(id)) return null;
   const cls = ABILITIES[id]?.class;
-  return cls ? `${SKILL_ICON_DIR}/${cls}/${id}.png` : null;
+  return cls ? `${SKILL_ICON_DIR}/${cls}/${id}.webp` : null;
+}
+
+// Item ids with committed painted art under /ui/items/<id>.webp (curated from the CraftPix
+// resource/consumable AND armor/equipment packs; provenance + license in
+// public/ui/items/mapping.json). Served for kind 'item' (bags, tooltips, loot, vendor, the
+// /wiki guide). Covers everything except weapons, which keep their rendered-model thumbnails
+// via WEAPON_ICON_DIR; items not listed fall through to the procedural ITEM_RECIPES below.
+// For armor the icon is purely cosmetic (rarity colour still comes from item.quality), and the
+// flashier icons are reserved for higher-rarity pieces. WebP only, like the skill icons. Add
+// art via `npm run assets:items`, then list the item id here. Guarded by tests/item_icons.test.ts.
+const ITEM_ICON_DIR = '/ui/items';
+export const ITEM_IMAGE_IDS = new Set<string>([
+  // food
+  'baked_bread',
+  'brightwood_venison',
+  'conjured_bread',
+  'conjured_bread3',
+  'fenbridge_rye',
+  'glimmerfin_koi',
+  'raw_bog_eel',
+  'raw_frostgill_trout',
+  'raw_marsh_pike',
+  'raw_mirror_trout',
+  'raw_river_perch',
+  'raw_stonescale_carp',
+  'roast_mountain_goat',
+  'roasted_boar',
+  'smoked_eel',
+  'tough_jerky',
+  'trail_hardtack',
+  // drink
+  'conjured_water',
+  'conjured_water2',
+  'conjured_water3',
+  'glacier_melt',
+  'marsh_mint_tea',
+  'silvermist_cordial',
+  'spring_water',
+  // potion
+  'healing_potion',
+  'lesser_healing_potion',
+  'lesser_mana_potion',
+  'mana_potion',
+  'minor_healing_potion',
+  // elixir
+  'elixir_of_the_bear',
+  // junk
+  'amber_hide',
+  'bogiron_nugget',
+  'bone_fragments',
+  'chipped_tusk',
+  'cracked_fetish',
+  'cracked_ogre_tusk',
+  'cracked_wyrm_scale',
+  'deepfen_pearl',
+  'emberwing_cinderscale',
+  'frayed_prayer_beads',
+  'inert_storm_shard',
+  'linen_scrap',
+  'moonpale_scale',
+  'mudfin_scale',
+  'ogre_toe_ring',
+  'old_cragmaws_pelt',
+  'pale_pearl',
+  'soft_down',
+  'stag_antler',
+  'tangled_weed',
+  'wolf_fang',
+  // quest
+  'bastion_ward_stone',
+  'blessed_embers',
+  'boar_hide',
+  'crypt_keystone',
+  'crypt_ritual_circle',
+  'cult_cipher',
+  'drowned_offering',
+  'fen_muster_order',
+  'ghostly_essence',
+  'glowing_wax',
+  'grave_high_priest_malric',
+  'gravecaller_sigil',
+  'gravewyrm_sigil',
+  'greyjaw_fang',
+  'grubjaw_tusk',
+  'highwatch_summons',
+  'kazzix_heartshard',
+  'lost_caravan_goods',
+  'mire_prowler_pelt',
+  'moongate_rubbing',
+  'morthen_grimoire',
+  'palecoil_heartscale',
+  'priests_sigil',
+  'ridge_stalker_pelt',
+  'ritual_phylactery',
+  'royal_seal',
+  'runed_bone_shard',
+  'storm_core',
+  'supply_crate',
+  'the_codfather',
+  'troll_fetish',
+  'weathered_ledger_page',
+  'webwood_silk',
+  'widow_venom_sac',
+  'wyrmcult_orders',
+  // tool
+  'alien_armor_plate',
+  'amber_crimson_armor_plate',
+  'amethyst_silver_armor_plate',
+  'crimson_amber_armor_plate',
+  'cyan_magenta_armor_plate',
+  'event_skin_token',
+  'forest_pink_armor_plate',
+  'imperial_crimson_armor_plate',
+  'imperial_gold_armor_plate',
+  'ivory_copper_armor_plate',
+  'magenta_cyan_armor_plate',
+  'pink_forest_armor_plate',
+  'simple_fishing_pole',
+  'steel_orange_armor_plate',
+  'vanguard_azure_armor_plate',
+  // equipment (CraftPix premium armor/helmet/boot/glove/greave/belt/jewelry + equipment packs;
+  // curated per slot with rarity allocated by icon richness). Weapons are excluded: they keep
+  // their rendered-model thumbnails via WEAPON_ICON_DIR.
+  // armor - chest
+  'apprentice_robe',
+  'bogiron_hauberk',
+  'boneguard_breastplate',
+  'boneplate_vest',
+  'bramblehide_jerkin',
+  'broodmother_silk_robe',
+  'caravan_quilted_vest',
+  'cryptstalker_jerkin',
+  'deathlord_warplate',
+  'drownedguard_breastplate',
+  'eastbrook_chain_vest',
+  'fenmist_robe',
+  'footpad_jerkin',
+  'gravewoven_raiment',
+  'gravewyrm_scale_hauberk',
+  'highwatch_breastplate',
+  'hollowbone_hauberk',
+  'marshcloth_robe',
+  'militia_vest',
+  'mirejaw_scale_vest',
+  'moonshroud_breastplate',
+  'moonshroud_robe',
+  'necromancers_starshroud',
+  'outrider_brigandine',
+  'peakwool_robe',
+  'recruit_tunic',
+  'reedwoven_jerkin',
+  'reliquary_cloth_chest',
+  'reliquary_plate_chest',
+  'revenant_silk_robe',
+  'shadow_jerkin',
+  'skullsmasher_warbelt',
+  'stalkerhide_jerkin',
+  'tanned_leather_jerkin',
+  'tidescale_vest',
+  'valespun_robe',
+  'wanderers_chestguard',
+  'woven_robe',
+  'wyrmcult_grand_robe',
+  'wyrmscale_jerkin',
+  'wyrmshadow_harness',
+  // armor - legs
+  'cryptbone_greaves',
+  'deathlord_legguards',
+  'drowned_prayer_leggings',
+  'eastbrook_wool_trousers',
+  'eelscale_leggings',
+  'emberwing_legguards',
+  'greyjaw_pelt_cloak',
+  'hollowbound_legguards',
+  'knight_commanders_greaves',
+  'korgaths_chainwraps',
+  'necromancers_legwraps',
+  'nhalias_funeral_wraps',
+  'oathbound_greaves',
+  'outrider_legguards',
+  'pilgrims_leggings',
+  'quilted_trousers',
+  'reedwoven_trousers',
+  'reliquary_legs',
+  'stormshard_leggings',
+  'tideguard_greaves',
+  'tidewatchers_wraps',
+  'trail_leggings',
+  'trollhide_leggings',
+  'windguard_leggings',
+  'wyrmshadow_legguards',
+  'ysols_pearl_greaves',
+  // armor - feet
+  'cragmaw_prowlboots',
+  'cragwalker_boots',
+  'deathlord_sabatons',
+  'drogmar_warboots',
+  'drowned_prayer_sandals',
+  'drownstep_sabatons',
+  'drownstep_slippers',
+  'drownstep_treads',
+  'eelscale_treads',
+  'fenwalker_boots',
+  'gravepath_treads',
+  'gravewalker_softboots',
+  'gravewyrm_sabatons',
+  'gravewyrm_stalkers_treads',
+  'greyjaw_hide_boots',
+  'hobnail_boots',
+  'marrowlord_boneboots',
+  'marrowtread_boots',
+  'marshstrider_boots',
+  'milepost_boots',
+  'moggers_stomper_boots',
+  'necromancers_soulsteps',
+  'oiled_boots',
+  'outrider_sabatons',
+  'ridgestalker_treads',
+  'sableweb_slippers',
+  'selthes_seastriders',
+  'sextons_slippers',
+  'tideguard_sabatons',
+  'wyrmcult_soulsteps',
+  'wyrmshadow_treads',
+  // armor - helmet
+  'acolytes_circlet',
+  'boundstone_helm',
+  'crownforged_dreadhelm',
+  'cryptbone_helm',
+  'deacon_reliquary_helm',
+  'deathlords_dread_visage',
+  'monarch_crown_helm',
+  'nighttalon_crown',
+  'reliquary_helm',
+  'roadwardens_helm',
+  'soulflame_cowl',
+  'stormcallers_crown',
+  'varric_shadow_cowl',
+  'wayfarers_hood',
+  // armor - gloves
+  'crownforged_gauntlets',
+  'gravewyrm_gauntlets',
+  'mistveil_grips',
+  'mossy_handwraps',
+  'nighttalon_grips',
+  'reliquary_gloves_rog',
+  'roughspun_gloves',
+  'soulflame_gloves',
+  'stormcallers_handguards',
+  'wyrmshadow_talongrips',
+  // armor - waist
+  'boundstone_girdle',
+  'cragmaw_huntcord',
+  'crownforged_girdle',
+  'mistveil_cord',
+  'nighttalon_waistband',
+  'sableweb_cord',
+  'silk_sash',
+  'soulflame_cord',
+  'stormcallers_waistguard',
+  'sturdy_belt',
+  // bags (the whole equippable set; the implicit backpack is a UI id, see UI_ITEM_IMAGE_IDS)
+  'gravewoven_bag',
+  'linen_pouch',
+  'mistcallers_duffel',
+  'travelers_knapsack',
+  'wolfhide_satchel',
+  // tools (gathering picks/axes/sickles + cosmetic armor-plate skin tokens)
+  'copper_mining_pick',
+  'felling_axe',
+  'gathering_sickle',
+  'handaxe',
+  'iron_mining_pick',
+  'ironbark_axe',
+  'mithril_mining_pick',
+  'orange_steel_armor_plate',
+  'silverleaf_sickle',
+  'vanguard_chrome_armor_plate',
+  // junk
+  'bandit_bandana',
+  'briny_idol',
+  'soggy_moccasin',
+  // food
+  'conjured_bread2',
+  // quest
+  'blessed_wax',
+  'captains_crest',
+  'grave_captain_voss',
+  'grave_sir_aldren',
+  'kings_signet',
+  'ogre_war_totem',
+  'sanctum_key_shard',
+  'unknown_alien_weaponry',
+]);
+
+// UI-only icon ids that ship painted art under /ui/items/<id>.webp but are NOT ITEMS
+// records. `backpack` is the implicit 16-slot bag the bag bar draws first: it can never be
+// looted, equipped, or unequipped, so it has no item def. Kept apart from ITEM_IMAGE_IDS so
+// the item guard (tests/item_icons.test.ts) keeps asserting that every wired ITEM id is a
+// real, non-weapon item; both sets are served by itemImageUrl and gated on committed art.
+export const UI_ITEM_IMAGE_IDS = new Set<string>(['backpack']);
+
+/** Static URL of an item's (or a UI pseudo-item's) image icon, or null if it uses a recipe. */
+export function itemImageUrl(id: string): string | null {
+  return ITEM_IMAGE_IDS.has(id) || UI_ITEM_IMAGE_IDS.has(id) ? `${ITEM_ICON_DIR}/${id}.webp` : null;
+}
+
+// Book of Deeds crest ids are shaped `deed_<deedId>` (deeds_view.ts deedCrestId). Those whose
+// deed ships committed painted art (public/ui/deeds/<deedId>.webp, listed in DEED_IMAGE_IDS)
+// resolve to that static WebP. Mirrors itemImageUrl. The `deed_cat_<category>` base crests and
+// every non-deed crest id (class crests, talent crests) prefix-strip to something not in the set,
+// so they return null and fall through to their procedural recipe: a missing image never breaks
+// a consumer.
+const DEED_ICON_DIR = '/ui/deeds';
+const DEED_CREST_PREFIX = 'deed_';
+/** Static URL of a deed crest's painted art, or null when the crest id has no committed image. */
+export function deedImageUrl(crestId: string): string | null {
+  if (!crestId.startsWith(DEED_CREST_PREFIX)) return null;
+  const deedId = crestId.slice(DEED_CREST_PREFIX.length);
+  return DEED_IMAGE_IDS.has(deedId) ? `${DEED_ICON_DIR}/${deedId}.webp` : null;
 }
 
 const urlCache = new Map<string, string>();
@@ -3054,7 +3756,9 @@ export function iconCanvas(
 // data URL. Both forms work as an <img src> or CSS background-image.
 export function iconDataUrl(kind: IconKind, id: string, size: number = DEFAULT_ICON_SIZE): string {
   if (kind === 'item') {
-    const img = weaponIconUrl(id);
+    const weapon = weaponIconUrl(id);
+    if (weapon) return weapon;
+    const img = itemImageUrl(id);
     if (img) return img;
   }
   // Abilities, and auras that carry a real ability id (a DoT/buff applied by that
@@ -3062,6 +3766,16 @@ export function iconDataUrl(kind: IconKind, id: string, size: number = DEFAULT_I
   // for generic aura_<kind> ids, so those still fall through to the procedural recipe.
   if (kind === 'ability' || kind === 'aura') {
     const img = abilityImageUrl(id);
+    if (img) return img;
+  }
+  // Deed crests with committed painted art short-circuit to the static WebP. A URL-only path is
+  // sufficient: deed crests are only ever drawn into the Book of Deeds window <img> tags (cards
+  // and the recent strip) through this function, never through the synchronous iconCanvas path
+  // (that is class-crest portraits only, unit_portrait_painter.ts), so no canvas is needed. Every
+  // other crest id (class/talent crests, the deed_cat_* bases, bespoke procedural recipes) returns
+  // null here and falls through to the composited canvas below.
+  if (kind === 'crest') {
+    const img = deedImageUrl(id);
     if (img) return img;
   }
   const key = `${kind}|${id}|${size}`;
@@ -3236,7 +3950,7 @@ export function raidMarkerDataUrl(idx: number): string {
   const canvas = document.createElement('canvas');
   canvas.width = RAID_MARKER_PX;
   canvas.height = RAID_MARKER_PX;
-  const ctx = canvas.getContext('2d')!;
+  const ctx = getCanvas2d(canvas);
   ctx.scale(RAID_MARKER_PX / 100, RAID_MARKER_PX / 100);
   ctx.translate(50, 50);
   drawRaidMarker(ctx, idx);

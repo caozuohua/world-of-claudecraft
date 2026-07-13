@@ -16,6 +16,7 @@
 // render/ui/game/net, no Math.random/Date.now), so it runs unchanged in Node, the
 // browser, and the headless RL env (enforced by tests/architecture.test.ts).
 
+import { effectiveMasterLooter } from '../loot_master';
 import type { Party } from '../sim';
 import type { SimContext } from '../sim_context';
 import { DEFAULT_PARTY_LOOT_STRATEGIES } from '../types';
@@ -40,6 +41,37 @@ export class PartyMachine {
   partyOf(pid: number): Party | null {
     const partyId = this.partyByPid.get(pid);
     return partyId !== undefined ? (this.parties.get(partyId) ?? null) : null;
+  }
+
+  // English Loot Settings summary line for a party (re-localized client-side). Sent
+  // to a joiner (private) and to the whole group on party/raid conversion. A single
+  // ternary return (rather than an early-return branch) keeps this recognized by the
+  // localizeSystemText summaryMaster/summaryGroup arms without a second, spurious
+  // literal-return candidate for the S3 drift guard's static scan.
+  private lootSettingsSummary(party: Party): string {
+    const m = party.lootStrategies.master;
+    const looterPid = m.looter === 0 ? party.leader : m.looter;
+    const looterName = this.ctx.players.get(looterPid)?.name ?? 'the leader';
+    return m.enabled
+      ? `Loot Settings: Master Loot, Master Looter ${looterName}, threshold ${m.threshold}.`
+      : 'Loot Settings: Group Loot.';
+  }
+
+  // Announce a shifted effective master looter to the whole group. `before` is the
+  // effective looter captured before a leadership change; call after the change.
+  private announceLooterShift(party: Party, before: number | null): void {
+    if (party.members.length <= 1) return;
+    if (!party.lootStrategies.master.enabled) return;
+    const after = effectiveMasterLooter(party.lootStrategies.master, party.leader, party.members);
+    if (after === null || after === before) return;
+    const name = this.ctx.players.get(after)?.name ?? 'the leader';
+    for (const mPid of party.members)
+      this.ctx.emit({
+        type: 'log',
+        text: `Master Looter is now ${name}.`,
+        color: '#aaf',
+        pid: mPid,
+      });
   }
 
   private hasActiveInvite(
@@ -124,7 +156,10 @@ export class PartyMachine {
     const leaderMeta = this.ctx.players.get(invite.fromPid);
     if (!leaderMeta) return;
     let party = this.partyOf(invite.fromPid);
+    let created = false;
     if (!party) {
+      created = true;
+      const dungeonDifficulty = leaderMeta.dungeonDifficulty;
       party = {
         id: this.nextPartyId++,
         leader: invite.fromPid,
@@ -132,6 +167,8 @@ export class PartyMachine {
         raid: false,
         raidGroups: new Map([[invite.fromPid, 1]]),
         lootStrategies: { ...DEFAULT_PARTY_LOOT_STRATEGIES },
+        lootTurn: 0,
+        ...(dungeonDifficulty ? { dungeonDifficulty } : {}),
       };
       this.parties.set(party.id, party);
       this.partyByPid.set(invite.fromPid, party.id);
@@ -144,6 +181,10 @@ export class PartyMachine {
     party.members.push(r.meta.entityId);
     party.raidGroups.set(r.meta.entityId, raidGroup);
     this.partyByPid.set(r.meta.entityId, party.id);
+    // Forming the party is the inviter's join too; the accepter counts on
+    // every successful join.
+    if (created) this.ctx.bumpDeedStat(leaderMeta, 'partiesJoined', 1);
+    this.ctx.bumpDeedStat(r.meta, 'partiesJoined', 1);
     for (const mPid of party.members) {
       this.ctx.emit({
         type: 'log',
@@ -152,6 +193,12 @@ export class PartyMachine {
         pid: mPid,
       });
     }
+    this.ctx.emit({
+      type: 'log',
+      text: this.lootSettingsSummary(party),
+      color: '#aaf',
+      pid: r.meta.entityId,
+    });
   }
 
   partyDecline(pid?: number): void {
@@ -187,6 +234,36 @@ export class PartyMachine {
     this.removeFromParty(targetPid, 'has been removed from the party');
   }
 
+  // Leader-only handoff: pass leadership to another member without changing the
+  // roster. Master loot pinned to the leader (looter 0) and the leader-only HUD
+  // controls track `party.leader`, so they follow the new leader automatically.
+  partyPromote(targetPid: number, pid?: number): void {
+    const r = this.ctx.resolve(pid);
+    if (!r) return;
+    const party = this.partyOf(r.meta.entityId);
+    if (!party || party.leader !== r.meta.entityId) {
+      this.ctx.error(r.meta.entityId, 'You are not the party leader.');
+      return;
+    }
+    if (!party.members.includes(targetPid) || targetPid === party.leader) return;
+    const beforeLooter = effectiveMasterLooter(
+      party.lootStrategies.master,
+      party.leader,
+      party.members,
+    );
+    party.leader = targetPid;
+    const newLeader = this.ctx.players.get(targetPid);
+    for (const mPid of party.members) {
+      this.ctx.emit({
+        type: 'log',
+        text: `${newLeader?.name ?? 'Someone'} is now the party leader.`,
+        color: '#aaf',
+        pid: mPid,
+      });
+    }
+    this.announceLooterShift(party, beforeLooter);
+  }
+
   convertPartyToRaid(pid?: number): void {
     const r = this.ctx.resolve(pid);
     if (!r) return;
@@ -217,6 +294,13 @@ export class PartyMachine {
         pid: mPid,
       });
     }
+    for (const mPid of party.members)
+      this.ctx.emit({
+        type: 'log',
+        text: this.lootSettingsSummary(party),
+        color: '#aaf',
+        pid: mPid,
+      });
   }
 
   convertRaidToParty(pid?: number): void {
@@ -253,6 +337,13 @@ export class PartyMachine {
         pid: mPid,
       });
     }
+    for (const mPid of party.members)
+      this.ctx.emit({
+        type: 'log',
+        text: this.lootSettingsSummary(party),
+        color: '#aaf',
+        pid: mPid,
+      });
   }
 
   moveRaidMember(targetPid: number, group: 1 | 2, pid?: number): void {
@@ -304,10 +395,19 @@ export class PartyMachine {
   removeFromParty(pid: number, verb: string): void {
     const party = this.partyOf(pid);
     if (!party) return;
+    const beforeLooter = effectiveMasterLooter(
+      party.lootStrategies.master,
+      party.leader,
+      party.members,
+    );
     const meta = this.ctx.players.get(pid);
     party.members = party.members.filter((m) => m !== pid);
     party.raidGroups.delete(pid);
     this.partyByPid.delete(pid);
+    // Drop the leaver from any in-flight ready check so the remaining members can
+    // still early-finalize once everyone left has answered (their pending slot
+    // would otherwise block it for the full timeout).
+    this.ctx.readyChecks.get(party.id)?.responses.delete(pid);
     for (const mPid of [...party.members, pid]) {
       this.ctx.emit({
         type: 'log',
@@ -323,6 +423,9 @@ export class PartyMachine {
       }
       this.parties.delete(party.id);
       this.ctx.dropPartyMarkers(party.id);
+      // A disband mid-check would otherwise fire the counts-only summary to every
+      // ex-member 30s later about a party that no longer exists.
+      this.ctx.readyChecks.delete(party.id);
     } else if (party.leader === pid) {
       party.leader = party.members[0];
       const newLeader = this.ctx.players.get(party.leader);
@@ -335,6 +438,7 @@ export class PartyMachine {
         });
       }
     }
+    this.announceLooterShift(party, beforeLooter);
     if (party.raid) this.normalizeRaidGroups(party);
   }
 }

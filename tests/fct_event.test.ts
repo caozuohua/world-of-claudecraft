@@ -8,9 +8,9 @@
 import { describe, expect, it } from 'vitest';
 import { type FctSpawnShape, fctSpawnShape } from '../src/ui/fct_event';
 
-describe('fctSpawnShape: damage avoidance (miss/dodge)', () => {
-  it('miss/dodge always float; isSelf tracks isPlayerTarget; never crit', () => {
-    for (const damageKind of ['miss', 'dodge'] as const) {
+describe('fctSpawnShape: damage avoidance (miss/dodge/resist)', () => {
+  it('miss/dodge/resist always float; isSelf tracks isPlayerTarget; never crit', () => {
+    for (const damageKind of ['miss', 'dodge', 'resist'] as const) {
       // player is the target -> isSelf true (the #bbb self colour token)
       expect(
         fctSpawnShape({
@@ -100,7 +100,7 @@ describe('fctSpawnShape: landed hit (damage-done vs damage-taken vs none)', () =
   });
 });
 
-describe('fctSpawnShape: heal / xp / rested-xp / self-note', () => {
+describe('fctSpawnShape: heal / xp / rested-xp / honor / self-note', () => {
   it('heal isSelf tracks isPlayerTarget and passes crit through', () => {
     expect(
       fctSpawnShape({ type: 'heal', crit: false, isPlayerTarget: true }),
@@ -110,7 +110,7 @@ describe('fctSpawnShape: heal / xp / rested-xp / self-note', () => {
     ).toEqual<FctSpawnShape>({ kind: 'heal', isSelf: false, crit: true });
   });
 
-  it('xp / rested-xp / self-note are always self, never crit', () => {
+  it('xp / rested-xp / honor / self-note are always self, never crit', () => {
     expect(fctSpawnShape({ type: 'xp' })).toEqual<FctSpawnShape>({
       kind: 'xp',
       isSelf: true,
@@ -118,6 +118,11 @@ describe('fctSpawnShape: heal / xp / rested-xp / self-note', () => {
     });
     expect(fctSpawnShape({ type: 'rested-xp' })).toEqual<FctSpawnShape>({
       kind: 'rested-xp',
+      isSelf: true,
+      crit: false,
+    });
+    expect(fctSpawnShape({ type: 'honor' })).toEqual<FctSpawnShape>({
+      kind: 'honor',
       isSelf: true,
       crit: false,
     });

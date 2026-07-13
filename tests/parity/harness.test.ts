@@ -131,6 +131,8 @@ describe('exclude lists are pinned and real (anti-loosening guard)', () => {
   it('ENTITY_EXCLUDE membership is exactly the pinned set', () => {
     expect([...ENTITY_EXCLUDE].sort()).toEqual([
       'color',
+      'equippedInstances',
+      'equippedItems',
       'guild',
       'holderBalance',
       'holderTier',
@@ -141,20 +143,25 @@ describe('exclude lists are pinned and real (anti-loosening guard)', () => {
       'overheadEmoteId',
       'overheadEmoteSeq',
       'overheadEmoteUntil',
+      'potionCdRemaining',
       'prevFacing',
       'prevPos',
       'scale',
       'skin',
       'skinCatalog',
+      'stealthed',
       'vx',
       'vy',
       'vz',
+      'weaponSkinId',
+      'weaponSkinLoadout',
     ]);
   });
 
   it('META_EXCLUDE membership is exactly the pinned set', () => {
     expect([...META_EXCLUDE].sort()).toEqual([
       'away',
+      'bankBonusSources',
       'characterId',
       'fiestaMods',
       'fiestaSpecial',
@@ -162,7 +169,7 @@ describe('exclude lists are pinned and real (anti-loosening guard)', () => {
       'known',
       'lastActiveTick',
       'lastWhisperFrom',
-      'marketFilter',
+      'marketQuery',
       'moveInput',
       'name',
       'pendingSkinCatalog',
@@ -171,6 +178,7 @@ describe('exclude lists are pinned and real (anti-loosening guard)', () => {
       'skin',
       'skinCatalog',
       'talentMods',
+      'wireRev',
     ]);
   });
 

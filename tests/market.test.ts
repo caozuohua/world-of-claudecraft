@@ -1,10 +1,16 @@
 import { describe, expect, it } from 'vitest';
+import type { MarketQuery } from '../src/sim/market_query';
 import { Sim } from '../src/sim/sim';
 import type { Entity } from '../src/sim/types';
 import { groundHeight } from '../src/sim/world';
 
 function makeWorld() {
   return new Sim({ seed: 42, playerClass: 'warrior', noPlayer: true });
+}
+
+// A full browse query with sensible defaults; tests vary only what they care about.
+function q(search = '', extra: Partial<MarketQuery> = {}): MarketQuery {
+  return { search, itemType: 'all', subtype: 'all', rarity: 'all', page: 0, ...extra };
 }
 
 function merchant(sim: Sim): Entity {
@@ -73,7 +79,7 @@ describe('the World Market — the Merchant', () => {
     expect(all.listings.some((l) => l.itemId === 'bone_fragments')).toBe(true);
 
     // A substring of the Wolf Fang name must hide every non-matching listing.
-    sim.marketSearch('wolf', seller);
+    sim.marketSearch(q('wolf'), seller);
     const filtered = sim.marketInfoFor(seller)!;
     expect(filtered.filter).toBe('wolf');
     expect(filtered.listings.length).toBeGreaterThan(0);
@@ -81,12 +87,67 @@ describe('the World Market — the Merchant', () => {
     expect(filtered.totalCount).toBe(filtered.listings.length);
 
     // A no-match query yields an empty list (the UI shows the "no matches" copy).
-    sim.marketSearch('zzzznomatch', seller);
+    sim.marketSearch(q('zzzznomatch'), seller);
     expect(sim.marketInfoFor(seller)!.listings.length).toBe(0);
 
     // Clearing the filter restores the full, unfiltered view.
-    sim.marketSearch('', seller);
+    sim.marketSearch(q(''), seller);
     expect(sim.marketInfoFor(seller)!.totalCount).toBe(all.totalCount);
+  });
+
+  it('paginates other sellers server-side, keeping the viewer own listings on every page', () => {
+    const sim = makeWorld();
+    const viewer = sim.addPlayer('warrior', 'Viewer');
+    standAtMerchant(sim, viewer);
+    const book = sim.market.marketListings;
+    book.length = 0; // drop the seeded house stock so the page math is exact
+
+    // 60 other sellers' listings of one item: same name, so they sort by price, which
+    // puts the 50 cheapest on page 0 and the last 10 on page 1.
+    for (let i = 0; i < 60; i++) {
+      book.push({
+        id: 100 + i,
+        sellerKey: 'rival',
+        sellerName: 'Rival',
+        itemId: 'bone_fragments',
+        count: 1,
+        price: 100 + i,
+        expiresAt: Number.POSITIVE_INFINITY,
+        house: false,
+      });
+    }
+    // One listing owned by the viewer (their stable seller key), which must ride on top
+    // of every page for quick reclaim rather than sorting off into the pages of others.
+    book.push({
+      id: 1,
+      sellerKey: marketSellerKey(viewer),
+      sellerName: 'Viewer',
+      itemId: 'wolf_fang',
+      count: 1,
+      price: 500,
+      expiresAt: Number.POSITIVE_INFINITY,
+      house: false,
+    });
+
+    const p0 = sim.marketInfoFor(viewer)!;
+    expect(p0.page).toBe(0);
+    expect(p0.pageCount).toBe(2); // 60 others / 50 per page
+    expect(p0.totalCount).toBe(61); // 60 others + 1 own (the full match count)
+    const othersP0 = p0.listings.filter((l) => !l.mine);
+    expect(othersP0).toHaveLength(50);
+    expect(othersP0[0].price).toBe(100); // sorted by price within the same item name
+    expect(p0.listings.some((l) => l.mine && l.itemId === 'wolf_fang')).toBe(true);
+
+    // Page 1: the viewer own listing still rides on top; only the last 10 others remain.
+    sim.marketSearch(q('', { page: 1 }), viewer);
+    const p1 = sim.marketInfoFor(viewer)!;
+    expect(p1.page).toBe(1);
+    expect(p1.listings.filter((l) => !l.mine)).toHaveLength(10);
+    expect(p1.listings.some((l) => l.mine && l.itemId === 'wolf_fang')).toBe(true);
+
+    // An out-of-range page clamps to the last page.
+    sim.marketSearch(q('', { page: 99 }), viewer);
+    expect(sim.marketInfoFor(viewer)!.page).toBe(1);
   });
 
   it("lists a stack from a seller's bags into escrow", () => {
@@ -401,6 +462,57 @@ describe('the World Market — the Merchant', () => {
     expect(new Set(ids).size).toBe(ids.length); // no id collisions
   });
 
+  it('keeps listings and collection items whose item id is no longer known', () => {
+    // A content edit (rename/retire/typo of an item id) must NOT vaporize every
+    // in-flight copy of that item sitting on the market at the next restart.
+    // The character load path keeps unknown ids verbatim as dormant data; the
+    // market must do the same so a re-added or corrected id rehydrates later.
+    const save = {
+      listings: [
+        {
+          id: 7,
+          sellerKey: '12',
+          sellerName: 'Seller',
+          itemId: 'retired_relic', // not in ITEMS
+          count: 2,
+          price: 300,
+          secondsLeft: 600,
+        },
+      ],
+      collections: [
+        {
+          key: '12',
+          copper: 50,
+          items: [
+            { itemId: 'wolf_fang', count: 1 }, // still known
+            { itemId: 'removed_widget', count: 3 }, // not in ITEMS
+          ],
+        },
+      ],
+      nextListingId: 8,
+    };
+
+    const sim = makeWorld();
+    sim.loadMarket(save);
+
+    // the unknown-id listing survived the load, escrowed goods intact
+    const loaded = sim.marketListings.filter((l) => !l.house);
+    expect(loaded.length).toBe(1);
+    expect(loaded[0]).toMatchObject({ itemId: 'retired_relic', count: 2, price: 300 });
+
+    // the unknown-id collection item survived alongside the known one, and it
+    // round-trips back out so it is not lost on the next save either (asserted
+    // via the public serialize path, since the collection map is Market-private)
+    const out = sim.serializeMarket();
+    expect(out.listings.find((l) => l.itemId === 'retired_relic')).toBeTruthy();
+    expect(
+      out.collections
+        .find((c) => c.key === '12')
+        ?.items.map((s) => s.itemId)
+        .sort(),
+    ).toEqual(['removed_widget', 'wolf_fang']);
+  });
+
   it('always wires a seller their own listings even when the market overflows the wire cap', () => {
     const sim = makeWorld();
     const seller = sim.addPlayer('warrior', 'Seller');
@@ -439,5 +551,52 @@ describe('the World Market — the Merchant', () => {
     expect(mineWired).toBe(info.myListingCount);
     // The wire cap is still respected overall.
     expect(info.listings.length).toBeLessThanOrEqual(120);
+  });
+});
+
+describe('World Market: a now-soulbound listing is returned to the seller', () => {
+  it('moves a soulbound listing off the book and into the seller collection on load', () => {
+    const sim = makeWorld();
+    const sellerKey = 'char:99';
+    // A save from BEFORE heroic_mark became soulbound can still hold a listing of
+    // it (the list-time gate only blocks NEW listings). loadMarket must not keep a
+    // soulbound item on the market; it returns it to the seller's collection.
+    const save = {
+      listings: [
+        {
+          id: 1,
+          sellerKey,
+          sellerName: 'Ada',
+          itemId: 'heroic_mark',
+          count: 3,
+          price: 100,
+          secondsLeft: 1000,
+        },
+        {
+          id: 2,
+          sellerKey,
+          sellerName: 'Ada',
+          itemId: 'wolf_fang',
+          count: 1,
+          price: 50,
+          secondsLeft: 1000,
+        },
+      ],
+      collections: [],
+      nextListingId: 3,
+    };
+    sim.market.loadMarket(save as never);
+
+    const listed = sim.market.marketListings.filter((l) => !l.house).map((l) => l.itemId);
+    expect(listed).not.toContain('heroic_mark'); // the soulbound listing is gone
+    expect(listed).toContain('wolf_fang'); // a tradable listing stays
+
+    const collections = (
+      sim.market as unknown as {
+        marketCollections: Map<string, { items: { itemId: string; count: number }[] }>;
+      }
+    ).marketCollections;
+    const coll = collections.get(sellerKey);
+    expect(coll?.items.some((s) => s.itemId === 'heroic_mark' && s.count === 3)).toBe(true);
   });
 });

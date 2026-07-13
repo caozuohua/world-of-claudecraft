@@ -43,7 +43,7 @@ export const nl_NL: EnTranslations = {
       "subtitle": "Levenslange XP",
       "rank": "Rang",
       "name": "Naam",
-      "realmCol": "Realm",
+      "realmCol": "Wereld",
       "level": "Niv",
       "vlevel": "V.Niv",
       "lifetimeXp": "Levenslange XP",
@@ -52,7 +52,7 @@ export const nl_NL: EnTranslations = {
       "loading": "Ranglijst laden…",
       "unranked": "Geen rang",
       "you": "Jij",
-      "globalSubtitle": "Topkampioenen uit alle realms",
+      "globalSubtitle": "Topkampioenen uit alle werelden",
       "retry": "Kon de ranglijst niet laden. Probeer het opnieuw."
     },
     "milestone": {
@@ -151,6 +151,22 @@ export const nl_NL: EnTranslations = {
     }
   },
   "hudChrome": {
+    "spectate": {
+      "banner": "Toeschouwer bij {name}"
+    },
+    "readyCheck": {
+      "prompt": "{name} heeft een gereedheidscontrole gestart. Ben je gereed?",
+      "ready": "Gereed",
+      "notReady": "Niet gereed",
+      "result": "Gereedheidscontrole: {ready} gereed, {notReady} niet gereed, {noResponse} geen antwoord.",
+      "notInPartyError": "Je moet in een groep zitten om een gereedheidscontrole te starten.",
+      "inProgressError": "Er is al een gereedheidscontrole bezig."
+    },
+    "death": {
+      "resurrectAtCorpse": "Herrijs bij je lijk",
+      "resurrectAtHealer": "De Bleke Hoeder (Tol van de Hoeder)",
+      "spiritHealerAlive": "De Bleke Hoeder waakt over de doden. Jij bent nog onder de levenden."
+    },
     "emotes": {
       "wave": "Zwaaien",
       "laugh": "LOL",
@@ -173,6 +189,317 @@ export const nl_NL: EnTranslations = {
     "emoteEditor": {
       "title": "Emotes",
       "done": "Klaar"
+    },
+    "dailyRewards": {
+      "title": "Dagelijkse beloningen",
+      "close": "Dagelijkse beloningen sluiten",
+      "loading": "Dagelijkse beloningen worden geladen...",
+      "error": "Kon de dagelijkse beloningen niet laden.",
+      "intro": "Houd genoeg WOC in je geverifieerde portemonnee om dagelijkse beloningen te ontgrendelen. Verdien punten met één dagelijkse draai en wisselende taken, en klim daarna op in de dagelijkse ranglijst voor een deel van de prijzenpot.",
+      "disclaimer": "De WOC-prijs kan snel bewegen. We raden aan meer aan te houden dan het minimum van $20 USD, zodat normale koersschommelingen je niet buitensluiten. Dit is geen financieel advies.",
+      "prize": "Prijzenpot",
+      "reset": "Reset",
+      "endsIn": "Eindigt over {time}",
+      "remainingLessThanMinute": "<1 min",
+      "remainingMinutes": "{minutes} min",
+      "remainingHoursMinutes": "{hours} u {minutes} min",
+      "score": "Score",
+      "walletValue": "Portemonneewaarde (WOC)",
+      "usd": "{amount} USD",
+      "sol": "{amount} SOL",
+      "unknown": "Onbekend",
+      "spinTitle": "Dagelijkse draai",
+      "spinDialogTitle": "Dagelijkse beloningsdraai",
+      "spinClose": "Dagelijkse draai sluiten",
+      "spinReady": "Eén draai staat klaar.",
+      "spinClaimed": "Geclaimd: +{points} punten.",
+      "spinResult": "+{points} punten",
+      "spinButton": "Draaien",
+      "tasks": "Taken",
+      "taskMultiplier": "x{multiplier} vermenigvuldiger",
+      "pointsGained": "{points} punten voor dagelijkse beloningen verdiend.",
+      "showChestButton": "Kist tonen",
+      "hideChestButton": "Kist verbergen",
+      "hideChestConfirmTitle": "Kist met dagelijkse beloningen verbergen?",
+      "hideChestConfirmBody": "Dit verwijdert de kistsnelkoppeling uit je HUD. Beloningen, geschiktheid en dit paneel blijven beschikbaar; je kunt de snelkoppeling terughalen via Opties.",
+      "hideChestConfirmOk": "Kist verbergen",
+      "hideChestConfirmCancel": "Annuleren",
+      "leaderboard": "Dagelijkse ranglijst",
+      "totalPlayer": "{count} speler vandaag",
+      "totalPlayers": "{count} spelers vandaag",
+      "history": "Eerdere winnaars",
+      "noLeaders": "Nog geen punten.",
+      "noHistory": "Nog geen uitbetalingen.",
+      "walletConnectTitle": "Portemonnee verifiëren",
+      "walletConnectBody": "Verifieer een Solana-portemonnee met WOC om dagelijkse beloningen te ontgrendelen.",
+      "walletConnectButton": "Portemonnee verifiëren",
+      "walletHoldTitle": "WOC aanhouden",
+      "walletHoldBody": "Houd minstens {amount} USD aan WOC om dagelijkse beloningen te ontgrendelen.",
+      "walletPriceBody": "WOC-prijzen zijn momenteel niet beschikbaar. Kom binnenkort terug.",
+      "reason": {
+        "eligible": "Beloningen ontgrendeld.",
+        "no_wallet": "Verbind een portemonnee met minstens $20 USD aan WOC.",
+        "under_minimum": "Portemonnee ligt onder het WOC-minimum van $20 USD.",
+        "price_unavailable": "WOC-prijs is niet beschikbaar, beloningen zijn tijdelijk vergrendeld.",
+        "banned": "Je bent uitgesloten van dagelijkse beloningen. Reden: {reason}"
+      }
+    },
+    "wocStore": {
+      "title": "WOC-winkel",
+      "close": "WOC-winkel sluiten",
+      "tabsLabel": "Onderdelen van de WOC-winkel",
+      "storeTab": "Winkel",
+      "rewardsTab": "Dagelijkse beloningen",
+      "loading": "WOC-winkel laden...",
+      "error": "De WOC Store is momenteel niet beschikbaar. Probeer het binnenkort opnieuw.",
+      "balance": "Claudium-saldo",
+      "buyClaudium": "Claudium kopen",
+      "owned": "In bezit",
+      "needMoreTitle": "Meer Claudium vereist",
+      "needMoreBody": "Je hebt {shortfall} meer Claudium nodig om {item} te kopen.",
+      "cancel": "Annuleren",
+      "confirmTitle": "Cosmetische aankoop bevestigen",
+      "confirmBody": "{item} voor {cost} Claudium kopen?",
+      "confirmPurchase": "Kopen",
+      "priceChanged": "De prijs veranderde voordat de aankoop voltooid was. Bekijk de vernieuwde prijs en bevestig opnieuw.",
+      "armoryEyebrow": "Seizoen 1",
+      "armoryTitle": "Het Arsenaal",
+      "armoryBody": "Gelimiteerde wapenskins uit de Wapenkamer van seizoen 1. Ze gelden voor je hele account, zijn puur cosmetisch en zijn zichtbaar voor iedereen om je heen.",
+      "collectionLine": "{collection}-collectie",
+      "collections": {
+        "guildmark": "Gildemerk",
+        "emberwrought": "Sintelgesmeed",
+        "hoarfrost": "Rijp",
+        "fallen_star": "Gevallen ster"
+      },
+      "skins": {
+        "guildmark_arming_sword": {
+          "name": "Gildemerk-Wapenzwaard",
+          "look": "Geblauwd stalen lemmet, bronzen vissenstaart pareerstang, groenblauw geverfde leren handgreep, klein gestempeld gildeteken.",
+          "lore": "Waar het gesmeed mes anoniem is, is deze gesigneerd. Een wapensmid krijgt pas het recht om zijn stempel in de ricasso te slaan als de koopman van de Wereldmarkt voor zijn staal instaat, en voor het merk van Smith Haldren. Blauwgeblakerd tegen het vocht van de Vale, tot op een haartje uitgebalanceerd. Je betaalt evenveel voor de postzegel als voor het zwaard, en het is het waard."
+        },
+        "brasscap_axe": {
+          "name": "Messingkapbijl",
+          "look": "Bit van gepolijst staal, messing dop en langets op een gelakte essenhouten heft, netjes omwikkeld, een stempel van de maker.",
+          "lore": "Een gestempelde bijl is een opschepperij die je kunt koesteren. De koperen dop en langets zijn half pantser, half signatuur: ze zorgen ervoor dat het heft niet splijt en vangen het licht van de herberg op, zodat iedereen weet dat je het werk van Armorer Hode hebt gekocht, en niet het werk van een militie. 'Als het bezuinigt, verkoop ik het', zegt de Highwatch-smid. Deze snijdt."
+        },
+        "tempered_flanged_mace": {
+          "name": "Geharde flensknots",
+          "look": "Kop van gehard blauw staal met zes flenzen, messing kraag en pommel, wijnrood leren handvat.",
+          "lore": "Zes flenzen van geblauwd, gehard staal, elk geslepen om een helm open te breken, afgewerkt met messing en omwikkeld met wijnrood leer. De pantsersmeden van het rijk maken geen lelijke wapens, zelfs niet wanneer het werk bruut is. Deze werd via de Wereldmarkt besteld en niet zomaar uit een rek gepakt. Ergens ligt een grootboek met de naam van een trotse koper en het bedrag dat hij Hode ervoor betaalde."
+        },
+        "guildmark_dirk": {
+          "name": "Gildemerk-Dirk",
+          "look": "Slanke dirk van gehard staal, bronzen beschermkap en pommelmoer, donkergroene koordgreep, gestempeld sigil.",
+          "lore": "Wat een gevestigd heer draagt wanneer het zwaard thuisblijft: slank, gehard en gestempeld met hetzelfde merk dat een volledige kling waarmerkt, aan de riem gedragen als een zegelring met een snede. Onopvallend voor iedereen behalve wie het bewijs van een pantsersmid kan lezen. Kwartiermeester Bree bewaart er in Hoogwacht een lade vol van voor officieren die het respect van de muur hebben verdiend."
+        },
+        "brasscrown_staff": {
+          "name": "Messingkroon-Wandelstaf",
+          "look": "Hardhouten staf met daarop een gedraaide koperen kroonknop, koperen ring en geverfde leren band.",
+          "lore": "Gemaakt van doorgewinterd hardhout en bekroond met een koperen kruisbloem die door de Eastbrook-smeden per honderd is gegoten, maar perfect door één. Het behoort tot het soort reiziger dat zowel bij de poort van Fenbridge als bij de muur van Highwatch serieus genomen wil worden. Een wandelstok die nooit echt heeft hoeven lopen; de geverfde band past bij een jas waarvan je de prijs wel kunt raden."
+        },
+        "lacquered_wand": {
+          "name": "Gelakte Staf",
+          "look": "Slanke, dieprood gelakte toverstaf, twee gepolijste koperen banden, kleine ronde koperen punt.",
+          "lore": "Dieprode lak in zeven geduldige jassen, tweemaal omwikkeld met gepolijst koper: het soort toverstok dat een heggenmagiër op de Wereldmarkt koopt zodra ze echte munten zijn gaan opladen en ernaar willen kijken. Het kanaliseert het licht niet beter dan een berkenstok. Maar het glanst prachtig over de toonbank van de Koopman, en de helft van de kleine magie is altijd geloofd."
+        },
+        "fletcher_s_guild_bow": {
+          "name": "Boog van het Pijlenmakersgilde",
+          "look": "Gelakte notenhouten recurvestrijkstok, messing uiteinden van de ledematen, gewaxte linnen snaar, een gildestempel op de stijgbuis.",
+          "lore": "Wat het rijk het dichtst bij een gilde brengt, is een stempel van een fletcher op de stijgleiding, een belofte over wat erin zit, zoals een wijnboer een vat verzegelt. Gelakt walnoothout, messing aan de uiteinden van de ledematen, een gewaxt linnen koord dat niet rafelt door een Mirefen-regen. Elke joint pleit voor de prijs. Trek het één keer voorbij het Widow Struikgewas en het argument wint."
+        },
+        "cinderbrand_sword": {
+          "name": "Sintelbrand",
+          "look": "Mes van donker gesmeed staal, voller gevuld met gloeiende sinteloranje runen, hittescheuren en een smeulend juweel in de beschermer.",
+          "lore": "Het eerste mes werd niet in water geblust, maar in gezegende sintels, geharkt uit Stormcrag, de kolen waarvan de Highwatch-smeden zweren dat ze 'blauw en schoon branden, omdat de berg zich zijn oude eed herinnert.' In de volle laag smeult dat vuur sinteloranje en zal niet doven; de runen blijven warm tot aan de blote hand tijdens de koudste nacht van de muur. Cinderbrand heeft nooit verlichting nodig. Het weigert eenvoudigweg om naar buiten te gaan."
+        },
+        "emberbite_axe": {
+          "name": "Sintelbeet",
+          "look": "Een bijl van zwart ijzer met oranje-oranje scheuren die door het bit heen gloeien, een steenkoolsteen, sliertjes hitte.",
+          "lore": "Armorer Hode werkte een steenkool van bergvuur in het hart van het bit, zodat de rand tussen de slagen nooit echt afkoelt. De scheuren ademen oranje tijdens de neerwaartse beweging, alsof de slag iets wakker maakt dat door het eerste smeden in het ijzer is blijven slapen. Ze zeggen dat een Stormcrag-elementaal de kolen ervoor heeft opgegeven; ze zeggen heel veel dingen bij Highwatch als de wind op is."
+        },
+        "smoulderfall_mace": {
+          "name": "Smeulval",
+          "look": "Donkere ijzeren flenzen gloeien sinteloranje langs de binnenste scheuren, een edelsteen met gesmolten kern in de kop.",
+          "lore": "Een strijdknots die zijn eigen haard draagt: een steen met gesmolten kern, afgebroken van het Sanctum-zegel en 'gesmeed met bergvuur', gloeiend in het hoofd. De flenzen blijven warm aanvoelen en warmer waar ze landen; een Highwatch-sergeant zweert dat een klap ervan een blauwe plek achterlaat die tot de ochtend zwak gloeit. Het vuur van de berg, eindelijk gemaakt om te breken in plaats van te verzegelen."
+        },
+        "ashspark_dagger": {
+          "name": "Asvonkmes",
+          "look": "Kort, zwartgeblakerd lemmet dooraderd met gloeiend sinteloranje, een klein smeulend juweeltje in de pommel, as en vonk.",
+          "lore": "Een mes uit een steegje met het vuur van de berg in de pommelsteen gesmokkeld, de stille grap van een wapensmid: zelfs een handtas zou een sintel van het eerste smeedstuk kunnen bevatten. Zwartgeblakerd, oranje geaderd, altijd een tintje te warm in de schede. Teken het in het donker onder Highwatch en de gloed verlicht je hand net genoeg om het gat in de bewaker van een man te vinden."
+        },
+        "forgeheart_staff": {
+          "name": "Smeedhartstaf",
+          "look": "Met ijzer beslagen staf bekroond met een gekooide gloeiende sintelkern, sintelrunen omhoog in de schacht, opstijgende hitte-glinstering.",
+          "lore": "Een levende steenkool van bergvuur, aan de kruin in ijzer gekooid. Loremaster Caddis noemt het het bewijs dat het vuur van het eerste smeden kan dienen om te dienen, en niet alleen om te verzegelen. Warmte-glinstering stijgt eruit op in een dun, eindeloos lint; een magiër die iemand draagt, heeft nooit behoefte aan een smederij of een wachtvuur. De sintel, zo fluisteren ze, werd uit de adem van Voskar de Sintelvleugel gehaald, en is sindsdien niet meer afgekoeld."
+        },
+        "emberwrought_wand": {
+          "name": "Sintelgesmede Toverstaf",
+          "look": "Zwartgeblakerde metalen toverstok met een gloeiende kolenkool in ijzeren klauwen, haarscheurtjes in de hitte, warm innerlijk licht.",
+          "lore": "De toverstaf die het cijfer noemde. Toen een Highwatch-wapenmaker voor het eerst een steenkool van bergvuur in ijzeren klauwen stak en deze een sterfelijke hand liet beantwoorden, noemden zelfs de Priester's van het Licht het niet langer ketterij en begonnen het nuttig te noemen. Warm, geduldig en stilletjes gevaarlijk: het kooltje aan de punt brandt al onafgebroken voordat de eigenaar ademhaalde."
+        },
+        "cinderlatch_crossbow": {
+          "name": "Sintelslot",
+          "look": "Een kruisboog van zwart staal, een sinteloranje gloed die uit de scheuren in de prikstok sijpelde, een smeulende kool in de helmstok.",
+          "lore": "Het vreemdste van de gesmeed sintels: het vuur van de berg stroomde in een machine. Sinaasappel sijpelt uit de scheuren in de prikstok, en een smeulende kool in de helmstok zorgt ervoor dat de snaar nooit verstijft in de kou van Thornpeak of de vochtigheid van Mirefen. De bouten verlaten de groef al warm en het land warmer. Het antwoord van een jager op een muur waar de vijand de kou ook niet voelt."
+        },
+        "ice_fang_sword": {
+          "name": "IJstand",
+          "look": "Gebogen blad van bleek gletsjerijs, gekartelde rijpkristallen langs de ruggengraat, een gloeiende cyaan bevroren kern in de vollere, ijspegelpareerstang.",
+          "lore": "Het vlaggenschip van de diepvriesklasse, en het stuk waar elke verzamelaar als eerste naar reikt. Ice Fang was gesneden, niet gesmeed, uit een hoektand van de gletsjer die Thornpeak boven Highwatch afdekt, waarvan de cyaan kern koud brandde als het licht van de Glimmermere. Het rijpt de lucht die het snijdt. De muurwachter zweert dat één soldaat hem heeft gedragen op de avond dat de hoge sneeuw de Wyrmcult tegenhield, en 'de muur voor een winter heeft gekocht'."
+        },
+        "glaciersplit_axe": {
+          "name": "Gletsjersplijter",
+          "look": "Een kop van doorschijnend blauw gletsjerijs, een gebarsten binnenkant van gloeiend cyaan, borstelige ijskristallen en een handvat dat koude damp achterlaat.",
+          "lore": "Gehouwen uit het blauwe hart van de Thornpeak-gletsjer, waar twee eeuwen ijs de kou hebben onderdrukt totdat deze uit zichzelf gloeit. Zelfs in rust laat hij damp achter, en de scheur waarin hij landt is een gletsjerspleet onder de Besluipener Ridge. Highwatch geeft zijn gevallenen daarboven aan het ijs; dit is dus een wapen dat bedoeld is om de dooi, en wat de dooi ook zou veroorzaken, op afstand te houden."
+        },
+        "rimecrusher_mace": {
+          "name": "Rijpverbrijzelaar",
+          "look": "Een cluster van grillige ijskristallen rond een gloeiende cyaankern, terwijl rijp langs een verzilverde steel naar beneden kruipt.",
+          "lore": "Niet uitgesneden maar gegroeid: Thornpeak-ijs lokte rond een koude cyaankern totdat het zo hard werd als Hode's beste staal. Rijm kruipt langs het verzilverde handvat naar de hand en komt nooit helemaal aan. Waar het toeslaat, bevriest het water; waar het rust, wordt de grond wit. De ernstige kou van de toppen, klein genoeg gemaakt om te slingeren naar de dingen die tegen de muur klimmen."
+        },
+        "frostbite_dagger": {
+          "name": "Rijpnaald",
+          "look": "Een griezelig dunne dolk van helderblauw ijs, een gloeiende cyaanader in het midden, naaldvorstkristallen en een rijp gevest.",
+          "lore": "Dun als een ingehouden adem en twee keer zo koud: een splinter van de Thornpeak-gletsjer aangescherpt tot een enkele gloeiende ader, zo scherp dat de wond dichtgevroren is voordat het bloed eraan denkt te stromen. De naam is ontleend aan de ernstige kou die de doden van de bergtoppen meedragen. Het hoeft nooit te worden verscherpt; ijs wordt niet dof, merkt Loremaster Caddis droogjes op, het wacht alleen maar."
+        },
+        "hoarfrost_vigil_staff": {
+          "name": "Rijpwake",
+          "look": "Verzilverde staf bekroond met een zwevende, langzaam roterende scherf van gloeiend cyaanijs, waaruit kristallen en koude damp voortkomen.",
+          "lore": "De staf van de wacht die nooit aan de muur van Highwatch slaapt. De kroon is een scherf cyaan-tarn-ijs dat vrij van het zilver drijft en langzaam uit zichzelf draait: altijd, zo zweert de bewaker, in de richting van de kou die zich onder de toppen verzamelt. Het dragen van de wake betekent tweehonderd jaar wacht houden in één nacht, en beloven niet weg te kijken."
+        },
+        "everwinter_wand": {
+          "name": "Scherf van de Eeuwige Winter",
+          "look": "Een enkele piek van gloeiend cyaan gletsjerijs, rijp die uit een zilveren kraag bloeit, zwakke koude mist.",
+          "lore": "Een piek van gloeiend gletsjerijs, naar verluidt gebroken uit het diepe bergmeer onder het Sanctum, waar de kou van de berg tanden heeft. Rijp bloeit eindeloos uit zijn zilveren kraag en smelt nooit, niet door vuur, noch door de zomer. Magiër's houden het dichtbij vanwege de kou die het hun werk leent, en houden het ver weg op de avonden dat het naar de crypte van Nythraxis lijkt te leunen en te luisteren."
+        },
+        "winterbite": {
+          "name": "Winterbeet",
+          "look": "Boog van verzilverd staal en blauw ijs, een gloeiende cyaan bevroren kern in de stijgbuis, een nokvormige pijl van massief ijs, koude damp.",
+          "lore": "Een boog van verzilverd staal en ijs uit Doorntop, met in het middenstuk een koude cyaankern die de pijl aan de pees vastvriest. De boog legt een schacht van massief gletsjerijs aan die zich bij elke trek opnieuw vormt. De schutter draagt op de muur geen pijlkoker, alleen de kou. Met zo'n boog hield Hoogwacht de Belagerrug tijdens een belegering: één schutter, zo wordt verteld, en een wintervoorraad pijlen die er altijd al waren."
+        },
+        "solheim_sword": {
+          "name": "Solheim, Laatste licht van de dageraad",
+          "look": "Een grootzwaard gesmeed uit een gevallen ster, een kern van gesmolten goud die het lemmet splijt, kosmoszwart staal met een rand in sterrenlicht, gouden scherven die rond de bewaker cirkelen, een aurora-lint.",
+          "lore": "Toen de ster uit de westelijke hemel viel en 'als een smidse' voorbij het weduwenstruikgewas barstte, trok broeder Aldric zijn nog smeulende hart uit de Mirefen-krater en smeekte de smeden van het rijk om 'iets te maken dat niet tot deze wereld behoort'. Ze hebben er één grootzwaard van gemaakt: Solheim. De gesmolten gouden kern splijt het kosmoszwarte blad als de dageraad die een nachtelijke hemel kraakt, en scherven van stermetaal cirkelen rond de bewaker op paden waar geen hand voor is ingesteld. Er is er maar één ooit vervalst. Er zal geen ander zijn."
+        },
+        "skyrender_axe": {
+          "name": "Hemelsplijter, De Wond van het Firmament",
+          "look": "Hoofd als een gescheurd stuk nachtelijke hemel, scheuren van gesmolten goud en etsen van sterrenbeelden, zwevende scherven van sterrenlicht, een aurora-glans langs de rand.",
+          "lore": "Geslagen vanaf de rand van de krater, waar de gevallen ster het spiegelbeeld van de hemel uit Mirefen scheurde en een wond achterliet die nog steeds stoomt. Het hoofd ziet eruit als een stuk verscheurde nacht: scheuren van gesmolten goud, sterrenbeelden die geen wetenschapper bij Highwatch kan noemen, een aurora die bij elke beweging van de rand bloedt. Broeder Aldric zegende het en wilde het niet aanraken. Het optillen betekent het gat vasthouden dat de hemel achterliet."
+        },
+        "starfall_mace": {
+          "name": "Sterrenval, Oordeel van de Hemel",
+          "look": "Gevangen gesmolten gouden sterkern omringd door rondcirkelende fragmenten, kosmoszwarte flenzen dooraderd met sterrenlicht, aurora die uit de naden spat.",
+          "lore": "Een sterkern werd gevangen vlak voordat hij stierf, omringd door het puin dat ermee viel, bevroren op een paar centimeter afstand van de vergetelheid. De kosmoszwarte flenzen lopen door van opgesloten sterrenlicht, en aurora komt uit de naden wanneer het omhoog wordt gebracht. De oude Priester's van het Licht noemden een vallende ster een oordeel, een oordeel van bovenaf dat geen enkel schild mocht tegenhouden, en noemden dit naar degene die op Mirefen neerkwam."
+        },
+        "astravyr_dagger": {
+          "name": "Astravyr, Hoektand van de Gevallen Ster",
+          "look": "Een stukje van een gevallen ster, een gloeiende rand van gesmolten goud op kosmoszwart metaal, een heldere sterdeeltjes die rond de pommel cirkelen, een dun auroraspoor.",
+          "lore": "Het kleinste stukje van de ster dat Aldric uit de krater haalde, en volgens sommigen het gevaarlijkste. Eén enkel stukje van dat buitenaardse hart, met de gesmolten gouden rand op kosmoszwart metaal, een eenzame sterstof die rond de pommel cirkelt als een maan die zijn wereld heeft verloren. Hij weegt bijna niets en deelt bijna alles. Klein genoeg om te verbergen, helder genoeg om in het donker door zijn eigen licht te vinden."
+        },
+        "cosmarch_staff": {
+          "name": "Cosmarch, Spits van de Eindeloze Leegte",
+          "look": "Ronddraaiende cluster van gouden sterrenscherven rond een kern van gesmolten goud, een door sterrenbeelden geëtste kosmoszwarte schacht, aurora-linten die naar boven kronkelen.",
+          "lore": "Een schacht van stermetaal bekroond met een kern van gesmolten goud en een ring van gouden scherven die er in een langzame, eindeloze baan omheen marcheren: een kleine kosmos, geëtst met sterrenbeelden die bij geen enkele hemel boven Thornpeak passen. Aurora slingert zich omhoog als rook die vergat op te stijgen. Degenen die het droegen, beweerden dat ze de leegte er doorheen konden voelen stromen, zoals Ysolei louter 'het maanlicht drinkt': geduldig en koud, en terugkijkend."
+        },
+        "emberwish_wand": {
+          "name": "Sintelwens, Vonk van de Stervende Zon",
+          "look": "Gevangen gesmolten gouden stervende sterrenstof omhuld door rondcirkelende vonken, kosmoszwarte schacht geëtst met gloeiende sterrenbeelden.",
+          "lore": "Niet de gevallen ster zelf, maar het laatste splintertje van een stervende: een enkele gesmolten gouden gloed van een zon die al is uitgedoofd, omhuld door de vonken die het laatste licht vormden. De kosmoszwarte schacht is geëtst met de sterrenbeelden die hem zagen sterven. De Mirefen-boeren zeggen dat het één wens vervult voor degene die het in de echte schemering vasthoudt; ze zeggen ook dat elke ziel die het vasthield meer tijd wenste, en dat de Verdronken Maan niemand van hen dat gunde."
+        },
+        "encore_bow": {
+          "name": "Encore, de tweede vallende ster",
+          "look": "Komisch extra groot sterrenkanon: een kosmoszwarte loop geëtst met gloeiende gouden sterrenbeelden, een uitlopende klokkenmond met daarin een gesmolten gouden komeetschelp, koperen fittingen, een houten schouderkolf.",
+          "lore": "De smeden die de gevallen ster bewerkten, maakten er zes relikwieën van en hadden nog een vat stermetaal over, en tegen die tijd hadden de leerlingen er een mening over. Wat uit het aambeeld kwam, is het eerste kanon van het rijk, of de kleinste belegeringsmachine: een schouderkanon dat niet zozeer een schot loslaat als wel een tweede ster vraagt, gericht. Broeder Aldric weigerde het te zegenen, omdat hij redeneerde dat alles wat zo luid is al door de hemel is opgemerkt. Jager's zijn er dol op. Er is niets downrange ooit gebeurd."
+        },
+        "meteorlatch_crossbow": {
+          "name": "Meteoorslot, Het Laatste Oordeel van de Hemel",
+          "look": "Meteorisch stermetaal, gesmolten gouden kern langs de helmstok, kosmoszwarte ledematen geëtst met sterrenbeelden, een nokvormige straal van puur sterrenvuur.",
+          "lore": "Gesmeed uit ruw meteorisch stermetaal terwijl de Mirefen-krater nog gloeide, puin 'te heet om te hanteren', in kosmoszwarte ledematen gehamerd met sterrenbeelden, en een gesmolten gouden kern langs de helmstok. Het slaat geen grendel, maar roept er een op: een straal van sterrenvuur, losgelaten als een vonnis en neerkomend als het einde van een. Toen Highwatch vreesde dat zelfs de onsterfelijke kroon van Nythraxis misschien niet het ergste onder de toppen zou zijn, was dit het wapen dat ze aan de muur wilden hebben. Richt het goed."
+        }
+      },
+      "seasonOne": "Seizoen 1",
+      "rarity": {
+        "uncommon": "Ongewoon",
+        "rare": "Zeldzaam",
+        "epic": "Episch",
+        "legendary": "Legendarisch"
+      },
+      "wtype": {
+        "sword": "Zwaard",
+        "axe": "Bijl",
+        "mace": "Foelie",
+        "dagger": "Dolk",
+        "staff": "Staf",
+        "wand": "Toverstaf",
+        "bow": "Boog",
+        "crossbow": "Kruisboog"
+      },
+      "badge": {
+        "flagship": "Vlaggenschip",
+        "hero": "Held"
+      },
+      "inspectAria": "Inspecteer {item}",
+      "viewModeLabel": "Voorbeeldmodus",
+      "tryOn": "Uitproberen",
+      "weaponOnly": "Alleen wapen",
+      "sceneLabel": "Voorbeeldbelichting",
+      "scene": {
+        "day": "Dag",
+        "dusk": "Schemering",
+        "night": "Nacht"
+      },
+      "lore": "Achtergrondverhaal",
+      "buySkin": "Skin kopen",
+      "unavailable": "Niet beschikbaar",
+      "applied": "In gebruik",
+      "apply": "Skin toepassen",
+      "detach": "Skin verwijderen",
+      "equipHint": "Rust een {type} uit om deze skin aan te brengen."
+    },
+    "claudium": {
+      "title": "Claudium",
+      "open": "Claudium openen",
+      "close": "Claudium sluiten",
+      "loading": "Claudium laden...",
+      "balanceLabel": "Saldo",
+      "balanceUnit": "{amount} Claudium",
+      "solBalance": "SOL: {amount}",
+      "wocBalance": "WOC: {amount}",
+      "unavailable": "De Claudium-winkel is momenteel niet beschikbaar. Je saldo en aankopen zijn niet aangetast. Probeer het binnenkort opnieuw.",
+      "disclosure": "Claudium is een virtuele valuta die maar één kant op gaat: koop het met geld en besteed het aan cosmetica. Het kan niet worden ingewisseld, overgedragen of uitbetaald.",
+      "buyTitle": "Claudium kopen",
+      "railLabel": "Betaalmethode",
+      "railStripe": "Kaart",
+      "railSol": "SOL",
+      "railWoc": "WOC",
+      "railWocDiscount": "20% korting",
+      "railWocUnavailable": "WOC-prijzen zijn momenteel niet beschikbaar.",
+      "railNativeUnavailable": "SOL/WOC staat uit.",
+      "amountLabel": "Hoeveelheid",
+      "showAmounts": "Toon alle Claudium-bedragen",
+      "hideAmounts": "Verberg extra Claudium-bedragen",
+      "skuRow": "{usd} voor {claudium} Claudium",
+      "buyButton": "Kopen",
+      "buyUnavailable": "Aankoop is momenteel niet mogelijk.",
+      "storeTitle": "Cosmetische winkel",
+      "storeEmpty": "Er zijn momenteel geen cosmetica beschikbaar.",
+      "storeCost": "{amount} Claudium",
+      "spendButton": "Besteden",
+      "kindCosmetic": "Cosmetica",
+      "kindSkin": "Skin",
+      "kindItem": "Item",
+      "checkoutTitle": "Aankoop voltooien",
+      "checkoutClose": "Betaalvenster sluiten",
+      "checkoutLoading": "Afrekenen laden...",
+      "checkoutPending": "Transactie in behandeling. Bevestig deze in je wallet en houd dit paneel open.",
+      "checkoutPendingButton": "Bezig",
+      "checkoutFailed": "Afrekenen kon niet worden geladen. Probeer het opnieuw.",
+      "checkoutUnavailable": "Die aankoop van Claudium is momenteel niet beschikbaar.",
+      "checkoutWalletRequired": "Koppel een Solana-wallet voordat je Claudium met cryptovaluta koopt.",
+      "checkoutWalletUnsupported": "Deze wallet kan geen Solana-transacties ondertekenen en verzenden.",
+      "checkoutNotSettled": "De transactie is verzonden, maar Claudium is nog niet gecrediteerd. Probeer het binnenkort opnieuw."
     },
     "theme": {
       "preset": "UI-thema",
@@ -222,13 +549,20 @@ export const nl_NL: EnTranslations = {
     "rest": {
       "resting": "Aan het rusten"
     },
+    "abilityScaling": {
+      "bonus": "(+{value})"
+    },
     "unitFrame": {
       "playerLabel": "Je Held",
       "targetLabel": "Je Doelwit",
       "targetAnnounce": "Markeer {name}",
       "partyLabel": "Je Bende",
+      "partyChip": "Groep",
       "partyGroup": "Groep {n}",
-      "durationUnitSeconds": "s"
+      "durationUnitSeconds": "s",
+      "durationUnitMinutes": "m",
+      "durationUnitHours": "u",
+      "durationUnitDays": "d"
     },
     "character": {
       "modelPreview": "Voorbeeld van Personagemodel"
@@ -238,19 +572,36 @@ export const nl_NL: EnTranslations = {
       "chat": "Ga naar chat"
     },
     "mobile": {
-      "autorun": "Autoloop",
       "jump": "Springen",
       "leaderboard": "Ranglijst",
+      "dailyRewards": "Winkel",
+      "deeds": "Daden",
       "nameplates": "Namen",
       "haptics": "Haptiek",
       "hapticsOff": "Haptiek uit",
-      "toggleHaptics": "Haptiek aan/uit"
+      "toggleHaptics": "Haptiek aan/uit",
+      "hotbarPage": "Vaardigheden",
+      "hotbarPageAria": "Toon de volgende set vaardigheden",
+      "actionRing": "Gevechtsacties",
+      "actionPageToggle": "Actiepagina wisselen",
+      "actionPageIndicator": "Pag. {page}",
+      "targetCycle": "Wissel van doel",
+      "targetCycleShort": "Doel",
+      "spellbookPageLabel": "Pagina {page}",
+      "hideKeyboard": "Toetsenbord verbergen",
+      "chatPlaceholder": "Zeg iets..."
     },
     "tutorial": {
       "moveBodyTouch": "Gebruik de bewegingsstick om te bewegen en sleep over het scherm om rond te kijken. Zet een paar stappen om te beginnen.",
       "talkBodyTouch": "Ga dicht bij Marshal Redbrook staan en tik op de Gebruik-knop om te spreken, neem dan zijn taak aan.",
       "returnBodyTouch": "Je taak is volbracht. Keer terug naar Marshal Redbrook en tik op de Gebruik-knop om hem in te leveren.",
-      "doneBodyTouch": "Je kent de basis, {name}. Het Dal ligt voor je om te verkennen. Tik op Meer, dan op Queesten, om je queestelogboek op elk moment na te kijken. Goede jacht."
+      "doneBodyTouch": "Je kent de basis, {name}. Het Dal ligt voor je om te verkennen. Tik op Meer, dan op Queesten, om je queestelogboek op elk moment na te kijken. Goede jacht.",
+      "slayTargetHint": "Nog niet vertrouwd met gevechten? Druk op {targetKey} of klik op een wolf om die als doelwit te kiezen. Gebruik daarna een vaardigheid op je actiebalk om aan te vallen.",
+      "slayTargetHintTouch": "Nog niet vertrouwd met gevechten? Tik op een wolf om die als doelwit te kiezen en tik daarna op een vaardigheid op je actiebalk om aan te vallen.",
+      "nextTipsTitle": "Waar nu heen?",
+      "nextTipQuestLog": "Open je questlogboek ({key}) om je volgende taak in de buurt te vinden.",
+      "nextTipMap": "Bekijk de wereldkaart ({key}) om te zien waar speurtochten wachten.",
+      "nextTipSocial": "Open Sociaal ({key}) om een groep te vinden voor zwaardere gevechten."
     },
     "widgets": {
       "clockTitle": "Lokale tijd - klik om te wisselen tussen 12/24-uurs",
@@ -259,12 +610,32 @@ export const nl_NL: EnTranslations = {
       "heading": "Richting",
       "minimapZoom": "Minimapzoom"
     },
+    "nativeUpdate": {
+      "title": "Update beschikbaar",
+      "body": "Er is een nieuwe versie van World of ClaudeCraft beschikbaar. Werk nu bij voor de nieuwste oplossingen en verbeteringen.",
+      "bodyWithVersion": "Versie {version} van World of ClaudeCraft is beschikbaar. Werk nu bij voor de nieuwste oplossingen en verbeteringen.",
+      "notNow": "Niet nu",
+      "update": "Bijwerken"
+    },
     "castBar": {
       "playerAria": "Jouw Spreukbalk",
       "targetAria": "Spreukbalk van Doelwit"
     },
     "leaderboard": {
-      "close": "Sluiten"
+      "close": "Sluiten",
+      "tabsLabel": "Topscorelijsten",
+      "tabPlayers": "Spelers",
+      "tabGuilds": "Gildes",
+      "tabDevs": "Ontwikkelaars",
+      "guildName": "Gilde",
+      "members": "Leden",
+      "topLevel": "Top",
+      "guildXp": "Totaal XP",
+      "guildEmpty": "Nog geen gerangschikte gildes.",
+      "devName": "Bijdrager",
+      "devTierCol": "Insigne",
+      "mergedPrs": "Samengevoegde PR's",
+      "devEmpty": "Nog geen gerangschikte bijdragers."
     },
     "raidLockout": {
       "title": "Raidvergrendelingen",
@@ -273,7 +644,9 @@ export const nl_NL: EnTranslations = {
       "hoursMinutes": "{h}u {m}m",
       "minutes": "{m}m",
       "lessThanMinute": "<1m",
-      "lockedToast": "Je bent vergrendeld voor {raid}. Ontgrendelt over {time}."
+      "lockedToast": "Je bent vergrendeld voor {raid}. Ontgrendelt over {time}.",
+      "heroicName": "Heroïsch {name}",
+      "heroicLocked": "Je bent vergrendeld voor Heroïsch {name}."
     },
     "compass": {
       "N": "N",
@@ -294,11 +667,156 @@ export const nl_NL: EnTranslations = {
     "keybinds": {
       "emoteWheel": "Emotewiel",
       "targetFriendly": "Dichtstbijzijnde Bondgenoot Aanwijzen",
-      "targetFriendlyNext": "Door Bondgenoten Bladeren"
+      "targetFriendlyNext": "Door Bondgenoten Bladeren",
+      "discord": "Discord",
+      "valecup": "Dalbeker",
+      "categoryPet": "Huisdier",
+      "petAttack": "Huisdier: Aanvallen",
+      "petStop": "Huisdier: Stoppen",
+      "petTaunt": "Huisdier: Uitdagen",
+      "petDefensive": "Huisdier: Verdedigend",
+      "petAggressive": "Huisdier: Agressief"
+    },
+    "vcup": {
+      "title": "De Dalbeker",
+      "shootPower": "KRACHT",
+      "close": "Sluit het Dalbeker-venster",
+      "offlineNote": "Het wedstrijdboek is gesloten. De Dalbeker is op dit moment niet beschikbaar.",
+      "recordLine": "Jouw staat van dienst: {wins} overwinningen, {losses} nederlagen, {draws} gelijke spelen.",
+      "bracketsAria": "Wedstrijdcategorie",
+      "bracketLabel": "{n}v{n}",
+      "waitingCount": "{count} wachtend",
+      "nationsHeading": "Baniernatie",
+      "nation": {
+        "vale": "Oostbeekdal",
+        "mirefen": "Het Slijkveen",
+        "thornpeak": "Doorntop",
+        "coliseum": "Het Asgrauwe Colosseum",
+        "choir": "Het Bleke Koor",
+        "ogre": "De Ogerclans",
+        "moon": "De Bleke Maan",
+        "copperdig": "De Kopergroeve"
+      },
+      "awayNote": "Als beide kanten dezelfde banier voeren, speelt de uitploeg in het omgekeerde kleurenpalet.",
+      "rolesHeading": "Sportrol",
+      "role": {
+        "allrounder": {
+          "name": "Allrounder",
+          "desc": "Van alles wat: trappen, uithalen en een eerlijke schouderduw."
+        },
+        "striker": {
+          "name": "Spits",
+          "desc": "Leeft voor de verre uithaal en de snelle zijstap."
+        },
+        "sweeper": {
+          "name": "Laatste Man",
+          "desc": "Duwt lopers van de bal en pegelt hem weg."
+        },
+        "keeper": {
+          "name": "Keeper",
+          "desc": "Bewaakt het doelgebied met grip, duik en uittrap."
+        }
+      },
+      "queue": "Sluit je aan in de wachtrij",
+      "leaveQueue": "Wachtrij verlaten",
+      "queueNote": "Meld je aan vanaf elke plek; de fluit roept je naar het Zeugveld.",
+      "queuedStatus": "In de wachtrij voor {bracket}: plaats {position} van {count}.",
+      "blockNation": "Kies eerst een baniernatie.",
+      "blockPartySize": "Die categorie vraagt een kleinere groep.",
+      "blockNotLeader": "Alleen de groepsleider kan het team aanmelden.",
+      "inMatchNote": "Je team staat op het veld. Doorspelen!",
+      "deserterNote": "De Terreinmeester onthoudt het. Je mag je over {seconds} sec weer aanmelden.",
+      "liveHeading": "Nu op het Zeugveld",
+      "liveAria": "Dalbeker: {nationA} {scoreA}, {nationB} {scoreB}",
+      "walkUp": "Loop naar het Zeugveld om toe te kijken vanaf de tribunes.",
+      "noLive": "Het veld ligt er stil bij. Er wordt geen wedstrijd gespeeld.",
+      "boardHeading": "Winnaarsbord",
+      "boardEmpty": "Nog geen winnaars opgetekend. De Koperen Emmer wacht.",
+      "boardWins": "{count} overwinningen",
+      "enterAsGuild": "Treed aan onder de banier van {guild}",
+      "guildRecordLine": "Staat van dienst van je gilde: {wins} overwinningen, {losses} nederlagen.",
+      "guildBoardHeading": "Gildebanieren",
+      "guildBoardEmpty": "Nog geen gilde heeft het veld betreden. Hijs je banier!",
+      "guildBoardWl": "{wins} W, {losses} V",
+      "practice": "Oefenen tegen bots",
+      "practiceNote": "Start meteen een besloten botwedstrijd op je eigen oefenveld.",
+      "practicingNow": "Nu aan het oefenen ({count}):",
+      "clock": "{minutes}:{seconds}",
+      "indicatorQueued": "Dalbeker-wachtrij: {bracket}, plaats {position} van {count}",
+      "indicatorLive": "Dalbeker",
+      "indicatorOpen": "Open het Dalbeker-venster",
+      "phaseCountdown": "Aftrap over {seconds}",
+      "phaseGoal": "GOAL!",
+      "phaseGolden": "GOUDEN GOAL",
+      "phaseOver": "EINDSIGNAAL",
+      "bannerFound": "De Dalbeker roept: {nationA} tegen {nationB}!",
+      "bannerCountdown": "Aftrap over {seconds}...",
+      "bannerKickoff": "AFTRAP!",
+      "bannerGoal": "GOAL! {nation} scoort!",
+      "bannerSave": "{name} REDT!",
+      "bannerGolden": "GOUDEN GOAL: de volgende treffer wint!",
+      "bannerEnd": "Eindstand: {nationA} {scoreA}, {nationB} {scoreB}",
+      "bannerWin": "Overwinning op het Zeugveld!",
+      "bannerDraw": "Een gelijkspel op het Zeugveld.",
+      "bannerLoss": "Nederlaag op het Zeugveld.",
+      "logQueued": "Je sluit je aan bij de Dalbeker-wachtrij voor {bracket} (plaats {position}).",
+      "logUnqueued": "Je verlaat de Dalbeker-wachtrij.",
+      "logFound": "Je Dalbeker-wedstrijd staat klaar: {nationA} tegen {nationB}.",
+      "logRoster": "Jouw kant: {allies}. Hun kant: {enemies}.",
+      "logGoal": "{name} scoort voor {nation}! {nationA} {scoreA}, {nationB} {scoreB}.",
+      "logSave": "{name} redt de bal!",
+      "logWin": "Je wint de partij op het Zeugveld.",
+      "logDraw": "De partij op het Zeugveld eindigt in een gelijkspel.",
+      "logLoss": "Je verliest de partij op het Zeugveld.",
+      "gossipOpen": "Het wedstrijdboek",
+      "gossipOpenAria": "Open het Dalbeker-venster",
+      "mobileLabel": "Beker",
+      "briefing": {
+        "subtitle": "Wedstrijdbespreking",
+        "vs": "tegen",
+        "rulesHeading": "Hoe je speelt",
+        "rule1": "Trap of speel de bal in het vijandelijke doel om te scoren.",
+        "rule2": "Wie het eerst 5 doelpunten maakt wint, of wie de meeste heeft bij het eindsignaal.",
+        "rule3": "Staat het gelijk bij het eindsignaal, dan volgt de gouden goal: de volgende treffer wint.",
+        "rule4": "Tackles laten je alleen omtuimelen. Niemand raakt gewond onder het oogstbestand.",
+        "rule5": "Iedereen kan aan komen lopen en je aanmoedigen vanaf de tribunes.",
+        "kitHeading": "Jouw uitrusting",
+        "kitNote": "Deze zetten vervangen je klassevaardigheden voor de duur van de wedstrijd.",
+        "rosterHeading": "De opstelling",
+        "you": "Jij",
+        "bot": "Bot",
+        "ready": "Ik ben er klaar voor",
+        "readyDone": "Klaar",
+        "readyAria": "Meld je klaar voor de aftrap",
+        "waiting": "Wachten tot de tegenpartij zich klaar meldt...",
+        "whistle": "De fluit klinkt over {seconds}s.",
+        "readyCount": "{ready} van {total} klaar"
+      },
+      "bet": {
+        "title": "Wedstrijdweddenschappen",
+        "aria": "Weddenschappen op de Dalbeker-wedstrijd",
+        "closesIn": "Inzetten sluiten over {seconds}s",
+        "closed": "Inzetten gesloten",
+        "prize": "Pot {amount}",
+        "splitAria": "Aandeel van de wedpot per team",
+        "expand": "Weddenschappen bekijken en inzetten",
+        "collapse": "Weddenschappen verbergen",
+        "oddsLabel": "Keert uit",
+        "back": "Zet in op {team}",
+        "form": "{wins}W-{losses}V",
+        "mine": "Jouw inzet: {amount} op {team}",
+        "none": "Je hebt nog geen weddenschap op deze wedstrijd.",
+        "record": "Wedbalans: {wins}W-{losses}V, {sign}{net}",
+        "wonBanner": "Je weddenschap is gewonnen!",
+        "wonLog": "Je Dalbeker-weddenschap is gewonnen: {amount} uitgekeerd.",
+        "lostLog": "Je Dalbeker-weddenschap is verloren: {amount}.",
+        "refundLog": "Weddenschappen nietig verklaard, je inzet van {amount} is teruggegeven."
+      }
     },
     "options": {
       "clickMoveLeft": "Linkermuisklik",
       "clickMoveRight": "Rechtermuisklik",
+      "version": "v{version} ({build})",
       "browserEffects": "Browsereffecten",
       "browserEffectsAuto": "Automatisch",
       "browserEffectsFull": "Volledig",
@@ -316,8 +834,23 @@ export const nl_NL: EnTranslations = {
       "keybindHelpLockCursorOnRotate": "Houdt de muisaanwijzer binnen het venster terwijl je sleept om de camera te draaien, zodat deze de schermrand niet kan bereiken of naar een ander beeldscherm kan gaan. Schakel uit als je liever een vrije aanwijzer hebt.",
       "showWalletOnCharacterScreen": "Portemonnee tonen op personagescherm",
       "showWalletOnPlayerCard": "Portemonnee tonen op spelerskaart",
+      "showDevBadges": "Ontwikkelaarsinsignes tonen",
+      "showOwnNameplate": "Mijn naambordje tonen",
       "uiScale": "UI-schaal",
-      "highContrastBackground": "Hoog-contrastachtergrond"
+      "playerFrameScale": "Schaal spelerframe",
+      "targetFrameScale": "Schaal doelwitframe",
+      "aurasOnPlayerFrame": "Buffs op het spelerframe",
+      "highContrastBackground": "Hoog-contrastachtergrond",
+      "startAttackOnAbility": "Auto-aanval bij gebruik van vaardigheid",
+      "walkByAutoloot": "Buit oprapen in het voorbijgaan",
+      "groundReticle": "Grondrichtkruis",
+      "showItemLevel": "Itemniveau tonen",
+      "itemLevelLine": "Itemniveau {level}",
+      "itemScoreLine": "Score {score}",
+      "showSecondaryActionBar": "Secundaire actiebalk tonen",
+      "showDailyRewardsChest": "Kist met dagelijkse beloningen tonen",
+      "mobileCameraJoystick": "Camerajoystick",
+      "mobileLeftHanded": "Linkshandige indeling"
     },
     "controller": {
       "title": "Controller",
@@ -368,7 +901,9 @@ export const nl_NL: EnTranslations = {
         "fps01Low": "0,1% Laag",
         "ping": "Ping",
         "jitter": "Jitter",
+        "predLead": "Predictievoorsprong",
         "snapshot": "Snapshotfrequentie",
+        "serverTick": "Servertickfrequentie",
         "connection": "Verbinding",
         "drawCalls": "Draw Calls",
         "triangles": "Driehoeken",
@@ -408,8 +943,29 @@ export const nl_NL: EnTranslations = {
       "highContrast": "Hoog contrast",
       "highContrastAria": "Hoog-contrastachtergrond aan/uit: schakelt de bewegende trailer uit zodat de tekst op het startscherm leesbaar blijft"
     },
+    "warfare": {
+      "honorAmount": "{amount} Eer",
+      "dualPrice": "{money} + {honor}",
+      "balance": "Eer: {amount}",
+      "honorFloat": "+{amount} Eer",
+      "honorGain": "Je krijgt {amount} eer ({reason}).",
+      "notEnoughHonor": "Niet genoeg eer.",
+      "reasons": {
+        "arenaWin": "Arena-overwinning",
+        "fiestaKill": "Fiesta-uitschakeling",
+        "fiestaComplete": "Fiesta voltooid",
+        "fiestaWin": "Fiesta-overwinning"
+      }
+    },
     "statInfo": {
       "fromYour": "Van je {value} {stat}:",
+      "names": {
+        "spellPower": "Spreukkracht",
+        "critRating": "Crit-waardering",
+        "hasteRating": "Snelheidswaardering",
+        "warfare": "Oorlogvoering"
+      },
+      "warfareValue": "+{increase}% toegebracht / -{reduction}% opgelopen",
       "desc": {
         "str": "Verhoogt je aanvalskracht, zodat je wapenslagen harder aankomen.",
         "agi": "Scherpt je reflexen en mikken, wat meerdere van je gevechtsstatistieken verbetert.",
@@ -418,9 +974,13 @@ export const nl_NL: EnTranslations = {
         "spi": "Versnelt hoe snel de mana van een spreukenwever terugkeert tijdens het rusten, buiten gevecht.",
         "armor": "Verzacht inkomende fysieke klappen. De vermindering is groter tegen aanvallers van een lager niveau en is gemaximeerd op 75%.",
         "attackPower": "Voedt je wapenaanvallen. Elke 14 aanvalskracht voegt 1 schade per seconde toe.",
+        "spellPower": "Verhoogt de schade van je spreuken en de kracht van je genezingen. Elk punt Intellect verleent een beetje Spreukkracht, bovenop wat je krijgt van uitrusting of buffs.",
         "dps": "Je geschatte wapenschade per seconde, een combinatie van de schade en snelheid van je wapen met je aanvalskracht.",
         "critChance": "Je kans dat een aanval kritiek raakt en dubbele schade aanricht.",
-        "dodge": "Je kans om een inkomende slagaanval volledig te ontwijken, zonder schade op te lopen."
+        "dodge": "Je kans om een inkomende slagaanval volledig te ontwijken, zonder schade op te lopen.",
+        "critRating": "Crit-waardering van je uitrusting en setbonussen, die je kans op een kritieke treffer verhoogt. Ongeveer 10 waardering verleent 1% crit.",
+        "hasteRating": "Snelheidswaardering van je uitrusting en setbonussen, die je aanvallen en spreukbezwering versnelt. Ongeveer 10 waardering verleent 1% snelheid.",
+        "warfare": "Verhoogt de schade die aan spelers wordt toegebracht met {increase}% en vermindert de schade die aan spelers wordt toegebracht met {reduction}%."
       },
       "effects": {
         "attackPower": "+{value} Aanvalskracht",
@@ -440,13 +1000,37 @@ export const nl_NL: EnTranslations = {
         "minorForClass": "Van weinig nut voor jouw klasse.",
         "baseChance": "Bevat een basiskans van 5% die door alle avonturiers gedeeld wordt.",
         "dpsApprox": "Een schatting, het sluit kritieke treffers en vaardigheidsschade uit."
+      },
+      "sources": {
+        "header": "Opgebouwd uit:",
+        "base": "Basis: {value}",
+        "attributes": "Van je attributen: {value}",
+        "fromAttribute": "Van {stat}: {value}",
+        "gear": "Uitgeruste uitrusting: {value}",
+        "buff": "{name}: {value}",
+        "talents": "Talenten en effecten: {value}"
       }
     },
     "talents": {
       "defaultBuildName": "Build {n}"
     },
     "tips": {
-      "joinChannels": "Tip: typ /join world of /join lfg om te chatten met spelers over het hele rijk."
+      "joinChannels": "Tip: typ /join world of /join lfg om te chatten met spelers over de hele wereld."
+    },
+    "itemHeroicTag": "[HELDHAFTIG]",
+    "itemSoulbound": "Zielsgebonden",
+    "itemSet": {
+      "header": "{name} ({have}/{total})",
+      "bonusLine": "({pieces}) {bonus}"
+    },
+    "itemProc": {
+      "onMeleeHit": "Kans bij treffer ({chance}%): {effect}",
+      "onSpellDamage": "Kans bij je schadespreuken ({chance}%): {effect}",
+      "onHeal": "Kans bij je genezingen ({chance}%): {effect}",
+      "chainArc": "treft het doelwit met een {school} {name} ({damage}) die naar {jumps} nabije vijanden springt voor afnemende schade",
+      "attackSlow": "en verlaagt de aanvalssnelheid van het doelwit met {pct}% gedurende {duration} sec",
+      "dot": "laat {name} etteren, een {school} schade-over-tijd die {total} toebrengt gedurende {duration} sec",
+      "hot": "laat {name} ontluiken, een genezing-over-tijd die {total} herstelt gedurende {duration} sec"
     },
     "questShare": {
       "notShareable": "Deze queeste kan niet gedeeld worden.",
@@ -459,6 +1043,9 @@ export const nl_NL: EnTranslations = {
       "ineligible": "Je voldoet niet aan de vereisten voor deze queeste.",
       "noQuestSelected": "Selecteer een queeste in je logboek om te delen.",
       "linkTitle": "Shift-klik om deze queeste in de chat te koppelen."
+    },
+    "itemShare": {
+      "linkHint": "Shift-klik om dit voorwerp in de chat te delen."
     },
     "plurals": {
       "guildMembers": {
@@ -484,11 +1071,17 @@ export const nl_NL: EnTranslations = {
         "few": "Wie: {count} spelers online op {realm}.",
         "many": "Wie: {count} spelers online op {realm}.",
         "other": "Wie: {count} spelers online op {realm}."
+      },
+      "playersMatching": {
+        "one": "Wie: {count} speler die overeenkomt met \"{query}\" op {realm}.",
+        "few": "Wie: {count} spelers die overeenkomen met \"{query}\" op {realm}.",
+        "many": "Wie: {count} spelers die overeenkomen met \"{query}\" op {realm}.",
+        "other": "Wie: {count} spelers die overeenkomen met \"{query}\" op {realm}."
       }
     },
     "bugReport": {
       "menuButton": "Bug melden",
-      "realm": "Realm",
+      "realm": "Wereld",
       "character": "Personage",
       "position": "Positie",
       "unknown": "Onbekend",
@@ -584,7 +1177,93 @@ export const nl_NL: EnTranslations = {
       "exportDone": "Je gegevens zijn gedownload. We hebben je een bevestiging gemaild.",
       "exportFailed": "Je gegevens konden niet worden geëxporteerd. Probeer het zo dadelijk opnieuw."
     },
+    "masterLoot": {
+      "title": "Meesterbuit",
+      "enableLabel": "Meesterbuit",
+      "enableAria": "Meesterbuit inschakelen",
+      "looterLabel": "Buitmeester",
+      "leaderOption": "Groepsleider",
+      "thresholdLabel": "Drempel",
+      "thresholdUncommon": "Ongewoon en hoger",
+      "thresholdRare": "Zeldzaam en hoger",
+      "thresholdEpic": "Episch en hoger",
+      "assignPrompt": "{item} toewijzen",
+      "assignAria": "{item} toewijzen aan {name}",
+      "rollButton": "Rollen",
+      "selectAll": "Alles selecteren",
+      "methodMaster": "Buitmethode ingesteld op meesterbuit. Buitmeester: {name}.",
+      "methodGroup": "Buitmethode ingesteld op groepsbuit.",
+      "assigned": "{looter} heeft {item} toegewezen aan {target}.",
+      "unassigned": "{item} is niet toegewezen en is vrij voor iedereen.",
+      "leaderOnly": "Alleen de groepsleider kan de buitmethode wijzigen.",
+      "rollingFor": "Werpen om {item}.",
+      "looterChanged": "Buitmeester is nu {name}.",
+      "thresholdSet": "Buitdrempel ingesteld op {threshold}.",
+      "summaryMaster": "Buitinstellingen: Buitmeester-buit, Buitmeester {name}, drempel {threshold}.",
+      "summaryGroup": "Buitinstellingen: Groepsbuit."
+    },
+    "corpseHarvest": {
+      "title": "Oogsten",
+      "harvestButton": "Oogsten",
+      "harvestButtonTooltip": "Oogsten: verzamel ambachtsmaterialen van dit lijk (vel, hoektand, zijde en vergelijkbare onderdelen), los van de buit. Iedereen kan oogsten, maar elk lijk kan maar door één speler worden geoogst.",
+      "concentrateHint": "Hoe minder delen je kiest, hoe hoger de kwaliteit van elk deel.",
+      "alreadyHarvested": "Dit kadaver is al geoogst.",
+      "componentAria": "Oogst {component}",
+      "components": {
+        "hide": "Huid",
+        "fang": "Tand",
+        "silk": "Zijde",
+        "venomSac": "Gifzak",
+        "gills": "Kieuwen",
+        "claw": "Klauw",
+        "horn": "Hoorn",
+        "tusk": "Slagtand"
+      }
+    },
+    "townFocus": {
+      "title": "Stadsfocus",
+      "hint": "Focuspunten geven een bonus bovenop de basisopbrengst van elk onderdeel. Onderdelen zonder focus blijven op het basisniveau.",
+      "budgetLabel": "Punten over: {remaining} / {budget}",
+      "saveButton": "Focus opslaan",
+      "notInTownHint": "Je moet in de stad zijn om je focus in te stellen.",
+      "increaseAria": "Vergroot de focus op {component}",
+      "decreaseAria": "Verminder de focus op {component}"
+    },
+    "party": {
+      "promoteLeader": "Bevorderen tot leider",
+      "inviteUsage": "Wie wil je uitnodigen? Gebruik: /invite <naam>."
+    },
+    "playerMenu": {
+      "info": "Spelerinfo",
+      "block": "Blokkeren",
+      "unblock": "Deblokkeren",
+      "openFor": "Spelersmenu voor {name} openen",
+      "profileUnavailable": "Geen profiel gevonden voor {name}.",
+      "aiTag": "[AI]",
+      "aiTagTitle": "Door AI bestuurd account",
+      "watchTwitch": "Bekijken op Twitch",
+      "watchX": "Bekijken op X",
+      "watchKick": "Bekijken op Kick",
+      "watchYouTube": "Bekijken op YouTube"
+    },
+    "lootSettings": {
+      "title": "Buitinstellingen",
+      "close": "Buitinstellingen sluiten",
+      "menuItem": "Buitinstellingen",
+      "method": "Buitmethode",
+      "rollThreshold": "Worpdrempel",
+      "groupLoot": "Groepsbuit",
+      "valueMaster": "Buitmeester-buit",
+      "leaderOption": "Buitmeester: Leider (jij)",
+      "masterOption": "Buitmeester: {name}"
+    },
+    "dungeonDifficulty": {
+      "setHeroic": "Kerkermoeilijkheid instellen: Heroïsch",
+      "setNormal": "Kerkermoeilijkheid instellen: Normaal"
+    },
     "bags": {
+      "cannotDestroy": "Dit voorwerp kan niet worden vernietigd.",
+      "rightClickDestroy": "Rechtsklik om te vernietigen",
       "filterGroupAria": "Tassen filteren op categorie",
       "filterAll": "Alle",
       "filterWeapon": "Wapens",
@@ -598,7 +1277,13 @@ export const nl_NL: EnTranslations = {
       "sortName": "Naam",
       "searchPlaceholder": "Items zoeken",
       "searchAria": "Tasitems zoeken op naam",
-      "noMatch": "Geen items komen overeen met je filters."
+      "noMatch": "Geen items komen overeen met je filters.",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Tasvakken gebruikt: {used} van {total}",
+      "backpack": "Rugzak",
+      "bagSocketAria": "{name}: {slots}",
+      "socketEmpty": "Leeg tasvak",
+      "unequipHint": "Klik om deze tas af te doen"
     },
     "raidConvert": {
       "toPartyDone": "Je raid is terug omgezet naar een groep.",
@@ -606,8 +1291,116 @@ export const nl_NL: EnTranslations = {
       "leaderOnly": "Alleen de raidleider kan omzetten naar een groep.",
       "tooLarge": "Een raid met meer dan vijf leden kan niet terug omgezet worden naar een groep."
     },
+    "itemArmorType": {
+      "cloth": "Stof",
+      "leather": "Leer",
+      "mail": "Maliën"
+    },
+    "auraEffect": {
+      "dot": "Brengt elke {interval} s {value} {school}schade toe",
+      "hot": "Herstelt elke {interval} s {value} gezondheid",
+      "absorb": "Absorbeert {value} schade",
+      "healAbsorb": "Absorbeert {value} inkomende genezing",
+      "thorns": "Verursacht bei Angreifern {value} {school}schaden",
+      "slow": "Verringert Bewegungstempo um {pct}%",
+      "speed": "Erhöht Bewegungstempo um {pct}%",
+      "attackSpeedSlow": "Verlangsamt Angriffstempo um {pct}%",
+      "attackSpeedFast": "Erhöht Angriffstempo um {pct}%",
+      "haste": "Erhöht Angriffs- und Zaubertempo um {pct}%",
+      "tongues": "Erhöht Zauberzeit um {pct}%",
+      "increase": {
+        "ap": "Erhöht Angriffskraft um {value}",
+        "armor": "Erhöht Rüstung um {value}",
+        "int": "Erhöht Intelligenz um {value}",
+        "agi": "Erhöht Beweglichkeit um {value}",
+        "sta": "Erhöht Ausdauer um {value}",
+        "spi": "Erhöht Willenskraft um {value}",
+        "allStats": "Erhöht alle Attribute um {value}"
+      },
+      "reduce": {
+        "ap": "Verringert Angriffskraft um {value}",
+        "armor": "Verringert Rüstung um {value}",
+        "int": "Verringert Intelligenz um {value}",
+        "agi": "Verringert Beweglichkeit um {value}",
+        "sta": "Verringert Ausdauer um {value}",
+        "spi": "Verringert Willenskraft um {value}",
+        "allStats": "Verringert alle Attribute um {value}"
+      },
+      "allStatsPctReduce": "Vermindert alle statistieken met {pct}%",
+      "increasePct": {
+        "ap": "Verhoogt aanvalskracht met {pct}%",
+        "armor": "Verhoogt pantser met {pct}%",
+        "int": "Verhoogt Intellect met {pct}%",
+        "sta": "Verhoogt Uithoudingsvermogen met {pct}%",
+        "allStats": "Verhoogt alle statistieken met {pct}%"
+      },
+      "dodge": "Erhöht Ausweichchance um {pct}%",
+      "dodgeReduce": "Verringert Ausweichchance um {pct}%",
+      "armorFlat": "Verringert Rüstung um {value}",
+      "armorFlatStacks": "Verringert Rüstung um {value} ({stacks} Stapel)",
+      "armorPct": "Vermindert pantser met {pct}%",
+      "armorPctStacks": "Vermindert pantser met {pct}% ({stacks} stapels)",
+      "mortalWound": "Verringert erhaltene Heilung um {pct}%",
+      "vulnerability": "Erhöht erlittenen Schaden um {pct}%",
+      "physVuln": "Erhöht erlittenen physischen Schaden um {pct}%",
+      "spellVuln": "Erhöht erlittenen Magieschaden um {pct}%",
+      "critVuln": "Erhöht Chance, kritisch getroffen zu werden, um {pct}%",
+      "costTax": "Erhöht Fähigkeitskosten um {pct}%",
+      "stun": "Betäubt: handlungsunfähig",
+      "root": "Festgewurzelt: bewegungsunfähig",
+      "incapacitate": "Handlungsunfähig: kann nicht handeln",
+      "polymorph": "Gedaanteverwisseld: kan niet handelen",
+      "hex": "Verringert verursachten Schaden und Heilung um {pct}%",
+      "blind": "Geblendet: handlungsunfähig",
+      "silence": "Zum Schweigen gebracht: kann keine Zauber wirken",
+      "disarm": "Entwaffnet: kann keine Waffenangriffe nutzen",
+      "lockout": "Zauberschule gesperrt",
+      "imbue": "Waffe mit Bonuseffekten erfüllt",
+      "imbueRange": "Wapen doordrongen: {min} tot {max} bonusschade bij Verdict",
+      "stealth": "Verborgen; Bewegungstempo um {pct}% verringert",
+      "formBear": "Bruingedaante: verhoogde gezondheid en pantser",
+      "formCat": "Katzengestalt: Nahkampfschaden und Energie",
+      "formTravel": "Fleetgedaante: bewegingssnelheid verhoogd met {pct}%",
+      "defensiveStance": "Bewaakte Houding: minder ontvangen schade, meer dreiging",
+      "righteousFury": "Brandende Eed: sterk verhoogde dreiging door Heilige schade",
+      "scale": "Größe um {pct}% erhöht",
+      "jump": "Sprunghöhe um {pct}% erhöht",
+      "school": {
+        "physical": "Fysiek",
+        "fire": "Vuur",
+        "frost": "Vorst",
+        "arcane": "Arcaan",
+        "shadow": "Schaduw",
+        "holy": "Heilig",
+        "nature": "Natuur"
+      }
+    },
+    "worldBoss": {
+      "spawn": "{name} verrijst boven Doorntop-Hoogten!"
+    },
+    "auth": {
+      "appleLoginCta": "Ga verder met Apple",
+      "appleError": "Aanmelden met Apple is mislukt. Probeer het opnieuw.",
+      "appleChoiceIntro": "Maak een nieuw account of koppel Apple aan een bestaand account.",
+      "appleChoiceExpired": "Deze aanmelding bij Apple is verlopen. Meld je opnieuw aan met Apple.",
+      "forgotPrompt": "Wachtwoord vergeten?",
+      "forgotTitle": "Wachtwoord opnieuw instellen",
+      "forgotHint": "Voer je gebruikersnaam in en we sturen een herstellink naar het geregistreerde e-mailadres.",
+      "forgotUsername": "Gebruikersnaam",
+      "forgotSubmit": "Herstellink versturen",
+      "forgotSent": "Als een account met die gebruikersnaam een e-mailadres heeft, hebben we een herstellink gestuurd. Controleer je inbox.",
+      "forgotBack": "Terug naar inloggen",
+      "resetTitle": "Kies een nieuw wachtwoord",
+      "resetNewPassword": "Nieuw wachtwoord",
+      "resetConfirm": "Bevestig nieuw wachtwoord",
+      "resetSubmit": "Wachtwoord bijwerken",
+      "resetDone": "Je wachtwoord is bijgewerkt. Je kunt nu inloggen.",
+      "resetMismatch": "De wachtwoorden komen niet overeen.",
+      "resetErrInvalid": "Deze herstellink is ongeldig of verlopen. Vraag een nieuwe aan."
+    },
     "loot": {
-      "chestTitle": "Kist"
+      "chestTitle": "Kist",
+      "takeAllTooltip": "Alles nemen: verzamel alle munten en voorwerpen in dit buitvenster."
     },
     "spellbook": {
       "addToBarAria": "{name} toevoegen aan actiebalk",
@@ -616,6 +1409,572 @@ export const nl_NL: EnTranslations = {
     "nameplate": {
       "mob": "[{level}] {name}",
       "mobElite": "[{level}+] {name}"
+    },
+    "mobTooltip": {
+      "levelFamily": "Niveau {level} {family}",
+      "familyDemon": "Demon",
+      "hostile": "Vijandig",
+      "friendly": "Vriendelijk"
+    },
+    "targetFrame": {
+      "unlock": "Doelwitframe verplaatsen",
+      "lock": "Doelwitframe vergrendelen"
+    },
+    "playerFrame": {
+      "unlock": "Spelerframe verplaatsen",
+      "lock": "Spelerframe vergrendelen"
+    },
+    "frameReset": {
+      "label": "Frameposities herstellen"
+    },
+    "itemTooltip": {
+      "requiresLevel": "Vereist niveau {level}"
+    },
+    "discord": {
+      "title": "Discord",
+      "panelTitle": "World of ClaudeCraft",
+      "open": "Discord",
+      "close": "Sluiten",
+      "keybind": "Discord-paneel",
+      "disabled": "Discord-integratie is momenteel niet beschikbaar.",
+      "tiers": {
+        "none": "Ongerangschikt",
+        "initiate": "Ingewijde",
+        "squire": "Schildknaap",
+        "footman": "Voetknecht",
+        "knight": "Ridder",
+        "champion": "Kampioen",
+        "warlord": "Krijgsheer",
+        "legend": "Legende",
+        "mythic": "Mythisch"
+      },
+      "loginCta": "Doorgaan met Discord",
+      "orEmail": "of gebruik e-mail",
+      "cta": {
+        "title": "Koppel je Discord om punten te verdienen en hogerop te komen",
+        "stats": "{online} online · {total} leden in de server",
+        "statsLoading": "Word lid van de gemeenschap en verdien beloningen",
+        "button": "Koppel in één klik",
+        "dismiss": "Negeren"
+      },
+      "link": {
+        "cta": "Discord koppelen",
+        "relink": "Discord opnieuw koppelen",
+        "connecting": "Discord openen...",
+        "benefits": "Koppel je Discord om punten te verdienen door spelen en gemeenschapsactiviteit, en klim door de statusrangen.",
+        "error": "Kon Discord niet koppelen. Probeer het opnieuw.",
+        "success": "Discord gekoppeld."
+      },
+      "choice": {
+        "title": "Doorgaan met Discord",
+        "intro": "Maak een nieuw account aan, of koppel je Discord aan een account dat je al hebt.",
+        "greeting": "Welkom, {name}!",
+        "createCta": "Nieuw account aanmaken",
+        "haveAccount": "Heb je al een account?",
+        "linkCta": "Bestaand account koppelen",
+        "linkSubmit": "Account koppelen",
+        "error": "Kon niet doorgaan. Probeer het opnieuw.",
+        "expired": "Die Discord-inlogsessie is verlopen. Log opnieuw in met Discord."
+      },
+      "keep": {
+        "title": "Stel een wachtwoord in",
+        "body": "Je account logt in met Discord. Stel een wachtwoord in zodat je na het ontkoppelen nog steeds met je gebruikersnaam kunt inloggen.",
+        "usernameLabel": "Je gebruikersnaam",
+        "confirmLabel": "Bevestig wachtwoord",
+        "submit": "Wachtwoord instellen en ontkoppelen",
+        "cancel": "Annuleren",
+        "mismatch": "Wachtwoorden komen niet overeen.",
+        "tooShort": "Wachtwoord moet minstens 6 tekens lang zijn."
+      },
+      "linkedAs": "Gekoppeld als {name}",
+      "linkedTitle": "Discord: {name}",
+      "viewCharacter": "Bekijk {name}",
+      "viewProfile": "Open het openbare profiel van dit personage",
+      "unlink": "Ontkoppelen",
+      "visit": "Bezoek Discord",
+      "unlinkConfirm": "Je Discord-account loskoppelen van dit spelaccount?",
+      "statusLabel": "Status",
+      "rank": "Rang",
+      "points": "Punten",
+      "lifetime": "Aller tijden",
+      "toNext": "{points} tot volgende rang",
+      "maxRank": "Hoogste rang bereikt",
+      "tiersTitle": "Statusrangen",
+      "tierLocked": "Vergrendeld",
+      "tierCurrent": "Huidig",
+      "earnTitle": "Hoe je punten verdient",
+      "earnBody": "Verdien punten door speeltijd in het spel en door actief te blijven in de Discord. Punten verhogen je statusrang.",
+      "memberSince": "Lid sinds",
+      "memberSinceDays": "{days}d in de Discord",
+      "roleTag": {
+        "levyst": "Levy St",
+        "admin": "Admin",
+        "coredevs": "Kernontwikkelaar",
+        "devs": "Dev",
+        "mods": "Mod",
+        "artists": "Artiest"
+      },
+      "guildMember": "Geverifieerd lid",
+      "notMember": "Nog niet in de server",
+      "joinCta": "Word lid van de Discord",
+      "online": "{count} online",
+      "community": "Gemeenschap",
+      "rewards": "Beloningen",
+      "voice": {
+        "title": "Spraak",
+        "channel": "In {channel}",
+        "empty": "Er is nu niemand in spraak.",
+        "speaking": "Aan het praten",
+        "muted": "Gedempt",
+        "join": "Deelnemen aan spraak",
+        "connect": "Verbinden met spraakkanaal"
+      },
+      "swag": {
+        "title": "Swag",
+        "claim": "Claimen",
+        "claimed": "Geclaimd",
+        "locked": "Vergrendeld",
+        "free": "Gratis",
+        "cost": "{points} ptn",
+        "needTier": "Bereik een hogere rang om dit te claimen.",
+        "needPoints": "Niet genoeg punten.",
+        "claimError": "Kon die beloning niet claimen. Probeer het opnieuw.",
+        "claimedToast": "Geclaimd: {name}",
+        "titleDiscordian": "Titel: Discordiaan",
+        "titleSquire": "Titel: Schildknaap van het Rijk",
+        "chromaBlurple": "Blurple Mech Chroma",
+        "titleChampion": "Titel: Kampioen van Claudemoon",
+        "swagStickers": "Stickerpakket (verzonden)",
+        "swagTee": "T-shirt (verzonden)"
+      },
+      "relay": {
+        "tooFast": "Je plaatst te snel. Wacht even en probeer het opnieuw.",
+        "lfg": {
+          "label": "Op zoek naar groep",
+          "hint": "Vind spelers voor een kerker of quest"
+        },
+        "wts": {
+          "label": "Te koop aangeboden",
+          "hint": "Adverteer een voorwerp of dienst te koop"
+        },
+        "wtb": {
+          "label": "Te koop gevraagd",
+          "hint": "Vraag naar een voorwerp dat je wilt kopen"
+        },
+        "recruit": {
+          "label": "Gilde werven",
+          "hint": "Werf spelers voor je gilde"
+        },
+        "event": {
+          "label": "Evenement / Raid",
+          "hint": "Kondig een raid, meetup of evenement aan"
+        },
+        "help": {
+          "label": "Hulp nodig",
+          "hint": "Vraag de gemeenschap om hulp"
+        }
+      }
+    },
+    "devBadge": {
+      "title": "Ontwikkelaar",
+      "tiers": {
+        "tinkerer": "Knutselaar",
+        "artificer": "Vervaardiger",
+        "runesmith": "Runensmid",
+        "architect": "Architect",
+        "worldwright": "Wereldbouwer"
+      },
+      "flavors": {
+        "tinkerer": "Je eerste pull request landde in het rijk.",
+        "artificer": "Vijf pull requests verder, en de wereld buigt naar je code.",
+        "runesmith": "Vijftien pull requests gesmeed in het draaiende spel.",
+        "architect": "Een architect van het rijk: 30 pull requests samengevoegd.",
+        "worldwright": "Een bouwer van werelden: 70 pull requests vormen het spel."
+      },
+      "badgeTitle": "Ontwikkelaar: {tier}",
+      "prsLanded": "{count} pull requests samengevoegd",
+      "contributor": "Opensource-bijdrager",
+      "link": {
+        "cta": "GitHub koppelen",
+        "relink": "GitHub opnieuw koppelen",
+        "benefits": "Koppel je GitHub om een ontwikkelaarsinsigne te verdienen voor de pull requests die je hebt laten samenvoegen in de opensource-repo.",
+        "error": "Kon GitHub niet koppelen. Probeer het opnieuw."
+      },
+      "linkedAs": "Gekoppeld als {login}",
+      "unlink": "GitHub ontkoppelen"
+    },
+    "steam": {
+      "title": "Steam",
+      "link": "Steam koppelen",
+      "unlink": "Steam ontkoppelen",
+      "linked": "Gekoppeld aan Steam-account {id}",
+      "benefits": "Koppel je Steam-account vanuit de desktop-app om de daden die je behaalt te spiegelen naar Steam-prestaties.",
+      "noTicket": "Steam gaf geen koppelticket af. Start Steam en probeer het daarna opnieuw."
+    },
+    "mailbox": {
+      "title": "Brievenbus",
+      "subtitle": "De Ravenpost",
+      "close": "Brievenbus sluiten",
+      "tabInbox": "Postvak In",
+      "tabInboxWithCount": "Postvak In ({count})",
+      "tabSend": "Versturen",
+      "empty": "Je brievenbus is leeg.",
+      "truncated": "De nieuwste {shown} van {total} brieven worden getoond.",
+      "attachmentsBadge": "Pakket bijgevoegd",
+      "unreadBadge": "Ongelezen",
+      "back": "Terug",
+      "take": "Bijlagen pakken",
+      "delete": "Brief verwijderen",
+      "deleteAria": "Verwijder de brief {subject}",
+      "openAria": "Lees de brief {subject} van {name}",
+      "noSubject": "(geen onderwerp)",
+      "toLabel": "Aan",
+      "toPlaceholder": "Personagenaam",
+      "subjectLabel": "Onderwerp",
+      "bodyLabel": "Bericht",
+      "coinLabel": "Munten bijvoegen",
+      "parcelsLabel": "Pakketten",
+      "parcelsHint": "Klik op een voorwerp in je tassen om het bij te voegen.",
+      "removeParcelAria": "Verwijder {item} uit de brief",
+      "parcelQtyDecreaseAria": "Eén {item} minder versturen",
+      "parcelQtyIncreaseAria": "Eén {item} meer versturen",
+      "sendButton": "Brief versturen",
+      "postageNote": "Porto: {amount}. De raaf vliegt ongeveer {seconds}s.",
+      "arrivedBanner": "De raaf is geland: post van {name}.",
+      "arrivedLog": "Je hebt nieuwe post van {name}.",
+      "indicatorAria": "Ongelezen post: {count}",
+      "indicatorTip": "Je hebt {count} ongelezen brieven. Ga naar een brievenbus om ze te lezen.",
+      "clickAttach": "Klik om aan je brief toe te voegen.",
+      "cannotMail": "Dit kan niet per post worden verstuurd.",
+      "result": {
+        "sent": "Een raaf vliegt op met je brief naar {name} ({postage} porto).",
+        "collected": "Je haalt {amount} uit de brief.",
+        "tooFar": "Je moet bij een brievenbus zijn om je post te beheren.",
+        "needRecipient": "Noem een ontvanger voor je brief.",
+        "noRecipient": "Niemand met die naam heeft hier een brievenbus.",
+        "tooManyParcels": "Een brief draagt hoogstens {count} pakketten.",
+        "noMailQuestItems": "Je kunt geen opdrachtvoorwerpen versturen.",
+        "notEnoughItems": "Zoveel heb je er niet om te versturen.",
+        "cantAffordPostage": "Je kunt de porto niet betalen.",
+        "recipientBoxFull": "Hun brievenbus is vol.",
+        "letterGone": "Die brief zit niet meer in je brievenbus.",
+        "takeParcelsFirst": "Haal de pakketten eruit voordat je de brief weggooit."
+      }
+    },
+    "bank": {
+      "title": "Bank",
+      "subtitle": "De Vergulde Geldkist",
+      "close": "Bank sluiten",
+      "capacity": "{used}/{total}",
+      "capacityAria": "Bankvakken gebruikt: {used} van {total}",
+      "empty": "Je bank is leeg.",
+      "tooFar": "Je moet bij een bankier zijn om je bank te bekijken.",
+      "buySlots": "Koop {count} vakken",
+      "buySlotsMaxed": "Volledig uitgebreid",
+      "buyConfirm": "{count} extra bankvakken kopen voor {price}?",
+      "buyConfirmAccept": "Kopen",
+      "withdrawHint": "Klik om op te nemen",
+      "withdrawPartialHint": "Shift-klik om een deel op te nemen",
+      "depositHint": "Klik om te storten",
+      "depositPartialHint": "Shift-klik om een deel te storten",
+      "cannotDeposit": "Kan niet in de bank",
+      "depositQuantityTitle": "{item} storten",
+      "depositQuantityInput": "Aantal om te storten",
+      "depositQuantityConfirm": "Storten",
+      "withdrawQuantityTitle": "{item} opnemen",
+      "withdrawQuantityInput": "Aantal om op te nemen",
+      "withdrawQuantityConfirm": "Opnemen",
+      "filterGroupAria": "Bank filteren op categorie",
+      "sortAria": "Bankvoorwerpen sorteren",
+      "searchAria": "Bankvoorwerpen zoeken op naam",
+      "depositAll": "Alle materialen storten",
+      "depositAllDone": "Materialen gestort: {count}.",
+      "depositAllFull": "Materialen gestort: {count}. De bank is nu vol.",
+      "depositAllNone": "Bank vol: niets gestort.",
+      "bonusTitle": "Bonusvakken",
+      "bonusEarned": "+{count}",
+      "bonusStatusEarned": "+{count}",
+      "bonusSourceEmail": "E-mailadres geverifieerd",
+      "bonusSourceDiscord": "Discord gekoppeld",
+      "bonusSourceWallet": "Portemonnee gekoppeld",
+      "bonusSourceReferral": "Aangebrachte vrienden",
+      "bonusAdvertEmail": "Verifieer je e-mailadres om 2 vakken te verdienen.",
+      "bonusAdvertDiscord": "Koppel je Discord om 2 vakken te verdienen.",
+      "bonusAdvertWallet": "Koppel een portemonnee om 2 vakken te verdienen.",
+      "bonusReferralProgress": "{count}/{cap}",
+      "bonusReferralExplainer": "Nodig een vriend uit: wanneer die niveau 10 bereikt, verdienen jullie allebei 2 vakken, tot 5 vrienden.",
+      "bonusSectionAria": "Bonusbankvakken en hoe je er meer verdient"
+    },
+    "calendar": {
+      "title": "Evenementenkalender",
+      "close": "Kalender sluiten",
+      "keybindLabel": "Evenementenkalender",
+      "prevMonth": "Vorige maand",
+      "nextMonth": "Volgende maand",
+      "dayAria": "{date}: {count} evenementen",
+      "noEvents": "Niets gepland voor deze dag.",
+      "allDay": "Hele dag",
+      "bookedBy": "Geboekt door {name}",
+      "deleteAria": "Verwijder het evenement {title}",
+      "bookTitle": "Een gilde-evenement boeken",
+      "titlePlaceholder": "Titel van het evenement",
+      "notePlaceholder": "Notitie (optioneel)",
+      "hourLabel": "Uur (UTC)",
+      "hourAllDay": "Hele dag",
+      "addButton": "Evenement boeken",
+      "guildOnlyNote": "Word lid van een gilde om samen evenementen te plannen.",
+      "result": {
+        "created": "Het evenement staat op de gildekalender.",
+        "removed": "Het evenement is van de kalender gehaald.",
+        "notInGuild": "Je zit niet in een gilde.",
+        "notOfficer": "Alleen officieren en de Gildemeester mogen gilde-evenementen beheren.",
+        "badInput": "Geef het evenement een titel en een geldige dag.",
+        "calendarFull": "De gildekalender is vol.",
+        "eventGone": "Dat evenement staat niet meer op de kalender."
+      },
+      "events": {
+        "raidCall": {
+          "title": "Raidoproep",
+          "note": "Wachters blazen de hoorn: verzamel een groep voor de cryptes en de raid."
+        },
+        "marketDay": {
+          "title": "Marktdag",
+          "note": "De Koopman verwacht verse voorraad. Een mooie dag om de Wereldmarkt af te struinen."
+        },
+        "fiestaNight": {
+          "title": "Fiesta-avond",
+          "note": "De 2v2 Fiesta-ring trekt vanavond zijn luidruchtigste publiek."
+        },
+        "arenaClash": {
+          "title": "Arenatreffen",
+          "note": "Duellisten stromen naar het Asgrauwe Colosseum. Sluit aan in de wachtrij en klim de ladder op."
+        },
+        "fishingDerby": {
+          "title": "Visderby",
+          "note": "Hengelaars staan langs de meren. Neem een hengel mee en wissel visverhalen uit."
+        },
+        "delveDay": {
+          "title": "Delvedag",
+          "note": "Broeder Halven markeert zijn kaarten: een mooie dag om het Ingestorte Reliekschrijn te trotseren."
+        },
+        "moongateCommunion": {
+          "title": "Maanpoort-Communie",
+          "note": "Pelgrims verzamelen zich bij de maanpoort van de tempel onder de maan van halverwege de maand."
+        }
+      }
+    },
+    "social": {
+      "lastSeen": "Laatst gezien: {when}",
+      "lastSeenNever": "nooit",
+      "ignoredTab": "Genegeerd",
+      "blockedTab": "Geblokkeerd",
+      "ignoredEmpty": "Je negeert niemand.",
+      "blockedEmpty": "Je hebt niemand geblokkeerd.",
+      "blockSearchPlaceholder": "Spelersnaam",
+      "blockAction": "Blokkeren",
+      "nowBlocking": "{name} geblokkeerd.",
+      "stopBlockingTitle": "{name} deblokkeren"
+    },
+    "gathering": {
+      "title": "Verzamelen",
+      "mining": "Mijnbouw",
+      "logging": "Houtkap",
+      "herbalism": "Kruidenkunde"
+    },
+    "archetypeTitle": {
+      "label": "Titel",
+      "none": "Geen",
+      "hobbyLabel": "Liefhebberij",
+      "armorcrafting": "Harnasmaker",
+      "weaponcrafting": "Wapensmid",
+      "jewelcrafting": "Juwelier",
+      "alchemy": "Alchemist",
+      "engineering": "Knutselaar",
+      "cooking": "Kok",
+      "inscription": "Schrijver",
+      "enchanting": "Betoveraar",
+      "tailoring": "Kleermaker",
+      "leatherworking": "Leerbewerker"
+    },
+    "crafting": {
+      "title": "Knutselen",
+      "close": "Sluit het maken",
+      "craft": "Ambacht",
+      "reagentsNeeded": "Vereist:",
+      "reagentLine": "{name}: {have}/{required}",
+      "empty": "Nog geen recepten bekend.",
+      "resultAria": "Ambacht {name}",
+      "craftedToast": "Gemaakt: {name}",
+      "insufficientMaterials": "Daar heb je de materialen niet voor.",
+      "unknownRecipe": "Dat recept bestaat niet.",
+      "comboRequirementUnmet": "Je hebt niet beide vereiste ambachten op het vereiste niveau voor dat recept.",
+      "notAtHub": "Je moet bij de werkbank zijn, op het vereiste niveau, om dat te maken.",
+      "throttled": "Je maakt te snel. Wacht even en probeer het opnieuw.",
+      "recipeNotLearned": "Je hebt dat recept nog niet geleerd."
+    },
+    "deeds": {
+      "title": "Boek der Daden",
+      "close": "Sluit het Boek der Daden",
+      "searchPlaceholder": "Daden zoeken",
+      "searchAria": "Zoek daden op naam",
+      "renownLabel": "Roem",
+      "countLabel": "{earned}/{total} daden",
+      "completionAria": "Daden behaald: {earned} van {total}",
+      "recentLabel": "Recent:",
+      "nearestLabel": "Bijna zover:",
+      "filterGroupAria": "Filter de daden",
+      "filterAll": "Alle",
+      "filterEarned": "Behaald",
+      "filterUnearned": "Niet behaald",
+      "filterNearly": "Bijna klaar",
+      "categoriesAria": "Categorieën van daden",
+      "catProgression": "Vooruitgang",
+      "catCombat": "Gevecht",
+      "catDungeon": "Kerkers",
+      "catDelve": "Delves",
+      "catChronicle": "Kronieken",
+      "catCollection": "Verzameling",
+      "catPvp": "PvP en Sport",
+      "catSocial": "Sociaal",
+      "catExploration": "Verkenning",
+      "catFeat": "Wapenfeiten",
+      "categoryCountAria": "{category}: {earned} van {visible} daden behaald",
+      "emptyCategory": "Geen daden gevonden die hierbij passen.",
+      "progressText": "{current}/{target}",
+      "progressAria": "Voortgang: {current} van {target}",
+      "renownChip": "{renown} Roem",
+      "earnedDate": "Behaald op {date}",
+      "featRibbon": "Wapenfeit",
+      "hiddenBadge": "Verborgen",
+      "titleChip": "Titelbeloning",
+      "watch": "Volgen",
+      "unwatch": "Niet meer volgen",
+      "watchFull": "Volglijst vol (max {cap})",
+      "watchAria": "Volg {name} in de dadenvolglijst op het scherm",
+      "unwatchAria": "Stop met het volgen van {name}",
+      "titlesSection": "Titels",
+      "titlesAria": "Kies de titel die je wilt tonen",
+      "titlesNone": "Geen titel",
+      "titlesEmpty": "Behaal een daad die een titel schenkt om deze plank te ontgrendelen.",
+      "unlockedBanner": "Daad volbracht: {name}",
+      "unlockedTitleHint": "Nieuwe titel behaald: {title}. Kies hem in het Boek der Daden.",
+      "retroSummary": "Je kroniek is bijgewerkt: {count} daden opgetekend.",
+      "broadcastLine": "{name} heeft een daad volbracht: {deed}",
+      "rarityLine": "Behaald door {percent} van de avonturiers",
+      "trackerLabel": "Daden",
+      "collapseHint": "Klap de dadenvolglijst in",
+      "expandHint": "Klap de dadenvolglijst uit",
+      "openBookHint": "Open het Boek der Daden",
+      "charTitleLabel": "Titel",
+      "charTitleNone": "Geen titel gekozen",
+      "charOpenBook": "Boek der Daden",
+      "lbTab": "Roem",
+      "lbDeedsCol": "Daden",
+      "lbTitleCol": "Titel",
+      "lbSelf": "Jouw positie: rang {rank}, top {percent} procent",
+      "lbEmpty": "Nog geen kroniekschrijvers op de ranglijst.",
+      "broadcastsLabel": "Deel behaalde daden met je gilde en vrienden",
+      "titledName": "{name} [{title}]"
+    }
+  },
+  "apiError": {
+    "validation": {
+      "failed": "Sommige velden zijn ongeldig. Controleer het formulier en probeer het opnieuw."
+    },
+    "json": {
+      "malformed": "Dat verzoek kon niet worden gelezen. Probeer het opnieuw."
+    },
+    "body": {
+      "too_large": "Dat verzoek is te groot. Probeer het opnieuw met minder gegevens.",
+      "unsupported_media_type": "Niet-ondersteund verzoekformaat."
+    },
+    "db": {
+      "conflict": "Die wijziging conflicteerde met een andere update. Probeer het opnieuw."
+    },
+    "rate_limit": {
+      "exceeded": "Te veel verzoeken. Probeer het opnieuw over {seconds}."
+    },
+    "internal": {
+      "error": "Er is iets misgegaan aan onze kant. Probeer het opnieuw."
+    },
+    "auth": {
+      "token_missing": "Je moet ingelogd zijn om dat te doen.",
+      "token_invalid": "Je sessie is verlopen. Log opnieuw in.",
+      "forbidden": "Je hebt geen toestemming om dat te doen.",
+      "invalid_credentials": "Ongeldige gebruikersnaam of wachtwoord.",
+      "required": "Niet geauthenticeerd.",
+      "web_login_only": "Inloggen is alleen toegestaan vanuit de spelclient.",
+      "too_many_attempts": "Te veel pogingen. Wacht een minuut en probeer het opnieuw.",
+      "too_many_failed_attempts": "Te veel mislukte pogingen. Wacht een paar minuten en probeer het opnieuw.",
+      "current_password_incorrect": "Je huidige wachtwoord is onjuist.",
+      "password_incorrect": "Je wachtwoord is onjuist.",
+      "verification_failed": "Verificatie mislukt. Probeer het opnieuw."
+    },
+    "account": {
+      "username_invalid": "Gebruikersnaam moet 3-24 tekens lang zijn en letters, cijfers of een liggend streepje bevatten.",
+      "username_not_allowed": "Die gebruikersnaam is niet toegestaan.",
+      "username_taken": "Die gebruikersnaam is al in gebruik.",
+      "username_mismatch": "Die gebruikersnaam komt niet overeen met je account.",
+      "password_too_short": "Wachtwoord moet minstens 6 tekens lang zijn.",
+      "password_too_long": "Nieuw wachtwoord mag maximaal 128 tekens lang zijn.",
+      "characters_online": "Log al je personages uit voordat je het account deactiveert.",
+      "deactivated": "Dit account is gedeactiveerd. Neem contact op met een beheerder om het te herstellen.",
+      "not_found": "Account niet gevonden."
+    },
+    "character": {
+      "name_invalid": "Ongeldige personagenaam. Gebruik 2-16 letters.",
+      "name_not_allowed": "Die personagenaam is niet toegestaan.",
+      "invalid_class": "Ongeldige klasse.",
+      "limit_reached": "Maximumaantal personages bereikt.",
+      "name_taken": "Die naam is al in gebruik.",
+      "not_found": "Personage niet gevonden.",
+      "online": "Personage is momenteel online.",
+      "rename_not_permitted": "Dit personage hernoemen is niet toegestaan.",
+      "delete_confirm": "Typ de personagenaam om de verwijdering te bevestigen.",
+      "already_in_world": "Personage is al in de wereld.",
+      "taken_over": "Je personage is overgenomen door een andere sessie.",
+      "rename_required": "Dit personage moet hernoemd worden voordat het de wereld kan betreden."
+    },
+    "moderation": {
+      "suspended_until": "Dit account is geschorst tot {date}.",
+      "suspended": "Dit account is geschorst.",
+      "banned": "Dit account is verbannen.",
+      "force_rename": "Een moderator vereist dat een van je personages wordt hernoemd."
+    },
+    "email": {
+      "invalid": "Voer een geldig e-mailadres in.",
+      "unchanged": "Dat is al je e-mailadres."
+    },
+    "two_factor": {
+      "code_invalid": "Die code is niet geldig, probeer het opnieuw.",
+      "setup_required": "Stel eerst tweefactorauthenticatie in.",
+      "already_enabled": "Tweefactorauthenticatie is al ingeschakeld.",
+      "not_enabled": "Tweefactorauthenticatie is niet ingeschakeld."
+    },
+    "origin": {
+      "cross_site": "Verzoek geblokkeerd om veiligheidsredenen."
+    },
+    "discord": {
+      "not_configured": "Discord-integratie is momenteel niet beschikbaar.",
+      "expired": "Die Discord-aanmelding is verlopen. Meld je opnieuw aan met Discord.",
+      "already_linked": "Dat Discord-account is al gekoppeld aan een ander account.",
+      "password_required": "Stel een wachtwoord in voordat je je Discord-account ontkoppelt.",
+      "unknown_swag": "Die beloning is niet beschikbaar.",
+      "link_required": "Koppel eerst je Discord-account.",
+      "swag_claimed": "Je hebt deze beloning al geclaimd.",
+      "swag_tier": "Bereik een hogere rang om dit te claimen.",
+      "swag_points": "Niet genoeg punten."
+    },
+    "deeds": {
+      "invalid_input": "Ongeldige invoer."
+    },
+    "steam": {
+      "disabled": "Koppelen met Steam is op dit moment niet beschikbaar.",
+      "invalid_ticket": "Steam kon dit koppelverzoek niet verifiëren. Probeer het opnieuw vanuit de desktop-app.",
+      "banned": "Dat Steam-account kan niet worden gekoppeld.",
+      "already_linked": "Je account heeft al een gekoppeld Steam-account.",
+      "account_taken": "Dat Steam-account is al aan een ander account gekoppeld.",
+      "upstream": "Steam reageerde niet. Probeer het zo meteen opnieuw."
     }
   },
   "guide": {
@@ -633,6 +1992,7 @@ export const nl_NL: EnTranslations = {
       "bestiary": "Bestiarium",
       "models": "3D-modellen",
       "gear": "Uitrusting & Voorwerpen",
+      "professions": "Beroepen",
       "economy": "Economie & Handel",
       "social": "Sociaal & Groepen",
       "stats": "Personage & Statistieken",
@@ -640,11 +2000,15 @@ export const nl_NL: EnTranslations = {
       "world": "Wereld",
       "quests": "Quests",
       "dungeons": "Kerkers & Raids",
+      "delves": "Delves",
       "reference": "Naslag",
       "controls": "Besturing",
+      "settings": "Instellingen en prestaties",
       "combat": "Gevecht",
       "talents": "Talenten",
       "arena": "Arena & PvP",
+      "valeCup": "Dalbeker",
+      "deeds": "Boek der Daden",
       "glossary": "Begrippenlijst",
       "wishIKnew": "Dingen die ik graag eerder had geweten",
       "faq": "FAQ",
@@ -654,6 +2018,7 @@ export const nl_NL: EnTranslations = {
       "primary": "Gidssecties",
       "topics": "Onderwerpen",
       "onThisPage": "Op deze pagina",
+      "sidebarLabel": "Gidsonderwerpen",
       "backToGame": "Terug naar het spel"
     },
     "groups": {
@@ -679,7 +2044,8 @@ export const nl_NL: EnTranslations = {
       "github": "Broncode op GitHub",
       "discord": "Word lid van de Discord",
       "communityWiki": "Community-wiki",
-      "rights": "World of ClaudeCraft"
+      "rights": "World of ClaudeCraft",
+      "linksLabel": "Speel- en communitylinks"
     },
     "language": {
       "label": "Taal",
@@ -694,7 +2060,10 @@ export const nl_NL: EnTranslations = {
       "typeZone": "Gebied",
       "typeCreature": "Wezens",
       "typeDungeon": "Dungeon",
-      "typeTerm": "Term"
+      "typeDelve": "Delve",
+      "typeTerm": "Term",
+      "typeAbility": "Vaardigheid",
+      "typeDeed": "Daad"
     },
     "home": {
       "eyebrow": "Klassieke MMO in je browser",
@@ -724,7 +2093,7 @@ export const nl_NL: EnTranslations = {
         "valeName": "Oostbeekdal",
         "valeBlurb": "Groene heuvels en oude bossen waar elk avontuur begint.",
         "marshName": "Slijkveenmoeras",
-        "marshBlurb": "Verzonken venen en door het tij verweerde ruïnes, thuis van murlocs en erger.",
+        "marshBlurb": "Verzonken venen en door het tij verweerde ruïnes, thuis van mudfins en erger.",
         "peaksName": "Doorntop-Hoogten",
         "peaksBlurb": "Door de wind geschuurde bergkammen die opklimmen naar de koudste gevaren van het rijk."
       },
@@ -744,14 +2113,14 @@ export const nl_NL: EnTranslations = {
         "q1": "Is het gratis te spelen?",
         "a1": "Ja. Het hele spel is gratis tot het maximale niveau, en het is open source op GitHub.",
         "q2": "Heb ik een crypto-wallet nodig?",
-        "a2": "Nee. Het spel is volledig speelbaar zonder. Het optionele community-token ontgrendelt alleen cosmetische opsmuk en heeft nooit invloed op kracht.",
+        "a2": "Nee. Het spel is volledig speelbaar zonder. Het optionele community-token voegt alleen cosmetische opsmuk en een aandeel in de prijzenpot van de dagelijkse beloningen toe, en heeft nooit invloed op kracht.",
         "q3": "Kan ik offline spelen?",
-        "a3": "Ja. Er is een directe singleplayermodus in je browser, plus het gedeelde online rijk.",
+        "a3": "Ja. Er is een directe singleplayermodus in je browser, plus de gedeelde online wereld.",
         "q4": "Hoe lang duurt het om het maximale niveau te bereiken?",
         "a4": "De grens is niveau {cap}, bereikt over drie gebieden vol quests, kerkers en verkenning."
       },
       "community": {
-        "heading": "Sluit je aan bij het rijk",
+        "heading": "Sluit je aan bij de wereld",
         "body": "Spring er nu in, of kom even gedag zeggen. De wereld is beter met gezelschap.",
         "play": "Speel nu",
         "discord": "Word lid van de Discord",
@@ -764,7 +2133,7 @@ export const nl_NL: EnTranslations = {
       "step1Title": "Maak een personage",
       "step1Body": "Kies een klasse en een uiterlijk, geef je held een naam en betreed de wereld. Je kunt later meer personages maken.",
       "step2Title": "Vind je eerste quest",
-      "step2Body": "Maarschalk Redbrook wacht in het startdorp. Praat met hem en accepteer Wolven aan de Deur.",
+      "step2Body": "Maarschalk Redbrook wacht in het startdorp met Wolven aan de Deur, en Voorman Odell in de buurt heeft ook werk. Praat met een van beiden om je eerste quest aan te nemen.",
       "step3Title": "Bewegen en rondkijken",
       "step3Body": "Beweeg met W, A, S, D. Houd de rechtermuisknop ingedrukt en sleep om rond te kijken. Dat is het grootste deel.",
       "step4Title": "Vecht ergens tegen",
@@ -781,44 +2150,129 @@ export const nl_NL: EnTranslations = {
       "questsTitle": "Quests",
       "questsBody": "Accepteer quests van mensen met een markering boven hun hoofd, voltooi het doel en lever ze in voor ervaring, munten en uitrusting. De tracker op je scherm houdt je doelen in beeld.",
       "deathTitle": "De dood is niet het einde",
-      "deathBody": "Als je valt, laat je je geest los op de dichtstbijzijnde begraafplaats en ren je terug naar je lichaam. Er gaat geen ervaring verloren.",
+      "deathBody": "Als je valt, blijft je lichaam liggen waar je viel en herrijs je als een geest bij de dichtstbijzijnde begraafplaats. Loop je geest terug naar je lichaam om ter plekke te herleven, zonder enige straf, of neem de Bleke Hoeder bij de begraafplaats aan voor een onmiddellijke herrijzenis tegen de prijs van een voorbijgaande verzwakking. Gloednieuwe helden blijft die verzwakking helemaal bespaard, en niets van wat je bezit of hebt verdiend gaat ooit verloren.",
       "groupingTitle": "Samen spelen",
       "groupingBody": "Nodig anderen uit voor een groep om questvoortgang te delen en kerkers aan te pakken. Het grootste deel van de wereld is solo te spelen, dus groeperen is een keuze, geen verplichting.",
       "onlineTitle": "Online of offline",
-      "onlineBody": "Speel het gedeelde online rijk met iedereen, of start een directe offline wereld in je browser om de kneepjes te leren.",
-      "reassure": "Talenten ontgrendelen op niveau 10 en kunnen altijd opnieuw worden ingesteld, dus je vroege keuzes zijn nooit permanent. Experimenteer naar hartenlust.",
+      "onlineBody": "Speel de gedeelde online wereld met iedereen, of start een directe offline wereld in je browser om de kneepjes te leren.",
+      "reassure": "Talenten ontgrendelen op niveau 10 en kunnen op elk moment buiten gevecht opnieuw worden ingesteld, dus je vroege keuzes zijn nooit permanent. Experimenteer naar hartenlust.",
       "controlsLink": "Bekijk de volledige besturingsnaslag"
     },
     "controls": {
-      "intro": "Standaardtoetsen voor desktop. Elke toewijzing kun je aanpassen in de opties van het spel.",
+      "intro": "Standaardtoetsen voor desktop. Elke toewijzing kun je aanpassen in de opties van het spel, behalve Esc, die altijd het spelmenu opent, en een toewijzing kan een combinatie met een modificatietoets zijn, zoals Shift+Z.",
       "keyHeader": "Toets",
       "actionHeader": "Actie",
       "groupMovement": "Beweging",
       "groupCombat": "Doelwit kiezen en gevecht",
-      "groupInterface": "Vensters",
+      "groupInterface": "Interface",
       "groupCamera": "Camera",
       "talents": "Talenten",
       "arena": "Arena",
       "leaderboard": "Ranglijst",
-      "abilities": "Vaardigheden gebruiken",
+      "deeds": "Boek der Daden",
+      "crafting": "Vervaardigen",
+      "valeCup": "De Dalbeker",
+      "calendar": "Evenementenkalender",
+      "discord": "Discord",
+      "abilities": "Actiebalkvaardigheden gebruiken (de cijferrij; een tweede balk staat op het numerieke toetsenblok)",
+      "targetFriendly": "Dichtstbijzijnde bondgenoot aanwijzen",
+      "cycleFriendly": "Door bondgenoten bladeren",
+      "gameMenu": "Spelmenu en opties openen",
+      "bothMouse": "Beide muisknoppen",
+      "runForward": "Vooruit rennen",
+      "arrowKeys": "Pijltjestoetsen",
+      "groupPet": "Huisdiercommando's",
+      "petBar": "Huisdierbalk: Aanvallen, Stoppen, Provoceren, Defensief, Agressief (met een huisdier van een jager of heksenmeester actief)",
+      "attackMoveNote": "Nog eentje, standaard uit: schakel Aanvalsbeweging in de opties in om een toets te reserveren (A, zolang de optie aanstaat) die je naar je cursor toe laat lopen en het vuur opent op de vijand eronder, of de eerste die je onderweg tegenkomt.",
       "mobileHeading": "Op mobiel",
-      "mobileBody": "Aanraakbediening verschijnt automatisch op telefoons en tablets: een bewegingsstick aan de linkerkant, sleep ergens aan de rechterkant om rond te kijken, en knoppen op het scherm voor je vaardigheden en menu's."
+      "mobileBody": "Aanraakbediening verschijnt automatisch op telefoons en tablets: een bewegingsstick aan de linkerkant, sleep ergens anders om rond te kijken, knijp met twee vingers om de camera te zoomen, en knoppen op het scherm voor je vaardigheden en menu's. Een klein pijltje in de linkerbovenhoek toont of verbergt de menuknoppen, en de knop Meer daar bevat de rest van je vensters.",
+      "controllerHeading": "Op een controller",
+      "controllerBody": "Gamepads werken ook, en controllerondersteuning staat standaard aan. De linkerstick beweegt, de rechterstick richt de camera, en de gezichts- en schouderknoppen dekken je vaardigheden, springen en interageren. Open een venster zoals je tassen om een aanwijzer op het scherm op te roepen, en door het spelmenu navigeer je rechtstreeks met de D-pad en de gezichtsknoppen. Je kunt de knoppen opnieuw toewijzen en de stickdeadzone, camerasnelheid, trilling en omgekeerd kijken aanpassen bij de controllerinstellingen in de opties."
+    },
+    "settingsPage": {
+      "heading": "Instellingen en prestaties",
+      "intro": "Zorg ervoor dat het spel er op zijn best uitziet of het snelst werkt. Drie kant-en-klare configuraties, plus wat elke grafische optie werkelijk doet.",
+      "wherePath": "Alles op deze pagina leeft in het spel: druk op Esc om de opties te openen. Het menu opent op een Overview met vastgezette essentiële instellingen, met de categorieën op een balk ernaast: de onderstaande instellingen vind je onder Graphics, Interface en Accessibility in de groep Display, en de Performance Overlay onder System. Nog sneller: typ een naam in het zoekvak bovenaan en spring er meteen naartoe.",
+      "fairnessTitle": "Eerlijk door ontwerp",
+      "fairnessBody": "Geen enkele optie hier ruilt schoonheid in voor macht. De instellingen van Lower geven alleen cosmetisch poetsmiddel af, nooit informatie waarmee je vecht: je debuffs, cast bars, party health en schadecijfers zijn identiek van Low tot Ultra. Spelen op een bescheiden machine is nooit een handicap.",
+      "loadoutsHeading": "Drie kant-en-klare uitrustingen",
+      "loadoutsIntro": "Begin met de uitrusting die klinkt als jouw machine en pas vervolgens één optie tegelijk aan totdat het goed voelt.",
+      "recommended": "Aanbevolen",
+      "whyLabel": "Waarom het werkt:",
+      "tagReload": "na herladen",
+      "fpsTitle": "Beste FPS",
+      "fpsTagline": "Voor oudere laptops, geïntegreerde grafische kaart en batterijweergave.",
+      "fpsWhy": "Grafische kwaliteit is de hoofdschakelaar en Renderkwaliteit is de sterkste schuifregelaar: met 70% tekent de wereld ongeveer de helft van de pixels terwijl de interface perfect scherp blijft.",
+      "balancedTitle": "Evenwichtig",
+      "balancedTagline": "De goede plek voor de meeste machines en ons standaardadvies.",
+      "balancedWhy": "Medium brengt echte schaduwen en volledige materialen; High voegt omgevingsocclusie en bloei toe. Onder Ultra absorbeert een ingebouwd veiligheidsnet plotselinge dipjes tijdens drukke gevechten, zodat Balanced soepel blijft zonder te babysitten.",
+      "visualsTitle": "Beste beelden",
+      "visualsTagline": "Screenshotmodus voor krachtige desktopmachines.",
+      "visualsWhy": "Ultra wordt weergegeven met de hoogste resolutie die uw scherm biedt, met de rijkste verlichting. Het schakelt ook het vangnet uit, en het is alleen voor desktops: telefoons en de app eindigen op High.",
+      "value50to70": "50 tot 70%",
+      "value90to100": "90 tot 100%",
+      "value100": "100%",
+      "valueHighOrMedium": "High op een gaming-pc, Medium op een laptop",
+      "valueOnOptional": "Aan (optioneel)",
+      "howHeading": "Hoe de opties zich gedragen",
+      "factDetectTitle": "Het spel stemt zichzelf eerst af",
+      "factDetectBody": "Bij de eerste keer opstarten leest de game je apparaat en kiest een verstandig niveau, van Low op een bescheiden telefoon tot Ultra op een sterke desktop. Elke keuze die je zelf maakt, wint altijd.",
+      "factReloadTitle": "Twee soorten opties",
+      "factReloadBody": "Grafische kwaliteit en de geavanceerde keuzemogelijkheden worden van kracht na het herladen, en het paneel biedt indien nodig een knop Nu opnieuw laden. Elke andere optie is van toepassing op het moment dat u deze wijzigt.",
+      "factGovernorTitle": "Een ingebouwd veiligheidsnet",
+      "factGovernorBody": "Op elk niveau onder Ultra verdunt het spel stilletjes het gras, de effecten en de verlichting voor een moment wanneer een groot gevecht een piek bereikt, en herstelt deze vervolgens. Als u Ultra kiest, geeft u aan dat u liever elk detail behoudt.",
+      "factSearchTitle": "Zoeken vindt het als eerste",
+      "factSearchBody": "Weet je niet waar een optie staat? Typ in het zoekvak boven aan het menu. Het begrijpt ook gangbare bewoordingen, dus fps vindt de FPS-weergave, en het kiezen van een resultaat brengt je meteen naar de instelling en laat die gemarkeerd staan.",
+      "advancedHeading": "De geavanceerde preset: mix je eigen preset",
+      "advancedBody": "Geavanceerd begint vanaf het niveau High en ontgrendelt vier extra keuzemogelijkheden, zodat u uw frames kunt besteden waar u ze daadwerkelijk opmerkt: terreindetail, bladdichtheid, effecten en belichting en schaduwkwaliteit. Net als Grafische kwaliteit zijn ze van toepassing na een herlaadbeurt.",
+      "advancedMixes": "Twee favoriete mixen: houd Schaduwkwaliteit op High en stel Effecten en belichting in op Low voor een heldere, gloedvrije look die licht is, of doe het omgekeerde om de bloei te behouden en de schaduwen te verzachten.",
+      "tableHeading": "Elke grafische optie, uitgelegd",
+      "colSetting": "Instelling",
+      "colDoes": "Wat het doet",
+      "colImpact": "FPS impact",
+      "impactNone": "Geen",
+      "impactLight": "Licht",
+      "impactModerate": "Gematigd",
+      "impactHeavy": "Zwaar",
+      "rowGraphicsQuality": "De hoofdschakelaar. Elke stap verandert samen de resolutie, schaduwen, materialen, bladeren en lichteffecten. Het grootste verschil dat je kunt maken.",
+      "rowRenderQuality": "Tekent de 3D-wereld met een lagere interne resolutie en schaalt deze op; de interface blijft scherp. De sterkste instant slider op zwakkere machines en schermen met hoge resolutie.",
+      "rowFieldOfView": "Hoeveel van de wereld past op het scherm, van een ingezoomde 55 tot een overweldigende 100 graden. Een comfortkeuze; bredere uitzichten trekken iets meer aan.",
+      "rowBrightness": "Scènebelichting, donkerder of helderder. Puur voorkeur.",
+      "rowWeather": "Omgevingsregen en sneeuw. Alleen sfeer, en uitzetten scheelt een beetje bij storm.",
+      "rowBrowserEffects": "Hoe mooi mag de interface zelf zijn: glasvervaging, gloed, geanimeerde menu's. Automatische match met uw browser; de 3D-wereld blijft hoe dan ook onaangeroerd.",
+      "rowTerrainDetail": "Rijke, gemengde grondtexturen versus een eenvoudiger, sneller terreinuiterlijk.",
+      "rowFoliageDensity": "Hoe ver en hoe dik het gras rond jouw karakter groeit.",
+      "rowEffectsQuality": "Bloei, omgevingsocclusie en hoeveel fakkels en spreuken echt licht werpen. De grootste besparing onder de geavanceerde plukkers.",
+      "rowShadowQuality": "Schaduwscherpte. Low behoudt schaduwen maar verzacht de randen.",
+      "rowFrostedPanels": "Een matglazen waas achter ramen. Mooi, en precies het soort effect dat een zwakkere browser voelt; laat het uit voor de klassieke, frisse look.",
+      "rowReduceMotion": "Verwijdert interface-animaties zodat vensters onmiddellijk verschijnen. Eerst een toegankelijkheidsoptie, met een kleine prestatiebonus.",
+      "rowPerfOverlay": "Een uitlezing op het scherm van FPS, frametijd en meer. Schakel het in terwijl u deze pagina afstemt en verberg het vervolgens weer.",
+      "tableFoot": "Op zoek naar een trekafstandsschuif of een FPS dop? Er is niets om naar te zoeken: de kijkafstand maakt deel uit van elk kwaliteitsniveau en de framestimulatie volgt uw weergave.",
+      "mobileTitle": "Op telefoons en tablets",
+      "mobileBody": "Mobiel beheert meer voor je: de game kiest het niveau, houdt de resolutie iets lager om de batterij en de hitte te beschermen, en houdt de hoogste niveaus alleen voor desktops. De bovenstaande uitrustingen zijn nog steeds van toepassing; telefoons eindigen gewoon op High.",
+      "touchBody": "Op een aanraakscherm groeit er in de opties ook een eigen comfortcluster: joystickgrootte en -gevoeligheid, grootte en doorzichtigheid van de schermknoppen, een linkshandige gespiegelde indeling, een optionele camerastick, en omgekeerd aanraakkijken, zodat het scherm zich naar je handen voegt in plaats van andersom.",
+      "audioTitle": "Geluid en taal",
+      "audioBody": "Het optievenster is niet alleen beeld. Een Audio-categorie bevat aparte volumeregelaars voor effecten, muziek en stem, en de Interface-categorie draagt een taalkiezer die de hele interface ter plekke opnieuw lokaliseert, zonder herladen, plus een themakiezer voor de vensteropmaak. Taal staat ook als eerste vastgezet op het Overview, zodat het altijd één stap van het openen van het menu verwijderd is.",
+      "autolootBody": "Liever niet elk lijk aanklikken? Een interface-optie, standaard uit, schept de buit van je eigen kills op terwijl je erlangs loopt."
     },
     "combat": {
       "intro": "Gevechten volgen vertrouwde klassieke MMO-regels. Je hoeft er niets van te bestuderen om goed te spelen, dit is gewoon de vorm van hoe gevechten werken.",
       "hitTitle": "Niet elke klap komt aan",
-      "hitBody": "Aanvallen kunnen missen of ontweken, gepareerd en geblokkeerd worden, en die van de vijand ook. Vechten dicht bij je eigen niveau en je uitrusting actueel houden is wat je klappen laat aankomen.",
-      "mitigationTitle": "Pantser en uitrusting houden je staande",
-      "mitigationBody": "Pantser verzacht fysieke klappen en de juiste uitrusting stompt magie af, dus upgrades zijn je belangrijkste bron van staande blijven. Zwaardere pantserklassen schudden meer af, maar niets maakt je onaantastbaar.",
+      "hitBody": "Aanvallen kunnen missen of ontweken worden, en die van de vijand ook, terwijl spreuken volledig weerstaan kunnen worden. Vechten dicht bij je eigen niveau is wat je klappen laat aankomen; hoe groter het niveauverschil, hoe vaker je in de lucht slaat.",
+      "mitigationTitle": "Pantser en gezondheid houden je staande",
+      "mitigationBody": "Pantser verzacht fysieke klappen, dus beter pantser is je belangrijkste bron van standhouden in melee. Magie is een ander verhaal: spreuken doorsta je met een diepere gezondheidsvoorraad en de kans om er een volledig te weerstaan, niet met pantser. Zwaardere pantserklassen schudden meer af, maar niets maakt je onaantastbaar.",
       "resourcesTitle": "Elke klasse heeft zijn eigen ritme",
       "resourcesBody": "Krijgers bouwen Rage op in het strijdgewoel, schurken besteden Energie die gestaag terugkeert, en spreukenwevers beheren een poel van Mana. Je hulpbron leren is de helft van je klasse goed spelen.",
       "growTitle": "Je wordt sterker met elk niveau",
-      "growBody": "Elk niveau maakt je taaier en ontgrendelt nieuwe vaardigheden, helemaal tot aan de limiet van niveau {cap}. Quests doen is de snelste weg omhoog; kerkers en verkenning maken het compleet.",
+      "growBody": "Elk niveau maakt je taaier en ontgrendelt nieuwe vaardigheden, helemaal tot aan de limiet van niveau {cap}. Quests doen is de snelste weg omhoog; jagen, kerkerruns en delves maken het compleet.",
       "effectsTitle": "Buffs, debuffs en crowd control",
-      "effectsBody": "Veel vaardigheden brengen een effect aan dat blijft hangen. Behulpzame (buffs) verhogen je statistieken, beschermen je, of helen je beetje bij beetje; schadelijke (debuffs) tappen je gezondheid af met schade na verloop van tijd of verzwakken je. Let op de kleine icoontjes bij je actiebalk om te zien wat er op je ligt en hoe lang het duurt.",
-      "ccBody": "Crowd control is een speciaal soort debuff die beperkt wat een doelwit kan doen: verdovingen, wortels en vertragingen, stiltes die het spreuken stilleggen, ontwapeningen, angsten, en gedaanteverwisseling die een vijand even ongevaarlijk maakt. Sommige hiervan, zoals wortels, angsten en gedaanteverwisseling, verliezen hun greep wanneer ze te snel opnieuw worden toegepast, zodat ze niet eindeloos kunnen worden aaneengeregen.",
+      "effectsBody": "Veel vaardigheden brengen een effect aan dat blijft hangen. Behulpzame (buffs) verhogen je statistieken, beschermen je, of helen je beetje bij beetje; schadelijke (debuffs) tappen je gezondheid af met schade na verloop van tijd of verzwakken je. Let op de kleine icoontjes in de bovenhoek van het scherm, naast de minimap, om te zien wat er op je ligt en hoe lang het duurt.",
+      "ccBody": "Crowd control is een speciaal soort debuff die beperkt wat een doelwit kan doen: verdovingen, wortels en vertragingen, stiltes die het spreuken stilleggen, ontwapeningen, angsten, en transformaties die een vijand even ongevaarlijk maken. Tegen andere spelers slijt controle door herhaling: dezelfde soort te snel opnieuw toegepast verzwakt en faalt dan volledig, en een verdoving die vanuit sluipmodus opent wordt apart geteld van de verdovingen die erop volgen, zodat niemand voor eeuwig weerloos aaneengeregen kan worden. De wezens van de wereld koesteren zulke wrok niet: bij hen verzwakt controle nooit door herhaling, al kunnen veel van de machtigste vijanden, benoemde elites en de sterkste bazen onder hen, helemaal niet worden gecontroleerd.",
+      "metersBody": "Benieuwd hoe een gevecht verliep? Druk op Z om de groepsmeters te openen, die schade, genezing en dreiging voor je groep bijhouden, gevecht na gevecht.",
+      "queueTitle": "Je volgende zet staat al geladen",
+      "queueBody": "Je hoeft je toetsdrukken niet exact op het frame te timen. Druk je volgende vaardigheid in de laatste ogenblikken van de lopende cast en hij wordt in de wachtrij gezet, om af te vuren zodra de cast klaar is, zodat geoefend spel zonder gaten verloopt. Een druk die te vroeg komt, wordt simpelweg geweigerd, zodat er niets verloren gaat. Sommige melee-aanvallen werken op dezelfde manier en rijden mee op je volgende wapenzwaai.",
       "deathTitle": "Wanneer je valt",
-      "deathBody": "Als je gezondheid nul bereikt, ga je neer. Je herleeft na een korte wachttijd en gaat verder waar je gebleven was, dus een dood kost je een beetje tijd, niet je voortgang. Ga tussen gevechten zitten om te eten en te drinken zodat je het volgende op volle kracht begint."
+      "deathBody": "Als je gezondheid nul bereikt, ga je neer waar je staat, en je lichaam blijft daar liggen. Laat je geest los en je herrijst als een geest bij de dichtstbijzijnde begraafplaats: sneller ter been dan de levenden, buiten het bereik van je vijanden, maar niet in staat om te vechten, te plunderen of met iemand te spreken behalve de Bleke Hoeder die boven de stenen zweeft. Vanaf daar kies je. Loop je geest terug naar je lichaam en je herleeft ter plekke, met een deel van je gezondheid en mana hersteld en zonder enige straf. Of neem de Bleke Hoeder aan voor een onmiddellijke herrijzenis waar je staat, tegen de prijs van de Tol van de Hoeder: een tijdelijke verzwakking van alles wat je bent, die langer duurt naarmate je meer ervaren bent, en gloednieuwe personages helemaal bespaard blijft. Val je in een kerker, dan wacht je geest bij de begraafplaats buiten; loop je geest terug door de deur en je herleeft bij de ingang. Delves zijn de uitzondering: val je daar, dan word je simpelweg weer op je benen gezet bij de ingang van de delve, al beëindigt een tweede val de run. Welke weg je ook kiest, je verliest geen ervaring, uitrusting of munten. Ga tussen gevechten zitten om te eten en te drinken zodat je het volgende op volle kracht begint."
     },
     "glossary": {
       "intro": "Een snelle naslag voor de termen die in deze gids en in de chat worden gebruikt.",
@@ -829,7 +2283,7 @@ export const nl_NL: EnTranslations = {
       "gcdTerm": "Globale afkoeltijd",
       "gcdDef": "De korte, gedeelde pauze na het gebruik van de meeste vaardigheden, zodat je niet alles tegelijk kunt afvuren.",
       "dpsTerm": "DPS",
-      "dpsDef": "Schade per seconde, een ruwe maat voor hoe snel iets schade aanricht.",
+      "dpsDef": "Schade per seconde, een ruwe maat voor hoe snel iets schade aanricht. Ook gebruikt voor de schade aanrichtende rol zelf, zoals in een tank, een genezer en drie DPS.",
       "buffTerm": "Buff",
       "buffDef": "Een gunstig effect op jou of een bondgenoot, zoals een zegen die een tijdlang een statistiek verhoogt.",
       "debuffTerm": "Debuff",
@@ -855,20 +2309,52 @@ export const nl_NL: EnTranslations = {
       "pullTerm": "Pull",
       "pullDef": "Een vijand of groep in een gevecht trekken, meestal bewust en steeds een groepje tegelijk.",
       "instanceTerm": "Instantie",
-      "instanceDef": "Een eigen kopie van een kerker of raid, speciaal voor jouw groep gemaakt."
+      "instanceDef": "Een eigen kopie van een kerker of raid, speciaal voor jouw groep gemaakt.",
+      "raidTerm": "Raid",
+      "raidDef": "Een grotere groep, hier tot tien spelers, gevormd voor de zwaarste eindspelbeproeving; een groep verandert er in een zodra hij vol is.",
+      "delveTerm": "Delve",
+      "delveDef": "Een korte, herspeelbare geïnstantieerde afdaling voor één of twee spelers, gespeeld vanaf het bord van een bewaarder met een metgezel aan je zij.",
+      "augmentTerm": "Augment",
+      "augmentDef": "Een tijdelijke versterking die je tijdens een twee-tegen-twee Fiesta-arenamatch kiest en die je kit alleen voor die match hervormt.",
+      "deedTerm": "Daad",
+      "deedDef": "Een prestatie die is opgetekend in het Boek der Daden. Er een behalen levert Roem op, en sommige schenken een cosmetische titel of naamplaatrand.",
+      "renownTerm": "Roem",
+      "renownDef": "De levenslange score waar je daden bij elkaar optellen. Hij stijgt alleen maar, en het rijk houdt er standen van bij op de Ranglijst.",
+      "heroicTerm": "Heroïsch",
+      "heroicDef": "De moeilijkere versie van een kerker of de raid, afgestemd op goed uitgeruste endgame-groepen. Heroïsche bazen laten verbeterde buit vallen, en de eindbaas betaalt Heroïsche Merken uit.",
+      "lockoutTerm": "Daglockout",
+      "lockoutDef": "Een dagelijkse limiet op de grootste herhaalbare beloningen. Elke heroïsche kerker keert één clear per dag uit, de raid houdt gewoon en heroïsch apart bij, en het plunderen van een wereldbaas start de jouwe. Een uitgespeelde run voor vijf spelers blijft open voor de eigen groep; de vergrendelde raiddeur gaat pas open bij de reset.",
+      "restedTerm": "Uitgerust",
+      "restedDef": "Bonuservaring die je personage opspaart terwijl het rust in een herberg, buiten gevecht. Je volgende kills verdienen extra ervaring tot de voorraad opraakt.",
+      "petBarTerm": "Huisdierbalk",
+      "petBarDef": "De commandorij die een huisdier van een jager of heksenmeester toevoegt: Aanvallen, Stoppen, Provoceren, Defensief en Agressief, standaard gebonden aan Ctrl plus 1 tot en met 5.",
+      "metersTerm": "Schademeters",
+      "metersDef": "Het scorebordvenster van de groep voor het huidige gevecht: aangerichte schade, verrichte genezing en wie de meeste dreiging vasthoudt, per gevecht bijgehouden. Open het met de toetsbinding (standaard Z).",
+      "targetMarkerTerm": "Doelwitmarkering",
+      "targetMarkerDef": "Een symbool dat elk groeps- of raidlid boven een doelwit kan spelden zodat iedereen zich op hetzelfde richt, of het juist mijdt. Acht symbolen, één doelwit per symbool.",
+      "loadoutTerm": "Loadout",
+      "loadoutDef": "Een opgeslagen talentindeling. Bewaar er meerdere en wissel tussen builds zonder je punten één voor één opnieuw te besteden.",
+      "readyCheckTerm": "Gereedheidscheck",
+      "readyCheckDef": "Een groepsleider die /ready typt om de groep of raid te peilen: iedereen bevestigt Gereed of Niet gereed, en de groep ziet de aantallen.",
+      "soulboundTerm": "Zielgebonden",
+      "soulboundDef": "Een voorwerp dat vanaf het moment dat je het verkrijgt aan je personage gebonden is. Het kan niet verhandeld, verstuurd, aan een verkoper verkocht of op de markt gezet worden.",
+      "spiritHealerTerm": "De Bleke Hoeder",
+      "spiritHealerDef": "De geestgenezer van het rijk, die boven elke begraafplaats zweeft: hij kan je geest ter plekke doen herrijzen tegen de prijs van een voorbijgaande verzwakking.",
+      "worldBossTerm": "Wereldbaas",
+      "worldBossDef": "Een baas met de kracht van een raid die in de open wereld verrijst met een vast ritme, bevochten door wie zich verzamelt om de roep te beantwoorden, niet door een vaste groep."
     },
     "faqPage": {
       "intro": "De vragen die nieuwe spelers het vaakst stellen.",
       "q1": "Is het echt gratis?",
       "a1": "Ja. Het hele spel is gratis te spelen tot aan de niveaulimiet, en de broncode is openbaar op GitHub.",
       "q2": "Heb ik een crypto-wallet of tokens nodig?",
-      "a2": "Nee. Het spel is volledig speelbaar zonder. De optionele community-token ontgrendelt alleen cosmetische opsmuk en heeft nooit invloed op kracht of voortgang.",
+      "a2": "Nee. Het spel is volledig speelbaar zonder. Het optionele community-token voegt alleen cosmetische opsmuk en een aandeel in de prijzenpot van de dagelijkse beloningen toe, en heeft nooit invloed op kracht of voortgang.",
       "q3": "Kan ik op mijn telefoon spelen?",
       "a3": "Ja. Het spel draait in een mobiele browser met aanraakbediening, en er is ook een desktop-starter.",
       "q4": "Kan ik offline of solo spelen?",
-      "a4": "Ja. Er is een directe offline modus voor één speler, en de online wereld is volledig solo speelbaar, behalve kerkers en de raid.",
+      "a4": "Ja. Er is een directe offline modus voor één speler, en de online wereld is volledig solo speelbaar, behalve kerkers, de raid en de wereldbaas.",
       "q5": "Hoeveel klassen zijn er?",
-      "a5": "Negen, die de klassieke rollen van tank, genezer en damage dekken, elk met hun eigen bron en kenmerkende vaardigheden.",
+      "a5": "Negen, die de klassieke rollen van tank, genezer en damage dekken, elk met een bronsysteem (woede, mana of energie) en hun eigen kenmerkende vaardigheden.",
       "q6": "Wat is de niveaulimiet?",
       "a6": "Niveau {cap}, bereikt over drie verbonden gebieden vol quests, kerkers en verkenning.",
       "q7": "Wordt mijn personage opgeslagen?",
@@ -878,7 +2364,7 @@ export const nl_NL: EnTranslations = {
       "q9": "Is er PvP?",
       "a9": "Ja. Daag iedereen uit voor de lol, of stap het Asgrauwe Colosseum binnen om tegen andere spelers te vechten. PvP is naar keuze, dus je wordt er nooit toe gedwongen.",
       "q10": "Wat is er te doen op het maximale niveau?",
-      "a10": "De limiet is niveau {cap}. Vanaf daar speel je de kerkers voor vijf spelers en de raid voor tien, jaag je op betere uitrusting en stel je jezelf op de proef in de arena.",
+      "a10": "De limiet is niveau {cap}. Vanaf daar speel je de kerkers voor vijf spelers en de raid voor tien, neem je ze opnieuw op in heroïsche modus voor betere buit, treed je de wereldbaas tegemoet wanneer hij verrijst, stel je jezelf op de proef in de arena, duik je in delves met een metgezel aan je zijde, en jaag je op daden in het Boek der Daden om in de rijksstand te klimmen.",
       "q11": "Hoe vind ik een groep?",
       "a11": "Nodig iedereen die je tegenkomt uit voor een groep, vraag het in de chat, of werk samen bij een kerker. Het grootste deel van de wereld is solo speelbaar, dus groepen is een keuze, geen vereiste."
     },
@@ -905,7 +2391,7 @@ export const nl_NL: EnTranslations = {
       "abilitiesNote": "Een voorproefje van de kit. Je leert meer naarmate je levelt, en talenten hervormen hoe het allemaal speelt.",
       "masteryLabel": "Meesterschap",
       "fullKitHeading": "De volledige kit",
-      "fullKitNote": "Elke vaardigheid die deze klasse kan leren, in de volgorde waarin ze beschikbaar komt. Talenten bepalen welke je build dragen.",
+      "fullKitNote": "De uitrusting die deze klasse leert terwijl ze levelt, in de volgorde waarin ze beschikbaar komt. Talenten schenken nog een paar vaardigheden en bepalen welke je build dragen.",
       "petsHeading": "Demonen",
       "petsNote": "Heksenmeesters roepen demonen op om naast hen te vechten, elk geschikt voor een andere taak."
     },
@@ -951,12 +2437,12 @@ export const nl_NL: EnTranslations = {
       "charge": "Stormt op een verre vijand af om het gevecht te openen met een korte verdoving.",
       "rend": "Opent een bloeding die het doelwit na verloop van tijd uitput.",
       "thunder_clap": "Raakt alles om je heen en vertraagt hun aanvallen.",
-      "seal_of_righteousness": "Doordringt je uithalen met Heilige schade, besteed het daarna met Oordeel.",
+      "seal_of_righteousness": "Doordringt je uithalen met Heilige schade, besteed het daarna met Verdict.",
       "holy_light": "Een gestage, flinke genezing om een bondgenoot of jezelf aan te vullen.",
       "devotion_aura": "Een blijvende zelfbuff die pantser verhoogt zodat klappen zachter aankomen.",
       "judgement": "Besteedt je actieve Zegel om een vijand van korte afstand te raken.",
       "blessing_of_might": "Verhoogt de aanvalskracht van een vriendelijk doelwit, goed om voor een pull uit te spreken.",
-      "divine_protection": "Een snel heilig schild om schade op te vangen als het hard tegen hard gaat.",
+      "divine_protection": "Een snelle beschermende wering om schade op te vangen als het hard tegen hard gaat.",
       "raptor_strike": "Een harde uithaal van dichtbij voor wanneer iets de afstand met je overbrugt.",
       "aspect_of_the_hawk": "Een houding die je aanhoudt om je aanvalskracht op afstand aan te scherpen.",
       "serpent_sting": "Plaatst een gif dat natuurschade laat bloeden na verloop van tijd.",
@@ -988,7 +2474,7 @@ export const nl_NL: EnTranslations = {
       "conjure_water": "Roept drank op die mana herstelt, zodat je tussen pulls kunt bijvullen.",
       "conjure_food": "Roept voedsel op dat gezondheid herstelt wanneer je gaat zitten om te eten.",
       "shadow_bolt": "Een bout van schaduw die je op een doelwit afvuurt, je vertrouwde nuke.",
-      "summon_imp": "Roept een duiveltje op dat van afstand vuurbouten naar vijanden slingert.",
+      "summon_imp": "Roept een Emberkin op die van afstand vuurbouten naar vijanden slingert.",
       "demon_skin": "Een blijvende zelfbuff die je huid verhardt en pantser toevoegt.",
       "immolate": "Steekt een doelwit in brand voor een openingsklap en een brand die blijft hangen.",
       "corruption": "Laat een doelwit wegrotten met schaduw die tikt terwijl jij andere dingen doet.",
@@ -1001,17 +2487,17 @@ export const nl_NL: EnTranslations = {
       "thorns": "Beschermt een bondgenoot zodat melee-aanvallers zichzelf bezeren bij het toeslaan."
     },
     "petHook": {
-      "imp": "Een demon op afstand die met vuurbouten vijanden bestookt vanaf een veilige afstand.",
-      "voidwalker": "Een stevige demon die provoceert en klappen opvangt zodat jij rustig kunt casten.",
-      "succubus": "Een snelle melee-demon die hard toeslaat maar bezwijkt onder druk.",
-      "felhunter": "Een schaduwschermutselaar die vijandelijke casters opjaagt.",
-      "felguard": "Een taaie melee-vechter, het allroundtype zodra je hem kunt oproepen.",
-      "infernal": "Een kolossale moloch met verpletterende melee, opgeroepen voor pure kracht.",
-      "doomguard": "Een elite-tovenaar die van veraf zware schaduw doet neerregenen."
+      "emberkin": "Een demon op afstand die met vuurbouten vijanden bestookt vanaf een veilige afstand.",
+      "gloomshade": "Een stevige demon die provoceert en klappen opvangt zodat jij rustig kunt casten.",
+      "duskborn": "Een snelle melee-demon die hard toeslaat maar bezwijkt onder druk.",
+      "spellhound": "Een schaduwschermutselaar die vijandelijke casters opjaagt.",
+      "warfiend": "Een taaie melee-vechter, het allroundtype zodra je hem kunt oproepen.",
+      "pyre_colossus": "Een kolossale moloch met verpletterende melee, opgeroepen voor pure kracht.",
+      "wraithborn": "Een elite-tovenaar die van veraf zware schaduw doet neerregenen."
     },
     "bestiary": {
       "heading": "Bestiarium",
-      "intro": "De wezens van de wereld, gegroepeerd per familie. Dit zijn de vijanden die je in de open lucht tegenkomt. De dodelijkste dingen wachten, ongenoemd, achter kerkerdeuren.",
+      "intro": "De wezens van de wereld, gegroepeerd per familie. Dit zijn de alledaagse vijanden die je in de open lucht tegenkomt. Elite-vijanden en hun krijgsheren houden zich buiten deze bladzijden, en de dodelijkste dingen van allemaal wachten achter kerkerdeuren.",
       "rare": "Zeldzaam",
       "levels": "Niveau {min} tot {max}",
       "levelsSame": "Niveau {min}",
@@ -1020,7 +2506,8 @@ export const nl_NL: EnTranslations = {
         "old_greyjaw": "Een littekenrijke oude wolf die geen val heeft vastgehouden, beschuldigd van drie honden en de arm van een stalknecht. Hij jaagt alleen in de diepe bossen, en wordt woester naarmate een gevecht langer duurt.",
         "grubjaw": "Een veentrol zo hebberig dat de andere trollen niet naast hem willen graven, naar verluidt heeft hij de laatste twee pakmuilezels van een handelaar opgegeten, tuig en al.",
         "shardlord_kazzix": "Een stormelementaal met schouders, dwalend over de verre rotsen boven Stormcrag met een hartscherf die het waard is om de bliksem voor te trotseren.",
-        "mirejaw_frenzy": "Een moerasmurloc die zichzelf middenin het gevecht opzweept tot een woedende razernij, het luidruchtigste ding in een luidruchtige, territoriale roedel.",
+        "sethrael_palecoil": "Een bleke slang, wit als bot, die over de diepe rand van De Glinstermeer glijdt, stille wachter van het water dat zij heeft opgeëist. Zwemmers die het meer met haar delen, komen zelden weer boven.",
+        "mirejaw_frenzy": "Een moerasmudfin die zichzelf middenin het gevecht opzweept tot een woedende razernij, het luidruchtigste ding in een luidruchtige, territoriale roedel.",
         "gravecaller_cultist": "Gewaden dragende dienaren van de doodscultus wier werk de graven bezoedelt van het Dal tot de toppen. Waar ze samenkomen, rusten de doden niet."
       }
     },
@@ -1031,15 +2518,15 @@ export const nl_NL: EnTranslations = {
       },
       "spider": {
         "name": "Spinnen",
-        "desc": "Webspinners en giftige loerders die nestelen op donkere, verwarde plekken."
+        "desc": "Webspinners en giftige loerders die nestelen op donkere, verwarde plekken. Jagers kunnen ze temmen, net als beesten."
       },
-      "murloc": {
-        "name": "Murlocs",
+      "mudfin": {
+        "name": "Mudfins",
         "desc": "Amfibische moerasbewoners die in luidruchtige, territoriale roedels de ondiepten overspoelen."
       },
-      "kobold": {
-        "name": "Kobolds",
-        "desc": "Kaarskoppige gravers die mijnen en holen besmetten en hun erts fel bewaken."
+      "burrower": {
+        "name": "Gravers",
+        "desc": "Met modder besmeurde gravers die mijnen en holen besmetten en hun erts fel bewaken."
       },
       "humanoid": {
         "name": "Mensachtigen",
@@ -1047,7 +2534,7 @@ export const nl_NL: EnTranslations = {
       },
       "troll": {
         "name": "Trollen",
-        "desc": "Logge, snelhelende beesten die schuilen in het moeras en het hoge land."
+        "desc": "Logge woestelingen die huizen in de moerassen van het veen."
       },
       "ogre": {
         "name": "Ogres",
@@ -1060,6 +2547,10 @@ export const nl_NL: EnTranslations = {
       "elemental": {
         "name": "Elementalen",
         "desc": "Levende storm en steen, gebonden aan de wilde plekken waar de elementen sterk stromen."
+      },
+      "dragonkin": {
+        "name": "Drakenvolk",
+        "desc": "Geschubde, slangachtige wezens uit de oude diepten. Zeldzaam, trots en veel sterker dan ze eruitzien."
       }
     },
     "worldPage": {
@@ -1071,7 +2562,7 @@ export const nl_NL: EnTranslations = {
       "places": "Opmerkelijke plekken",
       "residents": "Wie je zult ontmoeten",
       "valeBlurb": "Het groene begindal, waar nieuwe helden hun tanden scherpen op wolven en bandieten rond de stad Eastbrook.",
-      "marshBlurb": "Een verdronken land van mist en ruïnes. Murlocs zwermen door de ondiepten en iets ouders roert zich onder het water, gadegeslagen vanuit het brugdorp Fenbridge.",
+      "marshBlurb": "Een verdronken land van mist en ruïnes. Mudfins zwermen door de ondiepten en iets ouders roert zich onder het water, gadegeslagen vanuit het brugdorp Fenbridge.",
       "peaksBlurb": "Door wind geschuurde bergkammen en oude mijnwerken klimmen op naar de koudste, hoogste gevaren van het rijk, in handen van de buitenpost Highwatch.",
       "valeGreeting": "Houd je kling dichtbij. Het Dal is niet meer wat het was.",
       "valeGreeter": "Marshal Redbrook, Eastbrook",
@@ -1079,51 +2570,55 @@ export const nl_NL: EnTranslations = {
       "marshGreeter": "Warden Fenwick, Fenbridge",
       "peaksGreeting": "Tweehonderd jaar heeft deze muur standgehouden. Hij breekt niet onder mijn wacht, maar hij kreunt.",
       "peaksGreeter": "Captain Thessaly, Highwatch",
-      "valePlaceNotes": "Eastbrook is je eerste thuisbasis. Wolf Run en Boar Meadow zijn rustig jachtgebied; Mirror Lake is stil water om te vissen; het Webwood en de Copper Dig verbergen spinnen en ertsbeluste delvers; een Bandit Camp en de Fallen Chapel bieden ruwer werk; Brightwood Glade is een kalm natuurbosje in het noorden.",
-      "marshPlaceNotes": "Fenbridge bewaakt de enige droge weg. Het Prowler Reeds en de Deepfen Shallows wemelen van moerasbeesten en murlocs; het Widow Thicket zit dik onder het web; de Drowned Chapel en de Troll Mounds bergen oudere gevaren; het Gravecaller Encampment is de ingegraven sekte, en het Verzonken Bastion is het instantiehart van het moeras.",
-      "peaksPlaceNotes": "Highwatch houdt de muur. Stalker Ridge en de Deeprock Burrows behoren tot bergkatten en kobolds; de Ogre Foothills en Drogmar's War-Camp tot ingehuurde bruten; Stormcrag knettert van de elementalen en de Glimmermere gloeit eronder; de Wyrmcult Tents en Revenant Fields omsluiten het hoge terrein van de sekte, met het Grafwurm-Heiligdom op de top.",
+      "valePlaceNotes": "Oostbeek is je eerste thuisbasis. Wolvenloop en Everweide zijn rustig jachtgebied; Spiegelmeer is fijn viswater, al krioelen modderfinnen in de ondiepten; het Sableweb en de Kopergroeve verbergen spinnen en ertsbeluste delvers; een Bandietenkamp en de Gevallen Kapel bieden ruwer werk; Reliekschrijnheuvel leidt naar het Ingestorte Reliekschrijn, de eerste delve van het rijk; Lichtwoudgaarde is een kalm, zonovergoten bosje in het noorden; en het Zeugveld is Oostbeeks ommuurde zwijnenbalveld, waar De Dalbeker onder een oogstbestand wordt gespeeld.",
+      "marshPlaceNotes": "Veenbrug bewaakt de enige droge weg. Het Sluipersriet en de Diepveen-Ondiepten wemelen van moerasbeesten en mudfins; het Weduwestruweel zit dik onder het web; de Verdronken Kapel en de Trollenheuvels bergen oudere gevaren, met De Verdronken Litanie, de eigen delve van het moeras, die net ten noorden van de heuvels opengaat; het Grafroeper-Kampement is de ingegraven sekte, en het Verzonken Bastion is het instantiehart van het moeras.",
+      "peaksPlaceNotes": "Highwatch houdt de muur. Stalker Ridge en de Dieprots-Holen behoren tot bergkatten en gravers; de Ogre Foothills en Drogmar's War-Camp tot ingehuurde bruten; Stormcrag knettert van de elementalen, en daaronder gloeit De Glinstermeer, het bergmeer waarvan de oever de poort van bleek licht bewaart naar De Verdronken Tempel; de Wyrmcult Tents en Revenant Fields omsluiten het hoge terrein van de sekte, met het Grafwurm-Heiligdom op de top.",
       "gladeTitle": "Een rustig hoekje: Brightwood Glade",
-      "gladeBody": "Niet elk verhaal in het Dal gaat over de doden. In het noorden houdt een zonovergoten bosje genaamd Brightwood Glade zijn eigen, zachtere ritme aan, met stille paden, grazende herten en behoedzame beesten onder het loof. Het is een zacht tegenwicht voor het spoor dat je volgt, en de moeite waard als de weg je ruimte geeft om te dwalen."
+      "gladeBody": "Niet elk verhaal in the Vale gaat over de doden. In het noorden houdt een zonovergoten bosje genaamd Brightwood Glade zijn eigen, zachtere ritme aan, met enkel stille paden en gevlekt licht onder het loof. Het is een zacht tegenwicht voor het spoor dat je volgt, en de moeite waard als de weg je ruimte geeft om te dwalen.",
+      "worldBossTitle": "Wanneer de piek ontwaakt: de wereldbaas",
+      "worldBossBody": "Hoog op Doorntop verzamelt de storm boven Stormcrag soms een gedaante. Thunzharr, de Ontwakende Piek verrijst daar met een vast ritme, een elementaal met de kracht van een raid, bevochten in de open wereld door wie de roep beantwoordt, en hij wordt machtiger naarmate meer uitdagers tegen hem opstaan. Iedereen die zich in het gevecht mengt, verdient zijn eigen worp van zijn buit, geëerd op raidlockout-voorwaarden, en zijn val blijft lang genoeg hangen zodat de gevallenen kunnen terugrennen om hun deel op te eisen. Verzamel meer zwaarden dan je denkt nodig te hebben."
     },
     "questsPage": {
       "heading": "Quests",
       "intro": "Quests zijn het hart van de wereld en de snelste manier om te levelen. Zo werken ze.",
       "acceptTitle": "Vinden en aannemen",
-      "acceptBody": "Mensen met een markering boven hun hoofd hebben werk voor je. Praat met hen om een quest aan te nemen. Je allereerste is Wolven aan de Deur, van Maarschalk Redbrook in Oostbeekdal.",
+      "acceptBody": "Mensen met een markering boven hun hoofd hebben werk voor je. Praat met hen om een quest aan te nemen. In Oostbeek wacht Maarschalk Redbrook met Wolven aan de Deur, een van de eerste quests die je kunt aannemen.",
       "objectivesTitle": "Doelen",
-      "objectivesBody": "Versla bepaalde vijanden, verzamel voorwerpen of gebruik iets in de wereld. De tracker op je scherm telt je voortgang terwijl je bezig bent.",
+      "objectivesBody": "Versla bepaalde vijanden, verzamel voorwerpen of gebruik iets in de wereld. De tracker op je scherm telt je voortgang terwijl je bezig bent. Als je van gedachten verandert, kun je een quest uit je questlogboek laten vallen en hem later weer oppakken bij de gever.",
       "turninTitle": "Inleveren",
-      "turninBody": "Keer terug naar de questgever, de kaart wijst je waar, voor ervaring, geld en vaak een stuk uitrusting dat bij je klasse past.",
+      "turninBody": "Breng een voltooide quest naar zijn inlevermarkering, de kaart wijst je waar, voor ervaring, geld en vaak een stuk uitrusting gekozen om bij je klasse te passen. Dat is meestal degene die hem aan je gaf, hoewel sommige quests je doorsturen naar iemand anders.",
       "partyTitle": "Questen in een groep",
-      "partyBody": "Groepsleden in de buurt delen kill- en doelkrediet, dus samen questen is sneller, nooit langzamer.",
+      "partyBody": "Groepsleden in de buurt delen kill- en doelkrediet, dus samen questen is sneller, nooit langzamer. Je kunt ook een quest met je groep delen: plaats hem in de chat als een klikbare link met het commando /share, en elk lid dat in aanmerking komt, kan dezelfde quest met één klik oppakken.",
       "storyTitle": "Een rode draad loopt overal doorheen",
       "storyBody": "Vanaf je eerste klusjes in Oostbeekdal is er iets mis met de doden. Een cultus is aan het werk, en het spoor leidt naar het noorden door elk gebied. Volg het om te ontdekken wie erachter zit.",
-      "soloNote": "Het hoofdverhaal is volledig solo te doen; alleen de laatste hoofdstukken vragen om een groep.",
+      "soloNote": "Het hoofdverhaal is solo te doen tot aan de finale van elk hoofdstuk, die een dungeon voor vijf spelers is.",
       "typesTitle": "De soorten quests die je tegenkomt",
       "typesBody": "De meeste quests hebben een van een paar vertrouwde vormen. De tracker op je scherm legt precies uit wat elke quest van je vraagt, zodat je nooit hoeft te gissen.",
       "typeSlayTitle": "Verslaan",
-      "typeSlayBody": "Dun een roedel beesten uit of breek de greep van een cultus door een vast aantal van een gemarkeerde vijand te verslaan. De eerste quest in het spel, het verjagen van wolven van de Oostbeekdal-weg, is er zo een.",
+      "typeSlayBody": "Dun een roedel beesten uit of breek de greep van een cultus door een vast aantal van een gemarkeerde vijand te verslaan. Een van je eerste quests, het verjagen van wolven van de weg bij Oostbeek, is er zo een.",
       "typeGatherTitle": "Verzamelen",
-      "typeGatherBody": "Verzamel voorwerpen uit de wereld of uit wat vijanden laten vallen: kruiden, erts, verloren brieven, de grimmige reagentia van een cultus. Sommige stukken vallen alleen van een bepaalde vijand, dus de jacht en de buit horen bij elkaar.",
+      "typeGatherBody": "Verzamel voorwerpen uit de wereld of uit wat vijanden laten vallen: kruiden, erts, de grimmige reagentia van een cultus. Sommige stukken vallen alleen van een bepaalde vijand, dus de jacht en de buit horen bij elkaar.",
       "typeInteractTitle": "Interageren",
       "typeInteractBody": "Gebruik, reinig of lees iets dat vaststaat in de wereld: een geschonden graf, een waarschuwing gekerfd in een kustrots, een verzegelde cryptedeur. Loop naar de markering toe en handel ernaar.",
-      "typeMusterTitle": "Escorteren en verzamelen",
-      "typeMusterBody": "Breng een vriendelijk gezicht veilig van de ene plek naar de andere, of verzamel de verdedigers van een stad voor een opmars naar het noorden. Deze houden je in beweging met de mensen wiens verhaal je beleeft.",
+      "typeMusterTitle": "Verzamel de verdediging",
+      "typeMusterBody": "Bij sommige quests moet je een stad mobiliseren voor een opmars naar het noorden: dun de dreiging bij de poorten uit en verzamel wat de verdedigers nodig hebben. Dit zijn versla- en verzameldoelen in dienst van de mensen wiens verhaal je beleeft, en ze houden je met hen in beweging.",
       "typeGroupTitle": "Groepsfinales",
-      "typeGroupBody": "Elk hoofdstuk van het hoofdverhaal eindigt bij een dungeondeur. De aanloop is solo te doen, maar de genadeslag tegen de schurk van een hoofdstuk is bedoeld voor een groep van vijf (en de allerlaatste voor tien).",
+      "typeGroupBody": "Elk hoofdstuk van het hoofdverhaal eindigt bij een dungeondeur. De aanloop is solo te doen, maar de genadeslag tegen de schurk van een hoofdstuk is bedoeld voor een groep van vijf.",
       "sagaTitle": "Volg het spoor naar het noorden",
       "sagaBody": "Het hoofdverhaal is één lange jacht. Een dodencultus is bezig met de graven van het rijk, en elk hoofdstuk dat je afsluit wijst één gebied verder langs de weg. Je bestrijdt nooit het hele complot ineens; je trekt aan één draad en die leidt naar de volgende hand die hem vasthoudt.",
       "sagaValeTitle": "Oostbeekdal: een naam op een zegel",
       "sagaValeBody": "In Oostbeekdal vinden de doden geen rust, en het teken erachter behoort toe aan een sekte die men allang verdwenen waande. Volg het tot een Grafroeper die de kapelcrypte bewerkt, en zijn eigen papieren wijzen je naar het veen in het noorden.",
       "sagaMarshTitle": "Het moeras: een tiende aan zielen",
-      "sagaMarshBody": "In Slijkveen zijn de verdrinkingen geen ongeluk. Iemand vult het veen als een offerkist en wekt gehoorzame doden op uit elke reiziger die het water meeneemt. Volg de bevelen omhoog langs de keten tot een Mistroeper in het verdronken bastion, wiens laatste woorden iets nog ouders noemen, dat zich roert onder de toppen.",
+      "sagaMarshBody": "In Slijkveen zijn de verdrinkingen geen ongeluk. Iemand vult het veen als een offerkist en wekt gehoorzame doden op uit elke reiziger die het water meeneemt. Volg de bevelen omhoog langs de keten tot een Fogbinder in het verdronken bastion, wiens laatste woorden iets nog ouders noemen, dat zich roert onder de toppen.",
       "sagaPeaksTitle": "De toppen: waarvoor het tiende diende",
-      "sagaPeaksBody": "Op Doorntop wordt het hele plan duidelijk. Elke ziel die sinds Oostbeekdal is gestolen, was een tiende dat werd geofferd om een eeuwenoud wezen te wekken dat verzegeld is onder de berg. Het spoor dat begon op een kapelhof eindigt hier, bij een deur die tien man nodig heeft om te openen. We laten je zelf ontdekken wie erachter wacht.",
+      "sagaPeaksBody": "Op Thornpeak wordt het hele plan duidelijk. Elke ziel die sinds the Vale is gestolen, was een tiende dat werd bijgedragen aan het grimmige werk van de sekte in het hart van de berg. Het spoor dat begon op een kapelhof eindigt hier, in een afdaling voor vijf spelers om de hand achter dit alles te confronteren. We laten je zelf ontdekken wie er onderaan wacht.",
       "sideTitle": "Zijsporen van de hoofdweg",
       "sideWardenTitle": "Je naam verdienen",
-      "sideWardenBody": "Naast het verhaal delen de bewakers van Oostbeekdal en het veen een vaste premieladder uit. Werk je omhoog, vijand voor vijand, zoals elke bewaker voor jou zijn plek verdiende. Het is eerlijk levelen en een rondleiding langs de ergste onruststokers van elk gebied.",
+      "sideWardenBody": "Naast het verhaal delen de maarschalken en bewakers van the Vale en het veen een vaste premieladder uit. Werk je omhoog, vijand voor vijand, zoals elke premiejager voor jou zijn plek verdiende. Het is eerlijk levelen en een rondleiding langs de ergste onruststokers van elk gebied.",
       "sideCryptTitle": "De vergeten koning",
-      "sideCryptBody": "Hoog in de toppen loopt een stiller mysterie: oude graven gemarkeerd met een kroon die geen enkel verslag zich herinnert. Lees de doden, verzamel wat zij bewaakten en ontzegel een tombe die gesloten had moeten blijven. Het is een detectivespoor dat de weg opent naar een tweede eindspelbeproeving voor een volledige raid."
+      "sideCryptBody": "Hoog in de toppen loopt een stiller mysterie: oude graven gemarkeerd met een kroon die geen enkel verslag zich herinnert. Lees de doden, verzamel wat zij bewaakten en ontzegel een tombe die gesloten had moeten blijven. Het is een detectivespoor dat de weg opent naar de eindspelraid voor tien spelers van het rijk.",
+      "sideTempleTitle": "De verdronken tempel",
+      "sideTempleBody": "Een poort van bleek licht op een hooggelegen bergmeer in de toppen opent naar een verzonken heiligdom waar een verdronken sekte nog steeds zingt. Haar korte keten staat los van het hoofdverhaal, een op zichzelf staand mysterie voor iedereen die naar de oever klimt, de waarschuwingen leest die in de rotsen zijn gekerfd, en naar beneden gaat om te zien waar ze voor dienden."
     },
     "lore": {
       "figuresTitle": "Gezichten die je zult leren kennen",
@@ -1138,25 +2633,59 @@ export const nl_NL: EnTranslations = {
       "intro": "Als de open wereld niet genoeg is, verzamel dan een groep en stap een instantie binnen: een privékopie van een kerker speciaal voor jouw groep gemaakt.",
       "party": "Kerkers zijn gebouwd voor een groep van vijf. De eindspel-raid is voor tien.",
       "soloLead": "Elke kerker begint met een solospeelbare aanloopquest, zodat je altijd weet waarom je naar binnen gaat.",
-      "levelAround": "Rond niveau {n}",
       "levelExact": "Niveau {n}",
       "levelBand": "Niveau {min} tot {max}",
       "partySize": "{n} spelers",
+      "levelAround": "Rond niveau {n}",
       "raidSize": "Tien spelers, niveau {n}",
       "hollowName": "De Holle Crypte",
-      "hollowBody": "Een grafgeroofde kapelcrypte waar de pas gestorvenen weigeren te rusten. De eerste echte beproeving van een nieuwe groep.",
       "bastionName": "Het Verzonken Bastion",
-      "bastionBody": "Een ondergelopen vesting verloren aan het moeras, in handen van verdronken verdedigers en het rijzende tij zelf.",
       "templeName": "De Verdronken Tempel",
-      "templeBody": "Een door de maan verlicht heiligdom verzonken onder een gloeiend bergmeer hoog in de pieken, te bereiken door een poort van koud licht. Een verdronken sekte zingt daar nog steeds in haar verrotte gewaden, en de waarschuwingen in de oever gekerfd zeggen dat iets beneden slechts slaapt. Een op zichzelf staand mysterie, afgezonderd van het hoofdverhaal, voor de nieuwsgierigen en de goed voorbereiden.",
       "sanctumName": "Grafwurm-Heiligdom",
+      "hollowBody": "Een grafgeroofde kapelcrypte waar de pas gestorvenen weigeren te rusten. De eerste echte beproeving van een nieuwe groep.",
+      "bastionBody": "Een ondergelopen vesting verloren aan het moeras, in handen van verdronken verdedigers en het rijzende tij zelf.",
+      "templeBody": "Een door de maan verlicht heiligdom verzonken onder een gloeiend bergmeer hoog in de pieken, te bereiken door een poort van koud licht. Een verdronken sekte zingt daar nog steeds in haar verrotte gewaden, en de waarschuwingen in de oever gekerfd zeggen dat iets beneden slechts slaapt. Een op zichzelf staand mysterie, afgezonderd van het hoofdverhaal, voor de nieuwsgierigen en de goed voorbereiden.",
       "sanctumBody": "Het duistere hart van Doorntop, waar het lange werk van de sekte zijn vreselijke hoogtepunt bereikt.",
       "raidName": "De eindspel-raid",
       "raidBody": "Achter een verzegelde koninklijke deur wacht een beproeving voor tien spelers: een gevecht in meerdere fasen en een dodeloze macht die de hele raid samen moet uitschakelen. Verdien je toegang en breng dan negen vrienden mee.",
+      "heroicTitle": "Heroïsche modus",
+      "heroicBody": "Elke kerker voor vijf spelers, en de raid zelf, heeft een heroïsche versie die voorbij de niveaulimiet op je wacht. Dezelfde zalen, herbouwd voor een goed uitgeruste endgame-groep: alles slaat harder toe, niets valt te voet te ontlopen, en de bazen schudden verdovingen en vertragingen volledig van zich af. Ontgroei eerst de gewone versies; heroïsch gaat ervan uit dat je dat hebt gedaan.",
+      "heroicHowBody": "Kies de moeilijkheidsgraad voordat je groep de instantie claimt: typ /dungeon heroic, of zet de schakelaar Kerkermoeilijkheid in het groepsmenu om. De keuze geldt voor de hele groep en ligt vast bij de deur, zodat een run blijft wat er geclaimd is.",
+      "heroicRewardsTitle": "Heroïsche Merken en verbeterde buit",
+      "heroicRewardsBody": "Heroïsche bazen laten de buit vallen die je kent, verbeterd en op de tooltip gemarkeerd als Heroïsch, en de eindbaas van elke run voegt epics toe die je nergens anders vindt. Die laatste kill laat ook Heroïsche Merken achter voor elke deelnemer: een munt die je uitgeeft bij Kwartiermeester Vex in Highwatch, wiens voorraad ringen en halskettingen de enige sieraden in het rijk zijn.",
+      "heroicLockoutBody": "Gewone kerkers kun je de hele dag door lopen. Heroïsch vraagt geduld: de kill van de eindbaas zet iedereen in de run vast op één heroïsche clear van die kerker per dag, en de raid houdt voor elke moeilijkheidsgraad een eigen daglockout bij. Een uitgespeelde run voor vijf spelers blijft open voor de eigen groep, voor lijkenlopen en buit, zodat niemand wordt buitengesloten van wat ze daar hebben verdiend. De raid is strenger: zodra de kill je vastzet, blijft de deur dicht tot de dagelijkse reset, dus verzamel je buit voordat je de arena verlaat.",
       "templeLoreTitle": "De Verdronken Tempel, een beetje dieper",
       "templeLoreBody": "De tempel heeft zijn eigen legende, ouder dan de sekte die je elders najaagt. Aan de oever van de Glansmere, een bergmeer dat het maanlicht drinkt en de verdronkenen teruggeeft, bewaakt een eenzame wachter een poort van bleek licht. Onder het oppervlak loopt een trap van koude steen erheen naar beneden. Het volk dat daar zonk verdronk niet door een ongeluk: het was het Bleke Koor, dat in aanbidding onderging en nooit ophield met zingen. De oude wachters krasten een enkele waarschuwing in de rotsen voordat het water hen nam, een gebed tot iets dat zij de Verdronken Maan noemden, met een vastere hand die twee woorden eronder toevoegde: het slaapt slechts.",
       "cryptLeadTitle": "Een deur die de doden gesloten moesten houden",
-      "cryptLeadBody": "Hoog op de pieken, weg van het hoofdgevecht, ligt een kouder mysterie. Oude graven dragen een kroon die geen verslag zich herinnert, en de doden die hen bewaken dienden ooit een vergeten koning. Lees hun stenen, verzamel de sleutelstenen die zij bewaarden, en je kunt een tombe ontzegelen die drie trouwe zielen stierven om gesloten te houden, waarmee je een tweede beproeving voor tien spelers opent voor wie de aanwijzingen tot het einde volgt."
+      "cryptLeadBody": "Hoog op de pieken, weg van het hoofdgevecht, ligt een kouder mysterie. Oude graven dragen een kroon die geen verslag zich herinnert, en de doden die hen bewaken dienden ooit een vergeten koning. Lees hun stenen, verzamel de sleutelstenen die zij bewaarden, en je kunt een tombe ontzegelen die drie trouwe zielen stierven om gesloten te houden, de optionele beproeving die het rijk zijn raid voor tien spelers ontsluit voor wie de aanwijzingen tot het einde volgt."
+    },
+    "delvesPage": {
+      "heading": "Delves",
+      "intro": "Delves zijn korte, herspeelbare afdalingen voor één of twee, met een trouwe metgezel aan je zij wanneer je alleen naar beneden gaat. Vind het bord, kies een tocht en klim terug naar boven met de buit.",
+      "fromLevel": "Vanaf niveau {n}",
+      "partyLabel": "Voor één of twee",
+      "keeperLabel": "Bewaarder",
+      "keeperFmt": "{name}, {title}",
+      "companionLabel": "Metgezel",
+      "companionFmt": "{name}, {role}",
+      "tiersLabel": "Moeilijkheidsgraden",
+      "affixesLabel": "Mogelijke modifiers",
+      "whatHeading": "Wat een delve is",
+      "whatBody": "Een delve is een kleine geïnstantieerde dungeon, gemaakt speciaal voor jou en hooguit één bondgenoot, een privékopie waarin je niet gestoord kunt worden. Je start hem vanaf een bord dat door een delvebewaarder buiten in de wereld wordt bijgehouden, valt erin, vecht je naar beneden door een handvol kamers, en eindigt bij één enkele wachter. Tochten zijn snel en bedoeld om herhaald te worden, dus een delve is een betrouwbaar stukje voortgang wanneer de open wereld opdroogt.",
+      "howHeading": "Hoe een tocht werkt",
+      "howBody": "Spreek de bewaarder aan om het bord te openen, kies een moeilijkheidsgraad en daal af. Elke tocht rijgt een paar korte kamers aaneen en eindigt bij zijn wachter; reken die af om je beloning op te eisen en terug te keren naar de oppervlakte. Breng een vriend mee als je er een hebt, of leun op je metgezel als dat niet zo is.",
+      "companionHeading": "Je metgezel",
+      "companionBody": "Een delve stuurt een metgezel met je mee naar beneden, zodat een solotocht nooit hopeloos is. Zij vecht aan je zij, en naarmate je tussen tochten in haar investeert wordt ze gestaag sterker, tot ze eenmaal per afdaling een bondgenoot van de rand kan terughalen. Ze is van jou voor de delve en wacht bij het bord tussen tochten.",
+      "lockpickHeading": "Sloten en wat ze verbergen",
+      "lockpickBody": "Sommige deuren en kisten zijn verzegeld, en er een openen is een kleine zenuwproef in plaats van een statistiektoets: kraak het slot schoon en gestaag en je verdient een betere prijs dan bij een gehaaste, geklungelde poging. Het is optioneel, maar de zorgvuldige delver is de rijkere.",
+      "tiersHeading": "Moeilijkheidsgraad",
+      "tiersBody": "Een delve biedt meer dan één moeilijkheidsgraad. De hogere maakt de vijanden sterker en rolt een tochtmodifier mee, en betaalt in ruil meer uit. Hij vraagt ook dat je een paar niveaus op zak hebt voordat hij je binnenlaat.",
+      "affixesHeading": "Tochtmodifiers",
+      "affixesBody": "Zwaardere tochten rollen een modifier die verandert hoe de afdaling speelt, van rusteloze doden tot bedorven lucht tot bezwijkend dakwerk. Ze verhogen het gevaar en de beloning samen. Elke delve put uit de modifiers die bij zijn thema passen; over het hele rijk ziet de verzameling er zo uit:",
+      "marksHeading": "Delve-Tekens",
+      "marksBody": "Delves voltooien levert Delve-Tekens op, een valuta die los staat van je munten. Geef ze uit bij de bewaarder om je metgezel te versterken en uitrusting op te pikken die je nergens anders vindt.",
+      "whereHeading": "Waar je er een vindt",
+      "whereBody": "De eerste delve, het Ingestorte Reliekschrijn, gaat open bij Reliekschrijnheuvel in de beginvallei Oostbeekdal. Broeder Halven houdt daar het bord bij, en hij stuurt je naar beneden zodra je er klaar voor bent. Zijn ronde eindigt daar niet: voorbij de Trollenheuvels aan de noordrand van het Slijkveenmoeras opent dezelfde bewaarder De Verdronken Litanie voor delvers die hun draai hebben gevonden."
     },
     "talentsPage": {
       "heading": "Talenten en specialisaties",
@@ -1164,11 +2693,13 @@ export const nl_NL: EnTranslations = {
       "whatHeading": "Wat talenten doen",
       "whatBody": "Naarmate je in niveau stijgt, verdien je talentpunten om te besteden aan kleine, permanente verbeteringen van je vaardigheden en attributen. Ze bepalen hoe een klasse aanvoelt en buigen die naar meer schade, stevigere verdediging of sterkere genezing.",
       "howHeading": "Hoe ze werken",
-      "howBody": "Talenten gaan open op niveau 10, en je blijft punten verdienen terwijl je richting het maximum klimt. Je besteedt ze in het talentpaneel van je klasse, en je kunt meer dan één indeling opslaan om tussen builds te wisselen.",
+      "howBody": "Talenten gaan open op niveau 10, en je blijft punten verdienen terwijl je richting het maximum klimt. Je besteedt ze in het talentpaneel van je klasse, waar diepere rijen opengaan naarmate je investeert en levelt, en je kunt meer dan één indeling opslaan om tussen builds te wisselen.",
+      "shareNote": "Een afgeronde build kun je kopiëren naar een korte deelbare code en aan een vriend geven, die hem rechtstreeks in zijn eigen talentenpaneel plakt om hem te laden.",
+      "choiceNote": "Een paar punten op elke boom zijn een kruispunt in plaats van een aankoop: de node biedt twee of drie opties en je verbindt je aan één ervan. Je volgende reset heropent de keuze, net als al het andere op de boom.",
       "resetTitle": "Niets is permanent",
-      "resetNote": "Je kunt je talenten op elk moment resetten, dus een vroege keuze is nooit een valkuil. Probeer dingen uit, kijk wat je bevalt en verander vrijuit van gedachten.",
+      "resetNote": "Je kunt je talenten resetten op elk moment dat je buiten gevecht bent en niet in een arenawedstrijd zit, dus een vroege keuze is nooit een valkuil. Probeer dingen uit, kijk wat je bevalt en verander vrijuit van gedachten.",
       "specsHeading": "Specialisaties per klasse",
-      "specsBody": "Elke klasse heeft een handvol specialisaties, elk met een eigen rol en een kenmerkende focus. Hier zie je de vorm van allemaal. Open een klasse voor de volledige uitrusting."
+      "specsBody": "Elke klasse heeft een handvol specialisaties, elk met een eigen rol en een kenmerkende focus. Er een kiezen in het talentpaneel schenkt een kenmerkende vaardigheid en een blijvend eigen meesterschap. Hier zie je de vorm van allemaal. Open een klasse voor de volledige uitrusting."
     },
     "arenaPage": {
       "heading": "Arena en PvP",
@@ -1176,22 +2707,88 @@ export const nl_NL: EnTranslations = {
       "duelsHeading": "Duels",
       "duelsBody": "Daag elke speler die je tegenkomt uit voor een vriendschappelijk duel. Er staat niets op het spel behalve trots, dus het is de makkelijkste manier om een matchup te leren of een vriendschappelijk meningsverschil te beslechten.",
       "coliseumHeading": "Het Asgrauwe Colosseum",
-      "coliseumBody": "Het Colosseum is de arena van het rijk, waar je andere spelers tegemoet treedt in ranglijstwedstrijden. Win en je positie klimt, en de sterkste vechters stijgen op het scorebord voor iedereen om te zien.",
+      "coliseumBody": "Het Coliseum is de arena van het rijk, waar je andere spelers tegemoet treedt in ranglijstwedstrijden, één tegen één of twee tegen twee. Elke categorie heeft zijn eigen ranglijst, dus een overwinning tilt je hoger op die ladder, zichtbaar voor het hele rijk. Open het Arenavenster om je in te schrijven voor een categorie, alleen of met je partner.",
       "fiestaHeading": "Twee tegen twee Fiesta",
-      "fiestaBody": "Fiesta is een snelle, twee-tegen-twee modus die in korte rondes wordt gespeeld. Tussen rondes draft je augments, snelle boosts die je kit gaandeweg hervormen, zodat geen twee wedstrijden helemaal hetzelfde spelen.",
+      "fiestaBody": "Fiesta is een snel, twee-tegen-twee gevecht dat als één doorlopende partij wordt uitgevochten, waarbij elke strijder op gelijke voet wordt gebracht. Terwijl het gevecht loopt, draft je augments, snelle boosts die je kit gaandeweg hervormen, zodat geen twee wedstrijden helemaal hetzelfde spelen.",
       "augmentsNote": "Augments en power-ups gelden alleen voor de wedstrijd. Ze draaien om speelse, ter plekke bedachte builds, niet om blijvende macht, zodat niemand zich een weg naar de winst koopt.",
       "wavesTitle": "Augments komen in golven",
-      "wavesBody": "Elke ronde van een Fiesta geeft je een verse keuze, en de keuzes worden gewaagder naarmate de wedstrijd vordert. Je bouwt van de ene golf naar de volgende, kiest elke keer een van een paar opties en houdt het voor de rest van het gevecht.",
+      "wavesBody": "Een Fiesta-partij reikt je gaandeweg verse keuzes aan, en de keuzes worden gewaagder naarmate het gevecht langer duurt. Je bouwt van de ene golf naar de volgende, kiest elke keer een van een paar opties en houdt het voor de rest van de partij.",
       "waveSilverTitle": "Zilver",
       "waveSilverBody": "De openingsgolf: schone, enkelvoudige statboosts die de basis van je klasse aanscherpen.",
       "waveGoldTitle": "Goud",
       "waveGoldBody": "De middelste golf: tweesnijdende combo's waar je build vorm begint te krijgen en gaat zingen.",
       "wavePrismaticTitle": "Prismatisch",
       "wavePrismaticBody": "De laatste golf: build-bepalende, schermversmeltende pieken bedoeld om belachelijk aan te voelen op de beste manier.",
+      "yumiHeading": "Bescherm Yumi",
+      "yumiBody": "Bescherm Yumi is een teamdoelspel dat in een doolhof wordt gespeeld: elke kant bewaakt zijn eigen kattenmetgezel terwijl hij die van de ander bejaagt. Zo nu en dan flitsen beide katten naar nieuwe hoeken van het doolhof, zodat het gevecht heen en weer gaat tussen verdedigen, jagen en de race om ze opnieuw te vinden. Sluit aan als drie tegen drie of vijf tegen vijf; sneuvelen in de strijd zet je maar even op de bank.",
       "powerupsTitle": "Power-ups in de ring",
       "powerupsBody": "Gloeiende bollen vallen ook middenin het gevecht in de arena, gratis voor wie ze als eerste bereikt. Ze zijn opzettelijk over de top en duren maar even: Speed Demon voor een flits van verblindend tempo, Colossus om uit te dijen tot een logge reus, Moon Boots voor een stuiterende sprong met lage zwaartekracht, en Berserker voor een plotselinge golf van razernij.",
       "ladderHeading": "De ladder beklimmen",
       "ladderBody": "Ranglijstspel volgt je positie over de tijd. Bekijk het scorebord om te zien waar je staat en wie de top van het rijk bezit."
+    },
+    "valeCupPage": {
+      "heading": "De Dalbeker",
+      "intro": "Zwijnenbal op het Zeugveld: kies een banier, kies een rol, en trap een opgezette zwijnenhuid langs een keeper voor de Koperen Emmer. Geen bloed, geen buit, alleen het gebrul van de tribunes.",
+      "loreHeading": "Zwijnenbal en het oogstbestand",
+      "loreOldSow": "Lang voordat de doden ontwaakten, speelden de boerenknechten van Oostbeek zwijnenbal op de stoppelvelden na de oogst: twee horden, één zwijnenhuid gevuld met stro, en twee wagenhekken die naar de uiteinden van het veld werden gesleept. De eerste bal, de Oude Zeug, hangt in brons boven de taveernehaard.",
+      "loreTruce": "Toen het Asgrauwe Colosseum oorlogsspelen begon te sanctioneren, antwoordde Maarschalk Redbrook met iets zachtaardigers: een blijvend oogstbestand op het oude veld. De wagenhekken werden doelpalen, het veld kreeg muren, tribunes en een naam, het Zeugveld, en de prijs was altijd dezelfde gedeukte melkemmer waar de winnaars uit dronken: de Koperen Emmer.",
+      "howHeading": "Hoe je speelt",
+      "howQueue": "Meld je vanaf elke plek aan via het Dalbeker-venster, of praat met Terreinmeester Bram bij de poort van het Zeugveld. Kies een categorie van één tegen één tot vijf tegen vijf, een baniernatie en een sportrol; meld je solo aan of neem je groep mee.",
+      "howMatch": "Bij de aftrap wordt je klasse-uitrusting omgeruild voor een sportuitrusting en daarna exact hersteld. Trappen mikken op het grondvizier, de bal kaatst tegen de boarding, en dribbelen is gewoon rennen met de bal. Maak meer doelpunten dan de tegenpartij voor het eindsignaal; bij een gelijkspel volgt de gouden goal.",
+      "howTruce": "Niemand bloedt op het Zeugveld: tackles laten je tuimelen, niets doet pijn, en huisdieren zitten de wedstrijd uit.",
+      "spectateBody": "Er wordt één wedstrijd tegelijk gespeeld in het stadion, en iedereen kan aan komen lopen en toekijken vanaf de tribunes.",
+      "bettingHeading": "Een gokje bij de balustrade",
+      "bettingBody": "Toeschouwers bij het Zeugveld kunnen een kant steunen terwijl een wedstrijd zich vormt: de inzetten worden samengevoegd, en bij het eindsignaal verdelen de winnaars de pot van de verliezers naar rato van wat ze inzetten. Een gelijkspel, of een verrassing die niemand steunde, betaalt elke munt terug. Spelers die in de wedstrijd staan, kunnen er niet op wedden, en de balustrade houdt je levenslange record van winst, verlies en nettomunten bij.",
+      "practiceHeading": "Oefenpartijen en het stille veld",
+      "practiceBody": "Het venster van De Dalbeker biedt ook oefening: een privékopie van het veld waar bots beide kanten vullen en niets meetelt voor je record. Kom je een speler of twee tekort voor het echte werk? Na een korte wachttijd vullen bots de teams aan, en elke wedstrijd met bots op het veld is een vriendschappelijke, nooit voor de ranglijst. En wanneer het Zeugveld stilligt, geven de bots een demonstratie die je vanaf de tribune kunt bekijken, en waarop je kunt wedden; zodra echte spelers zich gereedmelden, geeft de demonstratie het veld vrij en wordt elke inzet teruggegeven.",
+      "nationsHeading": "De acht baniernaties",
+      "nationsBody": "Elk team speelt onder een banier. De aanvoerder kiest de natie, en als beide kanten dezelfde banier voeren, speelt de uitploeg in het omgekeerde kleurenpalet.",
+      "nationVale": "Groen en goud, onder de korenschoof: de thuisploeg, boerenknechten in hart en nieren.",
+      "nationMirefen": "Groenblauw en grijs onder de reiger: geduldig, met lange benen, nooit gehaast.",
+      "nationThornpeak": "IJsblauw en wit onder de bergtop: vast ter been en koppig.",
+      "nationColiseum": "Rood en zwart met gekruiste zwaarden: ze spelen alsof het nog steeds een oorlogsspel is.",
+      "nationChoir": "Bleekblauw en zilver onder de klok: onheilspellend, precies en heel stil.",
+      "nationOgre": "Oranje en omber achter de vuist: schouder eerst, en er trots op.",
+      "nationMoon": "Violet en zilver onder de maansikkel: nachtspelers, licht op de voeten.",
+      "nationCopperdig": "Koper en bruin met het houweel: delvers die nooit stoppen met rennen.",
+      "rolesHeading": "Sportrollen",
+      "rolesBody": "Je rol bepaalt de uitrusting die je het veld op draagt. Iedereen trapt; de rest is temperament. In de categorieën één-tegen-één en twee-tegen-twee speelt iedereen de allrounder-uitrusting, dus rolkeuzes komen pas vanaf drie-tegen-drie tot hun recht.",
+      "rewardsHeading": "Bestandsregels",
+      "rewardsBody": "Bestandsregels betekenen geen ervaring en geen buit: een besliste wedstrijd telt mee voor je staat van dienst en het winnaarsbord, en een overwinning telt ook mee voor de beloningstaken van de dag. Wie een wedstrijd in de steek laat, zet zijn plek op de bank, en de Terreinmeester onthoudt het."
+    },
+    "deedsPage": {
+      "intro": "In het Boek der Daden houdt de wereld de stand bij van alles wat je hebt verricht, van je eerste stappen buiten het dal waar je begon tot de zwaarste gevechten die het rijk te bieden heeft. Behaal daden terwijl je speelt, draag de titels die ze schenken en zie je Roem stijgen.",
+      "howHeading": "Hoe daden werken",
+      "howBody": "Daden behaal en bewaar je met één personage tegelijk, dus elke held die je speelt bouwt een eigen Boek op; alleen de ranglijst van het rijk bundelt je Roem over alle personages die je speelt, en telt elke daad maar één keer. Elke daad zegt in duidelijke taal wat er van je wordt gevraagd, direct in het Boek der Daden in het spel, zodat je altijd weet waar je op jaagt, en de daden waar je achteraan zit kun je op de volglijst zetten om ze tijdens het spelen in het oog te houden. Een klein aantal blijft geheim en onthult zich pas wanneer je ze hebt behaald. Het Boek houdt zichzelf ook eerlijk: alles wat je verleden kan bewijzen, wordt je meteen toegekend, zodat een veteraan het nooit op een lege bladzijde opent; alleen de tellende daden beginnen hun telling opnieuw.",
+      "renownHeading": "Roem",
+      "renownBody": "Roem is de score achter het Boek. Elke daad die je behaalt is een vaste hoeveelheid waard, en je totaal stijgt alleen maar, dus een rustige week kost je nooit terrein. Een handvol daden hangt af van geluk in plaats van kunde, en Wapenfeiten zijn een eer op zich, dus beide leveren helemaal geen Roem op.",
+      "rewardsHeading": "Titels en randen",
+      "rewardsBody": "De beloningen zijn puur voor de sier, en dat is precies de bedoeling. Sommige daden schenken een titel die je kunt dragen of een rand die je naam omlijst, en nooit iets dat je held sterker maakt. Kies de titel die je wilt in het Boek der Daden en hij reist mee op je naamplaatje, in de chat en op de ranglijsten, voor iedereen zichtbaar.",
+      "chroniclesHeading": "Kronieken",
+      "chroniclesBody": "Elk gebied houdt zijn eigen Kroniek bij: een verzameling daden, bijeengebracht door een plaatselijke Kroniekschrijver die het op zich heeft genomen elke reiziger die langskomt vast te leggen. Saul van Oostbeekdal is de eerste van hen. Een Kroniek is opgedeeld in hoofdstukken, en je mag ze doorlopen in de volgorde die jou het beste past.",
+      "featsHeading": "Wapenfeiten",
+      "featsBody": "Wapenfeiten staan op een plank apart: getuigenissen van nalatenschap en wereldprimeurs, de daden die horen bij een vervlogen tijdperk of een moment dat maar één keer zal plaatsvinden. Ze leveren geen Roem op en tellen niet mee voor de voltooiing, maar worden voor altijd bewaard als herinnering aan wat er is verricht.",
+      "catalogHeading": "De volledige rol der daden",
+      "catalogBody": "Hier staat elke daad die het Boek kan bevatten, geordend per categorie. De geheime daden zijn met opzet weggelaten: die wachten tot jij ze vindt. Open het Boek der Daden in het spel om precies te zien wat elke daad van je vraagt.",
+      "standingsNote": "De rijken houden een doorlopende telling van Roem bij over elk account. Om te zien wie waar staat, open je de Ranglijst in het spel en blader je naar het tabblad Roem; de standen leven daar, niet op de wiki.",
+      "catHeading": "{label} ({count})",
+      "colName": "Daad",
+      "colRenown": "Roem",
+      "colReward": "Beloning",
+      "featTag": "Wapenfeit",
+      "rewardBorder": "Rand",
+      "cat": {
+        "progression": "Vooruitgang",
+        "combat": "Gevecht",
+        "dungeon": "Kerkers",
+        "delve": "Delves",
+        "chronicle": "Kronieken",
+        "collection": "Verzameling",
+        "pvp": "PvP en Sport",
+        "social": "Sociaal",
+        "exploration": "Verkenning",
+        "feat": "Wapenfeiten"
+      }
     },
     "wishPage": {
       "heading": "Dingen die ik wou dat ik wist",
@@ -1199,9 +2796,9 @@ export const nl_NL: EnTranslations = {
       "i1Title": "Je kunt geen verkeerde klasse kiezen",
       "i1Body": "Elke klasse kan zich staande houden en het maximum bereiken. Kies de fantasie die je leuk vindt, niet die een ander de beste noemt.",
       "i2Title": "Sterven kost je nauwelijks iets",
-      "i2Body": "Wanneer je sneuvelt, kom je vrij bij een kerkhof en ren je terug naar je lichaam. Er gaat geen ervaring verloren, dus het is veilig om risico's te nemen en te leren.",
+      "i2Body": "Wanneer je valt, herrijs je als een geest bij de dichtstbijzijnde begraafplaats. Loop terug naar je lichaam om gratis te herleven, of neem de onmiddellijke herrijzenis van de Bleke Hoeder aan en draag voor het gemak een kortstondige verzwakking. Er gaat nooit ervaring, uitrusting of munten verloren, dus het is veilig om risico's te nemen en te leren.",
       "i3Title": "Talenten zijn geen valkuil",
-      "i3Body": "Ze gaan open op niveau 10 en resetten wanneer je maar wilt, dus je vroege keuzes zijn nooit permanent.",
+      "i3Body": "Ze gaan open op niveau 10 en resetten wanneer je maar wilt, buiten gevecht, dus je vroege keuzes zijn nooit permanent.",
       "i4Title": "Volg het questspoor",
       "i4Body": "Quests zijn de snelste manier om in niveau te stijgen en ze leiden je over de hele wereld. Als je niet zeker weet waar je heen moet, zoek dan de volgende markering.",
       "i5Title": "Houd je uitrusting actueel",
@@ -1219,13 +2816,18 @@ export const nl_NL: EnTranslations = {
       "loading": "Model laden...",
       "error": "Het 3D-model kon niet worden geladen. De afbeelding hierboven toont nog steeds deze {name}.",
       "dragHint": "Sleep om het model te draaien. Gebruik de pijltjestoetsen links en rechts wanneer het de focus heeft.",
-      "canvasLabel": "Draaibaar 3D-model van {name}"
+      "canvasLabel": "Draaibaar 3D-model van {name}",
+      "posterAlt": "{name}"
     },
     "models": {
       "title": "3D-modelweergave",
       "lead": "Bekijk de helden, monsters en demonen van de wereld van dichtbij. Kies een model en sleep om het te draaien.",
       "intro": "Elke figuur hier is hetzelfde model dat je in het spel ontmoet, live weergegeven in je browser. Kies er een om het te laden.",
       "groupClasses": "Klassen",
+      "groupForms": "Druïdengedaanten",
+      "formBear": "Bruingedaante",
+      "formCat": "Wolfsgedaante",
+      "formTravel": "Fleetgedaante",
       "groupCreatures": "Wezens",
       "groupPets": "Heksenmeester-Demonen",
       "pickerLabel": "Kies een model om te bekijken",
@@ -1235,15 +2837,19 @@ export const nl_NL: EnTranslations = {
     "gear": {
       "intro": "Uitrusting is de wapenrusting die je personage draagt en de voorwerpen die je meedraagt. Betere uitrusting is de gestaagste manier om sterker te worden, en het meeste pik je vanzelf op door te spelen.",
       "slotsTitle": "Wat je kunt uitrusten",
-      "slotsBody": "Je hebt een wapengleuf en zeven pantsergleuven. Elk stuk dat je uitrust voegt iets toe aan je personage, en je kunt vrij combineren naarmate je verbeteringen vindt.",
+      "slotsBody": "Je hebt een wapengleuf, zeven pantsergleuven en drie sieraadgleuven: een hals en twee vingers. Elke klasse kan slechts bepaalde wapens gebruiken en draagt pantser tot zijn eigen gewicht, stof, leer of maliën, dus de verbeteringen die bij je passen zijn die welke voor jouw klasse zijn gemaakt. Sieraden hebben helemaal geen gewicht: elke klasse draagt wat ze ook verdient. Vul daarbinnen elke gleuf met het beste stuk dat je vindt.",
       "slotMainhand": "Wapen",
       "slotHelmet": "Hoofd",
+      "slotNeck": "Nek",
       "slotShoulder": "Schouders",
       "slotChest": "Borst",
       "slotWaist": "Middel",
       "slotLegs": "Benen",
       "slotGloves": "Handen",
       "slotFeet": "Voeten",
+      "slotFinger": "Vinger",
+      "bagsTitle": "Tassen en draagruimte",
+      "bagsBody": "Alles wat je oppakt, reist mee in één gedeelde rugzak, en die vergroot je door tassen uit te rusten. Je tassenvenster heeft vier tassloten: klik op een tas in je rugzak om hem in een vrij slot te steken, en elke tas die je draagt, voegt zijn eigen ruimte toe. Eenvoudige tassen zijn goedkope handelswaar, ruimere vallen van beesten, en de fraaiste komen van kerkerbazen, zodat je draagruimte netjes meegroeit met je uitrusting.",
       "qualityTitle": "Kwaliteit, in één oogopslag",
       "qualityBody": "Elk voorwerp heeft een kwaliteit, en zijn naam is gekleurd om die te tonen, zodat je zijn waarde in één oogopslag kunt aflezen. Van meest gewoon tot meest gewild:",
       "qualityPoor": "Pover",
@@ -1255,37 +2861,89 @@ export const nl_NL: EnTranslations = {
       "qualityNote": "Hogere kwaliteit betekent meestal betere statistieken, maar kwaliteit is een hint, geen regel. Een goed passend stuk voor jouw klasse en niveau kan een flitsender exemplaar verslaan.",
       "upgradeTitle": "Houd je uitrusting actueel",
       "upgradeBody": "Een oud stuk vervangen door een verse verbetering doet meer voor je dan perfect spelen in uitrusting die je ontgroeid bent. Wanneer er iets beters valt of een quest het aanbiedt, neem het. Bewaar je goede voorwerpen niet voor later.",
+      "itemLevelBody": "Wil je een snelle manier om twee stukken te vergelijken, zet dan Itemniveau Tonen aan in de opties. Uitrusting die je in de wereld bemachtigt, van vijanden en quests, toont dan een itemniveau, een enkel getal voor hoe krachtig het ongeveer is op basis van waar het vandaan komt, zodat je in één oogopslag ziet welke upgrade meer gewicht in de schaal legt, zelfs tussen verschillende slots. Stukken zonder zo'n bron, zoals eenvoudige verkoperswaar en beginuitrusting, tonen geen itemniveau, dus een ontbrekend getal is normaal, geen fout.",
       "sourcesTitle": "Waar uitrusting vandaan komt",
-      "sourcesBody": "De meeste van je vroege verbeteringen zijn questbeloningen, dus het loont om quests af te ronden in plaats van te grinden. Vijanden laten uitrusting vallen wanneer je ze verslaat, verkopers in de stad verkopen degelijke basisspullen, en op de spelersmarkt kun je van andere avonturiers kopen.",
+      "sourcesBody": "De meeste van je vroege verbeteringen zijn questbeloningen, dus het loont om quests af te ronden in plaats van te grinden. Vijanden laten uitrusting vallen wanneer je ze verslaat, verkopers in de stad verkopen degelijke basisspullen, ambachtslieden maken van verzamelde materialen draagbare stukken, en op de spelersmarkt kun je van andere avonturiers kopen. Bovenaan de heuvel kopen twee merkvaluta uitrusting die nergens anders te vinden is: Delve-Merken bij de delvebewaarder, en Heroïsche Merken bij de heroïsche kwartiermeester.",
+      "soulboundTitle": "Zielgebonden: van jou en jou alleen",
+      "soulboundBody": "Een paar bijzondere beloningen zijn zielgebonden, verbonden aan je personage vanaf het moment dat je ze verdient. Een zielgebonden voorwerp kun je niet verhandelen, versturen, aan een verkoper verkopen of op de markt zetten; het is van jou en jou alleen. Vandaag beschermt dat prijzentokens zoals Heroïsche Merken, terwijl de uitrusting die je wint van jou is om vrijelijk te verhandelen, verkopen of delen.",
+      "setsTitle": "Sets en setbonussen",
+      "setsBody": "Sommige pantsers komen in bij elkaar passende families, meerdere stukken die zo gesneden zijn dat ze er als één uitzien en als één vechten. Draag er genoeg van een familie tegelijk en de set ontwaakt, en geeft bonussen bovenop de eigen statistieken van elk stuk, en hoe meer stukken je draagt, hoe sterker hij wordt. Een paar van zulke families duiken op als gewilde drops terwijl je levelt; de grootste ervan komen uit de zwaarste groepscontent vlak bij de levelcap, dus jagen op een volledige set is een klassiek eindspeldoel.",
       "consumablesTitle": "Verbruiksartikelen",
       "consumablesIntro": "Sommige voorwerpen worden eenmalig gebruikt voor een snel voordeel. Het is goedkope verzekering, dus houd er een paar bij de hand.",
       "consumablesPotions": "Toverdranken herstellen levenskracht of mana op het moment dat je ze gebruikt, zelfs midden in een gevecht, wat ze tot een reddende greep maakt als een aanval misgaat. Ze delen een korte afkoeltijd, dus plan één goed moment om ze te gebruiken.",
       "consumablesFood": "Eten en drinken herstellen je terwijl je zit en rust tussen gevechten. Eten herstelt levenskracht, drinken herstelt mana, en zo rusten is gratis. Ga na een zwaar gevecht een paar seconden zitten in plaats van half geheeld het volgende in te rennen.",
       "consumablesElixirs": "Elixers geven een tijdelijke buff terwijl je avontuurt, een klein voordeel dat helpt wanneer je net iets verder wilt doorzetten.",
       "fishingTitle": "Vissen",
-      "fishingBody": "Vissen is een rustige afwisseling. Rust een hengel uit, werp uit in open water en haal binnen wat bijt. Je vangt vooral vis die je tot eten kunt koken, af en toe wat rommel om voor een paar munten te verkopen, en zo nu en dan een gewilde zeldzame vangst. Wat je vindt, hangt af van het water waarin je vist.",
-      "fishingFood": "De vis die je binnenhaalt is rauw, en rauwe vis is voedsel. Kook je vangst en hij geneest meer wanneer je gaat zitten om te eten, met de betere vis afkomstig uit de koudere, diepere wateren in het noorden. Een lijn in het meer is een rustige manier om je pak gevuld te houden tussen gevechten.",
+      "fishingBody": "Vissen is een rustige afwisseling. Draag een hengel, gebruik hem naast open water, en haal binnen wat bijt. Je vangt vooral vis die voedsel is dat je kunt eten, af en toe wat rommel om voor een paar munten te verkopen, en zo nu en dan een gewilde zeldzame vangst. Wat je vindt, hangt af van het water waarin je vist.",
+      "fishingFood": "De vis die je binnenhaalt is voedsel: eet er een terwijl je gaat zitten om te rusten en het herstelt je gezondheid, met de stevigere vis afkomstig uit de koudere, diepere wateren in het noorden. Een lijn in het meer is een rustige manier om je pak gevuld te houden tussen gevechten.",
       "fishingRare": "Zo nu en dan vangt je lijn iets veel beters dan avondeten: een glinsterende gewilde vis die elke visser in elk water met geluk kan binnenhalen. Haak er een en je logboek licht op met de vangst. Het is het soort gelukkige vangst dat een ledige middag aan het meer het vertellen waard maakt.",
       "cosmeticsTitle": "Uiterlijken en cosmetica",
       "cosmeticsBody": "Sommige beloningen veranderen alleen hoe je personage eruitziet, nooit hoe sterk je bent. Met deze cosmetische skins val je op zonder het spel te beïnvloeden, dus draag wat je maar wilt.",
       "cosmeticsRanks": "Cosmetica hebben hun eigen zeldzaamheidsniveaus, en de zeldzamere zijn een leuk doel om na te jagen. Een hoger niveau verdienen ontgrendelt ook de uiterlijken eronder.",
-      "cosmeticsSkins": "Er zijn twee cosmetische lijnen om te verzamelen. Elke klasse heeft een handvol alternatieve uiterlijken, een frisse kijk op haar look die alleen jij mag dragen. Daarnaast zijn er chroma's: genoemde tweekleurige kleurschema's die een look volledig herschilderen, van sobere metalen tot felle keizerlijke kleuren.",
-      "cosmeticsCache": "Een paar daarvan komen uit een mysterieuze cosmetische kist, een verzegelde prijs die bij het openen een van drie kwaliteitsgraden oplevert en het bijbehorende uiterlijk verleent. Het is puur voor de show: niets erin maakt je sterker, alleen mooier om te zien."
+      "cosmeticsSkins": "Er zijn twee cosmetische lijnen om te verzamelen. De meeste klassen hebben meerdere alternatieve uiterlijken, een frisse kijk op de klasse-look die van jou is om te dragen. Daarnaast zijn er chroma's: genoemde tweekleurige kleurschema's die een look volledig herschilderen, van sobere metalen tot felle keizerlijke kleuren.",
+      "cosmeticsCache": "Een paar daarvan komen uit een mysterieuze cosmetische kist, een verzegelde prijs die bij het openen een van drie kwaliteitsgraden oplevert en het bijbehorende uiterlijk verleent. Het is puur voor de show: niets erin maakt je sterker, alleen mooier om te zien.",
+      "cosmeticsApply": "Stel je actieve uiterlijk in vanaf de uiterlijkrij op je personagescherm, en wissel vrij tussen alles wat je hebt ontgrendeld."
+    },
+    "professions": {
+      "intro": "Naast gevecht en quests beloont de wereld je voor het bewerken van het land en de smidse: grondstoffen verzamelen, ze in tien ambachtsvakken tot uitrusting en goederen maken, en een identiteit aannemen als een van de tien archetypen die deze vakken vertegenwoordigen.",
+      "gatherTitle": "Verzamelen: Mijnbouw, Houtkap en Kruidenkunde",
+      "gatherIntro": "Drie verzamelvakken laten je grondstoffen rechtstreeks uit de wereld halen: Mijnbouw slaat erts en steen uit aders, Houtkap velt timmerhout uit bomengroepen, en Kruidenkunde plukt kruiden en planten die in het wild groeien. Elk wordt apart bijgehouden, dus aan het ene werken vertraagt nooit je voortgang in het andere. Nieuw in dit alles? Voorman Odell in Oostbeek heeft een kort klusje, Een Vak voor Elke Hand, dat je door je eerste oogst loodst.",
+      "gatherWhatTitle": "Grondstofbronnen",
+      "gatherWhatBody": "Ertsaders, bomengroepen en kruidenveldjes staan in het Dal en het moeras als zichtbare, onbeheerde vaste punten. Loop ernaartoe en gebruik ze om te oogsten wat ze bevatten. Heb je een bron eenmaal geoogst, dan heeft die tijd nodig om te herstellen voordat jij persoonlijk er opnieuw kunt oogsten, maar niemand anders wordt geblokkeerd: een andere speler kan intussen precies dezelfde bron oogsten.",
+      "gatherProficiencyTitle": "Bedrevenheid",
+      "gatherProficiencyBody": "Elke geslaagde oogst bouwt je bedrevenheid in dat verzamelvak op, en je personageblad houdt elk vak apart bij. Meer oefening schaadt je voortgang nooit, ze draagt er alleen maar aan bij.",
+      "gatherToolsTitle": "Gereedschap van het vak",
+      "gatherToolsBody": "Handelaren verkopen basisgereedschap voor elk verzamelvak, en beter gereedschap kan worden gemaakt. Vandaag is er geen gereedschap nodig om een grondstofbron te bewerken: gereedschap is het voorwerk voor rijkere bronnen die nog komen, waar houwelen, bijlen en sikkels van hogere rang de manier zullen zijn om binnen te komen.",
+      "harvestTitle": "De jacht zelf oogsten",
+      "harvestBody": "Verzamelen stopt niet bij grondstofbronnen. Sommige gedode beesten kun je oogsten voor componenten, huiden, hoektanden, zijde en vreemdere zaken, rechtstreeks van het lijk naast de gewone buit. Eén oogster per kill: wie het eerst oogst, claimt alles. De keuze is ook elke keer aan jou: stroop alles wat het lijk biedt, of concentreer je op één component en neem er een fijnere kwaliteit van. Elk personage kan oogsten, geen vak of training vereist, en een bijzonder fijne component draagt zelfs de naam van wie hem heeft geoogst.",
+      "focusTitle": "Stadsfocus",
+      "focusBody": "Elke hoofdplaats heeft een Stadsfocus-paneel voor oogsters op bezoek: sta in de stad, open het naast de minimap, en richt een klein budget aan focuspunten op de componenttypen die je belangrijk vindt. Hoe meer focus je aan een component geeft, hoe fijner en rijker het van elk later lijk komt; je toewijzing volgt je personage waar het ook zwerft, en je kunt haar gratis herzien bij elk later bezoek aan de stad.",
+      "craftTitle": "De tien ambachten",
+      "craftIntro": "Tien ambachten maken van verzamelde materialen afgewerkte uitrusting en goederen: Harnasmaken, Wapensmeden en Juwelenmaken vormen ruwe grondstoffen om tot draagbare uitrusting; Alchemie en Knutselwerk draaien op vallen en opstaan; Koken, Inscriptie en Betoveren raken elk het werk van andere ambachten; Kleermaken en Leerbewerken werken naar exacte patronen. Samen vormen ze een wiel, waarbij elk ambacht naast twee buren zit en tegenover één ander.",
+      "craftRingTitle": "Een wiel van specialiteiten",
+      "craftRingBody": "De tien ambachten staan in een vaste ring, en waar een ambacht op die ring zit doet ertoe: ambachten die naast elkaar op het wiel liggen hebben meer met elkaar gemeen dan ambachten die tegenover elkaar liggen. Je aan één ambacht verbinden moet voelen als toetreden tot een familie van verwante vakken, niet als het kiezen van een losstaande vaardigheid.",
+      "craftRecipesTitle": "Recepten en reagentia",
+      "craftRecipesBody": "Elk recept vraagt om specifieke reagentia die je verzamelt of koopt. De meest eenvoudige recepten vragen niets anders dan gewone materialen en zijn vanaf het allereerste begin te maken, zodat je een vak meteen kunt gaan uitoefenen zodra je het oppakt. De receptenlijsten worden nog aangevuld: een paar vakken wachten nog op hun eerste recepten, en er komen er meer bij naarmate de ambachten groeien.",
+      "craftHowTitle": "Het vervaardigingsvenster",
+      "craftHowBody": "Open het vervaardigingsvenster (standaardtoets T) om elk recept te zien dat je kent, wat elk nodig heeft en wat je bij de hand hebt; als de materialen er zijn, doet één klik het werk. Gewone recepten kun je overal in de wereld vervaardigen. Een handjevol geavanceerde gereedschapsrecepten vraagt je in plaats daarvan om bij de ambachtshub in Highwatch te staan.",
+      "craftMasteryTitle": "Vaardigheid en meesterschap",
+      "craftMasteryBody": "Succesvol iets maken bouwt vaardigheid op in dat vak, en vaardigheid houdt de recepten van een ambacht nooit achter slot: als je een recept kent en de materialen ervan bezit, kun je het proberen. Wat vaardigheid je in plaats daarvan oplevert, is kwaliteit: een geoefende hand levert fijner werk af. De enige uitzondering zijn combinatierecepten, die vragen dat je jezelf in beide ambachten hebt bewezen voordat ze opengaan.",
+      "craftComboTitle": "Combinatierecepten",
+      "craftComboBody": "Naast de eigen receptenlijst van een ambacht ondersteunt het wiel ook combinatierecepten die twee naburige ambachten tegelijk aanspreken, als beloning voor een personage dat in aangrenzende vakken op de ring heeft geïnvesteerd in plaats van in één vak alleen. De maker moet beide vakken zelf beheersen; de vaardigheid van een partner kan geen van beide helften vervangen.",
+      "archetypeTitle": "De tien archetypen",
+      "archetypeIntro": "Elk van de tien ambachten staat ook voor een archetype, een bredere identiteit die je kunt aannemen en die verder gaat dan alleen dat vak uitoefenen. Je actieve archetype is één keuze tegelijk, geen afvinklijst: je draagt er één, en kunt later van keuze veranderen als je dat wilt.",
+      "archetypeChooseTitle": "Je archetype kiezen",
+      "archetypeChooseBody": "Een archetype uitroepen wordt een verhaalmoment: een quest die je formeel in die identiteit opneemt. Die weg wordt nog gebouwd, dus voorlopig loopt elk personage door de wereld met de keuze nog vóór zich, en elk ambacht vordert ondertussen tot de kwaliteitsrang Zeldzaam.",
+      "archetypeSwitchTitle": "Van gedachten veranderen",
+      "archetypeSwitchBody": "Een uitroeping is evenmin een levenslange gevangenisstraf. Het plan is een herhaalbare daad van goedmaken tegenover je oude vak voor je een nieuw vak opneemt, waarbij het goedmaken elke keer dat je wisselt steiler wordt, zodat de keuze betekenisvol blijft in plaats van gratis. Net als de uitroeping zelf is ook dit nog onderweg.",
+      "archetypeIdentityTitle": "Wat je archetype betekent",
+      "archetypeIdentityBody": "Je actieve archetype is een uitspraak over wie je personage in de wereld is, herkenbaar in hoe anderen en de wereld je aanspreken. De precieze beloningen en erkenning die erbij horen worden nog uitgewerkt; kom later terug naarmate het systeem zich vult."
     },
     "economy": {
-      "intro": "Munten smeren de hele wereld: ze kopen uitrusting en voorraden, betalen je reparaties en questkosten, en wisselen van eigenaar tussen spelers. Je pikt dit alles vanzelf op door te spelen, dus zie deze pagina als een kaart van waar je geld vandaan komt en waar het heen gaat.",
+      "intro": "Munten smeren de hele wereld: ze kopen je uitrusting, voorraden en reisuitrusting, en wisselen van eigenaar tussen spelers. Je pikt dit alles vanzelf op door te spelen, dus zie deze pagina als een kaart van waar je geld vandaan komt en waar het heen gaat.",
       "coinTitle": "Goud, zilver en koper",
       "coinBody": "Geld bestaat uit drie munten. Honderd koper maken een zilver, en honderd zilver maken een goud, dus je beurs vult zich eerst met de kleinste munt. Je verdient het met questbeloningen, met het plunderen van gevallen vijanden, en met het verkopen van wat je niet langer nodig hebt.",
       "vendorsTitle": "Verkopers en wat ze voeren",
-      "vendorsBody": "Steden en buitenposten zijn bezaaid met handelaren, elk met hun eigen vak. Proviandeurs hebben eten en drinken, wapensmeden en pantsersmeden voeren uitrusting, kruidenkenners handelen in reagentia, en een kwartiermeester houdt praktische reisuitrusting bij. Loop er een tegemoet om te zien wat ze verkopen.",
+      "vendorsBody": "Steden en buitenposten zijn bezaaid met handelaren, elk met hun eigen vak. Proviandeurs hebben eten en drinken, wapensmeden en pantsersmeden voeren uitrusting, en een kwartiermeester houdt praktische reisuitrusting bij. Loop er een tegemoet om te zien wat ze verkopen.",
+      "marksTitle": "Merken: de valuta naast munten",
+      "marksBody": "Munten zijn niet het enige dat je opspaart. Delves keren Delve-Merken uit, alleen te besteden bij de delvebewaarder aan metgezelupgrades en uitrusting die je nergens anders vindt. Heroïsche kerkertochten laten Heroïsche Merken achter op de eindbaas, te besteden bij de heroïsche kwartiermeester in Hoogwacht aan sieraden die geen andere uithoek van het rijk verkoopt. Geen van beide vermengt zich ooit met je munten.",
+      "bankTitle": "De bank",
+      "bankBody": "Elke hoofdplaats heeft een filiaal van De Vergulde Geldkist, het bankhuis van het rijk. Spreek daar met de thesaurier om je kluis te openen: een eigen bergruimte naast je tassen die je personage levenslang behoudt. Wat je bij hen achterlaat, wacht veilig op je, welk filiaal je daarna ook bezoekt.",
+      "bankHow": "Met de kluis open klik je op een voorwerp in je tassen om het te storten, en klik je erop in de kluis om het terug te nemen. De kluis bewaart alleen waren, nooit geld, en questvoorwerpen blijven bij je. Raken je tassen onderweg vol, dan veegt één knop al je ambachtsmaterialen in één keer naar binnen.",
+      "bankSlots": "Een nieuwe kluis begint klein en groeit met je mee. De thesaurier verkoopt extra vakken voor geld tegen steeds hogere prijzen, en online spelen levert daarbovenop bonusruimte op, voor zaken als een geverifieerd e-mailadres, gekoppelde accounts en vrienden die je naar het spel brengt.",
       "buyingTitle": "Kopen en verkopen",
-      "buyingBody": "Ga bij een handelaar staan om hun venster te openen. Je kunt alles kopen wat ze op voorraad hebben als je het kunt betalen, en het meeste uit je tassen verkopen voor munten. Als je per ongeluk iets verkoopt, houdt een verkoper je recente verkopen vast zodat je ze kunt terugkopen.",
+      "buyingBody": "Spreek een handelaar aan en kies om zijn waar te bekijken, en zijn winkel opent met drie tabbladen: Bekijken, Verkopen en Terugkopen. Bekijken bevat alles wat ze op voorraad hebben, van jou als je het kunt betalen. Verkopen toont welke spullen uit je tassen zij willen kopen, en een stuk verkopen dat zijn eigen gerolde kwaliteit draagt, vraagt je eerst te bevestigen, zodat een gewild exemplaar nooit per ongeluk wegglipt. Doe je afstand van iets waar je spijt van krijgt, dan houdt het tabblad Terugkopen je recente verkopen vast zodat je ze kunt terugkopen voor de munten die je kreeg.",
       "junkTitle": "Rommel opruimen",
-      "junkBody": "Buit waar je niets aan hebt, verkoopt nog steeds aan elke verkoper, dus leeg je tassen telkens wanneer je door de stad komt in plaats van ze vol te laten lopen. Echt waardeloze prullaria kun je ook gewoon weggooien om ruimte te maken.",
+      "junkBody": "Buit waar je niets aan hebt, verkoopt nog steeds aan elke verkoper, dus leeg je tassen telkens wanneer je door de stad komt in plaats van ze vol te laten lopen. Het verkooptabblad heeft zelfs een knop met één klik die alle prullaria van Slechte kwaliteit in één keer verkoopt. Echt waardeloze prullaria kun je ook gewoon weggooien om ruimte te maken.",
       "tradeTitle": "Ruilen met andere spelers",
       "tradeBody": "Je kunt van aangezicht tot aangezicht ruilen met iedereen die bij je in de buurt staat. Jullie zetten beiden voorwerpen en munten in een gedeeld venster en de ruil vindt pas plaats zodra jullie het allebei bevestigen, zodat geen van beide kanten verrast kan worden. Het is de eenvoudige manier om een vriend een buit te geven of een afspraak af te sluiten.",
+      "mailTitle": "De Ravenpost",
+      "mailBody": "Elke hoofdplaats heeft een uitgehouwen ravenpilaar: een brievenbus van De Ravenpost, de brievendienst van het rijk. Ga bij een pilaar staan om aan elk personage op naam te schrijven, een vriend die online of allang offline is, en voeg munten of goederen bij de brief voor een kleine porto. De raaf doet er een korte tijd over om te vliegen; als hij landt, laat een envelop-indicator de ontvanger weten dat er iets op hem wacht.",
+      "mailHow": "Ophalen gaat andersom net zo: ga bij een willekeurige pilaar staan om je brieven te lezen en te nemen wat ze meedragen, zo je beurs en tassen in. Een gewone brief vervaagt na een tijdje, maar een brief die nog munten of goederen draagt, wacht op je, hoe lang je er ook over doet. Sommige dingen weigert de post ronduit: zielgebonden voorwerpen, questgoederen en unieke cosmetische tokens reizen met jou mee of helemaal niet. En houd de pilaar in de gaten na een goede inlevering; sommige questgevers schrijven.",
+      "dailyTitle": "Dagelijkse beloningen",
+      "dailyBody": "Een knop met een schatkist op je scherm opent het venster met dagelijkse beloningen. Elke dag zet een handvol taken klaar, quests voltooien, vechten in het Asgrauwe Coliseum, een wedstrijd van De Dalbeker winnen, en biedt een gratis draai aan het prijzenrad, allemaal goed voor punten in de stand van die dag, en de topverdieners van de dag delen een prijzenpot voor houders van het optionele community-token. Niets daarvan geeft macht in het spel. Het venster zelf legt de regels van de dag en wie in aanmerking komt uit, toont de ranglijst en bewaart je geschiedenis.",
       "marketTitle": "De Wereldmarkt",
-      "marketBody": "De Koopman runt de Wereldmarkt, een door spelers gedreven beurs waar je kunt kopen en verkopen met mensen die je misschien nooit ontmoet. Spreek de Koopman aan om hem te openen.",
+      "marketBody": "De Koopman runt de Wereldmarkt, een door spelers gedreven beurs waar je kunt kopen en verkopen met mensen die je misschien nooit ontmoet. Spreek de Koopman aan in Oostbeek, of Veilingmeester Voss boven in Highwatch, om hem te openen: beide beheerders bedienen dezelfde gedeelde markt. De Koopman houdt er ook een vaste voorraad eigen goederen aangeboden, dus er is altijd iets te kopen, zelfs wanneer geen andere spelers iets hebben geplaatst.",
       "marketBrowse": "Bladeren: scrol door de aanbiedingen of zoek op naam om te vinden wat te koop is. Elke aanbieding toont de waren, de verkoper en de vraagprijs voor de hele stapel.",
       "marketPost": "Plaatsen: kies een stapel uit je tassen, stel je prijs in en zet hem in de lijst. De waren worden door de Koopman bewaard totdat iemand ze koopt. Onverkochte aanbiedingen komen na een tijdje naar je terug, en je kunt er een vroegtijdig terugvragen als je je bedenkt.",
       "marketCollect": "Innen: wanneer je waren verkocht zijn, wacht je opbrengst op je bij de Koopman. Keer terug om de munten te innen, samen met alles wat onverkocht terugkwam. De Koopman neemt een klein deel van elke voltooide verkoop.",
@@ -1304,15 +2962,15 @@ export const nl_NL: EnTranslations = {
       "chanParty": "Groep.",
       "chanPartyBody": "Praat met iedereen in je groep, hoe verspreid je ook bent.",
       "chanGeneral": "Algemeen.",
-      "chanGeneralBody": "Een altijd actief lokaal kanaal voor de mensen om je heen, handig om een vraag te stellen of te kletsen.",
+      "chanGeneralBody": "Een altijd actief kanaal voor het hele rijk dat iedereen die online is bereikt, handig om een vraag te stellen of te kletsen. Anders dan World en Looking for Group hoef je je nooit aan te melden.",
       "chanWorld": "Wereld.",
       "chanWorldBody": "Een kanaal voor het hele rijk waarvoor je je aanmeldt. Open het tabblad om mee te doen, en je ziet en bereikt iedereen die online is.",
       "chanLfg": "Op zoek naar groep.",
       "chanLfgBody": "Een optioneel kanaal voor het hele rijk om mensen te vinden voor een dungeon. Open het tabblad om mee te doen.",
       "chanGuild": "Gilde en Officier.",
-      "chanGuildBody": "Kanalen voor je gilde. Gildechat bereikt elk lid; het officierskanaal is alleen voor officieren.",
+      "chanGuildBody": "Kanalen voor je gilde. Gildechat bereikt elk lid; het officierskanaal is voor officieren en de gildeleider.",
       "partyHeading": "Een groep vormen",
-      "partyBody": "Nodig een andere speler uit door met de rechtermuisknop op hun naam te klikken en uitnodigen te kiezen, of met een chatcommando. Een groep telt maximaal vijf spelers, en een van jullie is de leider.",
+      "partyBody": "Nodig een andere speler uit door met de rechtermuisknop op hun naam te klikken en uitnodigen te kiezen. Een groep telt maximaal vijf spelers, en een van jullie is de leider.",
       "partyCredit": "Groepsleden dicht bij elkaar delen kill- en questkrediet, dus samen questen is sneller, nooit langzamer. Een groep is ook hoe je als team een dungeon binnenstapt.",
       "raidBody": "Zodra je een volledige groep van vijf hebt, kan de leider deze omzetten in een raid van maximaal tien, voor de eindspel-raid.",
       "lootHeading": "Groepsbuit",
@@ -1320,17 +2978,30 @@ export const nl_NL: EnTranslations = {
       "lootCoinTitle": "Geld.",
       "lootCoinBody": "Geld van een kill kan naar degene gaan die het buitmaakt, of gelijk over de groep worden verdeeld.",
       "lootCommonTitle": "Voorwerpen.",
-      "lootCommonBody": "Gewone drops kunnen naar de buitmaker gaan, terwijl betere drops voor een worp worden aangeboden zodat iedereen een eerlijke kans krijgt.",
+      "lootCommonBody": "Gewone drops kunnen om de beurt door de groep gaan of naar wie buit maakt, terwijl betere drops voor een worp worden aangeboden zodat iedereen een eerlijke kans krijgt.",
       "lootRollTitle": "Nodig, Hebzucht of Passen.",
       "lootRollBody": "Wanneer een voorwerp voor een worp gaat, kiest elk in aanmerking komend lid Nodig als ze het willen, Hebzucht als ze het alleen als reserve zouden nemen, of Passen om af te zien. De hoogste worp wint.",
+      "lootMasterTitle": "Buitmeester.",
+      "lootMasterBody": "In plaats daarvan kan de leider de leiding nemen over de betere drops en ze stuk voor stuk uitdelen aan het lid dat ze hoort te krijgen. Het voorkomt dat begeerde uitrusting naar een willekeurige worp gaat, zoals een georganiseerde groep een dungeon loopt.",
       "friendsHeading": "Vrienden en negeren",
       "friendsBody": "Voeg spelers toe aan je vriendenlijst om te zien wanneer ze online zijn en waar ze zijn, zodat je kunt groeperen zodra ze inloggen.",
       "ignoreBody": "Als iemand je lastigvalt, voeg diegene toe aan je negeerlijst en je ziet hun chat niet meer.",
       "guildHeading": "Gilden",
       "guildBody": "Een gilde is een blijvende groep spelers waartoe je tussen sessies behoort. Maak er een of accepteer een uitnodiging om mee te doen, en je kunt in één gilde tegelijk zitten. Leden hebben een rang: een leider, officieren en leden.",
       "guildChatBody": "Lid zijn van een gilde geeft je een privé-gildechatkanaal en toont je gildegenoten op een gedeelde ledenlijst, zodat er altijd bekende gezichten online zijn.",
+      "communityHeading": "De hele community oproepen",
+      "communityBody": "Begin een chatregel met een uitroepteken om een communityoproep te doen: !lfg om een groep te zoeken, !wts en !wtb om te handelen, !recruit voor je gilde, !event om een raid of ontmoeting aan te kondigen, en !help om hulp te vragen. Een menu van de oproepen verschijnt zodra je het teken typt. Elke oproep wordt in de wereld uitgezonden en doorgegeven aan de community-Discord, zodat hij spelers bereikt die niet eens ingelogd zijn. Communityoproepen horen bij online spelen.",
+      "slashHeading": "Handige slash-commando's",
+      "slashBody": "Een paar dagelijkse commando's zijn het onthouden waard: /w Naam stuurt een fluister en /r beantwoordt de laatste die je ontving, /invite vraagt iemand in je groep, /follow valt in de pas achter een vriend, /roll gooit dobbelstenen zodat de groep het ziet, /who toont wie online is, en /afk markeert je als afwezig. Typ /help in het spel voor de volledige lijst.",
+      "emotesBody": "Je personage kan ook zonder woorden spreken: typ een emote als /wave, /dance, /cheer of /bow, kies eerst een vriend als doel om de emote op hem te richten, of houd X ingedrukt om het emotewiel te openen voor een snelle uitdrukking boven je hoofd.",
+      "calendarHeading": "De evenementenkalender",
+      "calendarBody": "Druk op I om de evenementenkalender te openen. Hij markeert de dagen in het rijk waar het plannen om draait, van de wekelijkse raidoproep tot fiesta-avond, en het is waar gildes hun agenda bijhouden: de gildeleider en officieren kunnen er evenementen op boeken, en elk lid ziet ze op dezelfde pagina.",
+      "readyHeading": "Gereedheidschecks",
+      "readyBody": "Voor een grote pull kan de groepsleider /ready typen om de zaal te peilen: iedereen anders krijgt een prompt Gereed of Niet gereed, en zodra allen hebben geantwoord, of 30 seconden verstreken zijn, ziet de hele groep één samenvatting van de aantallen. Niemand wordt eruit gepikt; het gaat om het aantal, niet om de schuldige.",
+      "markersHeading": "Doelwitmarkeringen",
+      "markersBody": "Richt je in een groep op een vijandig wezen en klik met rechts op zijn portret in het doelwitframe (lang indrukken op aanraak) om het te kronen met een van de acht raidsymbolen. Elk lid kan markeren, elk symbool leeft op één doelwit tegelijk, en een symbool opnieuw op zijn eigen doelwit toepassen wist het. Killvolgorde, crowd-controltoewijzingen of een simpel 'deze eerst' reizen allemaal sneller als symbool dan als zin.",
       "etiquetteHeading": "Groepsetiquette",
-      "etiquetteBody": "Groeperen is een keuze, geen verplichting. Zeg hallo wanneer je je aansluit, gooi alleen Nodig voor uitrusting die je echt gaat gebruiken, en laat het de groep weten voordat je vertrekt. Een beetje hoffelijkheid helpt enorm, en de meeste spelers waarderen het gezelschap."
+      "etiquetteBody": "Groeperen is een keuze, geen verplichting. Zeg hallo wanneer je je aansluit, gooi alleen Nodig voor uitrusting die je echt gaat gebruiken, en laat het de groep weten voordat je vertrekt. Een beetje hoffelijkheid helpt enorm, en de meeste spelers waarderen het gezelschap. Moderators bewaren de vrede, en een speler die anderen het spel niet laat genieten, kan naar een cel worden verplaatst totdat een moderator hem eruit laat."
     },
     "stats": {
       "intro": "Je personage wordt beschreven door een handvol attributen. Je hoeft ze nooit uit je hoofd te leren om goed te spelen, maar ongeveer weten wat elk doet helpt je je personageblad te lezen en de juiste upgrades te kiezen.",
@@ -1343,17 +3014,23 @@ export const nl_NL: EnTranslations = {
       "staTitle": "Uithoudingsvermogen",
       "staBody": "Uithoudingsvermogen is je incasseringsvermogen. Meer Uithoudingsvermogen betekent een grotere gezondheidsvoorraad, en het versnelt de gezondheid die je herstelt terwijl je buiten gevecht rust. Elke klasse wil er wat van.",
       "intTitle": "Intellect",
-      "intBody": "Intellect vergroot de manavoorraad van een spreukmeester en verbetert de kans dat hun spreuken kritiek raken. Het is belangrijk voor de klassen die met mana casten; voor een Woede- of Energieklasse doet het weinig.",
+      "intBody": "Intellect vergroot de manavoorraad van een spreukmeester, verhoogt hun spreukkracht zodat hun spreuken harder aankomen, en verbetert de kans dat hun spreuken kritiek raken. Het is belangrijk voor de klassen die met mana casten; voor een Woede- of Energieklasse doet het weinig.",
       "spiTitle": "Geest",
-      "spiBody": "Geest bepaalt hoe snel de mana van een caster terugkeert buiten gevecht. Net als Intellect dient het de manaklassen en betekent het weinig voor de andere.",
+      "spiBody": "Geest bepaalt hoe snel de mana van een caster terugkeert telkens wanneer die het spreuken laat rusten, wat meestal tussen gevechten is. Net als Intellect dient het de manaklassen en betekent het weinig voor de andere.",
       "armorTitle": "Pantser",
       "armorBody": "Pantser vermindert de fysieke schade die je oploopt. Het komt vooral van wat je draagt, en de zwaardere pantserklassen dragen er veel meer van. Meer pantser tegen een vijand rond jouw niveau betekent dat elk van zijn treffers zachter aankomt.",
       "apTitle": "Aanvalskracht",
-      "apBody": "Aanvalskracht meet hoe hard je wapen toeslaat. Je primaire attributen voeden het, en sterkere wapens en uitrusting verhogen het verder, en daarom kan een upgrade een echte sprong in schade betekenen.",
+      "apBody": "Aanvalskracht meet hoe hard je wapen toeslaat. Je primaire attributen voeden het, en uitrusting die die attributen draagt, verhoogt het verder, terwijl een sterker wapen je schade rechtstreeks verhoogt, en daarom kan een upgrade een echte sprong in schade betekenen.",
+      "spTitle": "Spreukkracht",
+      "spBody": "Spreukkracht is de tegenhanger van aanvalskracht voor een caster: het verhoogt de schade die je spreuken aanrichten. Intellect voedt het, en casteruitrusting en buffs voegen er meer bovenop toe, dus een spreukenwerker let op spreukkracht zoals een melee-vechter op aanvalskracht let.",
       "critTitle": "Kritieke treffer",
-      "critBody": "Je kans op een kritieke treffer is hoe vaak een aanval extra schade aanricht. Iedereen begint met een kleine basiskans, en Behendigheid (plus enkele talenten en uitrusting) bouwt daarop voort.",
+      "critBody": "Je kans op een kritieke treffer is hoe vaak een aanval extra schade aanricht. Iedereen begint met een kleine basiskans, en Behendigheid (plus enkele talenten en uitrusting) bouwt daarop voort. Je personageblad toont zowel de kans zelf als de crit-waardering die je uitrusting eraan bijdraagt.",
       "dodgeTitle": "Ontwijken",
       "dodgeBody": "Ontwijken is je kans om een inkomende melee-aanval volledig te vermijden. Je begint met een kleine basiskans, en Behendigheid verhoogt deze, dus wendbare klassen ontwijken meer klappen.",
+      "hasteTitle": "Haast",
+      "hasteBody": "Haast is een statistiek die alles wat je doet versnelt: meleezwaaien, schoten op afstand en het spreuken versnellen allemaal samen. Het komt van uitrusting, vooral van bonussen van pantsersets, terwijl een paar vaardigheden een korte uitbarsting van snellere zwaaien schenken. Je blad toont het als Haastwaardering.",
+      "dpsTitle": "Schade per seconde",
+      "dpsBody": "Je blad toont ook een schade-per-seconde-schatting: ruwweg wat je wapen, zijn slagsnelheid en je aanvalskracht samen na verloop van tijd opleveren. Het is een snelle manier om twee wapens in één oogopslag te vergelijken.",
       "sheetHeading": "Je personageblad lezen",
       "sheetBody": "Open het personagevenster in het spel om dit allemaal op één plek te zien: je vijf attributen aan de ene kant en de stats die ze voeden aan de andere. Beweeg over een waarde en een tooltip legt uit wat het voor je klasse doet, zodat je in één oogopslag ziet welke getallen een upgrade daadwerkelijk heeft veranderd.",
       "growHeading": "Hoe je stats groeien",
@@ -1362,16 +3039,16 @@ export const nl_NL: EnTranslations = {
     "progression": {
       "intro": "Elk gevecht, elke quest en elke stap naar het noorden maakt je held sterker. Zo werkt het levelen en zo blijf je groeien wanneer je de top bereikt.",
       "xpTitle": "Hoe je ervaring opdoet",
-      "xpBody": "Je verdient ervaring door quests te voltooien en vijanden te verslaan. Quests geven veruit het meeste, dus het questspoor volgen is de snelste manier om te stijgen. Onderweg dingen verslaan vult de rest aan.",
+      "xpBody": "Je verdient ervaring door quests te voltooien, vijanden te verslaan en delves uit te spelen. Quests geven veruit het meeste, dus het questspoor volgen is de snelste manier om te stijgen. Kills en delveruns onderweg vullen de rest aan.",
       "capBody": "Elk niveau maakt je sterker en brengt nieuwe vaardigheden, helemaal tot het maximum van niveau {cap}.",
       "journeyTitle": "De reis naar het noorden",
       "journeyBody": "De wereld is één doorlopend land, drie gebieden van zuid naar noord, elk een niveaustap hoger. Je begint in de groene vallei, baant je een weg door het moeras en eindigt in de koude hoge toppen. Volg het questspoor en het land draagt je van het ene naar het andere.",
       "bandLabel": "Niveaus {min} tot {max}",
       "restedTitle": "Uitgeruste ervaring",
-      "restedBody": "Wanneer je uitlogt of rust op een veilige plek zoals een herberg, bouwt je personage uitgeruste ervaring op terwijl je weg bent. De volgende keer dat je eropuit gaat en vecht, geeft die voorraad je kills een extra impuls tot ze opraakt. Het bouwt zich na verloop van tijd op en versnelt je vroege niveaus, dus uitloggen in de stad is nooit verspilde tijd.",
+      "restedBody": "Stap een herberg binnen en blijf buiten gevecht, en je personage bouwt uitgeruste ervaring op terwijl je wacht. Elke stad heeft er een. De volgende keer dat je eropuit gaat en vecht, geeft die voorraad je kills een extra impuls tot ze opraakt. Een pauze in de herberg is nooit verspilde tijd; het versnelt je volgende stuk levelen.",
       "capTitle": "Niveau {cap} bereiken",
-      "capJourneyBody": "Niveau {cap} is het maximum, het einde van het levelen maar niet van het groeien. Vanaf daar loop je dungeons en de raid, jaag je op betere uitrusting en test je jezelf in de arena.",
-      "prestigeBody": "Ervaring blijft tellen, zelfs na het maximum. Het voedt een cosmetisch virtueel niveau, zodat je ervaringsbalk blijft stijgen, en een langetermijn-prestigerang die je voor de erkenning kunt verdienen. Het is puur optioneel en geeft nooit macht, alleen een teken van de weg die je hebt afgelegd.",
+      "capJourneyBody": "Niveau {cap} is het maximum, het einde van het levelen maar niet van het groeien. Vanaf daar loop je kerkers en de raid op normaal en heroïsch, treed je de wereldbaas tegemoet wanneer hij verrijst, jaag je op betere uitrusting en test je jezelf in de arena.",
+      "prestigeBody": "Ervaring blijft tellen, zelfs na het maximum. Het voedt een cosmetisch virtueel niveau, zodat je ervaringsbalk blijft stijgen, en een langetermijn-prestigerang die je vanaf je personageblad kunt claimen zodra je zover bent. Het passeren van grote mijlpalen in totale ervaring levert ook daden op in je Boek der Daden, met cosmetische titels en naamplaatranden die op je personageblad verschijnen. Het is allemaal puur optioneel en geeft nooit macht, alleen een teken van de weg die je hebt afgelegd.",
       "noRush": "Er is geen haast. De wereld is er om in je eigen tempo van te genieten, dus dwaal rond, pak de quests die je aanspreken en laat je held onderweg groeien."
     },
     "placeholder": {
@@ -1381,6 +3058,430 @@ export const nl_NL: EnTranslations = {
       "title": "We konden die pagina niet vinden",
       "body": "De pagina die je zocht bestaat niet of is mogelijk verplaatst.",
       "home": "Terug naar het overzicht"
+    }
+  },
+  "editor": {
+    "appTitle": "Kaarteditor",
+    "docTitle": "Kaarteditor - World of ClaudeCraft",
+    "untitledMap": "Naamloze kaart",
+    "playtestPlayerName": "Kaartenmaker",
+    "topbar": {
+      "label": "Editoracties",
+      "mapNameLabel": "Kaartnaam",
+      "dirty": "Niet-opgeslagen wijzigingen",
+      "dirtyDot": "Deze kaart heeft niet-opgeslagen wijzigingen",
+      "clean": "Alle wijzigingen opgeslagen",
+      "savedLocal": "Opgeslagen in deze browser",
+      "savedServer": "Opgeslagen op de server (v{version})",
+      "saving": "Opslaan...",
+      "neverSaved": "Nog niet opgeslagen",
+      "new": "Nieuw",
+      "newTitle": "Begin een nieuwe kaart vanuit de ingebouwde wereld",
+      "open": "Openen",
+      "openTitle": "Open een opgeslagen kaart (browser of server)",
+      "save": "Opslaan",
+      "saveTitle": "Sla op in deze browser, en op de server wanneer je bent ingelogd (Ctrl+S)",
+      "saveAs": "Opslaan als",
+      "saveAsTitle": "Sla een kopie op onder een nieuwe naam",
+      "fork": "Forken",
+      "forkTitle": "Maak je eigen serverkopie van deze kaart",
+      "forkDisabledTitle": "Open eerst een serverkaart om deze te forken",
+      "import": "Importeren",
+      "importTitle": "Importeer een kaart uit een JSON-bestand",
+      "export": "Exporteren",
+      "exportTitle": "Download deze kaart als JSON-bestand",
+      "uploadAsset": "Asset uploaden",
+      "uploadAssetTitle": "Upload een GLB-model (tot 8 MiB) om in je kaarten te plaatsen",
+      "uploadAssetDisabledTitle": "Log in vanuit het spel om assets te uploaden",
+      "playtest": "Speeltest",
+      "playtestTitle": "Start het spel op deze kaart (offline, inclusief huidige bewerkingen)",
+      "viewLabel": "Weergavemodus",
+      "view3d": "3D",
+      "view3dTitle": "Bewerk in de gerenderde wereld",
+      "view2d": "2D",
+      "view2dTitle": "Bewerk op de symbolische bovenaanzichtkaart",
+      "undoCount": "Ongedaan maken: {count}",
+      "undoCountTitle": "{count} ongedaan te maken stappen (Ctrl+Z om ongedaan te maken, Ctrl+Y om opnieuw uit te voeren)",
+      "autosave": "Automatisch opslaan",
+      "autosaveTitle": "Sla de kaart automatisch op zolang er niet-opgeslagen wijzigingen zijn. Schakelt zichzelf uit als opslaan mislukt.",
+      "undo": "Ongedaan maken",
+      "undoTitle": "Maak de laatste wijziging ongedaan (Ctrl+Z)",
+      "redo": "Opnieuw",
+      "redoTitle": "Voer de laatst ongedaan gemaakte wijziging opnieuw uit (Ctrl+Y)",
+      "offline": "Offline",
+      "offlineTitle": "Niet ingelogd: kaarten worden alleen in deze browser opgeslagen. Log in vanuit het spel om online op te slaan.",
+      "signIn": "Inloggen",
+      "signInTitle": "Open het inlogscherm van het spel in een nieuw tabblad",
+      "help": "Hulp",
+      "helpTitle": "Editorgids: gereedschappen, sneltoetsen en de tutorial"
+    },
+    "tool": {
+      "listLabel": "Editorgereedschappen",
+      "keyHint": "{name} ({key})",
+      "select": "Selecteren",
+      "raise": "Verhogen",
+      "lower": "Verlagen",
+      "smooth": "Gladstrijken",
+      "flatten": "Vlakmaken",
+      "paint": "Bioom verven",
+      "water": "Water",
+      "place": "Asset plaatsen",
+      "blocker": "Blokkademuur",
+      "camp": "Kamp",
+      "spawn": "Spawnpunt",
+      "region": "Regio",
+      "erase": "Wissen"
+    },
+    "inspector": {
+      "label": "Gereedschapsopties"
+    },
+    "brush": {
+      "title": "Penseel",
+      "size": "Penseelgrootte",
+      "strength": "Sterkte",
+      "sizeHint": "Toetsen: [ en ] veranderen de penseelgrootte; Shift+[ en Shift+] veranderen de sterkte.",
+      "editCount": "Terreinbewerkingen: {count} / {max}"
+    },
+    "biome": {
+      "title": "Bioom",
+      "paletteLabel": "Te verven bioom",
+      "vale": "Dal",
+      "marsh": "Moeras",
+      "peaks": "Toppen",
+      "beach": "Strand",
+      "desert": "Woestijn",
+      "volcano": "Vulkaan",
+      "cave": "Grot",
+      "erase": "Verf wissen",
+      "hint": "Geverfde cellen overschrijven het gebiedsbioom voor terreinvorm en kleur.",
+      "clear": "Alle bioomverf wissen",
+      "clearConfirm": "Elke geverfde bioomcel van deze kaart verwijderen?"
+    },
+    "flatten": {
+      "hint": "Vlakmaken egaliseert de grond naar de hoogte onder de cursor op het moment dat het slepen begint.",
+      "hardEdge": "Harde rand"
+    },
+    "water": {
+      "title": "Waterpeil",
+      "level": "Waterpeil",
+      "hint": "Stelt de hoogte van het wateroppervlak voor de hele kaart in, van {min} tot {max} m.",
+      "reset": "Herstel naar het ingebouwde peil"
+    },
+    "place": {
+      "title": "Asset plaatsen",
+      "scale": "Schaal",
+      "collide": "Blokkeert beweging",
+      "collideHint": "Een blokkerende asset krijgt een botsingsvoetafdruk waar spelers niet doorheen kunnen lopen.",
+      "randomRotation": "Willekeurige draaiing",
+      "chosen": "Plaatsen: {name}",
+      "none": "Kies een asset uit de browser hieronder en klik dan op de grond om hem te plaatsen."
+    },
+    "blockerTool": {
+      "title": "Blokkademuur",
+      "hint": "Sleep over de grond om een onzichtbare muur te tekenen waar spelers niet doorheen kunnen lopen of springen. Laat los om hem te plaatsen; een muur korter dan een halve meter wordt weggegooid.",
+      "count": "Blokkademuren: {count} / {max}"
+    },
+    "camp": {
+      "title": "Mobkamp",
+      "mob": "Mob",
+      "count": "Aantal",
+      "radius": "Straal",
+      "delete": "Kamp verwijderen",
+      "hint": "Klik op open grond om een kamp toe te voegen, of klik op een bestaand kamp om het te bewerken.",
+      "playtestNote": "Mobs verschijnen alleen in de speeltest, nooit in de editorweergave.",
+      "selected": "Kamp: {mob}",
+      "none": "Geen kamp geselecteerd."
+    },
+    "spawn": {
+      "title": "Spawnpunt",
+      "hint": "Klik op de grond om te bepalen waar de speeltest de speler neerzet.",
+      "position": "Spawn: {x}, {z}",
+      "unset": "De ingebouwde startpositie wordt gebruikt.",
+      "clear": "Spawnpunt wissen"
+    },
+    "region": {
+      "title": "Regio",
+      "hint": "Sleep een kader om plaatsingen en terreinbewerkingen te selecteren. Kopieer, en klik dan om te plakken.",
+      "hint3d": "Regiokaders teken je in de 2D-weergave; kopiëren en plakken werken in beide weergaven.",
+      "copy": "Regio kopiëren",
+      "pasteBeside": "Ernaast plakken",
+      "copied": "{assets} assets en {edits} terreinbewerkingen gekopieerd.",
+      "pasted": "{count} items geplakt.",
+      "needBox": "Teken eerst een regiokader.",
+      "needClipboard": "Kopieer eerst een regio."
+    },
+    "eraseTool": {
+      "title": "Wissen",
+      "hint": "Klik op een geplaatste asset om hem te verwijderen, of klik op gebeeldhouwde grond om de nieuwste stempel onder de cursor te verwijderen.",
+      "blockerHint": "Klikken bij een blokkademuur verwijdert in plaats daarvan die muur."
+    },
+    "selection": {
+      "title": "Selectie",
+      "none": "Niets geselecteerd. Gebruik Selecteren en klik op een geplaatste asset.",
+      "asset": "Asset: {name}",
+      "x": "X",
+      "z": "Z",
+      "rotation": "Draaiing",
+      "scale": "Schaal",
+      "collide": "Blokkeert beweging",
+      "radius": "Botsingsstraal",
+      "radiusAuto": "Auto",
+      "radiusAutoTitle": "Herstel de botsingsstraal zodat hij de schaal van de asset volgt",
+      "radiusHint": "Auto leidt de botsingsstraal af van de schaal van de asset; versleep de schuifregelaar om hem te overschrijven.",
+      "footprints": "Botsingsvoetafdrukken tonen",
+      "duplicate": "Dupliceren",
+      "delete": "Verwijderen",
+      "deleteHint": "Delete verwijdert de selectie; Ctrl+Z zet die terug.",
+      "moveHint": "Verplaatsen: sleep de asset over de grond in de 3D-weergave, of verschuif hem met de pijltjestoetsen (0,5 m, Shift voor 2 m).",
+      "wheelHint": "Shift+scrollen draait de asset, Alt+scrollen schaalt hem, Ctrl+D dupliceert hem."
+    },
+    "marker": {
+      "title": "Markering",
+      "reset": "Positie herstellen",
+      "moved": "{count} markeringen verplaatst ten opzichte van de ingebouwde indeling."
+    },
+    "layers": {
+      "title": "Lagen",
+      "hub": "Hubs",
+      "graveyard": "Begraafplaatsen",
+      "lake": "Meren",
+      "poi": "Interessante punten",
+      "camp": "Kampen",
+      "npc": "NPC's",
+      "object": "Objecten",
+      "blocker": "Blokkademuren"
+    },
+    "frame": {
+      "title": "Kadreren",
+      "all": "Alles"
+    },
+    "procgen": {
+      "title": "Procedureel",
+      "count": "Aantal",
+      "scatter": "Assets uit categorie verspreiden",
+      "hills": "Glooiende heuvels genereren",
+      "scattered": "{count} assets uit {category} verspreid.",
+      "hillsAdded": "{count} heuvels toegevoegd.",
+      "noAssets": "Geen assets in die categorie."
+    },
+    "assets": {
+      "title": "Assetbrowser",
+      "label": "Assetbrowser",
+      "search": "Assets zoeken",
+      "searchPlaceholder": "Assets zoeken...",
+      "empty": "Geen overeenkomende assets.",
+      "uploadedTab": "Geüpload",
+      "uploadedEmpty": "Nog geen geüploade assets. Gebruik Asset uploaden om een GLB-model toe te voegen (tot 8 MiB).",
+      "uploadedSignIn": "Log in vanuit het spel om je eigen GLB-modellen te uploaden en te plaatsen.",
+      "uploadedLoadFailed": "Kon je geüploade assets niet laden.",
+      "deleteAsset": "Geüploade asset verwijderen",
+      "deleteAssetConfirm": "De geüploade asset \"{name}\" verwijderen? Kaarten die hem gebruiken verliezen het model.",
+      "pick": "Plaats {name}",
+      "categoryTab": "{category} ({count})",
+      "category": {
+        "biome": "Bioom",
+        "chars": "Personages",
+        "creatures": "Wezens",
+        "dungeon": "Kerker",
+        "foliage": "Begroeiing",
+        "props": "Rekwisieten",
+        "quest": "Quest",
+        "resources": "Grondstoffen",
+        "tools": "Gereedschap",
+        "weapons": "Wapens"
+      }
+    },
+    "upload": {
+      "notGlb": "Kies een .glb-bestand.",
+      "tooLarge": "Dat bestand is groter dan de limiet van 8 MiB.",
+      "uploading": "Asset wordt geüpload...",
+      "uploaded": "Asset geüpload: {name}",
+      "uploadedExisting": "Dat model stond al op de server; het wordt hergebruikt.",
+      "deleted": "Geüploade asset verwijderd."
+    },
+    "openDrawer": {
+      "title": "Kaart openen",
+      "close": "Sluiten",
+      "tabLocal": "Deze browser",
+      "tabMine": "Mijn serverkaarten",
+      "tabPublic": "Openbare kaarten",
+      "colName": "Naam",
+      "colUpdated": "Bijgewerkt",
+      "colStatus": "Status",
+      "statusPublic": "Openbaar",
+      "statusPrivate": "Privé",
+      "open": "Openen",
+      "fork": "Forken",
+      "publish": "Publiceren",
+      "unpublish": "Publicatie intrekken",
+      "delete": "Verwijderen",
+      "draft": "Automatisch opgeslagen concept",
+      "emptyLocal": "Nog geen kaarten opgeslagen in deze browser. Sla er een op en hij verschijnt hier.",
+      "emptyMine": "Nog geen kaarten op de server. Sla op terwijl je bent ingelogd om er een te maken.",
+      "emptyPublic": "Nog geen openbare kaarten.",
+      "loading": "Kaarten laden...",
+      "loadFailed": "Kon geen kaarten van de server laden.",
+      "signInHint": "Log in vanuit het spel om serverkaarten te bekijken, op te slaan en te forken.",
+      "deleteLocalConfirm": "De lokale kaart \"{name}\" verwijderen?",
+      "deleteServerConfirm": "De serverkaart \"{name}\" verwijderen? Dit kan niet ongedaan worden gemaakt.",
+      "prev": "Vorige pagina",
+      "next": "Volgende pagina",
+      "page": "Pagina {page}"
+    },
+    "status": {
+      "savedLocal": "\"{name}\" opgeslagen in deze browser.",
+      "savedServer": "\"{name}\" opgeslagen op de server (v{version}).",
+      "savedLocalOnly": "\"{name}\" opgeslagen in deze browser. Log in om online op te slaan.",
+      "saveFailedLocal": "Lokaal opslaan mislukt (opslag geblokkeerd).",
+      "opened": "\"{name}\" geopend.",
+      "imported": "\"{name}\" geïmporteerd.",
+      "importFailed": "Import geannuleerd, of het bestand is geen geldige kaart.",
+      "exported": "\"{name}\" gedownload.",
+      "newMap": "Nieuwe kaart gestart vanuit de ingebouwde wereld.",
+      "forked": "Geforkt naar \"{name}\". Je bewerkt nu je eigen kopie.",
+      "published": "Kaart gepubliceerd. Iedereen kan hem nu vinden en forken.",
+      "unpublished": "Publicatie van kaart ingetrokken.",
+      "deleted": "Kaart verwijderd.",
+      "assetPlacedFirst": "Kies eerst een asset in de browser.",
+      "loading3d": "De wereld wordt geladen...",
+      "playtestLaunch": "Speeltest wordt gestart...",
+      "playtestFailed": "Kon de speeltest niet starten (opslag geblokkeerd).",
+      "draftSaved": "Concept automatisch opgeslagen.",
+      "draftRestored": "Het automatisch opgeslagen concept is hersteld.",
+      "autosaveFailed": "Automatisch opslaan mislukt (browseropslag is vol of geblokkeerd). Exporteer de kaart om een back-up te bewaren.",
+      "terrainCapReached": "Limiet voor terreinbewerkingen bereikt ({max}). Extra beeldhouwstempels zijn niet toegevoegd.",
+      "placementCapReached": "Plaatsingslimiet bereikt ({max}). Extra assets zijn niet toegevoegd.",
+      "blockerCapReached": "Limiet voor blokkademuren bereikt ({max}). De nieuwe muur is niet toegevoegd.",
+      "autosaveOff": "Automatisch opslaan uitgeschakeld: {reason} Sla handmatig op en zet het daarna weer aan."
+    },
+    "confirm": {
+      "ok": "OK",
+      "cancel": "Annuleren",
+      "discardTitle": "Wijzigingen verwerpen?",
+      "discardBody": "Je hebt niet-opgeslagen wijzigingen in \"{name}\". Deze verwerpen?",
+      "discard": "Verwerpen",
+      "conflictTitle": "Opslagconflict",
+      "conflictBody": "Deze kaart is op de server gewijzigd sinds je hem opende (nu v{version}). Jouw versie als nieuwe kopie opslaan?",
+      "conflictSaveCopy": "Opslaan als kopie"
+    },
+    "prompt": {
+      "saveAsTitle": "Opslaan als",
+      "nameLabel": "Naam nieuwe kaart"
+    },
+    "serverError": {
+      "invalid_map_name": "Die kaartnaam is niet toegestaan. Gebruik letters, cijfers, spaties, apostrofs of koppeltekens.",
+      "map_name_not_allowed": "Die kaartnaam is niet toegestaan.",
+      "invalid_map_doc": "De server heeft het kaartdocument geweigerd.",
+      "invalid_version": "Het opslagverzoek was ongeldig. Herlaad de pagina en probeer het opnieuw.",
+      "map_limit_reached": "Je hebt de limiet voor serverkaarten bereikt. Verwijder een kaart om meer op te slaan.",
+      "map_not_found": "Die kaart bestaat niet meer op de server.",
+      "version_conflict": "De kaart is op de server gewijzigd sinds je hem opende.",
+      "slug_unavailable": "De server kon geen link maken voor die naam. Probeer een andere naam.",
+      "map_too_large": "Het kaartdocument is te groot om op de server op te slaan.",
+      "invalid_glb": "Dat bestand is geen geldig GLB-model.",
+      "asset_blocked": "Die asset is door moderatie geblokkeerd.",
+      "asset_limit_reached": "Je hebt de limiet voor geüploade assets bereikt. Verwijder er een om meer te uploaden.",
+      "asset_storage_limit_reached": "Je opslagruimte voor assets is vol. Verwijder eerst een asset.",
+      "asset_too_large": "Dat model is groter dan de uploadlimiet.",
+      "asset_not_found": "Die asset bestaat niet meer op de server.",
+      "rate_limited": "Doe wat rustiger aan en probeer het opnieuw.",
+      "unauthorized": "Je sessie is verlopen. Log opnieuw in vanuit het spel.",
+      "network": "Kon de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "timeout": "De server deed er te lang over om te antwoorden. Probeer het opnieuw.",
+      "unknown": "Er ging iets mis in de communicatie met de server."
+    },
+    "hints": {
+      "nav3d": "Sleep om te draaien, scroll om te zoomen. Tijdens het slepen vlieg je met WASD en verandert Q/E de hoogte.",
+      "nav2d": "Sleep om te verschuiven, scroll om te zoomen."
+    },
+    "help": {
+      "title": "Editorhulp",
+      "toolsTitle": "Gereedschappen",
+      "shortcutsTitle": "Sneltoetsen",
+      "mouseTitle": "Muis en navigatie",
+      "flowTitle": "Opslaan en speeltesten",
+      "beginTutorial": "Tutorial starten",
+      "close": "Sluiten",
+      "tool": {
+        "select": "Kies geplaatste assets om ze te verplaatsen, te draaien en te schalen; klik op een 2D-markering om die te bewerken.",
+        "raise": "Verhoog het terrein onder het penseel.",
+        "lower": "Verlaag het terrein onder het penseel.",
+        "smooth": "Strijk hobbels glad richting de plaatselijke gemiddelde hoogte.",
+        "flatten": "Egaliseer de grond naar de hoogte waar het slepen begint.",
+        "paint": "Verf bioombegroeiing over de standaard van het gebied.",
+        "water": "Stel het waterpeil voor de hele kaart in.",
+        "place": "Plaats catalogus-assets of geüploade assets op de grond.",
+        "blocker": "Sleep onzichtbare muren die beweging blokkeren in de speeltest.",
+        "camp": "Voeg mobkampen toe en bewerk ze; ze verschijnen in de speeltest.",
+        "spawn": "Bepaal waar de speeltest de speler neerzet.",
+        "region": "Selecteer terrein en assets met een kader om ze te kopiëren en te plakken.",
+        "erase": "Verwijder geplaatste assets of beeldhouwstempels onder de cursor."
+      },
+      "key": {
+        "tools": "Elk gereedschap heeft een sneltoets van een enkele letter, getoond op zijn knop in de gereedschapsbalk.",
+        "brush": "[ en ] veranderen de penseelgrootte; Shift+[ en Shift+] veranderen de sterkte.",
+        "undo": "Ctrl+Z maakt de laatste wijziging ongedaan; Ctrl+Y of Ctrl+Shift+Z voert hem opnieuw uit.",
+        "save": "Ctrl+S slaat de kaart op.",
+        "duplicate": "Ctrl+D dupliceert de geselecteerde asset.",
+        "nudge": "Pijltjestoetsen verschuiven de geselecteerde asset 0,5 m; houd Shift ingedrukt voor 2 m.",
+        "wheel": "Shift+scrollen draait de geselecteerde asset; Alt+scrollen schaalt hem.",
+        "delete": "Delete verwijdert de geselecteerde asset of het geselecteerde kamp.",
+        "escape": "Esc wist eerst de selectie en keert daarna terug naar het gereedschap Selecteren."
+      },
+      "mouse": {
+        "orbit3d": "3D-weergave: sleep om te draaien en scroll om te zoomen; slepen met de middelste muisknop of Shift+slepen verschuift het beeld.",
+        "fly3d": "Terwijl je in 3D sleept, vliegt de camera met WASD en verandert Q/E de hoogte.",
+        "move": "Met Selecteren actief sleep je een geplaatste asset om hem over de grond te verplaatsen.",
+        "pan2d": "2D-weergave: sleep om te verschuiven en scroll om te zoomen."
+      },
+      "flow": {
+        "save": "Opslaan bewaart de kaart in deze browser, en op de server wanneer je bent ingelogd.",
+        "draft": "Zolang je niet-opgeslagen wijzigingen hebt, wordt er elke 30 seconden automatisch een concept opgeslagen; Openen herstelt het.",
+        "playtest": "Speeltest start het echte spel op deze kaart, inclusief je niet-opgeslagen bewerkingen."
+      }
+    },
+    "tutorial": {
+      "title": "Editortutorial",
+      "back": "Terug",
+      "next": "Volgende",
+      "finish": "Voltooien",
+      "skip": "Rondleiding overslaan",
+      "counter": "Stap {current} van {total}",
+      "steps": {
+        "toolbar": {
+          "title": "De gereedschapsbalk",
+          "body": "Elk bewerkingsgereedschap staat hier: beeldhouwpenselen, bioomverf, water, assetplaatsing, kampen en meer. Elk heeft een sneltoets van een enkele toets, getoond in zijn hoek."
+        },
+        "stage": {
+          "title": "De wereld",
+          "body": "Dit is jouw kaart, gerenderd met de echte game-engine. Sleep om te draaien, scroll om te zoomen, en sleep met de middelste muisknop of Shift+slepen om te verschuiven. Klik met een gereedschap op de grond om te bewerken."
+        },
+        "inspector": {
+          "title": "Gereedschapsopties",
+          "body": "De opties voor het actieve gereedschap verschijnen hier: penseelgrootte, het bioompalet, assetschaal, kampinstellingen en de eigenschappen van wat je ook selecteert."
+        },
+        "viewToggle": {
+          "title": "3D en 2D",
+          "body": "Wissel tussen de gerenderde 3D-wereld en de symbolische 2D-bovenaanzichtkaart. De 2D-weergave is het best voor het verplaatsen van gebiedsmarkeringen en het kadreren van grote gebieden."
+        },
+        "save": {
+          "title": "Sla je werk op",
+          "body": "Opslaan bewaart de kaart in deze browser, en op de server wanneer je bent ingelogd. Exporteren downloadt een JSON-back-up, en Openen haalt opgeslagen kaarten en concepten terug."
+        },
+        "playtest": {
+          "title": "Speeltest",
+          "body": "Start op elk moment het echte spel op je kaart, inclusief je huidige bewerkingen. Sluit het speeltesttabblad om terug te komen en verder te bewerken."
+        },
+        "help": {
+          "title": "Hulp is hier",
+          "body": "Dat is de hele cyclus. Open Hulp wanneer je maar wilt voor de volledige gereedschapslijst en elke sneltoets, of om deze rondleiding opnieuw te doen."
+        }
+      }
+    },
+    "a11y": {
+      "stage": "Kaartweergave",
+      "toasts": "Editormeldingen",
+      "dialog": "Editordialoog"
     }
   },
   "skinEvent": {
@@ -1430,15 +3531,16 @@ export const nl_NL: EnTranslations = {
     "donate": "Doneren"
   },
   "stats": {
-    "title": "Realmstatus",
+    "title": "Wereldstatus",
     "accountsCreated": "Spelers",
     "playersOnline": "Spelers online",
-    "realmName": "Realmnaam"
+    "realmName": "Wereldnaam"
   },
   "footer": {
     "copyright": "2026 World of ClaudeCraft",
     "githubLink": "https://github.com/levy-street/world-of-claudecraft",
     "githubLabel": "Opensourceproject",
+    "whitepaper": "Whitepaper",
     "terms": "Servicevoorwaarden",
     "privacy": "Privacybeleid",
     "discordLabel": "Word lid van de Discord"
@@ -1450,7 +3552,7 @@ export const nl_NL: EnTranslations = {
   },
   "highscores": {
     "title": "Topscores-Ranglijst",
-    "desc": "Volg de grootste kampioenen van het rijk en vergelijk je voortgang."
+    "desc": "Volg de grootste kampioenen van de wereld en vergelijk je voortgang."
   },
   "wiki": {
     "title": "Spelwiki en -gids",
@@ -1468,16 +3570,20 @@ export const nl_NL: EnTranslations = {
   },
   "download": {
     "title": "Desktop-launcher downloaden",
-    "desc": "Download de losse launcher voor optimale prestaties en schermvullend spelen."
+    "desc": "Download de losse launcher voor optimale prestaties en schermvullend spelen.",
+    "macCta": "Download voor macOS",
+    "linuxCta": "Downloaden voor Linux",
+    "linuxHint": "AppImage: maak het uitvoerbaar en voer het vervolgens uit. Geen installatie nodig.",
+    "windowsPending": "Windows-build volgt later."
   },
   "comingSoon": {
     "placeholder": "Binnenkort beschikbaar...",
-    "featureComingSoon": "Deze functie komt binnenkort naar de realm."
+    "featureComingSoon": "Deze functie komt binnenkort naar de wereld."
   },
   "mode": {
     "onlineTitle": "Online Spelen",
-    "onlineDesc": "Log in op de realm. Je personages leven op de server en je deelt de wereld met iedereen die online is.",
-    "onlineAria": "Online Spelen: log in op de blijvende gedeelde realm",
+    "onlineDesc": "Log in op de wereld. Je personages leven op de server en je deelt de wereld met iedereen die online is.",
+    "onlineAria": "Online Spelen: log in op de blijvende gedeelde wereld",
     "offlineTitle": "Offline Spelen",
     "offlineDesc": "Direct een singleplayer-wereld in je browser. Er wordt niets opgeslagen: perfect voor een snel gevecht of om te testen.",
     "offlineAria": "Offline Spelen: start direct een lokale singleplayer-sessie",
@@ -1487,36 +3593,39 @@ export const nl_NL: EnTranslations = {
     "serverOffline": "Offline",
     "play": "Spelen",
     "playAria": "Speel World of ClaudeCraft",
-    "serverLabel": "Kies je realm",
-    "serverAria": "Kies realm: Online of Offline",
+    "serverLabel": "Kies je wereld",
+    "serverAria": "Kies wereld: Online of Offline",
     "serverOfflineSub": "Directe lokale wereld",
     "caLabel": "$WOC Contractadres",
     "caCopyAria": "Contractadres kopiëren",
     "caNote": "WOC is onze communitytoken. Het is niet nodig om te spelen. Word lid van Discord om de WOC-toepassing en het vliegwiel te bespreken."
   },
   "auth": {
-    "enterRealm": "Betreed de Realm",
+    "enterRealm": "Betreed de wereld",
     "username": "Gebruikersnaam",
     "usernameError": "Voer je gebruikersnaam in.",
     "usernamePlaceholder": "Gebruikersnaam invoeren",
     "password": "Wachtwoord",
     "passwordError": "Voer je wachtwoord in.",
     "passwordPlaceholder": "Wachtwoord invoeren",
+    "email": "E-mail",
+    "emailPlaceholder": "jij@voorbeeld.nl",
+    "emailError": "Voer een geldig e-mailadres in.",
     "showPassword": "Wachtwoord tonen",
     "hidePassword": "Wachtwoord verbergen",
     "logIn": "Inloggen",
     "createAccount": "Account aanmaken",
     "back": "Terug",
-    "realmList": "Realmlijst",
-    "loadingRealms": "Realms laden...",
-    "changeRealm": "Realm wijzigen",
-    "realm": "Realm",
+    "realmList": "Wereldlijst",
+    "loadingRealms": "Werelden laden...",
+    "changeRealm": "Wereld wijzigen",
+    "realm": "Wereld",
     "newCharacter": "Nieuw personage",
     "appearance": "Uiterlijk",
     "class": "Klasse",
     "name": "Naam",
     "chromaOption": "Tint {n}",
-    "noAccountPrompt": "Nieuw in de realm?",
+    "noAccountPrompt": "Nieuw in de wereld?",
     "haveAccountPrompt": "Heb je al een account?",
     "characters": "Personages:",
     "createCharacter": "Personage aanmaken",
@@ -1527,7 +3636,15 @@ export const nl_NL: EnTranslations = {
     "create": "Aanmaken",
     "twoFactorLabel": "Authenticatiecode",
     "twoFactorPlaceholder": "6-cijferige of herstelcode",
-    "twoFactorHint": "Voer de code uit je authenticator-app in, of een van je herstelcodes."
+    "twoFactorHint": "Voer de code uit je authenticator-app in, of een van je herstelcodes.",
+    "recovery": {
+      "title": "Herstel-e-mailadres toevoegen",
+      "body": "Stel een e-mailadres in zodat je je account kunt herstellen. We gebruiken het alleen om te bevestigen dat dit account van jou is als je ooit je wachtwoord opnieuw moet instellen.",
+      "save": "E-mailadres opslaan",
+      "logOut": "Uitloggen",
+      "invalid": "Voer een geldig e-mailadres in.",
+      "failed": "Kon je e-mailadres niet opslaan. Probeer het opnieuw."
+    }
   },
   "wallet": {
     "label": "$WOC-portemonnee",
@@ -1581,6 +3698,7 @@ export const nl_NL: EnTranslations = {
     "helpLinkedWithBalance": "Houdervoordelen zijn actief. Portemonnee-app verbonden in deze browser.",
     "helpLinkedDisconnected": "Houdervoordelen zijn actief. Verbind de app wanneer je moet ondertekenen of uitgeven.",
     "helpLinkedDisconnectedWithBalance": "Houdervoordelen zijn actief. Verbind de app wanneer je moet ondertekenen of uitgeven.",
+    "extensionHelp": "Om hier een portemonnee te zien, houd je een browserextensie voor portemonnees zoals Solflare Wallet actief.",
     "flowConnect": "Kies een portemonnee. De verificatie gaat automatisch verder.",
     "flowSign": "Onderteken het verificatiebericht in je portemonnee-app. Geen transactie of SOL vereist.",
     "flowVerify": "Eigendom van portemonnee verifiëren...",
@@ -1679,7 +3797,7 @@ export const nl_NL: EnTranslations = {
     "renderFailedStatus": "Kaartweergave mislukt.",
     "levelClass": "Niveau {level} - {className}",
     "topPercent": "TOP {percent}%",
-    "realmSubtitle": "Realm {realm}",
+    "realmSubtitle": "Wereld {realm}",
     "defaultRealm": "World of ClaudeCraft",
     "brandWordmark": "WORLD OF CLAUDECRAFT",
     "recruited": "{count} geworven",
@@ -1688,7 +3806,7 @@ export const nl_NL: EnTranslations = {
     "footerCta": "Smeed je legende: {siteUrl}",
     "arenaStat": "Arena",
     "shareTierBit": ", {tier}-rang $WOC-houder",
-    "shareText": "Ik smeed mijn legende in World of ClaudeCraft: Niveau {level} {className}{tierBit}. Sluit je aan bij mijn realm:",
+    "shareText": "Ik smeed mijn legende in World of ClaudeCraft: Niveau {level} {className}{tierBit}. Sluit je aan bij mijn wereld:",
     "nativeShareTitle": "World of ClaudeCraft",
     "fileNameFallback": "speler",
     "actionShareX": "Delen op X",
@@ -1766,6 +3884,7 @@ export const nl_NL: EnTranslations = {
       "unknownTier": "Onbekende delve-tier.",
       "levelRequired": "Je moet niveau {level} zijn om {name} te betreden.",
       "levelRequiredTier": "Je moet niveau {level} zijn om {name} op {tier} te betreden.",
+      "partyTooLarge": "{name} is bedoeld voor solo- of duo-delves. Groepen van {max} of meer mogen niet naar binnen.",
       "instancesBusy": "Alle instanties van {name} zijn bezet. Probeer het binnenkort opnieuw.",
       "runFailed": "Run van {name} mislukt.",
       "complete": "{name} voltooid.",
@@ -1775,6 +3894,14 @@ export const nl_NL: EnTranslations = {
       "doorAlreadyOpen": "De deur is al open.",
       "companionRankUp": "{name} bereikt rang {rank}.",
       "bossChest": "De baas valt. Een betoverde relikwiekist verrijst op het podium. Forceer het slot om je buit op te eisen.",
+      "drownedLitanyReliquaryRise": "Zuster Nhalia valt stil. Het Verdronken Reliekschrijn rijst op uit het zwartwater. Ga ernaartoe om het ritueel te beginnen.",
+      "riteSequenceReady": "De schrijnen doven. Herhaal de reeks.",
+      "riteSequencePlaying": "De schrijnen spelen het ritueel opnieuw af. Wacht.",
+      "riteCorrect": "Een zachte toon beantwoordt je aanraking.",
+      "riteWrong": "Een schrille klokkenkraak. Zwart water spat op aan je voeten.",
+      "riteReliquaryOpen": "Het Verdronken Reliekschrijn opent zich.",
+      "riteReliquaryLocked": "Voltooi het schrijnritueel om het reliekschrijn te openen.",
+      "riteReliquaryEmpty": "Het reliekschrijn is leeg.",
       "surfaceStairs": "Een trap naar de oppervlakte opent zich. Druk op F bij de trap om te vertrekken.",
       "moduleEnter": "{name}: {objective}",
       "objectiveClearRoom": "Maak de kamer leeg.",
@@ -1782,6 +3909,13 @@ export const nl_NL: EnTranslations = {
       "tombstoneHint": "Een grafsteendoorgang opent zich naar het noorden zodra de kamer is opgeruimd.",
       "tombstoneOpen": "Een verzegelde grafsteendoorgang knarst open naar het noorden. Loop erin om verder te gaan.",
       "tombstoneInto": "Je gaat door de grafsteen naar {name}.",
+      "bellRopeShock": "Het klokkentouw schiet strak. Verdronken Cantors wankelen van de schok.",
+      "eggSacBurst": "De eierzak barst open. Spinnenbroed krioelt vrij over de rand van de doopkapel.",
+      "baptistryEggs": "De doopkapel valt stil. Spinnen-eierzakken kleven vochtig aan de rand.",
+      "baptistrySpidersSealed": "Probeer de spinnenzakken te vernietigen.",
+      "puzzleSealed": "Je moet het zegel openen door ergens in de kamer druk uit te oefenen.",
+      "ropesSealed": "Probeer aan de klokkentouwen te trekken.",
+      "baptistryWave": "Er roert zich iets in het zwarte water van de doopkapel.",
       "chestEmpty": "De kist is leeg.",
       "notInDelve": "Je bevindt je niet in een delve.",
       "cannotInteract": "Je kunt daar niet mee interageren.",
@@ -1800,9 +3934,12 @@ export const nl_NL: EnTranslations = {
       "passageSealed": "De doorgang is verzegeld.",
       "moveCloserPassage": "Kom dichter bij de doorgang.",
       "moveCloserChest": "Kom dichter bij de kist.",
+      "moveCloserReliquary": "Kom dichter bij het reliekschrijn.",
       "nothingToTake": "Er is niets meer om te pakken.",
       "wayOutNotOpen": "De weg naar buiten is nog niet open.",
-      "moveCloserStairs": "Kom dichter bij de trap."
+      "moveCloserStairs": "Kom dichter bij de trap.",
+      "nhaliaCantorShield": "Cantors, houd de noot aan!",
+      "nhaliaBlackwaterMark": "{name} markeert {player} met Zwartwater!"
     },
     "lockpick": {
       "lockYields": "Het slot geeft toe! {tier} buit.",
@@ -1865,6 +4002,30 @@ export const nl_NL: EnTranslations = {
       "abandoned": "Je trekt de pennen weer voorzichtig terug. Het slot wacht."
     }
   },
+  "delveRiteUi": {
+    "title": "Het Ritueel van het Verdronken Reliekschrijn",
+    "blurb": "De schrijnen lichten in volgorde op. Herhaal de reeks door elk schrijn om de beurt te activeren. Een verkeerde aanraking laat de poging mislukken en speelt de reeks opnieuw af, een foutloze poging levert de rijkste buit op, en wie door zijn pogingen heen raakt, ziet het reliekschrijn op zijn zuinigst opengaan. Kies hoe het ritueel je op de proef stelt.",
+    "easy": "Makkelijk",
+    "medium": "Gemiddeld",
+    "hard": "Moeilijk",
+    "guideWatch": "Nadat je kiest, lichten de vier schrijnen een voor een op. Onthoud de volgorde.",
+    "guideRepeat": "Wanneer de schrijnen doven, loop je naar elk schrijn en druk je op F (Interactie) in diezelfde volgorde.",
+    "guideStakes": "Een verkeerd schrijn bespat je met zwartwater en kost een poging. Voltooi de reeks om het reliekschrijn te openen.",
+    "showsTimes": "Reeks {count} keer getoond",
+    "showsOnce": "Reeks eenmaal getoond",
+    "symbols": "{count} symbolen",
+    "tries": "{count} pogingen",
+    "reward": {
+      "easy": "Bescheiden buit",
+      "medium": "Rijke buit",
+      "hard": "Voortreffelijke buit"
+    },
+    "closeAria": "Sluiten"
+  },
+  "heroicShop": {
+    "balance": "Heroïsche Merken: {count}",
+    "buyAria": "Koop {item} voor {marks} Heroïsche Merken"
+  },
   "delveUi": {
     "board": {
       "title": "Delvebord",
@@ -1874,6 +4035,7 @@ export const nl_NL: EnTranslations = {
       "openDelveAria": "Open Delvebord bij {name}",
       "marks": "Delve-Tekens: {count}",
       "minLevel": "Vereist Niveau {level}",
+      "partyTooLarge": "Alleen solo of duo (maximaal {max} spelers)",
       "tier": {
         "normal": "Normaal",
         "heroic": "Heroïsch"
@@ -1881,6 +4043,7 @@ export const nl_NL: EnTranslations = {
       "companion": {
         "pick": "Kies een metgezel",
         "tessa": "Acoliet Tessa",
+        "edda": "Edda Reedhand",
         "rank": "Rang {rank}",
         "boon": "Geneest de groep tussen gevechten. Rang 3 doet eenmaal per tocht een gevallen bondgenoot herleven.",
         "upgrade": "Waardeer op naar Rang {rank} ({marks} Tekens)",
@@ -1906,7 +4069,11 @@ export const nl_NL: EnTranslations = {
       "complete": "Voltooid",
       "marks": "Delve-Tekens: {count}",
       "exitHintOpen": "Loop de grafsteendoorgang in (noord)",
-      "exitHintLocked": "Ruim de gewone vijanden op om de noordelijke doorgang te openen"
+      "exitHintLocked": "Ruim de gewone vijanden op om de noordelijke doorgang te openen",
+      "riteChoose": "Ga naar het Verdronken Reliekschrijn en druk op F om het ritueel te beginnen",
+      "ritePlayback": "Kijk naar de schrijnen: onthoud de volgorde waarin ze oplichten",
+      "riteInput": "Druk op F bij elk schrijn in de volgorde waarin ze oplichtten ({current}/{total})",
+      "riteOpen": "Het reliekschrijn is open: druk op F om je buit op te eisen"
     },
     "objective": {
       "kill_boss": "Versla {boss}",
@@ -1927,27 +4094,54 @@ export const nl_NL: EnTranslations = {
     "npc": {
       "halven": {
         "greeting": "Het reliekschrijn beneden is opnieuw verschoven. We horen na middernacht gezang door de vloer, en Acoliet Tessa zweert dat de grafregisters hun eigen inkt veranderen. Als je moed genoeg hebt, {playerName}, neem dan een kaars en ga naar beneden. Vertrouw niet elke stem die je daar beneden hoort. Sommige kenden jouw naam al voordat je geboren werd."
+      },
+      "halvenMarsh": {
+        "greeting": "Het spoor leidde noordwaarts naar het moeras, {playerName}. Weer zingt er een reliekschrijn onder het zwarte water, en de verdronken doden geven gehoor aan de klokken. Acoliet Edda kent dit riet beter dan ik, blijf dicht bij haar lantaarn. Kies je moeilijkheid, en ik houd het touw vast tot je terugkeert."
       }
     },
     "intro": {
       "normal": "De trappenkoker is koud en donker. Gebroken heiligenstenen bezaaien de afdaling, en een zachte klokslag hangt in de vochtige lucht. Acoliet Tessa fluistert: \"Het reliekschrijn zou niet zo ver open mogen zijn. Blijf dichtbij, {playerName}.\"",
-      "heroic": "De deuren kreunen achter je dicht. Namen schrapen over de steen als vingernagels. Tessa's kaars brandt blauw. \"Ze roepen nu niet de doden op, {playerName}. Ze geven gehoor aan iets.\""
+      "heroic": "De deuren kreunen achter je dicht. Namen schrapen over de steen als vingernagels. Tessa's kaars brandt blauw. \"Ze roepen nu niet de doden op, {playerName}. Ze geven gehoor aan iets.\"",
+      "litanyNormal": "Met riet verstikte trappen dalen af onder Veenbrug. Edda Reedhand heft haar lantaarn. \"Het moeras herinnert zich elke naam die ze verdronken hebben, {playerName}. Blijf in het licht.\"",
+      "litanyHeroic": "Zwartwater klotst tegen de stenen van de dijk. Edda's vlam flakkert groen. \"Ze zingen weer daar beneden, {playerName}. Geef het koor geen antwoord.\""
     },
     "module": {
       "reliquary_sunken_ossuary": "Water sijpelt door de grafschappen en voert oude as mee in zilverzwarte stromen.",
       "reliquary_bell_niche": "Tientallen handbellen hangen in stilte, elk omwonden met rouwdoek.",
       "reliquary_saintless_hall": "Standbeelden met gezichten die met zorgvuldige haat zijn weggebeiteld.",
-      "reliquary_finale": "De begraven klok luidt eenmaal onder je laarzen."
+      "reliquary_finale": "De begraven klok luidt eenmaal onder je laarzen.",
+      "litany_sluice": "Met mos verstopte sluisdeuren druppelen zwartwater in de oude koorcrypte.",
+      "litany_ledger": "Registereilanden rijzen op uit ondergelopen geulen, en inkt vloeit uit in het moeras.",
+      "litany_ring": "Een reliekschrijnring loopt om een verzegelde centrale doopvont van zwart water.",
+      "litany_baptistry": "Een doopkapel in een zinkgat gaapt onder gebarsten heiligenstenen en eierzakken.",
+      "litany_choir_loft": "Uitwaaierende koorzolders galmen van klokken aan touwen die nooit helemaal verstommen.",
+      "litany_causeway": "Een Y-gesplitste dijk vertakt zich boven veenwater tot aan je middel.",
+      "litany_apse": "De verdronken apsis komt uit op het altaareiland van Zuster Nhalia."
     },
     "moduleName": {
       "reliquary_sunken_ossuary": "Het Verzonken Knekelhuis",
       "reliquary_bell_niche": "De Klokennis",
       "reliquary_saintless_hall": "De Heiligenloze Hal",
-      "reliquary_finale": "De Klokbegraven Kamer"
+      "reliquary_finale": "De Klokbegraven Kamer",
+      "litany_sluice": "De Halvemaansluis",
+      "litany_ledger": "Het Eilandregister",
+      "litany_ring": "Het Ring-Reliekschrijn",
+      "litany_baptistry": "De Zinkgat-Doopkapel",
+      "litany_choir_loft": "De Rietzanggalerij",
+      "litany_causeway": "De Y-Gesplitste Dijk",
+      "litany_apse": "De Verdronken Apsis"
+    },
+    "object": {
+      "sluice_valve": "Sluisklep",
+      "grave_tablet": "Graftablet",
+      "corpse_candle": "Lijkkaars",
+      "bell_rope": "Klokkentouw"
     },
     "companion": {
       "barkLine": "{name}: {line}",
       "tessa": {
+        "run_start": "Ik heb mijn kaars en mijn register, {playerName}. Ga voor.",
+        "ally_revive": "Overeind. Het register van vanavond draagt jouw naam niet.",
         "combat_start": "Blijf op de been, {playerName}. De doden zijn hier rusteloos.",
         "low_hp": "Adem. Ik heb nog gebeden voor je over.",
         "trap_spotted": "Wacht. Iets in de vloer herinnert zich voetstappen.",
@@ -1959,6 +4153,20 @@ export const nl_NL: EnTranslations = {
           "3": "Reliekschrijn-Acoliet",
           "4": "Grafroep-Getuige",
           "5": "Kapelwachter"
+        }
+      },
+      "edda": {
+        "run_start": "Blijf op de plankenlijn, {playerName}. Het slib neemt wie te trots stapt.",
+        "ally_revive": "Overeind, nu. Het moeras krijgt je vandaag niet.",
+        "combat_start": "Pas op voor het zwartwater, {playerName}. Het moeras luistert.",
+        "low_hp": "Rustig aan. Mijn lantaarn is nog niet gedoofd.",
+        "trap_spotted": "Wacht. Het riet klopt hier niet.",
+        "boss_pull": "Die lofzang kent je naam, {playerName}. Zing niet terug.",
+        "completion": "Het veen mag zijn geheimen nog een nacht inslikken.",
+        "rank": {
+          "1": "Lantaarndrager",
+          "2": "Rietwachter",
+          "3": "Veenbrug-Acoliet"
         }
       }
     },
@@ -2002,13 +4210,55 @@ export const nl_NL: EnTranslations = {
       "flooded_paths": "Ondergelopen Paden",
       "grave_tax": "Grafheffing",
       "unstable_roof": "Instabiel Dak",
-      "cult_remnants": "Cultusresten"
+      "cult_remnants": "Cultusresten",
+      "high_water": "Hoogwater",
+      "lively_choir": "Levendig Koor",
+      "belligerent_dead": "Strijdlustige Doden"
     },
     "blessing": {
       "chapel_candle": "Kapelkaars: veiligere tocht, één Markering minder bij voltooiing."
     },
     "chest": {
       "flavor": "De doden hebben afgestaan wat ze kunnen missen."
+    }
+  },
+  "yumi": {
+    "bracket3": "Bescherm Yumi 3v3",
+    "bracket5": "Bescherm Yumi 5v5",
+    "enterQueue": "Doe mee met Bescherm Yumi!",
+    "queue": {
+      "join": "Je sluit je aan bij de Bescherm Yumi-wachtrij. Bewaak je metgezel…",
+      "leave": "Je verlaat de Bescherm Yumi-wachtrij.",
+      "teamLeave": "Je team verlaat de Bescherm Yumi-wachtrij."
+    },
+    "error": {
+      "partyTooBig3": "Bescherm Yumi 3v3 staat een groep van maximaal drie toe.",
+      "partyTooBig5": "Bescherm Yumi 5v5 staat een groep van maximaal vijf toe."
+    },
+    "log": {
+      "start": "Bescherm Yumi! Verdedig je metgezel en bejaag die van hen."
+    },
+    "hud": {
+      "title": "BESCHERM YUMI",
+      "getReady": "Maak je klaar…",
+      "teleportIn": "Yumi's verplaatsen zich over {s}",
+      "suddenDeath": "PLOTSELINGE DOOD",
+      "yourYumi": "Jouw Yumi",
+      "enemyYumi": "Vijandige Yumi",
+      "aria": "Jouw Yumi op {mine} van {max} gezondheid, vijandige Yumi op {theirs}.",
+      "collapse": "De Bescherm Yumi-balken inklappen",
+      "expand": "De Bescherm Yumi-balken uitklappen"
+    },
+    "respawn": {
+      "title": "NEERGEHAALD!"
+    },
+    "banner": {
+      "sudden": "PLOTSELINGE DOOD! De Yumi's houden stand!",
+      "teleport": "De Yumi's teleporteren!"
+    },
+    "end": {
+      "win": "OVERWINNING! Yumi is veilig!",
+      "loss": "NEDERLAAG! Jouw Yumi is gevallen."
     }
   },
   "fiesta": {
@@ -2085,7 +4335,7 @@ export const nl_NL: EnTranslations = {
         "desc": "Je fysieke slagen treffen 15% harder."
       },
       "aug_spellfire": {
-        "name": "Spreukvuur",
+        "name": "Grimfire",
         "desc": "Je spreuken richten 15% meer schade aan."
       },
       "aug_toughness": {
@@ -2129,7 +4379,7 @@ export const nl_NL: EnTranslations = {
         "desc": "+18% schade van alle soorten en +12% loopsnelheid."
       },
       "aug_lightwell": {
-        "name": "Lichtbron",
+        "name": "Gravelight",
         "desc": "+30% genezing en +15% maximale levenskracht. Wees het anker van je team."
       },
       "aug_bounty_hunter": {
@@ -2180,13 +4430,13 @@ export const nl_NL: EnTranslations = {
   },
   "seo": {
     "title": "World of ClaudeCraft: Web-MMO in Klassieke Stijl",
-    "description": "Begin aan een episch avontuur in World of ClaudeCraft, een micro-MMO in klassieke stijl die je rechtstreeks in je browser kunt spelen. Sluit je aan bij een blijvende gedeelde realm, level je klassen op en versla vijanden!",
+    "description": "Begin aan een episch avontuur in World of ClaudeCraft, een micro-MMO in klassieke stijl die je rechtstreeks in je browser kunt spelen. Sluit je aan bij een blijvende gedeelde wereld, level je klassen op en versla vijanden!",
     "genre": "MMORPG",
     "playMode": "Multiplayer",
     "applicationCategory": "Spel",
     "operatingSystem": "Webbrowser",
     "officialLabel": "Officiële website van World of ClaudeCraft",
-    "officialBody": "worldofclaudecraft.com is de officiële gratis browser-MMO voor de Claudemoon-realm. Speel online met een blijvend personage, verken solo offline, lees de wiki en volg geverifieerde communitylinks vanaf deze site."
+    "officialBody": "worldofclaudecraft.com is de officiële gratis browser-MMO voor de Claudemoon-wereld. Speel online met een blijvend personage, verken solo offline, lees de wiki en volg geverifieerde communitylinks vanaf deze site."
   },
   "a11y": {
     "goHome": "Ga naar de startpagina",
@@ -2202,12 +4452,23 @@ export const nl_NL: EnTranslations = {
     "world": "Wereld laden...",
     "worldProgress": "Wereld laden... {done}/{total}",
     "enteringWorld": "De wereld betreden...",
-    "connectingRealm": "Verbinden met realm...",
+    "connectingRealm": "Verbinden met wereld...",
     "assetsFailed": "Laden van assets mislukt: probeer opnieuw te laden. {error}",
     "rendererFailed": "Kon de renderer niet starten: probeer opnieuw te laden. {error}",
     "enterTimeout": "Kon de wereld niet betreden. De verbinding is verlopen. Draait de gameserver?",
     "connectionLost": "De verbinding met de server is verbroken.",
-    "connectionRejected": "De server heeft de verbinding gesloten."
+    "reconnecting": "Verbinding verbroken. Opnieuw verbinding maken...",
+    "connectionRejected": "De server heeft de verbinding gesloten.",
+    "tips": {
+      "classes": "Tip: elk van de 9 klassen speelt anders. Probeer er een paar voordat je er een kiest.",
+      "talents": "Tip: je kunt je talenten buiten gevechten altijd herstellen, dus een vroege keuze is nooit een valstrik.",
+      "dungeons": "Tip: probeer een kerker op heldhaftige moeilijkheid wanneer je uitrusting te goed is geworden voor normaal, voor een zwaarder en lonender gevecht.",
+      "market": "Tip: op de Wereldmarkt kun je kopen en verkopen met spelers uit het hele rijk.",
+      "guilds": "Tip: als je lid wordt van een gilde, krijg je een eigen chatkanaal en een gedeelde lijst met je gildeleden.",
+      "professions": "Tip: verzamel- en ambachtsberoepen kunnen naast je gevechtsklasse worden geleerd.",
+      "loadouts": "Tip: sla meer dan één talentuitrusting op om tussen builds te wisselen zonder punten dubbel uit te geven.",
+      "pvp": "Tip: daag een andere speler uit voor een vriendschappelijk duel, of sluit je aan bij de wachtrij voor de arena van het Asgrauwe Colosseum om je build te testen."
+    }
   },
   "errors": {
     "nothingInteract": "Niets om mee te interacteren.",
@@ -2225,6 +4486,7 @@ export const nl_NL: EnTranslations = {
       "usernameTaken": "Die gebruikersnaam is al in gebruik.",
       "invalidCredentials": "Ongeldige gebruikersnaam of wachtwoord.",
       "verificationFailed": "Verificatie mislukt. Probeer het opnieuw.",
+      "desktopCodeInvalid": "Desktop-inlogcode is ongeldig of verlopen. Probeer het opnieuw.",
       "invalidCharacterName": "Ongeldige personagenaam. Gebruik 2-16 letters.",
       "characterNameNotAllowed": "Die personagenaam is niet toegestaan.",
       "invalidClass": "Ongeldige klasse.",
@@ -2238,31 +4500,49 @@ export const nl_NL: EnTranslations = {
       "webLoginOnly": "Inloggen is alleen toegestaan vanuit de spelclient.",
       "accountSuspended": "Dit account is geschorst tot {date}.",
       "alreadyInWorld": "Personage is al in de wereld.",
+      "accountSessionLimit": "Te veel personages op dit account zijn al in de wereld.",
       "takenOver": "Je personage is overgenomen door een andere sessie.",
       "renameBeforeEntering": "Dit personage moet hernoemd worden voordat het de wereld kan betreden.",
-      "renameNotPermitted": "Dit personage hernoemen is niet toegestaan."
+      "renameNotPermitted": "Dit personage hernoemen is niet toegestaan.",
+      "unsupportedMediaType": "Niet-ondersteund verzoekformaat.",
+      "crossSiteOrigin": "Verzoek geblokkeerd om veiligheidsredenen."
+    }
+  },
+  "desktop": {
+    "update": {
+      "downloading": "Update {version} wordt gedownload...",
+      "ready": "Update {version} is klaar. Deze wordt geïnstalleerd wanneer je afsluit, of herstart nu.",
+      "restart": "Nu herstarten",
+      "later": "Later"
+    },
+    "crash": {
+      "title": "World of ClaudeCraft",
+      "body": "De spelweergave werkt niet meer. Opnieuw laden?",
+      "reload": "Opnieuw laden",
+      "quit": "Afsluiten",
+      "fatalBody": "World of ClaudeCraft is op een onverwachte fout gestuit en moet worden afgesloten."
     }
   },
   "realm": {
-    "noRealms": "Geen realms beschikbaar.",
-    "loading": "Realms laden...",
+    "noRealms": "Geen werelden beschikbaar.",
+    "loading": "Werelden laden...",
     "recommended": "Aanbevolen",
     "checkingStatus": "Status controleren...",
     "onlineNow": "{count} nu online",
-    "down": "Realm is offline",
+    "down": "Wereld is offline",
     "offline": "Offline",
     "full": "Vol",
     "high": "Hoog",
     "medium": "Gemiddeld",
     "low": "Laag",
     "popTipLow": "Lage bevolking: minder dan 15 spelers nu online. Volop ruimte; ideaal voor een frisse start.",
-    "popTipMedium": "Gemiddelde bevolking: 15 tot 39 spelers nu online. Een gezonde, actieve realm.",
+    "popTipMedium": "Gemiddelde bevolking: 15 tot 39 spelers nu online. Een gezonde, actieve wereld.",
     "popTipHigh": "Hoge bevolking: 40 tot 79 spelers nu online. Druk, met veel spelers in de buurt.",
     "popTipFull": "Volle bevolking: 80 of meer spelers nu online. Erg druk; je kunt in een inlogwachtrij belanden.",
-    "popTipOffline": "Offline: deze realm is momenteel onbereikbaar en kan niet betreden worden.",
+    "popTipOffline": "Offline: deze wereld is momenteel onbereikbaar en kan niet betreden worden.",
     "characterCountOne": "{count} personage",
     "characterCountOther": "{count} personages",
-    "selectedRealm": "Realm: {name}",
+    "selectedRealm": "Wereld: {name}",
     "statsOffline": "Offline",
     "statsRealmOffline": "{realm} (Offline)"
   },
@@ -2346,13 +4626,13 @@ export const nl_NL: EnTranslations = {
     },
     "lore": {
       "warrior": "Krijgers zijn in de strijd geharde man-tot-man-vechters die Woede opbouwen terwijl ze schade uitdelen of incasseren. Ze absorberen zware klappen of verpletteren vijanden met krachtige wapens.",
-      "paladin": "Paladijnen zijn heilige kruisvaarders die bondgenoten steunen met zegeningen, wonden helen met Heilig Licht en de zwakken beschermen in zwaar pantser.",
-      "hunter": "Jagers beheersen de wildernis, sporen vijanden van veraf op met bogen of geweren en gebruiken vallen om het slagveld te beheersen.",
+      "paladin": "Paladijnen zijn heilige kruisvaarders die bondgenoten steunen met zegeningen, wonden helen met Helend Licht en de zwakken beschermen in zwaar pantser.",
+      "hunter": "Jagers zijn afstandsspecialisten die aan de zijde van een getemd beest vechten, vijanden bestoken met gerichte en snelle schoten, hen vertragen met steken en verdovend vuur, en van aspect wisselen om zich aan het moment aan te passen.",
       "rogue": "Schurken zijn sluipende sluipmoordenaars die Energie en Combopunten besteden aan rugsteken en finishers vanuit de schaduwen.",
-      "priest": "Priesters roepen Heilig Licht aan om bondgenoten te genezen en te beschutten, terwijl Schaduwmagie hen het leven van hun vijanden laat aftappen.",
+      "priest": "Priesters roepen Helend Licht aan om bondgenoten te genezen en te beschutten, terwijl Schaduwmagie hen het leven van hun vijanden laat aftappen.",
       "shaman": "Sjamanen gebieden de elementen, doordringen wapens met kracht, schokken vijanden met bliksem en herstellen bondgenoten.",
-      "mage": "Magiërs buigen Vuur-, Vorst- en Arcane-kracht om vijanden te vernietigen, water op te roepen en dreigingen ter plaatse te bevriezen.",
-      "warlock": "Heksenmeesters roepen demonen op, leggen vloeken en schade-over-tijd-magie op, en tappen leven af van vijanden om vol te houden.",
+      "mage": "Magiërs buigen Vuur-, Vorst- en arcane kracht om vijanden te vernietigen, water op te roepen en dreigingen ter plaatse te bevriezen.",
+      "warlock": "Heksenmeesters roepen demonen op, leggen vloeken en schade-over-tijd-magie op, en tappen leven af bij vijanden om vol te houden.",
       "druid": "Druïden kanaliseren de natuur, genezen wonden, verstrikken vijanden en veranderen in diergedaanten voor verdediging of schade."
     },
     "aria": "Klassedetails voor {className}: rol {role}. Beginstatistieken: Kracht {str}, Behendigheid {agi}, Uithoudingsvermogen {sta}, Intellect {int}, Geest {spi}.",
@@ -2377,10 +4657,10 @@ export const nl_NL: EnTranslations = {
     "otherInstallDetail": "Installeer of voeg deze pagina toe aan je beginscherm voor de beste mobiele ervaring met volledig scherm."
   },
   "serverUnavailable": {
-    "title": "World of ClaudeCraft - Realm niet beschikbaar",
+    "title": "World of ClaudeCraft - Wereld niet beschikbaar",
     "logoAlt": "World of ClaudeCraft",
-    "eyebrow": "Realmonderhoud",
-    "heading": "De realm is tijdelijk niet beschikbaar.",
+    "eyebrow": "Wereldonderhoud",
+    "heading": "De wereld is tijdelijk niet beschikbaar.",
     "body": "We herstarten de gameservice en verwachten dat Claudemoon binnenkort weer terug is. Deze pagina blijft automatisch controleren.",
     "status": "Snel terug"
   },
@@ -2437,6 +4717,7 @@ export const nl_NL: EnTranslations = {
       "mobileSocial": "Sociaal",
       "mobileArena": "Arena",
       "mobileMenu": "Menu",
+      "mobileSettings": "Instellingen",
       "mobileUse": "Gebruiken",
       "mobileMeters": "Meters",
       "mobileMap": "Kaart",
@@ -2645,6 +4926,7 @@ export const nl_NL: EnTranslations = {
     "combat": {
       "floatingMiss": "Mis",
       "floatingDodge": "Ontwijking",
+      "floatingResist": "Weerstaan",
       "cannotMove": "Kan niet bewegen!",
       "attack": "aanval",
       "damageDone": "Je {ability} raakt {target} voor {amount}.",
@@ -2653,6 +4935,7 @@ export const nl_NL: EnTranslations = {
       "damageTakenCrit": "{source} raakt je kritiek voor {amount}.",
       "miss": "Je {ability} mist {target}.",
       "dodged": "Je {ability} wordt ontweken door {target}.",
+      "resisted": "{target} weerstaat je {ability}.",
       "healSelf": "Je {ability} geneest je voor {amount}.",
       "healSelfCrit": "Je {ability} geneest je kritiek voor {amount}.",
       "healOther": "Je {ability} geneest {target} voor {amount}.",
@@ -2698,9 +4981,9 @@ export const nl_NL: EnTranslations = {
       "requiresCombo": "Die vaardigheid vereist combopunten.",
       "requiresForm": "Je moet in {form}-gedaante zijn.",
       "cantInForm": "Dat kun je niet doen in {form}-gedaante.",
-      "bear": "Beer",
+      "bear": "Bruin",
       "cat": "Wolf",
-      "travel": "Reis",
+      "travel": "Fleet",
       "shapeshifted": "Dat kun je niet doen terwijl je van gedaante bent veranderd.",
       "stealthed": "Je moet in sluiptocht zijn.",
       "inCombat": "Dat kun je niet doen tijdens een gevecht.",
@@ -2983,6 +5266,7 @@ export const nl_NL: EnTranslations = {
       "offGlobalCooldown": "Buiten de globale afkoeltijd",
       "friendlyTarget": "Vriendelijk doelwit",
       "enemyTarget": "Vijandig doelwit",
+      "selfOnly": "Alleen jezelf",
       "damageRange": "{min} tot {max}",
       "finisherDamage": "{base} plus {perCombo} per combopunt"
     },
@@ -2997,13 +5281,16 @@ export const nl_NL: EnTranslations = {
     },
     "cast": {
       "fishing": "Vissen",
-      "demonHeal": "Demonengenezing"
+      "demonHeal": "Demonengenezing",
+      "thunzharrStormcall": "Stormroep"
     }
   },
   "questUi": {
     "tracker": {
       "title": "Quests",
-      "complete": "Voltooid"
+      "complete": "Voltooid",
+      "showOnMap": "Toon {name} op de kaart",
+      "hideFromMap": "Verberg {name} op de kaart"
     },
     "log": {
       "title": "Questlogboek",
@@ -3082,12 +5369,14 @@ export const nl_NL: EnTranslations = {
     "slots": {
       "mainhand": "Hoofdhand",
       "helmet": "Helm",
+      "neck": "Hals",
       "shoulder": "Schouder",
       "chest": "Borst",
       "waist": "Middel",
       "legs": "Benen",
       "gloves": "Handschoenen",
-      "feet": "Voeten"
+      "feet": "Voeten",
+      "ring": "Vinger"
     },
     "quality": {
       "poor": "Waardeloos",
@@ -3106,7 +5395,8 @@ export const nl_NL: EnTranslations = {
       "drink": "Drank",
       "tool": "Gereedschap",
       "potion": "Toverdrank",
-      "elixir": "Elixer"
+      "elixir": "Elixer",
+      "bag": "Tas"
     },
     "stats": {
       "armor": "Pantser",
@@ -3148,7 +5438,8 @@ export const nl_NL: EnTranslations = {
       "useManaPotion": "Gebruik: Herstelt direct {amount} mana. Bruikbaar in gevecht. 1 min afkoeltijd.",
       "clickUseInstant": "Klik om direct te gebruiken in gevecht",
       "clickUse": "Klik om te gebruiken",
-      "clickBuyback": "Klik om terug te kopen"
+      "clickBuyback": "Klik om terug te kopen",
+      "bagSlots": "Tas met {slots} vakken"
     },
     "bags": {
       "title": "Tassen",
@@ -3284,261 +5575,326 @@ export const nl_NL: EnTranslations = {
       "needAria": "Nodig voor {item}",
       "greedAria": "Hebzucht voor {item}",
       "passAria": "{item} passeren",
-      "everyonePassed": "Iedereen passeerde {item}."
+      "everyonePassed": "Iedereen passeerde {item}.",
+      "rolled": "{answered}/{total} geworpen"
     }
   },
   "entities": {
     "abilities": {
+      "sport_kick": {
+        "name": "Trap",
+        "description": "Trap de bal over de grond richting het richtpunt."
+      },
+      "sport_shoot": {
+        "name": "Schieten",
+        "description": "Houd ingedrukt om kracht op te bouwen, laat los om op doel te schieten. Te veel kracht en hij zeilt eroverheen."
+      },
+      "sport_pass": {
+        "name": "Pass",
+        "description": "Speel een strakke pass naar je aangewezen teamgenoot, in de loop."
+      },
+      "sport_boot": {
+        "name": "Grote Uithaal",
+        "description": "Een lange, hoge uithaal richting het richtpunt. Het publiek smult ervan."
+      },
+      "sport_hoof": {
+        "name": "Pegel",
+        "description": "Ram de bal laag en hard het veld op."
+      },
+      "sport_punt": {
+        "name": "Verre Uittrap",
+        "description": "Een uittrap van de keeper, hoog en ver."
+      },
+      "sport_feint": {
+        "name": "Schijnbeweging",
+        "description": "Een snelle zijstap richting het richtpunt."
+      },
+      "sport_dive": {
+        "name": "Duik",
+        "description": "Werp jezelf richting het richtpunt. Een voorzet blijft aan je plakken."
+      },
+      "sport_shoulder": {
+        "name": "Schouderduw",
+        "description": "Een eerlijke schouderduw onder het oogstbestand. Stuurt ze tuimelend van de bal."
+      },
+      "sport_second_wind": {
+        "name": "Frisse Benen",
+        "description": "Vind je benen terug: beweeg 4 sec lang 50% sneller."
+      },
+      "flamestrike": {
+        "name": "Vlammenslag",
+        "description": "Roept een vuurexplosie op in het doelgebied die vijanden in de explosie {damage} Vuurschade toebrengt."
+      },
+      "rain_of_fire": {
+        "name": "Vuurregen",
+        "description": "Laat gedurende 4 sec een vuurregen neerdalen op het doelgebied en verbrandt vijanden elke seconde voor {damage} Vuurschade."
+      },
+      "volley": {
+        "name": "Pijlenregen",
+        "description": "Laat gedurende 3 sec een pijlenregen neerdalen op het doelgebied en richt elke 0.5 sec {damage} schade aan bij vijanden erin."
+      },
+      "hurricane": {
+        "name": "Orkaan",
+        "description": "Ontketent gedurende 6 sec een orkaan boven het doelgebied en treft vijanden elke seconde voor {damage} Natuurschade."
+      },
+      "earthquake": {
+        "name": "Aardbeving",
+        "description": "Laat het doelgebied 6 sec beven en treft vijanden elke 1.5 sec voor {damage} Natuurschade."
+      },
       "heroic_strike": {
-        "name": "Heroïsche Slag",
+        "name": "Plunderaarsslag",
         "description": "Een sterke aanval die de slagschade met {damage} verhoogt. Activeert bij je volgende slag."
       },
       "battle_shout": {
-        "name": "Strijdkreet",
-        "description": "Verhoogt je aanvalskracht met 20 gedurende 2 min."
+        "name": "IJzeren Gebrul",
+        "description": "Verhoogt je aanvalskracht met {buff} gedurende 2 min."
       },
       "commanding_shout": {
-        "name": "Bevelende Kreet",
-        "description": "Verhoogt je Uithoudingsvermogen met 6 gedurende 2 min."
+        "name": "Versterkende Kreet",
+        "description": "Verhoogt je Uithoudingsvermogen met {buff} gedurende 2 min."
       },
       "demoralizing_shout": {
-        "name": "Demoraliserende Kreet",
-        "description": "Slaakt een angstaanjagende kreet die de aanvalskracht van alle nabije vijanden met 30 verlaagt gedurende 30 sec."
+        "name": "Grimmig Gehuil",
+        "description": "Slaakt een angstaanjagende kreet die de aanvalskracht van alle nabije vijanden met {buff} verlaagt gedurende 30 sec."
       },
       "charge": {
-        "name": "Stormloop",
+        "name": "Bestorming",
         "description": "Stormt op een vijand af, genereert 9 woede en verdooft hem gedurende 1 sec. Bereik 8-25 m."
       },
       "rend": {
-        "name": "Openrijten",
-        "description": "Verwondt het doelwit, waardoor het {damage} schade bloedt gedurende 9 sec."
+        "name": "Diepe Snee",
+        "description": "Verwondt het doelwit, waardoor het {damage} schade bloedt gedurende {duration} sec."
       },
       "thunder_clap": {
-        "name": "Donderslag",
+        "name": "Schuddende Klap",
         "description": "Treft nabije vijanden voor {damage} schade en vertraagt hun aanvallen met 10% gedurende 10 sec."
       },
       "hamstring": {
-        "name": "Kniepees",
-        "description": "Verminkt de vijand voor 5 schade en vertraagt zijn beweging met 50% gedurende 15 sec."
+        "name": "Kreupelsnede",
+        "description": "Verminkt de vijand voor {damage} schade en vertraagt zijn beweging met 50% gedurende 15 sec."
       },
       "bloodrage": {
-        "name": "Bloedwoede",
+        "name": "Bloedtol",
         "description": "Genereert 10 woede ten koste van levenskracht."
       },
       "overpower": {
-        "name": "Overmeesteren",
-        "description": "Ogenblikkelijke aanval voor wapenschade +5. Alleen bruikbaar nadat het doelwit ontwijkt. Kan niet worden ontweken."
+        "name": "Roodhand",
+        "description": "Ogenblikkelijke aanval voor wapenschade plus {damage}. Alleen bruikbaar nadat het doelwit ontwijkt. Kan niet worden ontweken."
       },
       "execute": {
-        "name": "Terechtstelling",
+        "name": "Vroeg Graf",
         "description": "Poging om een gewonde vijand af te maken voor {damage} schade. Alleen bruikbaar op vijanden met minder dan 20% levenskracht."
       },
       "slam": {
-        "name": "Dreun",
+        "name": "Botte Zwaai",
         "description": "Dreunt op de tegenstander in voor wapenschade plus {damage}."
       },
       "cleave": {
-        "name": "Kloven",
+        "name": "Maaiboog",
         "description": "Een vegende slag die alle vijanden voor je raakt voor {damage} schade."
       },
       "defensive_stance": {
-        "name": "Verdedigende Houding",
+        "name": "Bewaakte Houding",
         "description": "Een verdedigende gevechtshouding: je genereert 30% meer dreiging, maar brengt 10% minder schade toe en incasseert 10% minder. Activeer opnieuw om de houding te verlaten."
       },
       "sunder_armor": {
-        "name": "Pantser Splijten",
-        "description": "Splijt het pantser van het doelwit en verlaagt het met {damage} per toepassing. Stapelt tot 5 keer. Wekt een grote hoeveelheid dreiging op."
+        "name": "Pantserscheur",
+        "description": "Scheurt het pantser van het doelwit open en verlaagt het met {damage}% per toepassing. Stapelt tot 5 keer. Genereert veel dreiging."
       },
       "taunt": {
         "name": "Provoceren",
         "description": "Provoceert het doelwit: je dreiging stijgt tot het niveau van zijn meest gehate vijand en het wordt 3 sec lang gedwongen jou aan te vallen."
       },
       "fireball": {
-        "name": "Vuurbal",
+        "name": "Sintelbout",
         "description": "Werpt een vurige bal die {damage} Vuurschade toebrengt plus extra schade over tijd."
       },
       "frost_armor": {
-        "name": "Vorstpantser",
-        "description": "Omhult je in vorst en verhoogt het pantser met 30 gedurende 30 min."
+        "name": "Rijpmantel",
+        "description": "Omhult je in vorst en verhoogt het pantser met {buff} gedurende 30 min."
       },
       "arcane_intellect": {
-        "name": "Arcaan Intellect",
-        "description": "Verhoogt Intellect met 2 gedurende 30 min."
+        "name": "Aether-inzicht",
+        "description": "Verhoogt Intellect met {buff} gedurende 30 min."
       },
       "frostbolt": {
-        "name": "Vorstbout",
+        "name": "Rijplans",
         "description": "Lanceert een bout van vorst die {damage} Vorstschade toebrengt en de beweging met 40% vertraagt."
       },
       "conjure_water": {
-        "name": "Water Oproepen",
+        "name": "Waterbinding",
         "description": "Roept 2 flessen water op die mana herstellen wanneer ze worden gedronken. Hogere rangen roepen zuiverder water op."
       },
       "conjure_food": {
-        "name": "Voedsel Oproepen",
+        "name": "Broodbinding",
         "description": "Roept 2 porties brood op die levenskracht herstellen wanneer ze worden gegeten. Hogere rangen roepen voedzamere kost op."
       },
       "fire_blast": {
-        "name": "Vuurstoot",
+        "name": "Sintelval",
         "description": "Treft de vijand voor {damage} Vuurschade. Ogenblikkelijk."
       },
       "arcane_missiles": {
-        "name": "Arcane Projectielen",
-        "description": "Lanceert Arcane Projectielen op de vijand en veroorzaakt elke seconde 8 Arcane schade gedurende 3 sec."
+        "name": "Aetherpijlen",
+        "description": "Lanceert Aetherpijlen op de vijand en veroorzaakt elke seconde {damage} Arcane schade gedurende 3 sec."
       },
       "polymorph": {
-        "name": "Gedaanteverwisseling",
-        "description": "Verandert de vijand in een schaap gedurende maximaal 15 sec. Het schaap dwaalt rond en geneest snel. Elke schade verbreekt het effect. Alleen beesten en humanoïden."
+        "name": "Beheksen",
+        "description": "Verandert de vijand in een pad gedurende maximaal {duration} sec. De pad dwaalt rond en geneest snel. Elke schade verbreekt het effect. Alleen beesten en humanoïden."
       },
       "frost_nova": {
-        "name": "Vorstnova",
+        "name": "IJsboei",
         "description": "Bevriest alle nabije vijanden ter plaatse gedurende maximaal 8 sec en brengt {damage} Vorstschade toe."
       },
       "arcane_explosion": {
-        "name": "Arcane Explosie",
+        "name": "Aetherbarst",
         "description": "Een uitbarsting van Arcane energie raakt alle nabije vijanden voor {damage} Arcane schade."
       },
       "scorch": {
-        "name": "Schroeien",
+        "name": "Blakeren",
         "description": "Schroeit de vijand voor {damage} Vuurschade. Snel te bezweren."
       },
       "pyroblast": {
-        "name": "Pyro-uitbarsting",
+        "name": "Pyrelans",
         "description": "Werpt een immense vurige kei die {damage} Vuurschade toebrengt plus extra schade over tijd."
       },
       "ice_barrier": {
-        "name": "IJsbarrière",
-        "description": "Schermt je af met ijs en absorbeert 130 schade gedurende 60 sec."
+        "name": "Vorstsluier",
+        "description": "Schermt je af met ijs en absorbeert {damage} schade gedurende 60 sec."
       },
       "sinister_strike": {
-        "name": "Sinistere Slag",
+        "name": "Kwaadaardige Houw",
         "description": "Een ogenblikkelijke slag voor wapenschade plus {damage}. Levert 1 combopunt op."
       },
       "eviscerate": {
-        "name": "Ontweien",
-        "description": "Afmaakzet die schade toebrengt per combopunt."
+        "name": "Zandslaap",
+        "description": "Afmaakzet die {damage} veroorzaakt."
       },
       "backstab": {
-        "name": "Rugsteek",
+        "name": "Laffe Steek",
         "description": "Steek het doelwit in de rug voor 150% wapenschade plus {damage}. Je moet achter het doelwit staan. Vereist een dolk. Levert 1 combopunt op."
       },
       "gouge": {
-        "name": "Uitsteken",
-        "description": "Treft het doelwit en maakt het 4 sec strijdongeschikt. Elke schade verbreekt het effect. Levert 1 combopunt op."
+        "name": "Oogstoot",
+        "description": "Treft het doelwit voor {damage} schade en maakt het 4 sec strijdongeschikt. Elke schade verbreekt het effect. Levert 1 combopunt op."
       },
       "evasion": {
-        "name": "Ontwijking",
+        "name": "Spookvoet",
         "description": "Verhoogt je ontwijkkans met 50% gedurende 15 sec."
       },
       "slice_and_dice": {
-        "name": "Snijden en Kerven",
+        "name": "Moordend Tempo",
         "description": "Afmaakzet die de melee-aanvalssnelheid met 30% verhoogt. Duurt langer per combopunt."
       },
       "sprint": {
-        "name": "Sprint",
+        "name": "Snelle Hielen",
         "description": "Verhoogt je bewegingssnelheid met 70% gedurende 15 sec."
       },
       "kidney_shot": {
-        "name": "Nierstoot",
+        "name": "Lage Stoot",
         "description": "Afmaakzet die het doelwit verdooft. Duurt 1 sec langer per combopunt."
       },
       "ambush": {
-        "name": "Hinderlaag",
+        "name": "Sluiperslag",
         "description": "Overval het doelwit voor 250% wapenschade plus {damage}. Je moet onzichtbaar zijn en achter het doelwit staan. Vereist een dolk. Levert 1 combopunt op."
       },
       "stealth": {
-        "name": "Sluiptocht",
-        "description": "Verbergt je in de schaduwen: vijanden merken je nauwelijks op, maar je beweegt 30% trager. Aanvallen of schade oplopen verbreekt Sluiptocht. Bezweer opnieuw om eruit te stappen."
+        "name": "Duskveil",
+        "description": "Verbergt je in de schaduwen: vijanden merken je nauwelijks op, maar je beweegt 50% trager. Aanvallen of schade oplopen verbreekt Duskveil. Bezweer opnieuw om eruit te stappen."
       },
       "adrenaline_rush": {
-        "name": "Adrenalinestoot",
+        "name": "Versneld Bloed",
         "description": "Je bloed kookt en herstelt onmiddellijk 60 energie."
       },
       "garrote": {
-        "name": "Wurgkoord",
-        "description": "Wurgt de vijand, brengt nu schade toe en laat het bloeden voor {damage} gedurende 18 sec. Vereist sluiptocht. Levert 1 combopunt op."
+        "name": "Keeldraad",
+        "description": "Wurgt de vijand, brengt nu {damage} schade toe en laat het bloeden voor {overTime} gedurende 18 sec. Vereist sluiptocht. Levert 1 combopunt op."
       },
       "cheap_shot": {
-        "name": "Gemene Stoot",
-        "description": "Sla het doelwit en verdoof het gedurende 4 sec. Je moet onzichtbaar zijn. Levert 2 combopunten op."
+        "name": "Buikstoot",
+        "description": "Sla het doelwit voor {damage} schade en verdoof het gedurende 4 sec. Je moet onzichtbaar zijn. Levert 2 combopunten op."
       },
       "sap": {
         "name": "Verdoven",
         "description": "Schakelt het doelwit 8 sec lang uit. Je moet gesluipt zijn en buiten gevecht. Elke schade verbreekt het effect."
       },
       "crippling_poison": {
-        "name": "Verlammend Gif",
-        "description": "Treft het doelwit met een verlammend gif, brengt {damage} Natuurschade toe en vertraagt zijn bewegingssnelheid met 50% gedurende 12 sec."
+        "name": "Loodzwaar Gif",
+        "description": "Treft het doelwit met een loodzwaar gif, brengt {damage} Natuurschade toe en vertraagt de bewegingssnelheid met 50% gedurende 12 sec."
       },
       "expose_armor": {
-        "name": "Pantser Blootleggen",
-        "description": "Afmaakzet die het doelwit blootlegt en zijn pantser verlaagt. Meer bestede combopunten leiden tot een diepere snede."
+        "name": "Pantserbres",
+        "description": "Afmaakzet die het doelwit blootlegt en zijn pantser met {damage} verlaagt gedurende 30 sec."
       },
       "rupture": {
-        "name": "Openscheuren",
+        "name": "Doodbloeden",
         "description": "Afmaakzet die het doelwit verwondt, waardoor het {damage} bloedt gedurende 16 sec."
       },
       "vanish": {
-        "name": "Verdwijnen",
-        "description": "Verdwijn uit het zicht en betreed Sluiptocht zelfs in gevecht. Je beweegt 30% trager terwijl je verborgen bent. Duurt tot 10 sec."
+        "name": "Rookstap",
+        "description": "Verdwijn uit het zicht en betreed Duskveil zelfs in gevecht. Je beweegt 50% trager terwijl je verborgen bent. Duurt tot 10 sec."
       },
       "instant_poison": {
-        "name": "Direct Gif",
+        "name": "Adderbeet",
         "description": "Bestrijkt je wapen gedurende 30 min, waardoor elke slag van wapen 8 extra Natuurschade toebrengt."
       },
       "deadly_poison": {
-        "name": "Dodelijk Gif",
+        "name": "Etterend Gif",
         "description": "Bestrijkt je wapen gedurende 30 min, waardoor elke slag van wapen 14 extra Natuurschade toebrengt."
       },
       "blind": {
-        "name": "Verblinden",
+        "name": "Zandworp",
         "description": "Verblindt het doelwit, waardoor het 8 sec gedesoriënteerd ronddwaalt. Elke schade verbreekt het effect."
       },
       "seal_of_righteousness": {
-        "name": "Zegel van Rechtschapenheid",
-        "description": "Vult je 30 sec lang met Heilige kracht, waardoor elk van je melee-zwaaien 4 extra Heilige schade toebrengt. Ontketen met Oordeel."
+        "name": "Eedmerk",
+        "description": "Vult je 30 sec lang met Heilige kracht, waardoor elk van je melee-zwaaien {damage} extra Heilige schade toebrengt. Ontketen met Verdict."
       },
       "holy_light": {
-        "name": "Heilig Licht",
+        "name": "Helend Licht",
         "description": "Geneest een bevriend doelwit voor {damage}."
       },
       "devotion_aura": {
-        "name": "Aura van Toewijding",
-        "description": "Verhoogt je pantser met 40 gedurende 30 min."
+        "name": "Standvastige Aura",
+        "description": "Verhoogt je pantser met {buff} gedurende 30 min."
       },
       "judgement": {
-        "name": "Oordeel",
-        "description": "Ontketent je actieve Zegel op de vijand en verbruikt het om de oordeelschade toe te brengen."
+        "name": "Verdict",
+        "description": "Ontketent je actieve Zegel op de vijand en verbruikt het om de opgeslagen Heilige schade toe te brengen."
       },
       "blessing_of_might": {
-        "name": "Zegen van Kracht",
-        "description": "Plaatst een Zegen op een bevriend doelwit, waardoor de aanvalskracht met 15 toeneemt gedurende 5 min."
+        "name": "Eed van IJzer",
+        "description": "Plaatst een Zegen op een bevriend doelwit, waardoor de aanvalskracht met {buff} toeneemt gedurende 5 min."
       },
       "divine_protection": {
-        "name": "Goddelijke Bescherming",
-        "description": "Een heilig schild absorbeert 50 schade gedurende 10 sec."
+        "name": "Wering van Geloof",
+        "description": "Een beschermende wering absorbeert {damage} schade gedurende 10 sec."
       },
       "hammer_of_justice": {
-        "name": "Hamer van Gerechtigheid",
-        "description": "Verdooft het doelwit gedurende 3 sec."
+        "name": "Splijtende Rechtershamer",
+        "description": "Verdooft het doelwit gedurende {duration} sec."
       },
       "lay_on_hands": {
-        "name": "Handoplegging",
-        "description": "Een enorme golf van genezing: herstelt 250 levenskracht. 10 min hersteltijd."
+        "name": "Laatste Rite",
+        "description": "Een enorme golf van genezing: herstelt {damage} levenskracht. 10 min hersteltijd."
+      },
+      "holy_taunt": {
+        "name": "Heilige Aansporing",
+        "description": "Tart het doelwit: je dreiging stijgt tot die van zijn meest gehate vijand en het wordt gedwongen je 3 sec aan te vallen."
       },
       "flash_of_light": {
-        "name": "Flits van Licht",
-        "description": "Een snelle, doeltreffende flits van Licht die een bevriend doelwit voor {damage} geneest."
+        "name": "Lichtheling",
+        "description": "Een snelle, doeltreffende uitbarsting van Licht die een bevriend doelwit voor {damage} geneest."
       },
       "exorcism": {
-        "name": "Uitdrijving",
+        "name": "Rite van Uitdrijving",
         "description": "Verbant de verdorvene met heilige toorn voor {damage} Heilige schade."
       },
       "consecration": {
-        "name": "Wijding",
-        "description": "Wijdt de grond onder je en schroeit nabije vijanden voor {damage} Heilige schade."
+        "name": "Heilige Grond",
+        "description": "Wijdt de grond onder je en schroeit nabije vijanden elke 2 sec voor {damage} Heilige schade gedurende 10 sec."
       },
       "righteous_fury": {
-        "name": "Rechtschapen Woede",
+        "name": "Brandende Eed",
         "description": "Verhoogt de dreiging die je Heilige schade opwekt met 60% gedurende 30 min. De hoeksteen van de tankende paladijn."
       },
       "retribution_aura": {
@@ -3546,55 +5902,55 @@ export const nl_NL: EnTranslations = {
         "description": "Omhult je 30 min lang met heilige energie en brengt 5 Heilige schade toe aan elke vijand die je in het melee aanvalt."
       },
       "tame_beast": {
-        "name": "Beest Temmen",
+        "name": "Wildband",
         "description": "Begint met het temmen van een beest tot je metgezel. Het moet je niveau of lager zijn en geen elite. Je huisdier volgt je, valt je vijanden aan en houdt zelf dreiging vast. Je mag één huisdier tegelijk hebben."
       },
       "dismiss_pet": {
-        "name": "Huisdier Wegsturen",
+        "name": "Metgezel Vrijlaten",
         "description": "Laat je huisdier terug de wildernis in gaan."
       },
       "raptor_strike": {
-        "name": "Raptorslag",
-        "description": "Een sterke slagaanval die de schade met 5 verhoogt. Activeert bij je volgende slag."
+        "name": "Ontweiende Slag",
+        "description": "Een sterke slagaanval die de schade met {damage} verhoogt. Activeert bij je volgende slag."
       },
       "aspect_of_the_hawk": {
-        "name": "Aspect van de Havik",
-        "description": "Neem het aspect van de havik aan, waardoor je aanvalskracht met 20 toeneemt gedurende 30 min."
+        "name": "Gedaante van de Kiekendief",
+        "description": "Neem de gedaante van de kiekendief aan, waardoor je aanvalskracht met {buff} toeneemt gedurende 30 min."
       },
       "serpent_sting": {
-        "name": "Slangensteek",
+        "name": "Gifweerhaak",
         "description": "Steekt het doelwit en brengt {damage} Natuurschade toe gedurende 15 sec."
       },
       "arcane_shot": {
-        "name": "Arcaan Schot",
+        "name": "Boosaardig Schot",
         "description": "Een onmiddellijk schot dat {damage} Arcane schade toebrengt."
       },
       "concussive_shot": {
-        "name": "Verdovend Schot",
-        "description": "Versuft het doelwit, waardoor de beweging met 50% wordt vertraagd gedurende 4 sec."
+        "name": "Ratelend Schot",
+        "description": "Versuft het doelwit voor {damage} schade, waardoor de beweging met 50% wordt vertraagd gedurende 4 sec."
       },
       "mongoose_bite": {
-        "name": "Mangoestbeet",
-        "description": "Tegenaanval nadat het doelwit ontwijkt voor wapenschade plus 12. Kan niet worden ontweken."
+        "name": "Tegenbeet",
+        "description": "Tegenaanval nadat het doelwit ontwijkt voor wapenschade plus {damage}. Kan niet worden ontweken."
       },
       "wing_clip": {
-        "name": "Vleugelknip",
-        "description": "Brengt een wond toe die de vijand 40% vertraagt gedurende 10 sec."
+        "name": "Kluisterende Houw",
+        "description": "Brengt een wond toe voor {damage} schade die de vijand 40% vertraagt gedurende 10 sec."
       },
       "aspect_of_the_monkey": {
-        "name": "Aspect van de Aap",
-        "description": "Neem het aspect van de aap aan, waardoor je ontwijkkans met 8% toeneemt gedurende 30 min."
+        "name": "Gedaante van de Marter",
+        "description": "Neem de gedaante van de marter aan, waardoor je ontwijkkans met 8% toeneemt gedurende 30 min."
       },
       "aspect_of_the_cheetah": {
-        "name": "Aspect van de Jachtluipaard",
-        "description": "Neem het aspect van de jachtluipaard aan, waardoor je bewegingssnelheid met 30% toeneemt gedurende 30 min."
+        "name": "Gedaante van de Renner",
+        "description": "Neem de gedaante van de renner aan, waardoor je bewegingssnelheid met 30% toeneemt gedurende 30 min."
       },
       "aimed_shot": {
-        "name": "Gericht Schot",
-        "description": "Een zorgvuldig gericht schot dat {damage} schade toebrengt."
+        "name": "Lange Trek",
+        "description": "Een zorgvuldig getrokken schot dat {damage} schade toebrengt."
       },
       "rapid_fire": {
-        "name": "Snelvuur",
+        "name": "Koortsige Trek",
         "description": "Verhoogt je aanvalssnelheid met 40% gedurende 15 sec."
       },
       "smite": {
@@ -3602,164 +5958,164 @@ export const nl_NL: EnTranslations = {
         "description": "Kastijdt de vijand voor {damage} Heilige schade."
       },
       "lesser_heal": {
-        "name": "Mindere Genezing",
+        "name": "Gefluisterd Gebed",
         "description": "Geneest een bevriend doelwit voor {damage}."
       },
       "power_word_fortitude": {
-        "name": "Machtwoord: Standvastigheid",
-        "description": "Verhoogt de Weerbaarheid van het doelwit met 3 gedurende 30 min."
+        "name": "Litanie van Vastberadenheid",
+        "description": "Verhoogt de Weerbaarheid van het doelwit met {buff} gedurende 30 min."
       },
       "shadow_word_pain": {
-        "name": "Schaduwwoord: Pijn",
+        "name": "Klaaglied van Verval",
         "description": "Een woord van duisternis veroorzaakt {damage} Schaduwschade gedurende 18 sec."
       },
       "power_word_shield": {
-        "name": "Machtwoord: Schild",
-        "description": "Schermt het doelwit af en absorbeert 48 schade gedurende 30 sec."
+        "name": "Psalm van Bescherming",
+        "description": "Schermt het doelwit af en absorbeert {damage} schade gedurende 30 sec."
       },
       "renew": {
-        "name": "Vernieuwing",
+        "name": "Aanhoudende Genade",
         "description": "Geneest het doelwit voor {damage} gedurende 15 sec."
       },
       "mind_blast": {
-        "name": "Geestesstoot",
+        "name": "Geestbreuk",
         "description": "Treft de geest van het doelwit voor {damage} Schaduwschade."
       },
       "heal": {
-        "name": "Genezing",
+        "name": "Plechtig Gebed",
         "description": "Een traag maar krachtig gebed dat een bevriend doelwit voor {damage} geneest."
       },
       "mind_flay": {
-        "name": "Geestesmarteling",
-        "description": "Bestookt de geest van het doelwit met Schaduwenergie en brengt elke seconde 12 schade toe gedurende 3 sec."
+        "name": "Litanie van Leed",
+        "description": "Bestookt de geest van het doelwit met Schaduwenergie en brengt elke seconde {damage} schade toe gedurende 3 sec."
       },
       "flash_heal": {
-        "name": "Snelle Genezing",
+        "name": "Dringend Gebed",
         "description": "Een snel gebed dat een bevriend doelwit voor {damage} geneest."
       },
       "lightning_bolt": {
-        "name": "Bliksemschicht",
+        "name": "Boogbliksem",
         "description": "Werpt een bliksemschicht voor {damage} Natuurschade."
       },
       "rockbiter_weapon": {
-        "name": "Rotsbijter-Wapen",
-        "description": "Doordrenkt je wapen met de woede van steen: elke zwaai brengt 5 extra schade toe gedurende 5 min."
+        "name": "Steengebonden Wapen",
+        "description": "Doordrenkt je wapen met de woede van steen: elke zwaai brengt {damage} extra schade toe gedurende 5 min."
       },
       "healing_wave": {
-        "name": "Genezende Golf",
+        "name": "Helende Wateren",
         "description": "Geneest een bevriend doelwit voor {damage}."
       },
       "earth_shock": {
-        "name": "Aardschok",
+        "name": "Aardse Schok",
         "description": "Schokt het doelwit ogenblikkelijk met verpletterende kracht voor {damage} Natuurschade."
       },
       "lightning_shield": {
-        "name": "Bliksemschild",
-        "description": "Omringt je met knetterende bliksem: aanvallers van dichtbij lijden 13 Natuurschade."
+        "name": "Donderwering",
+        "description": "Omringt je met knetterende bliksem: aanvallers van dichtbij lijden {buff} Natuurschade, tot 3 ladingen en maximaal eens per 5 seconden."
       },
       "flame_shock": {
-        "name": "Vlamschok",
-        "description": "Schroeit het doelwit met vuur voor 25 schade plus {damage} gedurende 12 sec."
+        "name": "Sintelschok",
+        "description": "Schroeit het doelwit met vuur voor {damage} schade plus {overTime} gedurende 12 sec."
       },
       "flametongue_weapon": {
-        "name": "Vlamtong-Wapen",
-        "description": "Doordringt je wapen met elementair vuur: elke slag brengt 8 extra Vuurschade toe gedurende 5 min."
+        "name": "Vuurbrand-Wapen",
+        "description": "Doordringt je wapen met elementair vuur: elke slag brengt {damage} extra Vuurschade toe gedurende 5 min."
       },
       "frost_shock": {
-        "name": "Vorstschok",
+        "name": "Rijpschok",
         "description": "Schokt het doelwit ogenblikkelijk met vorst voor {damage} Vorstschade en vertraagt zijn beweging met 50% gedurende 8 sec."
       },
       "frostbrand_weapon": {
-        "name": "Vorstmerk-Wapen",
-        "description": "Doordringt je wapen met bijtende vorst: elke slag brengt 8 extra schade toe gedurende 5 min."
+        "name": "Rijpgebonden Wapen",
+        "description": "Doordringt je wapen met bijtende vorst: elke slag brengt {damage} extra schade toe gedurende 5 min."
       },
       "ghost_wolf": {
-        "name": "Geestenwolf",
-        "description": "Verandert je in een Geestenwolf en verhoogt de bewegingssnelheid met 40% gedurende 10 min."
+        "name": "Shadewolf",
+        "description": "Verandert je in een Shadewolf en verhoogt de bewegingssnelheid met 40% gedurende 10 min."
       },
       "stormstrike": {
-        "name": "Stormslag",
+        "name": "Voorouderslag",
         "description": "Kanaliseert de storm door je wapen en treft ogenblikkelijk voor wapenschade plus {damage}."
       },
       "shadow_bolt": {
-        "name": "Schaduwbout",
+        "name": "Duisterbout",
         "description": "Zendt een schaduwbout op de vijand af voor {damage} Schaduwschade."
       },
       "demon_skin": {
-        "name": "Demonenhuid",
-        "description": "Demonenhuid verhoogt je pantser met 30 gedurende 30 min."
+        "name": "Duivelshuid",
+        "description": "Demonenhuid verhoogt je pantser met {buff} gedurende 30 min."
       },
       "immolate": {
-        "name": "Verbranden",
-        "description": "Verbrandt de vijand voor 11 Vuurschade en nog eens {damage} gedurende 15 sec."
+        "name": "Brandpact",
+        "description": "Verbrandt de vijand voor {damage} Vuurschade en nog eens {overTime} gedurende 15 sec."
       },
       "corruption": {
-        "name": "Verderf",
+        "name": "Zwartrot",
         "description": "Bederft het doelwit en veroorzaakt {damage} Schaduwschade gedurende 18 sec."
       },
       "life_tap": {
-        "name": "Levenstap",
-        "description": "Zet 30 levenskracht om in 30 mana."
+        "name": "Zware Koop",
+        "description": "Zet {damage} levenskracht om in {damage} mana."
       },
       "curse_of_agony": {
-        "name": "Vloek van Pijn",
+        "name": "Ban van Kwelling",
         "description": "Vervloekt het doelwit met pijn: {damage} Schaduwschade gedurende 24 sec."
       },
       "drain_life": {
-        "name": "Leven Aftappen",
-        "description": "Tapt het leven van het doelwit af en draagt elke seconde 7 levenskracht naar je over gedurende 5 sec."
+        "name": "Verteren",
+        "description": "Tapt het leven van het doelwit af en draagt elke seconde {damage} levenskracht naar je over gedurende 5 sec."
       },
       "fear": {
-        "name": "Angst",
+        "name": "Teisteren",
         "description": "Jaagt de vijand de stuipen op het lijf, waardoor het maximaal 8 sec ineenkrimpt. Elke schade verbreekt het effect."
       },
       "searing_pain": {
-        "name": "Schroeiende Pijn",
+        "name": "Schroeien",
         "description": "Verschroeit de vijand met kwellend vuur voor {damage} Vuurschade. Snel te bezweren."
       },
       "shadowburn": {
-        "name": "Schaduwbrand",
-        "description": "Treft het doelwit ogenblikkelijk met Schaduwvlam voor {damage} Schaduwschade."
+        "name": "Schemervuur",
+        "description": "Treft het doelwit ogenblikkelijk met verzengende schaduw voor {damage} Schaduwschade."
       },
       "wrath": {
-        "name": "Toorn",
+        "name": "Wildbout",
         "description": "Slingert een bout van natuurenergie voor {damage} Natuurschade."
       },
       "healing_touch": {
-        "name": "Genezende Aanraking",
+        "name": "Wildheling",
         "description": "Geneest een bevriend doelwit voor {damage}."
       },
       "mark_of_the_wild": {
-        "name": "Teken van de Wildernis",
-        "description": "Plaatst het Teken van de Wildernis op een bevriend doelwit en verhoogt het pantser met 25 gedurende 30 min."
+        "name": "Wildwering",
+        "description": "Plaatst de Wildward op een bevriend doelwit en verhoogt het pantser met {buff} gedurende 30 min."
       },
       "moonfire": {
-        "name": "Maanvuur",
+        "name": "Maanstorm",
         "description": "Verbrandt de vijand met maanvuur voor {damage} Arcane schade plus schade over tijd."
       },
       "rejuvenation": {
-        "name": "Verjonging",
+        "name": "Wildbloei",
         "description": "Geneest het doelwit voor {damage} gedurende 12 sec."
       },
       "thorns": {
-        "name": "Doornen",
-        "description": "Doornen schieten op uit het doelwit: melee-aanvallers lopen 3 Natuurschade op."
+        "name": "Doornwacht",
+        "description": "Doornen schieten op uit het doelwit: melee-aanvallers lopen {buff} Natuurschade op."
       },
       "entangling_roots": {
-        "name": "Verstrengelende Wortels",
+        "name": "Grijpende Wortels",
         "description": "Wortelt het doelwit ter plaatse gedurende maximaal 12 sec."
       },
       "bear_form": {
-        "name": "Berengedaante",
-        "description": "Verander in een beer: pantser +65%, aanvalskracht +15, je aanvallen bouwen woede op en genereren 30% meer dreiging. Spreek opnieuw om terug te keren naar je oorspronkelijke gedaante."
+        "name": "Bruingedaante",
+        "description": "Verander in een beer: pantser +90%, sterk verhoogde aanvalskracht, je aanvallen bouwen woede op en genereren 30% meer dreiging. Spreek opnieuw om terug te keren naar je oorspronkelijke gedaante."
       },
       "maul": {
-        "name": "Verscheuren",
-        "description": "Een verscheurende aanval die de slagschade met {damage} verhoogt en veel dreiging veroorzaakt. Activeert bij je volgende slag. Alleen in Berengedaante."
+        "name": "Botverbrijzelen",
+        "description": "Een verscheurende aanval die de slagschade met {damage} verhoogt en veel dreiging veroorzaakt. Activeert bij je volgende slag. Alleen in Bruingedaante."
       },
       "growl": {
-        "name": "Grommen",
-        "description": "Gromt naar het doelwit: je dreiging stijgt tot het niveau van zijn meest gehate vijand en het wordt gedwongen je 3 sec aan te vallen. Alleen in Berengedaante."
+        "name": "Bedreigen",
+        "description": "Gromt naar het doelwit: je dreiging stijgt tot het niveau van zijn meest gehate vijand en het wordt gedwongen je 3 sec aan te vallen. Alleen in Bruingedaante."
       },
       "cat_form": {
         "name": "Wolfsgedaante",
@@ -3770,43 +6126,43 @@ export const nl_NL: EnTranslations = {
         "description": "Klauw de vijand voor wapenschade plus {damage}. Levert 1 combopunt op. Alleen in Wolfsgedaante."
       },
       "ferocious_bite": {
-        "name": "Woeste Beet",
-        "description": "Afmaakzet die schade toebrengt per combopunt. Alleen in Wolfsgedaante."
+        "name": "Bloedbeet",
+        "description": "Afmaakzet die {damage} veroorzaakt. Alleen in Wolfsgedaante."
       },
       "swipe": {
-        "name": "Uithaal",
-        "description": "Haal uit naar nabije vijanden voor {damage} schade. Veroorzaakt extra dreiging. Alleen in Berengedaante."
+        "name": "Vegende Klauwen",
+        "description": "Haal uit naar nabije vijanden voor {damage} schade. Veroorzaakt extra dreiging. Alleen in Bruingedaante."
       },
       "regrowth": {
-        "name": "Hergroei",
+        "name": "Tweede Bloei",
         "description": "Geneest een bevriend doelwit voor {damage} plus een extra hoeveelheid gedurende 21 sec."
       },
       "barkskin": {
-        "name": "Schorshuid",
+        "name": "Eikenhuid",
         "description": "Je huid verhardt als schors, waardoor je pantser met 150 toeneemt gedurende 15 sec."
       },
       "starfire": {
-        "name": "Sterrenvuur",
+        "name": "Hemelval",
         "description": "Roept een bout van sterrenvuur naar beneden, die {damage} Arcane schade veroorzaakt."
       },
       "travel_form": {
-        "name": "Reisgedaante",
-        "description": "Verander ogenblikkelijk in een snelle reisgedaante en verhoog je bewegingssnelheid met 40%. Je kunt geen andere vaardigheden gebruiken terwijl je veranderd bent, maar je kunt in of buiten gevecht van gedaante wisselen, ideaal om te ontsnappen."
+        "name": "Fleetgedaante",
+        "description": "Verander ogenblikkelijk in een snelle Fleetgedaante en verhoog je bewegingssnelheid met 40%. Je kunt geen andere vaardigheden gebruiken terwijl je veranderd bent, maar je kunt in of buiten gevecht van gedaante wisselen, ideaal om te ontsnappen."
       },
       "enrage": {
-        "name": "Razernij",
-        "description": "Genereert ogenblikkelijk 20 woede. Alleen in Berengedaante."
+        "name": "Opstoken",
+        "description": "Genereert ogenblikkelijk 20 woede. Alleen in Bruingedaante."
       },
       "bash": {
-        "name": "Beuk",
-        "description": "Verdooft het doelwit gedurende 2 sec. Alleen in Berengedaante."
+        "name": "Bedwelmen",
+        "description": "Verdooft het doelwit gedurende 2 sec. Alleen in Bruingedaante."
       },
       "faerie_fire": {
-        "name": "Feeënvuur",
-        "description": "Verlaagt het pantser van het doelwit met 35 gedurende 40 sec."
+        "name": "Heksenlicht",
+        "description": "Verlaagt het pantser van het doelwit met {damage}% gedurende 40 sec. Stapelt niet met Pantserscheur."
       },
       "hibernate": {
-        "name": "Winterslaap",
+        "name": "Sluimer",
         "description": "Dwingt het doelwit in een diepe slaap gedurende maximaal 8 sec. Elke schade wekt het."
       },
       "dash": {
@@ -3814,83 +6170,203 @@ export const nl_NL: EnTranslations = {
         "description": "Spurt vooruit en verhoogt de bewegingssnelheid met 50% gedurende 15 sec. Alleen in Wolfsgedaante."
       },
       "pounce": {
-        "name": "Bespringen",
+        "name": "Sluipslag",
         "description": "Een sluipopener die het doelwit 2 sec verdooft. Levert 1 combopunt op. Alleen in Wolfsgedaante."
       },
       "insect_swarm": {
-        "name": "Insectenzwerm",
+        "name": "Stekende Zwerm",
         "description": "De vijand wordt belaagd door insecten en lijdt {damage} Natuurschade gedurende 12 sec."
       },
       "tigers_fury": {
-        "name": "Tijgerwoede",
+        "name": "Wolvenbloed",
         "description": "Verhoogt de aanvalskracht met 40 gedurende 6 sec. Alleen in Wolfsgedaante."
       },
       "rip": {
         "name": "Verscheuren",
-        "description": "Afmaakzet die bloedschade toebrengt gedurende 12 sec. Verbruikt combopunten. Alleen in Wolfsgedaante."
+        "description": "Afmaakzet die {damage} Bloedschade toebrengt gedurende 12 sec. Verbruikt combopunten. Alleen in Wolfsgedaante."
       },
       "mortal_strike": {
-        "name": "Dodelijke Slag",
+        "name": "Verminkende Slag",
         "description": "Een venijnige slag die wapenschade plus {damage} toebrengt. (Wapens-handtekening)"
       },
       "bloodthirst": {
-        "name": "Bloeddorst",
-        "description": "Val onmiddellijk aan in een bloedrazernij voor {damage}. (Razernij-kenmerk)"
+        "name": "Aderlating",
+        "description": "Val onmiddellijk aan in een bloedrazernij voor 60% wapenschade plus {damage}. (Razernij-kenmerk)"
       },
       "shield_slam": {
-        "name": "Schildslag",
-        "description": "Sla het doelwit met je schild voor {damage} en enorme dreiging. (Protectie-kenmerk)"
+        "name": "Schildbreuk",
+        "description": "Sla het doelwit met je schild voor 50% wapenschade plus {damage} en enorme dreiging. (Protectie-kenmerk)"
       },
       "whirlwind": {
-        "name": "Wervelwind",
+        "name": "Snijdende Wenteling",
         "description": "Draai in een dodelijke boog en tref alle nabije vijanden voor {damage}. (Razernij-talent)"
       },
       "berserker_rage": {
-        "name": "Berserkerwoede",
-        "description": "Ga in een berserkerwoede en genereer 20 woede. (Krijger-talent)"
+        "name": "Kolkende Woede",
+        "description": "Ga in een kolkende woede en genereer 20 woede. (Krijger-talent)"
+      },
+      "crusader_strike": {
+        "name": "Kruisvaardersslag",
+        "description": "Treft het doel voor wapenschade plus {damage} Heilige schade. (paladijntalent)"
+      },
+      "chain_heal": {
+        "name": "Kettinggenezing",
+        "description": "Geneest een bevriend doelwit voor een grote hoeveelheid en springt daarna naar maximaal 2 andere bondgenoten in de buurt. Elke sprong geneest 50% minder. (Herstelkenmerk)"
+      },
+      "metamorphosis": {
+        "name": "Metamorfose",
+        "description": "Neemt demonische kracht aan en verhoogt pantser en aanvalskracht 20 sec. lang. (heksenmeestertalent)"
+      },
+      "holy_shock": {
+        "name": "Heilige schok",
+        "description": "Schokt een bevriend doelwit met Heilige energie en geneest het voor {damage}. (Heilig signatuur)"
+      },
+      "holy_shield": {
+        "name": "Heilig schild",
+        "description": "Beschermt je 10 sec met Heilige kracht, verhoogt pantser met 90 en raakt melee-aanvallers voor 12 Heilige schade. (Bescherming signatuur)"
+      },
+      "bestial_wrath": {
+        "name": "Beestachtige woede",
+        "description": "Stuurt je in beestachtige razernij, waardoor aanvalskracht 15 sec met 55 toeneemt. (Beestbeheersing signatuur)"
+      },
+      "trueshot_aura": {
+        "name": "Zuiver schot-aura",
+        "description": "Inspireert nabije bondgenoten, waardoor aanvalskracht 5 min met 35 toeneemt. (Scherpschutter signatuur)"
+      },
+      "wyvern_sting": {
+        "name": "Wyvernsteek",
+        "description": "Steekt de vijand van afstand en maakt hem tot 4 sec uitgeschakeld. Elke schade verbreekt het effect. (Overleving signatuur)"
+      },
+      "arcane_power": {
+        "name": "Arcanekracht",
+        "description": "Verhoogt spreukschade met 20% en spreukhaast met 10% gedurende 10 sec. (Arcane-signatuur)"
+      },
+      "combustion": {
+        "name": "Verbranding",
+        "description": "Verhoogt de kritieke kans van spreuken met 50% gedurende 15 sec. (Fire-signatuur)"
+      },
+      "icy_veins": {
+        "name": "IJzige Aders",
+        "description": "Verhoogt spreukhaast met 30% en voorkomt onderbreking en terugslag van spreuken gedurende 10 sec. (Frost-signatuur)"
+      },
+      "cold_blood": {
+        "name": "Koud bloed",
+        "description": "Bundelt je dodelijke intentie zodat je volgende aanval een kritieke treffer is. (Moord signatuur)"
+      },
+      "blade_flurry": {
+        "name": "Klingenvlaag",
+        "description": "Ontketent een vlaag van klingen, waardoor aanvalssnelheid 12 sec met 20% toeneemt. (Gevecht signatuur)"
+      },
+      "hemorrhage": {
+        "name": "Bloeding",
+        "description": "Raakt de vijand voor wapenschade plus {damage} en veroorzaakt bloedschade gedurende 12 sec. Geeft 1 combopunt. (Subtiliteit signatuur)"
+      },
+      "power_infusion": {
+        "name": "Krachtinfusie",
+        "description": "Doordrenkt een bevriend doelwit met kracht, waardoor spreukkracht 15 sec met 28 toeneemt. (Discipline signatuur)"
+      },
+      "holy_nova": {
+        "name": "Heilige nova",
+        "description": "Veroorzaakt een explosie van Heilig licht, geneest nabije bondgenoten voor {damage} en beschadigt nabije vijanden. (Heilig signatuur)"
+      },
+      "shadowform": {
+        "name": "Schaduwvorm",
+        "description": "Neem schaduwvorm aan en versterk schaduwmagie totdat je terugschakelt. Spreek opnieuw uit om terug te keren naar normale vorm. (Schaduw signatuur)"
+      },
+      "elemental_mastery": {
+        "name": "Elementaire meesterschap",
+        "description": "Roept elementaire meesterschap aan, waardoor je volgende spreuk onmiddellijk is. (Elementair signatuur)"
+      },
+      "siphon_life": {
+        "name": "Levenshevel",
+        "description": "Hevelt leven uit de vijand, veroorzaakt {damage} Schaduwschade gedurende 30 sec en geneest je voor de toegebrachte schade. (Kwelling signatuur)"
+      },
+      "conflagrate": {
+        "name": "Ontvlamming",
+        "description": "Verbruikt je Verbranden op de vijand om hem te ontsteken voor {damage} Vuurschade. (Vernietiging signatuur)"
+      },
+      "moonkin_form": {
+        "name": "Maanuilvorm",
+        "description": "Neem maanuilvorm aan en versterk spreuken totdat je terugschakelt. Spreek opnieuw uit om terug te keren naar normale vorm. (Balans signatuur)"
+      },
+      "feral_charge": {
+        "name": "Wilde stormloop",
+        "description": "Storm op een vijand af en wortel hem 1 sec. Bereik 8-25 m. (Wildernis signatuur)"
+      },
+      "swiftmend": {
+        "name": "Snelle genezing",
+        "description": "Verbruikt een genezing-over-tijd-effect op een bevriend doelwit om het voor {damage} te genezen. (Herstel signatuur)"
       },
       "summon_imp": {
-        "name": "Duiveltje Oproepen",
-        "description": "Roept een Duiveltje op onder bevel van de Heksenmeester. Het Duiveltje slingert van veraf Vuurbouten naar je vijanden. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
+        "name": "Emberkin Oproepen",
+        "description": "Roept een Emberkin op onder bevel van de Heksenmeester. De Emberkin slingert van veraf Ashbolts naar je vijanden. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
       },
       "summon_voidwalker": {
-        "name": "Leegteloper Oproepen",
-        "description": "Roept een Leegteloper op onder bevel van de Heksenmeester. De Leegteloper is een stevige demon die je vijanden provoceert en klappen opvangt. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
+        "name": "Gloomshade Oproepen",
+        "description": "Roept een Gloomshade op onder bevel van de Heksenmeester. De Gloomshade is een stevige demon die je vijanden provoceert en klappen opvangt. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
       },
       "summon_succubus": {
-        "name": "Succubus Oproepen",
-        "description": "Roept een Succubus op onder bevel van de Heksenmeester. De Succubus is een fragiele demon die snel toeslaat en hard raakt in het melee. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
+        "name": "Duskborn Oproepen",
+        "description": "Roept een Duskborn op onder bevel van de Heksenmeester. De Duskborn is een fragiele demon die snel toeslaat en hard raakt in het melee. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
       },
       "summon_felhunter": {
-        "name": "Feljager Oproepen",
-        "description": "Roept een Feljager op onder bevel van de Heksenmeester. De Feljager treitert vijanden van afstand met Schaduwbeet en blinkt uit in het opjagen van bezweerders. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
+        "name": "Spellhound Oproepen",
+        "description": "Roept een Spellhound op onder bevel van de Heksenmeester. De Spellhound treitert vijanden van afstand met Gloombite en blinkt uit in het opjagen van bezweerders. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
       },
       "summon_felguard": {
-        "name": "Felwacht Oproepen",
-        "description": "Roept een Felwacht op onder bevel van de Heksenmeester. De Felwacht is een taaie melee-demon die de strijd in waadt en zijn mannetje staat. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
+        "name": "Warfiend Oproepen",
+        "description": "Roept een Warfiend op onder bevel van de Heksenmeester. De Warfiend is een taaie melee-demon die de strijd in waadt en zijn mannetje staat. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
       },
       "summon_infernal": {
-        "name": "Inferno Oproepen",
-        "description": "Bindt een Inferno aan je wil, een kolossale stormram met verpletterende melee en de diepste levenskracht en pantser van alle demonen. Een lange afkoeltijd beteugelt zijn rauwe kracht. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
+        "name": "Pyre-Kolos Oproepen",
+        "description": "Bindt een Pyre-Kolos aan je wil, een kolossale stormram met verpletterende melee en de diepste levenskracht en pantser van alle demonen. Een lange afkoeltijd beteugelt zijn rauwe kracht. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
       },
       "summon_doomguard": {
-        "name": "Doemwacht Oproepen",
-        "description": "Bindt een Doemwacht aan je wil, een elite-demon die van veraf zware Schaduwschade laat regenen. Een lange afkoeltijd beteugelt zijn verwoestende kracht. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
+        "name": "Wraithborn Oproepen",
+        "description": "Bindt een Wraithborn aan je wil, een elite-demon die van veraf zware Schaduwschade laat regenen. Een lange afkoeltijd beteugelt zijn verwoestende kracht. Het oproepen van een nieuwe demon stuurt je huidige weg. Je mag één demon tegelijk hebben."
+      },
+      "pummel": {
+        "name": "Kaakbreker",
+        "description": "Onderbreekt de spreuk van het doelwit en verhindert het 4 sec lang spreuken uit die magieschool uit te spreken."
+      },
+      "kick": {
+        "name": "Schop",
+        "description": "Onderbreekt de spreuk van het doelwit en verhindert het 4 sec lang spreuken uit die magieschool uit te spreken."
+      },
+      "counterspell": {
+        "name": "Spreukbreuk",
+        "description": "Onderbreekt de spreuk van het doelwit en verhindert het 6 sec lang spreuken uit die magieschool uit te spreken."
+      },
+      "counter_shot": {
+        "name": "Dempingsschot",
+        "description": "Een snel schot dat de spreuk van het doelwit onderbreekt en die magieschool 4 sec vergrendelt."
+      },
+      "rebuke": {
+        "name": "Berisping",
+        "description": "Onderbreekt de spreuk van het doelwit en verhindert het 4 sec lang spreuken uit die magieschool uit te spreken."
+      },
+      "skull_bash": {
+        "name": "Kopstoot",
+        "description": "Een uitvallende kopstoot die de spreuk van het doelwit onderbreekt en die magieschool 4 sec vergrendelt."
+      },
+      "spell_lock": {
+        "name": "Spreukverbod",
+        "description": "Legt het doelwit tijdens een spreuk het zwijgen op en verhindert het 5 sec lang spreuken uit die magieschool uit te spreken."
       },
       "bear_charge": {
-        "name": "Berenstormloop",
-        "description": "Storm op een vijand af, genereer 9 woede en verdoof hem gedurende 1 sec. Bereik 8-25 m. Alleen in Berengedaante."
+        "name": "Bruin-stormloop",
+        "description": "Storm op een vijand af, genereer 9 woede en verdoof hem gedurende 1 sec. Bereik 8-25 m. Alleen in Bruingedaante."
       },
       "demoralizing_roar": {
-        "name": "Demoraliserend Gebrul",
-        "description": "Demoraliseert nabije vijanden en verlaagt hun aanvalskracht met 20 gedurende 20 sec. Alleen in Berengedaante."
+        "name": "Laf Gebrul",
+        "description": "Demoraliseert nabije vijanden en verlaagt hun aanvalskracht met 20 gedurende 20 sec. Alleen in Bruingedaante."
       },
       "prowl": {
-        "name": "Sluipen",
-        "description": "Ga in sluiptocht terwijl je in Wolfsgedaante bent. Kan niet in gevecht worden gebruikt."
+        "name": "Besluipen",
+        "description": "Ga in sluiptocht terwijl je in Wolfsgedaante bent en beweeg 50% trager. Kan niet in gevecht worden gebruikt."
       },
       "rake": {
-        "name": "Harken",
+        "name": "Villen",
         "description": "Een sluipopener die de vijand harkt voor wapenschade plus {damage} en bloedingsschade veroorzaakt gedurende 9 sec. Levert 1 combopunt op. Alleen in Wolfsgedaante."
       },
       "revive_pet": {
@@ -3900,10 +6376,10 @@ export const nl_NL: EnTranslations = {
     },
     "items": {
       "worn_sword": {
-        "name": "Versleten Kortzwaard"
+        "name": "Ingevreten Kortzwaard"
       },
       "gnarled_staff": {
-        "name": "Knoestige Staf"
+        "name": "Moeraseiken Staf"
       },
       "rusty_dagger": {
         "name": "Roestige Dolk"
@@ -3915,13 +6391,13 @@ export const nl_NL: EnTranslations = {
         "name": "Roestige Bijl"
       },
       "recruit_tunic": {
-        "name": "Tuniek van de Rekruut"
+        "name": "Levymans Tuniek"
       },
       "apprentice_robe": {
-        "name": "Gewaad van de Leerling"
+        "name": "Versleten Gewaad"
       },
       "footpad_jerkin": {
-        "name": "Struikrovers-Wambuis"
+        "name": "Zakkenroller-Wambuis"
       },
       "redbrook_blade": {
         "name": "Redbrook Militie-Kling"
@@ -3951,22 +6427,22 @@ export const nl_NL: EnTranslations = {
         "name": "Grijskaaks Vacht-Beenstukken"
       },
       "baked_bread": {
-        "name": "Versgebakken Brood"
+        "name": "Boerenbrood"
       },
       "spring_water": {
-        "name": "Verfrissend Bronwater"
+        "name": "Koud Putwater"
       },
       "roasted_boar": {
-        "name": "Geroosterd Everzwijnvlees"
+        "name": "Everzwijnbout aan het Spit"
       },
       "conjured_water": {
-        "name": "Opgeroepen Bronwater"
+        "name": "Opgeroepen Regenwater"
       },
       "conjured_water2": {
-        "name": "Opgeroepen Mineraalwater"
+        "name": "Opgeroepen Putwater"
       },
       "conjured_water3": {
-        "name": "Opgeroepen Bruiswater"
+        "name": "Opgeroepen Helder Water"
       },
       "eastbrook_arming_sword": {
         "name": "Oostbeek-Wapenzwaard"
@@ -4026,13 +6502,16 @@ export const nl_NL: EnTranslations = {
         "name": "Spookachtige Essentie"
       },
       "webwood_silk": {
-        "name": "Webwoud-Zijdeklier"
+        "name": "Sableweb-Zijdeklier"
       },
       "supply_crate": {
         "name": "Gestolen Voorradenkist"
       },
       "greyjaw_fang": {
         "name": "Tand van Oude Grijskaak"
+      },
+      "chunk_of_ore": {
+        "name": "Brok erts"
       },
       "weathered_ledger_page": {
         "name": "Verweerd Grootboekblad"
@@ -4047,13 +6526,13 @@ export const nl_NL: EnTranslations = {
         "name": "Rode Bandana"
       },
       "tough_jerky": {
-        "name": "Taai Gedroogd Vlees"
+        "name": "Gezouten Gedroogd Vlees"
       },
       "mudfin_scale": {
-        "name": "Slijmerige Murloc-Schub"
+        "name": "Slijmerige Mudfin-Schub"
       },
       "tallow_candle": {
-        "name": "Talgkaars"
+        "name": "Vettige Talgklomp"
       },
       "spider_leg": {
         "name": "Trillende Spinnenpoot"
@@ -4063,6 +6542,15 @@ export const nl_NL: EnTranslations = {
       },
       "linen_scrap": {
         "name": "Linnen Lap"
+      },
+      "arcane_dust": {
+        "name": "Arcaan stof"
+      },
+      "arcane_essence": {
+        "name": "Arcane essentie"
+      },
+      "arcane_shard": {
+        "name": "Arcane scherf"
       },
       "fen_muster_order": {
         "name": "Veenbrug-Mobilisatiebevel"
@@ -4119,7 +6607,7 @@ export const nl_NL: EnTranslations = {
         "name": "Moeraswandelaar-Laarzen"
       },
       "mistcallers_edge": {
-        "name": "Nevelroepers Snede"
+        "name": "Fogbinders Snede"
       },
       "vaels_mist_staff": {
         "name": "Vaels Nevelstaf"
@@ -4263,7 +6751,7 @@ export const nl_NL: EnTranslations = {
         "name": "Staf van Velkhar"
       },
       "shadowmeld_tunic": {
-        "name": "Schaduwversmelt-Tuniek"
+        "name": "Nightveil-Tuniek"
       },
       "gravewyrm_scale_hauberk": {
         "name": "Grafwurm-Schubmaliënkolder"
@@ -4332,13 +6820,13 @@ export const nl_NL: EnTranslations = {
         "name": "Gebarsten Wurmschub"
       },
       "conjured_bread": {
-        "name": "Opgeroepen Brood"
+        "name": "Opgeroepen Haverkoek"
       },
       "conjured_bread2": {
-        "name": "Opgeroepen Roggebrood"
+        "name": "Opgeroepen Zwart Brood"
       },
       "conjured_bread3": {
-        "name": "Opgeroepen Zoet Broodje"
+        "name": "Opgeroepen Honingkoek"
       },
       "roadwardens_helm": {
         "name": "Helm van de Wegwachter"
@@ -4430,8 +6918,206 @@ export const nl_NL: EnTranslations = {
       "monarch_crown_helm": {
         "name": "Monarchenkroon"
       },
+      "linen_pouch": {
+        "name": "Linnen buidel"
+      },
+      "travelers_knapsack": {
+        "name": "Reizigersknapzak"
+      },
+      "wolfhide_satchel": {
+        "name": "Wolfshuiden tas"
+      },
+      "gravewoven_bag": {
+        "name": "Grafgeweven tas"
+      },
+      "mistcallers_duffel": {
+        "name": "Fogbinders Plunjezak"
+      },
+      "copper_mining_pick": {
+        "name": "Koperen Mijnpik"
+      },
+      "iron_mining_pick": {
+        "name": "IJzeren Mijnpik"
+      },
+      "mithril_mining_pick": {
+        "name": "Mithril Mijnpik"
+      },
+      "handaxe": {
+        "name": "Handbijl"
+      },
+      "felling_axe": {
+        "name": "Velbijl"
+      },
+      "ironbark_axe": {
+        "name": "IJzerschors Bijl"
+      },
+      "gathering_sickle": {
+        "name": "Oogstsikkel"
+      },
+      "bronze_sickle": {
+        "name": "Bronzen Sikkel"
+      },
+      "silverleaf_sickle": {
+        "name": "Zilverbladsikkel"
+      },
+      "thorium_mining_pick": {
+        "name": "Thorium Mijnpik"
+      },
+      "arcanite_mining_pick": {
+        "name": "Arcaniet Mijnpik"
+      },
+      "ashwood_axe": {
+        "name": "Essenhouten Bijl"
+      },
+      "elderwood_axe": {
+        "name": "Oudhouten Bijl"
+      },
+      "goldleaf_sickle": {
+        "name": "Goudbladsikkel"
+      },
+      "sunpetal_sickle": {
+        "name": "Zonneblaadjessikkel"
+      },
+      "thorium_ore": {
+        "name": "Thoriumerts"
+      },
+      "arcanite_bar": {
+        "name": "Arcaniet Staaf"
+      },
+      "ashwood_log": {
+        "name": "Essenhout Blok"
+      },
+      "elderwood_log": {
+        "name": "Oud Vlierhout Blok"
+      },
+      "goldleaf_herb": {
+        "name": "Goudbladkruid"
+      },
+      "sunpetal_herb": {
+        "name": "Zonnepetaalkruid"
+      },
+      "furyforged_warhelm": {
+        "name": "Woedegesmede Oorlogshelm"
+      },
+      "furyforged_warspaulders": {
+        "name": "Woedegesmede Oorlogsschouderplaten"
+      },
+      "furyforged_warplate": {
+        "name": "Woedegesmede Oorlogsplaat"
+      },
+      "furyforged_girdle": {
+        "name": "Woedegesmede Gordel"
+      },
+      "furyforged_legguards": {
+        "name": "Woedegesmede Beenbeschermers"
+      },
+      "furyforged_gauntlets": {
+        "name": "Woedegesmede Strijdhandschoenen"
+      },
+      "furyforged_sabatons": {
+        "name": "Woedegesmede Plaatlaarzen"
+      },
+      "stormbound_crown": {
+        "name": "Stormgebonden Kroon"
+      },
+      "stormbound_spaulders": {
+        "name": "Stormgebonden Schouderplaten"
+      },
+      "stormbound_hauberk": {
+        "name": "Stormgebonden Maliënkolder"
+      },
+      "stormbound_waistguard": {
+        "name": "Stormgebonden Taillebeschermer"
+      },
+      "stormbound_legmail": {
+        "name": "Stormgebonden Beenmaliën"
+      },
+      "stormbound_handguards": {
+        "name": "Stormgebonden Handbeschermers"
+      },
+      "stormbound_greaves": {
+        "name": "Stormgebonden Scheenplaten"
+      },
+      "ashstalker_cowl": {
+        "name": "Kap van de Asjager"
+      },
+      "ashstalker_shoulderguards": {
+        "name": "Schouderbeschermers van de Asjager"
+      },
+      "ashstalker_harness": {
+        "name": "Harnas van de Asjager"
+      },
+      "ashstalker_waistband": {
+        "name": "Tailleband van de Asjager"
+      },
+      "ashstalker_legguards": {
+        "name": "Beenbeschermers van de Asjager"
+      },
+      "ashstalker_grips": {
+        "name": "Handgrepen van de Asjager"
+      },
+      "ashstalker_treads": {
+        "name": "Laarzen van de Asjager"
+      },
+      "cinderweave_cowl": {
+        "name": "Sintelgeweven Kap"
+      },
+      "cinderweave_mantle": {
+        "name": "Sintelgeweven Schoudermantel"
+      },
+      "cinderweave_raiment": {
+        "name": "Sintelgeweven Gewaad"
+      },
+      "cinderweave_cord": {
+        "name": "Sintelgeweven Koord"
+      },
+      "cinderweave_legwraps": {
+        "name": "Sintelgeweven Beenwikkels"
+      },
+      "cinderweave_handwraps": {
+        "name": "Sintelgeweven Handwikkels"
+      },
+      "cinderweave_slippers": {
+        "name": "Sintelgeweven Schoenen"
+      },
+      "final_oath_medallion": {
+        "name": "Medaillon van de Laatste Eed"
+      },
+      "razorwind_torque": {
+        "name": "Halsring van de Snijwind"
+      },
+      "cinder_sigil_pendant": {
+        "name": "Hanger van het Sintelzegel"
+      },
+      "iron_vow_band": {
+        "name": "Ring van de IJzeren Eed"
+      },
+      "unbroken_circle": {
+        "name": "De Ongebroken Cirkel"
+      },
+      "fleetblood_band": {
+        "name": "Snelbloedring"
+      },
+      "last_step_signet": {
+        "name": "Zegelring van de Laatste Stap"
+      },
+      "ashen_focus_ring": {
+        "name": "Asgrauwe Focusring"
+      },
+      "spellbreakers_seal": {
+        "name": "Zegel van de Spreukbreker"
+      },
+      "final_argument_greatblade": {
+        "name": "Grootkling van het Slotargument"
+      },
+      "first_blood_razor": {
+        "name": "Eerstebloedmes"
+      },
+      "emberglass_warstaff": {
+        "name": "Sintelglazen Oorlogsstaf"
+      },
       "bristleback_maul": {
-        "name": "Borstelrug-Strijdhamer"
+        "name": "Gallowglass-Hamer"
       },
       "broodmother_silk_robe": {
         "name": "Zijden Gewaad van de Broedmoeder"
@@ -4440,16 +7126,16 @@ export const nl_NL: EnTranslations = {
         "name": "Cryptebeen-Scheenplaten"
       },
       "cryptstalker_jerkin": {
-        "name": "Cryptesluiper-Wambuis"
+        "name": "Gravestalker-Wambuis"
       },
       "deathlord_legguards": {
-        "name": "Doodsheer-Beenplaten"
+        "name": "Barrowlord-Beenplaten"
       },
       "deathlord_sabatons": {
-        "name": "Doodsheer-Sabatons"
+        "name": "Barrowlord-Sabatons"
       },
       "deathlord_warplate": {
-        "name": "Doodsheer-Strijdharnas"
+        "name": "Barrowlord-Strijdharnas"
       },
       "drogmar_warboots": {
         "name": "Drogmars Strijdlaarzen"
@@ -4527,13 +7213,13 @@ export const nl_NL: EnTranslations = {
         "name": "Moggers Stamplaarzen"
       },
       "necromancers_legwraps": {
-        "name": "Beenwindsels van de Necromant"
+        "name": "Mournweave-Beenwindsels"
       },
       "necromancers_soulsteps": {
-        "name": "Zielstappen van de Necromant"
+        "name": "Mournweave-Zielstappen"
       },
       "necromancers_starshroud": {
-        "name": "Sterrensluier van de Necromant"
+        "name": "Mournweave-Sterrensluier"
       },
       "nhalias_dirgeblade": {
         "name": "Nhalia's Klaagzang-Kling"
@@ -4569,13 +7255,13 @@ export const nl_NL: EnTranslations = {
         "name": "Zielstappen van de Wurmcultus"
       },
       "wyrmshadow_harness": {
-        "name": "Wurmschaduw-Harnas"
+        "name": "Nightfang-Harnas"
       },
       "wyrmshadow_legguards": {
-        "name": "Wurmschaduw-Beenstukken"
+        "name": "Nightfang-Beenstukken"
       },
       "wyrmshadow_treads": {
-        "name": "Wurmschaduw-Schoeisel"
+        "name": "Nightfang-Schoeisel"
       },
       "glimmerfin_koi": {
         "name": "Glansvin-Koi"
@@ -4593,7 +7279,7 @@ export const nl_NL: EnTranslations = {
         "name": "Rauwe Rivierbaars"
       },
       "raw_stonescale_carp": {
-        "name": "Rauwe Steenschub-Karper"
+        "name": "Rauwe Slatefin-Karper"
       },
       "soggy_boot": {
         "name": "Doorweekte Laars"
@@ -4704,13 +7390,13 @@ export const nl_NL: EnTranslations = {
         "name": "Maanschub-Sabel"
       },
       "moonshroud_breastplate": {
-        "name": "Maansluier-Borstplaat"
+        "name": "Moonwrack-Borstplaat"
       },
       "moonshroud_robe": {
-        "name": "Maansluier-Gewaad"
+        "name": "Moonwrack-Gewaad"
       },
       "moonshroud_tunic": {
-        "name": "Maansluier-Tuniek"
+        "name": "Moonwrack-Tuniek"
       },
       "pale_pearl": {
         "name": "Bleke Parel"
@@ -4746,7 +7432,7 @@ export const nl_NL: EnTranslations = {
         "name": "Cryptebeen-Schouderstukken"
       },
       "deathlords_dread_visage": {
-        "name": "Doodsheers Schrikgelaat"
+        "name": "Barrowlords Schrikgelaat"
       },
       "gravewyrm_gauntlets": {
         "name": "Grafwurm-Handschoenen"
@@ -4761,10 +7447,10 @@ export const nl_NL: EnTranslations = {
         "name": "Nevelsluier-Grepen"
       },
       "necromancers_soulspire_mantle": {
-        "name": "Zielspits-Mantel van de Necromant"
+        "name": "Mournweave Zielspits-Mantel"
       },
       "wyrmshadow_talongrips": {
-        "name": "Wurmschaduw-Klauwgrepen"
+        "name": "Nightfang-Klauwgrepen"
       },
       "reliquary_plate_chest": {
         "name": "Reliekwacht-Maliënkolder"
@@ -4792,6 +7478,69 @@ export const nl_NL: EnTranslations = {
       },
       "varric_shadow_cowl": {
         "name": "Varrics Schaduwkap"
+      },
+      "siltguard_helm": {
+        "name": "Slibwacht-Helm"
+      },
+      "bulwark_rusted_pauldrons": {
+        "name": "Bolwerk-Verroeste Schouderstukken"
+      },
+      "nhalias_bell_maul": {
+        "name": "Nhalia's Klok-Strijdhamer"
+      },
+      "reedstalker_jerkin": {
+        "name": "Rietsluiper-Wambuis"
+      },
+      "mirejaw_fang_knife": {
+        "name": "Slijkkaak-Slagtandmes"
+      },
+      "widow_silk_hood": {
+        "name": "Weduwezijden Kap"
+      },
+      "cantors_drowned_sash": {
+        "name": "Verdronken Sjerp van de Cantor"
+      },
+      "corpse_candle_focus": {
+        "name": "Lijkkaars-Focus"
+      },
+      "nhalias_litany_rod": {
+        "name": "Nhalia's Litaniestaf"
+      },
+      "blackwater_vanguard_chest": {
+        "name": "Borstbescherming van de Zwartwater-Voorhoede"
+      },
+      "siltstep_leggings": {
+        "name": "Slibtred-Beenstukken"
+      },
+      "sunken_reliquary_hood": {
+        "name": "Kap van het Verzonken Reliekschrijn"
+      },
+      "litany_legs": {
+        "name": "Slibloper-Scheenplaten"
+      },
+      "litany_shoulder": {
+        "name": "Zwartwater-Drijfmantel"
+      },
+      "litany_gloves_rog": {
+        "name": "Rietgebonden Handwindsels"
+      },
+      "litany_plate_chest": {
+        "name": "Zompwachter-Kuras"
+      },
+      "litany_leather_chest": {
+        "name": "Slibdiep Habijt"
+      },
+      "litany_cloth_chest": {
+        "name": "Koorverdronken Gewaad"
+      },
+      "litany_helm": {
+        "name": "Verdronken Kap van de Reliquant"
+      },
+      "sister_nhalia_choir_plate": {
+        "name": "Koorgesmeed Harnas van Zuster Nhalia"
+      },
+      "drowned_choir_fang": {
+        "name": "Slagtand van het Verdronken Koor"
       },
       "the_codfather": {
         "name": "De Kabeljauwvader"
@@ -4832,35 +7581,149 @@ export const nl_NL: EnTranslations = {
       "event_skin_token": {
         "name": "Mysterieuze Cosmetische Buidel"
       },
+      "heroic_mark": {
+        "name": "Heroïsch Merk"
+      },
+      "morthens_cryptforged_hauberk": {
+        "name": "Morthens Kryptgesmede Maliënkolder"
+      },
+      "shadowpulse_handwraps": {
+        "name": "Schaduwpuls-Handwindsels"
+      },
+      "bonechill_striders": {
+        "name": "Beenvorst-Schrijders"
+      },
+      "mistcallers_fang": {
+        "name": "Mistroepers Slagtand"
+      },
+      "tidebound_spaulders": {
+        "name": "Tijgebonden Schouderplaten"
+      },
+      "sash_of_the_sunken_court": {
+        "name": "Sjerp van het Verzonken Hof"
+      },
+      "lunar_tide_greatstaff": {
+        "name": "Maantij-Grootstaf"
+      },
+      "tidewoven_trousers": {
+        "name": "Tijgeweven Broek"
+      },
+      "choirmothers_casque": {
+        "name": "Koormoeders Helm"
+      },
+      "gravewyrm_cleaver": {
+        "name": "Grafwurm-Kliever"
+      },
+      "shroud_of_the_gravewyrm": {
+        "name": "Doodskleed van de Grafwurm"
+      },
+      "sanctum_prowlers_grips": {
+        "name": "Heiligdomsluiper-Grepen"
+      },
+      "scepter_of_the_deathless_court": {
+        "name": "Scepter van het Doodloze Hof"
+      },
+      "cryptplate_helm": {
+        "name": "Kryptplaat-Helm"
+      },
+      "shadowpulse_slippers": {
+        "name": "Schaduwpuls-Sloffen"
+      },
+      "bonechill_cord": {
+        "name": "Beenvorst-Koord"
+      },
+      "mistforged_pauldrons": {
+        "name": "Mistgesmede Schouderplaten"
+      },
+      "tideguard_faceguard": {
+        "name": "Tijwacht-Vizier"
+      },
+      "sunken_court_mantle": {
+        "name": "Mantel van het Verzonken Hof"
+      },
+      "lunar_choir_leggings": {
+        "name": "Maankoor-Beenstukken"
+      },
+      "choir_blessed_spaulders": {
+        "name": "Koorgezegende Schouderplaten"
+      },
+      "tideworn_warboots": {
+        "name": "Tijversleten Krijgslaarzen"
+      },
+      "gravewyrm_claws": {
+        "name": "Grafwurm-Klauwen"
+      },
+      "gravescale_girdle": {
+        "name": "Grafschub-Gordel"
+      },
+      "wyrmchoir_handwraps": {
+        "name": "Wurmkoor-Handwindsels"
+      },
+      "deathless_greatblade": {
+        "name": "Doodloos Grootzwaard"
+      },
+      "stormcallers_focus": {
+        "name": "Stormroepers Focus"
+      },
+      "seal_of_the_nine_oaths": {
+        "name": "Zegel van de Negen Eden"
+      },
+      "nielas_coldlight_band": {
+        "name": "Niela's Koudlicht-Ring"
+      },
+      "sutils_gambit": {
+        "name": "Sutils Gambiet"
+      },
+      "oath_of_the_round_table": {
+        "name": "Eed van de Ronde Tafel"
+      },
+      "zyzzs_deathless_signet": {
+        "name": "Zyzz's Doodloze Zegelring"
+      },
+      "architects_cornerstone": {
+        "name": "De Hoeksteen van de Architect"
+      },
+      "swiftfang_talisman": {
+        "name": "Sneltand-Talisman"
+      },
+      "yumis_keepsake_locket": {
+        "name": "Yumi's Aandenken-Medaillon"
+      },
+      "zense_meridian": {
+        "name": "Zense-Meridiaan"
+      },
+      "medallion_of_endless_profit": {
+        "name": "Medaillon van Eindeloze Winst"
+      },
       "deathless_heartwood": {
         "name": "Kernhout van de Dodeloze Kroon"
       },
       "kingsbane_last_oath": {
-        "name": "Koningsdood, Laatste Eed van Doorntop"
+        "name": "Thronebane, Laatste Eed van Doorntop"
       },
       "crownforged_dreadhelm": {
-        "name": "Kroongesmede Schrikhelm"
+        "name": "Bonewrought-Schrikhelm"
       },
       "crownforged_warspaulders": {
-        "name": "Kroongesmede Strijdschouderstukken"
+        "name": "Bonewrought-Strijdschouderstukken"
       },
       "nighttalon_crown": {
-        "name": "Nachtklauw-Kroon"
+        "name": "Direfang-Kroon"
       },
       "nighttalon_shoulderguards": {
-        "name": "Nachtklauw-Schouderstukken"
+        "name": "Direfang-Schouderstukken"
       },
       "soulflame_cowl": {
-        "name": "Zielsvlam-Kap"
+        "name": "Wraithfire-Kap"
       },
       "soulflame_mantle": {
-        "name": "Zielsvlam-Mantel"
+        "name": "Wraithfire-Mantel"
       },
       "stormcallers_crown": {
-        "name": "Kroon van de Stormroeper"
+        "name": "Galecall-Kroon"
       },
       "stormcallers_spaulders": {
-        "name": "Schouderstukken van de Stormroeper"
+        "name": "Galecall-Schouderstukken"
       },
       "unknown_alien_weaponry": {
         "name": "Onbekende Buitenaardse Wapens"
@@ -4912,9 +7775,36 @@ export const nl_NL: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Voorhoede-Chroom"
+      },
+      "crownforged_gauntlets": {
+        "name": "Kroongesmede Handschoenen"
+      },
+      "nighttalon_grips": {
+        "name": "Nachtklauw-Grepen"
+      },
+      "soulflame_gloves": {
+        "name": "Zielsvlam-Handschoenen"
+      },
+      "stormcallers_handguards": {
+        "name": "Handbeschermers van de Stormroeper"
+      },
+      "crownforged_girdle": {
+        "name": "Kroongesmede Gordel"
+      },
+      "nighttalon_waistband": {
+        "name": "Nachtklauw-Lendenband"
+      },
+      "soulflame_cord": {
+        "name": "Zielsvlam-Koord"
+      },
+      "stormcallers_waistguard": {
+        "name": "Lendenbescherming van de Stormroeper"
       }
     },
     "mobs": {
+      "yumi_cat": {
+        "name": "Yumi"
+      },
       "forest_wolf": {
         "name": "Boswolf"
       },
@@ -4925,13 +7815,13 @@ export const nl_NL: EnTranslations = {
         "name": "Wild Zwijn"
       },
       "webwood_spider": {
-        "name": "Webwoud-Sluiper"
+        "name": "Sableweb-Sluiper"
       },
       "mudfin_murloc": {
         "name": "Modvin-Sluiper"
       },
       "tunnel_rat": {
-        "name": "Tunnelrat-Graver"
+        "name": "Dieprots-Graver"
       },
       "vale_bandit": {
         "name": "Valleibandiet"
@@ -4974,6 +7864,9 @@ export const nl_NL: EnTranslations = {
       },
       "deacon_voss": {
         "name": "Diaken Voss"
+      },
+      "training_dummy": {
+        "name": "Oefenpop"
       },
       "ridge_stalker": {
         "name": "Bergkam-Sluiper"
@@ -5033,13 +7926,13 @@ export const nl_NL: EnTranslations = {
         "name": "Ridder-Commandant Olen"
       },
       "vael_the_mistcaller": {
-        "name": "Vael de Mistroeper"
+        "name": "Vael de Fogbinder"
       },
       "sanctum_boneguard": {
         "name": "Heiligdom-Botwacht"
       },
       "sanctum_drakonid": {
-        "name": "Heiligdom-Drakoniet"
+        "name": "Heiligdom-Scaleguard"
       },
       "raised_bonewalker": {
         "name": "Verrezen Botloper"
@@ -5083,6 +7976,15 @@ export const nl_NL: EnTranslations = {
       "nythraxis_scourge_of_thornpeak": {
         "name": "Nythraxis, Gesel van Doorntop"
       },
+      "nythraxis_heroic_warrior_add": {
+        "name": "Aldren, Doodloze Krijgswacht"
+      },
+      "nythraxis_heroic_priest_add": {
+        "name": "Malric, Doodloze Hiërofant"
+      },
+      "nythraxis_heroic_rogue_add": {
+        "name": "Voss, Doodloos Mes"
+      },
       "reliquary_ledger_wraith": {
         "name": "Grootboek-Schim"
       },
@@ -5103,6 +8005,48 @@ export const nl_NL: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Acoliet Tessa"
+      },
+      "drowned_cantor": {
+        "name": "Verdronken Cantor"
+      },
+      "reedbound_acolyte": {
+        "name": "Rietgebonden Acoliet"
+      },
+      "deepfen_spearjaw": {
+        "name": "Diepveen-Speerkaak"
+      },
+      "mirefen_widowling": {
+        "name": "Slijkveen-Weduweling"
+      },
+      "spider_egg_sac": {
+        "name": "Spinnen-Eierzak"
+      },
+      "grave_silt_bulwark": {
+        "name": "Grafslib-Bolwerk"
+      },
+      "sump_troll_devourer": {
+        "name": "Zomptrol-Verslinder"
+      },
+      "choir_thrall": {
+        "name": "Moeras-Lijfeigene"
+      },
+      "sister_nhalia_drowned_canticle": {
+        "name": "Zuster Nhalia, de Verdronken Lofzang"
+      },
+      "edda_reedhand": {
+        "name": "Edda Reedhand"
+      },
+      "tolling_bell": {
+        "name": "Luidende Klok"
+      },
+      "vale_cup_ball": {
+        "name": "Zwijnenbal"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, de Ontwakende Piek"
+      },
+      "thunzharr_stormling": {
+        "name": "Gewekte Stormling"
       },
       "ironvein_foreman": {
         "name": "IJzerader-Voorman"
@@ -5134,14 +8078,14 @@ export const nl_NL: EnTranslations = {
       "varkas_boneguard": {
         "name": "Varkas-Botwacht"
       },
-      "imp": {
-        "name": "Duiveltje"
+      "emberkin": {
+        "name": "Emberkin"
       },
-      "voidwalker": {
-        "name": "Leegteloper"
+      "gloomshade": {
+        "name": "Gloomshade"
       },
-      "succubus": {
-        "name": "Succubus"
+      "duskborn": {
+        "name": "Duskborn"
       },
       "grix_the_tunnelking": {
         "name": "Grix de Tunnelkoning"
@@ -5164,17 +8108,17 @@ export const nl_NL: EnTranslations = {
       "wraithbinder_maldrec": {
         "name": "Schimbinder Maldrec"
       },
-      "felhunter": {
-        "name": "Feljager"
+      "spellhound": {
+        "name": "Spellhound"
       },
-      "felguard": {
-        "name": "Felwacht"
+      "warfiend": {
+        "name": "Warfiend"
       },
-      "infernal": {
-        "name": "Inferno"
+      "pyre_colossus": {
+        "name": "Pyre-Kolos"
       },
-      "doomguard": {
-        "name": "Doemwacht"
+      "wraithborn": {
+        "name": "Wraithborn"
       },
       "choirmother_selthe": {
         "name": "Koormoeder Selthe"
@@ -5247,12 +8191,12 @@ export const nl_NL: EnTranslations = {
       "fisherman_brandt": {
         "name": "Visser Brandt",
         "title": "Oude Zeebonk",
-        "greeting": "Grlmurlgrl- sorry, te lang naar die vismannen geluisterd."
+        "greeting": "Blrb-glub- sorry, te lang naar die vismannen geluisterd."
       },
       "foreman_odell": {
         "name": "Voorman Odell",
         "title": "Mijnvoorman",
-        "greeting": "De hele opgraving krioelt van dat kaarskoppige ongedierte!"
+        "greeting": "De hele opgraving krioelt van dat modderbesmeurde ongedierte!"
       },
       "warden_fenwick": {
         "name": "Wachter Fenwick",
@@ -5304,10 +8248,40 @@ export const nl_NL: EnTranslations = {
         "title": "Meester-Pantsersmid",
         "greeting": "De smidse is heet en de slijpsteen draait. Als het snijdt, verkoop ik het."
       },
+      "heroic_quartermaster": {
+        "name": "Kwartiermeester Vex",
+        "title": "Heroïsche Kwartiermeester",
+        "greeting": "Bewijs van de heroïsche diepten koopt de fijnste ringen en hangers in Hoogwacht. Laat me je merken zien."
+      },
+      "fury": {
+        "name": "WOEDE",
+        "title": "Erekwartiermeester",
+        "greeting": "Het zand herinnert zich elke overwinning. Besteed je eer goed."
+      },
       "loremaster_caddis": {
         "name": "Verhalenmeester Caddis",
         "title": "Verhalenmeester",
         "greeting": "Pas op voor de losse leisteen, {className}. De berg is... rusteloos geweest de laatste tijd. Ik ben van plan uit te zoeken waarom."
+      },
+      "auctioneer_voss": {
+        "name": "Veilingmeester Voss",
+        "title": "Hoeder van de Wereldmarkt",
+        "greeting": "De Wereldmarkt is hier ook geopend, {className}. Koop van elke avonturier in het rijk, of stal je eigen waren uit."
+      },
+      "bursar_fernando": {
+        "name": "Thesaurier Fernando",
+        "title": "De Vergulde Geldkist",
+        "greeting": "Welkom bij de Vergulde Geldkist. Je goederen rusten veilig achter onze sloten."
+      },
+      "bursar_petra_vell": {
+        "name": "Thesaurier Petra Vell",
+        "title": "De Vergulde Geldkist",
+        "greeting": "De Vergulde Geldkist houdt schone grootboeken en nog schonere kluizen. Wat zullen we voor je opbergen?"
+      },
+      "bursar_aldous_crane": {
+        "name": "Thesaurier Aldous Crane",
+        "title": "De Vergulde Geldkist",
+        "greeting": "Elke kist, koffer en snuisterij is veilig bij de Vergulde Geldkist."
       },
       "brother_aldric_raid": {
         "name": "Broeder Aldric",
@@ -5319,6 +8293,36 @@ export const nl_NL: EnTranslations = {
         "title": "Reliekbewaarder",
         "greeting": "Het reliekschrijn beneden is opnieuw verschoven."
       },
+      "brother_halven_marsh": {
+        "name": "Broeder Halven",
+        "title": "Reliekbewaarder",
+        "greeting": "Het spoor leidde noordwaarts. Weer een reliekschrijn, weer een ritueel. Kies je moeilijkheid, en ik houd het touw vast tot je terugkeert."
+      },
+      "spirit_healer": {
+        "name": "De Bleke Hoeder",
+        "title": "Wachter van de Doden",
+        "greeting": "Rust nu, geest. Ik kan je terugbrengen naar je lichaam, maar de overtocht terug laat je verzwakt achter."
+      },
+      "groundskeeper_bram": {
+        "name": "Terreinmeester Bram",
+        "title": "Hoeder van het Zeugveld",
+        "greeting": "Het bestand houdt stand op het Zeugveld, {className}: alleen trappen en schouders. Zin om te spelen voor de Koperen Emmer?"
+      },
+      "chronicler_saul": {
+        "name": "Saul de Kroniekschrijver",
+        "title": "De Dalkroniek",
+        "greeting": "Elke daad die het doen waard is, is het waard om twee keer te worden opgeschreven, {playerName}: één keer voor het grootboek en één keer voor bij het haardvuur."
+      },
+      "chronicler_osric_fenn": {
+        "name": "Kroniekschrijver Osric Fenn",
+        "title": "De Moeraskroniek",
+        "greeting": "Pas op voor het vocht op de bladzijden, {playerName}. Het veen verslindt meer boeken dan lezers ooit zullen doen."
+      },
+      "chronicler_edda_hartwell": {
+        "name": "Kroniekschrijver Zenzie",
+        "title": "De Toppenkroniek",
+        "greeting": "De berg vergeet niets, {playerName}, en ik evenmin. Laten we eens kijken wat je hebt gedaan."
+      },
       "tidewatcher_ondrel": {
         "name": "Ondrel Vane",
         "title": "Tijwachter",
@@ -5326,6 +8330,16 @@ export const nl_NL: EnTranslations = {
       }
     },
     "quests": {
+      "q_prof_intro": {
+        "title": "Een ambacht voor iedere hand",
+        "text": "Iedereen in Oostbeek beoefent naast het zwaard een ambacht, {playerName}. Er liggen ertsaders rond de stad, dus zwaai met een pikhouweel en breng me 5 brokken. Delf ze zelf, hoor; ik merk het verschil.",
+        "completion": "Zie je? Erts in je tas en eelt op je handen. Blijf mijnen, houthakken en kruiden plukken terwijl je over de wegen reist. Wanneer je terug in de stad bent, kijk dan naar het bord met de Stadsfocus bij de markt en de werkbank ernaast. Er valt met alles een eerlijke boterham te verdienen, als je dat wilt.",
+        "objectives": {
+          "0": {
+            "label": "Brok erts"
+          }
+        }
+      },
       "q_wolves": {
         "title": "Wolven voor de Deur",
         "text": "De boswolven worden brutaal en happen naar reizigers op de noordweg. Dun hun aantal uit, {playerName}. Dood 8 Boswolven en Oostbeek zal vrijer ademen.",
@@ -5347,7 +8361,7 @@ export const nl_NL: EnTranslations = {
         }
       },
       "q_boars": {
-        "title": "Borstelrug-Huiden",
+        "title": "Borstelige Everzwijnhuiden",
         "text": "Zwijnenhuid maakt de beste reistassen, en de weiden ten westen van de stad wemelen van de beesten. Breng me 5 Borstelige Zwijnenhuiden en ik zal het de moeite waard maken.",
         "completion": "Ah, mooie borstelige huiden! Die zullen een goede prijs opbrengen.",
         "objectives": {
@@ -5357,21 +8371,21 @@ export const nl_NL: EnTranslations = {
         }
       },
       "q_spiders": {
-        "title": "De Plaag van het Webwoud",
-        "text": "De loerders in de oostelijke bossen spinnen een zijde die ik nodig heb voor mijn kompressen - en ze zijn bovendien veel te talrijk geworden. Vel 6 Webwoud-Loerders en snijd 4 zijdeklieren uit hun buiken.",
+        "title": "De Sableweb-Plaag",
+        "text": "De loerders in de oostelijke bossen spinnen een zijde die ik nodig heb voor mijn kompressen, en ze zijn bovendien veel te talrijk geworden. Vel 6 Sableweb-Loerders en snijd 4 zijdeklieren uit hun buiken.",
         "completion": "Bah, beweegt nog. Perfect. Hier, dit heb je verdiend.",
         "objectives": {
           "0": {
-            "label": "Webwoud-Loerder gedood"
+            "label": "Sableweb-Loerder gedood"
           },
           "1": {
-            "label": "Webwoud-Zijdeklier"
+            "label": "Sableweb-Zijdeklier"
           }
         }
       },
       "q_murlocs": {
         "title": "Onrust bij het Meer",
-        "text": "Twintig jaar vis ik al in Mirror Lake, en nooit een net verloren tot die gorgelende vismannen uit de ondiepten kropen. Drijf de Mudfin terug - dood er 8. En kijk uit: waar één murloc is, zijn er vijf.",
+        "text": "Twintig jaar vis ik al in Mirror Lake, en nooit een net verloren tot die gorgelende vismannen uit de ondiepten kropen. Drijf de Mudfin terug, dood er 8. En kijk uit: waar één mudfin is, zijn er vijf.",
         "completion": "Hah! Dat leert ze om zich met hun eigen modderpoelen te bemoeien.",
         "objectives": {
           "0": {
@@ -5381,11 +8395,11 @@ export const nl_NL: EnTranslations = {
       },
       "q_mine": {
         "title": "Ratten in de Mijn",
-        "text": "We stootten op een mooie koperader en toen kwamen die koboldongedierten uit de heuvelflank golven. Mijn ploeg zet geen voet in de groeve tot die ontruimd is. Leg 10 Tunnelrat-Gravers neer.",
+        "text": "We stootten op een mooie koperader en toen kwam dat gravende ongedierte uit de heuvelflank golven. Mijn ploeg zet geen voet in de groeve tot die ontruimd is. Leg 10 Dieprots-Gravers neer.",
         "completion": "Ha! Terug aan het werk, mannen! Je hebt mijn dank, en mijn goud.",
         "objectives": {
           "0": {
-            "label": "Tunnelrat-Graver gedood"
+            "label": "Dieprots-Graver gedood"
           }
         }
       },
@@ -5441,7 +8455,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_rite": {
         "title": "Het Bindende Ritueel",
-        "text": "De crypte onder de kapel moet ontzegeld worden als we de Grafroeper willen stoppen - maar alleen een bindend ritueel laat de levenden passeren. Ik heb 4 brokken Gezegende Talk nodig - de kobold-gravers hamsteren kaarsen per krat - en 6 Spookachtige Essenties van de rusteloze doden.",
+        "text": "De crypte onder de kapel moet ontzegeld worden als we de Gravecaller willen stoppen, maar alleen een bindend ritueel laat de levenden passeren. Ik heb 4 brokken Gezegende Talg nodig, de gravers van de mijn hamsteren talg per krat, en 6 Spookachtige Essenties van de rusteloze doden.",
         "completion": "Het is gedaan. De weg naar beneden staat open... en moge het Licht me vergeven dat ik hem opende. Verzamel je sterkste metgezellen voordat je afdaalt, {playerName}. Niemand zou de Holle alleen moeten trotseren.",
         "objectives": {
           "0": {
@@ -5475,7 +8489,7 @@ export const nl_NL: EnTranslations = {
       "q_gravecallers_trail": {
         "title": "Het Spoor van de Grafroeper",
         "text": "Morthen is dood, toch knaagt een vraag aan me: een sekte die zich een eeuw lang verborg, verspilt zich niet aan één dorpskapel. Hij hield een grimoire bij, zijn riten, zijn briefwisseling. Als er iets van overleeft, ligt het in de sacristie van de geruïneerde kapel boven de crypte. Doorzoek de ruïne en breng me wat er ook van zijn geschriften over is, {playerName}.",
-        "completion": "Morthen schreef aan een 'Mistroeper' in het noordelijke veen. De sekte is niet dood, {playerName}, ze is slechts geduldig geweest.",
+        "completion": "Morthen schreef aan een 'Fogbinder' in het noordelijke veen. De sekte is niet dood, {playerName}, ze is slechts geduldig geweest.",
         "objectives": {
           "0": {
             "label": "Morthens Grimoire"
@@ -5504,7 +8518,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_fenbridge_muster": {
         "title": "Oproep bij Fenbridge",
-        "text": "Morthens geschriften noemden een meester in het noordelijke moeras, een 'Mistroeper.' Nu heeft Wachter Fenwick de oproephoorn geblazen bij Fenbridge, en ik geloof niet in toeval, {playerName}. Neem de dijk naar het noorden, trek het oproepbevel van de poortpaal, en overhandig het aan de Wachter.",
+        "text": "Morthens geschriften noemden een meester in het noordelijke moeras, een 'Fogbinder.' Nu heeft Wachter Fenwick de oproephoorn geblazen bij Fenbridge, en ik geloof niet in toeval, {playerName}. Neem de dijk naar het noorden, trek het oproepbevel van de poortpaal, en overhandig het aan de Wachter.",
         "completion": "Aldrics zegel, is het? Dan zul je voldoen. Het veen heeft mijn patrouilles met huid en haar verzwolgen, en ik heb elke kling nodig die drijft.",
         "objectives": {
           "0": {
@@ -5544,7 +8558,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_deepfen": {
         "title": "Het Diepveen Roert Zich",
-        "text": "De Diepveen-murlocs hielden zich twintig jaar lang aan hun ondiepten. Nu zwermen ze over de oostoever als vliegen op een kadaver, en mijn wachters zeggen dat ze dingen van de meerbodem omhoog slepen. Wat hen ook heeft opgejut, ik wil het gestopt zien. Vel 12 van de bijters.",
+        "text": "De Diepveen-mudfins hielden zich twintig jaar lang aan hun ondiepten. Nu zwermen ze over de oostoever als vliegen op een kadaver, en mijn wachters zeggen dat ze dingen van de meerbodem omhoog slepen. Wat hen ook heeft opgejut, ik wil het gestopt zien. Vel 12 van de bijters.",
         "completion": "Dat zal hen een tijdje terug de modder in drijven. Maar iets heeft hen aan het graven gezet, en ik ben van plan te achterhalen wat.",
         "objectives": {
           "0": {
@@ -5574,7 +8588,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_deepfen_purge": {
         "title": "Terug naar de Ondiepten",
-        "text": "Aldric zegt dat die afgodsbeelden van sektenmakelij zijn, wat betekent dat de murlocs het oude kwaad van het moeras armvol voor armvol omhoog hijsen. Ik wil niet dat het op mijn dijk aanspoelt. Ga terug naar de ondiepten en breek het opdreggen voorgoed: 14 verdere bijters.",
+        "text": "Aldric zegt dat die afgodsbeelden van sektenmakelij zijn, wat betekent dat de mudfins het oude kwaad van het moeras armvol voor armvol omhoog hijsen. Ik wil niet dat het op mijn dijk aanspoelt. Ga terug naar de ondiepten en breek het opdreggen voorgoed: 14 verdere bijters.",
         "completion": "Meedogenloos en grondig. Mocht dit moeras ooit opdrogen, dan wacht er wachterswerk op je.",
         "objectives": {
           "0": {
@@ -5681,7 +8695,7 @@ export const nl_NL: EnTranslations = {
       "q_summoners": {
         "title": "Het Oproepen Stoppen",
         "text": "Marens rapporten noemen oproepers onder de sektariërs - stemmen die de verdronkenen uit het water opwekken als honden naar een fluit. Hun cijferschriften zullen de bevelketen uitspellen. Breng 8 oproepers tot zwijgen en breng me 4 van hun cijferschriften.",
-        "completion": "Elk cijferschrift is medeondertekend met 'Diaken Voss' - en doorgeadresseerd aan een 'Mistroeper' in het Bastion. Morthens meester, {playerName}. We hebben hem gevonden.",
+        "completion": "Elk cijferschrift is medeondertekend met 'Diaken Voss', en doorgeadresseerd aan een 'Fogbinder' in het Bastion. Morthens meester, {playerName}. We hebben hem gevonden.",
         "objectives": {
           "0": {
             "label": "Grafroeper-Oproeper gedood"
@@ -5703,7 +8717,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_bastion_door": {
         "title": "Het Verzonken Bastion",
-        "text": "Het Verzonken Bastion, een ridderveste die een eeuw geleden in het veen verdronk, is waar Voss' brieven naar wijzen, en waar deze Mistroeper zijn verdrinkingshymnen zingt. De sekte heeft de deur bezworen met grafstenen. Breng me een van de banstenen, {playerName}, en ik zal het zegel ontwarren.",
+        "text": "Het Verzonken Bastion, een ridderveste die een eeuw geleden in het veen verdronk, is waar Voss' brieven naar wijzen, en waar deze Fogbinder zijn verdrinkingshymnen zingt. De sekte heeft de deur bezworen met grafstenen. Breng me een van de banstenen, {playerName}, en ik zal het zegel ontwarren.",
         "completion": "De banbezwering wijkt als verrot touw. De deur staat open... en de duisternis eronder luistert.",
         "objectives": {
           "0": {
@@ -5713,7 +8727,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_olen": {
         "title": "De Schande van de Ridder-Commandant",
-        "text": "Ridder-Commandant Olen hield het Bastion toen het zonk - verdronk op zijn post in plaats van het te verlaten. Elke wachter leert zijn naam met trots. Nu heeft de Mistroeper hem als marionet opgewekt om juist de deur te bewaken die hij stervend verdedigde. Die schande eindigt, {playerName}. Neem vier metgezellen mee naar beneden en schenk Olen de rust die hij verdiende.",
+        "text": "Ridder-Commandant Olen hield het Bastion toen het zonk, verdronk op zijn post in plaats van het te verlaten. Elke wachter leert zijn naam met trots. Nu heeft de Fogbinder hem als marionet opgewekt om juist de deur te bewaken die hij stervend verdedigde. Die schande eindigt, {playerName}. Neem vier metgezellen mee naar beneden en schenk Olen de rust die hij verdiende.",
         "completion": "Dan is zijn wacht eindelijk voorbij. Ik zal zijn naam zelf in de poort laten kerven. Dank je, {playerName}.",
         "objectives": {
           "0": {
@@ -5722,12 +8736,12 @@ export const nl_NL: EnTranslations = {
         }
       },
       "q_mistcaller": {
-        "title": "De Mistroeper",
-        "text": "Onderaan het Bastion wacht Vael de Mistroeper - Morthens meester, Voss' meester, de stem die honderd reizigers heeft verdronken om zichzelf een leger te lichten. Hij gaat elke held in zijn eentje ver te boven: neem vier metgezellen, niet minder. Maak een eind aan hem, {playerName}, en de doden van het veen kunnen eindelijk stil liggen.",
+        "title": "De Fogbinder",
+        "text": "Onderaan het Bastion wacht Vael de Fogbinder, Morthens meester, Voss' meester, de stem die honderd reizigers heeft verdronken om zichzelf een leger te lichten. Hij gaat elke held in zijn eentje ver te boven: neem vier metgezellen, niet minder. Maak een eind aan hem, {playerName}, en de doden van het veen kunnen eindelijk stil liggen.",
         "completion": "Vael is dood, en de mist trekt op voor het eerst in jaren. Maar Maren hoorde zijn laatste woorden, en ze doen mijn bloed stollen: 'De Wurm roert zich onder de toppen.' De sekte dient iets dat ouder is dan we ooit vermoedden, {playerName}. Rust zolang het kan - de bergen zijn de volgende.",
         "objectives": {
           "0": {
-            "label": "Vael de Mistroeper gedood"
+            "label": "Vael de Fogbinder gedood"
           }
         }
       },
@@ -5761,10 +8775,40 @@ export const nl_NL: EnTranslations = {
           }
         }
       },
+      "q_stalkers_return": {
+        "title": "De Sluipers Keren Terug",
+        "text": "Twaalf dood, en de bergkam krioelt dichter dan op de dag dat je begon, {playerName}. Beesten werpen zich niet uit honger tegen een muur. Iets op de hoge bergkam drijft ze omlaag, en tot ik weet wat, stopt het uitdunnen niet. Nog veertien.",
+        "completion": "Nog veertien, en toch tellen mijn patrouilles tegen de ochtend verse sporen. Mijn verkenner kwam zo wit als de sneeuwgrens terug van de hoge bergkam: afdrukken zo groot als een schild, zegt ze, en oude prooiresten die geen sluiper zou achterlaten. Wat daar boven rondloopt, is geen gewone kat.",
+        "objectives": {
+          "0": {
+            "label": "Bergkam-Sluiper gedood"
+          }
+        }
+      },
+      "q_stalker_cloaks": {
+        "title": "Mantels voor de Wacht",
+        "text": "Acht pelzen voerden de mantels van de officieren, en nu wil elke soldaat op de muur hetzelfde, {playerName}. Ze willen het terecht: de winter neemt eerst vingers en aanvaardt nooit excuses. Nog tien pelzen van de bergkammen ten zuiden van de poort, en de hele wacht slaapt warm.",
+        "completion": "Tien goede pelzen, zo dik als ik er ooit... nee, kijk hier eens naar, {playerName}. De helft gescheurd, en niet door kling of speer. Klauwsporen zo breed als mijn hand, dwars door de wintervacht. Iets op die bergkam verscheurt zijn eigen soort.",
+        "objectives": {
+          "0": {
+            "label": "Bergkam-Sluiperpels"
+          }
+        }
+      },
+      "q_old_cragmaw": {
+        "title": "Oude Cragmaw",
+        "text": "Het bergvolk gaf een naam aan de afdrukken die mijn verkenner vond: Oude Cragmaw, een tiran van een kat met een littekenvacht, die drie generaties van zijn eigen roedel heeft overleefd. Hij is de reden dat de sluipers mijn weg overspoelen, {playerName}. Zijn leger ligt op de westelijke bergkam boven de zuidelijke weg. Neem een vriend mee en leg de oude duivel om.",
+        "completion": "Eindelijk geveld. Het bergvolk zwoer dat die kat de muur zelf zou overleven. De sluipers houden zich nu bij hun hoge sneeuw, {playerName}, en mijn patrouilles lopen de weg zonder ervoor te bloeden. De hele bergkam is stiller door jouw werk.",
+        "objectives": {
+          "0": {
+            "label": "Oude Cragmaw gedood"
+          }
+        }
+      },
       "q_kobold_tunnels": {
         "title": "Dieprots-Ellende",
-        "text": "De kobolds bij de Dieprots-Holen graven dieper dan enige kaarsrat te graven heeft, recht naar beneden, alsof iets hen roept. Hun tunnels lopen onder onze muur door, {playerName}. Stop de zaak: dood twaalf Dieprots-Tunnelaars.",
-        "completion": "Recht naar beneden, elke schacht ervan, kobolds graven zo niet uit zichzelf. Ik moet mijn boeken raadplegen.",
+        "text": "De tunnelgravers bij de Dieprots-Holen graven dieper dan enige putrat te graven heeft, recht naar beneden, alsof iets hen roept. Hun tunnels lopen onder onze muur door, {playerName}. Stop de zaak: dood twaalf Dieprots-Tunnelaars.",
+        "completion": "Recht naar beneden, elke schacht ervan, gravers graven zo niet uit zichzelf. Ik moet mijn boeken raadplegen.",
         "objectives": {
           "0": {
             "label": "Dieprots-Tunnelaar gedood"
@@ -5773,7 +8817,7 @@ export const nl_NL: EnTranslations = {
       },
       "q_glowing_wax": {
         "title": "Vreemde Was",
-        "text": "Caddis liet me een kaars zien die van een van die tunnelgravers was afgenomen, de was gloeit, {playerName}, en is warm als een hartslag. Hij wil er meer voor onderzoek, en ik wil het van mijn vorderingslijst af. Breng zes klompen van de gloeiende was terug.",
+        "text": "Caddis liet me een klomp was zien die van een van die tunnelgravers was afgenomen, hij gloeit, {playerName}, en is warm als een hartslag. Hij wil er meer voor onderzoek, en ik wil het van mijn vorderingslijst af. Breng zes klompen van de gloeiende was terug.",
         "completion": "Nog warm. De Meesterkundige zegt dat de gloed met geen vlam overeenkomt die hij kent. Ik zeg dat het bergellende is, en dat zeg ik vriendelijk.",
         "objectives": {
           "0": {
@@ -6078,6 +9122,26 @@ export const nl_NL: EnTranslations = {
           }
         }
       },
+      "q_archetype_acceptance": {
+        "title": "Een ambacht dat u het uwe kunt noemen",
+        "text": "Elke ambachtsman van Eastbrook kiest uiteindelijk voor één ambacht dat hij zijn eigen ambacht noemt. Bewijs jezelf met één enkele daad, {playerName}, en geef je pad aan.",
+        "completion": "Jouw pad is gekozen; loop er goed mee.",
+        "objectives": {
+          "0": {
+            "label": "Boswolf gedood"
+          }
+        }
+      },
+      "q_prof_make_amends": {
+        "title": "Het goedmaken",
+        "text": "Om het ene vaartuig voor het andere opzij te zetten, moet een ambachtsman eerst het niet bewandelde pad goedmaken, {playerName}.",
+        "completion": "Wijzigingen aangebracht; er ligt een nieuw pad voor je open.",
+        "objectives": {
+          "0": {
+            "label": "Boswolf gedood"
+          }
+        }
+      },
       "q_drowned_choir": {
         "title": "Het Verdronken Koor",
         "text": "De waders handelen niet alleen. Tussen hen lopen de Verdronken Aanbidders, de sekte die met de tempel zonk, nog in hun verrotte gewaden, nog steeds het gebed zingend vanaf de oeverrotsen. Breng er acht tot zwijgen, en breng me zes van de offergaven die ze dragen. Ik wil weten wat ze hun godin willen geven.",
@@ -6160,7 +9224,7 @@ export const nl_NL: EnTranslations = {
             "label": "Spiegelmeer"
           },
           "4": {
-            "label": "Webwoud"
+            "label": "Sableweb"
           },
           "5": {
             "label": "Kopergroeve"
@@ -6176,6 +9240,9 @@ export const nl_NL: EnTranslations = {
           },
           "9": {
             "label": "Lichtwoudgaarde"
+          },
+          "10": {
+            "label": "Het Zeugveld"
           }
         }
       },
@@ -6283,6 +9350,89 @@ export const nl_NL: EnTranslations = {
         "name": "Het Ingestorte Reliekschrijn",
         "enterText": "Je daalt af in het ingestorte reliekschrijn.",
         "leaveText": "Je klimt terug omhoog naar Broeder Halven bij de reliekschrijnruïne."
+      },
+      "drowned_litany": {
+        "name": "De Verdronken Litanie",
+        "enterText": "Je daalt af in het verdronken heiligdom aan de rand van het moeras.",
+        "leaveText": "Je klimt terug omhoog naar Broeder Halven aan de rand van het moeras."
+      }
+    },
+    "letters": {
+      "ravenpost_welcome": {
+        "sender": "De Ravenpost",
+        "subject": "De raven vliegen nu voor jou",
+        "body": "Reiziger,\n\nde Ravenpost heeft haar roestplaatsen door de hele vallei geopend. Zoek de ravenzuilen in Eastbrook, Fenbridge en Highwatch: vanaf elke zuil kun je brieven, munten en goederen naar andere avonturiers sturen en ophalen wat de raven je brengen.\n\nBijgesloten een kleine attentie voor je eerste postzegel.\n\nVleugels omhoog,\nDe Ravenpost"
+      },
+      "letter_q_wolves": {
+        "sender": "Maarschalk Redbrook",
+        "subject": "De kralen zijn weer rustig",
+        "body": "De herders kunnen eindelijk weer met beide ogen dicht slapen, en dat is jouw verdienste. Ik heb de Ravenpost gevraagd je een kleinigheid uit de wachtkas te bezorgen.\n\nHoud je kling geolied.\n- Maarschalk Redbrook"
+      },
+      "letter_q_greyjaw": {
+        "sender": "Maarschalk Redbrook",
+        "subject": "Oude Grauwkaak, eindelijk",
+        "body": "Nieuws reist snel in zo’n klein stadje. De herders dronken gisteravond op je gezondheid, en Wilkes zweert dat de wolf zo groot was als een kar. Laat ze maar aandikken: je hebt het verdiend.\n\nEet een maaltijd op kosten van de wacht.\n- Maarschalk Redbrook"
+      },
+      "letter_q_hollow": {
+        "sender": "Broeder Aldric",
+        "subject": "Wat je in het donker hebt gedaan",
+        "body": "Weinigen zullen ooit weten wat er in die kom begraven lag, en nog minder zouden het geloven. Ik weet het, en ik zal het niet vergeten.\n\nMoge je pad verlicht blijven.\n- Broeder Aldric"
+      }
+    },
+    "itemSets": {
+      "boundstone_vanguard": {
+        "name": "Bandsteen-voorhoede",
+        "bonus3": "Verhoogt aanvals- en spreuksnelheid met 15%."
+      },
+      "crownforged": {
+        "name": "Bonewrought-Regalia",
+        "bonus2": "Verhoogt aanvalskracht met 40.",
+        "bonus3": "Verhoogt kracht met 15, uithoudingsvermogen met 15 en aanvals- en spreuksnelheid met 15%.",
+        "bonus4": "Je kritieke wapentreffers splinteren het doelwit met Beensplinter, waardoor het 8 schade bloedt elke 2 sec gedurende 12 sec. Stapelt tot 3 keer."
+      },
+      "deathlord": {
+        "name": "Barrowlord-Strijduitrusting",
+        "bonus2": "Verhoogt aanvalskracht met 40.",
+        "bonus3": "Verhoogt kracht met 15 en uithoudingsvermogen met 15.",
+        "bonus4": "Je kritieke wapentreffers hebben 50% kans om Grafmacht te verlenen, waardoor je aanvalskracht met 60 toeneemt gedurende 10 sec."
+      },
+      "greyjaw_stalker": {
+        "name": "Uitrusting van de Grijskaak-sluiper",
+        "bonus3": "Verhoogt aanvals- en spreuksnelheid met 15%."
+      },
+      "necromancers": {
+        "name": "Mournweave-Gewaden",
+        "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
+        "bonus3": "Verhoogt intellect met 10 en uithoudingsvermogen met 10.",
+        "bonus4": "Je spreuken hebben 10% kans om Helder Bezweren te verlenen, waardoor je volgende spreuk gratis is."
+      },
+      "nighttalon": {
+        "name": "Direfang-Pels",
+        "bonus2": "Verhoogt aanvalskracht met 40.",
+        "bonus3": "Verhoogt behendigheid met 15, kritieke kans met 2% en aanvals- en spreuksnelheid met 15%.",
+        "bonus4": "Je kritieke wapentreffers rijten een Rafelige Snee, waardoor het doelwit 6 schade bloedt elke 2 sec gedurende 12 sec. Stapelt tot 3 keer."
+      },
+      "soulflame": {
+        "name": "Wraithfire-Regalia",
+        "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
+        "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%.",
+        "bonus4": "Je spreuken hebben 10% kans om Zielevlam te verlenen, waardoor je spreukkracht met 40 toeneemt gedurende 10 sec."
+      },
+      "stormcallers": {
+        "name": "Galecall-Gewaden",
+        "bonus2": "Je kunt niet worden teruggeslagen (100% terugslagweerstand).",
+        "bonus3": "Verhoogt intellect met 15, geest met 15 en aanvals- en spreuksnelheid met 15%.",
+        "bonus4": "Je spreuken hebben 10% kans om Zielevlam te verlenen, waardoor je spreukkracht met 40 toeneemt gedurende 10 sec."
+      },
+      "vale_arcanist": {
+        "name": "Gewaden van de Dal-arcanist",
+        "bonus3": "Verhoogt aanvals- en spreuksnelheid met 15%."
+      },
+      "wyrmshadow": {
+        "name": "Nightfang-Gewaden",
+        "bonus2": "Verhoogt aanvalskracht met 40.",
+        "bonus3": "Verhoogt behendigheid met 15 en kritieke kans met 2%.",
+        "bonus4": "Je kritieke wapentreffers hebben 50% kans om Slagtandstorm te verlenen, waardoor je aanvalssnelheid met 25% toeneemt gedurende 8 sec."
       }
     }
   },
@@ -6293,6 +9443,12 @@ export const nl_NL: EnTranslations = {
     "dungeonInstanceBusy": "Alle instanties van {name} zijn bezet. Probeer het zo weer.",
     "delveLockedChestInteract": "Druk op F om het slot te kraken",
     "delveRewardChestInteract": "Druk op F om de buit op te eisen",
-    "delveSurfaceExitInteract": "Druk op F om te klimmen"
+    "delveSurfaceExitInteract": "Druk op F om te klimmen",
+    "delveReliquaryInteract": "Verdronken Reliekschrijn: druk op F om het ritueel te beginnen",
+    "delveRiteShrineBellInteract": "Klokkenschrijn: druk op F om de klok te luiden",
+    "delveRiteShrineCandleInteract": "Kaarsenschrijn: druk op F om het aan te raken",
+    "delveRiteShrineReedInteract": "Rietschrijn: druk op F om het aan te raken",
+    "delveRiteShrineSkullInteract": "Schedelschrijn: druk op F om het aan te raken",
+    "mailboxName": "Brievenbus"
   }
 };

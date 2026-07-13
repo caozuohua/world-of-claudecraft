@@ -5,7 +5,12 @@ node_modules
 dist/
 dist-env/
 dist-server/
+release/
+release-steam/
+# generated main-process runtime bundles (scripts/electron-vendor.mjs)
+electron/vendor/
 media-cache/
+sfx-runtime/
 
 # i18n per-locale emit crash leftovers (the build sweeps these; never commit one)
 src/ui/i18n.resolved.generated/*.tmp
@@ -22,8 +27,19 @@ private/*
 
 # test artifacts & screenshots
 tmp/
+# PR-assist screenshot tour output + its CI-only ephemerals
+pr-shots/
+pr.diff
+.devpid
 .codex-research/
-.codex/
+# Codex local state stays ignored; shared project configuration and agents are tracked.
+.codex/*
+!.codex/config.toml
+!.codex/hooks.json
+!.codex/agents/
+!.codex/agents/*.toml
+!.codex/hooks/
+!.codex/hooks/*.sh
 .playwright-mcp/
 # Vitest Browser Mode failure screenshots + attachments (opt-in test:browser suite)
 tests/browser/__screenshots__/
@@ -43,6 +59,7 @@ __pycache__/
 .env
 .env.*
 !.env.example
+AuthKey_*.p8
 # Meshy asset-gen tooling embeds an API key, never commit it
 scripts/generate_treasure_chest.mjs
 
@@ -68,3 +85,26 @@ postgres/
 pr-assets-2fa
 
 .vite/
+
+# Discord app credentials + bot token, never commit it
+discord_bot_info.txt
+
+# bot build output
+dist-bot/
+
+# Local multibox / farming automation + session logs (never part of the game repo)
+/logs/
+/memory/
+/multibox.tokens.json
+/scripts/multibox*
+/scripts/agent/
+/scripts/companion.*
+/scripts/browser_auth.mjs
+/scripts/token_sink.mjs
+/scripts/_farm_supervisor.sh
+/scripts/_multibox_backup/
+/scripts/MULTIBOX.md
+/scripts/hunter_agent*.mjs
+/scripts/hunter_agents.sh
+/scripts/gravewyrm_trio.mjs
+/TESTING-TALENTS-2-0.md

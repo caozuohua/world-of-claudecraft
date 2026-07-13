@@ -10,6 +10,7 @@ import type {
   DelveDef,
   DelveModuleDef,
   DungeonDef,
+  GatherNodeDef,
   GroundObjectDef,
   ItemDef,
   MobTemplate,
@@ -17,6 +18,7 @@ import type {
   PlayerClass,
   QuestDef,
   QuestState,
+  WorldContent,
   ZoneDef,
   ZonePropsDef,
 } from './types';
@@ -26,12 +28,27 @@ export { FISHING_RARE_ID, FISHING_TABLES };
 
 import {
   BROTHER_HALVEN,
+  BROTHER_HALVEN_MARSH,
   COLLAPSED_RELIQUARY_DELVE,
   COLLAPSED_RELIQUARY_MODULES,
   DELVE_MOBS,
+  DROWNED_LITANY_DELVE,
+  DROWNED_LITANY_MODULES,
 } from './content/delves';
 import { DUNGEON_DEFS, DUNGEON_MOBS } from './content/dungeons';
+import { GATHER_NODES as GATHER_NODES_CONTENT } from './content/gather_nodes';
+import {
+  type GraveyardDef,
+  OVERWORLD_GRAVEYARDS,
+  SPIRIT_HEALER,
+  SPIRIT_HEALER_NPC_ID,
+} from './content/graveyards';
 import { GROUND_PICKUP_LINES } from './content/ground_pickup_lines';
+import {
+  ALL_RECIPES as ALL_RECIPES_CONTENT,
+  COMMON_RECIPES as COMMON_RECIPES_CONTENT,
+  TOOL_RECIPES as TOOL_RECIPES_CONTENT,
+} from './content/recipes';
 import {
   TEMPLE_CAMPS,
   TEMPLE_DUNGEON_DEFS,
@@ -44,7 +61,9 @@ import {
   TEMPLE_QUEST_ORDER,
   TEMPLE_QUESTS,
 } from './content/temple';
+import { VALE_CUP_BALL_MOB, VALE_CUP_BALL_TEMPLATE_ID } from './content/vale_cup';
 import { WARLOCK_PET_MOBS } from './content/warlock_pets';
+import { YUMI_MOBS } from './content/yumi';
 import {
   GRAVEYARD_POS,
   LAKE,
@@ -86,6 +105,7 @@ import {
   ZONE3_ZONE,
 } from './content/zone3';
 import { DUNGEON_WALL_HW } from './dungeon_layout';
+import { JAIL_BLOCKERS, JAIL_TERRAIN_EDITS } from './jail';
 
 export type { DelveShopEntry, DelveShopGate, DelveShopOffer } from './content/delves';
 // Delve affix/companion catalogs are consumed by the Sim delve engine; re-export
@@ -100,6 +120,10 @@ export {
 } from './content/delves';
 
 import { DELVE_ITEMS } from './content/delves/items';
+import { HEROIC_ITEMS } from './content/heroic_loot';
+import { buildHeroicVariants } from './content/heroic_variants';
+import { HEROIC_VENDOR_ITEMS } from './content/heroic_vendor';
+import { FURY_NPC, WARFARE_ITEMS } from './content/pvp_honor';
 import { DELVE_MODULE_LAYOUTS, type DelveModuleId, delveModuleSpan } from './delve_layout';
 
 function mergeItems(...parts: Record<string, ItemDef>[]): Record<string, ItemDef> {
@@ -114,6 +138,7 @@ function mergeItems(...parts: Record<string, ItemDef>[]): Record<string, ItemDef
 
 export type { ClassDef } from './content/classes';
 export { ABILITIES, abilitiesKnownAt, CLASSES } from './content/classes';
+export { GATHER_NODE_TYPES } from './content/gather_nodes';
 // Re-export content shapes so existing `from './data'` imports keep working.
 export type {
   BiomeId,
@@ -121,6 +146,8 @@ export type {
   DelveDef,
   DungeonDef,
   DungeonSpawn,
+  GatherNodeDef,
+  GatherNodeType,
   GroundObjectDef,
   NpcDef,
   ZoneDef,
@@ -137,7 +164,13 @@ export const ITEMS: Record<string, ItemDef> = mergeItems(
   ZONE3_ITEMS,
   TEMPLE_ITEMS,
   DELVE_ITEMS,
+  HEROIC_VENDOR_ITEMS,
+  HEROIC_ITEMS,
+  WARFARE_ITEMS,
 );
+
+export type { AggregatedSetEffect } from './content/item_sets';
+export { aggregateSetBonuses, ITEM_SETS } from './content/item_sets';
 
 export const MOBS: Record<string, MobTemplate> = {
   ...ZONE1_MOBS,
@@ -148,15 +181,34 @@ export const MOBS: Record<string, MobTemplate> = {
   ...TEMPLE_MOBS,
   ...TEMPLE_DUNGEON_MOBS,
   ...DELVE_MOBS,
+  ...YUMI_MOBS,
+  // The Vale Cup boarball: an inert, non-hostile ball entity (never camp-spawned;
+  // the match driver in social/vale_cup.ts spawns and despawns it).
+  [VALE_CUP_BALL_TEMPLATE_ID]: VALE_CUP_BALL_MOB,
 };
+
+// Heroic upgraded drop variants: generated from the base item + mob loot tables and
+// merged into ITEMS in place, so a "Heroic X" copy is a first-class item everywhere.
+// Must run after both ITEMS and MOBS are assembled (it reads their loot tables).
+Object.assign(ITEMS, buildHeroicVariants(ITEMS, MOBS));
 
 export const NPCS: Record<string, NpcDef> = {
   ...ZONE1_NPCS,
   ...ZONE2_NPCS,
   ...ZONE3_NPCS,
   ...TEMPLE_NPCS,
+  [FURY_NPC.id]: FURY_NPC,
   brother_halven: BROTHER_HALVEN,
+  brother_halven_marsh: BROTHER_HALVEN_MARSH,
+  // The Spirit Healer template (dynamic: true, so the ctor's surface-placement
+  // loop skips it). Kept in NPCS so the online client and world_entity_i18n can
+  // resolve its name; spirit.ts spawns a copy at every graveyard.
+  [SPIRIT_HEALER_NPC_ID]: SPIRIT_HEALER,
 };
+
+// Graveyards + the Spirit Healer: re-exported so the Sim and spirit.ts import the
+// whole death-loop data surface from this one merge module.
+export { type GraveyardDef, OVERWORLD_GRAVEYARDS, SPIRIT_HEALER, SPIRIT_HEALER_NPC_ID };
 
 export const QUESTS: Record<string, QuestDef> = {
   ...ZONE1_QUESTS,
@@ -171,6 +223,13 @@ export const QUEST_ORDER: string[] = [
   ...ZONE3_QUEST_ORDER,
   ...TEMPLE_QUEST_ORDER,
 ];
+
+// The Book of Deeds catalog (content/deeds.ts) is deliberately NOT re-exported
+// here: this merge module sits on the guide entry's static import graph (via
+// icons.ts and the entity localizers), and a re-export would color the deeds
+// table, hidden deeds included, into a chunk the public wiki serves (guarded
+// by tests/guide.test.ts). Consumers import DEEDS/DEED_ORDER directly from
+// './content/deeds'.
 
 // Camps spawn in array order, each drawing world-gen RNG, so an entry inserted
 // before others shifts their spawn positions. New rare-elite camps
@@ -191,6 +250,15 @@ export const GROUND_OBJECTS: GroundObjectDef[] = [
   ...ZONE3_OBJECTS,
   ...TEMPLE_OBJECTS,
 ];
+
+export const GATHER_NODES: GatherNodeDef[] = [...GATHER_NODES_CONTENT];
+
+export const COMMON_RECIPES = [...COMMON_RECIPES_CONTENT, ...TOOL_RECIPES_CONTENT];
+
+// Every recipe, common and combo alike (#1132 review): the recipeList read
+// surface below lists this, not just COMMON_RECIPES, so a combo recipe is
+// reachable in normal play.
+export const ALL_RECIPES = [...ALL_RECIPES_CONTENT];
 
 export const ROADS: { x: number; z: number }[][] = [...ZONE1_ROADS, ...ZONE2_ROADS, ...ZONE3_ROADS];
 
@@ -245,7 +313,7 @@ export function questRewardItem(quest: QuestDef, cls: PlayerClass): string | und
 
 export const questRewardItemId = questRewardItem;
 
-// Vanilla group XP multipliers by party size (1-5).
+// Classic-era group XP multipliers by party size (1-5).
 export const GROUP_XP_BONUS = [1, 1, 1.166, 1.3, 1.43];
 
 // ---------------------------------------------------------------------------
@@ -264,6 +332,46 @@ export const WORLD_MIN_Z = ZONES[0].zMin;
 export const WORLD_MAX_Z = ZONES[ZONES.length - 1].zMax;
 
 export const PLAYER_START = { x: 2, z: -2 };
+
+// ---------------------------------------------------------------------------
+// Active world content registry.
+//
+// The terrain function (src/sim/world.ts) and the Sim spawn loop derive the
+// playable world from the spatial data below. To support custom maps (the editor)
+// without forking the engine, that data is reachable through a swappable bundle.
+// The DEFAULT bundle wraps the exact same arrays the built-in game has always
+// used, so with no custom map loaded everything is byte-identical.
+//
+// The editor's offline play-test calls setActiveWorldContent(map) before building
+// the Sim+renderer; the default game never touches it.
+// ---------------------------------------------------------------------------
+
+export const BUILTIN_WORLD: WorldContent = {
+  zones: ZONES,
+  camps: CAMPS,
+  npcs: NPCS,
+  groundObjects: GROUND_OBJECTS,
+  roads: ROADS,
+  props: PROPS,
+  playerStart: PLAYER_START,
+  blockers: JAIL_BLOCKERS,
+  terrainEdits: JAIL_TERRAIN_EDITS,
+};
+
+let activeWorld: WorldContent = BUILTIN_WORLD;
+
+// The world content the terrain function and renderer should sample. Defaults to
+// the built-in 3-zone world; the editor swaps it for a custom map during play-test.
+export function getActiveWorldContent(): WorldContent {
+  return activeWorld;
+}
+
+// Swap in a custom world (editor play-test) or restore the built-in (pass nothing).
+// Affects terrain (world.ts), props (render/props.ts), and any consumer that reads
+// through getActiveWorldContent. Spawns come from SimConfig.world too (sim.ts ctor).
+export function setActiveWorldContent(world: WorldContent | null): void {
+  activeWorld = world ?? BUILTIN_WORLD;
+}
 
 // Zone containing a world position (overworld only; clamps to the strip ends).
 export function zoneAt(z: number): ZoneDef {
@@ -292,7 +400,11 @@ export const ZONE_NAME = ZONE1_ZONE.name;
 // slots stack along z.
 // ---------------------------------------------------------------------------
 
-export const INSTANCE_SLOT_COUNT = 6;
+// Concurrent copies a single dungeon can host. Each slot is a cheap, empty
+// InstanceSlot (no entities, no rng) pre-allocated in the Sim ctor and only
+// populated when a party claims it, so a generous ceiling costs little memory
+// and lets a busy realm keep many leveling groups in the same dungeon at once.
+export const INSTANCE_SLOT_COUNT = 24;
 export const DUNGEON_X_THRESHOLD = 600; // x beyond this = inside an instance
 export const DUNGEON_FLOOR_Y = 0;
 
@@ -377,7 +489,8 @@ export const DELVE_X_MIN = 4800;
 // and the west half is never misclassified as arena. Still >500u clear of ARENA_X.
 const DELVE_WALL_X = 25; // mirror of delve_layout.ts WALL_X (delve side-wall centre)
 export const DELVE_BAND_X_MIN = DELVE_X_MIN - (DELVE_WALL_X + DUNGEON_WALL_HW + 1);
-export const DELVE_SLOT_COUNT = 6;
+// Concurrent copies a single delve can host (mirrors INSTANCE_SLOT_COUNT).
+export const DELVE_SLOT_COUNT = 24;
 export const DELVE_MODULE_GAP = 16;
 export const DELVE_MODULE_Z_START = 8;
 const DELVE_Z0 = -1250;
@@ -388,7 +501,9 @@ export function delveOrigin(delveIndex: number, slot: number): { x: number; z: n
 }
 
 export function isDelvePos(x: number): boolean {
-  return x >= DELVE_BAND_X_MIN;
+  // Capped east by the Protect Yumi maze band, the same move the delve band
+  // made to isArenaPos when it was added.
+  return x >= DELVE_BAND_X_MIN && x < YUMI_BAND_X_MIN;
 }
 
 export function delveAt(x: number): DelveDef | null {
@@ -397,12 +512,57 @@ export function delveAt(x: number): DelveDef | null {
   return DELVE_LIST.find((d) => d.index === index) ?? null;
 }
 
+// ---------------------------------------------------------------------------
+// Protect Yumi! maze instances, the easternmost band. Delve rooms are centred
+// at DELVE_X_MIN + index*600 with a ~26u wall face, so an 8000 band edge
+// leaves headroom for delve indexes 0..5 (4800 + 5*600 + 26 = 7826 < 8000).
+// Like every far-east band: flat ground (world.groundHeight) and one shared
+// instance-local collider set (sim/yumi_maze_layout.ts via sim/colliders.ts).
+// ---------------------------------------------------------------------------
+
+export const YUMI_BAND_X_MIN = 8000; // x at/after this = a yumi maze instance
+// Two-sided cap: the Vale Cup practice pitches sit further east (x = 30000,
+// src/sim/vale_cup_layout.ts vcPracticeOrigin), so the maze band must not
+// claim everything past 8000 the way the delve band once claimed everything
+// past 4773. 12000 leaves generous maze headroom.
+export const YUMI_BAND_X_MAX = 12000;
+export const YUMI_MAZE_X = 8400; // maze instances share this x; slots stack along z
+export const YUMI_MAZE_SLOT_COUNT = 4; // concurrent Protect Yumi matches
+const YUMI_MAZE_Z0 = -1250;
+const YUMI_MAZE_SLOT_SPACING = 200; // > the ~90u maze footprint so slots never overlap
+
+export function yumiMazeOrigin(slot: number): { x: number; z: number } {
+  return { x: YUMI_MAZE_X, z: YUMI_MAZE_Z0 + slot * YUMI_MAZE_SLOT_SPACING };
+}
+
+export function isYumiMazePos(x: number): boolean {
+  return x >= YUMI_BAND_X_MIN && x < YUMI_BAND_X_MAX;
+}
+
+// Nearest maze instance origin to a far-off position, matched by z-band (the
+// x is shared across slots). Mirrors arenaOriginAt.
+export function yumiMazeOriginAt(z: number): { x: number; z: number; slot: number } {
+  let best = 0,
+    bestD = Infinity;
+  for (let i = 0; i < YUMI_MAZE_SLOT_COUNT; i++) {
+    const d = Math.abs(z - yumiMazeOrigin(i).z);
+    if (d < bestD) {
+      bestD = d;
+      best = i;
+    }
+  }
+  const o = yumiMazeOrigin(best);
+  return { x: o.x, z: o.z, slot: best };
+}
+
 export const DELVES: Record<string, DelveDef> = {
   [COLLAPSED_RELIQUARY_DELVE.id]: COLLAPSED_RELIQUARY_DELVE,
+  [DROWNED_LITANY_DELVE.id]: DROWNED_LITANY_DELVE,
 };
 export const DELVE_LIST: DelveDef[] = Object.values(DELVES).sort((a, b) => a.index - b.index);
 export const DELVE_MODULES: Record<string, DelveModuleDef> = {
   ...COLLAPSED_RELIQUARY_MODULES,
+  ...DROWNED_LITANY_MODULES,
 };
 
 function delveModuleFootprint(moduleId: string): number {

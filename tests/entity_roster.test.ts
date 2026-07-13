@@ -4,7 +4,8 @@
 // exercised against a real Sim.ctx (so resolve/recalcPlayerStats/groundPos are real).
 
 import { describe, expect, it, vi } from 'vitest';
-import { DELVES, isDelvePos, MOBS } from '../src/sim/data';
+import { MOBS } from '../src/sim/data';
+import { createDeedRuntime } from '../src/sim/deeds';
 import { createMob } from '../src/sim/entity';
 import {
   addEntityToRoster,
@@ -13,13 +14,12 @@ import {
   type GroundAoE,
   graveyardReadout,
   rebucketEntity,
-  releasePlayerSpirit,
   runDespawnDecay,
   tickGroundAoEs,
 } from '../src/sim/entity_roster';
 import { Rng } from '../src/sim/rng';
-import { Sim } from '../src/sim/sim';
 import { createSimContext, type SimContextHost } from '../src/sim/sim_context';
+import { createVcState } from '../src/sim/social/vale_cup';
 import { SpatialGrid } from '../src/sim/spatial';
 import type { Entity } from '../src/sim/types';
 
@@ -49,6 +49,7 @@ function makeCtx() {
   const cfg = { seed: 1 } as unknown as SimContextHost['cfg'];
   const clock = { time: 0, tick: 0 };
   let delayedEvents: { at: number; event: any; guard?: () => boolean }[] = [];
+  let pendingProjectiles: any[] = [];
   const emit = vi.fn();
   const clearEntityMarker = vi.fn();
   const pulseGroundAoE = vi.fn();
@@ -81,6 +82,12 @@ function makeCtx() {
     set delayedEvents(v) {
       delayedEvents = v;
     },
+    get pendingProjectiles() {
+      return pendingProjectiles;
+    },
+    set pendingProjectiles(v) {
+      pendingProjectiles = v;
+    },
     get groundAoEs() {
       return groundAoEs;
     },
@@ -102,12 +109,22 @@ function makeCtx() {
     arenaQueue2v2: [],
     arenaQueueFiesta: [],
     arenaBusySlots: new Set(),
+    arenaQueueYumi3: [],
+    arenaQueueYumi5: [],
+    yumiBusySlots: new Set(),
+    yumiCatMatches: new Map(),
+    matchmakeYumi: vi.fn(),
+    updateYumiActive: vi.fn(),
+    yumiPlayerDown: vi.fn(),
+    yumiCatDamaged: vi.fn(),
+    cleanupYumiMatch: vi.fn(),
     nextArenaMatchId: 1,
     delveRuns: [],
     delvePetStash: new Map(),
     utcDay: '',
     pendingMobRespawns: [],
     partyInvites: new Map(),
+    readyChecks: new Map(),
     chatTokens: new Map(),
     channelSubs: new Map(),
     emit,
@@ -142,6 +159,7 @@ function makeCtx() {
     fiestaTakedown: vi.fn(),
     fiestaDown: vi.fn(),
     rollLoot: vi.fn(),
+    rollWorldBossLoot: vi.fn(),
     applyHeal: vi.fn(),
     spellCrit: vi.fn(() => 0.05),
     applyAura: vi.fn(),
@@ -159,6 +177,8 @@ function makeCtx() {
     // elsewhere in this host - deduped).
     spendResource: vi.fn(),
     removeItem: vi.fn(),
+    canAddItem: vi.fn(() => true),
+    removeFungibleItem: vi.fn(),
     partyOf: vi.fn(() => null),
     removeFromParty: vi.fn(),
     dropPartyMarkers: vi.fn(),
@@ -166,11 +186,21 @@ function makeCtx() {
     onInventoryChangedForQuests: vi.fn(),
     checkQuestReady: vi.fn(),
     countItem: vi.fn(() => 0),
+    countFungibleItem: vi.fn(() => 0),
+    countEnchantableItem: vi.fn(() => 0),
+    removeEnchantableItem: vi.fn(),
+    completeQuestForDev: vi.fn(() => false),
+    completeCurrentQuestsForDev: vi.fn(() => 0),
     lockoutNowMs: vi.fn(() => 0),
+    raidResetMs: vi.fn((nowMs: number) => nowMs),
     instanceKeyFor: vi.fn(() => 'solo:0'),
     instanceOriginOf: vi.fn(() => ({ x: 0, z: 0 })),
+    instanceClaimIdAt: vi.fn(() => null),
     enterDungeon: vi.fn(),
     leaveDungeon: vi.fn(),
+    dungeonDifficulty: vi.fn(() => 'normal' as const),
+    setDungeonDifficulty: vi.fn(),
+    awardHeroicMarks: vi.fn(),
     addEntity: vi.fn(),
     dropEntity: vi.fn(),
     rebucket: vi.fn(),
@@ -185,6 +215,18 @@ function makeCtx() {
     nextLootRollId: 1,
     devCommands: false,
     marketListings: [],
+    bankerIds: [],
+    vcup: createVcState(),
+    deedDirtyPids: new Set<number>(),
+    deedDirtyKeys: new Map<number, Set<string>>(),
+    worldBossEntityIds: [],
+    deedRuntime: createDeedRuntime(),
+    fiestaBotPids: [],
+    bumpDeedStat: vi.fn(),
+    markItemDiscovered: vi.fn(),
+    markVisited: vi.fn(),
+    markDeedsDirty: vi.fn(),
+    grantDeed: vi.fn(() => true),
     grantXp: vi.fn(),
     enterCombat: vi.fn(),
     hexOutputMult: vi.fn(() => 1),
@@ -206,16 +248,12 @@ function makeCtx() {
     mobSwing: vi.fn(),
     updateRangedPetAttack: vi.fn(),
     fleeMoveSpeed: vi.fn(() => 0),
-    usesProfiledMobCombat: vi.fn(() => false),
-    updateProfiledMobCombat: vi.fn(),
-    tryMobMeleeSwingInRange: vi.fn(() => false),
     maybeFlee: vi.fn(() => false),
     aggroMob: vi.fn(),
     isStunned: vi.fn(() => false),
     isRooted: vi.fn(() => false),
     moveSpeedMult: vi.fn(() => 1),
     swingIntervalMult: vi.fn(() => 1),
-    mobEffectiveMeleeRange: vi.fn(() => 0),
     mobCanSwim: vi.fn(() => false),
     resolveMovePoint: vi.fn(() => ({ x: 0, z: 0 })),
     updatePet: vi.fn(),
@@ -238,6 +276,7 @@ function makeCtx() {
     // delveDetectMult stubbed above (C1/M2/C3) - deduped here.
     partyMembersForKey: vi.fn(() => []),
     addItem: vi.fn(),
+    addItemInstance: vi.fn(),
     // removeItem stubbed above (P1b inventory-hub helper) - deduped.
     spawnBossAdds: vi.fn(),
     tradeFor: vi.fn(() => null),
@@ -258,6 +297,8 @@ function makeCtx() {
     isHostileTo: vi.fn(() => false),
     lineOfSightBlocked: vi.fn(() => false),
     stopFollow: vi.fn(),
+    partyInvite: vi.fn(),
+    readyCheckStart: vi.fn(),
     tameError: vi.fn(() => null),
     standUp: vi.fn(),
     breakGhostWolf: vi.fn(),
@@ -277,6 +318,7 @@ function makeCtx() {
     // G2 social plumbing (hasPendingSocialInvite already stubbed above; deduped).
     setPlayerLevel: vi.fn(),
     notice: vi.fn(),
+    spawnDevBot: vi.fn(),
     // L2 inventory/vendor (W2): the four still-on-Sim helpers the moved useItem dispatches to.
     startFishing: vi.fn(),
     unlockMechChromaFromItem: vi.fn(),
@@ -289,6 +331,15 @@ function makeCtx() {
     targetEntity: vi.fn(),
     partyCapacity: vi.fn(() => 5),
     marketListingBelongsTo: vi.fn(() => false),
+    // Ravenpost mail: the quest turn-in letter hook.
+    queueQuestLetter: vi.fn(),
+    applySetProcs: vi.fn(),
+    // The Vale Cup sport-move arms.
+    vcupBallKick: vi.fn(),
+    vcupBallPass: vi.fn(),
+    vcupShoot: vi.fn(),
+    vcupSportDash: vi.fn(),
+    vcupSportShove: vi.fn(),
   };
   const ctx = createSimContext(host);
   return {
@@ -483,75 +534,5 @@ describe('entity_roster: graveyardReadout (pure)', () => {
   });
 });
 
-describe('entity_roster: release-spirit (real Sim.ctx)', () => {
-  const makeSim = (cls: 'warrior' | 'rogue' = 'warrior', seed = 42) =>
-    new Sim({ seed, playerClass: cls, autoEquip: true }) as any;
-
-  it('outdoor release respawns at the zone graveyard at FULL hp, out of combat', () => {
-    const sim = makeSim();
-    sim.setPlayerLevel(10);
-    const p = sim.player as AnyEntity;
-    p.hp = 1;
-    p.inCombat = true;
-    p.dead = true;
-    releasePlayerSpirit(sim.ctx, sim.playerId);
-    expect(p.dead).toBe(false);
-    expect(p.hp).toBe(p.maxHp); // FULL hp
-    expect(p.inCombat).toBe(false);
-    expect(p.auras).toEqual([]);
-    expect(isDelvePos(p.pos.x)).toBe(false);
-  });
-
-  it('a not-dead player early-bails (no respawn side effects)', () => {
-    const sim = makeSim();
-    sim.setPlayerLevel(10);
-    const p = sim.player as AnyEntity;
-    const posBefore = { ...p.pos };
-    p.dead = false;
-    releasePlayerSpirit(sim.ctx, sim.playerId);
-    expect(p.pos).toEqual(posBefore); // untouched
-  });
-
-  it('in-delve first death respawns at 50% hp; a second death fails the run', () => {
-    const sim = makeSim('rogue', 99);
-    const reliquary = DELVES.collapsed_reliquary;
-    sim.setPlayerLevel(reliquary.minLevel);
-    const p = sim.player as AnyEntity;
-    p.pos = { x: reliquary.doorPos.x, y: 0, z: reliquary.doorPos.z };
-    p.prevPos = { ...p.pos };
-    sim.rebucket(p);
-    sim.enterDelve('collapsed_reliquary', 'normal');
-    const run = sim.delveRunForPlayer(sim.playerId);
-    expect(run, 'delve run started').toBeTruthy();
-    run.modules = ['reliquary_finale'];
-    run.moduleIndex = 0;
-    (sim as any).spawnDelveModule(run);
-
-    // First death -> 50% hp at the module entry (delve pos).
-    p.dead = true;
-    releasePlayerSpirit(sim.ctx, sim.playerId);
-    expect(p.dead).toBe(false);
-    expect(p.hp).toBe(Math.max(1, Math.round(p.maxHp * 0.5)));
-    expect(isDelvePos(p.pos.x)).toBe(true);
-
-    // Second in-run death -> run fails, player ejected out of the delve.
-    const e2 = sim.entities.get(sim.playerId) as AnyEntity;
-    e2.dead = true;
-    releasePlayerSpirit(sim.ctx, sim.playerId);
-    const events = sim.tick();
-    expect(events.some((ev: any) => ev.type === 'delveFailed')).toBe(true);
-    expect(isDelvePos((sim.entities.get(sim.playerId) as AnyEntity).pos.x)).toBe(false);
-  });
-
-  it('is deterministic: same seed + same death -> identical graveyard outcome', () => {
-    const outcome = () => {
-      const sim = makeSim('warrior', 7);
-      sim.setPlayerLevel(10);
-      const p = sim.player as AnyEntity;
-      p.dead = true;
-      releasePlayerSpirit(sim.ctx, sim.playerId);
-      return { hp: p.hp, maxHp: p.maxHp, pos: { ...p.pos } };
-    };
-    expect(outcome()).toEqual(outcome());
-  });
-});
+// The release-spirit / ghost-loop tests moved to tests/spirit.test.ts (the flow now
+// lives in src/sim/spirit.ts). graveyardReadout (above) stays here with the roster.
