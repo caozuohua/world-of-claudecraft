@@ -1,4 +1,4 @@
-name: Sync Upstream
+name: Audit Upstream Drift
 
 on:
   schedule:
@@ -6,20 +6,15 @@ on:
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
-  sync:
+  audit:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          persist-credentials: false
 
       - name: Add upstream remote
         run: |
@@ -29,24 +24,43 @@ jobs:
         run: |
           git fetch upstream --tags
 
-      - name: Merge upstream/main
+      - name: Build drift report
+        id: drift
+        shell: bash
         run: |
-          git checkout main
-          git merge upstream/main --no-edit --allow-unrelated-histories || {
-            echo "::warning::Merge conflict detected. Creating a sync branch for manual resolution."
-            git merge --abort
-            BRANCH="sync/upstream-$(date +%Y%m%d-%H%M%S)"
-            git checkout -b "$BRANCH"
-            git merge upstream/main --no-edit --allow-unrelated-histories || true
-            git push origin "$BRANCH"
-            echo "::error::Merge conflict. Created branch $BRANCH for manual resolution."
-            exit 1
-          }
+          read -r AHEAD BEHIND < <(git rev-list --left-right --count HEAD...upstream/main)
+          if git merge-base --is-ancestor HEAD upstream/main; then
+            STATE="fork can be fast-forwarded, but no merge was attempted"
+          elif git merge-base --is-ancestor upstream/main HEAD; then
+            STATE="fork already contains upstream/main"
+          else
+            STATE="branches have diverged; manual review is required"
+          fi
 
-      - name: Push to origin
-        run: |
-          git push origin main --tags
+          cat > upstream-sync-report.md <<EOF
+          # Upstream drift report
 
-      - name: Notify on success
-        if: success()
-        run: echo "::notice::Synced with upstream successfully!"
+          - Generated: $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+          - Fork commit: $(git rev-parse HEAD)
+          - Upstream commit: $(git rev-parse upstream/main)
+          - Commits behind upstream: ${BEHIND}
+          - Commits ahead of upstream: ${AHEAD}
+          - State: ${STATE}
+
+          This workflow is audit-only. It does not merge, create branches, push commits, or push tags.
+          Review: https://github.com/caozuohua/world-of-claudecraft/compare/main...levy-street:world-of-claudecraft:main
+          EOF
+          cat upstream-sync-report.md >> "$GITHUB_STEP_SUMMARY"
+          echo "behind=${BEHIND}" >> "$GITHUB_OUTPUT"
+          echo "ahead=${AHEAD}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: upstream-drift-report
+          path: upstream-sync-report.md
+          retention-days: 30
+
+      - name: Flag manual review
+        if: steps.drift.outputs.behind != '0'
+        run: echo "::warning::Fork is ${{ steps.drift.outputs.behind }} commits behind upstream. Review the report before any manual sync."
